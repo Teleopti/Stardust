@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public FakeNotificationServiceClient NotificationServiceClient;
 		public ApplicationConfigurationDbProviderFake ApplicationConfigurationDbProvider;
 		public FakeInstallationEnvironment InstallationEnvironment;
+		public FakeToggleManager ToggleManager;
 
 		[Test]
 		public void ShouldNotRunOnLaterInstanceThanOne()
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				RoleInstanceID = 7
 			};
 
-			var task = new NotificationSubscriptionTask(LoadAllTenants, TenantUnitOfWork, NotificationServiceClient, ApplicationConfigurationDbProvider, env);
+			var task = new NotificationSubscriptionTask(LoadAllTenants, TenantUnitOfWork, NotificationServiceClient, ApplicationConfigurationDbProvider, env, ToggleManager);
 			task.Execute(null).GetAwaiter().GetResult();
 
 			Assert.IsTrue(task.LastExecution.Message == NotificationMessage.NotOnFirstRoleInstanceID);
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				RoleInstanceID = 0
 			};
 
-			var task = new NotificationSubscriptionTask(LoadAllTenants, TenantUnitOfWork, NotificationServiceClient, ApplicationConfigurationDbProvider, env);
+			var task = new NotificationSubscriptionTask(LoadAllTenants, TenantUnitOfWork, NotificationServiceClient, ApplicationConfigurationDbProvider, env, ToggleManager);
 			task.Execute(null).GetAwaiter().GetResult();
 
 			Assert.IsTrue(task.LastExecution.Keys.Any());
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				}
 			});
 
-			var task = new NotificationSubscriptionTask(LoadAllTenants, TenantUnitOfWork, NotificationServiceClient, db, env);
+			var task = new NotificationSubscriptionTask(LoadAllTenants, TenantUnitOfWork, NotificationServiceClient, db, env, ToggleManager);
 			task.Execute(null).GetAwaiter().GetResult();
 
 			Assert.IsTrue(!task.LastExecution.IsSuccess && task.LastExecution.Message == NotificationMessage.ServerConfigurationKeysNotPresent);
@@ -144,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				},
 			});
 
-			var task = new NotificationSubscriptionTask(loadFakeTenantsLocal, TenantUnitOfWork, NotificationServiceClient, db, env);
+			var task = new NotificationSubscriptionTask(loadFakeTenantsLocal, TenantUnitOfWork, NotificationServiceClient, db, env, ToggleManager);
 			task.Execute(null).GetAwaiter().GetResult();
 
 			Assert.AreEqual(0, task.LastExecution.Keys.Count);
