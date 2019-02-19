@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,6 +24,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 		public FakeRtaHistory History;
 		public MutableNow Now;
 		public FakeRtaEventStore Events;
+		public IRtaEventStoreSynchronizer synchronizer;
 
 		[Test]
 		public void ShouldDisplayWithAdjustedToNeutral()
@@ -152,6 +154,55 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().Days.First().Adherence.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldSynchronizeWellWithAdjustedEventInSecondBatch()
+		{
+			Events.LoadForSynchronizationSize = 1;
+			var teamId = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent(person)
+				.WithAssignment("2019-02-12")
+				.WithAssignedActivity("2019-02-12 10:00", "2019-02-12 14:00");
+			History
+				.StateChanged(person, "2019-02-12 10:00", Adherence.Configuration.Adherence.Out)
+				.AdjustedAdherenceToNeutral("2019-02-12 12:00", "2019-02-12 14:00")
+				;
+			Now.Is("2019-02-19 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldSynchronizeAdjustedAdherenceToNeutralForPreviousDay()
+		{
+			Events.LoadForSynchronizationSize = 1;
+			Events.SynchronizeOnAdd = false;
+			var teamId = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent(person)
+				.WithAssignment("2019-02-01")
+				.WithAssignedActivity("2019-02-01 10:00", "2019-02-01 14:00");
+			History
+				.StateChanged(person, "2019-02-01 10:00", Adherence.Configuration.Adherence.Out)
+				.StateChanged(person, "2019-02-01 11:00", Adherence.Configuration.Adherence.In);
+			synchronizer.Synchronize();
+			History
+				.StateChanged(person, "2019-02-02 11:00", Adherence.Configuration.Adherence.In)
+				.AdjustedAdherenceToNeutral("2019-02-01 12:00", "2019-02-01 14:00");
+			Now.Is("2019-02-08 08:00");
+			
+			synchronizer.Synchronize();
+
+			var data = Target.Build(null, new[] {teamId}).First();			
+			data.Agents.First().Days.First().Adherence.Should().Be(50);
 		}
 	}
 }

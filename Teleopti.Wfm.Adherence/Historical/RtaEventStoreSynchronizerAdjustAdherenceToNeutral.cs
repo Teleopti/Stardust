@@ -39,25 +39,43 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		[TestLog]
 		public virtual void Synchronize()
-		{
+		{			
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
+				var adjustToNeutral = false;
 				var toEventId = ToEventId();
 				while (true)
 				{
 					var fromEventId = FromEventId();
 					var events = LoadEvents(fromEventId);
-					// INFINITE LOOP
+					
 					if (events.Events.Any(x => x.GetType() == typeof(PeriodAdjustedToNeutralEvent)))
-						events = LoadEvents(0);
-
+					{
+						adjustToNeutral = true;
+						break;						
+					}
+					
 					Synchronize(events.Events);
 					UpdateSynchronizedEventId(events.ToId);
 					if (events.ToId >= toEventId)
 						break;
 				}
+
+				if (adjustToNeutral)
+				{
+					UpdateSynchronizedEventId(0);
+					while (true)
+					{
+						var fromEventId = FromEventId();
+						var events = LoadEvents(fromEventId);
+						Synchronize(events.Events);
+						UpdateSynchronizedEventId(events.ToId);
+						if (events.ToId >= toEventId)
+							break;
+					}					
+				}
 			});
-		}
+		}		
 
 		[UnitOfWork]
 		protected virtual LoadedEvents LoadEvents(long fromEventId) =>
