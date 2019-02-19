@@ -242,11 +242,9 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			IEnumerable<OpenPeriod> adjustedToNeutralPeriods,
 			IEnumerable<OpenPeriod> approvedPeriods)
 		{
-			Console.WriteLine("calculateSecondsInAdherence");
-
-			Console.WriteLine("before: SubtractOverlaps"  + JsonConvert.SerializeObject(adjustedToNeutralPeriods));
-			adjustedToNeutralPeriods = adjustedToNeutralPeriods.SubtractOverlaps().ToArray();
-			Console.WriteLine("after: SubtractOverlaps " + JsonConvert.SerializeObject(adjustedToNeutralPeriods));
+			adjustedToNeutralPeriods = adjustedToNeutralPeriods
+				.MergeIntersecting()
+				.ToArray();
 			
 			outOfAdherences = outOfAdherences
 				.Subtract(approvedPeriods)

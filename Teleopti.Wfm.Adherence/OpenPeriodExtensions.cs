@@ -10,53 +10,108 @@ namespace Teleopti.Wfm.Adherence
 	{
 		public static IEnumerable<OpenPeriod> Subtract(this IEnumerable<OpenPeriod> periods, IEnumerable<OpenPeriod> toSubtract)
 		{
-			return toSubtract
-				.Aggregate(periods, (ps, toBeSubtracted) =>
-					{
-						return ps.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, subtractFrom) =>
-							{
-								Console.WriteLine("Subtract/subtract/toBeSubtracted " + JsonConvert.SerializeObject(toBeSubtracted));
-								Console.WriteLine("Subtract/subtract/subtractFrom " + JsonConvert.SerializeObject(subtractFrom));
-								var remainder = subtractFrom.subtract(toBeSubtracted);
-								Console.WriteLine("Subtract/subtract/remainder " + JsonConvert.SerializeObject(remainder));
-								return r.Concat(remainder);
-							}
-						);
-					}
-				).ToArray();
+//			var result = new List<OpenPeriod>();
+//			periods.ForEach(x =>
+//			{
+//				result.AddRange(x.subtract(toSubtract));
+//			});
+//			return result;
+
+
+			// allwrong
+//			var result = periods.ToList();
+//			toSubtract.ForEach(x =>
+//			{
+//				result.AddRange(result.subtract(x));
+//				result.Remove(x);
+//			});
+
+
+//			var result = new List<OpenPeriod>();
+//			toSubtract.ForEach(x =>
+//			{
+//				result.AddRange(periods.subtract(x));
+//			});
+
+
+//			return toSubtract
+//				.Aggregate(periods, (ps, toBeSubtracted) =>
+//					{
+//						return ps.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, subtractFrom) =>
+//							{
+//								var remainder = subtractFrom.subtract(toBeSubtracted);
+//								return r.Concat(remainder);
+//							}
+//						);
+//					}
+//				).ToArray();
+
+
+			// WORKING
+//			var result = toSubtract
+////				.Aggregate(periods, subtract)
+//				.Aggregate(periods, (ps, toBeSubtracted) =>
+//				{
+//					return ps.subtract(toBeSubtracted);
+//				})
+//				.ToArray();
+
+//			var result = new List<OpenPeriod>();
+//			periods.ForEach(x =>
+//			{
+//				
+//				toSubtract.ForEach(y =>
+//				{
+//					Console.WriteLine("Subtract/x" + JsonConvert.SerializeObject(x));
+//					Console.WriteLine("Subtract/y" + JsonConvert.SerializeObject(y));
+//
+//					var r = x.subtract(y);
+//					result.AddRange(r);
+//					
+//					Console.WriteLine("Subtract/reminder" + JsonConvert.SerializeObject(r));
+//
+//				});
+//				
+//
+//			});
+
+			var result = periods.ToList();
+
+			toSubtract.ForEach(s =>
+			{
+				var subtracted = new List<OpenPeriod>();
+				result.ForEach(p =>
+				{
+					var r = p.subtract(s);
+					subtracted.AddRange(r);
+				});
+				result = subtracted;
+			});
+
+			return result;
 		}
 
-		public static IEnumerable<OpenPeriod> SubtractOverlaps(this IEnumerable<OpenPeriod> periods)
-//		{
-//			Console.WriteLine("SubtractOverlaps");
-//			var ret = periods.Aggregate(new List<OpenPeriod>(), (acc, i) =>
-//			{
-//				Console.WriteLine("SubtractOverlaps/AddRange");
-//				var current = i.AsArray().ToArray();
-//				Console.WriteLine("SubtractOverlaps/AddRange/current " + JsonConvert.SerializeObject(current));
-//				var toSubtract = periods
-//					.Where(x => x != i)
-//					.ToArray();
-//				Console.WriteLine("SubtractOverlaps/AddRange/toSubtract " + JsonConvert.SerializeObject(toSubtract));
-//				acc.AddRange(current.Subtract(toSubtract).ToArray());
-//				return acc;
-//			});
-//			Console.WriteLine("/SubtractOverlaps");
-//			return ret;
-//		}
-		
+		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, IEnumerable<OpenPeriod> toSubtract)
 		{
-			return periods.OrderBy(x => x.StartTime).Aggregate(new List<OpenPeriod>(), (acc, i) =>
-				{
-					if (acc.Any() && acc.Last().intersects(i))
-						acc.Last().EndTime = acc.Last().EndTime > i.EndTime ? acc.Last().EndTime : i.EndTime;				
-					else
-						acc.Add(i);							
-					
-					return acc;
-				}
-			).ToArray();
+			// note: doesnt work when nothing in toSubtract
+			var result = new List<OpenPeriod>() {subtractFrom};
+			toSubtract.ForEach(x => { result.AddRange(subtractFrom.subtract(x)); });
+			return result;
 		}
+
+		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
+		{
+			var result = new List<OpenPeriod>();
+			subtractFroms.ForEach(x => { result.AddRange(x.subtract(toSubtract)); });
+			return result;
+//			return subtractFroms.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, subtractFrom) =>
+//				{
+//					var remainder = subtractFrom.subtract(toSubtract);
+//					return r.Concat(remainder);
+//				}
+//			);
+		}
+
 
 		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, OpenPeriod toSubtract)
 		{
@@ -75,6 +130,21 @@ namespace Teleopti.Wfm.Adherence
 			}
 
 			return timePeriods;
+		}
+
+		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
+		{
+			var result = new List<OpenPeriod>();
+			periods
+				.OrderBy(x => x.StartTime)
+				.ForEach(x =>
+				{
+					if (result.Any() && result.Last().intersects(x))
+						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
+					else
+						result.Add(x);
+				});
+			return result;
 		}
 
 		private static bool intersects(this OpenPeriod instance, OpenPeriod period)
