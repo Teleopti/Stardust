@@ -6,3 +6,4 @@ Web;False
 AuthenticationBridge;False
 WindowsIdentityProvider;False
 Administration;False
+API;False
