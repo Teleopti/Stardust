@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 						try
 						{
 							
-							//never want to call Azure if a local environment							
+							//never want to call Azure if a local environment 							
 							if (Environment.UserDomainName == "TOPTINET" && 
 								!_toggleManager.IsEnabled(Toggles.Wfm_AutomaticNotificationEnrollmentStartup_79679))
 							{								
