@@ -7,29 +7,23 @@
 		body {
 			font-family: Arial, sans-serif;
 			font-size: 14px;
-			color: #444;
 		}
 
-		table {
-			border: 2px solid;
-			border-radius: 3px;
-		}
-
-		th {
-			text-align: left;
-			background-color: #dddddd;
-		}
-		
-		th, td {
-			min-width: 120px;
-			padding: 10px;
-		}
-		
 		.stepSuccess {
-			color : green;
+			color: green;
 		}
-		.stepFailure{
-			color : red;
+
+		.stepFailure {
+			color: red;
+		}
+
+		.stepItem {
+			border: 1px solid;
+			margin: 10px;
+		}
+		
+		div {
+			padding: 10px;
 		}
 	</style>
 	<script src="Scripts/vue.min.js"></script>
@@ -38,32 +32,13 @@
 </head>
 <body>
 <div id="steps">
-	<table>
-		<thead>
-			<tr>
-				<th>Step Name</th>
-				<th>Description</th>
-				<th>Url</th>
-				<th>Result</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="step in steps">
-				<td>
-					<div v-bind:class="outputColor(step.stepSuccess)">{{step.stepName}}</div>
-				</td>
-				<td>
-					<div v-bind:class="outputColor(step.stepSuccess)">{{step.description}}</div>
-				</td>
-				<td>
-					<div><a v-bind:href="step.url" v-bind:class="outputColor(step.stepSuccess)">{{step.url}}</a></div>
-				</td>
-				<td>
-					<div v-bind:class="outputColor(step.stepSuccess)">{{step.output}}</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div v-for="step in steps" class="stepItem">
+		<div><b>{{step.stepName}}</b> (<a v-bind:href="step.url">{{step.url}}</a>)</div>
+		<div>{{step.description}}</div>
+		<div v-bind:class="outputColor(step.stepSuccess)">
+			{{step.output}}
+		</div>
+	</div>
 </div>
 </body>
 </html>
