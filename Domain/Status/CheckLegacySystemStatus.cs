@@ -3,8 +3,8 @@ namespace Teleopti.Ccc.Domain.Status
 	public class CheckLegacySystemStatus : IStatusStep
 	{
 		private readonly ICallLegacySystemStatus _callLegacySystemStatus;
-		public const string FailureOutput = "SystemStatus is failing!";
-		public const string SuccessOutput = "SystemStatus OK!";
+		public const string FailureOutput = "System is down!";
+		public const string SuccessOutput = "System is up!";
 
 		public CheckLegacySystemStatus(ICallLegacySystemStatus callLegacySystemStatus)
 		{
