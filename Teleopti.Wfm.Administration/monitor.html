@@ -64,7 +64,6 @@
 
 <script>
 	var vm = new Vue({
-		unknwown : 'unknown',
 		el: '#steps',
 		data: {
 			steps: []
@@ -76,7 +75,7 @@
 					vm.$data.steps.push({
 						stepName: step,
 						stepSuccess : false,
-						output: this.unknwown
+						output: this.unknown
 					});
 
 					axios.get('/monitor/check/' + step)
@@ -99,7 +98,8 @@
 		methods : {
 			outputColor : function(value){
 				return value ? 'stepSuccess' : 'stepFailure';
-			}
+			},
+			unknown : 'unknown'
 		},
 		computed : {
 			success : function(){
@@ -117,7 +117,7 @@
 				}))
 					return 'FAILURE!';
 				if(this.steps.some(function (step) {
-					return step.output === this.unknwown;
+					return step.output === this.unknown;
 				}))
 					return 'Loading...';
 				return 'System OK!'
