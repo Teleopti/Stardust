@@ -67,6 +67,7 @@ Wfm_Authentication_ChangePasswordMenu_76666 = true
 Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 Wfm_AutomaticNotificationEnrollment_79679 = DEV
+Wfm_AutomaticNotificationEnrollmentStartup_79679 = false
 
 # China, can any of these be removed? #
 MyTimeWeb_NewTeamScheduleView_75989 = true
