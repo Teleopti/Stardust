@@ -105,7 +105,7 @@
 			if (!container) return;
 			var viewHeader = $document[0].querySelector('.view-header');
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper .schedule-table-header';
+			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper table thead';
 			var tHeader = $document[0].querySelector(tHeaderSelector);
 			var footer = $document[0].querySelector('.teamschedule-footer');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
@@ -124,18 +124,19 @@
 			};
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
-					'height': size.tableHeight + 'px',
-					'min-height': '0'
+					'min-height': size.tableHeight + 'px'
 				};
 				vm.scheduleTableBodyStyle = {
 					'max-height': size.tableBodyHeight + 'px',
 					'min-height': '0'
 				};
 				vm.chartHeight = size.chartHeight;
+				vm.scheduleBodyHeight = size.tableBodyHeight;
 			}
 			else {
-				vm.scheduleTableWrapperStyle = { 'height': defaultHeight + 'px' };
-				vm.scheduleTableBodyStyle = { 'max-height': defaultTableBodyHeight + 'px' };
+				vm.scheduleTableWrapperStyle = { 'min-height': 500 + 'px' };
+				vm.scheduleTableBodyStyle = { 'max-height': 460 + 'px' };
+				vm.scheduleBodyHeight = 460;
 			}
 		};
 
@@ -217,7 +218,7 @@
 			var container = $document[0].querySelector('#materialcontainer');
 			var viewHeader = $document[0].querySelector('.view-header');
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper .schedule-table-header';
+			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper table thead';
 			var tHeader = $document[0].querySelector(tHeaderSelector);
 			var footer = $document[0].querySelector('.teamschedule-footer');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
@@ -247,13 +248,13 @@
 			}
 			StaffingConfigStorageService.setSize(tableHeight, tBodyHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
-				'height': tableHeight + 'px',
-				'min-height': '0'
+				'min-height': tableHeight + 'px'
 			};
 			vm.scheduleTableBodyStyle = {
 				'max-height': tBodyHeight + 'px',
 				'min-height': '0'
 			}
+			vm.scheduleBodyHeight = tBodyHeight;
 			vm.chartHeight = chartHeight;
 
 		});
@@ -535,7 +536,7 @@
 				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
 			}
 		};
-	
+
 		vm.commandPanelClosed = function () {
 			return !$mdSidenav(commandContainerId).isOpen();
 		};

@@ -32,10 +32,34 @@
 				selectedSortOption: '<',
 				showWarnings: '=?',
 				paginationOptions: '<?',
-				tableStyle: '='
+				scheduleBodyHeight: '<'
 			},
 			controllerAs: 'vm'
 		});
+
+
+	angular.module('wfm.teamSchedule').directive('updateSize', [updateSizeDirective]);
+
+	function updateSizeDirective() {
+		return {
+			restrict: 'A',
+			require: '^mdVirtualRepeatContainer',
+			link: function (scope, element, attributes, mdVirtualRepeatContainer) {
+				scope.$watch(function () {
+					return attributes.updateSize;
+				}, function (value) {
+					if (!value) return;
+					var size = parseInt(value);
+					if (size % 2 !== 0) size += 1;
+
+					element[0].style.height = size + 'px';
+					mdVirtualRepeatContainer.setSize_(size);
+					mdVirtualRepeatContainer.updateSize();
+				});
+
+			}
+		};
+	}
 
 	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
 	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
@@ -56,6 +80,13 @@
 		}, function (newVal) {
 			vm.toggleAllInCurrentPage = newVal;
 		});
+
+		vm.$onChanges = function (changesObj) {
+			if (changesObj.scheduleBodyHeight
+				&& changesObj.scheduleBodyHeight.currentValue !== changesObj.scheduleBodyHeight.previousValue) {
+
+			}
+		}
 
 		vm.totalSelectedProjections = function () {
 			var totalSelection = personSelectionSvc.getTotalSelectedPersonAndProjectionCount();

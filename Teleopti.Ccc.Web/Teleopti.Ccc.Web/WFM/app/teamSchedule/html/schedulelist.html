@@ -18,9 +18,13 @@
 		<div class="schedule-tool-column schedule-note-column"></div>
 		<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
 	</div>
-	<md-virtual-repeat-container class="list-group" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }" ng-style="vm.tableStyle">
+	<md-virtual-repeat-container class="list-group"
+								 ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }"
+								 style="height:460px;"
+								 update-size="{{vm.scheduleBodyHeight}}">
 		<div md-virtual-repeat="personSchedule in vm.scheduleVm.Schedules">
-			<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
+			<div class="list-item"
+				 ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
 				 ng-click="vm.togglePerson(personSchedule, null)">
 				<div class="person-name-column" ng-click="vm.updatePersonSelection(personSchedule, $event)">
 					<label>
