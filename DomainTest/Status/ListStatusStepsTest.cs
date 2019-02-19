@@ -38,6 +38,14 @@ namespace Teleopti.Ccc.DomainTest.Status
 			
 			Target.Execute(baseUrl).Single(x => x.Name == FakeStatusStep.Name).Url.Should().Be.EqualTo(baseUrl + FakeStatusStep.Name);
 		}
+
+		[Test]
+		public void ShouldIncludeDescription()
+		{
+			FakeStatusStep.Description = Guid.NewGuid().ToString();
+		
+			Target.Execute(string.Empty).Single(x => x.Name == FakeStatusStep.Name).Description.Should().Be.EqualTo(FakeStatusStep.Description);
+		}
 		
 		public void Isolate(IIsolate isolate)
 		{

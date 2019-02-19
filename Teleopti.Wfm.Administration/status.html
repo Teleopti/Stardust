@@ -42,6 +42,7 @@
 		<thead>
 			<tr>
 				<th>Step Name</th>
+				<th>Description</th>
 				<th>Url</th>
 				<th>Result</th>
 			</tr>
@@ -50,6 +51,9 @@
 			<tr v-for="step in steps">
 				<td>
 					<div v-bind:class="outputColor(step.stepSuccess)">{{step.stepName}}</div>
+				</td>
+				<td>
+					<div v-bind:class="outputColor(step.stepSuccess)">{{step.description}}</div>
 				</td>
 				<td>
 					<div><a v-bind:href="step.url" v-bind:class="outputColor(step.stepSuccess)">{{step.url}}</a></div>

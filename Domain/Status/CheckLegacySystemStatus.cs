@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Domain.Status
 		}
 
 		public string Name { get; } = "SystemStatus";
+		public string Description { get; } = "Verifies that users can access the web and sign in.";
 	}
 }

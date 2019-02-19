@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Status
 			foreach (var monitorStep in _monitorSteps)
 			{
 				var stepName = monitorStep.Name;
-				yield return new StatusStepInfo(stepName, startUrl + stepName);
+				yield return new StatusStepInfo(stepName, monitorStep.Description, startUrl + stepName);
 			}
 		}
 	}

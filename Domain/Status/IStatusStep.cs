@@ -4,5 +4,6 @@ namespace Teleopti.Ccc.Domain.Status
 	{
 		StatusStepResult Execute();
 		string Name { get; }
+		string Description { get; }
 	}
 }

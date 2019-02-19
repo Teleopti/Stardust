@@ -21,5 +21,6 @@ namespace Teleopti.Ccc.Domain.Stardust
 		}
 
 		public string Name { get; } = "Stardust";
+		public string Description { get; } = "Verifies that long running background executions can run.";
 	}
 }

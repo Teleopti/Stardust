@@ -15,7 +15,8 @@
 							stepName: step.Name,
 							stepSuccess: false,
 							output: 'Loading...',
-							url: step.Url
+							url: step.Url,
+							description : step.Description
 						};
 						vm.steps.push(newStep);
 						axios.get(step.Url)

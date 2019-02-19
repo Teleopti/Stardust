@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 			return _result;
 		}
 
-		public string Name { get; set; } = "Fake";
+		public string Name { get; set; } = "FakeName";
+		public string Description { get; set; } = "FakeDesc";
 	}
 }
