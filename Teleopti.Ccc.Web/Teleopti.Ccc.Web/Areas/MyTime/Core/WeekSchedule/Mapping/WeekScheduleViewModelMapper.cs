@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IToggleManager _toggleManager;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
+		private readonly BankHolidayCalendarViewModelMapper _bankHolidayCalendarViewModelMapper;
 
 		public WeekScheduleViewModelMapper(IPeriodSelectionViewModelFactory periodSelectionViewModelFactory,
 			IPeriodViewModelFactory periodViewModelFactory,
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			ISiteOpenHourProvider siteOpenHourProvider,
 			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, ILicenseAvailability licenseAvailability,
 			IToggleManager toggleManager, 
-			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider, BankHolidayCalendarViewModelMapper bankHolidayCalendarViewModelMapper)
 		{
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_licenseAvailability = licenseAvailability;
 			_toggleManager = toggleManager;
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
+			_bankHolidayCalendarViewModelMapper = bankHolidayCalendarViewModelMapper;
 		}
 
 		public WeekScheduleViewModel Map(WeekScheduleDomainData s, bool loadOpenHourPeriod = false)
@@ -173,7 +175,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
 				OvertimeAvailabililty = overtimeAvailability(s),
 				Availability = s.Availability,
-				OpenHourPeriod = loadOpenHourPeriod ? getOpenHourPeriod(s) : null
+				OpenHourPeriod = loadOpenHourPeriod ? getOpenHourPeriod(s) : null,
+				BankHolidayCalendar = _bankHolidayCalendarViewModelMapper.Map(s.BankHolidayDate)
 			};
 			dayViewModel.HasNotScheduled = dayViewModel.Summary.Title == Resources.NotScheduled;
 

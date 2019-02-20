@@ -410,6 +410,7 @@
     <Compile Include="Areas\Insights\Core\InsightsAreaModel.cs" />
     <Compile Include="Areas\MultiTenancy\Controllers\ApplicationConfigurationDbController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\Mapping\BankHolidayCalendarViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\BankHolidayCalendarViewModel.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />

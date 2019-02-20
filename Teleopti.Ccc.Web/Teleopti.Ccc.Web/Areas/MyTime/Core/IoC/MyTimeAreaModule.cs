@@ -170,6 +170,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceDayInputMapper>().SingleInstance();
 			builder.RegisterType<RequestsViewModelMapper>().SingleInstance();
 			builder.RegisterType<CommonViewModelMapper>().SingleInstance();
+			builder.RegisterType<BankHolidayCalendarViewModelMapper>().SingleInstance();
 			builder.RegisterType<PreferenceViewModelMapper>().SingleInstance();
 			builder.RegisterType<PersonAccountViewModelMapper>().SingleInstance();
 			builder.RegisterType<PreferenceDomainDataMapper>().SingleInstance();
