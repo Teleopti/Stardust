@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 	public class ShiftCategoryDistributionModelTest
 	{
 		private MockRepository _mocks;
-		private IShiftCategoryDistributionModel _target;
+		private ShiftCategoryDistributionModel _target;
 		private ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;

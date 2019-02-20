@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private MockRepository _mock;
 		private IShiftCategory _shiftCategory;
 		private IList<IShiftCategory> _shiftCategories;
+		private IList<IPerson> _persons;
 
 		[SetUp]
 		public void Setup()
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_shiftCategory = new ShiftCategory("shiftCategory");
 			_shiftCategory.Description = new Description("shiftCatgory", "short");
 			_shiftCategories = new List<IShiftCategory>{_shiftCategory};
+			_persons = new List<IPerson> {new Person()};
 		}
 
 		[Test]
@@ -241,7 +244,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
 				Expect.Call(_model.ShouldUpdateViews).Return(true);
-				Expect.Call(_model.GetAverageForShiftCategory(_shiftCategory)).Return(23d);
+				Expect.Call(_model.GetSortedPersons(false)).Return(_persons);
+				Expect.Call(_model.GetAverageForShiftCategory(_shiftCategory, _persons)).Return(23d);
 			}
 
 			using (_mock.Playback())

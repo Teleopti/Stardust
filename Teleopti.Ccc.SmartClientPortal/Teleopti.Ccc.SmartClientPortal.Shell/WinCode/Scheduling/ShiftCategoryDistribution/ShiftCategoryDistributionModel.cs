@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 	public interface IShiftCategoryDistributionModel
 	{
 		MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory);
-		double GetAverageForShiftCategory(IShiftCategory shiftCategory);
+		double GetAverageForShiftCategory(IShiftCategory shiftCategory, IEnumerable<IPerson> sortedPersons);
 		event EventHandler ResetNeeded;
 		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 		int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		event EventHandler ChartUpdateNeeded;
 		void OnChartUpdateNeeded();
 		bool ShouldUpdateViews { get; set; }
-		IDictionary<int, int> GetFrequencyForShiftCategory(IShiftCategory shiftCategory);
+		IDictionary<int, int> GetFrequencyForShiftCategory(IShiftCategory shiftCategory, IEnumerable<IPerson> sortedPersons);
 	}
 
 	public class ShiftCategoryDistributionModel : IShiftCategoryDistributionModel
@@ -42,6 +42,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly CommonNameDescriptionSetting _commonNameDescriptionSetting;
+		private bool _lastSortOrderOfFilteredPerson;
+		private IList<IPerson> _lastSortedFilteredPersons;
 
 		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, CommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
@@ -50,15 +52,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_periodToMonitor = periodToMonitor;
 			_commonNameDescriptionSetting = commonNameDescriptionSetting;
+			_lastSortOrderOfFilteredPerson = false;
+			_lastSortedFilteredPersons = null;
 		}
 
 		public bool ShouldUpdateViews { get; set; }
 
-		public IDictionary<int, int> GetFrequencyForShiftCategory(IShiftCategory shiftCategory)
+		public IDictionary<int, int> GetFrequencyForShiftCategory(IShiftCategory shiftCategory, IEnumerable<IPerson> sortedPersons)
 		{
 			var frequency = new Dictionary<int, int>();
 
-			foreach (var sortedPerson in GetSortedPersons(false))
+			foreach (var sortedPerson in sortedPersons)
 			{
 				var num = ShiftCategoryCount(sortedPerson, shiftCategory);
 
@@ -82,10 +86,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		}
 
 		//use something else than the _populationStatisticsCalculator, should be something you send in values to and it returns what you want and dont calculate anything else
-		public double GetAverageForShiftCategory(IShiftCategory shiftCategory)
+		public double GetAverageForShiftCategory(IShiftCategory shiftCategory, IEnumerable<IPerson> sortedPersons)
 		{
 			var values = new List<double>();
-			foreach (var sortedPerson in GetSortedPersons(false))
+			foreach (var sortedPerson in sortedPersons)
 			{
 				values.Add(ShiftCategoryCount(sortedPerson, shiftCategory));
 			}
@@ -98,6 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{
 			_filteredPersons = filteredPersons;
+			_lastSortedFilteredPersons = null;
 			_cachedNumberOfEachCategoryPerDate.SetFilteredPersons(_filteredPersons);
 			_cachedShiftCategoryDistribution.SetFilteredPersons(_filteredPersons);
 			OnResetNeeded();
@@ -165,10 +170,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			var returnList = new List<IShiftCategory>();
 
 			var shiftCategories = GetSortedShiftCategories();
+			var sortedPersons = GetSortedPersons(false);
 
 			foreach (var shiftCategory in shiftCategories)
 			{
-				var average = GetAverageForShiftCategory(shiftCategory);
+				var average = GetAverageForShiftCategory(shiftCategory, sortedPersons);
 				result.Add(new shiftCategoryDoubleComparer(shiftCategory, average));	
 			}
 
@@ -199,6 +205,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 		public IList<IPerson> GetSortedPersons(bool ascending)
 		{
+			if (ascending != _lastSortOrderOfFilteredPerson)
+				_lastSortedFilteredPersons = null;
+
+			if (_lastSortedFilteredPersons != null)
+				return _lastSortedFilteredPersons;
+
 			CultureInfo loggedOnCulture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
@@ -207,7 +219,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			if (!ascending)
 				sortedFilteredPersons.Reverse();
 
-			return sortedFilteredPersons;
+			_lastSortedFilteredPersons = sortedFilteredPersons;
+			return _lastSortedFilteredPersons;
 		}
 
 		public IList<DateOnly> GetSortedDates(bool ascending)
