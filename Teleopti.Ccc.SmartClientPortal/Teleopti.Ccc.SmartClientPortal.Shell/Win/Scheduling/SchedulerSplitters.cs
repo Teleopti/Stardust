@@ -299,13 +299,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			_filteredPersons = filteredPersons.ToList();
 			if (tabInfoPanels.SelectedIndex == 2)
-			{
 				validationAlertsView1.ReDraw(_filteredPersons);
-			}
+
+			if (tabInfoPanels.SelectedIndex == 1)
+				shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
 
 			tabInfoPanels.Refresh();
-
-			shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
 		}
 
 		public void TogglePropertyPanel(bool value)
