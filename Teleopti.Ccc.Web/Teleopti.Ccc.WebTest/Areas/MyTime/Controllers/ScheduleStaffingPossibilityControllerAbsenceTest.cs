@@ -277,6 +277,40 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetPossibilitiesThereIsAOvernightSchedule()
+		{
+			var person = User.CurrentUser();
+			var activity = createActivity();
+			var skill = createSkill("skill", new TimePeriod(00, 00, 24, 00));
+			var personSkill = createPersonSkill(activity, skill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, 10d, 20d);
+			addPersonSkillsToPersonPeriod(personSkill);
+
+			var datetimePeriod = new DateTimePeriod(Now.UtcDateTime().Date.AddHours(18), Now.UtcDateTime().Date.AddHours(26));
+			var datetimePeriod2 = new DateTimePeriod(Now.UtcDateTime().Date.AddDays(1).AddHours(18), Now.UtcDateTime().Date.AddDays(1).AddHours(26));
+
+			createAssignment(person, datetimePeriod, activity);
+			createAssignment(person, datetimePeriod2, activity);
+			setupWorkFlowControlSet();
+
+			var possibilities = Target.GetPossibilityViewModels(Now.UtcDateTime().ToDateOnly().AddDays(1),
+				StaffingPossiblityType.Absence, false).ToList();
+
+			possibilities.Count.Should().Be(32);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(0).StartTime.Should().Be.EqualTo(Now.UtcDateTime().Date.AddDays(1));
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(2).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(3).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(4).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(5).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(6).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(7).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(7).StartTime.Should().Be.EqualTo(Now.UtcDateTime().Date.AddDays(1).AddHours(1).AddMinutes(45));
+		}
+
+		[Test]
 		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffing()
 		{
 			setupSiteOpenHour();
@@ -687,10 +721,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> getPossibilityViewModels(DateOnly? date,
-			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
+			StaffingPossiblityType staffingPossibilityType = StaffingPossiblityType.None,
 			bool returnOneWeekData = true)
 		{
-			var result = Target.GetPossibilityViewModels(date, staffingPossiblityType, returnOneWeekData);
+			var result = Target.GetPossibilityViewModels(date, staffingPossibilityType, returnOneWeekData);
 			return result.Where(view => intervals.Contains(view.StartTime.TimeOfDay));
 		}
 
@@ -715,6 +749,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				};
 				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
 					new[] { staffingPeriodData1, staffingPeriodData2 }, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+			});
+		}
+
+		private void setupIntradayStaffingSkillFor24Hours(ISkill skill, double forecastedStaffing,
+			double scheduledStaffing)
+		{
+			var period = getAvailablePeriod();
+			period.DayCollection().ToList().ForEach(day =>
+			{
+				var staffingDataList = new List<StaffingPeriodData>();
+				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+				var start = TimeSpan.Zero;
+				while (day.Date.Add(start) < day.Date.AddDays(1).Subtract(TimeSpan.FromSeconds(1)))
+				{
+					var staffingPeriodData = new StaffingPeriodData
+					{
+						ForecastedStaffing = forecastedStaffing,
+						ScheduledStaffing = scheduledStaffing,
+						Period = new DateTimePeriod(utcDate.Date.Add(start), utcDate.Date.Add(start.Add(TimeSpan.FromMinutes(15))))
+					};
+					start += TimeSpan.FromMinutes(15);
+					staffingDataList.Add(staffingPeriodData);
+				}
+
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
+					staffingDataList, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 			});
 		}
 	}
