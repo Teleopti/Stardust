@@ -427,12 +427,17 @@ team-schedule-datepicker {
 	display: block !important;
 	overflow: hidden;
 }
+.week-view {
+	.big-table-wrapper {
+		min-height: 500px;
+	}
+	
+}
 
 .teamschedule-body .big-table-wrapper {
 	overflow-x: auto;
 	overflow-y: hidden;
 	width: 100%;
-	min-height: 500px;
 
 	table {
 
@@ -574,10 +579,9 @@ team-schedule-datepicker {
 			height: 100%;
 			display: block;
 			overflow-y: scroll;
-			max-height: 62vh;
-			min-height: 500px;
 			min-width: 680px;
 			border-top: 1px solid $gray012;
+			max-height: 62vh;
 		}
 
 		thead,
@@ -702,6 +706,7 @@ team-schedule-datepicker {
 			float: right;
 		}
 	}
+
 
 	@media (max-width: 768px) {
 		thead tr.weekview-thead th {

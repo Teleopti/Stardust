@@ -41,6 +41,7 @@
 		var personIdInEditing;
 		var hasScheduleUpdatedInEditor = null; // init it to null because of only if it's false then need to update schedule after shift editor closed
 
+
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 
@@ -89,56 +90,40 @@
 			}
 		}
 
-		function getTotalTableRowHeight() {
-			var rowsSelector = vm.useScheuleList ? '.big-table-wrapper .list-group .list-item' : '.big-table-wrapper table tr';
-			var rows = $document[0].querySelectorAll(rowsSelector);
-			var sum = 0;
-			angular.forEach(rows,
-				function (r) {
-					sum += r.offsetHeight;
-				});
-			return sum;
-		}
 
 		function initTeamSize() {
 			var container = $document[0].querySelector('#materialcontainer');
 			if (!container) return;
-			var viewHeader = $document[0].querySelector('.view-header');
-			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper table thead';
-			var tHeader = $document[0].querySelector(tHeaderSelector);
-			var footer = $document[0].querySelector('.teamschedule-footer');
-			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 
-			var maxDefaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
-			var totalRowHeight = getTotalTableRowHeight();
-
-			var defaultHeight = totalRowHeight > maxDefaultHeight ? maxDefaultHeight : totalRowHeight;
-			var defaultTableBodyHeight = defaultHeight - tHeaderHeight;
-
-			var storageSize = StaffingConfigStorageService.getConfig();
-			var size = storageSize || {
-				tableHeight: defaultHeight * 0.64,
-				tableBodyHeight: defaultTableBodyHeight * 0.62,
-				chartHeight: defaultHeight * 0.3 - 40
-			};
 			if (vm.staffingEnabled) {
+				var storageSize = StaffingConfigStorageService.getConfig();
+				if (!storageSize) storageSize = getDefaultStorageSize();
 				vm.scheduleTableWrapperStyle = {
-					'min-height': size.tableHeight + 'px'
+					'min-height': storageSize.tableHeight + 'px'
 				};
 				vm.scheduleTableBodyStyle = {
-					'max-height': size.tableBodyHeight + 'px',
-					'min-height': '0'
+					'max-height': storageSize.tableBodyHeight + 'px'
 				};
-				vm.chartHeight = size.chartHeight;
-				vm.scheduleBodyHeight = size.tableBodyHeight;
+				vm.chartHeight = storageSize.chartHeight;
+				vm.scheduleBodyHeight = storageSize.tableBodyHeight;
 			}
 			else {
-				vm.scheduleTableWrapperStyle = { 'min-height': 500 + 'px' };
-				vm.scheduleTableBodyStyle = { 'max-height': 460 + 'px' };
-				vm.scheduleBodyHeight = 460;
+				var defaultStorageSize = getDefaultStorageSize();
+				vm.scheduleTableWrapperStyle = { 'min-height': defaultStorageSize.tableHeight + 'px' };
+				vm.scheduleTableBodyStyle = { 'min-height': defaultStorageSize.tableBodyHeight + 'px' };
+				vm.scheduleBodyHeight = defaultStorageSize.tableBodyHeight;
 			}
 		};
+
+		function getDefaultStorageSize() {
+			var bodyHeight = $document[0].body.clientHeight;
+			var tableHeight = bodyHeight * (vm.staffingEnabled ? 0.4 : 0.64);
+			return {
+				tableHeight: tableHeight,
+				tableBodyHeight: tableHeight - 40,
+				chartHeight: bodyHeight * 0.3 - 40
+			};
+		}
 
 		vm.paginationOptions = {
 			pageSize: 20,
@@ -148,7 +133,6 @@
 
 		vm.hasSelectedAllPeopleInEveryPage = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
-
 
 		var commandContainerId = 'teamschedule-command-container';
 		var settingsContainerId = 'teamschedule-settings-container';
@@ -221,6 +205,7 @@
 			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper table thead';
 			var tHeader = $document[0].querySelector(tHeaderSelector);
 			var footer = $document[0].querySelector('.teamschedule-footer');
+
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var tableHeight = d.height - footer.offsetHeight;
 			var tBodyHeight = tableHeight - tHeaderHeight;
@@ -709,12 +694,13 @@
 
 				vm.resetSchedulePage();
 				vm.permissions = teamsPermissions.all();
+				initTeamSize();
 			});
-
-			personSelectionSvc.clearPersonInfo();
 
 			if (vm.staffingEnabled)
 				vm.showStaffing();
+
+			personSelectionSvc.clearPersonInfo();
 		}
 
 		init();

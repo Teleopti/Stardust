@@ -20,7 +20,6 @@
 	</div>
 	<md-virtual-repeat-container class="list-group"
 								 ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }"
-								 style="height:460px;"
 								 update-size="{{vm.scheduleBodyHeight}}">
 		<div md-virtual-repeat="personSchedule in vm.scheduleVm.Schedules">
 			<div class="list-item"
