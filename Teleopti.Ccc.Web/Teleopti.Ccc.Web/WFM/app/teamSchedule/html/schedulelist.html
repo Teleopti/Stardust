@@ -50,19 +50,19 @@
 
 				<div class="shift-category-cell">
 					<span id="name"
-						  ng-if="personSchedule.ShiftCategory.Name"
+						  ng-if="personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
 						  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.TextColor}">
 						<span ng-click="vm.modifyShiftCategoryForAgent($event, personSchedule)">{{personSchedule.ShiftCategory.ShortName}}</span>
 						<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
+						<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
+									class="multiline-tooltip"
+									md-direction="right">
+							<div ng-if="personSchedule.ShiftCategory.Name">{{personSchedule.ShiftCategory.Name}}</div>
+							<underlying-schedule-info person-schedule="personSchedule"
+													  date="vm.selectedDate"></underlying-schedule-info>
+						</md-tooltip>
 					</span>
-
-					<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
-								class="multiline-tooltip"
-								md-direction="right">
-						<div ng-if="personSchedule.ShiftCategory.Name">{{personSchedule.ShiftCategory.Name}}</div>
-						<underlying-schedule-info person-schedule="personSchedule"
-												  date="vm.selectedDate"></underlying-schedule-info>
-					</md-tooltip>
+					
 				</div>
 
 				<div class="schedule schedule-column">
