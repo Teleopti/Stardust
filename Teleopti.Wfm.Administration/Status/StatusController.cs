@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Administration.Status
 		[Route("status/list")]
 		public IHttpActionResult List()
 		{
-			return Ok(_listStatusSteps.Execute(new Uri(Request.RequestUri, RequestContext.VirtualPathRoot) + relPathToCheck));
+			return Ok(_listStatusSteps.Execute(new Uri(Request.RequestUri, RequestContext.VirtualPathRoot) + "/" + relPathToCheck));
 		}
 	}
 }

@@ -8,7 +8,7 @@
 		},
 		mounted() {
 			var vm = this;
-			axios.get('/status/list')
+			axios.get('./status/list')
 				.then(function (statusSteps) {
 					statusSteps.data.forEach(function (step) {
 						var newStep = {
