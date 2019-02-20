@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
@@ -16,12 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly PreferenceDayViewModelMapper _preferenceDayModelMapper;
+		private readonly BankHolidayCalendarViewModelMapper _bankHolidayCalendarViewModelMapper;
 
-		public PreferenceAndScheduleDayViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZone, PreferenceDayViewModelMapper preferenceDayModelMapper)
+		public PreferenceAndScheduleDayViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZone, 
+			PreferenceDayViewModelMapper preferenceDayModelMapper, BankHolidayCalendarViewModelMapper bankHolidayCalendarViewModelMapper)
 		{
 			_projectionProvider = projectionProvider;
 			_userTimeZone = userTimeZone;
 			_preferenceDayModelMapper = preferenceDayModelMapper;
+			_bankHolidayCalendarViewModelMapper = bankHolidayCalendarViewModelMapper;
 		}
 
 		public PreferenceAndScheduleDayViewModel Map(IScheduleDay s, IBankHolidayDate bankHolidayDate)
@@ -45,19 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				BorderColor = borderColor(s),
 				Meetings = meetings(s),
 				PersonalShifts = personalShifts(s),
-				BankHolidayCalendar = mapCalendar(bankHolidayDate)
-			};
-		}
-
-		private BankHolidayCalendarViewModel mapCalendar(IBankHolidayDate bankHolidayDate)
-		{
-			if (bankHolidayDate == null) return null;
-
-			return new BankHolidayCalendarViewModel
-			{
-				CalendarId = bankHolidayDate.Calendar.Id.GetValueOrDefault(),
-				CalendarName = bankHolidayDate.Calendar.Name,
-				DateDescription = bankHolidayDate.Description
+				BankHolidayCalendar = _bankHolidayCalendarViewModelMapper.Map(bankHolidayDate)
 			};
 		}
 
