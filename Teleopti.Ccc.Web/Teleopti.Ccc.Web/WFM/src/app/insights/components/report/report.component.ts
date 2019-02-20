@@ -94,8 +94,8 @@ export class ReportComponent implements OnInit {
 			// If redirect to other page on update token, since the report container will be destroyed,
 			// the container will not be a embed report, it will failed to get the embed container and cause problem.
 			// Refer to test issue #80713: Error when edit a report
-			var pbiElement = <IPowerBiElement>embedContainer;
-			if(!pbiElement || !pbiElement.powerBiEmbed) return;
+			const pbiElement = <IPowerBiElement>embedContainer;
+			if (!pbiElement || !pbiElement.powerBiEmbed) return;
 
 			const self = this;
 			const report = this.pbiCoreService.get(embedContainer);
@@ -155,6 +155,11 @@ export class ReportComponent implements OnInit {
 		report.on('loaded', function () {
 			self.reportLoaded = true;
 			self.setTokenExpirationListener(config.Expiration, 2, config.ReportId);
+		});
+
+		report.off('saved');
+		report.on('saved', function () {
+			self.reportSvc.updateReport(config.ReportId, config.ReportName);
 		});
 	}
 

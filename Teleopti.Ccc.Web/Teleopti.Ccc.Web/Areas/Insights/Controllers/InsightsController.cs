@@ -58,6 +58,19 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 		}
 
 		[TenantUnitOfWork]
+		[HttpGet, Route("api/Insights/UpdateReport")]
+		public virtual async Task<bool> UpdateReportMetadata(string reportId, string reportName)
+		{
+			if (string.IsNullOrEmpty(reportId) || !Guid.TryParse(reportId, out var repId) ||
+				string.IsNullOrWhiteSpace(reportName))
+			{
+				return false;
+			}
+
+			return await _reportProvider.UpdateReportMetadata(repId, reportName);
+		}
+
+		[TenantUnitOfWork]
 		[HttpGet, Route("api/Insights/CloneReport")]
 		public virtual async Task<EmbedReportConfig> CloneReport(string reportId, string newReportName)
 		{

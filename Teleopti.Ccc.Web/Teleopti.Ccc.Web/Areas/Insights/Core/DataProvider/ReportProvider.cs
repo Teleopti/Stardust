@@ -131,6 +131,25 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			return result;
 		}
 
+		public Task<bool> UpdateReportMetadata(Guid reportId, string reportName)
+		{
+			try
+			{
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					_reportRepository.UpdateInsightsReport(reportId, reportName);
+					uow.PersistAll();
+				}
+
+				return Task.FromResult(true);
+			}
+			catch (Exception ex)
+			{
+				logger.Error($"Failed to update report raw data with Id=\"{reportId}\" and name = \"{reportName}\"", ex);
+				return Task.FromResult(false);
+			}
+		}
+
 		public async Task<EmbedReportConfig> CloneReport(Guid reportId, string newReportName)
 		{
 			var result = new EmbedReportConfig();
