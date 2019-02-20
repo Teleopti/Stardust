@@ -97,7 +97,8 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			});
 		}
 
-		[Test,Ignore("Waiting for a fast lane Build")]
+		//[Test,Ignore("Waiting for a fast lane Build")]
+		[Test]
 		public void AbsencesWithUpdateReadModelDeadLock()
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))

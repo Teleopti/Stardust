@@ -111,7 +111,8 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			});
 		}
 
-		[Test,Ignore("Waiting for a fast lane Build")]
+		//[Test,Ignore("Waiting for a fast lane Build")]
+		[Test]
 		public void Run100WaitlistedRequests()
 		{
 			Now.Is("2016-04-06 06:59");

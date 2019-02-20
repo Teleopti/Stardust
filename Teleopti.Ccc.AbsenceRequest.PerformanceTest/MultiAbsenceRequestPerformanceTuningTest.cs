@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 		public MultiAbsenceRequestsHandlerRobustToggleOn Target;
 		public WithUnitOfWork WithUnitOfWork;
 
-		[Test,Ignore("Waiting for a fast lane Build")]
+		//[Test,Ignore("Waiting for a fast lane Build")]
+		[Test]
 		public void ShouldHandle200AbsenceRequestsFast()
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
