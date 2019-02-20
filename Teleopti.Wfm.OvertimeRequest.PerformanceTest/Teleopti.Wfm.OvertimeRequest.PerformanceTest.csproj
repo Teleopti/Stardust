@@ -109,4 +109,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.11.0\build\NUnit.props'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)app.config"</PreBuildEvent>
+  </PropertyGroup>
 </Project>
