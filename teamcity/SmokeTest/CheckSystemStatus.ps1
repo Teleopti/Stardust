@@ -16,7 +16,7 @@ function CheckSystemStatus
         $listRead = $false
         try
         {
-            $steps = Invoke-RestMethod -Uri $listUrl
+            $steps = Invoke-RestMethod -Uri $Url
             $listRead = $true 
         }
         catch
