@@ -2274,6 +2274,12 @@
     <Content Include="WFM\src\app\core\translation\translate.parser.ts" />
     <Content Include="WFM\src\app\core\translation\translation.loader.ts" />
     <Content Include="WFM\src\app\core\translation\zorro.i18n.service.ts" />
+    <Content Include="WFM\src\app\example-module\components\example-component.component.ts" />
+    <Content Include="WFM\src\app\example-module\components\index.ts" />
+    <Content Include="WFM\src\app\example-module\example-module.module.ts" />
+    <Content Include="WFM\src\app\example-module\pages\index.ts" />
+    <Content Include="WFM\src\app\example-module\shared\index.ts" />
+    <Content Include="WFM\src\app\example-module\shared\navigation.service.ts" />
     <Content Include="WFM\src\app\insights\components\index.ts" />
     <Content Include="WFM\src\app\insights\components\report\report.component.html" />
     <Content Include="WFM\src\app\insights\components\report\report.component.scss" />
