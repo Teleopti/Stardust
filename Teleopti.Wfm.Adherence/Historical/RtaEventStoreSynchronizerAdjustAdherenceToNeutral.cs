@@ -35,47 +35,33 @@ namespace Teleopti.Wfm.Adherence.Historical
 			_adherenceDayLoader = adherenceDayLoader;
 			_keyValueStore = keyValueStore;
 			_distributedLock = distributedLock;
-		}
-
+		}	
+		
 		[TestLog]
 		public virtual void Synchronize()
 		{			
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
-				var adjustToNeutral = false;
 				var toEventId = ToEventId();
+				var fromEventId = FromEventId();
+				var syncAll = PeriodAdjustedToNeutralEventsCount(fromEventId) > 0;
+				if(syncAll)
+					UpdateSynchronizedEventId(0);
 				while (true)
 				{
-					var fromEventId = FromEventId();
+					fromEventId = FromEventId();
 					var events = LoadEvents(fromEventId);
-					
-					if (events.Events.Any(x => x.GetType() == typeof(PeriodAdjustedToNeutralEvent)))
-					{
-						adjustToNeutral = true;
-						break;						
-					}
-					
 					Synchronize(events.Events);
 					UpdateSynchronizedEventId(events.ToId);
 					if (events.ToId >= toEventId)
 						break;
 				}
-
-				if (adjustToNeutral)
-				{
-					UpdateSynchronizedEventId(0);
-					while (true)
-					{
-						var fromEventId = FromEventId();
-						var events = LoadEvents(fromEventId);
-						Synchronize(events.Events);
-						UpdateSynchronizedEventId(events.ToId);
-						if (events.ToId >= toEventId)
-							break;
-					}					
-				}
 			});
-		}		
+		}
+
+		[UnitOfWork]
+		protected virtual int PeriodAdjustedToNeutralEventsCount(long fromEventId) =>
+			_events.PeriodAdjustedToNeutralEventsCount(fromEventId);
 
 		[UnitOfWork]
 		protected virtual LoadedEvents LoadEvents(long fromEventId) =>

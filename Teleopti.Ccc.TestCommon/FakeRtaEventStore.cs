@@ -128,6 +128,12 @@ namespace Teleopti.Ccc.TestCommon
 		public long ReadLastId() =>
 			Data.LastOrDefault()?.Id ?? 0;
 
+		public int PeriodAdjustedToNeutralEventsCount(long fromEventId)
+		{
+			return Data
+				.Count(x => x.Event.GetType() == typeof(PeriodAdjustedToNeutralEvent));
+		}
+
 		public IEnumerable<IEvent> LoadAllForTest()
 		{
 			throw new NotImplementedException();
