@@ -4,6 +4,7 @@ using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -93,7 +94,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<RestorePersonInfoOnDetach>().SingleInstance();
 
 			builder.RegisterType<SkillForecastJobStartTimeRepository>().As<ISkillForecastJobStartTimeRepository>().SingleInstance();
-
+			builder.RegisterType<SkillForecastSettingsReader>().SingleInstance();
 		}
 	}
 
