@@ -109,10 +109,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		{
 			if (!ClearDataTablesAfterRun)
 				return;
-			if (_bulkInsertDataTable1 != null)
-				_bulkInsertDataTable1.Rows.Clear();
-			if (_bulkInsertDataTable2 != null)
-				_bulkInsertDataTable2.Rows.Clear();
+			_bulkInsertDataTable1?.Clear();
+			_bulkInsertDataTable2?.Clear();
 		}
 
 		public IJobStepResult Result

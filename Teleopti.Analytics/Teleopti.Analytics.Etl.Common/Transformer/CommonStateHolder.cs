@@ -38,7 +38,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private IList<IRuleSetBag> _ruleSetBagCollection;
 		private IList<IGroupPage> _userDefinedGroupings;
 		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection;
-		private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCache;
 		private readonly ConcurrentDictionary<string, ILastChangedReadModel> _timeValues = new ConcurrentDictionary<string, ILastChangedReadModel>();
 		private IList<IOptionalColumn> _optionalColumnCollection;
 		private CommonStateHolder()
@@ -188,12 +187,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			return dictionary;
 		}
-
-		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCache()
-		{
-			return _dictionaryCache ?? (_dictionaryCache = new Dictionary<DateTimePeriod, IScheduleDictionary>());
-		}
-
+		
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
 		{
 			return _jobParameters.Helper.Repository.LoadSchedulePartsPerPersonAndDate(period, GetSchedules(period, scenario));
@@ -251,15 +245,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)
 		{
 			var period = new DateTimePeriod(DateTime.SpecifyKind(restrictionDate.Date, DateTimeKind.Utc), DateTime.SpecifyKind(restrictionDate.Date, DateTimeKind.Utc).AddDays(1).AddMilliseconds(-1));
-			var scheduleCache = GetScheduleCache();
-			IScheduleDictionary dic;
-			if (scheduleCache.TryGetValue(period, out dic))
-			{
-				IScheduleRange range;
-				if (dic.TryGetValue(person, out range))
-					return range.ScheduledDay(restrictionDate);
-			}
-
+			
 			var theDic = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, new List<IPerson> { person });
 			return theDic[person].ScheduledDay(restrictionDate);
 		}
@@ -317,8 +303,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			{
 				get
 				{
-					ScheduleCacheItem cacheItem;
-					if (!_scenarioCacheDictionary.TryGetValue(scenario, out cacheItem))
+					if (!_scenarioCacheDictionary.TryGetValue(scenario, out var cacheItem))
 					{
 						cacheItem = new ScheduleCacheItem();
 						_scenarioCacheDictionary.Add(scenario, cacheItem);
@@ -336,8 +321,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			internal void Add(DateTimePeriod period, IScheduleDictionary dictionary)
 			{
-				IScheduleDictionary currentDictionary;
-				if (_periodData.TryGetValue(period, out currentDictionary))
+				if (_periodData.TryGetValue(period, out _))
 					_periodData.Remove(period);
 
 				_periodData.Add(period, dictionary);
