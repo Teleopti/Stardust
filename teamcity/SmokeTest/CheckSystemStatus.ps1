@@ -61,4 +61,4 @@ add-type @"
 [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 [Net.ServicePointManager]::SecurityProtocol = 'Tls12'
 
-CheckSystemStatus  $Url
+CheckSystemStatus  $listUrl
