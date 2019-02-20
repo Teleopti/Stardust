@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
@@ -13,23 +12,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceCalculation _resourceCalculation;
+		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
 
 		public TeamBlockRemoveShiftCategoryOnBestDateService(
 									ScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
 									Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
-									ITimeZoneGuard timeZoneGuard,
 									IDeleteSchedulePartService deleteSchedulePartService,
-									IResourceCalculation resourceCalculation)
+									IResourceCalculation resourceCalculation,
+									ScheduleChangesAffectedDates scheduleChangesAffectedDates)
 		{
 			
 			_scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_timeZoneGuard = timeZoneGuard;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceCalculation = resourceCalculation;
+			_scheduleChangesAffectedDates = scheduleChangesAffectedDates;
 		}
 
 		public IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			_deleteSchedulePartService.Delete(new [] {schedulePart}, options, schedulePartModifyAndRollbackService, new NoSchedulingProgress());
 
-			var dates = new ScheduleChangesAffectedDates(_timeZoneGuard).DecideDates(schedulePart.ReFetch(), schedulePart).ToList();
+			var dates = _scheduleChangesAffectedDates.DecideDates(schedulePart.ReFetch(), schedulePart).ToList();
 			var daysToRecalculate = new HashSet<DateOnly>(dates);
 
 			var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
