@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IContract> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ContractRepository(currentUnitOfWork);
+            return new ContractRepository(currentUnitOfWork, null, null);
         }
 
     }

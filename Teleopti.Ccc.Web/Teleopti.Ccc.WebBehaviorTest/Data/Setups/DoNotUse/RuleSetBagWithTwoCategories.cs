@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityRepository = new ActivityRepository(unitOfWork);
+			var activityRepository = new ActivityRepository(unitOfWork, null, null);
 			activityRepository.Add(activity);
 
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();

@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (person == null)
 			{
 				var partTimePercentageRepository = new PartTimePercentageRepository(uow);
-				var contractRepository = new ContractRepository(uow);
+				var contractRepository = new ContractRepository(uow, null, null);
 				var contractScheduleRepository = new ContractScheduleRepository(uow);
 				person = PersonFactory.CreatePerson(personName);
 				

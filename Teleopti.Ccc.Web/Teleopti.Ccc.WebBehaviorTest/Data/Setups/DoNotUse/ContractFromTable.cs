@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 					NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(NegativeTargetToleranceHours),
 					WorkTimeDirective = workTimeDirective
 				};
-			new ContractRepository(currentUnitOfWork).Add(Contract);
+			new ContractRepository(currentUnitOfWork, null, null).Add(Contract);
 		}
 	}
 }

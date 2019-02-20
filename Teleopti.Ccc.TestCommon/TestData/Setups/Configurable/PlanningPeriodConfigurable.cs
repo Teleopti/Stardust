@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				new JobResultRepository(currentUnitOfWork).Add(jobResult);
 				Period.JobResults.Add(jobResult);
 				var scenario = DefaultScenario.Scenario;
-				var activity = new ActivityRepository(currentUnitOfWork).LoadAll().FirstOrDefault();
+				var activity = new ActivityRepository(currentUnitOfWork, null, null).LoadAll().FirstOrDefault();
 				var perons = personRepository.FindPeopleInPlanningGroup(planningGroup, Period.Range);
 				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
 				foreach (var person in perons)

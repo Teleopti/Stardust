@@ -103,12 +103,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				IActivity activity;
 				if (a.Activity != null)
 				{
-					activity = new ActivityRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(a.Activity));
+					activity = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(a.Activity));
 				}
 				else
 				{
 					activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-					var activityRepository = new ActivityRepository(unitOfWork);
+					var activityRepository = new ActivityRepository(unitOfWork, null, null);
 					activityRepository.Add(activity);
 				}
 				if (a.IsPersonal)

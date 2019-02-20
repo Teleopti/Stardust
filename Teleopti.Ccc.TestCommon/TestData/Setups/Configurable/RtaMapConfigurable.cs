@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				ruleRepository.Add(rule);
 			}
 
-			var activityRepository = new ActivityRepository(currentUnitOfWork);
+			var activityRepository = new ActivityRepository(currentUnitOfWork, null, null);
 
 			IRtaStateGroup stateGroup = null;
 			if (PhoneState != null)

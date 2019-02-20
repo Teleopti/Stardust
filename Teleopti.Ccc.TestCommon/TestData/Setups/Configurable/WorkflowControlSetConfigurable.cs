@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AvailableActivity))
 			{
-				var activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableActivity);
+				var activity = new ActivityRepository(currentUnitOfWork, null, null).LoadAll().Single(c => c.Description.Name == AvailableActivity);
 				workflowControlSet.AllowedPreferenceActivity = activity;
 			}
 

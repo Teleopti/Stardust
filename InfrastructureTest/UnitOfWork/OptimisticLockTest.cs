@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			new PartTimePercentageRepository(new ThisUnitOfWork(uow1)).Add(partTimePercentage);
 			uow1.PersistAll();
 			var contract = new Contract(".");
-			new ContractRepository(new ThisUnitOfWork(uow1)).Add(contract);
+			new ContractRepository(new ThisUnitOfWork(uow1), null, null).Add(contract);
 			uow1.PersistAll();
 			var contratSchedule = new ContractSchedule(".");
 			new ContractScheduleRepository(new ThisUnitOfWork(uow1)).Add(contratSchedule);

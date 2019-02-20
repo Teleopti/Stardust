@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Skill.SetCascadingIndex(CascadingIndex.Value);
 			if (SeriousUnderstaffingThreshold.HasValue)
 				Skill.StaffingThresholds = new StaffingThresholds(new Percent(SeriousUnderstaffingThreshold.Value), Skill.StaffingThresholds.Understaffing, Skill.StaffingThresholds.Overstaffing);
-			var activityRepository = new ActivityRepository(currentUnitOfWork);
+			var activityRepository = new ActivityRepository(currentUnitOfWork, null, null);
 			Skill.Activity = activityRepository.LoadAll().Single(b => b.Description.Name == Activity);
 
 			var skillRepository = new SkillRepository(currentUnitOfWork);

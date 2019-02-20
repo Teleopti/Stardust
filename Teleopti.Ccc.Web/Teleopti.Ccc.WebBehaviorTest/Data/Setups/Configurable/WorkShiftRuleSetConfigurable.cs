@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Activity);
+			var activity = new ActivityRepository(currentUnitOfWork, null, null).LoadAll().Single(a => a.Name == Activity);
 			var shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(a => a.Description.Name == ShiftCategory);
 
 			var start = new TimePeriodWithSegment(Transform.ToTimePeriod(StartBoundry), Transform.ToTimeSpan(Segment));

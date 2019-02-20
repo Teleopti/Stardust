@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_view.Presenter = new ManageAlarmSituationPresenter(UnitOfWorkFactory.Current,
 																new RtaRuleRepository(currentUnitOfWork),
 																new RtaStateGroupRepository(currentUnitOfWork),
-																new ActivityRepository(currentUnitOfWork),
+																new ActivityRepository(currentUnitOfWork, null, null),
 																new RtaMapRepository(currentUnitOfWork),
 																MessageBrokerInStateHolder.Instance, 
 																_view);

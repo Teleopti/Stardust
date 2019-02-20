@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
 			}
 
-			new ContractRepository(currentUnitOfWork).Add(Contract);
+			new ContractRepository(currentUnitOfWork, null, null).Add(Contract);
 		}
 	}
 }

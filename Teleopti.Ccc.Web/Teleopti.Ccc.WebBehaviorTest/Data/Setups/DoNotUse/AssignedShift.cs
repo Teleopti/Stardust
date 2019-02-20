@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
 
 			IActivity activity;
-			var activityRepository = new ActivityRepository(unitOfWork);
+			var activityRepository = new ActivityRepository(unitOfWork, null, null);
 			if (Activity != null)
 			{
-				activity = new ActivityRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+				activity = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			}
 			else
 			{

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IActivity> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ActivityRepository(currentUnitOfWork);
+            return new ActivityRepository(currentUnitOfWork, null, null);
         }
     }
 }
