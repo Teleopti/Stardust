@@ -257,6 +257,10 @@
 				}
 			}
 		}
+
+		&.has-selected .schedule-column .shift .layer:not(.selected) {
+			opacity: 0.4;
+		}
 	}
 
 	.md-virtual-repeat-scroller {
