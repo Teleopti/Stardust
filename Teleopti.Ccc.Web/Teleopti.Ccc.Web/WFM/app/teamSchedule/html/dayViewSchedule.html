@@ -44,7 +44,7 @@
 						  timezone="vm.currentTimezone"></view-changer>
 
 			<timezone-picker class="timezone-picker"
-							 ng-if="!vm.isLoading"
+							 is-disabled="vm.isLoading"
 							 avaliable-timezones="vm.avaliableTimezones"
 							 ng-model="vm.currentTimezone"
 							 ng-change="vm.changeTimezone()"></timezone-picker>
