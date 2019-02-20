@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class TriggerInsightsDataRefreshJobStep : JobStepBase
 	{
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(TriggerInsightsDataRefreshJobStep));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(TriggerInsightsDataRefreshJobStep));
 		private readonly IServiceBusTopicClientFactory _serviceBusTopicClientProvider;
 
 		public TriggerInsightsDataRefreshJobStep(IJobParameters jobParameters,
@@ -37,10 +37,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			var insightsConfig = _jobParameters.InsightsConfig;
 			if (!_jobParameters.InsightsEnabled || insightsConfig == null || !insightsConfig.IsValid())
 			{
-				// TODO: It's not an problem (When scheduled Insights ETL job for all tenants, some tenant is not
+				// It's not an problem (When scheduled Insights ETL job for all tenants, some tenant is not
 				// enabled with Insights and no configuration applied, then no message should be send out for them),
-				// It's just for debug by now (To find out why no message send out), should be removed later.
-				_logger.WarnFormat("Insights not enabled or configuration for Insights ETL job is invalid for data source {0}.",
+				logger.InfoFormat(
+					"Insights not enabled or configuration for Insights ETL job is invalid for data source {0}.",
 					_jobParameters.Helper.SelectedDataSource.DataSourceName);
 				return;
 			}
@@ -49,7 +49,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			try
 			{
 				topicClient = _serviceBusTopicClientProvider.CreateTopicClient(insightsConfig.ServiceBusAddress,
-						insightsConfig.TopicName);
+					insightsConfig.TopicName);
 				var startRefreshMsg = new StartRefreshMessage
 				{
 					ModelLocation = insightsConfig.ModelLocation,
@@ -66,10 +66,19 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 				var message = new Message(startRefreshMsgByteArray);
 				await topicClient.SendAsync(message);
+
+				logger.Debug($"Sent message to ServiceBus with Address: \"{insightsConfig.ServiceBusAddress}\" and "
+							  + $"TopicName: \"{insightsConfig.TopicName}\":{Environment.NewLine}{startRefreshMsgJson}");
+			}
+			catch (Exception ex)
+			{
+				logger.Error("Exception sending Refresh message.", ex);
+				throw;
 			}
 			finally
 			{
 				topicClient?.CloseAsync();
+				logger.Debug("topicClient closed successfully");
 			}
 		}
 	}
