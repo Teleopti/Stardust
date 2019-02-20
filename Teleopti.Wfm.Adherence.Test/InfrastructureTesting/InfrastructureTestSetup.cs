@@ -1,7 +1,7 @@
+using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
@@ -15,29 +15,18 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		{
 			DatabaseTestSetup.Setup(context =>
 			{
-				BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
-				_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-				_person = PersonFactory.CreatePerson(RandomName.Make());
-
+				_businessUnit = new BusinessUnit(RandomName.Make());
+				_person = new Person()
+					.WithName(RandomName.Make())
+					.InTimeZone(TimeZoneInfo.Utc);
 				context.UpdatedByScope.OnThisThreadUse(_person);
-				using (var uow = context.DataSource.Application.CreateAndOpenUnitOfWork())
+				context.WithUnitOfWork.Do(() =>
 				{
-					var session = uow.FetchSession();
-
-					((IDeleteTag) _person).SetDeleted();
-					session.Save(_person);
-
-					//force a insert
-					var businessUntId = _businessUnit.Id.Value;
-					_businessUnit.SetId(null);
-					session.Save(_businessUnit, businessUntId);
-					session.Flush();
-
-					uow.PersistAll();
-				}
-
+					context.Persons.Add(_person);
+					context.Persons.Remove(_person); // SetDeleted
+					context.BusinessUnits.Add(_businessUnit);
+				});
 				context.UpdatedByScope.OnThisThreadUse(null);
-
 				return 254875;
 			});
 

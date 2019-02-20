@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             var state = new FakeState();
 	        var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
             var applicationData = StateHolderProxyHelper.CreateApplicationData(null);
-            var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+            var businessUnit = BusinessUnitUsedInTests.BusinessUnit;
 
             var per = new Person().WithName(new Name("Peter", "Westlin Junior")).WithId();
 

@@ -1,6 +1,6 @@
-using Teleopti.Ccc.Domain.MonitorSystem;
+using Teleopti.Ccc.Domain.Status;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystem
+namespace Teleopti.Ccc.DomainTest.Status
 {
 	public class FakeCallLegacySystemStatus : ICallLegacySystemStatus
 	{

@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void Setup()
 		{
-			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
-			_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			BusinessUnitUsedInTests.Reset();
+			_businessUnit = BusinessUnitUsedInTests.BusinessUnit;
 			_team = TeamFactory.CreateTeam("teamName", "siteName");
 			_team.Site.SetBusinessUnit(_businessUnit);
 			_personRepository = new FakePersonRepository(new FakeStorage());

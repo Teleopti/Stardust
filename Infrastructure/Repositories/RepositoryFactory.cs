@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRepository(new ThisUnitOfWork(unitOfWork));
+			return new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null);
 		}
 
 		/// <summary>

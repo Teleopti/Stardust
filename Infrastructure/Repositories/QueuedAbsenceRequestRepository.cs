@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class QueuedAbsenceRequestRepository : Repository<IQueuedAbsenceRequest>, IQueuedAbsenceRequestRepository
 	{
 		public QueuedAbsenceRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

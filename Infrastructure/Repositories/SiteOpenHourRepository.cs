@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class SiteOpenHourRepository : Repository<ISiteOpenHour>, ISiteOpenHourRepository
 	{
 		public SiteOpenHourRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 
 		}

@@ -30,6 +30,7 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 		IEnumerable<IEvent> LoadAllOfType<T>();
 		LoadedEvents LoadForSynchronization(long fromEventId);
 		long ReadLastId();
+		int CountOfTypeFromId<T>(long fromEventId);
 	}
 
 	public class LoadedEvents

@@ -335,8 +335,23 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 				)
 			),
 			toArray());
+		
+		monthCount.subscribe(result => {
+			
+			if (result.length > 1) {
+				if(result[0].Count<3){
+					result[1].Count -= 3-result[0].Count;
+					result[0].Count = 3;
+				}
 
-		monthCount.subscribe(result => this.months = result);
+				if(result[result.length-1].Count<3){
+					result[result.length-2].Count -= 3-result[result.length-1].Count;
+					result[result.length-1].Count = 3;
+				}
+			}
+			
+			this.months = result
+			});
 	}
 	
 	private parseWorstDays(){

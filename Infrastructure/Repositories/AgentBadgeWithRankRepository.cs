@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class AgentBadgeWithRankRepository : Repository<IAgentBadgeWithRank>, IAgentBadgeWithRankRepository
 	{
 		public AgentBadgeWithRankRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

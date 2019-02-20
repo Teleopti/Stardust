@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         [Test]
         public void ShouldNotHaveOrganisationBelongingsFromPersonIfNoPersonPeriods()
         {
-            target.Organisation.BelongsToBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, new DateOnly(2011,5,2)).Should().Be.False();
+            target.Organisation.BelongsToBusinessUnit(BusinessUnitUsedInTests.BusinessUnit, new DateOnly(2011,5,2)).Should().Be.False();
         }
     }
 }

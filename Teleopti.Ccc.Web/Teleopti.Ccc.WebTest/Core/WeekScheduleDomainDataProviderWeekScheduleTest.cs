@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -42,17 +41,43 @@ namespace Teleopti.Ccc.WebTest.Core
 		public ICurrentDataSource CurrentDataSource;
 		public MutableNow Now;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
+		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
+		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		public FakeLoggedOnUser User;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true })).For<IScenarioRepository>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+
+		private void prepareData()
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			User.SetFakeLoggedOnUser(logonUser);
+			PersonRepository.Add(logonUser);
+			var site = new Site("site").WithId();
+			SiteRepository.Add(site);
+			var team = new Team { Site = site }.WithDescription(new Description("team")).WithId();
+			TeamRepository.Add(team);
+			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
 		}
 
 		[Test]
 		public void ShouldMapDate()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 
 			var result = Target.GetWeekSchedule(date);
@@ -62,6 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAWeeksDays()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 
 			var result = Target.GetWeekSchedule(date);
@@ -71,6 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapWeeksDates()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 			var datesInWeek = (from d in firstDayOfWeek.Date.DateRange(7) select new DateOnly(d)).ToList();
@@ -84,6 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapScheduleDay()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 			var activity = new Activity("d");
 			addPersonSchedule(date, TimeSpan.FromHours(1), TimeSpan.FromHours(3), activity);
@@ -96,6 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapProjection()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 			var activity = new Activity("d").WithId();
 
@@ -109,6 +138,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapProjectionIncludingTheDayBeforeCurrentWeek()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 27);
 			var yesterdayDate = new DateOnly(2012, 08, 26);
 			var activityYesterday = new Activity("d").WithId();
@@ -124,6 +154,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapOvertimeAvailability()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 			var overtimeAvailability = new OvertimeAvailability(LoggedOnUser.CurrentUser(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0)).WithId();
 			ScheduleStorage.Add(overtimeAvailability);
@@ -136,6 +167,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapOvertimeAvailabilityForYesterday()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 27);
 			var yesterdayDate = new DateOnly(2012, 08, 26);
 			var overtimeAvailability = new OvertimeAvailability(LoggedOnUser.CurrentUser(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0)).WithId();
@@ -151,6 +183,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapPersonRequests()
 		{
+			prepareData();
 			var date = new DateOnly(DateTime.UtcNow.Date);
 
 			var personRequest = new PersonRequest(new Person(),
@@ -275,6 +308,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapPersonRequestsStartingAtMidnight()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 
 			var localMidnightInUtc = safeConvertTimeToUtc(date.Date);
@@ -294,6 +328,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapColorSource()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 			var activity = new Activity("d").WithId();
 			addPersonSchedule(date, TimeSpan.FromHours(1), TimeSpan.FromHours(3), activity);
@@ -310,6 +345,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTime()
 		{
+			prepareData();
 			var date = DateOnly.Today;
 			var localMidnightInUtc = safeConvertTimeToUtc(date.Date);
 			addPersonSchedule(date, localMidnightInUtc.AddHours(8), localMidnightInUtc.AddHours(17), new Activity().WithId());
@@ -326,6 +362,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForNightShift()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 28);
 			var localMidnightInUtc = safeConvertTimeToUtc(date.Date);
 			addPersonSchedule(date, localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28), new Activity().WithId());
@@ -342,6 +379,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldHaveCorrectStartTimeForEndingAtMidNightEdgeCase()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 28);
 			var localMidnightInUtc = safeConvertTimeToUtc(date.Date);
 			addPersonSchedule(date, localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(24), new Activity().WithId());
@@ -358,6 +396,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForNightShiftFromPreviousWeek()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 28);
 			Now.Is(date.Date);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -377,6 +416,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForNightShiftStartingOnTheLastDayOfCurrentWeek()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
 
@@ -395,6 +435,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForOvertimeAvailability()
 		{
+			prepareData();
 			var date = new DateOnly(2013, 09, 11);
 			ScheduleStorage.Add(new OvertimeAvailability(LoggedOnUser.CurrentUser(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0)));
 
@@ -410,6 +451,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShift()
 		{
+			prepareData();
 			var date = new DateOnly(2013, 09, 11);
 			addPersonSchedule(date, TimeSpan.Zero, TimeSpan.FromDays(1));
 			ScheduleStorage.Add(new OvertimeAvailability(LoggedOnUser.CurrentUser(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)));
@@ -426,6 +468,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftFromPreviousWeek()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 28);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 		
@@ -444,6 +487,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftStartingOnTheLastDayOfCurrentWeek()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
 
@@ -461,6 +505,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToTrueWhenHavingBothLicenseAndPermission()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -476,6 +521,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmLicense()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -494,6 +540,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
+			prepareData();
 			PermissionProvider.Enable();
 			
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
@@ -514,6 +561,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapViewPossibilityPermission()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -529,6 +577,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapRequestPermission()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -544,6 +593,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapOvertimeRequestPermission()
 		{
+			prepareData();
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -559,6 +609,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
+			prepareData();
 			var date = new DateTime(2014, 08, 26);
 			Now.Is(date);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));

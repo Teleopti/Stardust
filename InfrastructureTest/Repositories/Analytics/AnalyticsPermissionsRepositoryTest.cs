@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			datasource = new ExistingDatasources(timeZones);
-			businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 			
 			analyticsDataFactory.Setup(businessUnit);
 			analyticsDataFactory.Persist();

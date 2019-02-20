@@ -52,14 +52,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		public void ShouldFindRevisionPeople()
 		{
 			IEnumerable<SimplestPersonInfo> revPeople;
+
+			var searchPeriod = new DateOnlyPeriod(DateTime.Today, DateTime.Today);
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				revPeople = target.GetRevisionPeople();
+				revPeople = target.GetRevisionPeople(searchPeriod);
 			}
 
 			var expectedPerson = PersonAssignment.UpdatedBy;
 			var person = revPeople.SingleOrDefault(x => x.Id == expectedPerson.Id.Value);
 			person.Name.Should().Be.EqualTo(getExpectedName(expectedPerson));
+		}
+
+		[Test]
+		public void ShouldNotFindRevisionPeople()
+		{
+			IEnumerable<SimplestPersonInfo> revPeople;
+			var searchPeriod = new DateOnlyPeriod(DateTime.Today.AddDays(-4), DateTime.Today.AddDays(-3));
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				revPeople = target.GetRevisionPeople(searchPeriod);
+			}
+
+			revPeople.Count().Should().Be(0);
 		}
 
 		[Test]

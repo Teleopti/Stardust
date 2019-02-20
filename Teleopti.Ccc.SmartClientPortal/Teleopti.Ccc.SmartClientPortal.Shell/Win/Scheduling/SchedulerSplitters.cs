@@ -12,7 +12,6 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -36,6 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class SchedulerSplitters : BaseUserControl
 	{
+		//Most of those needs to be properties with backend field, otherwise can't work in the designer for this control
 		private readonly PinnedSkillHelper _pinnedSkillHelper;
 		private IList<IPerson> _filteredPersons = new List<IPerson>();
 		private readonly ContextMenuStrip _contextMenuSkillGrid;
@@ -50,6 +50,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private DateOnly _currentIntraDayDate;
 		private string _chartDescription;
 		private IVirtualSkillHelper _virtualSkillHelper;
+		private ChartControl _chartControlSkillData;
+		private TeleoptiLessIntelligentSplitContainer _splitContainerView;
+		private GridControl _grid;
+		private ElementHost _elementHostRequests;
+		private HandlePersonRequestView _handlePersonRequestView1;
+		private ElementHost _elementHost1;
+		private MultipleHostControl _multipleHostControl3;
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs>
 			RestrictionsNotAbleToBeScheduledProgress;
@@ -185,27 +192,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			skillGridControl.Refresh();
 		}
 
-		public MultipleHostControl MultipleHostControl3 { get; private set; }
+		public MultipleHostControl MultipleHostControl3 => _multipleHostControl3;
 
 		public AgentInfoControl AgentInfoControl => tabInfoPanels.TabPages[0].Controls[0] as AgentInfoControl;
 
 		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer => lessIntellegentSplitContainerAdvMainContainer;
 
-		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get; private set; }
+		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get => _splitContainerView; private set => _splitContainerView = value; }
 
-		public ChartControl ChartControlSkillData { get; private set; }
+		public ChartControl ChartControlSkillData { get => _chartControlSkillData; private set => _chartControlSkillData = value; }
 
 		public ContextMenuStrip ContextMenuSkillGrid => _contextMenuSkillGrid;
 
 		public TabControlAdv TabSkillData => tabSkillData;
 
-		public ElementHost ElementHostRequests { get; private set; }
+		public ElementHost ElementHostRequests { get => _elementHostRequests; private set => _elementHostRequests = value; }
 
-		public HandlePersonRequestView HandlePersonRequestView1 { get; private set; }
+		public HandlePersonRequestView HandlePersonRequestView1 { get => _handlePersonRequestView1; private set => _handlePersonRequestView1 = value; }
 
-		public ElementHost ElementHost1 { get; private set; }
+		public ElementHost ElementHost1 { get => _elementHost1; private set => _elementHost1 = value; }
 
-		public GridControl Grid { get; private set; }
+		public GridControl Grid { get => _grid; private set => _grid = value; }
 
 		public SkillDayGridControl DayGridControl => _skillDayGridControl;
 
@@ -226,7 +233,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				foreach (var item in ContextMenuSkillGrid.Items)
 				{
 					if (!((item as ToolStripMenuItem)?.Tag is SkillResultViewSetting)) continue;
-					var itemTag = ((ToolStripMenuItem) item).Tag;
+					var itemTag = ((ToolStripMenuItem)item).Tag;
 					(item as ToolStripMenuItem).Checked = ((SkillResultViewSetting)itemTag).Equals(_skillResultViewSetting);
 				}
 			}
@@ -443,7 +450,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (skillSummery.DialogResult == DialogResult.OK)
 				{
-					var virtualSkill = (ISkill) skillSummery.AggregateSkillSkill;
+					var virtualSkill = (ISkill)skillSummery.AggregateSkillSkill;
 					virtualSkill.SetId(Guid.NewGuid());
 					TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
 					tab.ImageIndex = 4;
@@ -509,7 +516,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IAggregateSkill handleSummeryEditMenuItems(ContextMenuStrip contextMenuSkillGrid,
 			ToolStripMenuItem menuItem, SkillSummary skillSummary)
 		{
-			var virtualSkill = (ISkill) skillSummary.AggregateSkillSkill;
+			var virtualSkill = (ISkill)skillSummary.AggregateSkillSkill;
 			tabSkillData.SelectedTab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
 			foreach (TabPageAdv tabPage in tabSkillData.TabPages)
 			{
@@ -535,7 +542,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				tabPage.Text = virtualSkill.Name;
 				menuItem.Name = virtualSkill.Name;
 				menuItem.Text = virtualSkill.Name;
-				var skillGridMenuItem = (ToolStripMenuItem) contextMenuSkillGrid.Items["Delete"];
+				var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items["Delete"];
 				foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
 				{
 					if (subItem.Tag == virtualSkill)
@@ -551,7 +558,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void removeVirtualSkillToolStripMenuItem(ContextMenuStrip contextMenuSkillGrid, TabPageAdv tabPage,
 			IAggregateSkill virtualSkill, string action)
 		{
-			var skillGridMenuItem = (ToolStripMenuItem) contextMenuSkillGrid.Items[action];
+			var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items[action];
 			tabSkillData.TabPages.Remove(tabPage);
 			foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
 			{
@@ -607,33 +614,33 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void enableDeleteVirtualSkill(ISkill virtualSkill)
 		{
-			var skillGridMenuItem = (ToolStripMenuItem) ContextMenuSkillGrid.Items["Delete"];
+			var skillGridMenuItem = (ToolStripMenuItem)ContextMenuSkillGrid.Items["Delete"];
 			skillGridMenuItem.Enabled = true;
-			var subItem = new ToolStripMenuItem(virtualSkill.Name) {Tag = virtualSkill};
+			var subItem = new ToolStripMenuItem(virtualSkill.Name) { Tag = virtualSkill };
 			subItem.Click += skillGridMenuItemDeleteClick;
 			skillGridMenuItem.DropDownItems.Add(subItem);
 		}
 
 		private void enableEditVirtualSkill(ISkill virtualSkill)
 		{
-			var skillGridMenuItem = (ToolStripMenuItem) _contextMenuSkillGrid.Items["Edit"];
+			var skillGridMenuItem = (ToolStripMenuItem)_contextMenuSkillGrid.Items["Edit"];
 			skillGridMenuItem.Enabled = true;
-			var subItem = new ToolStripMenuItem(virtualSkill.Name) {Tag = virtualSkill};
+			var subItem = new ToolStripMenuItem(virtualSkill.Name) { Tag = virtualSkill };
 			subItem.Click += skillGridMenuItemEditClick;
 			skillGridMenuItem.DropDownItems.Add(subItem);
 		}
 
 		private void skillGridMenuItemDeleteClick(object sender, EventArgs e)
 		{
-			var menuItem = (ToolStripMenuItem) sender;
-			var virtualSkill = (IAggregateSkill) menuItem.Tag;
+			var menuItem = (ToolStripMenuItem)sender;
+			var virtualSkill = (IAggregateSkill)menuItem.Tag;
 			removeVirtualSkill(virtualSkill);
 		}
 
 		private void skillGridMenuItemEditClick(object sender, EventArgs e)
 		{
-			var menuItem = (ToolStripMenuItem) sender;
-			var skill = (ISkill) menuItem.Tag;
+			var menuItem = (ToolStripMenuItem)sender;
+			var skill = (ISkill)menuItem.Tag;
 
 			var validData = editSkillSummary(_schedulerStateHolder.SchedulingResultState.Skills, skill, menuItem);
 			if (validData)
@@ -661,10 +668,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				skillStaffPeriods =
 					_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-						new List<ISkill> {skill},
+						new List<ISkill> { skill },
 						periodToFind);
 			}
-			
+
 			if (skillStaffPeriods.Count >= 0)
 			{
 				_chartDescription = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", skill.Name,

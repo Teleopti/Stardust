@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		}
 
 		[Test]
-		public void Test()
+		public void GenerateStaffingViewModel3TimesTest()
 		{
 			Now.Is("2016-04-06 03:59");
 

@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				var splitted = name.Split(' ');
 				personName = new Name(splitted[0], splitted[1]);
 			}
-			var personRepository = new PersonRepository(uow);
+			var personRepository = new PersonRepository(uow, null, null);
 			var people = personRepository.LoadAll();
 			var person = people.FirstOrDefault(p => p.Name == personName);
 			if (person == null)

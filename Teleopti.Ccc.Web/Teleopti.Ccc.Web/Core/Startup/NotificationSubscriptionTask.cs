@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Wfm.Azure.Common;
 
@@ -25,19 +26,22 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private readonly IApplicationConfigurationDbProvider _applicationConfigurationDbProvider;
 		private readonly IInstallationEnvironment _installationEnvironment;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NotificationSubscriptionTask));
+		private readonly IToggleManager _toggleManager;
 
 		public NotificationSubscriptionTask(
 			ILoadAllTenants tenants, 
 			ITenantUnitOfWork tenantUnitOfWork, 
 			INotificationServiceClient notificationServiceClient,
 			IApplicationConfigurationDbProvider applicationConfigurationDbProvider,
-			IInstallationEnvironment installationEnvironment)
+			IInstallationEnvironment installationEnvironment,
+			IToggleManager toggleManager)
 		{
 			_loadAllTenants = tenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_notificationServiceClient = notificationServiceClient;
 			_applicationConfigurationDbProvider = applicationConfigurationDbProvider;
 			_installationEnvironment = installationEnvironment;
+			_toggleManager = toggleManager;
 		}
 
 		public NotificationResult LastExecution { get; set; }
@@ -73,15 +77,19 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 					foreach (var tenant in _loadAllTenants.Tenants())
 					{
-						tenant.ApplicationConfig.TryGetValue(TenantApplicationConfigKey.NotificationApiKey.ToString(), out var apiKey);
+						tenant.ApplicationConfig.TryGetValue(TenantApplicationConfigKey.NotificationApiKey.ToString(), 
+							out var apiKey);
+
 						if (!apiKey.IsNullOrEmpty()) continue;
 
 						var subscriptionKey = string.Empty;
 
 						try
 						{
-							//never want to call Azure if a local environment
-							if (Environment.UserDomainName == "TOPTINET")
+							
+							//never want to call Azure if a local environment 							
+							if (Environment.UserDomainName == "TOPTINET" && 
+								!_toggleManager.IsEnabled(Toggles.Wfm_AutomaticNotificationEnrollmentStartup_79679))
 							{								
 								subscriptionKey = "5bb3723b10d44163800b83aab080d603";
 								returnResult.Keys.Add(subscriptionKey);

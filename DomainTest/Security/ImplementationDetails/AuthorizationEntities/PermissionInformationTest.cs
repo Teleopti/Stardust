@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
             IApplicationRole normalRole = new ApplicationRole();
             IApplicationRole deletedBuRole = new ApplicationRole();
 
-            IBusinessUnit normalBu = BusinessUnitFactory.BusinessUnitUsedInTest;
+            IBusinessUnit normalBu = BusinessUnitUsedInTests.BusinessUnit;
             IBusinessUnit deletedBu = new BusinessUnit("deleted");
             ((IDeleteTag)deletedBu).SetDeleted();
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
             target.AddApplicationRole(deletedBuRole);
 
             Assert.AreEqual(1, target.BusinessUnitAccessCollection().Count);
-            Assert.IsTrue(target.BusinessUnitAccessCollection().Contains(BusinessUnitFactory.BusinessUnitUsedInTest));
+            Assert.IsTrue(target.BusinessUnitAccessCollection().Contains(BusinessUnitUsedInTests.BusinessUnit));
             Assert.IsFalse(target.BusinessUnitAccessCollection().Contains(deletedBu));
 
         }

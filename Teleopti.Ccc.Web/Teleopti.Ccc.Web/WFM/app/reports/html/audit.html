@@ -34,7 +34,7 @@
 
 						<div class="form-input-wrap">
 							<label>{{'ChangeDateColon'|translate}}</label><br/>
-							<wfm-date-range-picker ng-model="vm.dateChangeRange" popup-mode="true"></wfm-date-range-picker>
+							<wfm-date-range-picker ng-model="vm.dateChangeRange" ng-change="vm.changesData()" popup-mode="true"></wfm-date-range-picker>
 						</div>
 						<div class="form-input-wrap">
 							<label for="drop">{{'ChangedBy'|translate}}:</label>

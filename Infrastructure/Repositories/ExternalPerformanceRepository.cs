@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class ExternalPerformanceRepository : Repository<IExternalPerformance>, IExternalPerformanceRepository
 	{
-		public ExternalPerformanceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public ExternalPerformanceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 

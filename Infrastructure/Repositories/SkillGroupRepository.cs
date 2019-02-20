@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SkillGroupRepository : Repository<SkillGroup>, ISkillGroupRepository
 	{
-		public SkillGroupRepository(ICurrentUnitOfWork currentUnitOfWork):base(currentUnitOfWork)
+		public SkillGroupRepository(ICurrentUnitOfWork currentUnitOfWork):base(currentUnitOfWork, null, null)
 		{
 		}
 	}

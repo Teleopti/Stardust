@@ -28,14 +28,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldAddScenarioToAnalytics()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Test scenario", true);
 			ScenarioRepository.Add(scenario);
 			Target.Handle(new ScenarioChangeEvent
 			{
 				ScenarioId = scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(1);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldOnlyAddScenarioReportableToAnalytics()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Test scenario", false);
 			scenario.EnableReporting = false;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			Target.Handle(new ScenarioChangeEvent
 			{
 				ScenarioId = scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(0);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldUpdateScenarioToAnalytics()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("New scenario name", true);
 			ScenarioRepository.Add(scenario);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			Target.Handle(new ScenarioChangeEvent
 			{
 				ScenarioId = scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(1);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldSetScenarioToDeleteWhenDisableReporting()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Scenario name", false);
 			scenario.EnableReporting = false;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			Target.Handle(new ScenarioChangeEvent
 			{
 				ScenarioId = scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(1);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldSetScenarioToDelete()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Scenario name", true);
 			ScenarioRepository.Add(scenario);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			Target.Handle(new ScenarioDeleteEvent
 			{
 				ScenarioId = scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(1);

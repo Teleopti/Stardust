@@ -15472,7 +15472,7 @@ Applikaatio sulkeutuu. </value>
     <value>Hallinnoi kolmannen osapuolen sisäänkirjautumistunnuksia</value>
   </data>
   <data name="ChatBot" xml:space="preserve">
-    <value>Chatbot</value>
+    <value>Grant</value>
   </data>
   <data name="RequestList" xml:space="preserve">
     <value>Pyyntölistaus</value>

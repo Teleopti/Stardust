@@ -15,11 +15,13 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
+	[AllTogglesOn]
 	//public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			{
 				connection.Open();
 				StardustJobFeedback.SendProgress($"Will run script");
-				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare200RequestForIntradayTest.sql";
+				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare100RequestForIntradayTest.sql";
 				var script = File.ReadAllText(path);
 
 				using (var command = new SqlCommand(script, connection))
@@ -94,12 +96,12 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 								  StardustJobFeedback.SendProgress($"Done update staffing readmodel");
 								  PersonRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
 								  requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
-								  
+						  
 							  });
 		}
 
 		[Test,Ignore("Waiting for a fast lane Build")]
-		public void Run200RequestsWithoutValidation()
+		public void Run100RequestsWithoutValidation()
 		{
 			Now.Is("2016-03-16 07:01");
 			

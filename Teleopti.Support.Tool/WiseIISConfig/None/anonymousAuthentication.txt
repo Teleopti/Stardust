@@ -8,3 +8,4 @@ TeleoptiWFM;True
 AuthenticationBridge;True
 WindowsIdentityProvider;True
 Administration;True
+API;True

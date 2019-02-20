@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public InsightsReportRepository(ICurrentUnitOfWork currentUnitOfWork, ILoggedOnUser loggedOnUser)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 			_loggedOnUser = loggedOnUser;
 		}

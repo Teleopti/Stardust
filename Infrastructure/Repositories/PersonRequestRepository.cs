@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public PersonRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

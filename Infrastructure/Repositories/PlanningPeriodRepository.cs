@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PlanningPeriodRepository : Repository<PlanningPeriod> , IPlanningPeriodRepository
 	{
-		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 

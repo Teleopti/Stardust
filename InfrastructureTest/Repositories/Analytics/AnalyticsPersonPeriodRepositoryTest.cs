@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			datasource = new ExistingDatasources(timeZones);
-			businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 
 			analyticsDataFactory.Setup(businessUnit);
 			var validFrom = new DateTime(2010, 1, 1);
@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 
 			analyticsDataFactory.Setup(new Person(_personWithGuid, datasource, 0, validFrom,
-				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
 				false, timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(new Person(personWithGuid2, datasource, 1, validFrom,
-				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
 				false, timeZones.UtcTimeZoneId));
 
 			analyticsDataFactory.Persist();
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			setUpData();
 			var commonNameDescription = new CommonNameDescriptionSetting(commonNameDescriptionSetting);
-			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonNames(commonNameDescription, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()));
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdatePersonNames(commonNameDescription, BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()));
 			var correctName = commonNameDescription.BuildFor(personPeriod1.FirstName, personPeriod1.LastName, personPeriod1.EmploymentNumber);
 			var updatedName = WithAnalyticsUnitOfWork.Get(() => Target.PersonPeriod(personPeriodCode1).PersonName);
 			updatedName.Should().Be.EqualTo(correctName);
@@ -183,8 +183,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				PersonPeriodCode = personPeriodCode1,
 				ValidFromDate = new DateTime(2000, 1, 1),
 				ValidToDate = new DateTime(2001, 1, 1),
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
-				BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
+				BusinessUnitName = BusinessUnitUsedInTests.BusinessUnit.Name,
 				BusinessUnitId = 1,
 				ContractCode = Guid.NewGuid(),
 				ContractName = "Test contract",

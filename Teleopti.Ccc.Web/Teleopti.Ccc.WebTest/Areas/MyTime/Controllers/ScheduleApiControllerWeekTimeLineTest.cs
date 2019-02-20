@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -26,7 +25,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
 using Teleopti.Ccc.WebTest.Core.IoC;
 
-
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture(true)]
@@ -37,12 +35,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
-		public ILoggedOnUser User;
+		public FakeLoggedOnUser User;
 		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeUserTimeZone UserTimeZone;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
+		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
+		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
 
 		private readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 		private readonly Action<FakeToggleManager> _configure;
@@ -59,34 +63,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			var person = PersonFactory.CreatePersonWithId();
 			var skill = new Skill("test1").WithId();
 			skill.SkillType = skillType;
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014, 1, 1), skill);
-			personPeriod.Team = TeamFactory.CreateTeam("team1", "site1");
-			person.AddPersonPeriod(personPeriod);
-			var workflowControlSet = new WorkflowControlSet("test");
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { skillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			person.WorkflowControlSet = workflowControlSet;
-
-			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
-
+			var skillRepository = new FakeSkillRepository();
+			skillRepository.Has(skill);
+			isolate.UseTestDouble(skillRepository).For<ISkillRepository>();
 			isolate.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
 
+			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
 		{
+			setupLoggedOnUser();
 			addSiteOpenHour();
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
+
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),7,45,17,15); 
@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotAdjustTimelineForOverTimeWhenSchedulePeriodContainsSiteOpenHourPeriod()
 		{
+			setupLoggedOnUser();
 			addSiteOpenHour();
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 7, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 17, 45, 0, DateTimeKind.Utc));
@@ -121,6 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotAdjustTimelineForOverTimeWhenNoSiteOpenHourAvailable()
 		{
+			setupLoggedOnUser();
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 			   new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
@@ -133,6 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimelineAccordingSiteOpenHourInWeek()
 		{
+			setupLoggedOnUser();
 			addSiteOpenHour(new SiteOpenHour
 			{
 				TimePeriod = new TimePeriod(8, 0, 17, 0),
@@ -282,6 +285,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimelineAccordingCrossDaySiteOpenHourInWeek()
 		{
+			setupLoggedOnUser();
 			addSiteOpenHour(new SiteOpenHour
 			{
 				TimePeriod = new TimePeriod(8, 0, 17, 0),
@@ -311,6 +315,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimelineAccordingCrossWeekSiteOpenHourInWeek()
 		{
+			setupLoggedOnUser();
 			addSiteOpenHour(new SiteOpenHour
 			{
 				TimePeriod = new TimePeriod(8, 0, 17, 0),
@@ -331,6 +336,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
+
 			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,23,59);
@@ -339,6 +345,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotAdjustTimelineWithSiteOpenHourWhenCurrentWeekOutOfRange()
 		{
+			setupLoggedOnUser();
 			addSiteOpenHour(new SiteOpenHour
 			{
 				TimePeriod = new TimePeriod(8, 0, 17, 0),
@@ -377,6 +384,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimeLineBySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
+			setupLoggedOnUser();
 			var skill = addSkill();
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
@@ -390,11 +398,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimeLineByFullDaySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
-
 			var skill = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
+			setupLoggedOnUser();
 
 			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
@@ -404,6 +412,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimeLineByMultipleDaySkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
+			setupLoggedOnUser();
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var skill2 = addSkill(TimeSpan.FromHours(8), TimeSpan.FromHours(19));
 			var period1 = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
@@ -421,6 +430,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotAdjustTimeLineByNonInBoundPhoneSkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
+			setupLoggedOnUser();
 			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(Now.UtcDateTime()).ToDateOnlyPeriod()).FirstOrDefault();
 			personPeriod.ResetPersonSkill();
 
@@ -438,6 +448,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenNoSkillAreScheduled()
 		{
+			setupLoggedOnUser();
 			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
@@ -451,6 +462,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourWeekSchedule()
 		{
+			setupLoggedOnUser();
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
 			for (var i = 0; i < 7; i++)
@@ -469,6 +481,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimelineBySiteOpenHourAndSkillOpenHourWeekSchedule()
 		{
+			setupLoggedOnUser();
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			addSiteOpenHour();
 
@@ -481,6 +494,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				addAssignment(new DateOnly(day), new activityDto { Period = period, Activity = skill.Activity });
 			}
 
+
 			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 17, 15);
@@ -489,6 +503,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayWhenStaffingDataIsAvailable()
 		{
+			setupLoggedOnUser();
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
 			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
@@ -609,6 +624,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				team.Site.AddOpenHour(siteOpenHour);
 			}
+		}
+
+		private void setupLoggedOnUser()
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			var workflowControlSet = new WorkflowControlSet("test");
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { skillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13)
+			});
+			logonUser.WorkflowControlSet = workflowControlSet;
+
+			var site = new Site("site1").WithId();
+			SiteRepository.Add(site);
+			var team = new Team { Site = site }.WithDescription(new Description("team1")).WithId();
+			TeamRepository.Add(team);
+			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team));
+
+			User.SetFakeLoggedOnUser(logonUser);
+			PersonRepository.Add(logonUser);
 		}
 	}
 }

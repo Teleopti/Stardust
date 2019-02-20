@@ -44,7 +44,10 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		public IEnumerable<IBankHolidayDate> GetMySiteBankHolidayDates(DateOnlyPeriod period)
 		{
-			var mySite = _loggedOnUser.CurrentUser().MyTeam(DateOnly.Today).Site;
+			var team = _loggedOnUser.CurrentUser().MyTeam(DateOnly.Today);
+			if (team == null) return new List<IBankHolidayDate>();
+
+			var mySite = team.Site;
 			var calendars = _bankHolidayCalendarSiteRepository.FetchBankHolidayCalendars(mySite.Id.GetValueOrDefault());
 			return _bankHolidayDateRepository.FetchByCalendarsAndPeriod(calendars, period);
 		}

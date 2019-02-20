@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             var state = new FakeState();
 	        var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
             var applicationData = StateHolderProxyHelper.CreateApplicationData(null);
-            var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+            var businessUnit = BusinessUnitUsedInTests.BusinessUnit;
             
             loggedOnPerson = new Person().WithName(new Name("Peter", "Westlin Junior")).WithId();
             

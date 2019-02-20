@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("pageId", Guid.NewGuid())
 				.ExecuteUpdate();
 
-			return new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Get(person1.Id.GetValueOrDefault());
+			return new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).Get(person1.Id.GetValueOrDefault());
 		}
 	}
 }

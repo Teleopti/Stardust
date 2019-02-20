@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			target = new MonthScheduleViewModelMapper(_projectionProvider,
-				new PushMessageProvider(new FakeLoggedOnUser(), new FakePushMessageDialogueRepository()));
+				new PushMessageProvider(new FakeLoggedOnUser(), new FakePushMessageDialogueRepository()), new BankHolidayCalendarViewModelMapper());
 		}
 
 		[Test]

@@ -28,6 +28,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
-		public ILoggedOnUser User;
+		public FakeLoggedOnUser User;
 		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -55,6 +56,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeToggleManager ToggleManager;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
+		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
+		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
+		private ISkill _skill;
 
 		private readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
@@ -73,23 +81,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		public void Isolate(IIsolate isolate)
 		{
-			var person = PersonFactory.CreatePersonWithId();
-			var skill = new Skill("test1").WithId();
-			skill.SkillType = skillType;
-			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014,1,1),skill));
-			var workflowControlSet = new WorkflowControlSet("test");
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			person.WorkflowControlSet = workflowControlSet;
-
+			_skill = new Skill("test1").WithId();
+			_skill.SkillType = skillType;
 			var skillRepository = new FakeSkillRepository();
-			skillRepository.Has(skill);
+			skillRepository.Has(_skill);
 			isolate.UseTestDouble(skillRepository).For<ISkillRepository>();
-			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
+
+			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+
+		[Test]
+		public void ShouldCreateModelForWeekScheduleWithSevenDays()
+		{
+			setupLoggedOnUser(DateOnly.Today);
+			var result = Target.FetchWeekData(null);
+			result.Days.Count().Should().Be.EqualTo(7);
 		}
 
 		[Test]
@@ -98,6 +110,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Now.Is(new DateTime(2017, 5, 7, 20, 0, 0, DateTimeKind.Utc));
 			TimeZone.IsSweden();
 
+			var date = new DateOnly(2017, 5, 7);
+			setupLoggedOnUser(date);
 			var viewModel = Target.FetchWeekData(null);
 			viewModel.Should().Not.Be.Null();
 			viewModel.PeriodSelection.Date.Should().Be.EqualTo("2017-05-07");
@@ -107,6 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnOvertimeProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
 		{
+			setupLoggedOnUser(new DateOnly(2014,1,1));
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
@@ -116,7 +131,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnOvertimeProbabilityEnabledFalseWhenItHasBeenToggledOffInFatClient()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = false;
+			
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(false);
 		}
@@ -127,6 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
@@ -139,6 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
+			setupLoggedOnUser(new DateOnly(2014, 1, 1));
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
@@ -151,6 +170,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
+			setupLoggedOnUser(new DateOnly(2014, 1, 1));
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
@@ -163,6 +183,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
+			setupLoggedOnUser(new DateOnly(2014, 1, 1));
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
@@ -172,6 +193,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnFalseForOvertimeProbabilityEnabledWhenTheWholeWeekIsOutsideOpenPeriod()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddWeeks(3));
@@ -181,6 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenThePartialWeekIsWithinOpenPeriod()
 		{
+			setupLoggedOnUser(new DateOnly(2014, 1, 1));
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
@@ -198,6 +221,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 
+			var date = new DateOnly(2014,1,1);
+			setupLoggedOnUser(date);
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
 			{
@@ -226,7 +251,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var personEmailSkill = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
 			var personPhoneSkill = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
-			addPersonSkillsToPersonPeriod(personPhoneSkill, personEmailSkill);
+			addPersonSkillsToPersonPeriod(date, personPhoneSkill, personEmailSkill);
 
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(true);
@@ -235,6 +260,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnAbsenceProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.AbsenceProbabilityEnabled = true;
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
@@ -246,6 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldShowAbsenceProbabilityOptionWhen14DaysAreWithinAbsencePeriod()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Period = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13)),
@@ -277,6 +304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			};
 			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddDays(4));
@@ -286,6 +314,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotShowAbsenceProbabilityOptionWhenNoDaysWithinAbsencePeriod()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Period = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(6), Now.ServerDate_DontUse().AddDays(8)),
@@ -305,6 +334,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
+			setupLoggedOnUser(date);
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 08:00".Utc(), "2015-03-29 17:00".Utc()));
@@ -320,6 +350,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapTimeLineCorrectlyOnDayBeforeDst()
 		{
 			TimeZone.IsSweden();
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
 			Now.Is("2015-03-28 10:00");
@@ -339,6 +370,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDay()
 		{
 			TimeZone.IsSweden();
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
 			Now.Is("2015-03-29 10:00");
@@ -358,6 +390,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDayAndNightShift()
 		{
 			TimeZone.IsSweden();
+			setupLoggedOnUser(new DateOnly(2015, 03, 29));
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
 			Now.Is("2015-03-29 10:00");
@@ -386,6 +419,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapTimeLineCorrectlyOnEndDstDayAndNightShift()
 		{
 			TimeZone.IsSweden();
+			setupLoggedOnUser(DateOnly.Today);
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
 			Now.Is("2015-10-25 10:00");
@@ -412,6 +446,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapBaseUtcOffset()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			TimeZone.IsHawaii();
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			Now.Is("2015-03-29 10:00");
@@ -423,6 +458,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapDaylightSavingTimeAdjustment()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			TimeZone.IsSweden();
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			Now.Is("2015-03-29 10:00");
@@ -438,12 +474,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCalculateCorrectPercentageforActivityLayersForEnteringDSTDay()
 		{
+			var date = new DateOnly(2018, 03, 11);
+			setupLoggedOnUser(date);
+
 			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
 			TimeZone.Is(timeZone);
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
 			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
 
-			var date = new DateOnly(2018, 03, 11);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period1 = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 0, 0), timeZone),
 				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 0, 0), timeZone));
@@ -482,6 +520,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotMapDaylightSavingTimeAdjustment()
 		{
 			TimeZone.IsChina();
+			setupLoggedOnUser(new DateOnly(2015, 03, 29));
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 			Now.Is("2015-03-29 10:00");
 
@@ -494,6 +533,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			TimeZone.IsSweden();
 			var date = new DateOnly(2015, 07, 06);
+			setupLoggedOnUser(date);
 			var viewModel = Target.FetchWeekData(date);
 
 			Assert.AreEqual("2015-07-06", viewModel.CurrentWeekStartDate);
@@ -503,6 +543,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapPeriodSelectionForWeek()
 		{
+			setupLoggedOnUser(new DateOnly(2014, 12, 18));
 			var result = Target.FetchWeekData(null).PeriodSelection;
 
 			result.Date.Should().Be.EqualTo(new DateOnly(2014, 12, 18).ToFixedClientDateOnlyFormat());
@@ -524,7 +565,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayer()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 17);
 			assignment.AddActivity(new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green }, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
@@ -546,7 +589,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayerForNightShift()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 15, 18, 2014, 12, 16, 02);
 			assignment.AddActivity(new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green },
 				period);
@@ -568,7 +613,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreatePeriodViewModelFromAbsenceLayer()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 15, 08, 2014, 12, 15, 17);
 			assignment.AddActivity(new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green },
 				period);
@@ -596,7 +643,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var definitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Overtime",
 				MultiplicatorType.Overtime);
 
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 15, 08, 2014, 12, 15, 17);
 			assignment.AddOvertimeActivity(
 				new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green },
@@ -621,6 +670,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreatePeriodViewModelFromMeetingLayer()
 		{
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
 			var meeting = new Meeting(User.CurrentUser(), new[] { new MeetingPerson(User.CurrentUser(), false) }, "subj", "loc",
 				"desc",
 				new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green }, null);
@@ -630,7 +681,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			meeting.EndTime = TimeSpan.FromHours(17);
 			MeetingRepository.Has(meeting);
 
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 17);
 			assignment.AddActivity(new Activity("Phone") { InWorkTime = true, InContractTime = true, DisplayColor = Color.Green },
 				period);
@@ -655,9 +706,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModelNotSpanToTomorrow()
 		{
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
 			var start = new TimeSpan(12, 0, 0);
 			var end = new TimeSpan(24, 0, 1);
-			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 15), start, end);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date, start, end);
 			ScheduleData.Add(overtimeAvailability);
 
 			var result = Target.FetchWeekData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
@@ -678,6 +731,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var end = new TimeSpan(24, 0, 1);
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 15), start, end);
 			ScheduleData.Add(overtimeAvailability);
+			setupLoggedOnUser(DateOnly.Today);
 
 			Target.FetchWeekData(null).Days.First().Periods.GetType().Should().Be.EqualTo<PeriodViewModel[]>();
 		}
@@ -685,9 +739,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModel()
 		{
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
 			var start = new TimeSpan(12, 0, 0);
 			var end = new TimeSpan(13, 0, 0);
-			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 15), start, end);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date, start, end);
 			ScheduleData.Add(overtimeAvailability);
 
 			var result = Target.FetchWeekData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
@@ -704,9 +760,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModelForYesterday()
 		{
+			var date = new DateOnly(2014, 12, 14);
+			setupLoggedOnUser(date);
 			var start = new TimeSpan(12, 0, 0);
 			var end = new TimeSpan(25, 0, 0);
-			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 14), start, end);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date, start, end);
 			ScheduleData.Add(overtimeAvailability);
 
 			var result = Target.FetchWeekData(null).Days.First().Periods.Single() as OvertimeAvailabilityPeriodViewModel;
@@ -726,7 +784,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var start = new TimeSpan(12, 0, 0);
 			var end = new TimeSpan(13, 0, 0);
-			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 14), start, end);
+			var date = new DateOnly(2014, 12, 14);
+			setupLoggedOnUser(date);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date, start, end);
 			ScheduleData.Add(overtimeAvailability);
 
 			var result = Target.FetchWeekData(null).Days.First().Periods;
@@ -737,14 +797,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapDayOfWeekNumber()
 		{
+			var date = new DateOnly(2014, 12, 15);
+			setupLoggedOnUser(date);
+
 			var result = Target.FetchWeekData(null);
 
-			result.Days.First().DayOfWeekNumber.Should().Be.EqualTo((int)new DateOnly(2014, 12, 15).DayOfWeek);
+			result.Days.First().DayOfWeekNumber.Should().Be.EqualTo((int)date.DayOfWeek);
 		}
 
 		[Test]
 		public void ShouldMapAvailability()
 		{
+			setupLoggedOnUser(DateOnly.Today);
+
 			var result = Target.FetchWeekData(null);
 
 			result.Days.First().Availability.Should().Be.EqualTo(false);
@@ -753,6 +818,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapStateToday()
 		{
+			setupLoggedOnUser(DateOnly.Today);
+
 			var result = Target.FetchWeekData(null);
 
 			result.Days.ElementAt(3).State.Should().Be.EqualTo(SpecialDateState.Today);
@@ -761,6 +828,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapNoSpecialState()
 		{
+			setupLoggedOnUser(DateOnly.Today);
+
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddDays(-2));
 
 			result.Days.First().State.Should().Be.EqualTo((SpecialDateState)0);
@@ -770,6 +839,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapDayHeader()
 		{
 			var date = Now.ServerDate_DontUse().AddDays(-2);
+			setupLoggedOnUser(date);
 			var result = Target.FetchWeekData(date).Days.ElementAt(1);
 
 			result.Header.Date.Should().Be.EqualTo(date.ToShortDateString());
@@ -781,6 +851,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetUICulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfWeek()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var date = Now.ServerDate_DontUse().AddDays(-2);
 			var result = Target.FetchWeekData(date).Days.First();
 
@@ -790,7 +861,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetUICulture("sv-SE")]
 		public void ShouldMapDayHeaderWithMontNameForFirstDayOfMonth()
 		{
-			var result = Target.FetchWeekData(new DateOnly(2014, 12, 29)).Days.ElementAt(3);
+			var date = new DateOnly(2014, 12, 29);
+			setupLoggedOnUser(date);
+			var result = Target.FetchWeekData(date).Days.ElementAt(3);
 
 			result.Header.DayDescription.Should().Be.EqualTo("januari");
 		}
@@ -798,8 +871,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapPublicNote()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			ScheduleData.Add(new PublicNote(User.CurrentUser(), Now.ServerDate_DontUse(), Scenario.Current(), "TestNote"));
-
+			
 			var result = Target.FetchWeekData(null);
 
 			result.Days.ElementAt(3).Note.Message.Should().Be.EqualTo("TestNote");
@@ -808,6 +882,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapOvertimeAvailability()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse(), new TimeSpan(1, 1, 1), new TimeSpan(1, 2, 2, 2));
 			ScheduleData.Add(overtimeAvailability);
 
@@ -822,6 +897,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapOvertimeAvailabilityDefaultValuesForEmpty()
 		{
 			ScheduleData.Add(new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse()));
+			setupLoggedOnUser(DateOnly.Today);
 
 			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
@@ -832,6 +908,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesForDayOff()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
@@ -845,6 +922,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapOvertimeAvailabilityDefaultValuesIfHasShift()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var dateTimePeriod = new DateTimePeriod(new DateTime(2014, 12, 18, 6, 0, 0, DateTimeKind.Utc), new DateTime(2014, 12, 18, 15, 0, 0, DateTimeKind.Utc));
 			assignment.AddActivity(new Activity("a") { InWorkTime = true }, dateTimePeriod);
@@ -864,6 +942,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var textRequest = new PersonRequest(User.CurrentUser(), new TextRequest(period));
 			PersonRequestRepository.Add(textRequest);
 			PersonRequestRepository.Add(textRequest);
+			setupLoggedOnUser(DateOnly.Today);
 
 			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.RequestsCount.Should().Be.EqualTo(2);
@@ -874,6 +953,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			ScheduleData.Add(assignment);
+			setupLoggedOnUser(DateOnly.Today);
 
 			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.Summary.Should().Not.Be.Null();
@@ -882,6 +962,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapSummaryForDayOff()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
@@ -895,6 +976,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapSummaryForMainShift()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
 			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
@@ -912,6 +994,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotMapPersonalActivityToSummaryTimespan()
 		{
+			setupLoggedOnUser(new DateOnly(2014, 12, 18));
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
 			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
@@ -927,6 +1010,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapSummaryForAbsence()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
 			assignment.AddActivity(new Activity("Phone") { InContractTime = true }, new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 17), true);
 			ScheduleData.Add(assignment);
@@ -952,6 +1036,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapStyleClassViewModelsFromScheduleColors()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
 			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
@@ -971,6 +1056,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapStyleClassForAbsenceOnPersonDayOff()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
@@ -986,6 +1072,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapTextRequestPermission()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null);
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
@@ -994,6 +1081,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapTimeLine()
 		{
+			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 8, 45, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 17, 15, 0, DateTimeKind.Utc));
@@ -1014,6 +1103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldHaveCompleteProjectionForShiftStartingYesterdayEndingTomorrow()
 		{
+			setupLoggedOnUser(new DateOnly(2014, 12, 18));
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 20, 45, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 19, 2, 15, 0, DateTimeKind.Utc));
@@ -1028,6 +1118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapAsmEnabled()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null);
 			result.AsmEnabled.Should().Be.True();
 		}
@@ -1035,6 +1126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapViewPossibilityPermission()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null);
 			result.ViewPossibilityPermission.Should().Be.True();
 		}
@@ -1042,6 +1134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapAbsenceRequestPermission()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null);
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
 		}
@@ -1049,6 +1142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapOvertimeAvailabilityPermission()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null);
 			result.RequestPermission.OvertimeAvailabilityPermission.Should().Be.True();
 		}
@@ -1056,6 +1150,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
+			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
 			var result = Target.FetchWeekData(null);
 			result.IsCurrentWeek.Should().Be.True();
 		}
@@ -1071,7 +1167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				IsClosed = false,
 				WeekDay = DayOfWeek.Thursday
 			});
-
+			setupLoggedOnUser(new DateOnly(2014,1,1));
 			User.CurrentUser().PersonPeriods(Now.ServerDate_DontUse().ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime).Days.ElementAt(3);
@@ -1081,6 +1177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapDateFormatForUser()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null);
 			var expectedFormat = User.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
@@ -1089,6 +1186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReportNoNoteWhenNull()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var result = Target.FetchWeekData(null).Days.First();
 			result.HasNote.Should().Be.False();
 		}
@@ -1097,6 +1195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetSiteOpenHourPeriodForDayView()
 		{
 			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			team.Site.AddOpenHour(new SiteOpenHour
 			{
@@ -1121,10 +1220,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetSkillOpenHourPeriodForDayView()
 		{
 			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
-			var skill = addSkill();
+			var skill = addSkill(date);
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
@@ -1138,10 +1238,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetSkillOpenHourPeriodInUsersTimeZoneForDayView()
 		{
 			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
-			var skill = addSkill();
+			var skill = addSkill(date);
 			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
 
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
@@ -1158,10 +1259,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetSkillOpenHourPeriodInUsersTimeZoneWhenSkillOpenHourIsCrossDay()
 		{
 			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
-			var skill = addSkill();
+			var skill = addSkill(date);
 			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
 
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Cape Verde Standard Time"));
@@ -1177,6 +1279,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnFalseForCheckStaffingByIntradayWhenIntradayAbsencePeriodIsInLowPriority()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Period = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13)),
@@ -1201,6 +1304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForCheckStaffingByIntradayWhenAnyIntradayAbsencePeriodIsAvailable()
 		{
+			setupLoggedOnUser(DateOnly.Today);
 			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Period = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(2)),
@@ -1220,6 +1324,46 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchWeekData(null);
 			result.CheckStaffingByIntraday.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldGetBankHolidayCalendar()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
+			var calendarId = Guid.NewGuid();
+			var calendarName = "ChinaBankHoliday";
+			var description = "New Year";
+			createBankHolidayCalendarData(date, calendarId, calendarName, description);
+
+			var weekDaysData = Target.FetchWeekData(null).Days;
+
+			var result = weekDaysData.First(w => w.Date == date.ToShortDateString());
+			result.BankHolidayCalendar.CalendarId.Should().Be.EqualTo(calendarId);
+			result.BankHolidayCalendar.CalendarName.Should().Be.EqualTo(calendarName);
+			result.BankHolidayCalendar.DateDescription.Should().Be.EqualTo(description);
+		}
+
+		[Test]
+		public void ShouldGetNullWhenThereIsNoBankHolidayCalendar()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			setupLoggedOnUser(date);
+
+			var weekDaysData = Target.FetchWeekData(null).Days;
+
+			var result = weekDaysData.First(w => w.Date == date.ToShortDateString());
+			result.BankHolidayCalendar.Should().Be.Null();
+		}
+
+		private void createBankHolidayCalendarData(DateOnly date, Guid calendarId, string calendarName, string description)
+		{
+			var calendar = new BankHolidayCalendar { Name = calendarName };
+			calendar.SetId(calendarId);
+			BankHolidayCalendarRepository.Add(calendar);
+			var calendarDate = new BankHolidayDate { Calendar = calendar, Date = date, Description = description };
+			BankHolidayDateRepository.Add(calendarDate);
+			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite { Site = User.CurrentUser().MyTeam(date).Site, Calendar = calendar });
 		}
 
 		private void addAssignment(DateTimePeriod period, IActivity activity)
@@ -1253,20 +1397,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return skill;
 		}
 
-		private ISkill addSkill()
+		private ISkill addSkill(DateOnly date)
 		{
 			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
-			var personPeriod = getOrAddPersonPeriod();
+			var personPeriod = getOrAddPersonPeriod(date);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			return skill;
 		}
 
-		private PersonPeriod getOrAddPersonPeriod()
+		private PersonPeriod getOrAddPersonPeriod(DateOnly date)
 		{
-			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(2014, 1, 1).ToDateOnlyPeriod()).FirstOrDefault();
+			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault();
 			if (personPeriod != null) return personPeriod;
 			var team = TeamFactory.CreateTeam("team1", "site1");
-			personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team);
+			personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(date, team);
 			User.CurrentUser().AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
@@ -1302,13 +1446,36 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
 
-		private void addPersonSkillsToPersonPeriod(params IPersonSkill[] personSkills)
+		private void addPersonSkillsToPersonPeriod(DateOnly date, params IPersonSkill[] personSkills)
 		{
-			var personPeriod = getOrAddPersonPeriod();
+			var personPeriod = getOrAddPersonPeriod(date);
 			foreach (var personSkill in personSkills)
 			{
 				personPeriod.AddPersonSkill(personSkill);
 			}
+		}
+
+		private void setupLoggedOnUser(DateOnly date)
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			var workflowControlSet = new WorkflowControlSet("test");
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13)
+			});
+			logonUser.WorkflowControlSet = workflowControlSet;
+
+			var site = new Site("site").WithId();
+			SiteRepository.Add(site);
+			var team = new Team { Site = site }.WithDescription(new Description("team")).WithId();
+			TeamRepository.Add(team);
+			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+			IPersonSkill personSkill = new PersonSkill(_skill, new Percent(1));
+			((IPersonPeriodModifySkills)logonUser.PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault()).AddPersonSkill(personSkill);
+
+			User.SetFakeLoggedOnUser(logonUser);
+			PersonRepository.Add(logonUser);
 		}
 	}
 }

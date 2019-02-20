@@ -449,9 +449,9 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					: [
 							['x'].concat(timeStamps),
 							['ASA'].concat(input.AverageSpeedOfAnswer),
-							['Abandoned_rate'].concat(input.AbandonedRate),
 							['Service_level'].concat(input.ServiceLevel),
-							['ESL'].concat(input.EstimatedServiceLevels)
+							['ESL'].concat(input.EstimatedServiceLevels),
+							['Abandoned_rate'].concat(input.AbandonedRate)
 					  ],
 				type: 'area-spline',
 				colors: {
@@ -462,15 +462,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				},
 				names: {
 					ASA: this.translate.instant('AverageSpeedOfAnswer') + ' ←',
-					Abandoned_rate: this.translate.instant('AbandonedRate') + ' ←',
 					Service_level: this.translate.instant('ServiceLevel') + ' →',
-					ESL: this.translate.instant('ESL') + ' →'
+					ESL: this.translate.instant('ESL') + ' →',
+					Abandoned_rate: this.translate.instant('AbandonedRate') + ' ←'
 				},
 				axes: {
 					Service_level: 'y2',
-					Abandoned_rate: 'y2',
 					ESL: 'y2',
-					ASA: 'y'
+					ASA: 'y',
+					Abandoned_rate: 'y2'
 				}
 			};
 		} else {
@@ -494,8 +494,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 							Heading: this.translate.instant('Average'),
 							ServiceLevel: input.ServiceLevel,
 							EstimatedServiceLevel: input.EstimatedServiceLevel,
-							AbandonRate: input.AbandonRate,
-							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
+							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer,
+							AbandonRate: input.AbandonRate
 						}
 				  ];
 		} else {
@@ -522,9 +522,9 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					: [
 							['x'].concat(timeStamps),
 							['Forecasted_staffing'].concat(input.ForecastedStaffing),
-							['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing),
 							['Actual_staffing'].concat(input.ActualStaffing),
-							['Scheduled_staffing'].concat(input.ScheduledStaffing)
+							['Scheduled_staffing'].concat(input.ScheduledStaffing),
+								['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing)
 					  ],
 				type: 'area-spline',
 				colors: {
@@ -535,15 +535,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				},
 				names: {
 					Forecasted_staffing: this.translate.instant('ForecastedStaff') + ' ←',
-					Updated_forecasted_staffing: this.translate.instant('ReforecastedStaff') + ' ←',
 					Actual_staffing: this.translate.instant('RequiredStaff') + ' ←',
-					Scheduled_staffing: this.translate.instant('ScheduledStaff') + ' ←'
+					Scheduled_staffing: this.translate.instant('ScheduledStaff') + ' ←',
+					Updated_forecasted_staffing: this.translate.instant('ReforecastedStaff') + ' ←'
 				},
 				axes: {
 					Forecasted_staffing: 'y',
-					Updated_forecasted_staffing: 'y',
 					Actual_staffing: 'y',
-					Scheduled_staffing: 'y'
+					Scheduled_staffing: 'y',
+					Updated_forecasted_staffing: 'y'
 				}
 			};
 		} else {

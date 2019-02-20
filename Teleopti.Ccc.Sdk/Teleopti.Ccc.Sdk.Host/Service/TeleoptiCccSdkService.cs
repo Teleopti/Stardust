@@ -1047,7 +1047,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personRepository = new PersonRepository(currentUnitOfWork);
+				var personRepository = new PersonRepository(currentUnitOfWork, null, null);
 				var person = personRepository.Get(personDto.Id.Value);
 				var schedulePublishedToDate = person.WorkflowControlSet.SchedulePublishedToDate ?? new DateTime(1900, 01, 01);
 
@@ -1453,7 +1453,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var person = new PersonRepository(new ThisUnitOfWork(unitOfWork)).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
+					var person = new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 					personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
 				}
 				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1709,7 +1709,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPerson person = new PersonRepository(new ThisUnitOfWork(unitOfWork)).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
+				IPerson person = new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 				DateTime localTime = GetPersonLocalTime(utcDate, person);
 				DateOnly localDate = new DateOnly(localTime);
 				ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
@@ -1848,7 +1848,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 				var accRep = new PersonAbsenceAccountRepository(currentUnitOfWork);
-				var perRep = new PersonRepository(currentUnitOfWork);
+				var perRep = new PersonRepository(currentUnitOfWork, null, null);
 				var loadedPerson = perRep.Load(person.Id.GetValueOrDefault());
 				var accounts = accRep.Find(loadedPerson);
 				var dateOnly = containingDate.ToDateOnly();

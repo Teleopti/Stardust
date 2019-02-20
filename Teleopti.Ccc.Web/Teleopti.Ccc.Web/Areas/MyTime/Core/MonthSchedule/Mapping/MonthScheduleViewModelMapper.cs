@@ -4,10 +4,9 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
@@ -16,11 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IPushMessageProvider _pushMessageProvider;
+		private readonly BankHolidayCalendarViewModelMapper _bankHolidayCalendarViewModelMapper;
 
-		public MonthScheduleViewModelMapper(IProjectionProvider projectionProvider, IPushMessageProvider pushMessageProvider)
+		public MonthScheduleViewModelMapper(IProjectionProvider projectionProvider, IPushMessageProvider pushMessageProvider, 
+			BankHolidayCalendarViewModelMapper bankHolidayCalendarViewModelMapper)
 		{
 			_projectionProvider = projectionProvider;
 			_pushMessageProvider = pushMessageProvider;
+			_bankHolidayCalendarViewModelMapper = bankHolidayCalendarViewModelMapper;
 		}
 
 		public MonthScheduleViewModel Map(MonthScheduleDomainData s, bool mobileMonth = false)
@@ -52,19 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				SeatBookings = s.SeatBookingInformation,
 				IsDayOff = isDayOff(s),
 				Shift = shift(s, mobileMonth),
-				BankHolidayCalendarInfo = mapBankHolidayCalendar(s.BankHolidayDate)
-			};
-		}
-
-		private BankHolidayCalendarViewModel mapBankHolidayCalendar(IBankHolidayDate bankHolidayDate)
-		{
-			if (bankHolidayDate == null) return null;
-
-			return new BankHolidayCalendarViewModel
-			{
-				CalendarId = bankHolidayDate.Calendar.Id.GetValueOrDefault(),
-				CalendarName = bankHolidayDate.Calendar.Name,
-				DateDescription = bankHolidayDate.Description
+				BankHolidayCalendarInfo = _bankHolidayCalendarViewModelMapper.Map(s.BankHolidayDate)
 			};
 		}
 

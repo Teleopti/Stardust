@@ -75,12 +75,12 @@
 		vm.addSkills = function() {
 			if (vm.selectedSkills.length <= 0) return;
 
-			vm.skillGroups[vm.selectedGroupIndex].Skills = sortByName(
+			vm.skillGroups[vm.selectedGroupIndex].Skills = vm.sortByName(
 				_.unionBy(vm.selectedSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
 					return skill.Id;
 				})
 			);
-			vm.skills = sortByName(
+			vm.skills = vm.sortByName(
 				_.differenceBy(vm.allSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
 					return skill.Id;
 				})
@@ -99,7 +99,7 @@
 			clone.Saved = false;
 			vm.skillGroups.push(clone);
 
-			vm.skillGroups = sortByName(vm.skillGroups);
+			vm.skillGroups = vm.sortByName(vm.skillGroups);
 
 			setSaveableState();
 		};
@@ -174,10 +174,10 @@
 		vm.removeSkills = function() {
 			if (vm.selectedGroupSkills.length <= 0) return;
 
-			vm.skillGroups[vm.selectedGroupIndex].Skills = sortByName(
+			vm.skillGroups[vm.selectedGroupIndex].Skills = vm.sortByName(
 				_.difference(vm.skillGroups[vm.selectedGroupIndex].Skills, vm.selectedGroupSkills)
 			);
-			vm.skills = sortByName(
+			vm.skills = vm.sortByName(
 				_.differenceBy(vm.allSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
 					return skill.Id;
 				})
@@ -200,9 +200,9 @@
 			if (vm.isNew) {
 				if (vm.newGroupName && vm.newGroupName.length > 0) {
 					vm.newGroup.Name = vm.newGroupName;
-					vm.skills = vm.allSkills.slice();
+					vm.skills = vm.sortByName(vm.allSkills.slice());
 					vm.skillGroups.push(vm.newGroup);
-					vm.skillGroups = sortByName(vm.skillGroups);
+					vm.skillGroups = vm.sortByName(vm.skillGroups);
 					vm.selectedGroupIndex = vm.skillGroups.indexOf(vm.newGroup);
 					vm.newGroup = null;
 				}
@@ -223,7 +223,7 @@
 			if (form.$invalid) {
 				return;
 			}
-			var selectedSkills = $filter('filter')(vm.skills, { isSelected: true });
+			var selectedSkills = vm.sortByName($filter('filter')(vm.skills, { isSelected: true }));
 
 			var selectedSkillIds = selectedSkills.map(function(skill) {
 				return skill.Id;
@@ -267,7 +267,7 @@
 		vm.selectSkillGroup = function(group) {
 			if (!group) return;
 			vm.selectedGroupIndex = vm.skillGroups.indexOf(group);
-			vm.skills = sortByName(
+			vm.skills = vm.sortByName(
 				_.differenceBy(vm.allSkills, group.Skills, function(skill) {
 					return skill.Id;
 				})
@@ -280,13 +280,13 @@
 			return index !== -1;
 		};
 
-		//----------- Local functions ----------------------------------------------------
-
-		function sortByName(arr) {
+		vm.sortByName = function(arr) {
+			if (!arr) return;
 			return arr.sort(function(r1, r2) {
 				return r1.Name.localeCompare(r2.Name, CurrentUserInfo.CurrentUserInfo().Language);
 			});
-		}
+		};
+		//----------- Local functions ----------------------------------------------------
 
 		function getAllSkillGroups(select) {
 			SkillGroupSvc.getSkillGroups().then(function(result) {
@@ -295,7 +295,7 @@
 					element.Saved = true;
 					return element;
 				});
-				vm.skillGroups = sortByName(vm.skillGroups);
+				vm.skillGroups = vm.sortByName(vm.skillGroups);
 				originalGroups = _.cloneDeep(vm.skillGroups);
 				if (select) {
 					vm.selectSkillGroup(vm.selectedGroupIndex);
@@ -319,7 +319,7 @@
 		//----------- Run at instantiation ----------------------------------------------------
 
 		SkillGroupSvc.getSkills().then(function(result) {
-			vm.skills = result.data;
+			vm.skills = vm.sortByName(result.data);
 			vm.allSkills = vm.skills.slice();
 		});
 

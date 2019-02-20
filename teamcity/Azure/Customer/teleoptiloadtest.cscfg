@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="TeleoptiCCC" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*">
   <Role name="TeleoptiCCC">
-    <Instances count="1" />
+    <Instances count="2" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="RnD" />
@@ -12,7 +12,7 @@
       <Setting name="TeleoptiDriveMap.AccountName" value="" />
       <Setting name="TeleoptiDriveMap.AccountKey" value="IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ==" />
       <Setting name="TeleoptiDriveMap.ContainerName" value="teleopticcc/Payroll" />
-      <Setting name="TeleoptiDriveMap.DataSourceName" value="teleoptisectest" />
+      <Setting name="TeleoptiDriveMap.DataSourceName" value="teleoptiloadtest" />
 	  <Setting name="TeleoptiSetting.VmSize" value="Standard_A2_v2" />
     </ConfigurationSettings>
     <Certificates>

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class JobResultRepository : Repository<IJobResult>, IJobResultRepository
 	{
-		public JobResultRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public JobResultRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

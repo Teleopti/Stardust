@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class ExtendedPreferenceTemplateRepository : Repository<IExtendedPreferenceTemplate>, IExtendedPreferenceTemplateRepository
     {
 	    public ExtendedPreferenceTemplateRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

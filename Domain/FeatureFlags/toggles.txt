@@ -67,6 +67,7 @@ Wfm_Authentication_ChangePasswordMenu_76666 = true
 Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 Wfm_AutomaticNotificationEnrollment_79679 = DEV
+Wfm_AutomaticNotificationEnrollmentStartup_79679 = false
 
 # China, can any of these be removed? #
 MyTimeWeb_NewTeamScheduleView_75989 = true
@@ -86,7 +87,8 @@ ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = true
 ResourcePlanner_QueryHintOnLayers_79780 = true
 ResourcePlanner_TeamSchedulingInPlans_79283 = RC #Note to ourselves: remember to remove a build step in ethiopian team after remove this toggle
-ResourcePlanner_DelayShiftCreations_81680 = DEV
+ResourcePlanner_DelayShiftCreations_81680 = RC
+ResourcePlanner_PrepareToRemoveRightToLeft_81112 = false
 WFM_Plans_Redesign_81198 = RC
 WFM_Plans_HeatMap_79112 = RC
 
@@ -138,7 +140,8 @@ WFM_Setting_BankHolidayCalendar_Create_79297 = RC
 WFM_Setting_AssignBankHolidayCalendarsToSites_79899 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 MyTimeWeb_Preference_Indicate_BankHoliday_79900 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
-MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154 = DEV #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
+MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
+MyTimeWeb_Schedule_MonthView_Indicate_BankHoliday_81158 = DEV #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 
 # Tech #
 WFM_ChatBot_77547 = RC

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			var businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 
 			analyticsDataFactory.Setup(businessUnit);
 			analyticsDataFactory.Persist();
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			var potentialGroupPage = new AnalyticsGroup
 			{
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddAndGetGroupPage(newGroupPage));
 			result.GroupId.Should().Be.GreaterThan(-1);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 			WithAnalyticsUnitOfWork.Do(() => Target.DeleteGroupPages(new[] { groupPage.GroupPageCode }, groupPage.BusinessUnitCode));
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 			var groupPage2 = new AnalyticsGroup
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName2",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage2));
 
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 			var groupPage2 = new AnalyticsGroup
@@ -257,12 +257,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName2",
 				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage2));
 
 			var result = WithAnalyticsUnitOfWork.Get(() =>
-				Target.GetBuildInGroupPageBase(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()).FirstOrDefault());
+				Target.GetBuildInGroupPageBase(BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()).FirstOrDefault());
 
 			result.Should().Not.Be.Null();
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);

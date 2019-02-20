@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 		[SetUp]
 		public void Setup()
 		{
-			BusinessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			BusinessUnit = BusinessUnitUsedInTests.BusinessUnit;
 			SourceScenario = new Scenario("source");
 			TargetScenario = new Scenario("default") { DefaultScenario = true };
 			Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 5);

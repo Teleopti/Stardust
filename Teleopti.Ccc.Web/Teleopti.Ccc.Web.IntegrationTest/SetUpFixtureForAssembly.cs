@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 
 			ApplicationData = new ApplicationData(appSettings, null);
 
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitUsedInTests.BusinessUnit.SetId(null);
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitUsedInTests.BusinessUnit);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState {ApplicationScopeData_DONTUSE = ApplicationData});
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(new ThisUnitOfWork(uow)).Add(loggedOnPerson);
+				new PersonRepository(new ThisUnitOfWork(uow), null, null).Add(loggedOnPerson);
 				uow.PersistAll();
 			}
 		}
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new BusinessUnitRepository(uow).Add(BusinessUnitFactory.BusinessUnitUsedInTest);
+				new BusinessUnitRepository(uow).Add(BusinessUnitUsedInTests.BusinessUnit);
 				uow.PersistAll();
 			}
 		}
@@ -146,10 +146,10 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 ";
 			
 			var stateMock = new FakeState();
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(Guid.NewGuid());
+			BusinessUnitUsedInTests.BusinessUnit.SetId(Guid.NewGuid());
 			StateHolderProxyHelper.ClearAndSetStateHolder(
 				loggedOnPerson,
-				BusinessUnitFactory.BusinessUnitUsedInTest,
+				BusinessUnitUsedInTests.BusinessUnit,
 				ApplicationData,
 				DataSource,
 				stateMock);
@@ -219,7 +219,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 
 		private static void createBusinessUnitAndPerson(out IPerson person)
 		{
-			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
+			BusinessUnitUsedInTests.Reset();
 
 			person = PersonFactory.CreatePerson(RandomName.Make());
 		}
@@ -229,7 +229,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			StateHolderProxyHelper.SetupFakeState(
 				DataSource, 
 				person, 
-				BusinessUnitFactory.BusinessUnitUsedInTest);
+				BusinessUnitUsedInTests.BusinessUnit);
 		}
 
 		public static void Logout()
@@ -245,9 +245,9 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			session.Save(person);
 
 			//force a insert
-			var businessUntId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value;
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-			session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, businessUntId);
+			var businessUntId = BusinessUnitUsedInTests.BusinessUnit.Id.Value;
+			BusinessUnitUsedInTests.BusinessUnit.SetId(null);
+			session.Save(BusinessUnitUsedInTests.BusinessUnit, businessUntId);
 			session.Flush();
 		}
 

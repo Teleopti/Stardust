@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class OvertimeAvailabilityRepository : Repository<IOvertimeAvailability>, IOvertimeAvailabilityRepository
 	{
 		public OvertimeAvailabilityRepository(ICurrentUnitOfWork currentUnitOfWork)
-			 : base(currentUnitOfWork)
+			 : base(currentUnitOfWork, null, null)
 		{
 
 		}

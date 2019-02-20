@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public QueueSourceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public QueueSourceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
     }

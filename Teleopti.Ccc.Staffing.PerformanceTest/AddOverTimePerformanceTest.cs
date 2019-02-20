@@ -1,8 +1,11 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Data.SqlClient;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -14,11 +17,13 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
+	[AllTogglesOn]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -29,7 +34,9 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public AddOverTime AddOverTime;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
-		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
+		public IStaffingViewModelCreator StaffingViewModelCreator;
+		public UpdateSkillForecastReadModel UpdateSkillForecastReadModel;
+		public IConfigReader ConfigReader;
 
 		private DateTime[] timeSerie;
 		private Guid[] skillIds;
@@ -48,7 +55,31 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
+
+				using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
+				{
+					connection.Open();
+
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombination", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResourceDelta", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillCombinationResource", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillForecast", connection))
+					{
+						command.ExecuteNonQuery();
+					}
+				}
+
 				UpdateStaffingLevel.Update(period);
+				UpdateSkillForecastReadModel.Update(period);
 
 				var viewModel = StaffingViewModelCreator.Load(skillIds);
 				timeSerie = viewModel.DataSeries.Time;

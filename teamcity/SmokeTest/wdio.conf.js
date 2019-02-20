@@ -16,7 +16,7 @@ exports.config = {
 		groundall: ['./test/ServiceBusAndMessageBrokerTest.js', './test/IframeGroundTest.js'],
 		ground: ['./test/ServiceBusAndMessageBrokerTest.js'],
 		docker: ['./test/ServiceBusAndMessageBrokerTest.js'],
-		azure: ['./test/AzureAdOAuthTest.js', './test/AzureAdWsFedTest.js', './test/OktaSamlIdpTest.js', './test/OktaSamlSpTest.js', './test/GoogleTest.js', './test/IframeAzureTest.js', './test/ServiceBusAndMessageBrokerTest.js']
+		azure: ['./test/AzureAdOAuthTest.js', './test/AzureAdWsFedTest.js', './test/OktaSamlIdpTest.js', './test/OktaSamlSpTest.js', './test/GoogleTest.js', './test/IframeAzureTest.js']
 	},
     // Patterns to exclude.
     exclude: [

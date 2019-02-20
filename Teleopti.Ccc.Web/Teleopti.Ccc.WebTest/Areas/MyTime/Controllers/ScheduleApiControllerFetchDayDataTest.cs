@@ -4,12 +4,12 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
-		public ILoggedOnUser User;
+		public FakeLoggedOnUser User;
 		public IScheduleStorage ScheduleData;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeMeetingRepository MeetingRepository;
@@ -921,13 +921,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.RequestPermission.ShiftExchangePermission.Should().Be.True();
 			result.RequestPermission.ShiftTradeBulletinBoardPermission.Should().Be.True();
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldMapAsmEnabled()
-		{
-			var result = Target.FetchWeekData(null);
-			result.AsmEnabled.Should().Be.True();
 		}
 
 		[Test]

@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new ImportTenantResultModel { Success = false, Message = "It is not allowed to import the same database again. Every Tenant must have it's own database." });
 			
 			var version = _checkDatabaseVersions.GetVersions(appBuilder.ConnectionString);
-			if(!(version.ImportAppVersion > 360))
+			if(version.HeadVersion < version.ImportAppVersion)
 				return Json(new ImportTenantResultModel { Success = false, Message = "This is a version that is too early to import this way!" });
 
 			result = _databaseHelperWrapper.Exists(analBuilder.ConnectionString, DatabaseType.TeleoptiAnalytics);

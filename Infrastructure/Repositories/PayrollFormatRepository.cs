@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PayrollFormatRepository : Repository<IPayrollFormat>, IPayrollFormatRepository
 	{
 		public PayrollFormatRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 
 		}

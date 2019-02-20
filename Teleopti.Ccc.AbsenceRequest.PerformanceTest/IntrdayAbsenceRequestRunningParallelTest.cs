@@ -25,6 +25,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
+	[AllTogglesOn]
 	//public class IntrdayAbsenceRequestRunningParallelTest : PerformanceTestWithOneTimeSetup
 	public class IntrdayAbsenceRequestWithValidationTest : PerformanceTestWithOneTimeSetup
 	{
@@ -117,83 +118,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			});
 		}
 
-		/// <summary>
-		/// To see if the loading of skills is fast enough or not. It should not load all skills, workload for all skills and workload day template
-		/// for all the workloads
-		/// </summary>
-		[Test, Ignore("Waiting for a fast lane Build")]
-		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
-		public void Run200ParallelAbsenceRequest()
-		{
-			Now.Is("2016-03-16 07:01");
-
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			StardustJobFeedback.SendProgress($"Will process {200} requests");
-			var taskList = new List<Task>();
-			
-			for (int i = 0; i < 100; i++)
-			{
-				var task = Task.Run(() => WithUnitOfWork.Do(() =>
-				{
-					//AbsenceRepository.LoadAll();
-					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
-					var endDateTime = new DateTime(2016, 3, 16, 17, 0, 0, DateTimeKind.Utc);
-					i = i - 1;
-					AbsenceRequestModel model = new AbsenceRequestModel()
-					{
-						Period = new DateTimePeriod(startTime, endDateTime),
-						PersonId = _personIdList[i],
-						Message = "Story79139",
-						Subject = "Story79139",
-						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
-					};
-					AbsenceRequestPersister.Persist(model);
-				}));
-				taskList.Add(task);
-
-			}
-			Task.WaitAll(taskList.ToArray());
-			taskList.Clear();
-
-			for (int i = 100; i < 200; i++)
-			{
-				var task = Task.Run(() => WithUnitOfWork.Do(() =>
-				{
-					AbsenceRepository.LoadAll();
-					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
-					var endDateTime = new DateTime(2016, 3, 16, 17, 0, 0, DateTimeKind.Utc);
-					i = i - 1;
-					AbsenceRequestModel model = new AbsenceRequestModel()
-					{
-						Period = new DateTimePeriod(startTime, endDateTime),
-						PersonId = _personIdList[i],
-						Message = "Story79139",
-						Subject = "Story79139",
-						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
-					};
-					AbsenceRequestPersister.Persist(model);
-				}));
-				taskList.Add(task);
-
-			}
-			Task.WaitAll(taskList.ToArray());
-
-			WithUnitOfWork.Do(() =>
-			{
-				var list = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(2016, 3, 16, 2016, 3, 17));
-				var formatting = new NoFormatting();
-				list.Count(pr =>
-				{
-					var subject = pr.GetSubject(formatting);
-					return subject!=null && subject.Equals("Story79139");
-				})
-				.Should().Be(200);
-			});
-		}
-
 		[Test]
-		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
 		[Ignore("For manual testing of MaxPoolSize of SQL connections reached")]
 		public void Run500ParallelAbsenceRequestToVerifyThreshold()
 		{ // NOTE: Make sure to only run one of these tests at a time, because OneTimeSetup is used for now.

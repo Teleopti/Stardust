@@ -27,7 +27,7 @@ describe('AuditTrailCtrl', function () {
     $controller = _$controller_;
     NoticeService = _NoticeService_;
 
-    $httpBackend.whenGET('../api/Reports/PersonsWhoChangedSchedules').respond(function (method, url, data, headers) {
+	  $httpBackend.whenPOST('../api/Reports/PersonsWhoChangedSchedules').respond(function (method, url, data, headers) {
       return [200, fakeChanges]
     });
     $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {

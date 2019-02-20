@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Wfm_User_Password_Reset_74957,
 		Wfm_ReadNotificationConfigurationFromDb_78242,
 		Wfm_AutomaticNotificationEnrollment_79679,
+		Wfm_AutomaticNotificationEnrollmentStartup_79679,
 
 		WfmGlobalLayout_personalOptions_37114,
 
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_QueryHintOnLayers_79780,
 		ResourcePlanner_TeamSchedulingInPlans_79283,
 		ResourcePlanner_DelayShiftCreations_81680,
+		ResourcePlanner_PrepareToRemoveRightToLeft_81112,
 		WFM_Plans_Redesign_81198,
 		WFM_Plans_HeatMap_79112,
 
@@ -105,6 +107,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,
 		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,
 		MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154,
+		MyTimeWeb_Schedule_MonthView_Indicate_BankHoliday_81158,
 
 		WFM_Intraday_Redesign_77214,
 

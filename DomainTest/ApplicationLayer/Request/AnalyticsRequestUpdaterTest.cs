@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void MissingDateInAnalyticsDatabaseThrows()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(new DateTime(2000, 1, 1), new DateTime(2000, 1, 1));
 
 			Target = new AnalyticsRequestUpdater(PersonRequestRepository, AnalyticsRequestRepository, AnalyticsDateRepository, AnalyticsBusinessUnitRepository, PersonPeriodRepository, AnalyticsAbsenceRepository);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			var person = PersonFactory.CreatePerson("Test").WithId();
 			var request = new TextRequest(new DateTimePeriod(new DateTime(1999, 1, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(1999, 1, 2, 0, 0, 0, DateTimeKind.Utc))).WithId();
 			var personRequest = new PersonRequest(person, request).WithId();
-			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			personRequest.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			PersonRequestRepository.Add(personRequest);
 
 			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
@@ -64,20 +64,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 				Target.Handle(new PersonRequestChangedEvent
 				{
 					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 				}));
 		}
 
 		[Test]
 		public void MissingRequestInAppDatabaseDoesNothing()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
 
 			Target.Handle(new PersonRequestChangedEvent
 			{
 				PersonRequestId = Guid.NewGuid(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
@@ -87,17 +87,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void MissingPersonPeriodInAnalyticsDatabaseDoesNothing()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
 
 			var personRequest = new PersonRequestFactory().CreatePersonRequest().WithId();
 			personRequest.Request.SetId(Guid.NewGuid());
-			((IFilterOnBusinessUnit)personRequest).SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			((IFilterOnBusinessUnit)personRequest).SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			PersonRequestRepository.Add(personRequest);
 			Target.Handle(new PersonRequestChangedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
@@ -107,13 +107,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void ShouldAddRequestAndRequestedDay()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
 
 			var person = PersonFactory.CreatePerson("Test").WithId();
 			var request = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow + TimeSpan.FromDays(1))).WithId();
 			var personRequest = new PersonRequest(person, request).WithId();
-			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			personRequest.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			PersonRequestRepository.Add(personRequest);
 
 			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			Target.Handle(new PersonRequestDeletedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Not.Be.Empty();
@@ -137,18 +137,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void ShouldAddRequestWithGivenBusinessUnit()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
 
 			var person = PersonFactory.CreatePerson("Test").WithId();
 			var request = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow + TimeSpan.FromDays(1))).WithId();
 			var personRequest = new PersonRequest(person, request).WithId();
-			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			personRequest.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			PersonRequestRepository.Add(personRequest);
 
 			var analyticsBu = new AnalyticBusinessUnit
 			{
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
 				BusinessUnitId = 11
 			};
 			((FakeAnalyticsBusinessUnitRepository) AnalyticsBusinessUnitRepository).UseList = true;
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			Target.Handle(new PersonRequestDeletedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Not.Be.Empty();
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void ShouldDeleteRequestAndRequestedDay()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
 
 			var person = PersonFactory.CreatePerson("Test").WithId();
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			Target.Handle(new PersonRequestChangedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void ShouldDeleteRequestPlacedAfterTerminationDate()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30), DateTime.Today + TimeSpan.FromDays(30));
 
 			var person = PersonFactory.CreatePerson("Test").WithId();
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			Target.Handle(new PersonRequestChangedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test]
 		public void ShouldAddOvertimeRequestAndSaveRequestTypeId()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30),
 				DateTime.Today + TimeSpan.FromDays(30));
 
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			var request = new OvertimeRequest(multiplicatorDefinitionSet,
 				new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow + TimeSpan.FromDays(1))).WithId();
 			var personRequest = new PersonRequest(person, request).WithId();
-			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			personRequest.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			PersonRequestRepository.Add(personRequest);
 
 			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			Target.Handle(new PersonRequestDeletedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsRequestRepository.AnalyticsRequests.Should().Not.Be.Empty();

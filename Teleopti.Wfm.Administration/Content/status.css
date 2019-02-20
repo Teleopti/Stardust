@@ -1,0 +1,21 @@
+body {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+}
+
+.stepSuccess {
+	color: green;
+}
+
+.stepFailure {
+	color: red;
+}
+
+.stepItem {
+	border: 1px solid;
+	margin: 10px;
+}
+
+div {
+	padding: 10px;
+}

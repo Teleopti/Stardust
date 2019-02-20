@@ -1,9 +1,9 @@
 using System.Linq;
-using Teleopti.Ccc.Domain.MonitorSystem;
+using Teleopti.Ccc.Domain.Status;
 
 namespace Teleopti.Ccc.Domain.Stardust
 {
-	public class StardustChecker : IMonitorStep
+	public class StardustChecker : IStatusStep
 	{
 		private readonly IGetAllWorkerNodes _getAllWorkerNodes;
 		public readonly string Output = "{0} nodes found. {1} of them is alive.";
@@ -13,13 +13,14 @@ namespace Teleopti.Ccc.Domain.Stardust
 			_getAllWorkerNodes = getAllWorkerNodes;
 		}
 		
-		public MonitorStepResult Execute()
+		public StatusStepResult Execute()
 		{
 			var nodes = _getAllWorkerNodes.GetAllWorkerNodes();
 			var aliveNodesCount = nodes.Count(x => x.Alive);
-			return new MonitorStepResult(aliveNodesCount > 0, string.Format(Output, nodes.Count(), aliveNodesCount));
+			return new StatusStepResult(aliveNodesCount > 0, string.Format(Output, nodes.Count(), aliveNodesCount));
 		}
 
 		public string Name { get; } = "Stardust";
+		public string Description { get; } = "Verifies that long running background executions can run.";
 	}
 }

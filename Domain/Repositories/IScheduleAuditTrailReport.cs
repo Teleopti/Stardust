@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IScheduleAuditTrailReport
 	{
-		IEnumerable<SimplestPersonInfo> GetRevisionPeople();
+		IEnumerable<SimplestPersonInfo> GetRevisionPeople(DateOnlyPeriod searchPeriod);
 		IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod,
 			DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents);
 	}

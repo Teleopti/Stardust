@@ -87,9 +87,9 @@ namespace Teleopti.Wfm.Api.Test
 			var person = PersonFactory.CreatePerson().WithId(FakeTokenVerifier.UserId);
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var availableData = new AvailableData().WithId();
-			availableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			availableData.AddAvailableBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			var applicationRole = new ApplicationRole{AvailableData = availableData}.WithId();
-			applicationRole.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			applicationRole.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			person.PermissionInformation.AddApplicationRole(applicationRole);
 
 			var userUnauthorized = new LoadUserUnauthorizedFake();
@@ -112,7 +112,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble<DummyHangfireClientStarter>().For<IHangfireClientStarter>();
 			
 			var businessUnitRepository = new FakeBusinessUnitRepository();
-			businessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			businessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 
 			var fakeStorage = new FakeStorage();
 			var personRepository = new FakePersonRepository(fakeStorage);

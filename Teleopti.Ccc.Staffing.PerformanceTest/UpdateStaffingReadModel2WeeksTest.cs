@@ -9,12 +9,14 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[TestFixture]
 	[UpdateReadModelPerformanceTest]
+	[AllTogglesOn]
 	public class UpdateStaffingReadModel2WeeksTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -53,35 +55,35 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			});
 		}
 
-		[Test]
-		public void UpdateReadModel2Weeks()
-		{
-			Now.Is("2016-03-26 07:00");
-			var now = Now.UtcDateTime();
-			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+		//[Test]
+		//public void UpdateReadModel2Weeks()
+		//{
+		//	Now.Is("2016-03-26 07:00");
+		//	var now = Now.UtcDateTime();
+		//	UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+		//	using (DataSource.OnThisThreadUse("Teleopti WFM"))
+		//		AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-			WithUnitOfWork.Do(() =>
-			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(14).AddHours(1)));
-			});
-		}
+		//	WithUnitOfWork.Do(() =>
+		//	{
+		//		UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(14).AddHours(1)));
+		//	});
+		//}
 
-		[Test]
-		public void UpdateReadModel4Weeks()
-		{
-			Now.Is("2016-03-26 07:00");
-			var now = Now.UtcDateTime();
-			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+		//[Test]
+		//public void UpdateReadModel4Weeks()
+		//{
+		//	Now.Is("2016-03-26 07:00");
+		//	var now = Now.UtcDateTime();
+		//	UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+		//	using (DataSource.OnThisThreadUse("Teleopti WFM"))
+		//		AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-			WithUnitOfWork.Do(() =>
-			{
-				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(28).AddHours(1)));
-			});
-		}
+		//	WithUnitOfWork.Do(() =>
+		//	{
+		//		UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(28).AddHours(1)));
+		//	});
+		//}
 
 		[Test]
 		public void UpdateReadModel7Weeks()

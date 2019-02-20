@@ -19,8 +19,8 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 		private readonly IJsonEventSerializer _serializer;
 		private readonly IJsonEventDeserializer _deserializer;
 		private readonly PersistedTypeMapper _typeMapper;
-		private readonly int _batchSize;
-		private readonly int _loadSize;
+		private readonly int _addBatchSize;
+		private readonly int _loadForSynchronizationSize;
 
 		public RtaEventStore(
 			ICurrentUnitOfWork unitOfWork,
@@ -35,8 +35,8 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 			_serializer = serializer;
 			_deserializer = deserializer;
 			_typeMapper = typeMapper;
-			_batchSize = config.ReadValue("RtaEventStoreBatchSize", 10);
-			_loadSize = config.ReadValue("RtaEventStoreLoadForSynchronizationSize", 50000);
+			_addBatchSize = config.ReadValue("RtaEventStoreBatchSize", 10);
+			_loadForSynchronizationSize = config.ReadValue("RtaEventStoreLoadForSynchronizationSize", 50000);
 		}
 
 		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) =>
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
 
-			events.Batch(_batchSize).ForEach(batch =>
+			events.Batch(_addBatchSize).ForEach(batch =>
 			{
 				var sqlValues = batch.Select((m, i) =>
 					$@"
@@ -191,7 +191,7 @@ ORDER BY [Id] ASC
 			var events = load(
 				_unitOfWork.Current().Session()
 					.CreateSQLQuery($@"
-SELECT TOP {_loadSize}
+SELECT TOP {_loadForSynchronizationSize}
 	[Id], 
 	[Type],
 	[Event] 
@@ -212,6 +212,18 @@ ORDER BY [Id]
 
 		public long ReadLastId() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
+
+		public int CountOfTypeFromId<T>(long fromEventId) =>
+		_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT COUNT (*) 
+FROM 
+	[rta].[Events] WITH (NOLOCK)
+WHERE
+	[Type] = :eventType AND 
+	[Id] > :fromEventId
+")
+			.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
+			.SetParameter("fromEventId", fromEventId)
+			.UniqueResult<int>();
 
 		private IEnumerable<IEvent> loadEvents(IQuery query) =>
 			load(query).Select(x => x.DeserializedEvent).ToArray();

@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					.ForEach(role.AvailableData.AddAvailableSite);
 			}
 
-			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork);
+			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork, null, null);
 			var businessUnit = businessUnitRepository.LoadAllBusinessUnitSortedByName().Single(b => b.Name == BusinessUnit);
 			role.SetBusinessUnit(businessUnit);
 

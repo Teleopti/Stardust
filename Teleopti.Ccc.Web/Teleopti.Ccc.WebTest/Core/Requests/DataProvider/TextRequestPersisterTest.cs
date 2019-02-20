@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -15,9 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.Exceptions;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
@@ -99,15 +96,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Invalid);
 			PersonRequestRepository.LoadAll().Should().Have.Count.EqualTo(0);
 		}
-
-		[Test]
-		public void ShouldThrowHttp404OIfTextRequestDoesNotExists()
-		{
-			var id = Guid.NewGuid();
-			
-			var exception = Assert.Throws<CustomMessageException>(() => Target.Delete(id));
-			exception.GetHttpCode().Should().Be(404);
-		}
 		
 		[Test]
 		public void ShouldUpdateExistingTextRequest()
@@ -131,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 
-			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			isolate.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
 			var dataSource = new FakeCurrentDatasource("Test");
 			isolate.UseTestDouble(dataSource).For<ICurrentDataSource>();

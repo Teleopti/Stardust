@@ -38,7 +38,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
 		{
-			var scheduleDictionary = loadScheduleDictionary(person, period);
+			var periodWithYesterdayAndToday = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate);
+			var scheduleDictionary = loadScheduleDictionary(person, periodWithYesterdayAndToday);
+
 			var skills = getSupportedPersonSkills(person, period).Select(s => s.Skill).ToArray();
 			var useShrinkageDic = getShrinkageStatusAccordingToPeriods(person, period);
 			var workflowControlSet = person.WorkflowControlSet;
@@ -88,8 +90,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private Dictionary<DateTime, int> calculateIntervalPossibilities(IPerson person, IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)
 		{
 			var intervalPossibilities = new Dictionary<DateTime, int>();
-			var personAssignmentDictionary = skillStaffingData.Select(s => s.Date).Distinct()
-				.ToDictionary(d => d, d => getPersonAssignment(scheduleDictionary, d));
+
 			foreach (var skillStaffing in skillStaffingData)
 			{
 				if (!staffingDataHasValue(skillStaffing))
@@ -98,8 +99,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffing.Time))
 					continue;
 
-				var subtracted =  subtractUsersSchedule(person, skillStaffing, personAssignmentDictionary[skillStaffing.Date]);
-				if(!subtracted) continue;
+				if (!isSkillScheduledInThisInterval(person, skillStaffing, scheduleDictionary))
+					continue;
+
+				subtractUsersSchedule(skillStaffing);
 
 				var possibility = calculatePossibility(skillStaffing);
 				var key = skillStaffing.Time;
@@ -144,16 +147,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return personAssignment == null || personAssignment.ShiftLayers.IsEmpty();
 		}
 
-		private bool subtractUsersSchedule(IPerson person, SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
+		private bool isSkillScheduledInThisInterval(IPerson person, SkillStaffingData skillStaffingData, IScheduleDictionary scheduleDictionary)
 		{
+			var scheduleDate = skillStaffingData.Date;
+			var personAssignmentDictionary = new Dictionary<DateOnly, IPersonAssignment>
+			{
+				{scheduleDate.AddDays(-1), getPersonAssignment(scheduleDictionary, scheduleDate.AddDays(-1))},
+				{scheduleDate, getPersonAssignment(scheduleDictionary, scheduleDate)}
+			};
+			var personAssignmentToday = personAssignmentDictionary[scheduleDate];
+			var personAssignmentYesterday = personAssignmentDictionary[scheduleDate.AddDays(-1)];
+
 			var skill = skillStaffingData.Skill;
 			var timezone = person.PermissionInformation.DefaultTimeZone();
 			var startTime = TimeZoneHelper.ConvertToUtc(skillStaffingData.Time, timezone);
-			var skillScheduled = isSkillScheduled(personAssignment,
-				new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),
-				skill);
-			if (!skillScheduled) return false;
+			var skillScheduled = isSkillScheduled(personAssignmentToday, new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),skill)
+								 || isSkillScheduled(personAssignmentYesterday, new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),skill);
+			return skillScheduled;
+		}
 
+		private void subtractUsersSchedule(SkillStaffingData skillStaffingData)
+		{
 			if (skillStaffingData.ScheduledStaffing <= 1)
 			{
 				skillStaffingData.ScheduledStaffing = 0;
@@ -162,8 +176,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			{
 				skillStaffingData.ScheduledStaffing -= 1;
 			}
-
-			return true;
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)

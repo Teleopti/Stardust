@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class NoteRepository: Repository<INote>, INoteRepository 
     {
 				public NoteRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

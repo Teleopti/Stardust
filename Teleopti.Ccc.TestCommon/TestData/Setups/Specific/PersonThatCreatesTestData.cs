@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 
         public void Apply(ICurrentUnitOfWork currentUnitOfWork)
         {
-            new PersonRepository(currentUnitOfWork).Add(_personThatCreatesTestData);
+            new PersonRepository(currentUnitOfWork, null, null).Add(_personThatCreatesTestData);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork);
+			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork, null, null);
 			businessUnitRepository.Add(BusinessUnit);
 		}
 

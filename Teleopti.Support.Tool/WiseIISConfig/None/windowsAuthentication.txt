@@ -7,3 +7,4 @@ Client;False
 AuthenticationBridge;False
 WindowsIdentityProvider;True
 Administration;False
+API;False

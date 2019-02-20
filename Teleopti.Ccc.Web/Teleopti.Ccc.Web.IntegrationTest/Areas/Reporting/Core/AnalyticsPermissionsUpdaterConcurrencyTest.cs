@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 		[Test]
 		public void ShouldHandleConcurrency()
 		{
-			var businessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault();
+			var businessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault();
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			var businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 			analyticsDataFactory.Setup(businessUnit);
 		
 			Database.WithAgent("test1");

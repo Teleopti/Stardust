@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				using (session.SessionFactory.WithStats())
 				{
 					var p = PersonFactory.CreatePerson();
-					new PersonRepository(new ThisUnitOfWork(uow)).Add(p);
+					new PersonRepository(new ThisUnitOfWork(uow), null, null).Add(p);
 					Assert.IsTrue(uow.IsDirty());
 					uow.Flush();
 					Assert.IsFalse(uow.IsDirty());
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             Guid id;
             using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                var repository = new PersonRepository(new ThisUnitOfWork(uow1));
+                var repository = new PersonRepository(new ThisUnitOfWork(uow1), null, null);
                 p = PersonFactory.CreatePerson();
                 repository.Add(p);
                 id = p.Id.Value;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (var uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                Assert.That(new PersonRepository(new ThisUnitOfWork(uow2)).Get(id), Is.Null);
+                Assert.That(new PersonRepository(new ThisUnitOfWork(uow2), null, null).Get(id), Is.Null);
             }
         }
 

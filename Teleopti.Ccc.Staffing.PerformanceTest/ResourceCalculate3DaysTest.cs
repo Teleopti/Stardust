@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	//[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)] waiting for results from the build
+	[AllTogglesOn]
 	public class ResourceCalculate3DaysTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -88,73 +88,73 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			});
 		}
 
-		[Test]
-		public void ResourceCalculate3DaysWithShrinkage()
-		{
-			Now.Is("2016-03-07 07:00");
-			var now = Now.UtcDateTime();
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+		//[Test]
+		//public void ResourceCalculate3DaysWithShrinkage()
+		//{
+		//	Now.Is("2016-03-07 07:00");
+		//	var now = Now.UtcDateTime();
+		//	using (DataSource.OnThisThreadUse("Teleopti WFM"))
+		//		AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-			var period = new DateTimePeriod(now, now.AddDays(3));
-			WithUnitOfWork.Do(() =>
-							  {
-								  var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
-								  var result = SkillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, skillCombinationResources.ToList(), true); //with shrinkage
-								  Assert.Greater(result.Count, 0);
-							  });
-		}
+		//	var period = new DateTimePeriod(now, now.AddDays(3));
+		//	WithUnitOfWork.Do(() =>
+		//					  {
+		//						  var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
+		//						  var result = SkillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, skillCombinationResources.ToList(), true); //with shrinkage
+		//						  Assert.Greater(result.Count, 0);
+		//					  });
+		//}
 
-		[Test]
-		public void ResourceCalculate3DaysWithoutShrinkage()
-		{
-			Now.Is("2016-03-07 07:00");
-			var now = Now.UtcDateTime();
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+		//[Test]
+		//public void ResourceCalculate3DaysWithoutShrinkage()
+		//{
+		//	Now.Is("2016-03-07 07:00");
+		//	var now = Now.UtcDateTime();
+		//	using (DataSource.OnThisThreadUse("Teleopti WFM"))
+		//		AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-			var period = new DateTimePeriod(now, now.AddDays(3));
-			WithUnitOfWork.Do(() =>
-							  {
-								  var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
-								  var result = SkillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, skillCombinationResources.ToList(), false);
-								  Assert.Greater(result.Count, 0);
-							  });
-		}
+		//	var period = new DateTimePeriod(now, now.AddDays(3));
+		//	WithUnitOfWork.Do(() =>
+		//					  {
+		//						  var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
+		//						  var result = SkillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, skillCombinationResources.ToList(), false);
+		//						  Assert.Greater(result.Count, 0);
+		//					  });
+		//}
 
 
 
-		[Test]
-		public void GetForecastAndStaffingInfoForTodayWithoutShrinkage()
-		{
-			Now.Is("2016-03-07 07:00");
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			WithUnitOfWork.Do(() =>
-							  {
-								  var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray());
-								  Assert.AreEqual(result.StaffingHasData, true);
-								  Assert.Greater(result.DataSeries.Time.Length, 0);
-								  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
-								  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
-							  });
-		}
+		//[Test]
+		//public void GetForecastAndStaffingInfoForTodayWithoutShrinkage()
+		//{
+		//	Now.Is("2016-03-07 07:00");
+		//	using (DataSource.OnThisThreadUse("Teleopti WFM"))
+		//		AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+		//	WithUnitOfWork.Do(() =>
+		//					  {
+		//						  var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray());
+		//						  Assert.AreEqual(result.StaffingHasData, true);
+		//						  Assert.Greater(result.DataSeries.Time.Length, 0);
+		//						  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
+		//						  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
+		//					  });
+		//}
 
-		[Test]
-		public void GetForecastAndStaffingInfoForTodayWithShrinkage()
-		{
-			Now.Is("2016-03-07 07:00");
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			WithUnitOfWork.Do(() =>
-							  {
-								  var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), null, true);
-								  Assert.AreEqual(result.StaffingHasData, true);
-								  Assert.Greater(result.DataSeries.Time.Length, 0);
-								  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
-								  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
-							  });
-		}
+		//[Test]
+		//public void GetForecastAndStaffingInfoForTodayWithShrinkage()
+		//{
+		//	Now.Is("2016-03-07 07:00");
+		//	using (DataSource.OnThisThreadUse("Teleopti WFM"))
+		//		AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+		//	WithUnitOfWork.Do(() =>
+		//					  {
+		//						  var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), null, true);
+		//						  Assert.AreEqual(result.StaffingHasData, true);
+		//						  Assert.Greater(result.DataSeries.Time.Length, 0);
+		//						  Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
+		//						  Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
+		//					  });
+		//}
 
 	}
 }

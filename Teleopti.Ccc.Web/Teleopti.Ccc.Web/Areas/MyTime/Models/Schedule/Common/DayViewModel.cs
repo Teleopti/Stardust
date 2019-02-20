@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 
 
@@ -28,5 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common
 		public IList<OccupancyViewModel> SeatBookings { get; set; }
 		public TimePeriod? OpenHourPeriod { get; set; }
 		public bool HasNotScheduled { get; set; }
+		public BankHolidayCalendarViewModel BankHolidayCalendar { get; set; }
 	}
 }

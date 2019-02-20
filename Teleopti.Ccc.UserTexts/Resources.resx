@@ -10190,7 +10190,7 @@ These options are activated:
     <value>Schedule audit trail is not running.</value>
     <comment>Schedule audit trail is not running.</comment>
   </data>
-	<data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+    <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
     <value>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</value>
     <comment>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</comment>
   </data>
@@ -16028,7 +16028,7 @@ Do you want to participate?</value>
   </data>
   <data name="NoPlanningGroupFound" xml:space="preserve">
     <value>No planning group found.</value>
-	<comment>used in web plans when no planning group exist or no planning group matches the filter</comment>
+    <comment>used in web plans when no planning group exist or no planning group matches the filter</comment>
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Create first planning period</value>
@@ -16306,7 +16306,7 @@ Do you want to participate?</value>
   </data>
   <data name="ShowNumbers" xml:space="preserve">
     <value>Show values</value>
-	<comment>Show relative difference in web plans heatmap</comment>
+    <comment>Show relative difference in web plans heatmap</comment>
   </data>
   <data name="UnsupportedDataSeriesFound" xml:space="preserve">
     <value>Contains mixed skill types, certain data series may be unavailable</value>
@@ -17831,7 +17831,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Header for managing identity logons</comment>
   </data>
   <data name="ChatBot" xml:space="preserve">
-    <value>Chat bot</value>
+    <value>Grant</value>
     <comment>Name for chatbot</comment>
   </data>
   <data name="RequestList" xml:space="preserve">

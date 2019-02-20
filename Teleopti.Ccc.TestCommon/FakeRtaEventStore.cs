@@ -28,11 +28,14 @@ namespace Teleopti.Ccc.TestCommon
 
 		private int _id;
 
+		public int LoadForSynchronizationSize = 50000;
+		public bool SynchronizeOnAdd = true; 
+		
 		public FakeRtaEventStore(Lazy<IRtaEventStoreSynchronizer> synchronizer)
 		{
 			_synchronizer = synchronizer;
 		}
-
+		
 		public IEnumerable<StoredEvent> Data = Enumerable.Empty<StoredEvent>();
 
 		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) =>
@@ -63,8 +66,9 @@ namespace Teleopti.Ccc.TestCommon
 					}).ToArray();
 				}
 			);
-
-			_synchronizer.Value.Synchronize();
+			
+			if (SynchronizeOnAdd)
+				_synchronizer.Value.Synchronize();
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
@@ -106,7 +110,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{
-			var rows = Data.Where(x => x.Id > fromEventId).ToArray();
+			var rows = Data
+				.Where(x => x.Id > fromEventId)
+				.Take(LoadForSynchronizationSize)
+				.ToArray();
 			var events = rows
 				.Select(e => e.Event.CopyBySerialization(e.Event.GetType()))
 				.Cast<IEvent>()
@@ -120,6 +127,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public long ReadLastId() =>
 			Data.LastOrDefault()?.Id ?? 0;
+
+		public int CountOfTypeFromId<T>(long fromEventId) => 
+			Data.Count(x => (x.Event.GetType() == typeof(T)) && x.Id > fromEventId);
 
 		public IEnumerable<IEvent> LoadAllForTest()
 		{

@@ -834,7 +834,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var stateMock = new FakeState();
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitUsedInTests.BusinessUnit);
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}
 
@@ -947,7 +947,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(
 				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest), dataSource, null);
+			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(loggedOnPerson, BusinessUnitUsedInTests.BusinessUnit), dataSource, null);
 			Thread.CurrentPrincipal = principal;
 
 			StateHolderProxyHelper.ClearStateHolder();

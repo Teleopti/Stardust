@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class FavoriteSearchRepository : Repository<IFavoriteSearch>, IFavoriteSearchRepository
 	{
-		public FavoriteSearchRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public FavoriteSearchRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 

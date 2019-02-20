@@ -4,6 +4,7 @@ Level2;Client;Teleopti WFM;v4.0;vdir;default.htm;None;Client
 Level2;PMService;Teleopti WFM;v4.0;app;None;None;PMService
 Level2;RTA;Teleopti RTA;v4.0;app;None;None;Web
 Level2;SDK;Teleopti SDK;v4.0;app;None;None;SDK
+Level2;API;Teleopti SDK;v4.0;app;None;None;API
 Level2;Web;Teleopti Web;v4.0;app;None;aspnet_isapi;Web
 Level2;AuthenticationBridge;Teleopti Web;v4.0;app;None;aspnet_isapi;AuthenticationBridge
 Level2;WindowsIdentityProvider;Teleopti Web;v4.0;app;None;aspnet_isapi;WindowsIdentityProvider

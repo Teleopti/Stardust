@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Stardust;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystem
+namespace Teleopti.Ccc.DomainTest.Status
 {
 	[DomainTest]
 	public class StardustCheckerTest

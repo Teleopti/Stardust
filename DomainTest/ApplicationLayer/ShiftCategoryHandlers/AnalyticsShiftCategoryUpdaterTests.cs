@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		[Test]
 		public void ShouldAddShiftCategoryToAnalytics()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory1", "red");
 			shiftCategory.SetId(Guid.NewGuid());
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 			Target.Handle(new ShiftCategoryChangedEvent
 			{
 				ShiftCategoryId = shiftCategory.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		[Test]
 		public void ShouldUpdateShiftCategoryToAnalytics()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("New Shift Category Name", "red");
 			shiftCategory.SetId(Guid.NewGuid());
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 			Target.Handle(new ShiftCategoryChangedEvent
 			{
 				ShiftCategoryId = shiftCategory.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		[Test]
 		public void ShouldSetShiftCategoryToDelete()
 		{
-			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Has(BusinessUnitUsedInTests.BusinessUnit);
 			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(0);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory1", "red");
 			shiftCategory.SetId(Guid.NewGuid());
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 			Target.Handle(new ShiftCategoryDeletedEvent
 			{
 				ShiftCategoryId = shiftCategory.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault()
 			});
 
 			AnalyticsShiftCategoryRepository.ShiftCategories().Count.Should().Be.EqualTo(1);

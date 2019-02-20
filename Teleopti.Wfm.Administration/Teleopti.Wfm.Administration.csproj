@@ -242,6 +242,7 @@
     <Content Include="Content\angular-material.min.css" />
     <Content Include="Content\images\error_alert_24px.svg" />
     <Content Include="Content\images\ic_search_white_24px.svg" />
+    <Content Include="Content\status.css" />
     <Content Include="Etl\config.html" />
     <Content Include="Etl\etlBaseConfigModal.component.js" />
     <Content Include="Etl\etlConfigController.js" />
@@ -268,6 +269,7 @@
     <Content Include="Etl\modal.html" />
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
+    <Content Include="status.html" />
     <Content Include="HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
@@ -317,7 +319,9 @@
     <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.service.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
+    <Content Include="Scripts\App\status.js" />
     <Content Include="Scripts\App\Services\tenant.service.js" />
+    <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -344,6 +348,7 @@
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobFailedController.js" />
     <Content Include="Scripts\StardustApp\summaryController.js" />
+    <Content Include="Scripts\vue.min.js" />
     <Content Include="StardustDashboard\failedJobs.html" />
     <Content Include="StardustDashboard\jobqueuedetails.html" />
     <Content Include="StardustDashboard\nodedetails.html" />
@@ -437,7 +442,7 @@
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />
-    <Compile Include="Monitoring\MonitorController.cs" />
+    <Compile Include="Status\StatusController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />

@@ -7,23 +7,27 @@ namespace Teleopti.Wfm.Adherence
 	{
 		public static IEnumerable<OpenPeriod> Subtract(this IEnumerable<OpenPeriod> periods, IEnumerable<OpenPeriod> toSubtract)
 		{
-			return toSubtract
-				.Aggregate(periods, (ps, toBeSubtracted) =>
-					{
-						return ps.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, recorded) =>
-							{
-								var remainder = recorded.subtract(toBeSubtracted);
-								return r.Concat(remainder);
-							}
-						);
-					}
-				).ToArray();
+			var result = periods.ToArray().AsEnumerable();
+			toSubtract.ForEach(s =>
+			{
+				result = result.subtract(s);
+			});
+			return result;
+		}
+
+		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
+		{
+			var result = new List<OpenPeriod>();
+			subtractFroms.ForEach(x =>
+			{
+				result.AddRange(x.subtract(toSubtract));
+			});
+			return result;
 		}
 
 		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, OpenPeriod toSubtract)
 		{
 			var timePeriods = new List<OpenPeriod>();
-
 			if (subtractFrom.intersects(toSubtract))
 			{
 				if (subtractFrom.startsBefore(toSubtract))
@@ -40,9 +44,25 @@ namespace Teleopti.Wfm.Adherence
 			return timePeriods;
 		}
 
+		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
+		{
+			var result = new List<OpenPeriod>();
+			periods
+				.OrderBy(x => x.StartTime)
+				.ForEach(x =>
+				{
+					if (result.Any() && result.Last().intersects(x))
+						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
+					else
+						result.Add(x);
+				});
+			return result;
+		}
+
 		private static bool intersects(this OpenPeriod instance, OpenPeriod period)
 		{
 			var startsAfterPeriodEnds = instance.StartTime > period.EndTime;
+
 			var endsBeforePeriodStarts = instance.EndTime < period.StartTime;
 			return !(startsAfterPeriodEnds || endsBeforePeriodStarts);
 		}

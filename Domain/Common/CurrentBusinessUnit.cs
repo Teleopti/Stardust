@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private readonly ICurrentIdentity _identity;
 		private readonly IBusinessUnitIdForRequest _businessUnitIdForRequest;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWork;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
+		private readonly Lazy<IBusinessUnitRepository> _businessUnitRepository;
 		private readonly ThreadLocal<IBusinessUnit> _threadBusinessUnit = new ThreadLocal<IBusinessUnit>();
 
 		public static ICurrentBusinessUnit Make()
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Common
 			ICurrentIdentity identity,
 			IBusinessUnitIdForRequest businessUnitIdForRequest,
 			ICurrentUnitOfWorkFactory unitOfWork,
-			IBusinessUnitRepository businessUnitRepository)
+			Lazy<IBusinessUnitRepository> businessUnitRepository)
 		{
 			_identity = identity;
 			_businessUnitIdForRequest = businessUnitIdForRequest;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Common
 			
 			var hasUnitOfWork = _unitOfWork?.Current()?.HasCurrentUnitOfWork() ?? false;
 			if (hasUnitOfWork && _businessUnitRepository != null)
-				return _businessUnitRepository.Load(businessUnitId.Value);
+				return _businessUnitRepository.Value.Load(businessUnitId.Value);
 
 			var businessUnitOnlyForEntities = new BusinessUnit(identity.BusinessUnitName);
 			businessUnitOnlyForEntities.SetId(businessUnitId);

@@ -31,10 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		public IEnumerable<SimplestPersonInfo> GetRevisionPeople()
+		public IEnumerable<SimplestPersonInfo> GetRevisionPeople(DateOnlyPeriod searchPeriod)
 		{
+			var startDate = searchPeriod.StartDate.AddDays(-1);
+			var endDate = searchPeriod.EndDate.AddDays(1);
 			const string sql = "SELECT DISTINCT p.Id, p.FirstName, p.LastName, p.EmploymentNumber "
-							   + "FROM Auditing.Revision r INNER JOIN dbo.Person p ON r.ModifiedBy = p.Id";
+							   + "FROM Auditing.Revision r INNER JOIN dbo.Person p ON r.ModifiedBy = p.Id where r.ModifiedAt between :startDate and :endDate";
 
 			var commonNameDescription = getNameDescriptionSetting();
 			return _currentUnitOfWork.Current().Session().CreateSQLQuery(sql)
@@ -42,6 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.AddScalar("FirstName", NHibernateUtil.String)
 				.AddScalar("LastName", NHibernateUtil.String)
 				.AddScalar("EmploymentNumber", NHibernateUtil.String)
+				.SetString("startDate", startDate.ToString())
+				.SetString("endDate", endDate.ToString())
 				.SetReadOnly(true)
 				.List<object[]>()
 				.Select(x => new SimplestPersonInfo

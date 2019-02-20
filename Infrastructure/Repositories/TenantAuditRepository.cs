@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class TenantAuditRepository : Repository<ITenantAudit>, ITenantAuditRepository
 	{
 		public TenantAuditRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

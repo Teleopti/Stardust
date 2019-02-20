@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class LicenseStatusRepository : Repository<ILicenseStatus>, ILicenseStatusRepository
     {
-		public LicenseStatusRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public LicenseStatusRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{ 
 	    }
 

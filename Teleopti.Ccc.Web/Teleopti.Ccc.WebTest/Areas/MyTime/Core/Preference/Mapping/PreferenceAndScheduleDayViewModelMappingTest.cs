@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
@@ -26,13 +27,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceAndScheduleDayViewModelMappingTest
 	{
 		private IProjectionProvider _projectionProvider;
-		private IUserTimeZone _userTimeZone;
+		private PreferenceAndScheduleDayViewModelMapper _target;
 
 		[SetUp]
 		public void Setup()
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
-			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Local);
+			var userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Local);
+			_target = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, userTimeZone,
+				new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate()), new BankHolidayCalendarViewModelMapper());
 		}
 		
 		[Test]
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider,_userTimeZone,new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Date.Should().Be(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
@@ -56,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(personRestrictionCollection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Preference.Should().Not.Be.Null();
 			result.Preference.Preference.Should().Be("DO");
@@ -69,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			                                                    PersonAssignmentFactory.CreateAssignmentWithDayOff(new Person(), new Scenario("s"),
 				                                                    DateOnly.Today, new DayOffTemplate(new Description("DO"))));
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.DayOff.Should().Not.Be.Null();
 			result.DayOff.DayOff.Should().Be("DO");
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Absence.Should().Not.Be.Null();
 			result.Absence.Absence.Should().Be("Illness");
@@ -107,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Absence.Should().Not.Be.Null();
 			result.Absence.AbsenceContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
@@ -127,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.PersonAssignment.Should().Not.Be.Null();
 			result.PersonAssignment.ShiftCategory.Should().Be("shiftCategory");
@@ -144,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.PersonAssignment.Should().Not.Be.Null();
 			result.PersonAssignment.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
@@ -160,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.PersonAssignment.Should().Not.Be.Null();
 			result.PersonAssignment.ContractTimeMinutes.Should().Be(contractTime.TotalMinutes);
@@ -181,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 			
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 			result.PersonAssignment.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
 		}
 
@@ -191,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Feedback.Should().Be.True();
 		}
@@ -202,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Feedback.Should().Be.False();
 		}
@@ -213,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var stubs = new StubFactory();
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.StyleClassName.Should().Contain(StyleClasses.DayOff);
 			result.StyleClassName.Should().Contain(StyleClasses.Striped);
@@ -225,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var stubs = new StubFactory();
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
@@ -237,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.DarkMagenta)));
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.FullDayAbsence, personAbsence);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.BorderColor.Should().Be(Color.DarkMagenta.ToHtml());
 		}
@@ -250,7 +253,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<PersonalShiftLayer>());
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.BorderColor.Should().Be(Color.Coral.ToHtml());
 		}
@@ -271,7 +274,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(meetings);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.Meetings.Count().Should().Be(1);
 			result.Meetings.First().Subject.Should().Be("subject");
@@ -292,7 +295,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<PersonalShiftLayer>{new PersonalShiftLayer(payload, new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)))});
 			scheduleDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 
 			result.PersonalShifts.Count().Should().Be(1);
 			result.PersonalShifts.First().Subject.Should().Be("activity");
@@ -316,7 +319,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var result = new PreferenceAndScheduleDayViewModelMapper(_projectionProvider, _userTimeZone, new PreferenceDayViewModelMapper(new ExtendedPreferencePredicate())).Map(scheduleDay, null);
+			var result = _target.Map(scheduleDay, null);
 			result.PersonAssignment.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
 		}
 	}

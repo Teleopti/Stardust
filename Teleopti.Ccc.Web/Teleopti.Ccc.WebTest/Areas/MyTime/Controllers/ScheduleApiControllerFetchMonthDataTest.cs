@@ -92,13 +92,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldCreateModelForWeekScheduleWithSevenDays()
-		{
-			var result = Target.FetchWeekData(null);
-			result.Days.Count().Should().Be.EqualTo(7);
-		}
-
-		[Test]
 		public void ShouldMapCurrentDate()
 		{
 			var result = Target.FetchMonthData(null);

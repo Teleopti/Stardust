@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class ForecastDayOverrideRepository : Repository<IForecastDayOverride>, IForecastDayOverrideRepository
 	{
-		public ForecastDayOverrideRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public ForecastDayOverrideRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 
 		}

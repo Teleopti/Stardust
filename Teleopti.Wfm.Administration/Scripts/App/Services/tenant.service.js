@@ -19,7 +19,7 @@ function tenantService($http) {
 		}
 
 		function getAllTenantsFailed(error) {
-			console.log('XHR Failed .' + error.data);
+			console.log('XHR Failed. ' + error.data);
 		}
 	}
 }

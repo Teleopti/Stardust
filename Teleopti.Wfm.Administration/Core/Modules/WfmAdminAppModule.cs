@@ -2,7 +2,9 @@
 using Autofac;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -12,10 +14,12 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Support.Security.Library;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.Core.Modules
 {
@@ -83,11 +87,14 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<RecurrentEventTimer>().SingleInstance();
 			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();
 			builder.RegisterType<PurgeOldSignInAttempts>().As<IPurgeOldSignInAttempts>().SingleInstance();
+			builder.RegisterType<WfmInstallationEnvironment>().As<IInstallationEnvironment>();
 
 			builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
 
 			builder.RegisterType<RestorePersonInfoOnDetach>().SingleInstance();
 
+			builder.RegisterType<SkillForecastJobStartTimeRepository>().As<ISkillForecastJobStartTimeRepository>().SingleInstance();
+			builder.RegisterType<SkillForecastSettingsReader>().SingleInstance();
 		}
 	}
 

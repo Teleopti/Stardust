@@ -11,6 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider;
 using Teleopti.Ccc.Web.Core.Extensions;
 
 
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly INow _now;
 		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
+		private readonly IBankHolidayCalendarProvider _bankHolidayCalendarProvider;
 
 		public WeekScheduleDomainDataProvider(IScheduleProvider scheduleProvider,
 			IProjectionProvider projectionProvider,
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			ILoggedOnUser loggedOnUser,
 			IPermissionProvider permissionProvider,
 			INow now,
-			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, ILicenseAvailability licenseAvailability)
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, ILicenseAvailability licenseAvailability, 
+			IBankHolidayCalendarProvider bankHolidayCalendarProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -49,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_now = now;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
 			_licenseAvailability = licenseAvailability;
+			_bankHolidayCalendarProvider = bankHolidayCalendarProvider;
 		}
 
 		internal class ScheduleDaysAndProjection
@@ -72,6 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay,
 				new ScheduleDictionaryLoadOptions(true, true, true) {LoadAgentDayScheduleTags = false}).ToArray();
+			var calendars = _bankHolidayCalendarProvider.GetMySiteBankHolidayDates(period);
 
 			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period).ToLookup(r => r.StartDateTimeLocal(timeZone).ToDateOnly());
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period).ToLookup(r => r.Date);
@@ -92,6 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 					MinMaxTime = minMaxTime,
 					ProbabilityClass = "",
 					ProbabilityText = "",
+					BankHolidayDate = calendars.FirstOrDefault(c => c.Date == day)
 				};
 
 				if (scheduleDaysAndProjections.TryGetValue(day, out var theDay))

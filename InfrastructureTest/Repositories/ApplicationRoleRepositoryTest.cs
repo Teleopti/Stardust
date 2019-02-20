@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IApplicationRole ret = new ApplicationRole();
 			ret.DescriptionText = "hej och";
 			ret.Name = "ha";
-			ret.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			ret.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			return ret;
 		}
 

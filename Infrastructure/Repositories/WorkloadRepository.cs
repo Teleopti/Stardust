@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 				public WorkloadRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

@@ -15809,7 +15809,7 @@ Applikationen kommer nu att stängas. </value>
     <value>Hantera tredjepartsinloggningar</value>
   </data>
   <data name="ChatBot" xml:space="preserve">
-    <value>Chatbot</value>
+    <value>Grant</value>
   </data>
   <data name="RequestList" xml:space="preserve">
     <value>Förfrågningslista</value>

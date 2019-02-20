@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			businessUnit = new TestCommon.TestData.Analytics.BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			businessUnit = new TestCommon.TestData.Analytics.BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 			var quarterOfAnHourInterval = new QuarterOfAnHourInterval();
 			var dates = new DatesFromPeriod(new DateTime(2009, 12, 01), new DateTime(2009, 12, 31));
 

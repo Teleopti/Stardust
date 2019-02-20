@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldNotRemoveAbsenceSpanningOverLeavingDate()
 		{
 			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
-			scenario.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest); 
+			scenario.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit); 
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
 				new DateOnly(2001, 1, 1));
 			((IRepository<IPersonAbsence>)PersonAbsenceRepository).Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2001, 1, 31, 8, 2001, 2, 1, 17)).WithId());

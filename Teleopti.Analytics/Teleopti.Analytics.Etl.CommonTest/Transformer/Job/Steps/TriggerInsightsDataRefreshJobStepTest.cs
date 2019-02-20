@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 		[Test]
 		public void ShouldSendTriggerDataRefreshMessage()
 		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			var jobParameters = JobParametersFactory.SimpleParametersWithInsightsFlag(true);
 			var topicClientFactory = new FakeTopicClientFactory();
 
 			var etlConfiguration = new BaseConfiguration(1052, 15, "Mountain Standard Time", false)
@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 		[Test]
 		public void ShouldDoNothingIfInsightsConfigurationIsInvalid_1()
 		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			var jobParameters = JobParametersFactory.SimpleParametersWithInsightsFlag(true);
 			var topicClientFactory = new FakeTopicClientFactory();
 
 			var etlConfiguration = new BaseConfiguration(1052, 15, "Mountain Standard Time", false);
@@ -74,7 +74,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 		[Test]
 		public void ShouldDoNothingIfInsightsConfigurationIsInvalid_2()
 		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			var jobParameters = JobParametersFactory.SimpleParametersWithInsightsFlag(true);
 			var topicClientFactory = new FakeTopicClientFactory();
 
 			var etlConfiguration = new BaseConfiguration(1052, 15, "Mountain Standard Time", false)
@@ -83,6 +83,34 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 				{
 					AnalysisService = null,
 					AnalyticsDatabase = "",
+					Location = "TestLocation",
+					ModelLocation = "TestModelLocation",
+					ModelName = "TestModelName",
+					ServiceBusAddress = "TestServiceBusAddress",
+					TopicName = "TestTopicName"
+				}
+			};
+
+			jobParameters.SetTenantBaseConfigValues(etlConfiguration);
+
+			var target = new TriggerInsightsDataRefreshJobStep(jobParameters, topicClientFactory);
+			target.Run(new List<IJobStep>(), null, new List<IJobResult>(), false);
+
+			topicClientFactory.TopicClient.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldDoNothingIfInsightsConfigurationIsInvalid_3()
+		{
+			var jobParameters = JobParametersFactory.SimpleParametersWithInsightsFlag(false);
+			var topicClientFactory = new FakeTopicClientFactory();
+
+			var etlConfiguration = new BaseConfiguration(1052, 15, "Mountain Standard Time", false)
+			{
+				InsightsConfig =
+				{
+					AnalysisService = "TestAnalysisService",
+					AnalyticsDatabase = "TestAnalyticsDatabase",
 					Location = "TestLocation",
 					ModelLocation = "TestModelLocation",
 					ModelName = "TestModelName",

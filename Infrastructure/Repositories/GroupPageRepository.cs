@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 		public GroupPageRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

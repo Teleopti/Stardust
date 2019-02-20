@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
@@ -76,6 +77,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                         }
                     }
                 }
+
+				foreach (var optionalColumnValue in person.OptionalColumnValueCollection)
+				{
+					if(!LazyLoadingManager.IsInitialized(optionalColumnValue.ReferenceObject))
+						LazyLoadingManager.Initialize(optionalColumnValue.ReferenceObject);
+				}
             }
 			stateHolder.SchedulingResultState.LoadedAgents = _peopleInOrg;
 			stateHolder.ResetFilteredPersons();

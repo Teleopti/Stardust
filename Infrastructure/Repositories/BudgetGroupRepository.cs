@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 #pragma warning restore 618
 
 				public BudgetGroupRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

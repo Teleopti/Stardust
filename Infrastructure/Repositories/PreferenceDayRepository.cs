@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PreferenceDayRepository : Repository<IPreferenceDay>, IPreferenceDayRepository
 	{
 		public PreferenceDayRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

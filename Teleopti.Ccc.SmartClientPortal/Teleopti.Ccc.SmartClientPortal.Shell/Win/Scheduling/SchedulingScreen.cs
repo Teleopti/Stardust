@@ -1,6 +1,4 @@
-﻿#region wohoo!! 95 usings in one form
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -96,14 +94,10 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCom
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
-
-#endregion
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
-
 	public partial class SchedulingScreen : BaseRibbonForm
 	{
 		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
@@ -150,10 +144,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly BackgroundWorker _backgroundWorkerOptimization = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOvertimeScheduling = new BackgroundWorker();
 		private readonly IUndoRedoContainer _undoRedo;
-
 		private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections =
 			new HashSet<IPersonWriteProtectionInfo>();
-
 		private SchedulingScreenSettings _currentSchedulingScreenSettings;
 		private ZoomLevel _currentZoomLevel;
 		private ZoomLevel _previousZoomLevel;
@@ -2965,15 +2957,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 				}
 
-				var workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
-				var shiftBags = SchedulerState.SchedulerStateHolder.ChoosenAgents
-					.Select(person => person.Period(requestPeriod.StartDate)?.RuleSetBag).Where(r => r != null)
-					.Distinct();
-
-				var ruleSets = shiftBags.SelectMany(r => r.RuleSetCollection).Distinct();
-				foreach (var ruleSet in ruleSets)
+				if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DelayShiftCreations_81680))
 				{
-					workShiftWorkTime.CalculateMinMax(ruleSet, new EffectiveRestriction());
+					var workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
+					var shiftBags = SchedulerState.SchedulerStateHolder.ChoosenAgents
+						.Select(person => person.Period(requestPeriod.StartDate)?.RuleSetBag).Where(r => r != null)
+						.Distinct();
+
+					var ruleSets = shiftBags.SelectMany(r => r.RuleSetCollection).Distinct();
+					foreach (var ruleSet in ruleSets)
+					{
+						workShiftWorkTime.CalculateMinMax(ruleSet, new EffectiveRestriction());
+					}
 				}
 			}
 
@@ -3165,7 +3160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
 				_optionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
-				var personRep = new PersonRepository(new ThisUnitOfWork(uow));
+				var personRep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
 				{

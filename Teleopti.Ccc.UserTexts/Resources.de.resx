@@ -15338,7 +15338,7 @@ Möchten Sie teilnehmen?</value>
 		<value>Identitätsanmeldungen verwalten</value>
 	</data>
   <data name="ChatBot" xml:space="preserve">
-		<value>Chat-Bot</value>
+		<value>Grant</value>
 	</data>
   <data name="RequestList" xml:space="preserve">
 		<value>Liste anfordern</value>

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource, 1);
+			var businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource, 1);
 			var threeSkills = new ThreeSkills(timeZones, businessUnit, datasource);
 			var workload = new AWorkload(threeSkills, timeZones, businessUnit, datasource) { WorkloadId = 1 };
 			var deletedWorkload = new AWorkload(threeSkills, timeZones, businessUnit, datasource) { WorkloadId = 2, IsDeleted = true};
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var timeZones = new UtcAndCetTimeZones();
 			var easternStandardTimeZone = new ATimeZone("Eastern Standard Time") {TimeZoneId = 2};
 			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource, 1);
+			var businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource, 1);
 			var threeSkills = new ThreeSkills(timeZones, businessUnit, datasource);
 			var workload = new AWorkload(threeSkills, timeZones, businessUnit, datasource) { WorkloadId = 1 };
 			var queue = new AQueue(datasource);

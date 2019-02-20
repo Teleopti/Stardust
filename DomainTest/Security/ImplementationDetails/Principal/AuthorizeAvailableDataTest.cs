@@ -146,12 +146,12 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         [Test]
         public void ShouldAuthorizeBusinessUnitWithBusinessUnitInAvailableData()
         {
-            availableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+            availableData.AddAvailableBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 
             queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
-			target.Check(queryingPersonMembership, DateOnly.Today, BusinessUnitFactory.BusinessUnitUsedInTest).Should().Be.True();
+			target.Check(queryingPersonMembership, DateOnly.Today, BusinessUnitUsedInTests.BusinessUnit).Should().Be.True();
         }
 
     }

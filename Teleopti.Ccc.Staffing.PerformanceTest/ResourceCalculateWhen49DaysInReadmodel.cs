@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
+	[AllTogglesOn]
+	//[ToggleOff(Toggles.WFM_Forecast_Readmodel_80790)]
 	public class ResourceCalculateWhen49DaysInReadmodel : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -30,9 +32,10 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
-		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
+		public IStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
+		public UpdateSkillForecastReadModel UpdateSkillForecastReadModel;
 
 		private IEnumerable<ISkill> skills;
 
@@ -68,6 +71,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				}
 				skills = SkillRepository.LoadAllSkills();
 				UpdateStaffingLevel.Update(period);
+				UpdateSkillForecastReadModel.Update(period);
 				uow.Current().PersistAll();
 				var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
 				foreach (var skillCombinationResource in skillCombinationResources)
@@ -138,6 +142,5 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
 			});
 		}
-
 	}
 }

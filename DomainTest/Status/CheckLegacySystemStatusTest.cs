@@ -1,9 +1,9 @@
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MonitorSystem;
+using Teleopti.Ccc.Domain.Status;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystem
+namespace Teleopti.Ccc.DomainTest.Status
 {
 	[DomainTest]
 	public class CheckLegacySystemStatusTest : IIsolateSystem

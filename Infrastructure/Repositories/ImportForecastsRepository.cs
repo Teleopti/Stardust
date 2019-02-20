@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class ImportForecastsRepository: Repository<IForecastFile>, IImportForecastsRepository
     {
 				public ImportForecastsRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }
