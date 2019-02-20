@@ -105,7 +105,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 		}
 
 		[Test]
-		public void ShouldCountOfType()
+		public void ShouldFindEventOfType()
 		{
 			Publisher.Publish(
 				new PeriodAdjustedToNeutralEvent
@@ -114,29 +114,33 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 					EndTime = "2019-02-20 18:00".Utc(),
 				});
 
-			var actual = WithUnitOfWork.Get(() => Events.CountOfTypeFromId<PeriodAdjustedToNeutralEvent>(0));
+			var actual = WithUnitOfWork.Get(() => Events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(0));
 			
-			actual.Should().Be(1);
+			actual.Should().Be(true);
 		}
 		
 		[Test]
-		public void ShouldCountOfTypeFromId()
+		public void ShouldFindEventOfTypeFromId()
 		{
+			var personId = Guid.NewGuid();
 			Publisher.Publish(
 				new PeriodAdjustedToNeutralEvent
 				{
 					StartTime = "2019-02-20 08:00".Utc(),
 					EndTime = "2019-02-20 18:00".Utc(),
 				},
-				new PeriodAdjustedToNeutralEvent
+				new PersonStateChangedEvent
 				{
-					StartTime = "2019-02-20 08:00".Utc(),
-					EndTime = "2019-02-20 18:00".Utc(),
+					PersonId = personId,
+					BelongsToDate = "2019-02-20".Date(),
+					Timestamp = "2019-02-20 08:00".Utc()
 				});
 
-			var actual = WithUnitOfWork.Get(() => Events.CountOfTypeFromId<PeriodAdjustedToNeutralEvent>(1));
+			var eventOfTypeFromId0 = WithUnitOfWork.Get(() => Events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(0));
+			var eventOfTypeFromId1 = WithUnitOfWork.Get(() => Events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(1));
 			
-			actual.Should().Be(1);
+			eventOfTypeFromId0.Should().Be(true);
+			eventOfTypeFromId1.Should().Be(false);
 		}
 	}
 }

@@ -42,14 +42,12 @@ namespace Teleopti.Wfm.Adherence.Historical
 		{			
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
-				var toEventId = ToEventId();
-				var fromEventId = FromEventId();
-				var shouldSyncAll = PeriodAdjustedToNeutralEventsCount(fromEventId) > 0;
-				if(shouldSyncAll)
+				if(ShouldReSync())
 					UpdateSynchronizedEventId(0);
+				var toEventId = ToEventId();
 				while (true)
 				{
-					fromEventId = FromEventId();
+					var fromEventId = FromEventId();
 					var events = LoadEvents(fromEventId);
 					Synchronize(events.Events);
 					UpdateSynchronizedEventId(events.ToId);
@@ -60,8 +58,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 		}
 
 		[UnitOfWork]
-		protected virtual int PeriodAdjustedToNeutralEventsCount(long fromEventId) =>
-			_events.CountOfTypeFromId<PeriodAdjustedToNeutralEvent>(fromEventId);
+		protected virtual bool ShouldReSync() =>
+			_events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(FromEventId());
 
 		[UnitOfWork]
 		protected virtual LoadedEvents LoadEvents(long fromEventId) =>

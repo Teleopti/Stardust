@@ -128,8 +128,12 @@ namespace Teleopti.Ccc.TestCommon
 		public long ReadLastId() =>
 			Data.LastOrDefault()?.Id ?? 0;
 
-		public int CountOfTypeFromId<T>(long fromEventId) => 
-			Data.Count(x => (x.Event.GetType() == typeof(T)) && x.Id > fromEventId);
+		public bool EventsOfTypeWereStoredFromId<T>(long fromEventId)
+		{
+			var count = Data.Count(x => (x.Event.GetType() == typeof(T)) && x.Id > fromEventId);
+			return count != 0;
+		}
+			
 
 		public IEnumerable<IEvent> LoadAllForTest()
 		{
