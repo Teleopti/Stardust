@@ -204,7 +204,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		public IList<IPerson> GetSortedPersons(bool ascending)
 		{
 			if (ascending != _lastSortOrderOfFilteredPerson)
+			{
 				_lastSortedFilteredPersons = null;
+				_lastSortOrderOfFilteredPerson = ascending;
+			}
 
 			if (_lastSortedFilteredPersons != null)
 				return _lastSortedFilteredPersons;
