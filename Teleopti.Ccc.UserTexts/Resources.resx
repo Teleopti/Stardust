@@ -17887,7 +17887,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Label for permission item</comment>
   </data>
   <data name="EditInsightsReport" xml:space="preserve">
-    <value>Edit report</value>
+    <value>Create/Edit report</value>
     <comment>Label for permission item</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">

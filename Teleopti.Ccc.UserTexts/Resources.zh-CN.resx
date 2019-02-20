@@ -14811,7 +14811,7 @@ Teleopti R&amp;D</value>
     <value>{0}已经发布！我们期待您的{1}反馈{2}！</value>
   </data>
   <data name="EditInsightsReport" xml:space="preserve">
-    <value>编辑报表</value>
+    <value>新建/编辑报表</value>
   </data>
   <data name="ApproveAsInAdherence" xml:space="preserve">
     <value>批准为遵时</value>
