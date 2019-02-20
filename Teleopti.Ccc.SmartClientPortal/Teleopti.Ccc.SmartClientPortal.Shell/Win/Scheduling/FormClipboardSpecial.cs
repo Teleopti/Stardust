@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	{
 		private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
 
-		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
+		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet, bool useRightToLeft)
 		{
 			InitializeComponent();
   
 			_clipboardSpecialPresenter = new ClipboardSpecialPresenter(this, pasteOptions, clipboardSpecialOptions.DeleteMode, clipboardSpecialOptions.ShowRestrictions);
-			_clipboardSpecialPresenter.Initialize();
+			_clipboardSpecialPresenter.Initialize(useRightToLeft);
 
 			checkBoxOvertimeAvailability.Visible = clipboardSpecialOptions.ShowOvertimeAvailability;
 			checkBoxShiftAsOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;

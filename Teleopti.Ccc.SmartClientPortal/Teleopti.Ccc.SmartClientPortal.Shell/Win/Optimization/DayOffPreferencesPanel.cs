@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
@@ -16,17 +15,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         public DayOffPreferencesPanel()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
         }
 
-        /// <summary>
-        /// Initializes the specified rule set. 
-        /// Note: As a rule you call this method it before you start using the component.
-        /// </summary>
-        /// <param name="daysOffPreferences">The rule set.</param>
-        public void Initialize(IDaysOffPreferences daysOffPreferences)
+        public void Initialize(IDaysOffPreferences daysOffPreferences, bool useRightToLeft)
         {
-            DaysOffPreferences = daysOffPreferences;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+			DaysOffPreferences = daysOffPreferences;
 
             ExchangeData(ExchangeDataOption.ServerToClient);
             setInitialControlStatus();

@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
+		private bool _useRightToLeft;
 
 		public SchedulingSessionPreferencesDialog(
 			SchedulingOptions schedulingOptions, 
@@ -37,8 +38,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			SchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
-			IEnumerable<IActivity> availableActivity)
-			: this()
+			IEnumerable<IActivity> availableActivity,
+			bool useRightToLeft)
+			: this(useRightToLeft)
 		{
 			_schedulingOptions = schedulingOptions;
 			_shiftCategories = shiftCategories;
@@ -61,10 +63,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			return list;
 		}
 
-		private SchedulingSessionPreferencesDialog()
+		private SchedulingSessionPreferencesDialog(bool useRightToLeft)
 		{
 			InitializeComponent();
-			if (!DesignMode) SetTexts();
+			_useRightToLeft = useRightToLeft;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
 		}
 
 		private void loadPersonalSettings()
@@ -119,16 +129,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 
 		private void Form_Load(object sender, EventArgs e)
 		{
-			
 			loadPersonalSettings();
-
-			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,
-				 _groupPagesProvider, _scheduleTags, _availableActivity);
-
+			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,_groupPagesProvider, _scheduleTags, _availableActivity, _useRightToLeft);
 			addToHelpContext();
 			setColor();
-			// don not use for now in scheduling
-			
 			schedulingSessionPreferencesTabPanel1.ShiftCategoryVisible = true;
 			schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = true;
 			schedulingSessionPreferencesTabPanel1.ScheduleOnlyPreferenceDaysVisible = true;

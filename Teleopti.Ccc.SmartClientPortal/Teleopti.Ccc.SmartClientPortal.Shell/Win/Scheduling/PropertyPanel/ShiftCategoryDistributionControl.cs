@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 
@@ -12,6 +13,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			InitializeComponent();
 			if(!DesignMode)
 				SetTexts();
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112)]
+		public void PrepareToRemoveRightToLeft()
+		{
+			if (!DesignMode) SetTextsNoRightToLeft();	
 		}
 
 		public IShiftCategoryDistributionModel Model { get; private set; }

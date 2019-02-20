@@ -50,12 +50,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 	    private IGroupPagePerDate _groupPagePerDate;
 	    private GroupPageLight _lastSelectedGroupPage;
 
-        public AgentInfoControl()
+        public AgentInfoControl(ILifetimeScope container)
         {
             InitializeComponent();
-            if (!DesignMode)
-                SetTexts();
-
+			_container = container;
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112))
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
             _employmentTypeList = LanguageResourceHelper.TranslateEnum<EmploymentType>();
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
@@ -64,10 +70,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, 
 															 ISchedulerStateHolder stateHolder,
 			IEnumerable<IOptionalColumn> optionalColumns)
-		    : this()
+		    : this(container)
 	    {
 		    _groupPagesProvider = groupPagesProvider;
-		    _container = container;
 		    _dateOnlyPeriod = dateOnlyPeriod;
 		    _requestedPeriod = requestedPeriod;
 		    _stateHolder = stateHolder;

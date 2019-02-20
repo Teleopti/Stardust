@@ -19,9 +19,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
             _showRestrictions = showRestrictions;
         }
 
-        public void Initialize()
+        public void Initialize(bool useRightToLeft = true)
         {
-            _view.SetTexts();
+			if (!useRightToLeft)
+			{
+				_view.SetTextsNoRightToLeft();
+			}
+			else
+			{
+				_view.SetTexts();
+			}
             _view.SetColor();
             _view.SetPermissionOnAbsences(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
 			_view.SetPermissionOnDayOffs(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
