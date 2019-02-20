@@ -9,19 +9,21 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
+	[AllTogglesOn]
 	public class MultiAbsenceRequestPerformanceTuningTest
 	{
 		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
 		public IPersonRequestRepository PersonRequestRepository;
-		public MultiAbsenceRequestsHandlerRobustToggleOff Target;
+		public MultiAbsenceRequestsHandlerRobustToggleOn Target;
 		public WithUnitOfWork WithUnitOfWork;
 
-		[Test, Ignore("Waiting for a fast lane Build")]
+		[Test,Ignore("Waiting for a fast lane Build")]
 		public void ShouldHandle200AbsenceRequestsFast()
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))

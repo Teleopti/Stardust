@@ -25,6 +25,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
+	[AllTogglesOn]
 	//public class IntrdayAbsenceRequestRunningParallelTest : PerformanceTestWithOneTimeSetup
 	public class IntrdayAbsenceRequestWithValidationTest : PerformanceTestWithOneTimeSetup
 	{
@@ -118,7 +119,6 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 		}
 
 		[Test]
-		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
 		[Ignore("For manual testing of MaxPoolSize of SQL connections reached")]
 		public void Run500ParallelAbsenceRequestToVerifyThreshold()
 		{ // NOTE: Make sure to only run one of these tests at a time, because OneTimeSetup is used for now.

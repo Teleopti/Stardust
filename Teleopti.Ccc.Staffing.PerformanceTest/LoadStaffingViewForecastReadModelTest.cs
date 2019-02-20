@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
+	[AllTogglesOn]
 	public class LoadStaffingViewForecastReadModelTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -94,7 +94,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		}
 
 		[Test]
-		[Toggle(Toggles.WFM_Forecast_Readmodel_80790)]
 		public void Load1MonthUsingForecastReadModel()
 		{
 			var startDate = new DateOnly(2016,02,08);

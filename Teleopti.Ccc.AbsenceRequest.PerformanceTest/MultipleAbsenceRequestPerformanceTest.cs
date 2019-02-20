@@ -22,6 +22,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
+	[AllTogglesOn]
 	//public class MultipleAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	public class AbsenceRequestThroughputPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
@@ -117,8 +118,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 		/// To see if the loading of skills is fast enough or not. It should not load all skills, workload for all skills and workload day template
 		/// for all the workloads
 		/// </summary>
-		[Test, Ignore("Waiting for a fast lane Build")]
-		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+		[Test,Ignore("Waiting for a fast lane Build")]
 		public void Run400RequestsWithBudgetGroupValidation()
 		{
 			Now.Is("2016-03-16 07:01");

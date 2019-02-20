@@ -193,6 +193,7 @@
     <Compile Include="HelperScripts.cs" />
     <Compile Include="IntradayAbsenceRequestPerformanceTest.cs" />
     <Compile Include="IntrdayAbsenceRequestRunningParallelTest.cs" />
+    <Compile Include="MultiAbsenceRequestPerformanceTuningTest.cs" />
     <Compile Include="MultipleAbsenceRequestPerformanceTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />

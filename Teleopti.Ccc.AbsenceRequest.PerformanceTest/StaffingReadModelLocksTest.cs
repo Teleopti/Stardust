@@ -18,11 +18,13 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
+	[AllTogglesOn]
 	public class StaffingReadModelLocksTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			});
 		}
 
-		[Test, Ignore("Waiting for a fast lane Build")]
+		[Test,Ignore("Waiting for a fast lane Build")]
 		public void AbsencesWithUpdateReadModelDeadLock()
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
