@@ -15,7 +15,7 @@ import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.com
 import { BankCalendarDataService } from '../../shared';
 import { registerLocaleData } from '@angular/common';
 
-describe('BankHolidayCalendarAddComponent', () => {
+fdescribe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarAddComponent;
@@ -63,12 +63,14 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should render name and year input box', () => {
-		const addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+	it('should render name input box', () => {
+		const addBankHolidayCalendarHeader = document.getElementsByClassName('add-new-bank-holiday-calendar-header')[0];
 
-		expect(addBankHolidayCalendarPanel).toBeTruthy();
-		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-input').length).toBe(2);
-		expect(addBankHolidayCalendarPanel.getElementsByTagName('nz-year-picker').length).toBe(1);
+		expect(addBankHolidayCalendarHeader).toBeTruthy();
+		expect(addBankHolidayCalendarHeader.getElementsByClassName('ant-input').length).toBe(1);
+		expect(addBankHolidayCalendarHeader.getElementsByClassName('ant-input')[0].getAttribute('placeholder')).toBe(
+			'NewCalendarName'
+		);
 	});
 
 	it('should render cancel and save button', () => {
@@ -125,17 +127,14 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should not add duplicated date', () => {
-		component.newYearTab(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'));
 
-		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
-		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
-
-		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+		expect(component.selectedDates.length).toBe(1);
 	});
 
-	it('should be able to add a date back after removing it', fakeAsync(() => {
-		component.newYearTab(new Date('2015-01-10'));
-		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
+	it('should be able to add a date back after removing it', () => {
+		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
 		const addNewBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
@@ -144,46 +143,33 @@ describe('BankHolidayCalendarAddComponent', () => {
 			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(1);
-		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
 		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 
-		component.removeDateOfYear(component.newCalendarYears[0].Dates[0], component.newCalendarYears[0]);
+		component.removeDate(component.selectedDates[0]);
 		fixture.detectChanges();
 
-		expect(component.newCalendarYears[0].Dates.length).toBe(0);
-
-		component.dateClick({ nativeDate: new Date('2015-01-10') }, component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
-		flush();
 
-		fixture.whenStable().then(() => {
-			expect(component.newCalendarYears[0].Dates.length).toBe(1);
-		});
-	}));
-
-	it('should focus to another year after deleting one year tab', () => {
-		component.newYearTab(new Date('2015-01-10'));
-		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
-
-		component.newYearTab(new Date('2016-01-10'));
-		component.dateChangeCallback(new Date('2016-01-10'), component.newCalendarYears[1]);
-
-		component.deleteYearTab(component.newCalendarYears[1]);
-
-		expect(component.newCalendarTabIndex).toBe(0);
-		expect(component.newCalendarYears.length).toBe(1);
-		expect(component.newCalendarYears[0].Active).toBe(true);
+		expect(component.selectedDates.length).toBe(1);
+		expect(component.selectedDates[0].Date).toBe('2015-01-10');
+		expect(component.selectedDates[0].Description).toBe('BankHoliday');
 	});
 
-	// it('should keep the remaining dates in selected dates array after removing a date', () => {
-	// 	component.newYearTab(new Date('2015-01-10'));
-	// 	component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
-	// 	component.dateChangeCallback(new Date('2015-01-11'), component.newCalendarYears[0]);
+	it('should categorize dates by year', () => {
+		component.dateChangeCallback(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2016-01-10'));
+		fixture.detectChanges();
 
-	// 	component.removeDateOfYear(component.newCalendarYears[0].Dates[1], component.newCalendarYears[0]);
+		expect(component.newCalendarYears.length).toBe(2);
 
-	// 	expect(component.newCalendarYears[0].SelectedDates.length).toBe(1);
-	// 	expect(component.newCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10').getTime());
-	// });
+		expect(component.newCalendarYears[0].Year).toBe('2015');
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates[0].Date).toBe('2015-01-10');
+
+		expect(component.newCalendarYears[1].Year).toBe('2016');
+		expect(component.newCalendarYears[1].Dates.length).toBe(1);
+		expect(component.newCalendarYears[1].Dates[0].Date).toBe('2016-01-10');
+	});
 });
