@@ -6,7 +6,7 @@
 		data: {
 			steps: []
 		},
-		mounted() {
+		mounted: function() {
 			var vm = this;
 			axios.get('./status/list')
 				.then(function (statusSteps) {
