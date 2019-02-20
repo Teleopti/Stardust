@@ -44,8 +44,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 			{
 				var toEventId = ToEventId();
 				var fromEventId = FromEventId();
-				var syncAll = PeriodAdjustedToNeutralEventsCount(fromEventId) > 0;
-				if(syncAll)
+				var shouldSyncAll = PeriodAdjustedToNeutralEventsCount(fromEventId) > 0;
+				if(shouldSyncAll)
 					UpdateSynchronizedEventId(0);
 				while (true)
 				{
