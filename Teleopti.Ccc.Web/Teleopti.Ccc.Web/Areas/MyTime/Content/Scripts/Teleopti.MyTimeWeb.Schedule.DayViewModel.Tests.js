@@ -83,7 +83,12 @@
 							Color: '128,255,128',
 							IsOvertime: false
 						}
-					]
+					],
+					BankHolidayCalendar: {
+						CalendarId: 'fcd79f73-c9d4-481c-b884-f0d7a34f39c2',
+						CalendarName: 'China Bank Holiday',
+						DateDescription: 'New Year'
+					}
 				}
 			],
 			AbsenceProbabilityEnabled: true,
@@ -238,5 +243,21 @@
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 		equal(vm.showStaffingProbabilityBar, true);
+	});
+
+	test('should load bankholidaycalendar info', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154');
+		var fakeScheduleData = getFakeScheduleData();
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
+		week.initializeData(fakeScheduleData);
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
+		equal(vm.hasCalendar, true);
+		equal(vm.dateDescription, fakeScheduleData.Days[0].BankHolidayCalendar.DateDescription);
 	});
 });

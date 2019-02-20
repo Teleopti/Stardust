@@ -15,6 +15,10 @@
 	self.periods = scheduleDay.Periods;
 	self.openHourPeriod = scheduleDay.OpenHourPeriod;
 	self.headerDayDescription = '';
+	self.hasCalendar =
+		scheduleDay.BankHolidayCalendar != null &&
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154');
+	self.dateDescription = self.hasCalendar ? scheduleDay.BankHolidayCalendar.DateDescription : '';
 
 	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
 		self.headerTitle = fixedDateMoment.format('dddd');
