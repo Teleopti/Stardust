@@ -94,7 +94,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			Publisher.Publish(new PeriodAdjustedToNeutralEvent
 			{
 				StartTime = "2019-02-14 08:00".Utc(),
-				EndTime = "2019-02-14 18:00".Utc(),				
+				EndTime = "2019-02-14 18:00".Utc(),
 			});
 
 			var actual = WithUnitOfWork.Get(() => Events.LoadAllOfType<PeriodAdjustedToNeutralEvent>());
@@ -102,6 +102,41 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
 			@event.StartTime.Should().Be("2019-02-14 08:00".Utc());
 			@event.EndTime.Should().Be("2019-02-14 18:00".Utc());
+		}
+
+		[Test]
+		public void ShouldCountOfType()
+		{
+			Publisher.Publish(
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-20 08:00".Utc(),
+					EndTime = "2019-02-20 18:00".Utc(),
+				});
+
+			var actual = WithUnitOfWork.Get(() => Events.CountOfTypeFromId<PeriodAdjustedToNeutralEvent>(0));
+			
+			actual.Should().Be(1);
+		}
+		
+		[Test]
+		public void ShouldCountOfTypeFromId()
+		{
+			Publisher.Publish(
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-20 08:00".Utc(),
+					EndTime = "2019-02-20 18:00".Utc(),
+				},
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-20 08:00".Utc(),
+					EndTime = "2019-02-20 18:00".Utc(),
+				});
+
+			var actual = WithUnitOfWork.Get(() => Events.CountOfTypeFromId<PeriodAdjustedToNeutralEvent>(1));
+			
+			actual.Should().Be(1);
 		}
 	}
 }

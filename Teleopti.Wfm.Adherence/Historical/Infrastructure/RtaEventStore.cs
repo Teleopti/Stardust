@@ -213,10 +213,17 @@ ORDER BY [Id]
 		public long ReadLastId() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
-		public int CountOfTypeFromId<T>(long fromEventId)
-		{
-			throw new NotImplementedException();
-		}
+		public int CountOfTypeFromId<T>(long fromEventId) =>
+		_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT COUNT (*) 
+FROM 
+	[rta].[Events] WITH (NOLOCK)
+WHERE
+	[Type] = :eventType AND 
+	[Id] > :fromEventId
+")
+			.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
+			.SetParameter("fromEventId", fromEventId)
+			.UniqueResult<int>();
 
 		private IEnumerable<IEvent> loadEvents(IQuery query) =>
 			load(query).Select(x => x.DeserializedEvent).ToArray();
