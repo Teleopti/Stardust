@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Status
 {
@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.Status
 			_monitorSteps = monitorSteps;
 		}
 		
-		public IEnumerable<StatusStepInfo> Execute(string baseUrl)
+		public IEnumerable<StatusStepInfo> Execute(Uri virtualDirectoryAbsolutePath, string actionString)
 		{
-			var startUrl = baseUrl.EndsWith("/") ? baseUrl : baseUrl + "/";
+			var basePath = virtualDirectoryAbsolutePath.ToString().TrimEnd('/') + "/" + actionString + "/";
 			foreach (var monitorStep in _monitorSteps)
 			{
 				var stepName = monitorStep.Name;
-				yield return new StatusStepInfo(stepName, monitorStep.Description, startUrl + stepName);
+				yield return new StatusStepInfo(stepName, monitorStep.Description, basePath + stepName);
 			}
 		}
 	}
