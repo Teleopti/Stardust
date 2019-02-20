@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				}
 				catch (Exception exception)
 				{
-				
+					logger.Error("An error occurred while running the payroll export. ", exception);
 					//a very unusual way of reporting error but we need that to make the UI more responsive
 					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
 					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
 					_stardustJobFeedback.SendProgress("An error occurred while running the payroll export. " + exception.StackTrace);
 					_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
-					logger.Error("An error occurred while running the payroll export. ", exception);
+					
 				}
 				finally
 				{
