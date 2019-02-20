@@ -171,7 +171,7 @@
 						</span>
 						<div class="con-row" style="margin-top: -10px">
 							<div class="con-flex">
-								<div class="wfm-chip-wrap" ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered"
+								<div class="wfm-chip-wrap" ng-repeat="skill in vm.sortByName(vm.skillGroups[vm.selectedGroupIndex].Skills) | filter:areaFilter as filtered"
 								 ng-click="vm.selectGroupSkill(skill)" ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
 									<span class="wfm-chip">
 										<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">

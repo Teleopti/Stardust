@@ -140,7 +140,8 @@ WFM_Setting_BankHolidayCalendar_Create_79297 = RC
 WFM_Setting_AssignBankHolidayCalendarsToSites_79899 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 MyTimeWeb_Preference_Indicate_BankHoliday_79900 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
-MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154 = DEV #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
+MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
+MyTimeWeb_Schedule_MonthView_Indicate_BankHoliday_81158 = DEV #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 
 # Tech #
 WFM_ChatBot_77547 = RC

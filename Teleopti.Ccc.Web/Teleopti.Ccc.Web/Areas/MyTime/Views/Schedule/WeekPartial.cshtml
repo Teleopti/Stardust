@@ -153,7 +153,7 @@ Layout = null;
 				<div class="weekview-day-header" data-bind="text: headerTitle"></div>
 				<div class="weekview-day-date clearfix">
 					<label class="weekview-day-month pull-left badge day-header-month" data-bind="text: headerDayDescription"></label>
-					<label class="pull-right badge day-header-day" data-bind="text: headerDayNumber"></label>
+					<label class="pull-right badge day-header-day" data-bind="text: headerDayNumber, css: {'bank-holiday-day-shape':hasCalendar},tooltip:{title: dateDescription, html: true}"></label>
 				</div>
 				<div data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
 		            style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm"
