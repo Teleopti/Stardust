@@ -1,4 +1,7 @@
-$listUrl =  "https://$env:CloudServiceName.teleopticloud.com/administration/status/list"
+
+Param (
+		[Parameter(Mandatory=$True)]$listUrl
+	)
 
 function CheckSystemStatus
 {
