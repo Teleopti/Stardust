@@ -213,7 +213,7 @@ ORDER BY [Id]
 		public long ReadLastId() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
-		public int PeriodAdjustedToNeutralEventsCount(long fromEventId)
+		public int CountOfTypeFromId<T>(long fromEventId)
 		{
 			throw new NotImplementedException();
 		}

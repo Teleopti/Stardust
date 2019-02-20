@@ -61,7 +61,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		[UnitOfWork]
 		protected virtual int PeriodAdjustedToNeutralEventsCount(long fromEventId) =>
-			_events.PeriodAdjustedToNeutralEventsCount(fromEventId);
+			_events.CountOfTypeFromId<PeriodAdjustedToNeutralEvent>(fromEventId);
 
 		[UnitOfWork]
 		protected virtual LoadedEvents LoadEvents(long fromEventId) =>
