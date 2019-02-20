@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
-		[Test, Ignore("bug #81679")]
+		[Test]
 		public void ShouldRemoveShiftToFulfillLimitationAndResourceCalculateCorrectIfExtremeDifferenceInAgentAndAgdasTimezone()
 		{
 			var startDate = new DateOnly(2018, 6, 11);

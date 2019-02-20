@@ -73,18 +73,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private void deleteMainShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
-			//copied from ScheduleDayService
 			var options = new DeleteOption { MainShift = true };
 
 			_deleteSchedulePartService.Delete(new [] {schedulePart}, options, schedulePartModifyAndRollbackService, new NoSchedulingProgress());
 
-			//var dates = new ScheduleChangesAffectedDates(_timeZoneGuard).DecideDates(schedulePart.ReFetch(), schedulePart).ToList();
-			//var daysToRecalculate = new HashSet<DateOnly>(dates);
-
-			var daysToRecalculate = new HashSet<DateOnly>();
-			var date = new DateOnly(schedulePart.Period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone()));
-			daysToRecalculate.Add(date);
-			daysToRecalculate.Add(date.AddDays(1));
+			var dates = new ScheduleChangesAffectedDates(_timeZoneGuard).DecideDates(schedulePart.ReFetch(), schedulePart).ToList();
+			var daysToRecalculate = new HashSet<DateOnly>(dates);
 
 			var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
 			foreach (var dateToCalculate in daysToRecalculate)
