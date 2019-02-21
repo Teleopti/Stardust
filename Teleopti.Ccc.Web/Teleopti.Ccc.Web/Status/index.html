@@ -3,10 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Status of TeleoptiWFM</title>
-	<script src="Scripts/vue.min.js"></script>
-	<script src="Scripts/axios.min.js"></script>
-	<script defer src="Scripts/App/status.js"></script>
-	<link rel="stylesheet" href="Content/status.css">
+	<script src="../Content/Vue/vue.min.js"></script>
+	<script src="../Content/axios/axios.min.js"></script>
+	<script src="status.js" defer></script>
+	<link rel="stylesheet" href="status.css">
 </head>
 <body>
 <div id="steps">
@@ -23,6 +23,9 @@
 			{{step.output}}
 		</div>
 	</div>
+	<div v-bind:class="{ stepsAreLoadedMarker: stepsAreLoaded }">
+		<!-- Keep this. Verified by test -->
+	</div>	
 </div>
 </body>
 </html>

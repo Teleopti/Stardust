@@ -4,17 +4,19 @@
 	new Vue({
 		el: '#steps',
 		data: {
-			steps: []
+			steps: [],
+			stepsAreLoaded: false
 		},
 		mounted: function() {
 			var vm = this;
-			axios.get('./status/list')
+			axios.get('../status/list')
 				.then(function (statusSteps) {
+					vm.stepsAreLoaded = true;
 					statusSteps.data.forEach(function (step) {
 						var newStep = {
 							stepName: step.Name,
 							stepSuccess: false,
-							output: 'Loading...',
+							output: 'Verifying...',
 							url: step.Url,
 							description : step.Description
 						};

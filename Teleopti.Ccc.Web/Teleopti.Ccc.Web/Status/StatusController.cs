@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Status;
 
-namespace Teleopti.Wfm.Administration.Status
+namespace Teleopti.Ccc.Web.Status
 {
 	public class StatusController : ApiController
 	{

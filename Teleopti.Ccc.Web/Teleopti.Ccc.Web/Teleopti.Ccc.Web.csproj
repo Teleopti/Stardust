@@ -1429,6 +1429,7 @@
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Status\StatusController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\Domain\FeatureFlags\toggles.txt">
@@ -1505,6 +1506,7 @@
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordView.js" />
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
+    <Content Include="Content\axios\axios.min.js" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
     <Content Include="Content\Error\404.aspx" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
@@ -1525,8 +1527,12 @@
     </None>
     <Content Include="Content\signalr\jquery.signalR-2.3.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.3.0.min.js" />
+    <Content Include="Content\vue\vue.min.js" />
     <Content Include="Content\webchat\readme.txt" />
     <Content Include="Content\webchat\webchat-es5.js" />
+    <Content Include="Status\index.html" />
+    <Content Include="Status\status.css" />
+    <Content Include="Status\status.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />

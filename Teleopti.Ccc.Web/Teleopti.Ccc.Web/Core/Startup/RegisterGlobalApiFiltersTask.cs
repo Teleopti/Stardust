@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Ccc.Web.Status;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					typeof (ConfigController),
 					typeof (JavascriptLoggingController),
 					typeof (PasswordController),
-					typeof (ExternalApplicationAccessController)
+					typeof (ExternalApplicationAccessController),
+					typeof(StatusController)
 				}));
 
 				if (string.IsNullOrEmpty(_configReader.AppConfig("DisableCsrfProtection")))

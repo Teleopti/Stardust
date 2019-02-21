@@ -293,6 +293,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Status\Status.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Status.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Status\StatusStepDefinition.cs" />
     <Compile Include="Wfm\Authentication\AuthenticationStepDefinition.cs" />
     <Compile Include="Wfm\Authentication\Authentication.feature.cs">
       <AutoGen>True</AutoGen>
@@ -1305,6 +1311,10 @@
     <None Include="MyTime\PreferencesFeedbackRefact.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Status\Status.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Status.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\TestRun.Task.TheTask.bat" />
     <None Include="Testing\TestRun.Task.bat" />
