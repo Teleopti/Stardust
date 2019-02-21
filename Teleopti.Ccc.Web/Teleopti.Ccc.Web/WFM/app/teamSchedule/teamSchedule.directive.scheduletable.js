@@ -81,13 +81,6 @@
 			vm.toggleAllInCurrentPage = newVal;
 		});
 
-		vm.$onChanges = function (changesObj) {
-			if (changesObj.scheduleBodyHeight
-				&& changesObj.scheduleBodyHeight.currentValue !== changesObj.scheduleBodyHeight.previousValue) {
-
-			}
-		}
-
 		vm.totalSelectedProjections = function () {
 			var totalSelection = personSelectionSvc.getTotalSelectedPersonAndProjectionCount();
 			return totalSelection.CheckedPersonCount +
