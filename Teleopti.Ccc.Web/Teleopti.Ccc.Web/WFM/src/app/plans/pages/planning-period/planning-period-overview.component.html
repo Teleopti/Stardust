@@ -141,15 +141,15 @@
 								<span nz-col [nzSpan]="12">{{ 'PreSchedulingValidationIssues' | translate }}</span>
 								<span nz-col [nzSpan]="4">
 									<ng-template #indicatorTemplate
-										><i nz-icon type="loading" style="font-size: 24px;"></i
+									><i nz-icon type="loading" style="font-size: 24px;"></i
 									></ng-template>
 									<nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="valLoading">
 										{{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
 										<button
-											nz-button
-											nzType="default"
-											nzShape="circle"
-											(click)="loadValidations(); $event.stopPropagation()"
+												nz-button
+												nzType="default"
+												nzShape="circle"
+												(click)="loadValidations(); $event.stopPropagation()"
 										>
 											<i nz-icon type="reload"></i>
 										</button>
@@ -158,41 +158,42 @@
 								<span nz-col [nzSpan]="8"> </span>
 							</div>
 						</ng-template>
-						<div nz-row style="padding-bottom: 5px">
-							<div nz-col [nzSpan]="8">
-								<nz-input-group
-									[nzSuffix]="suffixPreValidationTemplate"
-									[nzPrefix]="prefixPreValidationTemplate"
-								>
-									<input
-										type="text"
-										nz-input
-										placeholder="Filter"
-										[formControl]="preValidationFilterControl"
-									/>
-								</nz-input-group>
+						<div *ngIf="filteredPreValidations && filteredPreValidations.length>0">
+							<div nz-row style="padding-bottom: 5px">
+								<div nz-col [nzSpan]="8">
+									<nz-input-group
+											[nzSuffix]="suffixPreValidationTemplate"
+											[nzPrefix]="prefixPreValidationTemplate"
+									>
+										<input
+												type="text"
+												nz-input
+												placeholder="Filter"
+												[formControl]="preValidationFilterControl"
+										/>
+									</nz-input-group>
 
-								<ng-template #prefixPreValidationTemplate><i nz-icon type="filter"></i></ng-template>
-								<ng-template #suffixPreValidationTemplate
+									<ng-template #prefixPreValidationTemplate><i nz-icon type="filter"></i></ng-template>
+									<ng-template #suffixPreValidationTemplate
 									><i
-										nz-icon
-										type="close-circle"
-										(click)="clearPreValidationFilter()"
-										*ngIf="preValidationFilterControl.value"
+											nz-icon
+											type="close-circle"
+											(click)="clearPreValidationFilter()"
+											*ngIf="preValidationFilterControl.value"
 									></i
-								></ng-template>
+									></ng-template>
+								</div>
 							</div>
-						</div>
-						<div nz-row>
-							<table class="wfm-table">
-								<thead>
+							<div nz-row>
+								<table class="wfm-table">
+									<thead>
 									<tr>
 										<th>{{ 'Resource' | translate }}</th>
 										<th>{{ 'Area' | translate }}</th>
 										<th>{{ 'Description' | translate }}</th>
 									</tr>
-								</thead>
-								<tbody>
+									</thead>
+									<tbody>
 									<tr *ngFor="let msg of filteredPreValidations">
 										<td class="data-test-pre-validation">{{ msg.ResourceName }}</td>
 										<td>
@@ -206,16 +207,18 @@
 											</div>
 										</td>
 									</tr>
-								</tbody>
-							</table>
+									</tbody>
+								</table>
+							</div>
 						</div>
+						
 					</nz-collapse-panel>
-					<nz-collapse-panel [nzHeader]="scheduleIssuesTitle">
+					<nz-collapse-panel [nzHeader]="scheduleIssuesTitle" *ngIf="filteredScheduleIssues && filteredScheduleIssues.length>0">
 						<ng-template #scheduleIssuesTitle>
 							<div nz-row>
 								<span nz-col [nzSpan]="12">{{ 'ScheduledIssues' | translate }}</span>
 								<span nz-col [nzSpan]="12"
-									>{{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}</span
+								>{{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}</span
 								>
 							</div>
 						</ng-template>
