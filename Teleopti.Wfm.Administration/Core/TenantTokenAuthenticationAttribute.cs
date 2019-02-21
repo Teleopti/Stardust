@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -34,7 +35,7 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				var auth = cookieAuth != "" ? cookieAuth : req.Headers.Authorization.Parameter;
 				//Tenant: todo look up so key exists in user db
-				var valid = AdminAccessTokenRepository.TokenIsValid(auth, new Now());
+				var valid = AdminAccessTokenRepository.TokenIsValid(auth, new Now(), new ConfigReader());
 			
 				if (valid)
 				{

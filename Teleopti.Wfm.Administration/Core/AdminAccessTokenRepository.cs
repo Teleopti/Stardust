@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Security;
 
@@ -18,10 +19,10 @@ namespace Teleopti.Wfm.Administration.Core
 			_now = now;
 		}
 		
-		public static bool TokenIsValid(string token, INow now)
+		public static bool TokenIsValid(string token, INow now, IConfigReader config)
 		{
 			bool isValid;
-			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			var builder = new SqlConnectionStringBuilder(config.ConnectionString("Tenancy"));
 			using (var sqlConn = new SqlConnection(builder.ConnectionString))
 			{
 				sqlConn.Open();

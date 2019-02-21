@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
 			var importModel = new ImportDatabaseModel
 			{

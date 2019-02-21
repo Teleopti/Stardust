@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -9,11 +10,13 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		private readonly string _tenant;
 		private readonly int _tenantId;
+		private readonly IConfigReader _config;
 
-		public TenantLogger(string tenant, int tenantId)
+		public TenantLogger(string tenant, int tenantId, IConfigReader config)
 		{
 			_tenant = tenant;
 			_tenantId = tenantId;
+			_config = config;
 		}
 
 		public void Write(string message)
@@ -25,7 +28,7 @@ namespace Teleopti.Wfm.Administration.Core
 		{
 			var sql = "insert into Tenant.UpgradeLog (Tenant, Time, Level, Message, TenantId) values(@tenant, @time, @level, @message, @tenantid)";
 
-			using (var sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString))
+			using (var sqlConnection = new SqlConnection(_config.ConnectionString("Tenancy")))
 			{
 				sqlConnection.Open();
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))

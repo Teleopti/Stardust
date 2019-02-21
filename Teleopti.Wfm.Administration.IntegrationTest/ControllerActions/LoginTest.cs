@@ -78,7 +78,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		{
 			var hangfireCookie = new FakeHangfireCookie();
 			Target = new AccountController(TenantSession, hangfireCookie, new OneWayEncryption(), new[] { new OneWayEncryption(),}, 
-				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()));
+				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()), new FakeConfigReader().FakeInfraTestConfig());
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
@@ -102,7 +102,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		{
 			var hangfireCookie = new FakeHangfireCookie();
 			Target = new AccountController(TenantSession, hangfireCookie, new OneWayEncryption(), new []{ new OneWayEncryption()},
-				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()));
+				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()), new FakeConfigReader().FakeInfraTestConfig());
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());

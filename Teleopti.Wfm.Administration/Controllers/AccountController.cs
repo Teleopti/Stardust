@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -30,15 +31,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IHashFunction _currentHashFunction;
 		private readonly IEnumerable<IHashFunction> _hashFunctions;
 		private readonly AdminAccessTokenRepository _adminAccessTokenRepository;
+		private readonly IConfigReader _config;
 
 		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie, 
-			IHashFunction currentHashFunction, IEnumerable<IHashFunction> hashFunctions, AdminAccessTokenRepository adminAccessTokenRepository)
+			IHashFunction currentHashFunction, IEnumerable<IHashFunction> hashFunctions, AdminAccessTokenRepository adminAccessTokenRepository,
+			IConfigReader config)
 		{
 			_currentTenantSession = currentTenantSession;
 			_hangfireCookie = hangfireCookie;
 			_currentHashFunction = currentHashFunction;
 			_hashFunctions = hashFunctions;
 			_adminAccessTokenRepository = adminAccessTokenRepository;
+			_config = config;
 		}
 
 		[OverrideAuthentication]
@@ -51,7 +55,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new LoginResult { Success = false, Message = "Both user name and password must be provided." });
 
 			string sql = "SELECT Id, Name, Password FROM Tenant.AdminUser WHERE Email=@email";
-			using (var sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString))
+			using (var sqlConnection = new SqlConnection(_config.ConnectionString("Tenancy")))
 			{
 				sqlConnection.Open();
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
@@ -397,7 +401,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				var value = Uri.UnescapeDataString(cook.Value);
 				var obj = System.Web.Helpers.Json.Decode<cookieValues>(value);
 				var cookieAuth = obj.tokenKey;
-				var valid = AdminAccessTokenRepository.TokenIsValid(cookieAuth, new Now());
+				var valid = AdminAccessTokenRepository.TokenIsValid(cookieAuth, new Now(), _config);
 				if(!valid) return Json(new UserModel());
 				return Json(new UserModel {Name = obj.user, Id = obj.id, Token = obj.tokenKey});
 			}

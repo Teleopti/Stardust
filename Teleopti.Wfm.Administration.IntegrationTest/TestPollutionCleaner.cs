@@ -2,6 +2,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest
@@ -16,7 +17,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		public SqlConnectionStringBuilder TestTenantConnection()
 		{
 			return
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString())
 				{
 					InitialCatalog = TestTenantDatabaseName
 				};
@@ -25,7 +26,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		public SqlConnectionStringBuilder TestTenantAnalyticsConnection()
 		{
 			return
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString())
 				{
 					InitialCatalog = TestTenantAnalyticsDatabaseName
 				};
@@ -39,7 +40,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		public void Clean(string tenant, string appUser)
 		{
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
 			var sqlVersion = new SqlVersion(12);
 			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "passwordPassword7");
