@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		private static Tenant defaultTenant(ICurrentTenantSession tenantSession)
 		{
-			return new LoadAllTenants(tenantSession).Tenants().Single(t => t.Name.Equals(DataSourceHelper.TenantName));
+			return new LoadAllTenants(tenantSession).Tenants().Single(t => t.Name.Equals(InfraTestConfigReader.TenantName()));
 		}
 	}
 }

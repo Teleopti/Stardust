@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -15,40 +16,49 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DatabaseTestSetup
 	{
-		private static int createdDataHash = 0;
+		private static readonly ThreadLocal<object> createDataResult = new ThreadLocal<object>();
+		private static object setupLock = new object();
 
-		public static void Setup(Func<CreateDataContext, int> createData)
+		public static T Setup<T>(Func<CreateDataContext, CreateDataResult<T>> createData)
 		{
-			if (createdDataHash != 0)
+			lock (setupLock)
 			{
-				DataSourceHelper.RestoreApplicationDatabase(createdDataHash);
-				DataSourceHelper.RestoreAnalyticsDatabase(createdDataHash);
-				return;
-			}
+//			if (createdDataHash != 0)
+//			{
+//				DataSourceHelper.RestoreApplicationDatabase(createdDataHash);
+//				DataSourceHelper.RestoreAnalyticsDatabase(createdDataHash);
+//				return;
+//			}
 
-			withContainer(container =>
-			{
-				container.Resolve<DatabaseTestHelper>().CreateDatabases();
-				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(TestTenantName.Name);
-				var dataSourceScope = container.Resolve<IDataSourceScope>();
-				using (dataSourceScope.OnThisThreadUse(dataSource))
+				withContainer(container =>
 				{
-					createdDataHash = createData.Invoke(new CreateDataContext
-					{
-						DataSource = dataSource,
-						DataSourceScope = dataSourceScope,
-						WithUnitOfWork = container.Resolve<WithUnitOfWork>(),
-						UpdatedByScope = container.Resolve<IUpdatedByScope>(),
-						BusinessUnits = container.Resolve<IBusinessUnitRepository>(),
-						Persons = container.Resolve<IPersonRepository>()
-					});
-				}
-				if (createdDataHash == 0)
-					throw new Exception("create data function needs to return a number representing the data created");
+					container.Resolve<DatabaseTestHelper>().CreateDatabases(InfraTestConfigReader.TenantName());
 
-				DataSourceHelper.BackupApplicationDatabase(createdDataHash);
-				DataSourceHelper.BackupAnalyticsDatabase(createdDataHash);
-			});
+					var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
+
+					var dataSourceScope = container.Resolve<IDataSourceScope>();
+					using (dataSourceScope.OnThisThreadUse(dataSource))
+					{
+						var result = createData.Invoke(new CreateDataContext
+						{
+							DataSource = dataSource,
+							DataSourceScope = dataSourceScope,
+							WithUnitOfWork = container.Resolve<WithUnitOfWork>(),
+							UpdatedByScope = container.Resolve<IUpdatedByScope>(),
+							BusinessUnits = container.Resolve<IBusinessUnitRepository>(),
+							Persons = container.Resolve<IPersonRepository>()
+						});
+						if (result.Hash == 0)
+							throw new Exception("create data function needs to return a number representing the data created");
+						createDataResult.Value = result;
+					}
+
+//				DataSourceHelper.BackupApplicationDatabase(createdDataHash);
+//				DataSourceHelper.BackupAnalyticsDatabase(createdDataHash);
+				});
+
+				return (createDataResult.Value as CreateDataResult<T>).Data;
+			}
 		}
 
 		private static void withContainer(Action<IComponentContext> action)
@@ -60,11 +70,17 @@ namespace Teleopti.Ccc.TestCommon
 			builder.RegisterType<DatabaseTestHelper>().SingleInstance();
 			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
 			var container = builder.Build();
-			
+
 			action.Invoke(container);
-			
+
 			container.Dispose();
 		}
+	}
+
+	public class CreateDataResult<T>
+	{
+		public int Hash;
+		public T Data;
 	}
 
 	public class CreateDataContext
