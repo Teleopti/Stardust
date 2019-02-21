@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 {
@@ -36,8 +37,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 
 	    private AuthenticationQuerierResult logOnSystem()
 	    {
-		    IPerson systemUser;
-		    if (attemptSystemUserLogOn(out systemUser)) 
+			if (attemptSystemUserLogOn(out var systemUser)) 
 					return new AuthenticationQuerierResult {Success = true, Person = systemUser};
 
 		    var authQuerier = new AuthenticationTenantClient(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 				    {
 					    UserName = _customUserNameSecurityToken.UserName,
 					    Password = _customUserNameSecurityToken.Password
-				    }, string.Empty);
+				    }, MultiTenancyAuthenticationFactory.UserAgent);
 	    }
 
 	    private bool attemptSystemUserLogOn(out IPerson systemUser)

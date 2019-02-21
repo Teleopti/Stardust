@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			{
 				var request = new HttpRequestMessage(HttpMethod.Post, url) {Content = new StringContent(json, Encoding.UTF8, "application/json")};
 
-				if (userAgent != null)
+				if (!string.IsNullOrEmpty(userAgent))
 				{
 					request.Headers.UserAgent.Clear();
-					request.Headers.Add("User-Agent", userAgent);
+					request.Headers.TryAddWithoutValidation("User-Agent", userAgent);
 				}
 
 				return request;
