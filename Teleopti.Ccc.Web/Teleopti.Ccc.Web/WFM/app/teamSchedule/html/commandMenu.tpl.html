@@ -1,6 +1,8 @@
-<div id="scheduleContextMenuButton" tabindex=0 class="context-menu card-context" ng-class="{'active-menu':vm.activateCommandMenu()}" ng-if="vm.isMenuVisible()">
-	<i class="mdi mdi-dots-vertical"></i>
-	<span class="context-menu-left">
+<div id="scheduleContextMenuButton" tabindex=0 
+	 class="context-menu card-context"
+	 ng-class="{'active-menu':vm.activateCommandMenu()}" ng-click="vm.toggleMenu()">
+	<i class="mdi mdi-dots-vertical" ></i>
+	<span class="context-menu-left" ng-if="vm.isMenuVisible">
 		<ul class="wfm-list">
 			<li class="item" ng-attr-id="menuItem{{cmd.label}}" ng-if="cmd.visible()" ng-repeat="cmd in vm.commands" 
 				ng-disabled="!(cmd.clickable())" ng-click="cmd.clickable() && cmd.action()">

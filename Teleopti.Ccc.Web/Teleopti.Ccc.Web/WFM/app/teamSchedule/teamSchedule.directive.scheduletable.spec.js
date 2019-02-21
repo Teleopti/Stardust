@@ -421,7 +421,7 @@ describe('teamschedule schedule table controller tests', function () {
 
 		scope.$apply();
 
-        expect(schedules[0].HasUnderlyingSchedules()).not.toBeNull();
+        expect(schedules[0].UnderlyingScheduleSummary).not.toBeNull();
 	});
 
 	it('should not make current page selected when only one person on the page and the person is partially selected', inject(function () {
@@ -613,9 +613,6 @@ describe('teamschedule schedule table controller tests', function () {
 			ScheduleEndTime: function () { return dateMoment.endOf('day') },
 			AllowSwap: function () { return false; },
 			UnderlyingScheduleSummary: underlyingScheduleSummary,
-			HasUnderlyingSchedules: function () {
-				return !!underlyingScheduleSummary;
-			},
 			IsFullDayAbsence: isFullDayAbsence,
 			ActivityCount: function () {
 				return this.Shifts[0].ActivityCount();

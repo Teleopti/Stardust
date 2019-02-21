@@ -7,7 +7,6 @@
 	function scheduleTableDirective() {
 		return {
 			scope: {
-				selectMode: '=',
 				selectedDate: '=',
 				selectedTimezone: '<',
 				selectedSortOption: '<',
@@ -23,8 +22,47 @@
 		};
 	}
 
-	ScheduleTableController.$inject = ['$scope', '$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
-	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
+	angular.module('wfm.teamSchedule')
+		.component('scheduleList', {
+			controller: ScheduleTableController,
+			templateUrl: 'app/teamSchedule/html/schedulelist.html',
+			bindings: {
+				selectedDate: '=',
+				selectedTimezone: '<',
+				selectedSortOption: '<',
+				showWarnings: '=?',
+				paginationOptions: '<?',
+				scheduleBodyHeight: '<'
+			},
+			controllerAs: 'vm'
+		});
+
+
+	angular.module('wfm.teamSchedule').directive('updateSize', [updateSizeDirective]);
+
+	function updateSizeDirective() {
+		return {
+			restrict: 'A',
+			require: '^mdVirtualRepeatContainer',
+			link: function (scope, element, attributes, mdVirtualRepeatContainer) {
+				scope.$watch(function () {
+					return attributes.updateSize;
+				}, function (value) {
+					if (!value) return;
+					var size = parseInt(value);
+					if (size % 2 !== 0) size += 1;
+
+					element[0].style.height = size + 'px';
+					mdVirtualRepeatContainer.setSize_(size);
+					mdVirtualRepeatContainer.updateSize();
+				});
+
+			}
+		};
+	}
+
+	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
+	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
 		var vm = this;
 		vm.scheduleInEditing = null;
 
@@ -44,36 +82,36 @@
 		});
 
 		vm.totalSelectedProjections = function () {
-			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount +
-				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount +
-				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount;
+			var totalSelection = personSelectionSvc.getTotalSelectedPersonAndProjectionCount();
+			return totalSelection.CheckedPersonCount +
+				totalSelection.SelectedActivityInfo.ActivityCount +
+				totalSelection.SelectedAbsenceInfo.AbsenceCount;
 		};
 
-		vm.updatePersonSelection = function (personSchedule) {
+		vm.updatePersonSelection = function (personSchedule, $event) {
+			if ($event) {
+				$event.stopPropagation();
+			}
 			personSelectionSvc.updatePersonSelection(personSchedule);
 			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
-		vm.canToggleSelection = function (currentProjection, viewDate) {
-			return currentProjection.Selectable();
-		};
-
-		vm.ToggleProjectionSelection = function (currentProjection, viewDate) {
-			if (!vm.canToggleSelection(currentProjection, viewDate)) return;
+		vm.ToggleProjectionSelection = function (currentProjection, viewDate, $event) {
+			if ($event) {
+				$event.stopPropagation();
+			}
+			if (!currentProjection.Selectable()) return;
 			currentProjection.ToggleSelection();
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, viewDate);
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
-			if ($event === null) {
-				personSchedule.IsSelected = !personSchedule.IsSelected;
-				vm.updatePersonSelection(personSchedule);
-			}
-			else if ($event.target instanceof HTMLTableCellElement) {
+			if ($event === null || $event.target instanceof HTMLTableCellElement) {
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
 			}
 		};
+
 
 		vm.modifyShiftCategoryForAgent = function ($event, personSchedule) {
 			if (!vm.permissions.HasEditShiftCategoryPermission) {
@@ -100,19 +138,13 @@
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
 
-		vm.checkIsLoadedValidationForPerson = function (personId) {
-			return ValidateRulesService.checkIsLoadedValidationForPerson(personId);
-		};
-
 		vm.getScheduleNoteForPerson = function (personId) {
 			return ScheduleNoteMgmt.getNoteForPerson(personId);
 		};
 
-		vm.hasPublicNote = function (personId) {
-			return ScheduleNoteMgmt.getNoteForPerson(personId).publicNotes && ScheduleNoteMgmt.getNoteForPerson(personId).publicNotes.length > 0;
-		}
-
-		vm.editScheduleNote = function (personId) {
+		vm.editScheduleNote = function (personId, $event) {
+			if ($event)
+				$event.stopPropagation();
 			vm.noteEditorInputOption = {
 				selectedDate: vm.selectedDate,
 				personId: personId,
@@ -128,7 +160,9 @@
 				&& !!personSchedule.ActivityCount();
 		}
 
-		vm.clickEditButton = function (personSchedule) {
+		vm.clickEditButton = function (personSchedule, $event) {
+			if ($event)
+				$event.stopPropagation();
 			if (vm.scheduleInEditing !== personSchedule) {
 				if (vm.scheduleInEditing) {
 					$scope.$emit('teamSchedule.shiftEditor.close', { isOpeningNew: true });
@@ -139,10 +173,6 @@
 
 		vm.isScheduleInEditing = function (personSchedule) {
 			return vm.scheduleInEditing && vm.scheduleInEditing.PersonId === personSchedule.PersonId;
-		}
-
-		vm.isNotSameTimezone = function (personTimezone) {
-			return vm.selectedTimezone && personTimezone.IanaId !== vm.selectedTimezone;
 		}
 
 		vm.getHourPointsForHourLine = function () {

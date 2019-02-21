@@ -1915,6 +1915,7 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
+    <Content Include="WFM\app\teamSchedule\html\schedulelist.html" />
     <Content Include="WFM\app\teamSchedule\html\shiftEditor.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />
@@ -2618,6 +2619,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.viewStateKeeper.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.js" />
+    <Content Include="WFM\css\_teamschedule.schedulelist.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\app\outbound\outbound.service.campaign.js" />

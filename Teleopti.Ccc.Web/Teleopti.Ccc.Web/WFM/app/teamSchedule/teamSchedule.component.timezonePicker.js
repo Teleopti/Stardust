@@ -11,7 +11,8 @@
 			},
 			bindings: {
 				avaliableTimezones: '<',
-				ngModel: '=?'
+				ngModel: '=?',
+				isDisabled: '<'
 			}
 		});
 

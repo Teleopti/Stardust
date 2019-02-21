@@ -225,7 +225,7 @@
 
 
 		function setUp(selectedDate, selectedTimezone) {
-			var html = '<schedule-table select-mode="true" selected-date="selectedDate" selected-timezone="selectedTimezone"></schedule-table>';
+			var html = '<schedule-table selected-date="selectedDate" selected-timezone="selectedTimezone"></schedule-table>';
 
 			var scope = $rootScope.$new();
 			scope.selectedDate = selectedDate;

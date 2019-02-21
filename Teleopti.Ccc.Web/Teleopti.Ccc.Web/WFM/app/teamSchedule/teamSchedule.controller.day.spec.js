@@ -110,7 +110,7 @@
 			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 			expect(personSchedule1.IsSelected).toEqual(true);
@@ -129,7 +129,7 @@
 			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 			expect(personSchedule1.IsSelected).toEqual(true);
@@ -147,7 +147,7 @@
 			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 			expect(personSchedule1.IsSelected).toEqual(true);
@@ -164,7 +164,7 @@
 			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 			expect(personSchedule1.IsSelected).toEqual(true);
@@ -251,7 +251,7 @@
 			};
 			controller.currentSettings.validateWarningEnabled = true;
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			controller.checkValidationWarningForCurrentPage();
 			$httpBackend.whenPOST('../api/TeamScheduleData/FetchRuleValidationResult', {
@@ -269,7 +269,7 @@
 			};
 			controller.currentSettings.validateWarningEnabled = true;
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			controller.checkValidationWarningForCommandTargets(['221B-Baker-SomeoneElse', '221B-Sherlock']);
 			$httpBackend.whenPOST('../api/TeamScheduleData/FetchRuleValidationResult', {
@@ -406,7 +406,7 @@
 
 			controller.scheduleDate = "2015-10-26";
 			controller.loadSchedules();
-			controller.selectAllForAllPages();
+			controller.toggleSelectAll();
 
 			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 			expect(personSchedule1.IsSelected).toEqual(true);

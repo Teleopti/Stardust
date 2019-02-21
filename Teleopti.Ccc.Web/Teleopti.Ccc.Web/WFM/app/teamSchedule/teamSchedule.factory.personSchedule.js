@@ -111,6 +111,7 @@
 
 			var displayEnd = endTimeMinutes <= timelineEndMinute ? endTimeMinutes : timelineEndMinute;
 			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
+			if (!length) return undefined;
 
 			var dayOffVm = new DayOffViewModel(scheduleDate, dayOff.DayOffName, startPosition, length, personSchedule);
 			return dayOffVm;
@@ -226,10 +227,6 @@
 				return d.Date == serviceDateFormatHelper.getDateOnly(date);
 			}).length;
 		};
-
-		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
-			return !!this.UnderlyingScheduleSummary;
-		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {
 			if (this.Shifts[0] && this.Shifts[0].Date === this.Date) {
