@@ -5,6 +5,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -126,7 +127,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PurgeSettingRepository>().As<IPurgeSettingRepository>().SingleInstance();
 
-			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().As<IGetAllWorkerNodes>().SingleInstance();
+			builder.Register(c =>
+			{
+				var configReader = c.Resolve<IConfigReader>();
+				var connectionString = configReader.ConnectionString("Tenancy");
+				return new StardustRepository(connectionString);
+			}).As<IStardustRepository>().As<IGetAllWorkerNodes>().SingleInstance();
 		}
 
 		private bool hasRepositoryConstructor(Type type)

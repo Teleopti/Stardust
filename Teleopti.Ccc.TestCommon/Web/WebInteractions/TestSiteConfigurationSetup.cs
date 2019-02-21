@@ -260,9 +260,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.LoadFile(file);
 			settingsFile.UpdateFileByName("machineKey.validationKey", "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1");
 			settingsFile.UpdateFileByName("machineKey.decryptionKey", "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429");
-			settingsFile.UpdateFileByName("DB_CCC7", InfraTestConfigReader.DatabaseName);
-			settingsFile.UpdateFileByName("DB_ANALYTICS", InfraTestConfigReader.AnalyticsDatabaseName);
-			settingsFile.UpdateFileByName("AS_DATABASE", InfraTestConfigReader.AnalyticsDatabaseName);
+			settingsFile.UpdateFileByName("DB_CCC7", InfraTestConfigReader.ApplicationDatabaseName());
+			settingsFile.UpdateFileByName("DB_ANALYTICS", InfraTestConfigReader.AnalyticsDatabaseName());
+			settingsFile.UpdateFileByName("AS_DATABASE", InfraTestConfigReader.AnalyticsDatabaseName());
 			settingsFile.UpdateFileByName("SQL_AUTH_STRING", InfraTestConfigReader.SqlAuthString);
 			settingsFile.UpdateFileByName("ToggleMode", InfraTestConfigReader.ToggleMode);
 

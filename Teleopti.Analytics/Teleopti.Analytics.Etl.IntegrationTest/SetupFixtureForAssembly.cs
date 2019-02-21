@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		private static IDisposable auth;
 
 		[OneTimeSetUp]
-		public void Setup()
+		public void OneTimeSetUp()
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
@@ -44,6 +44,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 
 			DataSourceHelper.BackupApplicationDatabase(123);
+		}
+		
+		[OneTimeTearDown]
+		public void OneTimeTearDown()
+		{
+			StateHolderProxyHelper.ClearStateHolder();
 		}
 
 		private static void disposeUnitOfWork()

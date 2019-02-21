@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static IDataSource makeDataSource(IDataSourcesFactory factory, string name)
 		{
-			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
-			return factory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
+			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ApplicationConnectionString(), null, name);
+			return factory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString());
 		}
 
 		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout,

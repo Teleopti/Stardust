@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 	public class TenantAuditAspectTest : IIsolateSystem, IExtendSystem
 	{
 		public TestAuditService Target;
-		public TenantUnitOfWorkManager TenantUnitOfWorkManager;
+		public ICurrentTenantSession CurrentTenantSession;
+		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentHttpContext CurrentHttpContext;
 
 		
@@ -41,10 +42,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 			var personInfo = new PersonInfo(new Tenant("_"), Guid.NewGuid());
 			CurrentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfoKey] = personInfo;
 
-			using (TenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				Target.DoSomething(new AppLogonChangeActionObj(){PersonInfo = personInfo});
-				var session = TenantUnitOfWorkManager.CurrentSession();
+				var session = CurrentTenantSession.CurrentSession();
 				session.FlushAndClear();
 				session.Query<TenantAudit>().ToList().Count.Should().Be.EqualTo(1);
 			}

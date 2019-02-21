@@ -54,11 +54,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeInfraTestConfig();
 			return config;
 		}
 
@@ -66,7 +62,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.Extend(extend, configuration);
 			
-			extend.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
 			extend.AddService<Database>();
 			extend.AddService<AnalyticsDatabase>();
 		}
@@ -127,8 +122,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
 				TestTenantName.Name,
-				InfraTestConfigReader.ConnectionString,
-				InfraTestConfigReader.AnalyticsConnectionString,
+				InfraTestConfigReader.ApplicationConnectionString(),
+				InfraTestConfigReader.AnalyticsConnectionString(),
 				null);
 
 			MessageSender.AllNotifications.Clear();
@@ -160,7 +155,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		
 		protected void Logout()
 		{
-			PrincipalContext.SetCurrentPrincipal(null);
+			PrincipalContext?.SetCurrentPrincipal(null);
 		}
 	}
 }

@@ -9,6 +9,7 @@ using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
 			var container = builder.Build();
 
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();

@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static DatabaseHelper application()
 		{
 			return new DatabaseHelper(
-				InfraTestConfigReader.ConnectionString,
+				InfraTestConfigReader.ApplicationConnectionString(),
 				DatabaseType.TeleoptiCCC7,
 				new DbManagerLog4Net("DbManager.Application"),
 				new WfmInstallationEnvironment()
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static DatabaseHelper agg()
 		{
 			return new DatabaseHelper(
-				InfraTestConfigReader.AggConnectionString,
+				InfraTestConfigReader.AggConnectionString(),
 				DatabaseType.TeleoptiCCCAgg,
 				new DbManagerLog4Net("DbManager.Agg"),
 				new WfmInstallationEnvironment()
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static DatabaseHelper analytics()
 		{
 			return new DatabaseHelper(
-				InfraTestConfigReader.AnalyticsConnectionString,
+				InfraTestConfigReader.AnalyticsConnectionString(),
 				DatabaseType.TeleoptiAnalytics,
 				new DbManagerLog4Net("DbManager.Analytics"),
 				new WfmInstallationEnvironment()

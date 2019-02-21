@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private List<SkillForecast> readIntervals()
 		{
-			var connection = new SqlConnection(InfraTestConfigReader.ConnectionString);
+			var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString());
 			connection.Open();
 			var returnList = new List<SkillForecast>();
 			using (var command =

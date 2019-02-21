@@ -160,7 +160,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			const string timeZoneId = "W. Europe Standard Time";
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 
-			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null,
+			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null,
 				AnalyticsPersonPeriodDateFixer);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			var dsFactory = DataSourceFactoryFactory.MakeLegacyWay().Make();

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[SetUp]
 		public void Setup()
 		{
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ApplicationConnectionString());
 			_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 			var tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
