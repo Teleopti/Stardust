@@ -945,7 +945,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.PersistSkillCombinationResourceBpo(combinationResources);
 
 			Dictionary<Guid, string> bpoList;
-			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();
 				bpoList = Target.LoadSourceBpo(connection);
@@ -983,7 +983,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.PersistSkillCombinationResourceBpo(combinationResources);
 
 			Dictionary<Guid, string> bpoList;
-			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();
 				bpoList = Target.LoadSourceBpo(connection);
@@ -1022,7 +1022,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.PersistSkillCombinationResourceBpo(combinationResources);
 
 			Dictionary<Guid, string> bpoList;
-			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();
 				bpoList = Target.LoadSourceBpo(connection);
@@ -1512,7 +1512,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
 
-			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();
 				using (var insertCommand = new SqlCommand(@"insert into [BusinessProcessOutsourcer] (Id, Source) Values (@id,@source)", connection))
@@ -1560,7 +1560,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.ClearBpoResources(bpoGuid, dateTimePeriod);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();
 				using (var command = new SqlCommand(@"select count(*) from ReadModel.SkillCombinationResourceBpo where sourceId = @bpoGuid", connection))
@@ -1621,7 +1621,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.ClearBpoResources(bpoGuid, dateTimePeriod);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();
 				var returnList = new List<DateTime>();

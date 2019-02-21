@@ -70,7 +70,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private void performLevel2Assert()
 		{
-			var connectionString = InfraTestConfigReader.ApplicationConnectionString();
+			var connectionString = InfraTestConfigReader.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -164,7 +164,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private void performLevel1Assert(DateOnlyPeriod period)
 		{
-			var connectionString = InfraTestConfigReader.ApplicationConnectionString();
+			var connectionString = InfraTestConfigReader.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();

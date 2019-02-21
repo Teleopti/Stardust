@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 		public static void DropAndCreateTestProcedures()
 		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				SqlCommand command = connection.CreateCommand();
 				connection.Open();
@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 		public static void RunSysSetupTestData(DateTime testDate, int queueId)
 		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				SqlCommand command = connection.CreateCommand();
 				connection.Open();
@@ -96,7 +96,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 		public static void AddOneInterval(int agent_id, string AcdLogOnName, int queue_id, int addMinute, DateTime? testDate, int? interval)
 		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				SqlCommand command = connection.CreateCommand();
 				connection.Open();

@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[SetUp]
 		public void InsertPreState()
 		{
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ApplicationConnectionString());
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 			
 			tenantPresentInDatabase = new Tenant(RandomName.Make());

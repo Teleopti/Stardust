@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
-				var connectionString = configReader.ConnectionString("Tenancy");
-				return TenantUnitOfWorkManager.Create(connectionString);
+				var connstringAsString = configReader.ConnectionString("Tenancy");
+				return TenantUnitOfWorkManager.Create(connstringAsString);
 			})
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()

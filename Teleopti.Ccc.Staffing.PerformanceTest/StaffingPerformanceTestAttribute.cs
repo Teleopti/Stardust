@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString());
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString());
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
 
@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble<UpdateSkillForecastReadModelHandler>().For<UpdateSkillForecastReadModelHandler>();
 		}
 
-		protected override void BeforeInject(IComponentContext container)
+		protected override void Startup(IComponentContext container)
 		{
-			base.BeforeInject(container);
+			base.Startup(container);
 			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}

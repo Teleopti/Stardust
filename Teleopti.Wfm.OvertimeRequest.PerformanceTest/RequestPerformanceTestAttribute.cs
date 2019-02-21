@@ -21,7 +21,8 @@ namespace Teleopti.Wfm.OvertimeRequest.PerformanceTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeInfraTestConnectionStrings();
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
 
@@ -47,9 +48,9 @@ namespace Teleopti.Wfm.OvertimeRequest.PerformanceTest
 			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
-		protected override void BeforeInject(IComponentContext container)
+		protected override void Startup(IComponentContext container)
 		{
-			base.BeforeInject(container);
+			base.Startup(container);
 			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}

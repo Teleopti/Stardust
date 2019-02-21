@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
@@ -8,7 +7,7 @@ namespace Teleopti.Ccc.TestCommon
 	public class FakeConfigReader : IConfigReader
 	{
 		private readonly IDictionary<string, string> _settings = new Dictionary<string, string>();
-		private readonly IDictionary<string, Func<string>> _connectionStrings = new Dictionary<string, Func<string>>();
+		private readonly IDictionary<string, string> _connectionStrings = new Dictionary<string, string>();
 
 		public FakeConfigReader(IEnumerable<KeyValuePair<string, string>> config)
 		{
@@ -31,14 +30,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void FakeConnectionString(string name, string connectionString)
 		{
-			_connectionStrings[name] = () => connectionString;
-		}
-
-		public void FakeConnectionString(string name, Func<string> connectionString)
-		{
 			_connectionStrings[name] = connectionString;
 		}
-		
+
 		public string AppConfig(string name)
 		{
 			return _settings.ContainsKey(name) ? _settings[name] : null;
@@ -46,25 +40,15 @@ namespace Teleopti.Ccc.TestCommon
 
 		public string ConnectionString(string name)
 		{
-			return _connectionStrings.ContainsKey(name) ? _connectionStrings[name].Invoke() : null;
+			return _connectionStrings.ContainsKey(name) ? _connectionStrings[name] : null;
 		}
 	}
 	
 	public static class FakeConfigReaderExtensions
 	{
-		public static FakeConfigReader FakeInfraTestConnectionStrings(this FakeConfigReader config)
-		{
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString);
-			config.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
-			return config;
-		}
-
 		public static FakeConfigReader AddConnectionString(this FakeConfigReader configReader, string name, string connectionString)
 		{
-			configReader.FakeConnectionString("Toggle", null as string);
+			configReader.FakeConnectionString("Toggle", null);
 			return configReader;
 		}				
 	}

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Autofac;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 		}
 
-		protected virtual void BeforeInject(IComponentContext container)
+		protected virtual void Startup(IComponentContext container)
 		{
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				throw new NotSupportedException("This fixture (or base fixtures) is not compatible with a IoC test attributeDatabaseTest");
 			_service = new IoCTestService(testDetails, this);
 			buildContainer();
-			BeforeInject(_container);
+			Startup(_container);
 			_service.InjectFrom(_container);
 			
 			Now.Is("2014-12-18 13:31");
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (QueryAllAttributes<UseIocForFatClientAttribute>().Any())
 				args.IsFatClient = true;
 			(_fixture as ISetupConfiguration)?.SetupConfiguration(args);
-			args.EnableLegacyServiceLocators = !TestContext.CurrentContext.isParallel();
+			args.EnableLegacyServiceLocators = !isParallel();
 			var configuration = new IocConfiguration(args, toggles);
 
 			extend.AddModule(new CommonModule(configuration));
@@ -151,6 +151,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			QueryAllExtensions<IIsolateSystem>()
 				.ForEach(x => x.Isolate(isolate));
 		}
+
+		private static bool isParallel() => 
+			new Regex(@"Worker#[0-9]+").IsMatch(TestContext.CurrentContext.WorkerId);
 
 		private void disposeContainer()
 		{

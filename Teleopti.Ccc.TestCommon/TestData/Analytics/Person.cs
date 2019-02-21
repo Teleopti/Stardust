@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		public static int FindPersonIdByPersonCode(Guid person_code)
 		{
 			var personTable = new Person();
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString()))
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				var culture = Thread.CurrentThread.CurrentCulture;
 				connection.Open();

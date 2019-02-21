@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldAddApplicationNameToConnectionString()
 		{
-			var res = target.Create(nHibSettings(), InfraTestConfigReader.AnalyticsConnectionString());
+			var res = target.Create(nHibSettings(), InfraTestConfigReader.AnalyticsConnectionString);
 			using (var appSession = ((NHibernateUnitOfWorkFactory)res.Application).SessionFactory.OpenSession())
 			{
 				appSession.Connection.ConnectionString.Should().Contain("unit tests");
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IDictionary<string, string> ret = new Dictionary<string, string>();
 			ret.Add("connection.provider", "NHibernate.Connection.DriverConnectionProvider");
 			ret.Add("connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-			ret.Add("connection.connection_string", InfraTestConfigReader.ApplicationConnectionString());
+			ret.Add("connection.connection_string", InfraTestConfigReader.ConnectionString);
 			ret.Add("show_sql", "false");
 			ret.Add("dialect", "NHibernate.Dialect.MsSql2008Dialect");
 

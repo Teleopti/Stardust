@@ -1,17 +1,14 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
@@ -33,15 +30,10 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		{
 			var (person, businessUnit) = InfrastructureTestSetup.Before();
 			_businessUnit = businessUnit;
-			
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
-			builder.RegisterType<FakeConfigReader>().AsSelf().As<IConfigReader>().SingleInstance();
-			builder.RegisterType<FakeLicenseRepository>().AsSelf().As<ILicenseRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConnectionStrings()).AsSelf().As<IConfigReader>().SingleInstance();
 			container = builder.Build();
-			
-			var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
+			var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(TestTenantName.Name);
 			Login(person, businessUnit, dataSource);
 			_unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork();
 			_session = _unitOfWork.FetchSession();
@@ -55,16 +47,10 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		[TearDown]
 		public void BaseTeardown()
 		{
-			try
-			{
-				_unitOfWork.Dispose();
-				_unitOfWork = null;
-				container.Dispose();
-			}
-			finally
-			{
-				InfrastructureTestSetup.After();
-			}
+			_unitOfWork.Dispose();
+			_unitOfWork = null;
+			container.Dispose();
+			InfrastructureTestSetup.After();
 		}
 
 		protected void PersistAndRemoveFromUnitOfWork(IEntity obj)

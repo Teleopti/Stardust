@@ -89,7 +89,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null), null)
+					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 			};
 
 			Assert.That(SqlCommands.SumFactScheduleDeviation(day1, "deviation_contract_s"), Is.EqualTo(620));

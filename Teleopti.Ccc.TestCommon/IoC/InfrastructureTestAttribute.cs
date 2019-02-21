@@ -54,7 +54,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeInfraTestConnectionStrings();
+			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
 
@@ -62,6 +66,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.Extend(extend, configuration);
 			
+			extend.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
 			extend.AddService<Database>();
 			extend.AddService<AnalyticsDatabase>();
 		}
@@ -121,9 +126,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
-				InfraTestConfigReader.TenantName(),
-				InfraTestConfigReader.ApplicationConnectionString(),
-				InfraTestConfigReader.AnalyticsConnectionString(),
+				TestTenantName.Name,
+				InfraTestConfigReader.ConnectionString,
+				InfraTestConfigReader.AnalyticsConnectionString,
 				null);
 
 			MessageSender.AllNotifications.Clear();
@@ -149,13 +154,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected void Login(IPerson person, IBusinessUnit businessUnit)
 		{
-			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(InfraTestConfigReader.TenantName()), null);
+			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(TestTenantName.Name), null);
 			PrincipalContext.SetCurrentPrincipal(principal);
 		}
 		
 		protected void Logout()
 		{
-			PrincipalContext?.SetCurrentPrincipal(null);
+			PrincipalContext.SetCurrentPrincipal(null);
 		}
 	}
 }

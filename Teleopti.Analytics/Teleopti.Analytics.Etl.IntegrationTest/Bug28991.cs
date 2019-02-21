@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 				{
 					Helper =
-						new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null), null)
+						new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 				};
 
 			//run nightly
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null), null)
+					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 			};
 			result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
 			step = new StageScheduleJobStep(jobParameters);
@@ -156,7 +156,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null), null)
+					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 			};
 
 			//run nightly
@@ -189,7 +189,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null), null)
+					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 			};
 			result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
 			step = new StageScheduleJobStep(jobParameters);

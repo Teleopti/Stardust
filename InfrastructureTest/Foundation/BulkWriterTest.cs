@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				var writer = new BulkWriter();
 				var dt = dim_overtime.CreateTable();
 				dt.AddOvertime(1, Guid.NewGuid(), "test", 1, 1, false);
-				writer.WriteWithRetries(dt, InfraTestConfigReader.AnalyticsConnectionString(), dt.TableName);
+				writer.WriteWithRetries(dt, InfraTestConfigReader.AnalyticsConnectionString, dt.TableName);
 			}
 			catch (InvalidOperationException e)
 			{
@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				var writer = new BulkWriter(1);
 				var dt = dim_overtime.CreateTable();
 				dt.AddOvertime(1, Guid.NewGuid(), "test", 1, 1, false);
-				lockTable(dt, InfraTestConfigReader.AnalyticsConnectionString());
+				lockTable(dt, InfraTestConfigReader.AnalyticsConnectionString);
 				transactionCommitInSeconds(10);
 				Console.WriteLine(DateTime.Now);
-				writer.WriteWithRetries(dt, InfraTestConfigReader.AnalyticsConnectionString(), dt.TableName);
+				writer.WriteWithRetries(dt, InfraTestConfigReader.AnalyticsConnectionString, dt.TableName);
 				Console.WriteLine($"{DateTime.Now} {writer.Retries}");
 				writer.Retries.Should().Be.GreaterThan(1);
 			}

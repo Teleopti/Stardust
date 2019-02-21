@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[SetUp]
 		public void InsertPreState()
 		{
-			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ApplicationConnectionString());
+			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 
 			target = new FindPersonInfo(tenantUnitOfWorkManager);

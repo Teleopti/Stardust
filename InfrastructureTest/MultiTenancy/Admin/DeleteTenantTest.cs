@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 		[SetUp]
 		public void Setup()
 		{
-			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ApplicationConnectionString());
+			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 		}
 

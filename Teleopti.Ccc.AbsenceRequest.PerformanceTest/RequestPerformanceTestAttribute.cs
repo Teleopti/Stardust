@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString());
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString());
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
 
@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
-		protected override void BeforeInject(IComponentContext container)
+		protected override void Startup(IComponentContext container)
 		{
-			base.BeforeInject(container);
+			base.Startup(container);
 			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}

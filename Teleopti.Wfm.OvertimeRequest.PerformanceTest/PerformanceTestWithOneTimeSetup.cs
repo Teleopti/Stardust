@@ -28,7 +28,9 @@ namespace Teleopti.Wfm.OvertimeRequest.PerformanceTest
 			var service = new IoCTestService(new[] { this }, null);
 
 			var config = service.Config();
-			config.FakeInfraTestConnectionStrings();
+			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 
 			var toggles = service.Toggles();
 
