@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 
 		[Test]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.BpoExchange)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
