@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Setting_BankHolidayCalendar_Create_79297,
 				DefinedRaptorApplicationFunctionForeignIds.SystemSetting);
 
-			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 
 			hideInsights(functions);
