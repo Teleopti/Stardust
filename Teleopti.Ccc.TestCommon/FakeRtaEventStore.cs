@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.TestCommon
 		public long ReadLastId() =>
 			Data.LastOrDefault()?.Id ?? 0;
 
-		public bool EventsOfTypeWereStoredFromId<T>(long fromEventId)
+		public bool AnyEventsOfType<T>(long fromEventId)
 		{
 			var count = Data.Count(x => (x.Event.GetType() == typeof(T)) && x.Id > fromEventId);
 			return count != 0;

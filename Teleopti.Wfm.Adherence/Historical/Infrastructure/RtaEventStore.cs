@@ -213,7 +213,7 @@ ORDER BY [Id]
 		public long ReadLastId() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
-		public bool EventsOfTypeWereStoredFromId<T>(long fromEventId)
+		public bool AnyEventsOfType<T>(long fromEventId)
 		{
 			var count = _unitOfWork.Current().Session().CreateSQLQuery(@"SELECT COUNT (*) 
 FROM 

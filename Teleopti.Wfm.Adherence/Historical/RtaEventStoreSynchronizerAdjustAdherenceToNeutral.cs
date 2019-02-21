@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		[UnitOfWork]
 		protected virtual bool ShouldReSync() =>
-			_events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(FromEventId());
+			_events.AnyEventsOfType<PeriodAdjustedToNeutralEvent>(FromEventId());
 
 		[UnitOfWork]
 		protected virtual LoadedEvents LoadEvents(long fromEventId) =>

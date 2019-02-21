@@ -114,7 +114,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 					EndTime = "2019-02-20 18:00".Utc(),
 				});
 
-			var actual = WithUnitOfWork.Get(() => Events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(0));
+			var actual = WithUnitOfWork.Get(() => Events.AnyEventsOfType<PeriodAdjustedToNeutralEvent>(0));
 			
 			actual.Should().Be(true);
 		}
@@ -136,8 +136,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 					Timestamp = "2019-02-20 08:00".Utc()
 				});
 
-			var eventOfTypeFromId0 = WithUnitOfWork.Get(() => Events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(0));
-			var eventOfTypeFromId1 = WithUnitOfWork.Get(() => Events.EventsOfTypeWereStoredFromId<PeriodAdjustedToNeutralEvent>(1));
+			var eventOfTypeFromId0 = WithUnitOfWork.Get(() => Events.AnyEventsOfType<PeriodAdjustedToNeutralEvent>(0));
+			var eventOfTypeFromId1 = WithUnitOfWork.Get(() => Events.AnyEventsOfType<PeriodAdjustedToNeutralEvent>(1));
 			
 			eventOfTypeFromId0.Should().Be(true);
 			eventOfTypeFromId1.Should().Be(false);
