@@ -60,12 +60,12 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleData, selectedD
 		: 'black';
 
 	self.bankHoliday = null;
-	if (scheduleData.BankHolidayCalendarInfo) {
-		var bankHolidayInfo = scheduleData.BankHolidayCalendarInfo;
+	if (scheduleData.BankHolidayCalendar) {
+		var bankHolidayCalendar = scheduleData.BankHolidayCalendar;
 		self.bankHoliday = {
-			calendarId: bankHolidayInfo.CalendarId,
-			calendarName: bankHolidayInfo.CalendarName,
-			dateDescription: bankHolidayInfo.DateDescription
+			calendarId: bankHolidayCalendar.CalendarId,
+			calendarName: bankHolidayCalendar.CalendarName,
+			dateDescription: bankHolidayCalendar.DateDescription
 		};
 	}
 

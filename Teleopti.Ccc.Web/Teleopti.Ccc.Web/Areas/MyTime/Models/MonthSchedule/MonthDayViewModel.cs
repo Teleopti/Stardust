@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
 		public ShiftViewModel Shift { get; set; }
 		public bool HasOvertime { get; set; }
 		public IList<OccupancyViewModel> SeatBookings { get; set; }
-		public BankHolidayCalendarViewModel BankHolidayCalendarInfo { get; set; }
+		public BankHolidayCalendarViewModel BankHolidayCalendar { get; set; }
 	}
 
 	public class ShiftViewModel

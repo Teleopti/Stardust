@@ -338,9 +338,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var monthDaysData = Target.FetchMobileMonthData(date).ScheduleDays.ToList();
 
 			var result = monthDaysData.First(m => m.Date == date.Date);
-			result.BankHolidayCalendarInfo.CalendarId.Should().Be.EqualTo(calendarId);
-			result.BankHolidayCalendarInfo.CalendarName.Should().Be.EqualTo(calendarName);
-			result.BankHolidayCalendarInfo.DateDescription.Should().Be.EqualTo(description);
+			result.BankHolidayCalendar.CalendarId.Should().Be.EqualTo(calendarId);
+			result.BankHolidayCalendar.CalendarName.Should().Be.EqualTo(calendarName);
+			result.BankHolidayCalendar.DateDescription.Should().Be.EqualTo(description);
 		}
 
 		[Test]
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var monthDaysData = Target.FetchMobileMonthData(date).ScheduleDays.ToList();
 
 			var result = monthDaysData.First(m => m.Date == date.Date);
-			result.BankHolidayCalendarInfo.Should().Be.Null();
+			result.BankHolidayCalendar.Should().Be.Null();
 		}
 
 		[Test]
@@ -368,9 +368,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var monthDaysData = Target.FetchMonthData(date).ScheduleDays.ToList();
 
 			var result = monthDaysData.First(m => m.Date == date.Date);
-			result.BankHolidayCalendarInfo.CalendarId.Should().Be.EqualTo(calendarId);
-			result.BankHolidayCalendarInfo.CalendarName.Should().Be.EqualTo(calendarName);
-			result.BankHolidayCalendarInfo.DateDescription.Should().Be.EqualTo(description);
+			result.BankHolidayCalendar.CalendarId.Should().Be.EqualTo(calendarId);
+			result.BankHolidayCalendar.CalendarName.Should().Be.EqualTo(calendarName);
+			result.BankHolidayCalendar.DateDescription.Should().Be.EqualTo(description);
 		}
 
 		[Test]
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var monthDaysData = Target.FetchMonthData(date).ScheduleDays.ToList();
 
 			var result = monthDaysData.First(m => m.Date == date.Date);
-			result.BankHolidayCalendarInfo.Should().Be.Null();
+			result.BankHolidayCalendar.Should().Be.Null();
 		}
 
 		[Test]
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var monthDaysData = Target.FetchMonthData(date).ScheduleDays.ToList();
 
 			var result = monthDaysData.First(m => m.Date == date.Date);
-			result.BankHolidayCalendarInfo.Should().Be.Null();
+			result.BankHolidayCalendar.Should().Be.Null();
 		}
 
 		private void setupLoggedOnUser(DateOnly date)
