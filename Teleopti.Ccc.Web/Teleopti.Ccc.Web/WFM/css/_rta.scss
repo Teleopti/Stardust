@@ -18,7 +18,8 @@
 
 	$out-of-adherence-color: darkred;
 	$in-adherence-color: darkgreen;
-	$out-of-adherence-height: 4px;
+	$adjusted-to-neutral-color: darkblue;
+	$adherence-height: 4px;
 
 	.label-alert {
 		background-color: #fb8c00;
@@ -53,11 +54,11 @@
 		position: absolute;
 	}
 
-	@mixin out-of-adherence-line {
+	@mixin adherence-line($color) {
 		@include positioned;
 		z-index: 20;
-		background-color: $out-of-adherence-color;
-		height: $out-of-adherence-height;
+		background-color: $color;
+		height: $adherence-height;
 		opacity: 0.6;
 		min-width: 1px;
 	}
@@ -146,7 +147,7 @@
 			}
 
 			.out-of-adherence {
-				@include out-of-adherence-line;
+				@include adherence-line($out-of-adherence-color);
 				top: 50%;
 				transform: translateY(-50%);
 			}
@@ -259,8 +260,13 @@
 			}
 
 			.out-of-adherence {
-				@include out-of-adherence-line;
-				top: ($shift-height - $out-of-adherence-height) / 2;
+				@include adherence-line($out-of-adherence-color);
+				top: ($shift-height - $adherence-height) / 2;
+			}
+
+			.adjusted-to-neutral-adherence {
+				@include adherence-line($adjusted-to-neutral-color);
+				top: ($shift-height - $adherence-height) / 2;
 			}
 
 			.activity {
@@ -337,6 +343,16 @@
 				@include adherence-layer($in-adherence-color);
 				opacity: 0.5;
 				z-index: 10;
+			}
+		}
+		
+		.adjusted-to-neutral-adherences {
+			@include container;
+			height: $layer-row-height;
+			.adjusted-to-neutral-adherence {
+				@include adherence-layer($adjusted-to-neutral-color);
+				cursor: pointer;
+				z-index: 20;
 			}
 		}
 
