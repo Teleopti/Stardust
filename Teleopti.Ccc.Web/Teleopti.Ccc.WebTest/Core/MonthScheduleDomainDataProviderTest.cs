@@ -2,14 +2,17 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
@@ -29,6 +32,12 @@ namespace Teleopti.Ccc.WebTest.Core
 		public IScheduleStorage ScheduleStorage;
 		public FullPermission Authorization;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
+		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
+		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -36,11 +45,18 @@ namespace Teleopti.Ccc.WebTest.Core
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<SeatOccupancyProvider>().For<ISeatOccupancyProvider>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]
 		public void ShouldMapDate()
 		{
+			setupLoggedOnUser();
 			var today = DateOnly.Today;
 
 			var result = Target.GetMonthData(today);
@@ -52,6 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[SetCulture("sv-SE")]
 		public void ShouldMapDays()
 		{
+			setupLoggedOnUser();
 			var date = new DateOnly(2014, 1, 11);
 			addPersonSchedule(new DateOnly(2013, 12, 30), TimeSpan.FromHours(1), TimeSpan.FromHours(2));
 
@@ -64,6 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToTrueWhenHavingBothLicenseAndPermission()
 		{
+			setupLoggedOnUser();
 			var today = DateOnly.Today;
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
@@ -76,6 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmLicense()
 		{
+			setupLoggedOnUser();
 			var today = DateOnly.Today;
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
@@ -88,6 +107,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
+			setupLoggedOnUser();
 			PermissionProvider.Enable();
 			var today = DateOnly.Today;
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
@@ -112,6 +132,18 @@ namespace Teleopti.Ccc.WebTest.Core
 			var personAssignment = new PersonAssignment(LoggedOnUser.CurrentUser(), CurrentScenario.Current(), date).WithId();
 			personAssignment.AddActivity(activity, assignmentPeriod);
 			ScheduleStorage.Add(personAssignment);
+		}
+
+		private void setupLoggedOnUser()
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			LoggedOnUser.SetFakeLoggedOnUser(logonUser);
+			PersonRepository.Add(logonUser);
+			var site = new Site("site").WithId();
+			SiteRepository.Add(site);
+			var team = new Team { Site = site }.WithDescription(new Description("team")).WithId();
+			TeamRepository.Add(team);
+			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
 		}
 	}
 }
