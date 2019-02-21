@@ -99,10 +99,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffing.Time))
 					continue;
 
-				if (!isSkillScheduledInThisInterval(person, skillStaffing, scheduleDictionary))
-					continue;
-
-				subtractUsersSchedule(skillStaffing);
+				if (isSkillScheduledInThisInterval(person, skillStaffing, scheduleDictionary))
+				{
+					subtractUsersSchedule(skillStaffing);
+				}
 
 				var possibility = calculatePossibility(skillStaffing);
 				var key = skillStaffing.Time;
