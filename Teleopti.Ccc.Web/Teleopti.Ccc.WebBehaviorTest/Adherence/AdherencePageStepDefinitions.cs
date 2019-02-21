@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			Browser.Interactions.SwitchToLastTab_Experimental();
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
 			{
-				Browser.Interactions.AssertFirstContains(".list-group .person-name-column", name);
+				Browser.Interactions.AssertAnyContains(".person-name-column", name);
 			});
 		}
 
