@@ -1751,8 +1751,10 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.picker.buttons.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta-historical.adjustAdherenceToNeutral_80594.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.inputValidationForApprovingAdherencePeriods_77045.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.AdjustAdherenceToNeutral_80594.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
