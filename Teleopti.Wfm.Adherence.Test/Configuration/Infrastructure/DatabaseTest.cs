@@ -32,6 +32,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			_businessUnit = businessUnit;
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
+			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
 			container = builder.Build();
 			var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(TestTenantName.Name);
 			Login(person, businessUnit, dataSource);
