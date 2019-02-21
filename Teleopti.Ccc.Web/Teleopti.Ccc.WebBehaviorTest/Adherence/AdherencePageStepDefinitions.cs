@@ -57,9 +57,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			Browser.Interactions.AssertExists($".change-schedule");
 			Browser.Interactions.Click($".change-schedule");
 			Browser.Interactions.SwitchToLastTab_Experimental();
-			Browser.Interactions.AssertFirstContains("td.person-name-column", name);
-//			Browser.Interactions.AssertExists("td.schedule .layer");
-//			Browser.Interactions.AssertExists("td.schedule-tool-column span i");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
+			{
+				Browser.Interactions.AssertFirstContains(".list-group .person-name-column", name);
+			});
 		}
 
 		[When(@"I click the toggle to see all agents")]
