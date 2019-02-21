@@ -59,8 +59,18 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	showSkills = true;
 	showReforecastedWarning = false;
 	axisLabels: IIntradayAxisLabels = { yLabel: '-', y2Label: '-' };
+	isFocused = true;
 
 	ngOnInit() {
+		// Active
+		window.addEventListener('focus', () => {
+			this.isFocused = true;
+		});
+		// Active
+		window.addEventListener('blur', () => {
+			this.isFocused = false;
+		});
+
 		this.startTimer();
 	}
 
@@ -84,7 +94,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	}
 
 	updateOnInterval = () => {
-		if (this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
+		if (this.isFocused && this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
 			this.updateData();
 		}
 	};
@@ -524,7 +534,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 							['Forecasted_staffing'].concat(input.ForecastedStaffing),
 							['Actual_staffing'].concat(input.ActualStaffing),
 							['Scheduled_staffing'].concat(input.ScheduledStaffing),
-								['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing)
+							['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing)
 					  ],
 				type: 'area-spline',
 				colors: {
