@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.TestCommon
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<DatabaseTestHelper>().SingleInstance();
+			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
 			var container = builder.Build();
 			
 			action.Invoke(container);

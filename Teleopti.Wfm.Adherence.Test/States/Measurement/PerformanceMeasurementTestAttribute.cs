@@ -53,9 +53,9 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestSetup.Before();
-
+			var (person, businessUnit) = InfrastructureTestSetup.Before();
 			base.BeforeTest();
+			base.Login(person, businessUnit);
 
 			FakePublisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			FakePublisher.AddHandler<AgentStateMaintainer>();
