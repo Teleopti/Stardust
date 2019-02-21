@@ -128,7 +128,10 @@
 		</nz-tab>
 		<nz-tab [nzTitle]="titleTemplate">
 			<ng-template #titleTemplate>
-				{{ 'Validations' | translate }}<nz-badge [nzCount]="valData.totalValNum"></nz-badge>
+				{{ 'Validations' | translate }}
+				<nz-spin nzSize="small" [nzSpinning]="valLoading">
+					<nz-badge [nzCount]="valData.totalValNum"></nz-badge>
+				</nz-spin>
 			</ng-template>
 			<div *ngIf="valData.totalValNum !== 0">
 				<nz-collapse>
