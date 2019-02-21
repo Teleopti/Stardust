@@ -1,5 +1,4 @@
 using System;
-using System.IdentityModel.Tokens;
 using System.Security.Principal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 

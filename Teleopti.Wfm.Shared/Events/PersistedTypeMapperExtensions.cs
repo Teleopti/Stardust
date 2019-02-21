@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
