@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 		protected override void BeforeTest()
 		{
-			_data = InfrastructureTestSetup.Setup();
+			_data = InfrastructureTestSetup.Before();
 			base.BeforeTest();
 			base.Login(_data.Person, _data.BusinessUnit);
 		}
@@ -31,6 +31,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		{
 			base.AfterTest();
 			base.Logout();
+			InfrastructureTestSetup.After();
 		}
 
 		public void Login()

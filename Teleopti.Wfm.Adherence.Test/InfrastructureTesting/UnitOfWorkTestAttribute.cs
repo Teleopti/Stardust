@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
@@ -9,7 +10,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 		protected override void BeforeTest()
 		{
-			var (person, businessUnit) = InfrastructureTestSetup.Setup();
+			var (person, businessUnit) = InfrastructureTestSetup.Before();
 			base.BeforeTest();
 			base.Login(person, businessUnit);
 			_aspect = Resolve<IUnitOfWorkAspect>();
@@ -22,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 			_aspect = null;
 			base.Logout();
 			base.AfterTest();
+			InfrastructureTestSetup.After();
 		}
 	}
 }

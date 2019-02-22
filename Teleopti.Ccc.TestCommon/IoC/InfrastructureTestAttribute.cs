@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
-				InfraTestConfigReader.TenantName(),
+				TestTenantName.Name,
 				InfraTestConfigReader.ApplicationConnectionString(),
 				InfraTestConfigReader.AnalyticsConnectionString(),
 				null);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected void Login(IPerson person, IBusinessUnit businessUnit)
 		{
-			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(InfraTestConfigReader.TenantName()), null);
+			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(TestTenantName.Name), null);
 			PrincipalContext.SetCurrentPrincipal(principal);
 		}
 		

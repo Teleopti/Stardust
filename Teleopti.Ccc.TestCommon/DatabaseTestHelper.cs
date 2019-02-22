@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class DatabaseTestHelper
 	{
-		public void CreateDatabases() => CreateDatabases(null);
-		public void CreateDatabases(string tenant) 
+		public void CreateDatabases(string tenant = TestTenantName.Name)
 		{
 			using (testDirectoryFix())
 			{
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.TestCommon
 			configure.MergePersonAssignments();
 
 			configure.PersistAuditSetting();
-			configure.SetTenantConnectionInfo(tenant ?? InfraTestConfigReader.TenantName(), database.ConnectionString, analytics().ConnectionString);
+			configure.SetTenantConnectionInfo(tenant, database.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static void backupByFileCopy(DatabaseHelper database, int dataHash)

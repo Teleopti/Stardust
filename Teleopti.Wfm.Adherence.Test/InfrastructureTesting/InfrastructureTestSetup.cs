@@ -8,28 +8,33 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class InfrastructureTestSetup
 	{
-		public static (IPerson Person, IBusinessUnit BusinessUnit) Setup()
+		private static IPerson _person;
+		private static IBusinessUnit _businessUnit;
+
+		public static (IPerson Person, IBusinessUnit BusinessUnit) Before()
 		{
-			return DatabaseTestSetup.Setup(context =>
+			DatabaseTestSetup.Setup(context =>
 			{
-				var businessUnit = new BusinessUnit(RandomName.Make());
-				var person = new Person()
+				_businessUnit = new BusinessUnit(RandomName.Make());
+				_person = new Person()
 					.WithName(RandomName.Make())
 					.InTimeZone(TimeZoneInfo.Utc);
-				context.UpdatedByScope.OnThisThreadUse(person);
+				context.UpdatedByScope.OnThisThreadUse(_person);
 				context.WithUnitOfWork.Do(() =>
 				{
-					context.Persons.Add(person);
-					context.Persons.Remove(person); // SetDeleted
-					context.BusinessUnits.Add(businessUnit);
+					context.Persons.Add(_person);
+					context.Persons.Remove(_person); // SetDeleted
+					context.BusinessUnits.Add(_businessUnit);
 				});
 				context.UpdatedByScope.OnThisThreadUse(null);
-				return new CreateDataResult<(IPerson, IBusinessUnit)>
-				{
-					Hash = 213124,
-					Data = (person, businessUnit)
-				};
+				return 254875;
 			});
+
+			return (_person, _businessUnit);
+		}
+
+		public static void After()
+		{
 		}
 	}
 }

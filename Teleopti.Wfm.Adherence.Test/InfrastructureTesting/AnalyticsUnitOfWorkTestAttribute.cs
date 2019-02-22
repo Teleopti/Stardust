@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
@@ -10,7 +11,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 	{
 		protected override void BeforeTest()
 		{
-			var (person, businessUnit) = InfrastructureTestSetup.Setup();
+			var (person, businessUnit) = InfrastructureTestSetup.Before();
 			base.BeforeTest();
 			base.Login(person, businessUnit);
 			Resolve<IEnumerable<IAspect>>()
@@ -27,6 +28,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 				.OnAfterInvocation(null, null);
 			base.Logout();
 			base.AfterTest();
+			InfrastructureTestSetup.After();
 		}
 	}
 }

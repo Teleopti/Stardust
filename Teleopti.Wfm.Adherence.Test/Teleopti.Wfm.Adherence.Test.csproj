@@ -178,10 +178,10 @@
     <Compile Include="Configuration\Infrastructure\RtaRuleRepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaStateGroupRepositoryTest.cs" />
-    <Compile Include="Configuration\Parallelize.cs" />
     <Compile Include="Configuration\Unit\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Configuration\Unit\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Configuration\Unit\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
+    <Compile Include="Configuration\Unit\Parallelize.cs" />
     <Compile Include="Configuration\Unit\PermissionViewModelBuilderTest.cs" />
     <Compile Include="Configuration\Unit\RtaMapTest.cs" />
     <Compile Include="Configuration\Unit\RtaRuleTest.cs" />
