@@ -24,11 +24,7 @@
 		>
 		</nz-date-picker>
 		<ng-template #dateRender let-currentDate>
-			<div
-				class="ant-calendar-date"
-				[class.border]="selectedDatesTimeList.indexOf(currentDate.getTime()) > -1"
-				(click)="dateClick(currentDate)"
-			>
+			<div class="ant-calendar-date" [class.border]="highlightDate(currentDate)" (click)="dateClick(currentDate)">
 				{{ currentDate.getDate() }}
 			</div>
 		</ng-template>
@@ -60,7 +56,7 @@
 								nzSize="small"
 								nzType="danger"
 								nzShape="circle"
-								(click)="removeDate(date)"
+								(click)="removeDate(date, year)"
 								class="remove-date-icon"
 							>
 								<i nz-icon type="close" theme="outline"></i>
@@ -72,7 +68,7 @@
 		</nz-collapse>
 
 		<nz-alert
-			*ngIf="false"
+			*ngIf="newCalendarYears.length == 0"
 			nzType="info"
 			class="bank-holiday-no-date-tip"
 			[nzMessage]="'NoBankHolidays' | translate"

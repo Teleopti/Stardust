@@ -15,7 +15,7 @@ import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.com
 import { BankCalendarDataService } from '../../shared';
 import { registerLocaleData } from '@angular/common';
 
-fdescribe('BankHolidayCalendarAddComponent', () => {
+describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarAddComponent;
@@ -126,15 +126,40 @@ fdescribe('BankHolidayCalendarAddComponent', () => {
 		expect(component.nameAlreadyExisting).toBe(true);
 	});
 
-	it('should not add duplicated date', () => {
+	it('should be able to add dates', () => {
 		component.dateChangeCallback(new Date('2015-01-10'));
-		component.dateChangeCallback(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-11'));
+		fixture.detectChanges();
 
-		expect(component.selectedDates.length).toBe(1);
+		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
+		const dateRows = dateContent
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+
+		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
+		expect(dateRows.length).toBe(2);
+		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
+		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+		expect(dateRows[1].innerHTML.indexOf('2015-01-11') > -1).toBeTruthy();
+		expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(2);
+		expect(component.selectedDatesTimeList.length).toBe(2);
 	});
 
-	it('should be able to add a date back after removing it', () => {
+	it('should not add duplicated dates', () => {
 		component.dateChangeCallback(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+
+		expect(component.selectedDatesTimeList.length).toBe(1);
+		expect(component.selectedDatesTimeList[0]).toBe(new Date('2015-01-10').getTime());
+	});
+
+	it('should be able remove a date', () => {
+		component.dateChangeCallback(new Date('2015-01-10 10:00:00'));
+		component.dateChangeCallback(new Date('2015-01-11 10:00:00'));
 		fixture.detectChanges();
 
 		const addNewBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
@@ -142,19 +167,57 @@ fdescribe('BankHolidayCalendarAddComponent', () => {
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
+		expect(dateRows.length).toBe(2);
+		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
+		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+
+		expect(dateRows[1].innerHTML.indexOf('2015-01-11') > -1).toBeTruthy();
+		expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+
+		dateRows[0].getElementsByClassName('remove-date-icon')[0].dispatchEvent(new Event('click'));
+
+		fixture.detectChanges();
+
+		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
+
+		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
+		expect(dateRows.length).toBe(1);
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+
+		expect(component.selectedDatesTimeList.length).toBe(1);
+		expect(component.selectedDatesTimeList[0]).toBe(new Date('2015-01-11').getTime());
+	});
+
+	it('should be able to add a date back after removing it', () => {
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+
+		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
+		const dateRows = dateContent
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+
 		expect(dateRows.length).toBe(1);
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
 		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 
-		component.removeDate(component.selectedDates[0]);
+		dateRows[0].getElementsByClassName('remove-date-icon')[0].dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
-		expect(component.selectedDates.length).toBe(1);
-		expect(component.selectedDates[0].Date).toBe('2015-01-10');
-		expect(component.selectedDates[0].Description).toBe('BankHoliday');
+		expect(dateRows.length).toBe(1);
+		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
+		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+
+		expect(component.selectedDatesTimeList.length).toBe(1);
+		expect(component.selectedDatesTimeList[0]).toBe(new Date('2015-01-10').getTime());
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates[0].Date).toBe('2015-01-10');
+		expect(component.newCalendarYears[0].Dates[0].Description).toBe('BankHoliday');
 	});
 
 	it('should categorize dates by year', () => {
@@ -171,5 +234,16 @@ fdescribe('BankHolidayCalendarAddComponent', () => {
 		expect(component.newCalendarYears[1].Year).toBe('2016');
 		expect(component.newCalendarYears[1].Dates.length).toBe(1);
 		expect(component.newCalendarYears[1].Dates[0].Date).toBe('2016-01-10');
+	});
+
+	it('should show a hint message off adding date when there is no date', () => {
+		const hintElement = document.getElementsByClassName('bank-holiday-no-date-tip');
+
+		expect(hintElement.length).toBe(1);
+		expect(
+			hintElement[0].innerHTML.indexOf(
+				'ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday'
+			) > -1
+		).toBeTruthy();
 	});
 });
