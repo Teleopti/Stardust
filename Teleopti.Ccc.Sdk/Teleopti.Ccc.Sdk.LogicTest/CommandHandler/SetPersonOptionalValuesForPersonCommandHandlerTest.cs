@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository mock;
         private IOptionalColumnRepository optionalColumnRepository;
         private IUnitOfWorkFactory unitOfWorkFactory;
-        private SetPersonOptionalValuesForPersonCommandHandler target;
     	private IPersonRepository personRepository;
         private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             personRepository = mock.StrictMock<IPersonRepository>();
             unitOfWorkFactory = mock.StrictMock<IUnitOfWorkFactory>();
             currentUnitOfWorkFactory = mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            target = new SetPersonOptionalValuesForPersonCommandHandler(optionalColumnRepository, personRepository, currentUnitOfWorkFactory);
         }
 
 		[Test]
@@ -59,10 +57,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 var command = new SetPersonOptionalValuesForPersonCommandDto { PersonId = person.Id.GetValueOrDefault() };
                 command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "42" });
 
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					target.Handle(command);
-				}
+				var target = new SetPersonOptionalValuesForPersonCommandHandler(optionalColumnRepository, personRepository, currentUnitOfWorkFactory, new FullPermission());
+				target.Handle(command);
 
 				var result = command.Result;
 				result.AffectedItems.Should().Be.EqualTo(1);
@@ -95,11 +91,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 var command = new SetPersonOptionalValuesForPersonCommandDto { PersonId = person.Id.GetValueOrDefault() };
                 command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "" });
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					target.Handle(command);
-				}
 
+				var target = new SetPersonOptionalValuesForPersonCommandHandler(optionalColumnRepository, personRepository, currentUnitOfWorkFactory, new FullPermission());
+				target.Handle(command);
+				
 				person.GetColumnValue(optionalColumn).Should().Be.Null();
             }
         }
@@ -125,6 +120,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				{
 					var command = new SetPersonOptionalValuesForPersonCommandDto {PersonId = personId};
 					command.OptionalValueCollection.Add(new OptionalValueDto {Key = "Shoe size", Value = "42"});
+
+					var target = new SetPersonOptionalValuesForPersonCommandHandler(optionalColumnRepository, personRepository, currentUnitOfWorkFactory, new FullPermission());
 					target.Handle(command);
 				}
 			});
@@ -146,14 +143,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();
 				Expect.Call(untiOfWork.Dispose);
 			}
+
 			using (mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
-				{
-					var command = new SetPersonOptionalValuesForPersonCommandDto{PersonId = person.Id.GetValueOrDefault()};
-                    command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "42" });
-					Assert.Throws<FaultException>(() => target.Handle(command));
-				}
+				var command = new SetPersonOptionalValuesForPersonCommandDto {PersonId = person.Id.GetValueOrDefault()};
+				command.OptionalValueCollection.Add(new OptionalValueDto {Key = "Shoe size", Value = "42"});
+
+				var target = new SetPersonOptionalValuesForPersonCommandHandler(optionalColumnRepository, personRepository, currentUnitOfWorkFactory, new NoPermission());
+				Assert.Throws<FaultException>(() => target.Handle(command));
 			}
 		}
     }

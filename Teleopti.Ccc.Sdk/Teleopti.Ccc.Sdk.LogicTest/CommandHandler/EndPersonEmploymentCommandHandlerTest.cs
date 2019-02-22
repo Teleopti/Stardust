@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -32,13 +30,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
-			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy());
+			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy(), new FullPermission());
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				target.Handle(endPersonEmploymentCommandDto);
-			}
-
+			target.Handle(endPersonEmploymentCommandDto);
+			
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 		}
@@ -56,12 +51,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = new Person().WithId(endPersonEmploymentCommandDto.PersonId);
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
-			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy());
-			
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
-			{
-				Assert.Throws<FaultException>(() => target.Handle(endPersonEmploymentCommandDto));
-			}
+			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy(), new NoPermission());
+
+			Assert.Throws<FaultException>(() => target.Handle(endPersonEmploymentCommandDto));
 		}
 
 		[Test]
@@ -85,13 +77,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			personAssignmentRepository.Has(personAssignment);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
-					new FakePersonAbsenceRepository(null)), new PersonAccountUpdaterDummy());
+					new FakePersonAbsenceRepository(null)), new PersonAccountUpdaterDummy(), new FullPermission());
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				target.Handle(endPersonEmploymentCommandDto);
-			}
-
+			target.Handle(endPersonEmploymentCommandDto);
+			
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 			personAssignmentRepository.LoadAll().Should().Be.Empty();
@@ -117,13 +106,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			personAssignmentRepository.Has(personAssignment);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory,
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
-					new FakePersonAbsenceRepository(null)), new PersonAccountUpdaterDummy());
+					new FakePersonAbsenceRepository(null)), new PersonAccountUpdaterDummy(), new FullPermission());
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				target.Handle(endPersonEmploymentCommandDto);
-			}
-
+			target.Handle(endPersonEmploymentCommandDto);
+			
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 			personAssignmentRepository.LoadAll().Should().Not.Be.Empty();

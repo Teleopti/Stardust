@@ -7,14 +7,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData;
-
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -59,10 +57,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _contractRepository = _mock.StrictMock<IContractRepository>();
             _teamRepository = _mock.StrictMock<ITeamRepository>();
             _target = new EmployPersonCommandHandler(_currentUnitOfWorkFactory, _personRepository, _personAssembler,
-                _partTimePercentageRepository, _contractScheduleRepository, _contractRepository, _teamRepository);
+                _partTimePercentageRepository, _contractScheduleRepository, _contractRepository, _teamRepository, new FullPermission(), new SpecificBusinessUnit(BusinessUnitUsedInTests.BusinessUnit));
 
-            _person = PersonFactory.CreatePerson("test");
-            _person.SetId(Guid.NewGuid());
+            _person = PersonFactory.CreatePerson("test").WithId();
             _personDto = new PersonDto {Id = Guid.NewGuid()};
 
             _team = TeamFactory.CreateTeamWithId(Guid.NewGuid(), "test team");
@@ -94,12 +91,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Team = _teamDto
             };
 
-            _contract = new Contract("test contract");
-            _contract.SetId(Guid.NewGuid());
-            _contractSchedule = new ContractSchedule("temp contract schedule");
-            _contractSchedule.SetId(Guid.NewGuid());
-            _partTimePercentage = new PartTimePercentage("temp part time percentage");
-            _partTimePercentage.SetId(Guid.NewGuid());
+            _contract = new Contract("test contract").WithId();
+            _contractSchedule = new ContractSchedule("temp contract schedule").WithId();
+            _partTimePercentage = new PartTimePercentage("temp part time percentage").WithId();
         }
 
         [Test]
@@ -127,10 +121,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             using (_mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					_target.Handle(_employPersonCommandDto);
-				}
+				_target.Handle(_employPersonCommandDto);
 			}
         }
 
@@ -175,10 +166,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                         SiteAndTeam = teamX.SiteAndTeam
                     };
 
-					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-					{
-						_target.Handle(_employPersonCommandDto);
-					}
+					_target.Handle(_employPersonCommandDto);
 				}
             });
             ex.Message.Should().Contain("Adding references to items from a different business unit than the currently specified in the header is not allowed");

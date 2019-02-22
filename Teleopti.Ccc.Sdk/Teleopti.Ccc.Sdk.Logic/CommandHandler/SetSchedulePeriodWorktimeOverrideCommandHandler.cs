@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 
@@ -12,11 +13,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public SetSchedulePeriodWorktimeOverrideCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public SetSchedulePeriodWorktimeOverrideCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentAuthorization currentAuthorization)
 		{
 			_personRepository = personRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentAuthorization = currentAuthorization;
 		}
 
 		public void Handle(SetSchedulePeriodWorktimeOverrideCommandDto command)
@@ -29,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					command.Result = new CommandResultDto();
 					return;
 				}
-				person.VerifyCanBeModifiedByCurrentUser();
+				person.VerifyCanBeModifiedByCurrentUser(_currentAuthorization);
 				var period = person.SchedulePeriod(command.Date.ToDateOnly());
 				if (period == null)
 				{

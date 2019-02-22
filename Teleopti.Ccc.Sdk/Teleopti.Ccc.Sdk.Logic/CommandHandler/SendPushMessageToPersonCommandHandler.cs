@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
@@ -14,12 +15,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IPersonRepository _personRepository;
 		private readonly IPushMessagePersister _pushMessagePersister;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessagePersister pushMessagePersister, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessagePersister pushMessagePersister, ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentAuthorization currentAuthorization)
 		{
 			_personRepository = personRepository;
 			_pushMessagePersister = pushMessagePersister;
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentAuthorization = currentAuthorization;
 		}
 
 		public void Handle(SendPushMessageToPeopleCommandDto command)
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var people = _personRepository.FindPeople(command.Recipients).ToList();
 				if (people.Count > 0)
 				{
-					people.VerifyCanBeModifiedByCurrentUser(DateOnly.Today);
+					people.VerifyCanBeModifiedByCurrentUser(DateOnly.Today, _currentAuthorization);
 					
 					makeSureAtLeastDefaultReplyOptionExists(command.ReplyOptions);
 

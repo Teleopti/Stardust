@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -14,12 +15,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IPersonRepository _personRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public GetPeopleOptionalValuesByPersonIdQueryHandler(IOptionalColumnRepository optionalColumnRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public GetPeopleOptionalValuesByPersonIdQueryHandler(IOptionalColumnRepository optionalColumnRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentAuthorization currentAuthorization)
 		{
 			_optionalColumnRepository = optionalColumnRepository;
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentAuthorization = currentAuthorization;
 		}
 
 		public ICollection<PersonOptionalValuesDto> Handle(GetPeopleOptionalValuesByPersonIdQueryDto query)
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				{
 					var resultList = new List<PersonOptionalValuesDto>();
 					var foundPeople = _personRepository.FindPeople(query.PersonIdCollection);
-					foundPeople.VerifyCanBeModifiedByCurrentUser(DateOnly.Today);
+					foundPeople.VerifyCanBeModifiedByCurrentUser(DateOnly.Today, _currentAuthorization);
 
 					var foundColumns = _optionalColumnRepository.GetOptionalColumns<Person>();
 
