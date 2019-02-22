@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 
@@ -59,6 +60,16 @@ namespace Teleopti.Ccc.TestCommon
 			config.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
+			
+			config.FakeSetting("CertificateModulus", ConfigurationManager.AppSettings["CertificateModulus"]);
+			config.FakeSetting("CertificateExponent", ConfigurationManager.AppSettings["CertificateExponent"]);
+			config.FakeSetting("CertificateP", ConfigurationManager.AppSettings["CertificateP"]);
+			config.FakeSetting("CertificateQ", ConfigurationManager.AppSettings["CertificateQ"]);
+			config.FakeSetting("CertificateDP", ConfigurationManager.AppSettings["CertificateDP"]);
+			config.FakeSetting("CertificateDQ", ConfigurationManager.AppSettings["CertificateDQ"]);
+			config.FakeSetting("CertificateInverseQ", ConfigurationManager.AppSettings["CertificateInverseQ"]);
+			config.FakeSetting("CertificateD", ConfigurationManager.AppSettings["CertificateD"]);
+
 			return config;
 		}
 
