@@ -21,8 +21,11 @@ namespace Teleopti.Wfm.Administration
 		public void Configuration(IAppBuilder app)
 		{
 			// Code that runs on application startup
+
+			var mvcAntiforgery = new MvcAntiforgery();
 			GlobalConfiguration.Configure(WebApiConfig.Register);
 			var config = GlobalConfiguration.Configuration;
+			config.Filters.Add(new AntiForgeryTokenValidationFilter());
 			config.Filters.Add(new NoCacheFilterHttp());
 
 			var builder = new ContainerBuilder();
@@ -41,7 +44,7 @@ namespace Teleopti.Wfm.Administration
 				AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie
 			});
 
-			container.Resolve<HangfireDashboardStarter>().Start(app, ()=>new MvcAntiforgery());
+			container.Resolve<HangfireDashboardStarter>().Start(app, ()=> mvcAntiforgery);
 			container.Resolve<RecurrentEventTimer>().Init(TimeSpan.FromDays(1));
 
 			initializeTenantLicenses(container);

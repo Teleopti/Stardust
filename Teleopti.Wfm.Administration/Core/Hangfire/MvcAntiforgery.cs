@@ -14,7 +14,9 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			AntiForgeryConfig.UniqueClaimTypeIdentifier = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 		}
 
-		public string HeaderName => "X-CSRF-Token";
+		public const string CustomHeaderName = "X-XSRF-TOKEN";
+		public string HeaderName => CustomHeaderName;
+
 
 		public string GetToken(IDictionary<string, object> environment)
 		{
@@ -47,7 +49,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 
 		private string GetCookieToken()
 		{
-			var cookie = HttpContext.Current.Request.Cookies[AntiForgeryConfig.CookieName];
+			var cookie = HttpContext.Current.Request.Cookies[HangfireCookie.AntiForgeryCookieName];
 			return cookie != null && !String.IsNullOrEmpty(cookie.Value) ? cookie.Value : null;
 		}
 	}
