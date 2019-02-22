@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			IEnumerable<SimplestPersonInfo> revPeople;
 
-			var searchPeriod = new DateOnlyPeriod(DateTime.Today, DateTime.Today);
+			var searchPeriod = new DateOnlyPeriod(DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1));
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				revPeople = target.GetRevisionPeople(searchPeriod);
