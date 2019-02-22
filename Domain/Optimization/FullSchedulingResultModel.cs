@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[JsonProperty(PropertyName = "f")]
 		public double ForecastAgents { get; set; }
 		
-		[JsonProperty(PropertyName = "st")]
+		[JsonProperty(PropertyName = "x")]
 		public TimeSpan StartTime { get; set; }
 	}
 }

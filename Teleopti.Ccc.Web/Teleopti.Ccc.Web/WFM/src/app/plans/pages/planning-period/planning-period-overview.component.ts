@@ -41,6 +41,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	worstUnderStaffDay: any;
 	worstOverStaffDay: any;
 	showNumbers: false;
+	intervalDetails: any[] = null;
 
 	validationFilter;
 
@@ -219,8 +220,11 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	public isDisabled() {
-		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;
-		
+		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;	
+	}
+	
+	public updateIntervalDetails(intervalDetails){
+		this.intervalDetails = intervalDetails;
 	}
 
 	private checkProgress = () => {
