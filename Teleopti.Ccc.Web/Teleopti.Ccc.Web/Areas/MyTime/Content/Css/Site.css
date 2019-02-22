@@ -1232,17 +1232,19 @@ select.time-input {
 	margin: 0;
 	width: 140px;
 }
+.tooltip.left,
+.tooltip.right {
+	width: 150px;
+}
 
 .tooltip-inner {
 	white-space: normal;
 	word-wrap: break-word;
 	width: 140px;
 }
-
 /*
  * CSS alterations in order to get RTL-direction to work properly
  */
-
 /*** Header ***/
 .ie7 header {
 	right: 50%;
