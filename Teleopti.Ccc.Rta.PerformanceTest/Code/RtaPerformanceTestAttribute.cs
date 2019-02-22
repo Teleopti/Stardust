@@ -63,9 +63,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse(DataSourceHelper.TenantName))
+			using (DataSource.OnThisThreadUse(InfraTestConfigReader.TenantName()))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			Impersonate.Impersonate(DataSourceHelper.TenantName, businessUnitId);
+			Impersonate.Impersonate(InfraTestConfigReader.TenantName(), businessUnitId);
 			TestSiteConfigurationSetup.TearDown();
 
 			TestSiteConfigurationSetup.Setup();

@@ -76,7 +76,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-				Rta.CheckForActivityChanges(DataSourceHelper.TenantName);
+				Rta.CheckForActivityChanges(InfraTestConfigReader.TenantName());
 				stopwatch.Stop();
 
 				return new

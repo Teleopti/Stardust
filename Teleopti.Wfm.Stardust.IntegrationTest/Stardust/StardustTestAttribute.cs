@@ -92,10 +92,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			HangfireClientStarter.Start();
 			TestLog.Debug("HangfireClientStarter.Start");
 			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse(DataSourceHelper.TenantName))
+			using (DataSource.OnThisThreadUse(InfraTestConfigReader.TenantName()))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			TestLog.Debug("AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId)");
-			AsSystem.Logon(DataSourceHelper.TenantName, businessUnitId);
+			AsSystem.Logon(InfraTestConfigReader.TenantName(), businessUnitId);
 
 			TestLog.Debug("Setting up ConfigValues..");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");

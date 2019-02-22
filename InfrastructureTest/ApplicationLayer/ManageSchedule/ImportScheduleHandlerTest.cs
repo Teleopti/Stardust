@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 				JobResultId = JobResultId,
 				LogOnBusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
 				TotalMessages = 1,
-				LogOnDatasource = DataSourceHelper.TenantName
+				LogOnDatasource = InfraTestConfigReader.TenantName()
 			};
 		}
 
