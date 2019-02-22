@@ -23,13 +23,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			lock (setupLock)
 			{
-//			if (createdDataHash != 0)
-//			{
-//				DataSourceHelper.RestoreApplicationDatabase(createdDataHash);
-//				DataSourceHelper.RestoreAnalyticsDatabase(createdDataHash);
-//				return;
-//			}
-
 				withContainer(container =>
 				{
 					container.Resolve<DatabaseTestHelper>().CreateDatabases(InfraTestConfigReader.TenantName());
@@ -52,9 +45,6 @@ namespace Teleopti.Ccc.TestCommon
 							throw new Exception("create data function needs to return a number representing the data created");
 						createDataResult.Value = result;
 					}
-
-//				DataSourceHelper.BackupApplicationDatabase(createdDataHash);
-//				DataSourceHelper.BackupAnalyticsDatabase(createdDataHash);
 				});
 
 				return (createDataResult.Value as CreateDataResult<T>).Data;
