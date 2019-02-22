@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { IntradayDataService } from '../services/intraday-data.service';
 import { IntradayIconService } from '../services/intraday-icon.service';
 import { IntradayPersistService } from '../services/intraday-persist.service';
+import { TogglesService } from '../../core/services';
 import {
 	IntradayChartType,
 	IntradayLatestTimeData,
@@ -30,14 +31,23 @@ import {
 })
 export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentInit {
 	request: Subscription;
+	browserTabToggle = false;
 	constructor(
 		public intradayDataService: IntradayDataService,
 		public translate: TranslateService,
 		private message: NzMessageService,
 		private persistData: IntradayPersistService,
-		public skillIcons: IntradayIconService
-	) {}
+		public skillIcons: IntradayIconService,
+		public toggleService: TogglesService
+	) {
+		this.toggleService.toggles$.subscribe({
+			next: toggles => {
+				this.browserTabToggle = toggles.WFM_Intraday_Browser_Tab_81482;
+			}
+		});
+	}
 
+	pollingInterval = 60000;
 	selectedSkillOrGroup: SkillPickerItem;
 	// selectedSubSkill: Skill;
 	selectedSubSkillId: string;
@@ -61,12 +71,38 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	axisLabels: IIntradayAxisLabels = { yLabel: '-', y2Label: '-' };
 	isFocused = true;
 
+	handleVisibilityChange() {
+		this.isFocused = !document.hidden;
+	}
+
+	addListeneersForHiddenTab() {
+		// Set the name of the hidden property and the change event for visibility
+		let hidden = '';
+		if (typeof document.hidden !== 'undefined') {
+			// Opera 12.10 and Firefox 18 and later support
+			hidden = 'hidden';
+
+			// Warn if the browser doesn't support addEventListener or the Page Visibility API
+			if (typeof document.addEventListener === 'undefined' || hidden === undefined) {
+				console.log(
+					'This requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API.'
+				);
+			} else {
+				// Handle page visibility change
+				document.addEventListener('visibilitychange', this.handleVisibilityChange, false);
+			}
+		}
+	}
+
 	ngOnInit() {
 		this.startTimer();
+		if (this.browserTabToggle) {
+			this.addListeneersForHiddenTab();
+		}
 	}
 
 	startTimer() {
-		this.timer = setInterval(this.updateOnInterval, 60000);
+		this.timer = setInterval(this.updateOnInterval, this.pollingInterval);
 	}
 
 	ngAfterContentInit() {
@@ -85,8 +121,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	}
 
 	updateOnInterval = () => {
-		if (this.isFocused && this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
-			this.updateData();
+		if (this.browserTabToggle) {
+			if (!document.hidden && this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
+				this.updateData();
+			}
+		} else {
+			if (this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
+				this.updateData();
+			}
 		}
 	};
 
