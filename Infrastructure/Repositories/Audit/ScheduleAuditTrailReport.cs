@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NHibernate;
 using NHibernate.Envers;
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		public IEnumerable<SimplestPersonInfo> GetRevisionPeople(DateOnlyPeriod searchPeriod)
 		{
-			var startDate = searchPeriod.StartDate.Date;
-			var endDate = searchPeriod.EndDate.Date;
+			var startDate = searchPeriod.StartDate.AddDays(-1);
+			var endDate = searchPeriod.EndDate.AddDays(1);
 			const string sql = "SELECT DISTINCT p.Id, p.FirstName, p.LastName, p.EmploymentNumber "
 							   + "FROM Auditing.Revision r INNER JOIN dbo.Person p ON r.ModifiedBy = p.Id where r.ModifiedAt between :startDate and :endDate";
 
@@ -45,8 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.AddScalar("FirstName", NHibernateUtil.String)
 				.AddScalar("LastName", NHibernateUtil.String)
 				.AddScalar("EmploymentNumber", NHibernateUtil.String)
-				.SetString("startDate", startDate.ToString(CultureInfo.InvariantCulture))
-				.SetString("endDate", endDate.ToString(CultureInfo.InvariantCulture))
+				.SetString("startDate", startDate.ToString())
+				.SetString("endDate", endDate.ToString())
 				.SetReadOnly(true)
 				.List<object[]>()
 				.Select(x => new SimplestPersonInfo
