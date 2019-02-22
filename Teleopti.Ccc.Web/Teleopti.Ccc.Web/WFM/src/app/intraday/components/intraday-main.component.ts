@@ -62,15 +62,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	isFocused = true;
 
 	ngOnInit() {
-		// Active
-		window.addEventListener('focus', () => {
-			this.isFocused = true;
-		});
-		// Active
-		window.addEventListener('blur', () => {
-			this.isFocused = false;
-		});
-
 		this.startTimer();
 	}
 

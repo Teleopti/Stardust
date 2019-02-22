@@ -95,6 +95,7 @@ WFM_Plans_HeatMap_79112 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = true
+WFM_Intraday_Browser_Tab_81482 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC

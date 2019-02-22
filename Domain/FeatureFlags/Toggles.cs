@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_Schedule_MonthView_Indicate_BankHoliday_81158,
 
 		WFM_Intraday_Redesign_77214,
+		WFM_Intraday_Browser_Tab_81482,
 
 		WFM_ChatBot_77547,
 		WFM_Insights_80704,
