@@ -29,9 +29,9 @@
 			</div>
 		</ng-template>
 
-		<nz-collapse class="bank-holiday-calendar-date-content" *ngIf="newCalendarYears.length > 0">
+		<nz-collapse class="bank-holiday-calendar-date-content" *ngIf="newCalendarYearsForDisplay.length > 0">
 			<nz-collapse-panel
-				*ngFor="let year of newCalendarYears"
+				*ngFor="let year of newCalendarYearsForDisplay"
 				[nzHeader]="year.Year"
 				[nzActive]="year.Active"
 				(nzActiveChange)="collapseStatusChange($event, year)"
@@ -68,7 +68,7 @@
 		</nz-collapse>
 
 		<nz-alert
-			*ngIf="newCalendarYears.length == 0"
+			*ngIf="newCalendarYearsForDisplay.length == 0"
 			nzType="info"
 			class="bank-holiday-no-date-tip"
 			[nzMessage]="'NoBankHolidays' | translate"
@@ -81,14 +81,6 @@
 	</div>
 
 	<div class="con-flex operation-buttons">
-		<button nz-button nzType="default" (click)="exit()">{{ 'Cancel' | translate }}</button>
-		<button
-			nz-button
-			nzType="primary"
-			[disabled]="nameAlreadyExisting || newCalendarName.length == 0"
-			(click)="saveNewBankCalendar()"
-		>
-			{{ 'Save' | translate }}
-		</button>
+		<button nz-button nzType="default" (click)="exit()">{{ 'Back' | translate }}</button>
 	</div>
 </div>

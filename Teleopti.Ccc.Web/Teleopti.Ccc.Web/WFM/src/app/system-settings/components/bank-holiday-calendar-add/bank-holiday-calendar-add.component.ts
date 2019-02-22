@@ -29,6 +29,7 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 
 	selectedYearDate: Date;
 	newCalendarYears: BankHolidayCalendarYear[] = [];
+	newCalendarYearsForDisplay: BankHolidayCalendarYear[] = [];
 	selectedDatesTimeList: number[] = [];
 	showDatePicker: boolean;
 	menuSubscription: Subscription;
@@ -93,7 +94,9 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 		};
 
 		this.selectedDatesTimeList.push(timeStamp);
+
 		this.addDateToYear(newDate);
+		this.saveNewBankCalendar();
 	}
 
 	resetLastAddedDateItem() {
@@ -138,12 +141,12 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 	}
 
 	removeDate(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYear) {
-		const index = year.Dates.indexOf(date);
-		year.Dates.splice(index, 1);
-		year.Dates = [...year.Dates];
+		date.IsDeleted = true;
 
 		const timeStampIdx = this.selectedDatesTimeList.indexOf(new Date(date.Date).getTime());
 		this.selectedDatesTimeList.splice(timeStampIdx, 1);
+
+		this.saveNewBankCalendar();
 	}
 
 	sortDateOrYearAscending(currentDate: any, nextDate: any) {
@@ -159,20 +162,14 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
 			if (result.Id.length > 0) {
 				const calItem = result as BankHolidayCalendarItem;
-
 				calItem.Years.forEach((y, i) => {
 					y.Dates.forEach(d => {
 						d.Date = moment(d.Date, this.dateFormat).format(this.dateFormat);
 					});
+					y.Active = true;
 				});
-
-				this.bankHolidayCalendarsList.unshift(calItem);
-				this.bankHolidayCalendarsList.sort((c, n) => {
-					return c.Name.localeCompare(n.Name);
-				});
-
-				this.bankCalendarDataService.bankHolidayCalendarsList$.next(this.bankHolidayCalendarsList);
-				this.exit();
+				this.newCalendarYearsForDisplay = calItem.Years;
+				this.newCalendarYears = calItem.Years.concat();
 			} else {
 				this.networkError();
 			}

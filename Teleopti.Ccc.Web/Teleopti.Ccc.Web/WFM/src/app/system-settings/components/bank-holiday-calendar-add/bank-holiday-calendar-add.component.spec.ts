@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
@@ -19,6 +19,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarAddComponent;
+	let httpTestingController: HttpTestingController;
 
 	configureTestSuite();
 
@@ -53,6 +54,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
 		fixture.autoDetectChanges(true);
+		httpTestingController = TestBed.get(HttpTestingController);
 	}));
 
 	afterAll(() => {
@@ -73,22 +75,16 @@ describe('BankHolidayCalendarAddComponent', () => {
 		);
 	});
 
-	it('should render cancel and save button', () => {
+	it('should render Back button', () => {
 		const addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
 
-		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-btn').length).toBe(2);
+		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-btn').length).toBe(1);
 		expect(
 			addBankHolidayCalendarPanel
 				.getElementsByClassName('ant-btn')[0]
 				.getElementsByTagName('span')[0]
 				.innerText.trim()
-		).toBe('Cancel');
-		expect(
-			addBankHolidayCalendarPanel
-				.getElementsByClassName('ant-btn')[1]
-				.getElementsByTagName('span')[0]
-				.innerText.trim()
-		).toBe('Save');
+		).toBe('Back');
 	});
 
 	it('should trim space before and after when checking the existing name', () => {
@@ -131,6 +127,32 @@ describe('BankHolidayCalendarAddComponent', () => {
 		component.dateChangeCallback(new Date('2015-01-11'));
 		fixture.detectChanges();
 
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						},
+						{
+							Id: '06980577-cc30-434e-88d3-e23505671a38',
+							Date: '2015-01-11',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
 		const dateRows = dateContent
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
@@ -162,6 +184,32 @@ describe('BankHolidayCalendarAddComponent', () => {
 		component.dateChangeCallback(new Date('2015-01-11 10:00:00'));
 		fixture.detectChanges();
 
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						},
+						{
+							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
+							Date: '2015-01-11',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
 		const addNewBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
 		const dateRows = addNewBankHolidayCalendarPanel
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
@@ -175,13 +223,36 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 
 		dateRows[0].getElementsByClassName('remove-date-icon')[0].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
 
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
+							Date: '2015-01-11',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
 		fixture.detectChanges();
 
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
 
 		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
-		expect(dateRows.length).toBe(1);
+		expect(dateContent.getElementsByTagName('nz-list-item').length).toBe(1);
+
+		expect(component.newCalendarYearsForDisplay.length).toBe(1);
+		expect(component.newCalendarYearsForDisplay[0].Dates.length).toBe(1);
+
 		expect(component.newCalendarYears.length).toBe(1);
 		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 
@@ -193,8 +264,28 @@ describe('BankHolidayCalendarAddComponent', () => {
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
-		const dateRows = dateContent
+		let dateRows = dateContent
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
@@ -205,8 +296,45 @@ describe('BankHolidayCalendarAddComponent', () => {
 		dateRows[0].getElementsByClassName('remove-date-icon')[0].dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: []
+				}
+			]
+		});
+		fixture.detectChanges();
+
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
+
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
+		dateRows = dateContent
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(1);
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
@@ -223,6 +351,37 @@ describe('BankHolidayCalendarAddComponent', () => {
 	it('should categorize dates by year', () => {
 		component.dateChangeCallback(new Date('2015-01-10'));
 		component.dateChangeCallback(new Date('2016-01-10'));
+		fixture.detectChanges();
+
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				},
+				{
+					Year: '2016',
+					Dates: [
+						{
+							Id: '8c0eb95d-33cc-4136-a800-ba85bb38ca83',
+							Date: '2016-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
 		fixture.detectChanges();
 
 		expect(component.newCalendarYears.length).toBe(2);
@@ -245,5 +404,43 @@ describe('BankHolidayCalendarAddComponent', () => {
 				'ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday'
 			) > -1
 		).toBeTruthy();
+	});
+
+	it('should save after user input calendar name and select a date', () => {
+		component.newCalendarName = 'I am a new calendar';
+		document.querySelector('.add-new-bank-holiday-calendar-header input').dispatchEvent(new Event('change'));
+
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+
+		expect(component.newCalendarYearsForDisplay.length).toBe(0);
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2015',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
+		expect(component.newCalendarYearsForDisplay.length).toBe(1);
+		expect(component.newCalendarYearsForDisplay[0].Dates.length).toBe(1);
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+		expect(component.selectedDatesTimeList.length).toBe(1);
 	});
 });
