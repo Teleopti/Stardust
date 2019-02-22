@@ -25,8 +25,8 @@
 				<th></th>
 				<th style="word-break: keep-all">{{ 'ServiceLevel' | translate }}</th>
 				<th style="word-break: keep-all">{{ 'ESL' | translate }}</th>
-				<th [hidden]="hideAbandonRate" style="word-break: keep-all">{{ 'AbandonedRate' | translate }}</th>
 				<th style="word-break: keep-all">{{ 'AverageSpeedOfAnswer' | translate }}</th>
+				<th [hidden]="hideAbandonRate" style="word-break: keep-all">{{ 'AbandonedRate' | translate }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,10 +34,10 @@
 				<td style="word-break: keep-all">{{ data.Heading | translate }}</td>
 				<td style="white-space: nowrap">{{ data.ServiceLevel | number: '1.1-1' }}%</td>
 				<td style="white-space: nowrap">{{ data.EstimatedServiceLevel | number: '1.1-1' }}%</td>
+				<td style="white-space: nowrap">{{ data.AverageSpeedOfAnswer | number: '1.1-1' }}s</td>
 				<td [hidden]="hideAbandonRate" style="white-space: nowrap">
 					{{ data.AbandonRate | number: '1.1-1' }}%
 				</td>
-				<td style="white-space: nowrap">{{ data.AverageSpeedOfAnswer | number: '1.1-1' }}s</td>
 			</tr>
 		</tbody>
 	</nz-table>

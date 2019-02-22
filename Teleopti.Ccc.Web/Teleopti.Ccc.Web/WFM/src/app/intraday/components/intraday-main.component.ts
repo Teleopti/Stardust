@@ -485,15 +485,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				columns: this.showReforecastedWarning
 					? [
 							['x'].concat(timeStamps),
-							['ASA'].concat(input.AverageSpeedOfAnswer),
 							['Service_level'].concat(input.ServiceLevel),
-							['ESL'].concat(input.EstimatedServiceLevels)
+							['ESL'].concat(input.EstimatedServiceLevels),
+							['ASA'].concat(input.AverageSpeedOfAnswer)
 					  ]
 					: [
 							['x'].concat(timeStamps),
-							['ASA'].concat(input.AverageSpeedOfAnswer),
 							['Service_level'].concat(input.ServiceLevel),
 							['ESL'].concat(input.EstimatedServiceLevels),
+							['ASA'].concat(input.AverageSpeedOfAnswer),
 							['Abandoned_rate'].concat(input.AbandonedRate)
 					  ],
 				type: 'area-spline',
@@ -559,14 +559,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					? [
 							['x'].concat(timeStamps),
 							['Forecasted_staffing'].concat(input.ForecastedStaffing),
-							['Actual_staffing'].concat(input.ActualStaffing),
-							['Scheduled_staffing'].concat(input.ScheduledStaffing)
+							['Scheduled_staffing'].concat(input.ScheduledStaffing),
+							['Actual_staffing'].concat(input.ActualStaffing)
 					  ]
 					: [
 							['x'].concat(timeStamps),
 							['Forecasted_staffing'].concat(input.ForecastedStaffing),
-							['Actual_staffing'].concat(input.ActualStaffing),
 							['Scheduled_staffing'].concat(input.ScheduledStaffing),
+							['Actual_staffing'].concat(input.ActualStaffing),
 							['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing)
 					  ],
 				type: 'area-spline',
@@ -578,14 +578,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				},
 				names: {
 					Forecasted_staffing: this.translate.instant('ForecastedStaff') + ' ←',
-					Actual_staffing: this.translate.instant('RequiredStaff') + ' ←',
 					Scheduled_staffing: this.translate.instant('ScheduledStaff') + ' ←',
+					Actual_staffing: this.translate.instant('RequiredStaff') + ' ←',
 					Updated_forecasted_staffing: this.translate.instant('ReforecastedStaff') + ' ←'
 				},
 				axes: {
 					Forecasted_staffing: 'y',
-					Actual_staffing: 'y',
 					Scheduled_staffing: 'y',
+					Actual_staffing: 'y',
 					Updated_forecasted_staffing: 'y'
 				}
 			};
