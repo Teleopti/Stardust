@@ -50,7 +50,7 @@ WfmTeamSchedule_SuggestShiftCategory_152 = RC
 WfmTeamSchedule_ShiftEditorInDayView_78295 = RC
 WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = RC
 WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 = true
-WfmTeamSchedule_VirtualRepeatInScheduleTable_80404 = DEV
+WfmTeamSchedule_VirtualRepeatInScheduleTable_80404 = RC
 
 # Code Monkeys, can any of these be removed? #
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
