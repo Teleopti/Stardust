@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Hosting;
 using System.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
 using System.Xml;
 using System.Xml.XPath;
@@ -28,9 +29,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		}
 	}
 
+	public class RunPayrollReturnObject
+	{
+		public RunPayrollReturnObject(XmlDocument xmlResult, List<PayrollResultDetailData> resultDetails)
+		{
+			XmlResult = xmlResult;
+			ResultDetails = resultDetails;
+		}
+		
+		public XmlDocument XmlResult;
+		public List<PayrollResultDetailData> ResultDetails;
+	}
+
 	public class AppdomainCreatorWrapper
 	{
-		public XmlDocument RunPayroll(ISdkServiceFactory sdkServiceFactory, PayrollExportDto payrollExportDto,
+		public RunPayrollReturnObject  RunPayroll(ISdkServiceFactory sdkServiceFactory, PayrollExportDto payrollExportDto,
 			RunPayrollExportEvent @event, Guid payrollResultId,
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback, string payrollBasePath)
 		{
@@ -53,7 +66,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			
 			var payrollResultString = appDomain.GetData(InterAppDomainParameters.PayrollResultParameter) as string;
 
-			if (appDomain.GetData(InterAppDomainParameters.PayrollResultDetailsParameter) is List<PayrollResultDetailData> payrollDetailsData)
+			var payrollResultDetailsParameterObject = appDomain.GetData(InterAppDomainParameters.PayrollResultDetailsParameter);
+			var payrollDetailsData = (List<PayrollResultDetailData>) payrollResultDetailsParameterObject;
+			if (payrollDetailsData != null)
 			{ 
 				foreach (var payrollDetailData in payrollDetailsData)
 				{
@@ -65,9 +80,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			AppDomain.Unload(appDomain);
 
 			var result = new XmlDocument();
-			if (payrollResultString != null)
+			if (!string.IsNullOrEmpty(payrollResultString))
 				result.LoadXml(payrollResultString);
-			return result;
+			return new RunPayrollReturnObject(result, payrollDetailsData);
 		}
 
 
@@ -92,7 +107,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		private static void runPayroll()
 		{
 			var appDomainArguments = AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) as InterAppDomainArguments;
-
+			AppDomain.CurrentDomain.SetData(InterAppDomainParameters.PayrollResultParameter, "");
+			
 			var sdkServiceFactory = appDomainArguments.SdkServiceFactory;
 			var feedback = sdkServiceFactory.CreatePayrollExportFeedback(appDomainArguments);
 
