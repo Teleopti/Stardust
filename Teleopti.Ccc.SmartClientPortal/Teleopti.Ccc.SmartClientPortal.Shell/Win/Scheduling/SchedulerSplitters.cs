@@ -198,21 +198,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer => lessIntellegentSplitContainerAdvMainContainer;
 
-		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get => _splitContainerView; private set => _splitContainerView = value; }
+		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get => _splitContainerView; }
 
-		public ChartControl ChartControlSkillData { get => _chartControlSkillData; private set => _chartControlSkillData = value; }
+		public ChartControl ChartControlSkillData { get => _chartControlSkillData; }
 
 		public ContextMenuStrip ContextMenuSkillGrid => _contextMenuSkillGrid;
 
 		public TabControlAdv TabSkillData => tabSkillData;
 
-		public ElementHost ElementHostRequests { get => _elementHostRequests; private set => _elementHostRequests = value; }
+		public ElementHost ElementHostRequests { get => _elementHostRequests; }
 
-		public HandlePersonRequestView HandlePersonRequestView1 { get => _handlePersonRequestView1; private set => _handlePersonRequestView1 = value; }
+		public HandlePersonRequestView HandlePersonRequestView1 { get => _handlePersonRequestView1; }
 
-		public ElementHost ElementHost1 { get => _elementHost1; private set => _elementHost1 = value; }
+		public ElementHost ElementHost1 { get => _elementHost1; }
 
-		public GridControl Grid { get => _grid; private set => _grid = value; }
+		public GridControl Grid { get => _grid; }
 
 		public SkillDayGridControl DayGridControl => _skillDayGridControl;
 
