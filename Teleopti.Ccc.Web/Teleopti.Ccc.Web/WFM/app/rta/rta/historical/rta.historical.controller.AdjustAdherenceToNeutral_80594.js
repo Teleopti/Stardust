@@ -46,6 +46,7 @@
                 data.OutOfAdherences = data.OutOfAdherences || [];
                 data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
                 data.ApprovedPeriods = data.ApprovedPeriods || [];
+                data.AdjustedToNeutralAdherences = data.AdjustedToNeutralAdherences || [];
                 data.Changes = data.Changes || [];
                 data.Timeline = data.Timeline || {};
                 data.Navigation = data.Navigation || {};
@@ -65,7 +66,16 @@
                 vm.outOfAdherences = buildOutOfAdherence(data.Timeline, data.OutOfAdherences);
                 vm.recordedOutOfAdherences = buildRecordedOutOfAdherences(data.Timeline, data.RecordedOutOfAdherences);
                 vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
-
+                
+                vm.showAdjustedToNeutralAdherences = data.AdjustedToNeutralAdherences.length > 0;
+                vm.adjustedToNeutralAdherences = data.AdjustedToNeutralAdherences
+                    .map(function (period) {
+                        return {
+                            StartTime: moment(period.StartTime).format('LTS'),
+                            EndTime: moment(period.EndTime).format('LTS')
+                        }
+                    });
+                
                 vm.fullTimeline = buildTimeline(data);
                 timelineStart = data.Timeline.StartTime;
                 timelineEnd = data.Timeline.EndTime;
