@@ -74,11 +74,19 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 	}
 
 	checkNewCalendarName() {
+		if (this.checkNameAlreadyExisting() || this.checkNameIsEmpty()) {
+			return;
+		}
+
+		this.saveNewBankCalendar();
+	}
+
+	checkNameAlreadyExisting(): boolean {
 		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(c => {
 			return c.Id !== this.newCalendarId && c.Name.trim() === this.newCalendarName.trim();
 		});
 
-		this.checkNameIsEmpty();
+		return this.nameAlreadyExisting;
 	}
 
 	checkNameIsEmpty(): boolean {
@@ -102,7 +110,7 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 	}
 
 	dateChangeCallback(date: Date) {
-		if (this.checkNameIsEmpty()) {
+		if (this.checkNameAlreadyExisting() || this.checkNameIsEmpty()) {
 			return;
 		}
 
@@ -179,57 +187,76 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 		return moment(currentDate, this.dateFormat) < moment(nextDate, this.dateFormat) ? -1 : 0;
 	}
 
-	saveNewBankCalendar(newDate: BankHolidayCalendarDateItem) {
+	saveNewBankCalendar(newDate?: BankHolidayCalendarDateItem) {
 		const bankHolidayCalendar: BankHolidayCalendar = {
 			Id: this.newCalendarId,
 			Name: this.newCalendarName,
-			Years: this.buildYearsForPost(this.newCalendarYears)
+			Years: newDate ? this.buildYearsForPost(this.newCalendarYears, newDate) : []
 		};
 
 		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
 			if (result.Id.length > 0) {
 				this.newCalendarId = result.Id;
+				this.newCalendarName = result.Name;
 				bankHolidayCalendar.Id = result.Id;
 
-				const calItem = result as BankHolidayCalendarItem;
-				calItem.Years.forEach((y, i) => {
+				result.Years.forEach((y, i) => {
 					y.Year = y.Year.toString();
 					y.Dates.forEach(d => {
 						d.Date = moment(d.Date, this.dateFormat).format(this.dateFormat);
-						if (d.Date === newDate.Date) {
+						d.IsLastAdded = false;
+
+						if (newDate && newDate.Date === d.Date) {
 							d.IsLastAdded = true;
 						}
 					});
 					y.Active = true;
 				});
-				this.newCalendarYearsForDisplay = calItem.Years;
-				this.newCalendarYears = calItem.Years;
+				this.newCalendarYearsForDisplay = result.Years;
+				this.newCalendarYears = result.Years;
 
-				if (this.bankHolidayCalendarsList.indexOf(bankHolidayCalendar) === -1) {
-					this.bankHolidayCalendarsList.push(bankHolidayCalendar);
-					this.bankCalendarDataService.bankHolidayCalendarsList$.next(this.bankHolidayCalendarsList);
-				}
+				this.updateBankHolidayCalendarList(result);
 			} else {
 				this.networkError();
 			}
 		}, this.networkError);
 	}
 
-	buildYearsForPost(years: BankHolidayCalendarYear[]): BankHolidayCalendarYear[] {
-		return years.map(year => {
-			const dates = year.Dates.map(date => {
+	buildYearsForPost(
+		years: BankHolidayCalendarYear[],
+		newDate: BankHolidayCalendarDateItem
+	): BankHolidayCalendarYear[] {
+		return years
+			.filter(y => y.Year === moment(newDate.Date, this.dateFormat).format(this.yearFormat))
+			.map(year => {
+				const dates = [newDate].map(date => {
+					return {
+						Id: date.Id,
+						Date: date.Date,
+						Description: date.Description,
+						IsDeleted: date.IsDeleted
+					};
+				});
+
 				return {
-					Date: date.Date,
-					Description: date.Description,
-					IsDeleted: date.IsDeleted
+					Year: year.Year,
+					Dates: dates
 				};
 			});
+	}
 
-			return {
-				Year: year.Year,
-				Dates: dates
-			};
-		});
+	updateBankHolidayCalendarList(bankHolidayCalendar: BankHolidayCalendar) {
+		const currentCalendar = this.bankHolidayCalendarsList.filter(
+			calendar => calendar.Id === bankHolidayCalendar.Id
+		);
+		if (currentCalendar.length === 0) {
+			this.bankHolidayCalendarsList.push(bankHolidayCalendar);
+			this.bankCalendarDataService.bankHolidayCalendarsList$.next(this.bankHolidayCalendarsList);
+		} else {
+			currentCalendar[0].Name = bankHolidayCalendar.Name;
+			currentCalendar[0].Years = bankHolidayCalendar.Years;
+			this.bankCalendarDataService.bankHolidayCalendarsList$.next(this.bankHolidayCalendarsList);
+		}
 	}
 
 	networkError = (error?: any) => {
