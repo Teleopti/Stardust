@@ -112,8 +112,8 @@
 								>
 									<div nz-tooltip nzTitle="{{node.tooltip}}"
 										class="heatmap-box"
-										[ngClass]="{ 'heatmap-closed': node.ColorId===4}"
-										[style.background-color]="node.bgcolor" (click)="updateIntervalDetails(node)"
+										[ngClass]="{ 'heatmap-closed': node.ColorId===4, 'selected':node.selected}"
+										[style.background-color]="node.bgcolor" (click)="updateIntradayDetails(node, subnode.SkillName)"
 									>
 										<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">
 											{{node.DisplayedPercent}}
@@ -125,8 +125,8 @@
 					</nz-table>
 				</div>
 			</div>
-			<div *ngIf="selectedDay">
-				<plans-intraday [chartData]="selectedDay"></plans-intraday>
+			<div *ngIf="selectedDay" style="margin-top: 10px;">
+				<plans-intraday [chartData]="selectedDay" [skill]="selectedSkill"></plans-intraday>
 			</div>
 		</nz-tab>
 		<nz-tab [nzTitle]="titleTemplate">

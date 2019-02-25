@@ -42,6 +42,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	worstOverStaffDay: any;
 	showNumbers: false;
 	selectedDay = null;
+	selectedSkill: string = null;
 
 	validationFilter;
 
@@ -223,8 +224,18 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;	
 	}
 	
-	public updateIntervalDetails(selectedDay){
-		this.selectedDay = selectedDay;
+	public updateIntradayDetails(selectedDay, skillName){
+		if(this.selectedDay) {
+			this.selectedDay.selected = false;
+		}
+		if(this.selectedDay === selectedDay){
+			this.selectedDay = null;
+			this.selectedSkill = null;
+		} else{
+			this.selectedDay = selectedDay;
+			this.selectedDay.selected = true;
+			this.selectedSkill = skillName;
+		}
 	}
 
 	private checkProgress = () => {

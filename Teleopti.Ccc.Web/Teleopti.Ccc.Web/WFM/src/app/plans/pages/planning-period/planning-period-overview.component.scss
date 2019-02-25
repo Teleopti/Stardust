@@ -109,6 +109,10 @@ table.overview {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
 }
 
+.heatmap-box.selected {
+	outline: 3px rgba(0, 0, 0, 0.54) solid;
+}
+
 .heatmap-day{
 	background-color: rgba(0, 0, 0, 0.1);
 	padding: 0 !important;

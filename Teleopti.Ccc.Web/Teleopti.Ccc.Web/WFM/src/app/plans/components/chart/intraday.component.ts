@@ -10,12 +10,13 @@ import * as moment from 'moment';
 })
 export class IntradayComponent implements OnChanges {
 	chart: c3.ChartAPI;
-	skill: string;
 	date;
 
 	@Input()
 	chartData;
-
+	@Input()
+	skill: string;
+	
 	constructor(private translate: TranslateService) {}
 
 
