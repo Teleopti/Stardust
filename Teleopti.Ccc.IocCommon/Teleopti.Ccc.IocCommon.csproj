@@ -164,7 +164,7 @@
     <Compile Include="Configuration\MbCacheLog4NetListener.cs" />
     <Compile Include="Configuration\MessageBrokerServerModule.cs" />
     <Compile Include="Configuration\MessageBrokerUnitOfWorkModule.cs" />
-    <Compile Include="Configuration\MonitorModule.cs" />
+    <Compile Include="Configuration\StatusModule.cs" />
     <Compile Include="Configuration\NotificationModule.cs" />
     <Compile Include="Configuration\OutboundScheduledResourcesProviderModule.cs" />
     <Compile Include="Configuration\PeopleAreaModule.cs" />
