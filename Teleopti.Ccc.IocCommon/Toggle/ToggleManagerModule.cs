@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
 				_iocArgs.Cache.This<IFetchToggleOverride>(x => 
 					x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle))
-						.OverrideCache(new InMemoryCache(1)));	
+						.OverrideCache(new InMemoryCache(TimeSpan.FromMinutes(1))));	
 			}
 			
 			if (string.IsNullOrEmpty(pathToToggle))
