@@ -23,7 +23,7 @@ using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Flaky test again")]
+	[StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public TestLog TestLog;
 
 
-		[Test, Ignore("Flaky test again")]
+		[Test]
 		public void ShouldRunEndToEndAbsenceRequest()//[Range(1, 50, 1)] int rangeCount
 		{
 			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);

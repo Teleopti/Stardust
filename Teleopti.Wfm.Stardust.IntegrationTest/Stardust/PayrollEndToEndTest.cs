@@ -22,7 +22,7 @@ using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Flaky test again")]
+	[StardustTest]
 	public class PayrollEndToEndTest
 	{
 		public IStardustSender StardustSender;
@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private AssertRetryStrategy _assertRetryStrategy;
 
-		[Test, Ignore("Flaky test again")]
+		[Test]
 		public void ShouldPublishAndProcessPayrollJob()
 		{
 			_assertRetryStrategy = new AssertRetryStrategy(100);

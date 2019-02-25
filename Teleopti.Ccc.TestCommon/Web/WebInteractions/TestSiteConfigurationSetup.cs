@@ -29,8 +29,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		private static readonly SettingsFileManager settingsFile = new SettingsFileManager();
 
-		public static void Setup(bool runStardust = false, TestLog testlog = null)
+		public static void Setup(bool runStardust = false, TestLog testlog = null, int? firstPortUsed = null)
 		{
+			if (firstPortUsed != null)
+				customPortLastUsed = firstPortUsed.GetValueOrDefault();
+
 			_portsConfiguration = RandomPortsAndUrls(testlog);
 			
 			writeWebConfigs();

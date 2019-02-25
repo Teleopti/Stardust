@@ -33,11 +33,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IConfigReader ConfigReader;
 		public TestLog TestLog;
 
+		private static int lastPortUsed = 57000;
+
 		public override void BeforeTest(ITest testDetails)
 		{
 			base.BeforeTest(testDetails);
-			TestSiteConfigurationSetup.Setup();
-
+			TestSiteConfigurationSetup.Setup(false,null, lastPortUsed);
+			lastPortUsed += 3;
+			
 			var dataHash = DefaultDataCreator.HashValue;
 			var path = "";
 #if DEBUG
