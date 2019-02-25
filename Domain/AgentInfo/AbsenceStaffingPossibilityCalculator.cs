@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingIntervalUnderStaffing = skillStaffingIntervalUnderStaffing;
 		}
 
-		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
+		public CalculatedPossibilityModelResult CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
 		{
 			var periodWithYesterdayAndToday = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate);
 			var scheduleDictionary = loadScheduleDictionary(person, periodWithYesterdayAndToday);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				workflowControlSet.AbsenceRequestOpenPeriods.Any() &&
 				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone()), date));
 
-			return calculatePossibilities(person, skillStaffingData, scheduleDictionary);
+			return new CalculatedPossibilityModelResult(scheduleDictionary, calculatePossibilities(person, skillStaffingData, scheduleDictionary));
 		}
 
 		private Dictionary<DateOnly, bool> getShrinkageStatusAccordingToPeriods(IPerson person, DateOnlyPeriod period)

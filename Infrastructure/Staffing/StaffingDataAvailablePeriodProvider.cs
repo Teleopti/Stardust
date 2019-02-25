@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 			}
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+			var today = _now.CurrentLocalDate(timeZone);
 
 			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
 			var maxEndDate = today.AddDays(staffingInfoAvailableDays);

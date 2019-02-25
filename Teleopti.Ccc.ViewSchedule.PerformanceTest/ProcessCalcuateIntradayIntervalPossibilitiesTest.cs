@@ -20,10 +20,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 {
-	public class ProcessCalcuateIntradayIntervalPossibilitiesTestAttribute : RequestPerformanceTuningTestAttribute
+	public class ProcessCalculateIntradayIntervalPossibilitiesTestAttribute : RequestPerformanceTuningTestAttribute
 	{
 		protected override void Isolate(IIsolate isolate)
 		{
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		}
 	}
 
-	[ProcessCalcuateIntradayIntervalPossibilitiesTest]
-	public class ProcessCalcuateIntradayIntervalPossibilities
+	[ProcessCalculateIntradayIntervalPossibilitiesTest]
+	public class ProcessCalculateIntradayIntervalPossibilities
 	{
 		private const string tenantName = "Teleopti WFM";
 		private readonly Guid businessUnitId = new Guid("1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B");
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var elapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, getTodayDateOnlyPeriod(), StaffingPossiblityType.Absence) / personCount;
+				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, getTodayDateOnlyPeriod(), StaffingPossiblityType.Absence) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var elapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Absence) / personCount;
+				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Absence) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var elapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Overtime) / personCount;
+				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Overtime) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			return new DateOnly(usersNow).ToDateOnlyPeriod();
 		}
 
-		private long calcuatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod, StaffingPossiblityType staffingPossiblityType)
+		private long calculatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod, StaffingPossiblityType staffingPossiblityType)
 		{
 			long totalElapsedMilliseconds = 0;
 
@@ -163,7 +162,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
 				var possibilities = staffingPossiblityType == StaffingPossiblityType.Absence
-					? AbsenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod)
+					? AbsenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod).Models
 					: OvertimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod, true);
 				stopwatch.Stop();
 				totalElapsedMilliseconds += stopwatch.ElapsedMilliseconds;
@@ -216,8 +215,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
 				period.StaffingThresholdValidator = new StaffingThresholdValidator();
 				period.AbsenceRequestProcess = new GrantAbsenceRequest();
-				var datePeriod = period as AbsenceRequestOpenDatePeriod;
-				if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
+				if (period is AbsenceRequestOpenDatePeriod datePeriod) datePeriod.Period = period.OpenForRequestsPeriod;
 			}
 		}
 	}
