@@ -100,10 +100,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
 			int resolution, bool useShrinkage, IList<ISkillDay> skillDays, Func<DateOnly, bool> dayFilter)
 		{
-			var days = period.DayCollection();
+			IEnumerable<DateOnly> days = period.DayCollection();
 			if (dayFilter != null)
 			{
-				days = days.Where(dayFilter).ToList();
+				days = days.Where(dayFilter);
 			}
 
 			var dayStaffingDatas = days.Select(day => new

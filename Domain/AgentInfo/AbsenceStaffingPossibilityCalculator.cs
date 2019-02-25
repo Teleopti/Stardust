@@ -44,10 +44,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skills = getSupportedPersonSkills(person, period).Select(s => s.Skill).ToArray();
 			var useShrinkageDic = getShrinkageStatusAccordingToPeriods(person, period);
 			var workflowControlSet = person.WorkflowControlSet;
-			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date =>
-				workflowControlSet?.AbsenceRequestOpenPeriods != null &&
-				workflowControlSet.AbsenceRequestOpenPeriods.Any() &&
-				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone()), date));
+			var currentLocalDate = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
+			var workflowControlSetHasOpenAbsenceRequestPeriods = workflowControlSet?.AbsenceRequestOpenPeriods != null &&
+																 workflowControlSet.AbsenceRequestOpenPeriods.Any();
+			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date => workflowControlSetHasOpenAbsenceRequestPeriods &&
+																										   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(currentLocalDate, date));
 
 			return new CalculatedPossibilityModelResult(scheduleDictionary, calculatePossibilities(person, skillStaffingData, scheduleDictionary));
 		}
