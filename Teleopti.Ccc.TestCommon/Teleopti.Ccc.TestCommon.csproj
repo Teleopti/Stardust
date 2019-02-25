@@ -352,6 +352,7 @@
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
     <Compile Include="IoC\AddDatasourceId.cs" />
+    <Compile Include="IoC\IocRegistrationTest.cs" />
     <Compile Include="IoC\NoDefaultDataAttribute.cs" />
     <Compile Include="IoC\ParallelTestExtensions.cs" />
     <Compile Include="PersistedTypeMapperForTest.cs" />

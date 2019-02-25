@@ -196,6 +196,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="..\..\Domain\FeatureFlags\toggles.txt">
+      <Link>FeatureFlags\toggles.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Payroll.DeployNew\TestBrokenExtension\Teleopti.Ccc.Payroll.dll.dllj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
