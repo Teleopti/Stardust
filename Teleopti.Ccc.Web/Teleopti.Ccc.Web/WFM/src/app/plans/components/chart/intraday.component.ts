@@ -5,56 +5,62 @@ import * as moment from 'moment';
 
 @Component({
 	selector: 'plans-intraday',
-	templateUrl: './intraday.html'
+	templateUrl: './intraday.component.html',
+	styleUrls: ['./intraday.component.scss']
 })
 export class IntradayComponent implements OnChanges {
 	chart: c3.ChartAPI;
-	hiddenArray: string[] = [];
 
 	constructor(private translate: TranslateService) {}
 
 	@Input()
 	chartData: c3.Data;
 
-	emptyChart = {
-		x: 'x',
-		type: 'area-spline',
-		columns: [],
-		empty: { label: { text: this.translate.instant('NoDataAvailable') } }
-	};
-
 	private intervalDetailsToC3Data(input): c3.Data {
 		if(input && input.length>0){
-			const timeStamps = input.map(item => {
-				return moment.utc(item.x, "HH:mm");
+			
+			let timeStamps = [];
+			let forecastedAgents = [];
+			let scheduledAgents = [];
+			let overStaffing = [];
+			let staffingScaffold = [];
+			let underStaffing = [];
+			input.forEach(item => {
+				timeStamps.push(moment.utc(item.x, "HH:mm"));
+				forecastedAgents.push(item.f);
+				scheduledAgents.push(item.s);
+				let diff = item.s-item.f;
+				staffingScaffold.push(diff>0?item.f:item.s);
+				overStaffing.push(diff>0?diff:0);
+				underStaffing.push(diff<0?-diff:0);
 			});
-			const forecastedAgents = input.map(item => {
-				return item.f;
-			});
-			const scheduledAgents = input.map(item => {
-				return item.s;
-			});
+			
 			return {
 				x: 'x',
-				xFormat: '%H:%M',
 				columns: [
 					['x'].concat(timeStamps),
 					['Forecasted'].concat(forecastedAgents),
 					['Scheduled'].concat(scheduledAgents),
+					['StaffingScaffold'].concat(staffingScaffold),
+					['OverStaffing'].concat(overStaffing),
+					['UnderStaffing'].concat(underStaffing)
 				],
-				type: 'area-spline',
+				order: 'null',
+				type: 'bar',
+				types: {
+					'Forecasted': "line",
+					'Scheduled': "line"
+				},
 				colors: {
-					Forecasted: '#99D6FF',
-					Scheduled: '#0099FF',
+					'StaffingScaffold': '#FFFFFF',
+					'OverStaffing': '#0a84d6',
+					'UnderStaffing': '#D32F2F'
 				},
 				names: {
 					Forecasted: this.translate.instant('ForecastedAgents'),
 					Scheduled: this.translate.instant('ScheduledAgents'),
 				},
-				axes: {
-					Forecasted: 'y',
-					Scheduled: 'y',
-				}
+				groups: [['StaffingScaffold', 'OverStaffing', 'UnderStaffing']]
 			}
 		} else {
 			return {
@@ -72,7 +78,7 @@ export class IntradayComponent implements OnChanges {
 		}
 	}
 
-	initChart(inData: c3.Data) {
+	private initChart(inData: c3.Data) {
 		if (this.chart) {
 			this.chart.destroy();
 		}
@@ -80,6 +86,12 @@ export class IntradayComponent implements OnChanges {
 			const chartObject: c3.ChartConfiguration = {
 				bindto: '#chart',
 				data: inData,
+				point: {
+					show: false
+				},
+				legend: {
+					hide: ['StaffingScaffold']
+				},
 				axis: {
 					x: {
 						type: 'timeseries',
@@ -95,17 +107,10 @@ export class IntradayComponent implements OnChanges {
 						}
 					},
 					y: {
-						label: {
-							text: this.translate.instant('Agents'),
-							position: 'outer-middle'
-						},
 						tick: {
 							format: d3.format('.1f')
 						}
 					},
-				},
-				transition: {
-					duration: 100
 				}
 			};
 			this.chart = c3.generate(chartObject);

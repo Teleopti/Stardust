@@ -2427,9 +2427,10 @@
     <Content Include="WFM\src\app\people\shared\workspace.service.ts" />
     <Content Include="WFM\src\app\people\utils\count-roles.ts" />
     <Content Include="WFM\src\app\people\utils\index.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.scss" />
     <Content Include="WFM\src\app\plans\components\chart\index.ts" />
     <Content Include="WFM\src\app\plans\components\chart\intraday.component.ts" />
-    <Content Include="WFM\src\app\plans\components\chart\intraday.html" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.html" />
     <Content Include="WFM\src\app\plans\components\index.ts" />
     <Content Include="WFM\src\app\plans\components\title-bar\index.ts" />
     <Content Include="WFM\src\app\plans\components\title-bar\title-bar.component.html" />
