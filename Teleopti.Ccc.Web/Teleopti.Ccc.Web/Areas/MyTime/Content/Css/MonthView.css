@@ -96,7 +96,10 @@
 	border-radius: 2px;
 }
 
-.cal-day-outmonth {
+.cal-day-outmonth .day-header-day,
+.cal-day-outmonth .dayoff,
+.cal-day-outmonth .absence,
+.cal-day-outmonth .shift {
 	opacity: 0.3;
 }
 

@@ -144,4 +144,24 @@ $(document).ready(function () {
 
 		equal(_hash, 'Schedule/Week');
 	});
+
+	test('should indicate bankholiday', function() {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+
+		vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({
+			ScheduleDays: [
+				{
+					BankHolidayCalendar: {
+						CalendarId: 'c50b3a81-dc8a-44ce-820d-08c6f0e798fe',
+						CalendarName: 'China Bank Holiday',
+						DateDescription: 'A bank holiday calendar'
+					}
+				}
+			]
+		});
+		equal(vm.weekViewModels()[0].dayViewModels()[0].bankHoliday.calendarId, 'c50b3a81-dc8a-44ce-820d-08c6f0e798fe');
+		equal(vm.weekViewModels()[0].dayViewModels()[0].bankHoliday.calendarName, 'China Bank Holiday');
+		equal(vm.weekViewModels()[0].dayViewModels()[0].bankHoliday.dateDescription, 'A bank holiday calendar');
+	});
 });
