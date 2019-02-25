@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var lastJobResult = planningPeriod.GetLastSchedulingJob();
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
-				var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
+				var jobResultDetail = lastJobResult.Details.Last();
+				var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(jobResultDetail.Message);
 				fullSchedulingResultModel.BusinessRulesValidationResults = HintsHelper.BuildBusinessRulesValidationResults(fullSchedulingResultModel.BusinessRulesValidationResults, _userTimeZone);
 				return Ok(new
 				{
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						StartDate = range.StartDate.Date,
 						EndDate = range.EndDate.Date
 					},
-					FullSchedulingResult = fullSchedulingResultModel
+					FullSchedulingResult = fullSchedulingResultModel,
+					LastUpdated = TimeZoneHelper.ConvertFromUtc(jobResultDetail.Timestamp, _userTimeZone.TimeZone())
 				});
 			}
 			return Ok(new {});

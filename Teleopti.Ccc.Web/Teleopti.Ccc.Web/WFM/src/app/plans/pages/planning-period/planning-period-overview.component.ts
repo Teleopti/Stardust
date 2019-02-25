@@ -48,6 +48,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	skills;
 	filteredSkills;
+	lastUpdated;
 	
 	forTesting = false;
 
@@ -391,6 +392,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			const fullSchedulingResult = data.FullSchedulingResult;
 			if (fullSchedulingResult) {
 				this.isScheduled = true;
+				this.lastUpdated = moment(data.LastUpdated).format('YYYY-MM-DD HH:mm');
 				this.scheduledAgents = data.FullSchedulingResult.ScheduledAgentsCount;
 				this.valData.scheduleIssues = data.FullSchedulingResult.BusinessRulesValidationResults;
 				this.scheduleIssuesFilterControl.updateValueAndValidity();

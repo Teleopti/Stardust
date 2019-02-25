@@ -30,9 +30,10 @@
 
 			<div *ngIf="skills&&skills.length>0" style="overflow: auto">
 				<h2>Scheduled skills heatmap</h2>
+				<div>Updated: {{lastUpdated}}</div>
 	
-				<div nz-row>
-					<span style="margin-left: 20px" nz-col [nzSpan]="8">
+				<div nz-row style="margin-top: 10px">
+					<span nz-col [nzSpan]="8">
 						<nz-input-group
 								[nzSuffix]="suffixSkillMapTemplate"
 								[nzPrefix]="prefixSkillMapTemplate"
