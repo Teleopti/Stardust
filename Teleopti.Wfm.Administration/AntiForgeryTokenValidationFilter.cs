@@ -15,9 +15,11 @@ namespace Teleopti.Wfm.Administration
 			if (actionContext.ActionDescriptor.GetCustomAttributes<OverrideAuthenticationAttribute>().Any()) return;
 
 			var cookieToken = GetCookieToken(actionContext);
+			if (string.IsNullOrEmpty(cookieToken)) return;
+
 			var headerToken = GetHeaderToken(actionContext);
 			
-			if (string.IsNullOrEmpty(headerToken) || string.IsNullOrEmpty(cookieToken) || cookieToken != headerToken) throw new HttpAntiForgeryException();
+			if (string.IsNullOrEmpty(headerToken) || cookieToken != headerToken) throw new HttpAntiForgeryException();
 		}
 
 		private string GetHeaderToken(HttpActionContext actionContext)
