@@ -135,7 +135,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if exist "$(ProjectDir)..\packages\Teleopti.Cube.Xmla.8.1.423\CreateDatabase.xmla" XCOPY "$(ProjectDir)..\packages\Teleopti.Cube.Xmla.8.1.423\CreateDatabase.xmla" "$(ProjectDir)bin\$(Configuration)\" /Y</PreBuildEvent>
+    <PreBuildEvent>if exist "$(ProjectDir)..\packages\Teleopti.Cube.Xmla.8.1.422\CreateDatabase.xmla" XCOPY "$(ProjectDir)..\packages\Teleopti.Cube.Xmla.8.1.422\CreateDatabase.xmla" "$(ProjectDir)bin\$(Configuration)\" /Y</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

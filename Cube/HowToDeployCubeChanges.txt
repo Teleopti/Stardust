@@ -1,7 +1,7 @@
 1. Make you changes in the Teleopti Analytics cube solution. 
 2. Open the Cube/build folder and run 1-BuildXMLA.bat and then 2-uploadNugetPackage.cmd. Set the version number to current +1.
 3. Check that you new nuget package is uploaded at \\hestia\nugetpackages\Teleopti.Cube.Xmla.8.1.xxx.nupkg
-4. Update the version number in Teamcity build step
+4. Update the version number in [your base repo dir]\.nuget\packages.config
 5. Update the version number for Teleopti.Cube.Xmla directory in [your base repo dir]\Teleopti.Ccc.AnalysisServicesManager\Teleopti.Ccc.AnalysisServicesManager.csproj under 
 properties "Build Events"
-6. Push your changes to git as usual.
+6. Push you changes in hg as usual.
