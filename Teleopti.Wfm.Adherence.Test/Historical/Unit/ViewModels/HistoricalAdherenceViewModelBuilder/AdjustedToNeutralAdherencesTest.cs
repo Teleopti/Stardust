@@ -44,5 +44,19 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			data.AdjustedToNeutralAdherences.Last().StartTime.Should().Be("2019-02-25T09:00:00");
 			data.AdjustedToNeutralAdherences.Last().EndTime.Should().Be("2019-02-25T10:00:00");
 		}
+		
+		[Test]
+		public void ShouldNotGetAdjustedToNeutralAdherencesThatDoNotIntersectBuiltDate()
+		{
+			Now.Is("2019-02-26 15:00");
+			var person = Guid.NewGuid();
+			History
+				.AdjustedAdherenceToNeutral("2019-02-24 08:00", "2019-02-24 09:00")
+				.AdjustedAdherenceToNeutral("2019-02-25 09:00", "2019-02-25 10:00");
+			var data = Target.Build(person, new DateOnly("2019-02-25".Utc()));
+
+			data.AdjustedToNeutralAdherences.Single().StartTime.Should().Be("2019-02-25T09:00:00");
+			data.AdjustedToNeutralAdherences.Single().EndTime.Should().Be("2019-02-25T10:00:00");
+		}
 	}
 }

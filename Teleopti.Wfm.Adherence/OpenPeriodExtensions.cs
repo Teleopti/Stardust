@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Adherence
 		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, OpenPeriod toSubtract)
 		{
 			var timePeriods = new List<OpenPeriod>();
-			if (subtractFrom.intersects(toSubtract))
+			if (subtractFrom.Intersects(toSubtract))
 			{
 				if (subtractFrom.startsBefore(toSubtract))
 					timePeriods.Add(new OpenPeriod(subtractFrom.StartTime, toSubtract.StartTime));
@@ -51,7 +51,7 @@ namespace Teleopti.Wfm.Adherence
 				.OrderBy(x => x.StartTime)
 				.ForEach(x =>
 				{
-					if (result.Any() && result.Last().intersects(x))
+					if (result.Any() && result.Last().Intersects(x))
 						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
 					else
 						result.Add(x);
@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.Adherence
 			return result;
 		}
 
-		private static bool intersects(this OpenPeriod instance, OpenPeriod period)
+		public static bool Intersects(this OpenPeriod instance, OpenPeriod period)
 		{
 			var startsAfterPeriodEnds = instance.StartTime > period.EndTime;
 

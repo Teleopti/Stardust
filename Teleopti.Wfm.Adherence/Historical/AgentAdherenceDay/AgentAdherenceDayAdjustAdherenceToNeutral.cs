@@ -233,12 +233,21 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			approvedPeriods
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
-		
-		private IEnumerable<AdherencePeriod> calculateAdjustedToNeutralPeriods(IEnumerable<OpenPeriod> adjustedToNeutralPeriods) =>
-			adjustedToNeutralPeriods
+
+		private IEnumerable<AdherencePeriod> calculateAdjustedToNeutralPeriods(IEnumerable<OpenPeriod> adjustedToNeutralPeriods)
+		{
+			var displayPeriodAsOpenPeriod = new OpenPeriod
+			{
+				StartTime = _calculatedDisplayPeriod.GetValueOrDefault().StartDateTime,
+				EndTime = _calculatedDisplayPeriod.GetValueOrDefault().EndDateTime
+			};
+			
+			return adjustedToNeutralPeriods
+				.Where(p => p.Intersects(displayPeriodAsOpenPeriod))
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
-
+		}
+		
 		private static int? calculateSecondsInAdherence(
 			DateTimePeriod shift,
 			DateTime now,
