@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs/';
 import { NzNotificationService } from 'ng-zorro-antd';
@@ -16,35 +16,43 @@ import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 	templateUrl: './bank-holiday-calendar-add.component.html',
 	styleUrls: ['./bank-holiday-calendar-add.component.scss']
 })
-export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
+export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Input() exit: Function;
+	@ViewChild('calendarNameInput') calendarNameInputElment: ElementRef;
 
 	yearFormat = this.bankCalendarDataService.yearFormat;
 	dateFormat = this.bankCalendarDataService.dateFormat;
 
-	bankHolidayCalendarsList: BankHolidayCalendarItem[];
-
 	newCalendarName = '';
 	nameAlreadyExisting = false;
+	isNewCalendarNameEmpty = false;
+	newCalendarId = null;
 
+	showDatePicker: boolean;
 	selectedYearDate: Date;
 	newCalendarYears: BankHolidayCalendarYear[] = [];
 	newCalendarYearsForDisplay: BankHolidayCalendarYear[] = [];
 	selectedDatesTimeList: number[] = [];
-	showDatePicker: boolean;
+	bankHolidayCalendarsList: BankHolidayCalendar[];
+
 	menuSubscription: Subscription;
+	bankHolidayListSubscription: Subscription;
 
 	constructor(
-		private bankCalendarDataService: BankCalendarDataService,
+		public bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
 		private noticeService: NzNotificationService,
 		private menuService: ToggleMenuService
 	) {}
 
 	ngOnInit(): void {
-		this.bankCalendarDataService.bankHolidayCalendarsList$.subscribe(calendars => {
-			this.bankHolidayCalendarsList = calendars;
-		});
+		this.newCalendarName = this.translate.instant('BankHolidayCalendar') + moment().format(this.dateFormat);
+
+		this.bankHolidayListSubscription = this.bankCalendarDataService.bankHolidayCalendarsList$.subscribe(
+			calendars => {
+				this.bankHolidayCalendarsList = calendars;
+			}
+		);
 
 		this.menuSubscription = this.menuService.showMenu$.subscribe(isMenuVisible => {
 			this.showDatePicker = false;
@@ -54,14 +62,28 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	ngAfterViewInit(): void {
+		setTimeout(() => {
+			this.calendarNameInputElment.nativeElement.select();
+		}, 0);
+	}
+
 	ngOnDestroy(): void {
+		this.bankHolidayListSubscription.unsubscribe();
 		this.menuSubscription.unsubscribe();
 	}
 
 	checkNewCalendarName() {
-		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(
-			c => c.Name.trim() === this.newCalendarName.trim()
-		);
+		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(c => {
+			return c.Id !== this.newCalendarId && c.Name.trim() === this.newCalendarName.trim();
+		});
+
+		this.checkNameIsEmpty();
+	}
+
+	checkNameIsEmpty(): boolean {
+		this.isNewCalendarNameEmpty = !this.newCalendarName;
+		return this.isNewCalendarNameEmpty;
 	}
 
 	highlightDate(currentDate: any): boolean {
@@ -80,6 +102,10 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 	}
 
 	dateChangeCallback(date: Date) {
+		if (this.checkNameIsEmpty()) {
+			return;
+		}
+
 		const dateString = moment(date, this.dateFormat).format(this.dateFormat);
 		const timeStamp = new Date(dateString).getTime();
 
@@ -96,7 +122,7 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 		this.selectedDatesTimeList.push(timeStamp);
 
 		this.addDateToYear(newDate);
-		this.saveNewBankCalendar();
+		this.saveNewBankCalendar(newDate);
 	}
 
 	resetLastAddedDateItem() {
@@ -146,30 +172,43 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 		const timeStampIdx = this.selectedDatesTimeList.indexOf(new Date(date.Date).getTime());
 		this.selectedDatesTimeList.splice(timeStampIdx, 1);
 
-		this.saveNewBankCalendar();
+		this.saveNewBankCalendar(date);
 	}
 
 	sortDateOrYearAscending(currentDate: any, nextDate: any) {
 		return moment(currentDate, this.dateFormat) < moment(nextDate, this.dateFormat) ? -1 : 0;
 	}
 
-	saveNewBankCalendar() {
+	saveNewBankCalendar(newDate: BankHolidayCalendarDateItem) {
 		const bankHolidayCalendar: BankHolidayCalendar = {
+			Id: this.newCalendarId,
 			Name: this.newCalendarName,
 			Years: this.buildYearsForPost(this.newCalendarYears)
 		};
 
 		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
 			if (result.Id.length > 0) {
+				this.newCalendarId = result.Id;
+				bankHolidayCalendar.Id = result.Id;
+
 				const calItem = result as BankHolidayCalendarItem;
 				calItem.Years.forEach((y, i) => {
+					y.Year = y.Year.toString();
 					y.Dates.forEach(d => {
 						d.Date = moment(d.Date, this.dateFormat).format(this.dateFormat);
+						if (d.Date === newDate.Date) {
+							d.IsLastAdded = true;
+						}
 					});
 					y.Active = true;
 				});
 				this.newCalendarYearsForDisplay = calItem.Years;
-				this.newCalendarYears = calItem.Years.concat();
+				this.newCalendarYears = calItem.Years;
+
+				if (this.bankHolidayCalendarsList.indexOf(bankHolidayCalendar) === -1) {
+					this.bankHolidayCalendarsList.push(bankHolidayCalendar);
+					this.bankCalendarDataService.bankHolidayCalendarsList$.next(this.bankHolidayCalendarsList);
+				}
 			} else {
 				this.networkError();
 			}
@@ -177,19 +216,20 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy {
 	}
 
 	buildYearsForPost(years: BankHolidayCalendarYear[]): BankHolidayCalendarYear[] {
-		const result: BankHolidayCalendarYear[] = [];
-		years.forEach(y => {
-			const dates = [...y.Dates];
-			dates.forEach(d => {
-				delete d.IsLastAdded;
+		return years.map(year => {
+			const dates = year.Dates.map(date => {
+				return {
+					Date: date.Date,
+					Description: date.Description,
+					IsDeleted: date.IsDeleted
+				};
 			});
 
-			result.push({
-				Year: y.Year,
+			return {
+				Year: year.Year,
 				Dates: dates
-			});
+			};
 		});
-		return result.filter(y => y.Dates.length > 0);
 	}
 
 	networkError = (error?: any) => {

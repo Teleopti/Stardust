@@ -2,11 +2,17 @@
 	<div class="add-new-bank-holiday-calendar-header full-padding">
 		<span class="inline-block">{{ 'Name' | translate }} :</span>
 		<input
+			#calendarNameInput
 			nz-input
 			[placeholder]="'NewCalendarName' | translate"
 			[(ngModel)]="newCalendarName"
 			(blur)="checkNewCalendarName()"
 		/>
+		<nz-alert
+			*ngIf="isNewCalendarNameEmpty"
+			nzType="error"
+			[nzMessage]="'PleaseInputCalendarNameFirst' | translate"
+		></nz-alert>
 		<nz-alert *ngIf="nameAlreadyExisting" nzType="error" [nzMessage]="'NameAlreadyExisting' | translate"></nz-alert>
 	</div>
 
@@ -39,7 +45,7 @@
 				<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date" class="bank-holiday-calendar-date-list">
 					<ng-template #date let-date>
 						<nz-list-item class="bank-holiday-calendar-date-item relative">
-							<span class="selected-date-indicator absolute" [hidden]="!date.IsLastAdded"></span>
+							<span class="selected-date-indicator absolute" *ngIf="date.IsLastAdded"></span>
 							<span class="inline-block">
 								<span class="bank-holiday-date-text">{{ date.Date }}</span>
 							</span>

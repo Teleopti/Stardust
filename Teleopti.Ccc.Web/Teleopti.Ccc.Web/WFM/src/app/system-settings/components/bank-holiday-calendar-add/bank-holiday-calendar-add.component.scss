@@ -5,12 +5,16 @@
 	display: flex;
 	align-items: center;
 	margin-bottom: 20px;
+	min-height: 50px;
 
 	input {
-		width: 180px;
+		width: 250px;
 	}
 	span.inline-block {
 		min-width: 80px;
+	}
+	nz-alert {
+		margin: 0 10px;
 	}
 }
 .add-new-bank-holiday-calendar-body {
@@ -20,7 +24,7 @@
 }
 .add-new-bank-holiday-calendar-datepicker {
 	width: 340px;
-	padding: 0 25px;
+	padding: 4px 25px;
 	height: 305px;
 }
 .bank-holiday-calendar-date-content {

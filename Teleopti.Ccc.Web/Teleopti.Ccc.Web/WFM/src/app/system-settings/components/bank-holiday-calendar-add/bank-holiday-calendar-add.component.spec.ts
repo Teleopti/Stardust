@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
-import { async, ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
@@ -92,7 +92,6 @@ describe('BankHolidayCalendarAddComponent', () => {
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar',
-				CurrentYearIndex: 0,
 				Years: [
 					{
 						Year: '2013',
@@ -123,6 +122,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should be able to add dates', () => {
+		component.newCalendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		component.dateChangeCallback(new Date('2015-01-11'));
 		fixture.detectChanges();
@@ -133,7 +133,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
@@ -170,7 +170,72 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(component.selectedDatesTimeList.length).toBe(2);
 	});
 
+	it('should set is last added after adding dates', () => {
+		component.newCalendarName = 'New Bank Holiday Calendar';
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: 2015,
+					Dates: [
+						{
+							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
+		component.dateChangeCallback(new Date('2015-01-11'));
+		fixture.detectChanges();
+
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: 2015,
+					Dates: [
+						{
+							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						},
+						{
+							Id: '06980577-cc30-434e-88d3-e23505671a38',
+							Date: '2015-01-11',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
+		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
+		const dateRows = dateContent
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+
+		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
+		expect(dateRows.length).toBe(2);
+
+		expect(dateRows[1].getElementsByClassName('selected-date-indicator').length).toBe(1);
+	});
+
 	it('should not add duplicated dates', () => {
+		component.newCalendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
@@ -180,6 +245,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should be able remove a date', () => {
+		component.newCalendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10 10:00:00'));
 		component.dateChangeCallback(new Date('2015-01-11 10:00:00'));
 		fixture.detectChanges();
@@ -190,7 +256,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -231,7 +297,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '86784a24-ea35-466a-a535-839a22d06bf4',
@@ -261,6 +327,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should be able to add a date back after removing it', () => {
+		component.newCalendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -270,7 +337,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -302,7 +369,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: []
 				}
 			]
@@ -318,7 +385,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -349,6 +416,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should categorize dates by year', () => {
+		component.newCalendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		component.dateChangeCallback(new Date('2016-01-10'));
 		fixture.detectChanges();
@@ -359,7 +427,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -370,7 +438,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 					]
 				},
 				{
-					Year: '2016',
+					Year: 2016,
 					Dates: [
 						{
 							Id: '8c0eb95d-33cc-4136-a800-ba85bb38ca83',
@@ -423,7 +491,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 			CurrentYearIndex: 0,
 			Years: [
 				{
-					Year: '2015',
+					Year: 2015,
 					Dates: [
 						{
 							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -442,5 +510,127 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(component.newCalendarYears.length).toBe(1);
 		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 		expect(component.selectedDatesTimeList.length).toBe(1);
+	});
+
+	it('should calendar name not be empty before saving', () => {
+		component.newCalendarName = '';
+		document.querySelector('.add-new-bank-holiday-calendar-header input').dispatchEvent(new Event('change'));
+
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+
+		expect(
+			document
+				.querySelector('.add-new-bank-holiday-calendar-header nz-alert')
+				.innerHTML.indexOf('PleaseInputCalendarNameFirst') > -1
+		).toBeTruthy();
+		expect(httpTestingController.match('../api/BankHolidayCalendars/Save').length).toBe(0);
+		expect(component.newCalendarYearsForDisplay.length).toBe(0);
+		expect(component.selectedDatesTimeList.length).toBe(0);
+		expect(component.newCalendarYears.length).toBe(0);
+	});
+
+	it('should store calendar id after adding first date', () => {
+		component.newCalendarName = 'I am a new calendar';
+		document.querySelector('.add-new-bank-holiday-calendar-header input').dispatchEvent(new Event('change'));
+
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+
+		expect(component.newCalendarYearsForDisplay.length).toBe(0);
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+
+		let request = httpTestingController.match('../api/BankHolidayCalendars/Save')[0];
+		request.flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: 2015,
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+		expect(component.newCalendarId).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
+
+		component.dateChangeCallback(new Date('2015-01-11'));
+		fixture.detectChanges();
+
+		request = httpTestingController.match('../api/BankHolidayCalendars/Save')[0];
+		request.flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: 2015,
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						},
+						{
+							Id: '19eed98f-d48b-4974-9b1f-fd0ad05719d2',
+							Date: '2015-01-11',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+
+		expect(request.request.body.Id).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
+		expect(request.request.body.Name).toBe('I am a new calendar');
+		expect(request.request.body.Years.length).toBe(1);
+	});
+
+	it('should update the bank holiday calendar list after saving', () => {
+		component.newCalendarName = 'I am a new calendar';
+		component.dateChangeCallback(new Date('2015-01-10'));
+		fixture.detectChanges();
+
+		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'I am a new calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: 2015,
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2015-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		});
+		fixture.detectChanges();
+
+		expect(component.bankHolidayCalendarsList.length).toBe(1);
+
+		const calendar = component.bankCalendarDataService.bankHolidayCalendarsList$.getValue();
+		expect(calendar.length).toBe(1);
+		expect(calendar[0].Id).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
+		expect(calendar[0].Name).toBe('I am a new calendar');
+		expect(calendar[0].Years.length).toBe(1);
+		expect(calendar[0].Years[0].Year).toBe('2015');
+		expect(calendar[0].Years[0].Dates.length).toBe(1);
+		expect(calendar[0].Years[0].Dates[0].Date).toBe('2015-01-10');
 	});
 });
