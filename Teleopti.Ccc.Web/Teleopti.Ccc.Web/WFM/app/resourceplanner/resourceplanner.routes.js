@@ -91,7 +91,7 @@
 			.state('resourceplanner.planningperiodoverview', {
 				url: '/planninggroup/:groupId/detail/:ppId',
 				templateUrl: function() {
-					return ToggleProvider.WFM_Plans_HeatMap_79112
+					return ToggleProvider.WFM_Plans_HeatMap_79112_80785
 						? 'app/resourceplanner/plans-planningperiodoverview-modern.html'
 						: 'app/resourceplanner/planning_period/planningperiod.overview.html';
 				},

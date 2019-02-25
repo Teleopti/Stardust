@@ -91,7 +91,7 @@ ResourcePlanner_TeamSchedulingInPlans_79283 = RC #Note to ourselves: remember to
 ResourcePlanner_DelayShiftCreations_81680 = RC
 ResourcePlanner_PrepareToRemoveRightToLeft_81112 = RC
 WFM_Plans_Redesign_81198 = RC
-WFM_Plans_HeatMap_79112 = RC
+WFM_Plans_HeatMap_79112_80785 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = true
