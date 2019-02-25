@@ -10,11 +10,14 @@ import * as moment from 'moment';
 })
 export class IntradayComponent implements OnChanges {
 	chart: c3.ChartAPI;
+	skill: string;
+	date;
+
+	@Input()
+	chartData;
 
 	constructor(private translate: TranslateService) {}
 
-	@Input()
-	chartData: c3.Data;
 
 	private intervalDetailsToC3Data(input): c3.Data {
 		if(input && input.length>0){
@@ -74,9 +77,11 @@ export class IntradayComponent implements OnChanges {
 	
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.chartData) {
-			this.initChart(this.intervalDetailsToC3Data(changes.chartData.currentValue));
+			this.date = moment(changes.chartData.currentValue.Date);
+			this.initChart(this.intervalDetailsToC3Data(changes.chartData.currentValue.IntervalDetails));
 		}
 	}
+
 
 	private initChart(inData: c3.Data) {
 		if (this.chart) {
