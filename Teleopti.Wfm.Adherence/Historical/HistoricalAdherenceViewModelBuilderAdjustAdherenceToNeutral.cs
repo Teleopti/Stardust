@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,7 +11,7 @@ using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Historical
 {
-	public class HistoricalAdherenceViewModelBuilder : IHistoricalAdherenceViewModelBuilder
+	public class HistoricalAdherenceViewModelBuilderAdjustAdherenceToNeutral : IHistoricalAdherenceViewModelBuilder
 	{
 		private readonly IPersonRepository _persons;
 		private readonly ScheduleLoader _schedule;
@@ -21,7 +22,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 		private readonly ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 		private readonly int _displayPastDays;
 
-		public HistoricalAdherenceViewModelBuilder(
+		public HistoricalAdherenceViewModelBuilderAdjustAdherenceToNeutral(
 			IPersonRepository persons,
 			ScheduleLoader schedule,
 			INow now,
@@ -65,6 +66,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				OutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
 				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.RecordedOutOfAdherences()),
 				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
+				AdjustedToNeutralAdherences = buildAdjustedToNeutralAdherences(adherenceDay.AdjustedToNeutralAdherences()),
 				Timeline = new ScheduleTimeline
 				{
 					StartTime = formatForUser(adherenceDay.DisplayPeriod().StartDateTime),
@@ -73,6 +75,19 @@ namespace Teleopti.Wfm.Adherence.Historical
 				AdherencePercentage = adherenceDay.Percentage(),
 				Navigation = buildNavigation(person)
 			};
+		}
+
+		private IEnumerable<AdjustedToNeutralAdherenceViewModel> buildAdjustedToNeutralAdherences(IEnumerable<AdherencePeriod> periods)
+		{
+			return periods
+				.Select(x =>
+					new AdjustedToNeutralAdherenceViewModel
+					{
+						StartTime = formatForUser(x.StartTime),
+						EndTime = formatForUser(x.EndTime)
+					}
+				)
+				.ToArray();
 		}
 
 		private HistoricalAdherenceNavigationViewModel buildNavigation(IPerson person)
@@ -179,11 +194,5 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		private string formatForUser(DateTime? time) =>
 			time.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(time.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss") : null;
-	}
-
-	public interface IHistoricalAdherenceViewModelBuilder
-	{
-		HistoricalAdherenceViewModel Build(Guid person);
-		HistoricalAdherenceViewModel Build(Guid person, DateOnly date);
 	}
 }

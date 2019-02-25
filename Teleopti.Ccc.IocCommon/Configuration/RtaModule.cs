@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaMapRepository>().AsImplementedInterfaces().SingleInstance();
 			builder.RegisterType<RtaRuleRepository>().AsImplementedInterfaces().SingleInstance();
 			builder.RegisterType<RtaStateGroupRepository>().AsImplementedInterfaces().SingleInstance();
-			
+
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
@@ -109,7 +109,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SiteCardViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamCardReader>().As<ITeamCardReader>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
-			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
+			if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+				builder.RegisterType<HistoricalAdherenceViewModelBuilderAdjustAdherenceToNeutral>().As<IHistoricalAdherenceViewModelBuilder>().SingleInstance();
+			else
+				builder.RegisterType<HistoricalAdherenceViewModelBuilder>().As<IHistoricalAdherenceViewModelBuilder>().SingleInstance();
+
 			builder.RegisterType<HistoricalOverviewViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AdjustedPeriodsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
@@ -137,7 +141,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaEventStoreSynchronizerAdjustAdherenceToNeutral>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RunAsynchronouslyAndLog>().As<IRtaEventStoreAsyncSynchronizerStrategy>().SingleInstance().ApplyAspects();
-			}		
+			}
 			else if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();

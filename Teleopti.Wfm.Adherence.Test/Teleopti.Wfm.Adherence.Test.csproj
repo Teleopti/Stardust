@@ -222,6 +222,7 @@
     <Compile Include="Historical\Unit\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceDate\DateTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdjustedToNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ApprovedPeriodsTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
