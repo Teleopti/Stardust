@@ -231,6 +231,7 @@
     <Compile Include="Authentication\NonceInfoRepository.cs" />
     <Compile Include="Config\NotificationConfigDbReader.cs" />
     <Compile Include="Config\ThrowingLoadPasswordPolicyService.cs" />
+    <Compile Include="ETL\TimeSinceLastEtlPing.cs" />
     <Compile Include="Foundation\BulkWriter.cs" />
     <Compile Include="Foundation\DatabaseCommand.cs" />
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />

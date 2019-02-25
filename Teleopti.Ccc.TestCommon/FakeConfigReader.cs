@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.TestCommon
 			config.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("DatamartConnectionString", InfraTestConfigReader.AnalyticsConnectionString);
 			
 			config.FakeSetting("CertificateModulus", ConfigurationManager.AppSettings["CertificateModulus"]);
 			config.FakeSetting("CertificateExponent", ConfigurationManager.AppSettings["CertificateExponent"]);

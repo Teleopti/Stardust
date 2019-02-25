@@ -226,6 +226,7 @@
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DatabaseTestAttribute.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
+    <Compile Include="ETL\TimeSinceLastEtlPingTest.cs" />
     <Compile Include="Foundation\AppInsightsConfigTest.cs" />
     <Compile Include="Foundation\BulkWriterTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />

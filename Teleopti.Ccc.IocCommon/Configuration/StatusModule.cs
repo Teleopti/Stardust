@@ -1,5 +1,7 @@
 using Autofac;
+using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Status;
+using Teleopti.Ccc.Infrastructure.ETL;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -7,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<TimeSinceLastEtlPing>().As<ITimeSinceLastEtlPing>().As<IMarkEtlPing>().SingleInstance();
 			builder.RegisterType<CheckLegacySystemStatus>().SingleInstance();
 			builder.RegisterType<ExecuteStatusStep>().SingleInstance();
 			builder.RegisterType<ListStatusSteps>().SingleInstance();
