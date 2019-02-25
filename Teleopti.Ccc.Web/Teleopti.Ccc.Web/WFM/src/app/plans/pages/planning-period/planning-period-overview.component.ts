@@ -9,6 +9,7 @@ import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
 import {from} from "rxjs";
 import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
+import * as moment from 'moment';
 
 @Component({
 	selector: 'plans-period-overview',

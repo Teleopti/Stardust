@@ -22,6 +22,7 @@ import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+import {IntradayComponent} from "../../components/chart";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroup(groupId: string) {
@@ -166,7 +167,7 @@ describe('Planning Period Overview', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [PlanningPeriodOverviewComponent, TitleBarComponent],
+			declarations: [PlanningPeriodOverviewComponent, TitleBarComponent, IntradayComponent],
 			imports: [
 				NzInputModule,
 				NzTableModule,
