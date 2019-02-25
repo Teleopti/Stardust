@@ -5,7 +5,6 @@
 						 ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
 				{{ 'AgentName' | translate }}
 			</md-checkbox>
-			<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
 		</div>
 		<div class="shift-category-cell"></div>
 		<div class="schedule schedule-column">
@@ -18,6 +17,11 @@
 		<div class="schedule-tool-column schedule-note-column"></div>
 		<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
 	</div>
+
+	<div class="list-sort-agent">
+		<sort-agent ng-model="vm.selectedSortOption" class="sort-agent"></sort-agent>
+	</div>
+
 	<md-virtual-repeat-container class="list-group"
 								 ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }"
 								 update-size="{{vm.scheduleBodyHeight}}">
@@ -62,7 +66,7 @@
 													  date="vm.selectedDate"></underlying-schedule-info>
 						</md-tooltip>
 					</span>
-					
+
 				</div>
 
 				<div class="schedule schedule-column">

@@ -57,6 +57,17 @@
 		}
 	}
 
+	.list-sort-agent {
+		position: relative;
+		z-index: 3;
+
+		sort-agent {
+			top: -37px;
+			left: 22%;
+			position: absolute;
+		}
+	}
+
 	.list-header, .list-group .list-item {
 		width: calc(100% - 17px);
 
