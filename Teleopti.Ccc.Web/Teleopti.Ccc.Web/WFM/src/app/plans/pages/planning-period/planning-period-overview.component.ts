@@ -9,6 +9,7 @@ import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
 import {from} from "rxjs";
 import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
+import * as moment from 'moment';
 
 @Component({
 	selector: 'plans-period-overview',
@@ -41,11 +42,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	worstUnderStaffDay: any;
 	worstOverStaffDay: any;
 	showNumbers: false;
+	selectedDay = null;
+	selectedSkill: string = null;
 
 	validationFilter;
 
 	skills;
 	filteredSkills;
+	lastUpdated;
 	
 	forTesting = false;
 
@@ -219,8 +223,21 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	public isDisabled() {
-		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;
-		
+		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;	
+	}
+	
+	public updateIntradayDetails(selectedDay, skillName){
+		if(this.selectedDay) {
+			this.selectedDay.selected = false;
+		}
+		if(this.selectedDay === selectedDay){
+			this.selectedDay = null;
+			this.selectedSkill = null;
+		} else{
+			this.selectedDay = selectedDay;
+			this.selectedDay.selected = true;
+			this.selectedSkill = skillName;
+		}
 	}
 
 	private checkProgress = () => {
@@ -376,6 +393,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			const fullSchedulingResult = data.FullSchedulingResult;
 			if (fullSchedulingResult) {
 				this.isScheduled = true;
+				this.lastUpdated = moment(data.LastUpdated).format('YYYY-MM-DD HH:mm');
 				this.scheduledAgents = data.FullSchedulingResult.ScheduledAgentsCount;
 				this.valData.scheduleIssues = data.FullSchedulingResult.BusinessRulesValidationResults;
 				this.scheduleIssuesFilterControl.updateValueAndValidity();

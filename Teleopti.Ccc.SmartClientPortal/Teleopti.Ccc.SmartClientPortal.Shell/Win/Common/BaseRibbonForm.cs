@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
@@ -36,6 +37,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 		}
 
 		#endregion
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112)]
+		public void SetTextsNoRightToLeft()
+		{
+			new LanguageResourceHelper().SetTexts(this, false);
+			SetCommonTexts();
+		}
 
 		protected virtual void SetCommonTexts()
 		{

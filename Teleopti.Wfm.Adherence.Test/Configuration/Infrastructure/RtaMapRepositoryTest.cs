@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
@@ -40,6 +41,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
         protected override IRtaMap CreateAggregateWithCorrectBusinessUnit()
         {
 			activity = new Activity("roger") { DisplayColor = Color.White };
+			activity.SetBusinessUnit(_businessUnit);
 			PersistAndRemoveFromUnitOfWork(activity);
 
             IRtaMap rtaMap = new RtaMap{StateGroup = stateGroup, Activity = activity.Id.Value};

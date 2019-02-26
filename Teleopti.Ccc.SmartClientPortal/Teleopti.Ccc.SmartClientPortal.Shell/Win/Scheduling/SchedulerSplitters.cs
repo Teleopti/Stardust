@@ -10,10 +10,12 @@ using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
@@ -66,8 +68,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public SchedulerSplitters()
 		{
 			InitializeComponent();
-			if (!DesignMode)
-				SetTexts();
 			_pinnedSkillHelper = new PinnedSkillHelper();
 			tabSkillData.TabStyle = typeof(SkillTabRenderer);
 			tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
@@ -107,6 +107,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder,
 			SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns, SchedulingScreenSettings currentSchedulingScreenSettings)
 		{
+			if (container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112))
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+				shiftCategoryDistributionControl1.PrepareToRemoveRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+				
 			Grid.VScrollPixel = false;
 			Grid.HScrollPixel = false;
 			_virtualSkillHelper = container.Resolve<IVirtualSkillHelper>();

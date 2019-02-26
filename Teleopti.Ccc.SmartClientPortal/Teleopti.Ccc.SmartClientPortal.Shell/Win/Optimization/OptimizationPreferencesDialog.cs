@@ -4,14 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -42,6 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
+		private bool _useRightToLeft;
 
 		public OptimizationPreferencesDialog(
 			IOptimizationPreferences preferences,
@@ -51,8 +50,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			int resolution,
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> selectedPersons, 
-			IDaysOffPreferences daysOffPreferences)
-			: this()
+			IDaysOffPreferences daysOffPreferences,
+			bool useRightToLeft)
+			: this(useRightToLeft)
 		{
 			Preferences = preferences;
 			DaysOffPreferences = daysOffPreferences;
@@ -69,20 +69,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			_eventAggregator = new EventAggregator();
 		}
 
-		private OptimizationPreferencesDialog()
+		private OptimizationPreferencesDialog(bool useRightToLeft)
 		{
 			InitializeComponent();
-			if (!DesignMode) SetTexts();
+			_useRightToLeft = useRightToLeft;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}	
 		}
 
 		private void formLoad(object sender, EventArgs e)
 		{
 			loadPersonalSettings();
-			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
-			dayOffPreferencesPanel1.Initialize(DaysOffPreferences);
-			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
-			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
+			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator, _useRightToLeft);
+			dayOffPreferencesPanel1.Initialize(DaysOffPreferences, _useRightToLeft);
+			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity, _useRightToLeft);
+			advancedPreferencesPanel1.Initialize(Preferences.Advanced, _useRightToLeft);
+			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution, _useRightToLeft);
 			Panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
 			ActiveControl = tabControlTopLevel;

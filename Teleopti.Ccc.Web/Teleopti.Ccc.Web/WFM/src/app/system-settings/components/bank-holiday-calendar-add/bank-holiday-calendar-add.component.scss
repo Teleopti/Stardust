@@ -1,79 +1,67 @@
 .add-new-bank-holiday-calendar {
-	max-height: calc(100vh - 190px);
-	overflow: auto;
+	height: calc(100vh - 190px);
+}
+.add-new-bank-holiday-calendar-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	min-height: 50px;
 
-	nz-year-picker,
 	input {
-		width: 180px;
-	}
-	.con-row {
-		align-items: center;
-		.con-flex > div > span.inline-block {
-			min-width: 80px;
-		}
-	}
-	nz-content .bank-holiday-calendar-date-list {
-		max-height: calc(100vh - 450px);
-		min-width: 420px;
-		overflow: auto;
-		padding: 0 10px 0 0;
-	}
-}
-.ant-tabs-bar {
-	margin: 0;
-}
-.ant-layout,
-.ant-layout-footer {
-	background: transparent;
-}
-.ant-layout-sider {
-	padding: 20px;
-	background: inherit;
-	min-height: 400px;
-	.ant-layout {
-		min-height: 400px;
-	}
-	.ant-layout-content {
-		min-height: 320px;
-	}
-	.ant-layout-footer {
-		display: flex;
-		justify-content: center;
-	}
-	nz-date-picker {
-		visibility: hidden;
-	}
-}
-.ant-layout-header {
-	padding: 10px;
-	background: inherit;
-	.con-row {
-		justify-content: center;
-	}
-}
-.bank-holiday-year-content {
-	padding: 15px 0 0 20px;
-}
-.bank-holiday-calendar-date-item-header {
-	.ant-list-item {
-		padding: 0;
+		width: 250px;
 	}
 	span.inline-block {
-		font-weight: bold;
+		min-width: 80px;
 	}
+	nz-alert {
+		margin: 0 10px;
+	}
+}
+.add-new-bank-holiday-calendar-body {
+	display: flex;
+	flex-wrap: wrap;
+	height: calc(100% - 62px - 52px);
+}
+.add-new-bank-holiday-calendar-datepicker {
+	width: 340px;
+	padding: 4px 25px;
+	height: 305px;
+}
+.bank-holiday-calendar-date-content {
+	border-radius: 4px;
+	border-top: 1px solid #efefef;
+	height: 100%;
+	overflow-y: auto;
+	flex-grow: 1;
 }
 .bank-holiday-calendar-date-item {
 	span.inline-block {
-		margin: 0 15px;
+		margin: 0 10px 0 15px;
 		min-width: 80px;
 
 		& > span {
 			font-weight: bold;
 			border-radius: 4px;
 		}
-		input,
-		.bank-holiday-description {
-			width: 220px;
+	}
+	input {
+		width: 250px;
+	}
+}
+@media (max-width: 852px) {
+	.add-new-bank-holiday-calendar-header {
+		margin-bottom: 0;
+	}
+	.add-new-bank-holiday-calendar-body {
+		height: calc(100% - 42px - 52px);
+	}
+	.bank-holiday-calendar-date-content {
+		height: calc(100% - 305px);
+	}
+	.bank-holiday-calendar-date-item {
+		flex-wrap: nowrap;
+		input {
+			width: 150px;
 		}
 	}
 }
@@ -84,7 +72,7 @@
 .remove-date-icon {
 	min-width: 24px;
 	max-width: 24px;
-	margin: 0 15px;
+	margin: 0 5px;
 }
 .selected-date-indicator {
 	background: #09f;
@@ -104,9 +92,6 @@
 	button {
 		margin: 5px;
 	}
-}
-nz-tabset {
-	border: 1px solid #ddd;
 }
 nz-alert {
 	margin: 5px 0;

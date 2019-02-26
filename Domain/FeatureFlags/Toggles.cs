@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_DelayShiftCreations_81680,
 		ResourcePlanner_PrepareToRemoveRightToLeft_81112,
 		WFM_Plans_Redesign_81198,
-		WFM_Plans_HeatMap_79112,
+		WFM_Plans_HeatMap_79112_80785,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,
 		MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154,
 		MyTimeWeb_Schedule_MonthView_Indicate_BankHoliday_81158,
+		MyTimeWeb_Availability_Indicate_BankHoliday_81656,
 
 		WFM_Intraday_Redesign_77214,
 		WFM_Intraday_Browser_Tab_81482,

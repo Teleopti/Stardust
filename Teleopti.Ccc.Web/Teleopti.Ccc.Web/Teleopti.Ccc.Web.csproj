@@ -126,12 +126,12 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.16.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.16.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.18.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.16.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.16.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.18.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -436,6 +436,7 @@
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
+    <Compile Include="Areas\SystemSetting\SystemSettingController.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -1755,6 +1756,7 @@
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.inputValidationForApprovingAdherencePeriods_77045.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.AdjustAdherenceToNeutral_80594.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adjustAdherenceToNeutral_80594.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
@@ -2426,6 +2428,10 @@
     <Content Include="WFM\src\app\people\shared\workspace.service.ts" />
     <Content Include="WFM\src\app\people\utils\count-roles.ts" />
     <Content Include="WFM\src\app\people\utils\index.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.scss" />
+    <Content Include="WFM\src\app\plans\components\chart\index.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.html" />
     <Content Include="WFM\src\app\plans\components\index.ts" />
     <Content Include="WFM\src\app\plans\components\title-bar\index.ts" />
     <Content Include="WFM\src\app\plans\components\title-bar\title-bar.component.html" />
@@ -2520,6 +2526,7 @@
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.ts" />
     <Content Include="WFM\src\app\system-settings\shared\bank-calendar-data.service.ts" />
     <Content Include="WFM\src\app\system-settings\shared\index.ts" />
+	<Content Include="WFM\src\app\system-settings\shared\system-settings.service.ts" />
     <Content Include="WFM\src\app\system-settings\system-settings.module.ts" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.html" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.scss" />

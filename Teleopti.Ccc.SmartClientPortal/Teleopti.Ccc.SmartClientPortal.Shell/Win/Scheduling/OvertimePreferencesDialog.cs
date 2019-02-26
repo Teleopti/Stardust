@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 										int resolution, 
 										IList<IMultiplicatorDefinitionSet> definitionSets,
 										IList<IRuleSetBag> shiftBags,
-										bool showUseSkills)
-			: this()
+										bool showUseSkills,
+										bool useRightToLeft)
+			: this(useRightToLeft)
 		{
 			_scheduleTags = scheduleTags;
 			_settingValue = settingValue;
@@ -219,11 +220,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			
 		}
 
-		public OvertimePreferencesDialog()
+		public OvertimePreferencesDialog(bool useRightToLeft)
 		{
 			InitializeComponent();
-			if (!DesignMode)
-				SetTexts();
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
 		}
 
 		public void SavePersonalSettings()

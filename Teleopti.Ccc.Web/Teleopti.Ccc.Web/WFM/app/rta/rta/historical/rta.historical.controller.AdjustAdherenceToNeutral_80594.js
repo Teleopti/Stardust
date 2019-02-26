@@ -46,6 +46,7 @@
                 data.OutOfAdherences = data.OutOfAdherences || [];
                 data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
                 data.ApprovedPeriods = data.ApprovedPeriods || [];
+                data.AdjustedToNeutralAdherences = data.AdjustedToNeutralAdherences || [];
                 data.Changes = data.Changes || [];
                 data.Timeline = data.Timeline || {};
                 data.Navigation = data.Navigation || {};
@@ -65,7 +66,10 @@
                 vm.outOfAdherences = buildOutOfAdherence(data.Timeline, data.OutOfAdherences);
                 vm.recordedOutOfAdherences = buildRecordedOutOfAdherences(data.Timeline, data.RecordedOutOfAdherences);
                 vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
-
+                
+                vm.showAdjustedToNeutralAdherences = data.AdjustedToNeutralAdherences.length > 0;
+                vm.adjustedToNeutralAdherences = buildAdjustedToNeutralAdherences(data.Timeline, data.AdjustedToNeutralAdherences);
+                
                 vm.fullTimeline = buildTimeline(data);
                 timelineStart = data.Timeline.StartTime;
                 timelineEnd = data.Timeline.EndTime;
@@ -104,7 +108,8 @@
         }
 
         function buildOutOfAdherence(timeline, intervals) {
-            return intervals.map(function (i) {
+            return intervals
+                .map(function (i) {
                 return buildInterval(timeline, i)
             });
         }
@@ -136,6 +141,21 @@
                     };
 
                     return o
+                });
+        }
+
+        function buildAdjustedToNeutralAdherences(timeline, intervals) {
+            return intervals
+                .map(function (i) {
+                    var interval = buildInterval(timeline, i);
+                    interval.click = function() {
+                        vm.adjustedToNeutralAdherences.forEach(function(a){
+                            a.highlight = false;
+                        });
+                        interval.highlight = true;
+                        vm.openAdjustedToNeutralAdherences = true;
+                    };
+                    return interval;
                 });
         }
 

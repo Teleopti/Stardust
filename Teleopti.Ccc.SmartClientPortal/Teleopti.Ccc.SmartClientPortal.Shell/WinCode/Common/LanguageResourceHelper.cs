@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -24,15 +25,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         ILocalized _targetControl;
 
-        /// <summary>
-        /// Sets the texts.
-        /// </summary>
-        /// <param name="targetControl">The control to set texts for.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-03
-        /// </remarks>
-        public void SetTexts(ILocalized targetControl)
+       
+		[RemoveMeWithToggle("Always use RightToLeft.No",Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112)]
+        public void SetTexts(ILocalized targetControl, bool useRightToLeft = true)
         {
 	        if (targetControl == null)
 		        return;
@@ -46,15 +41,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                 if (Thread.CurrentPrincipal is TeleoptiPrincipalWithUnsafePerson)
                 {
                     _targetControl.RightToLeft =
-                        (((ITeleoptiPrincipalWithUnsafePerson)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().PermissionInformation.RightToLeftDisplay)
+                        (((ITeleoptiPrincipalWithUnsafePerson)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().PermissionInformation.RightToLeftDisplay) && useRightToLeft
                             ? RightToLeft.Yes
                             : RightToLeft.No;
 
                     var form = _targetControl as Form;
                     if (form!=null && _targetControl.RightToLeft == RightToLeft.Yes)
-                    {
-                        form.RightToLeftLayout = true;
-                    }
+					{
+						form.RightToLeftLayout = _targetControl.RightToLeft == RightToLeft.Yes;
+					}
                 }
             }
             else

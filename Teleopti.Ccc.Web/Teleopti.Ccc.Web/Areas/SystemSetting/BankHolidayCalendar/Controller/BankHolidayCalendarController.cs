@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.SystemSetting)]
 	public class BankHolidayCalendarController : ApiController
 	{
 		private readonly IBankHolidayCalendarPersister _bankHolidayCalendarPersister;

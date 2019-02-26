@@ -10,9 +10,10 @@ import { PlanningPeriodOverviewComponent } from './pages/planning-period/plannin
 import {DateFormatPipe, MomentModule} from "ngx-moment";
 import {HeatMapColorHelper} from "./shared/heatmapcolor.service";
 import {PlanningPeriodActionService} from "./shared/planningperiod.action.service";
+import {IntradayComponent} from "./components/chart";
 
 @NgModule({
-	declarations: [TitleBarComponent, PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
+	declarations: [TitleBarComponent, IntradayComponent,  PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
 	imports: [
 		SharedModule, 
 		TranslateModule.forChild(),

@@ -175,9 +175,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#region Constructors
 
-		protected SchedulingScreen()
+		protected SchedulingScreen(IComponentContext componentContext)
 		{
 			InitializeComponent();
+			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
 			_dateNavigateControl = new DateNavigateControl();
 
 			var hostDatePicker = new ToolStripControlHost(_dateNavigateControl);
@@ -195,8 +196,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemWorkTime.Tag = ScheduleTimeType.WorkTime;
 			toolStripMenuItemPaidTime.Tag = ScheduleTimeType.PaidTime;
 			toolStripMenuItemOverTime.Tag = ScheduleTimeType.OverTime;
-			if (!DesignMode) SetTexts();
-
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112))
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
 			// this timer is just for fixing bug 17948 regarding dateNavigationControl && show agent info when RTL and coming back from File
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
@@ -307,12 +314,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario,
 			bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, bool loadRequests, IList<IEntity> allSelectedEntities,
 			Form ownerWindow)
-			: this()
+			: this(componentContext)
 		{
 			Application.DoEvents();
 			_mainWindow = ownerWindow;
-
-			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
 			_undoRedo = new UndoRedoWithScheduleCallbackContainer(_container.Resolve<IScheduleDayChangeCallback>());
 			_timeZoneGuard = _container.Resolve<ITimeZoneGuard>();
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
@@ -437,8 +442,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
 
 			_permissionHelper = new SchedulingScreenPermissionHelper();
+			var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 			_cutPasteHandlerFactory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart,
-				checkPastePermissions, pasteFromClipboard, enablePasteOperation);
+				checkPastePermissions, pasteFromClipboard, enablePasteOperation, useRightToLeft);
 
 			checkSmsLinkLicense();
 		}
@@ -1019,12 +1025,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!selectedSchedules.Any())
 					return;
 
+				var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 				using (var optimizationPreferencesDialog =
 					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
 						SchedulerState.ScheduleTags.NonDeleted(),
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 						SchedulerState.DefaultSegmentLength, SchedulerState.SchedulerStateHolder.Schedules,
-						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
+						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences, useRightToLeft))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
@@ -2373,10 +2380,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						return;
 					}
 
+					var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 							SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted(),
 							_groupPagesProvider, SchedulerState.ScheduleTags.NonDeleted(),
-							"SchedulingOptions", SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted()))
+							"SchedulingOptions", SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(), useRightToLeft))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -2411,11 +2419,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				_schedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
 				_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
+				var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted(),
 						_groupPagesProvider, SchedulerState.ScheduleTags.NonDeleted(), "SchedulingOptionsActivities",
-						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted()))
+						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(), useRightToLeft))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
@@ -3609,7 +3618,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void showFilterDialog()
 		{
 			var scheduleFilterView = getCachedPersonsFilterView();
-
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
 
 			//TODO: Please come up with a better solution!
@@ -5717,13 +5725,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var showUseSkills = SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills.Any(x => x.IsCascading());
 
+				var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 				using (var options = new OvertimePreferencesDialog(SchedulerState.ScheduleTags.NonDeleted(),
 																"OvertimePreferences",
 																SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 																resolution,
 																definitionSets,
 																ruleSetBags,
-																showUseSkills))
+																showUseSkills,
+																useRightToLeft))
 				{
 					if (options.ShowDialog(this) != DialogResult.OK) return;
 					options.Refresh();

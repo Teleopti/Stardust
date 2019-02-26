@@ -21,12 +21,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         public ExtraPreferencesPanel()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
         }
 
-		public void Initialize(ExtraPreferences extraPreferences, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
+		public void Initialize(ExtraPreferences extraPreferences, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity, bool useRightToLeft)
         {
-            Preferences = extraPreferences;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+			Preferences = extraPreferences;
 		    _availableActivity = availableActivity;
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
 			_singleAgentEntry = GroupPageLight.SingleAgentGroup(Resources.NoTeam);

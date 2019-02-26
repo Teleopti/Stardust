@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommon
 		protected override void Load(ContainerBuilder builder)
 		{
 			_configuration.AddToggleManagerToBuilder(builder);
-			builder.RegisterModule<MonitorModule>();
+			builder.RegisterModule<StatusModule>();
 			builder.RegisterModule<ToggleRuntimeModule>();
 			builder.RegisterModule(new SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(_configuration.Args()));
 			builder.RegisterModule(new RuleSetModule(_configuration));

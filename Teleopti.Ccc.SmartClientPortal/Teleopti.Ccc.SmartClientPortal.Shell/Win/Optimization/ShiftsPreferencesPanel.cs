@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -18,13 +17,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         public ShiftsPreferencesPanel()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
         }
 
 		public void Initialize(
-            ShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution)
+            ShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution, bool useRightToLeft)
 		{
-		    _availableActivity = availableActivity;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+			_availableActivity = availableActivity;
 		    _resolution = resolution;
 			comboBoxAdvActivity.DisplayMember = "Name";
 			comboBoxAdvActivity.DataSource = _availableActivity;

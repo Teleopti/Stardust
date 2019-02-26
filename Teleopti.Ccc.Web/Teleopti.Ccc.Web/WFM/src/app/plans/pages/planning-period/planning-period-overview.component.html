@@ -30,9 +30,10 @@
 
 			<div *ngIf="skills&&skills.length>0" style="overflow: auto">
 				<h2>Scheduled skills heatmap</h2>
+				<div>Updated: {{lastUpdated}}</div>
 	
-				<div nz-row>
-					<span style="margin-left: 20px" nz-col [nzSpan]="8">
+				<div nz-row style="margin-top: 10px">
+					<span nz-col [nzSpan]="8">
 						<nz-input-group
 								[nzSuffix]="suffixSkillMapTemplate"
 								[nzPrefix]="prefixSkillMapTemplate"
@@ -112,8 +113,8 @@
 								>
 									<div nz-tooltip nzTitle="{{node.tooltip}}"
 										class="heatmap-box"
-										[ngClass]="{ 'heatmap-closed': node.ColorId===4}"
-										[style.background-color]="node.bgcolor"
+										[ngClass]="{ 'heatmap-closed': node.ColorId===4, 'selected':node.selected}"
+										[style.background-color]="node.bgcolor" (click)="updateIntradayDetails(node, subnode.SkillName)"
 									>
 										<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">
 											{{node.DisplayedPercent}}
@@ -124,6 +125,9 @@
 						</tbody>
 					</nz-table>
 				</div>
+			</div>
+			<div *ngIf="selectedDay" style="margin-top: 10px;">
+				<plans-intraday [chartData]="selectedDay" [skill]="selectedSkill"></plans-intraday>
 			</div>
 		</nz-tab>
 		<nz-tab [nzTitle]="titleTemplate">

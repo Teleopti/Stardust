@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingIntervalUnderStaffing = skillStaffingIntervalUnderStaffing;
 		}
 
-		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
+		public CalculatedPossibilityModelResult CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
 		{
 			var periodWithYesterdayAndToday = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate);
 			var scheduleDictionary = loadScheduleDictionary(person, periodWithYesterdayAndToday);
@@ -44,12 +44,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skills = getSupportedPersonSkills(person, period).Select(s => s.Skill).ToArray();
 			var useShrinkageDic = getShrinkageStatusAccordingToPeriods(person, period);
 			var workflowControlSet = person.WorkflowControlSet;
-			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date =>
-				workflowControlSet?.AbsenceRequestOpenPeriods != null &&
-				workflowControlSet.AbsenceRequestOpenPeriods.Any() &&
-				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone()), date));
+			var currentLocalDate = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
+			var workflowControlSetHasOpenAbsenceRequestPeriods = workflowControlSet?.AbsenceRequestOpenPeriods != null &&
+																 workflowControlSet.AbsenceRequestOpenPeriods.Any();
+			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date => workflowControlSetHasOpenAbsenceRequestPeriods &&
+																										   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(currentLocalDate, date));
 
-			return calculatePossibilities(person, skillStaffingData, scheduleDictionary);
+			return new CalculatedPossibilityModelResult(scheduleDictionary, calculatePossibilities(person, skillStaffingData, scheduleDictionary));
 		}
 
 		private Dictionary<DateOnly, bool> getShrinkageStatusAccordingToPeriods(IPerson person, DateOnlyPeriod period)

@@ -11,6 +11,7 @@
 	    void SetPermissionsOnShiftAsOvertime(bool permission);
         void HideForm();
         void SetTexts();
+		void SetTextsNoRightToLeft();
         void SetColor();
         bool Cancel();
         void ShowRestrictions(bool show);

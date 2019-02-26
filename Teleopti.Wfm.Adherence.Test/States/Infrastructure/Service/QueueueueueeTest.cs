@@ -66,7 +66,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 				}
 			});
 			
-			Target.QueueIteration(DataSourceHelper.TenantName);
+			Target.QueueIteration(InfraTestConfigReader.TenantName());
 
 			WithUnitOfWork.Get(() => AgentStates.Load(personId)).StateGroupId.Should().Be(stateGroupId);
 		}

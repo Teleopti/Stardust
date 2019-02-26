@@ -15,6 +15,7 @@ import { TopNavigationComponent } from './components/top-navigation';
 import { AreaService } from './shared/area.service';
 import { BusinessUnitService } from './shared/businessunit.service';
 import { ToggleMenuService } from './shared/toggle-menu.service';
+import { SystemSettingsService } from '../system-settings/shared/system-settings.service';
 
 @NgModule({
 	imports: [
@@ -41,7 +42,8 @@ import { ToggleMenuService } from './shared/toggle-menu.service';
 			useFactory: (i: any): IStateService => i.get('$state'),
 			deps: ['$injector']
 		},
-		ToggleMenuService
+		ToggleMenuService,
+		SystemSettingsService
 	],
 	entryComponents: [SideMenuComponent, TopNavigationComponent, SettingsMenuComponent]
 })

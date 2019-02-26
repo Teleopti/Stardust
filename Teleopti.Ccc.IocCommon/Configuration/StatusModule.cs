@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Status;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	internal class MonitorModule : Module
+	internal class StatusModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

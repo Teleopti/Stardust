@@ -48,12 +48,12 @@
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.16.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\packages\MbCache.2.16.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.18.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.16.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\packages\MbCache.2.16.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.18.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -178,10 +178,10 @@
     <Compile Include="Configuration\Infrastructure\RtaRuleRepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaStateGroupRepositoryTest.cs" />
+    <Compile Include="Configuration\Parallelize.cs" />
     <Compile Include="Configuration\Unit\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Configuration\Unit\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Configuration\Unit\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
-    <Compile Include="Configuration\Unit\Parallelize.cs" />
     <Compile Include="Configuration\Unit\PermissionViewModelBuilderTest.cs" />
     <Compile Include="Configuration\Unit\RtaMapTest.cs" />
     <Compile Include="Configuration\Unit\RtaRuleTest.cs" />
@@ -222,6 +222,7 @@
     <Compile Include="Historical\Unit\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceDate\DateTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdjustedToNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ApprovedPeriodsTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
