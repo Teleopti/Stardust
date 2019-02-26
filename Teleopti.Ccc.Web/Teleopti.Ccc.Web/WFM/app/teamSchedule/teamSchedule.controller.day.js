@@ -410,7 +410,10 @@
 			});
 		};
 
-		function afterSchedulesLoaded(result) {
+		function afterSchedulesLoaded(date, result) {
+			scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
+			ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
+
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.scheduleCount = scheduleMgmtSvc.groupScheduleVm.Schedules.length;
 			vm.total = result.Total;
@@ -420,6 +423,12 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			];
 			vm.scheduleFullyLoaded = true;
+
+			vm.checkValidationWarningForCurrentPage();
+			populateAvailableTimezones(result);
+			vm.isLoading = false;
+			vm.searchOptions.focusingSearch = false;
+
 		}
 
 		function populateAvailableTimezones(schedules) {
@@ -442,41 +451,18 @@
 
 			vm.isLoading = true;
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
+
 			if (vm.searchEnabled) {
-				var params = getParamsForLoadingSchedules();
-				teamScheduleSvc.searchSchedules(params).then(function (response) {
+				teamScheduleSvc.searchSchedules(getParamsForLoadingSchedules()).then(function (response) {
 					var result = response.data;
-					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
-					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
-					afterSchedulesLoaded(result);
+					afterSchedulesLoaded(date, result);
+					personSelectionSvc.syncProjectionSelection(scheduleMgmtSvc.groupScheduleVm.Schedules, date, vm.hasSelectedAllPeopleInEveryPage);
 
-					if (vm.hasSelectedAllPeopleInEveryPage) {
-						personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-					}
-					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-
-					vm.checkValidationWarningForCurrentPage();
-					populateAvailableTimezones(result);
-					vm.isLoading = false;
-					vm.searchOptions.focusingSearch = false;
 				});
 			} else if (vm.preSelectPersonIds.length > 0) {
 				teamScheduleSvc.getSchedules(date, vm.preSelectPersonIds).then(function (result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
-					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
-					afterSchedulesLoaded(result);
-
-					if (vm.hasSelectedAllPeopleInEveryPage) {
-						personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-					}
-					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-
-					personSelectionSvc.preSelectPeople(vm.preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
-
-					vm.checkValidationWarningForCurrentPage();
-					populateAvailableTimezones(result);
-					vm.isLoading = false;
-					vm.searchOptions.focusingSearch = false;
+					afterSchedulesLoaded(date, result);
+					personSelectionSvc.preSelectPeople(vm.preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, date);
 				});
 			}
 		};

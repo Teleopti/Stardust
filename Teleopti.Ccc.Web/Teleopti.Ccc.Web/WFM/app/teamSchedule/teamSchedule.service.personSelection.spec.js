@@ -2,13 +2,15 @@
 
 describe("teamschedule person selection tests", function () {
 	var target;
+	var scheduleManagement;
 
 	beforeEach(function () {
 		module("wfm.teamSchedule");
 	});
 
-	beforeEach(inject(function (PersonSelection) {
+	beforeEach(inject(function (PersonSelection, ScheduleManagement) {
 		target = PersonSelection;
+		scheduleManagement = ScheduleManagement;
 	}));
 
 	var scheduleDate = moment("2016-03-20");
@@ -92,15 +94,32 @@ describe("teamschedule person selection tests", function () {
 		}));
 
 		it("can select/deselect one person", inject(function () {
-			schedule1.IsSelected = true;
-			target.updatePersonSelection(schedule1);
+			var schedule = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": '2019-02-26',
+				"ShiftCategory": {
+					"ShortName": "AM",
+					"Name": "Early",
+					"DisplayColor": "#000000"
+				},
+				"Projection": [],
+				"IsProtected": true,
+				"Timezone": { IanaId: "Asia/Shanghai", DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi" },
+				"DayOff": null
+			};
+			scheduleManagement.resetSchedules([schedule], '2019-02-26', "Asia/Shanghai");
+			var scheduleVm = scheduleManagement.groupScheduleVm.Schedules[0];
 
-			var person1 = target.personInfo[personId1];
+			scheduleVm.IsSelected = true;
+			target.updatePersonSelection(scheduleVm);
+
+			var person1 = target.personInfo[schedule.PersonId];
 			expect(person1.Checked).toEqual(true);
 			expect(target.getSelectedPersonInfoList().length).toEqual(1);
 
-			schedule1.IsSelected = false;
-			target.updatePersonSelection(schedule1);
+			scheduleVm.IsSelected = false;
+			target.updatePersonSelection(scheduleVm);
 
 			expect(target.getSelectedPersonInfoList().length).toEqual(0);
 		}));
