@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_schedulingResultStateHolder.LoadedAgents).Return(new List<IPerson>());
             Expect.Call(_loaderDeciderResult.FilterPeople(new List<IPerson>())).Return(0);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => _schedulerStateLoader.LoadSchedulingResultAsync(null, unitOfWork, null,new List<ISkill>(), _staffingCalculatorServiceFacade)).IgnoreArguments();
+            Expect.Call(() => _schedulerStateLoader.LoadSchedulingResultAsync(null, null, new List<ISkill>(), _staffingCalculatorServiceFacade)).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             _mocks.ReplayAll();
             _target.ReloadResultIfNeeded(_scenario, _period, _persons);

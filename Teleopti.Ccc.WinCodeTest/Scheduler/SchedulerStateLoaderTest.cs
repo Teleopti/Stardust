@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _targetStateHolder.SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			
 
-			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, new StaffingCalculatorServiceFacade());
+			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, new StaffingCalculatorServiceFacade());
 
             Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
             Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));

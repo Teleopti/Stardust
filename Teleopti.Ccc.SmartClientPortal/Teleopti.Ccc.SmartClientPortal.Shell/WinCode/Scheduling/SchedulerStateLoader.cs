@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -23,10 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		void LoadOrganization();
 		void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod);
-
-		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow,
-			BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
+		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
 		void EnsureSkillsLoaded(DateOnlyPeriod period);
 	}
 
@@ -80,38 +76,42 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow,
-			BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			_backgroundWorker = backgroundWorker;
 
-			reassociateCommonData(uow);
-			if (_backgroundWorker.CancellationPending)
-				return;
-
-			reassociatePeople(uow);
-			if (_backgroundWorker.CancellationPending)
-				return;
-
-			if (_schedulerState.SchedulerStateHolder.Schedules == null || _schedulerState.SchedulerStateHolder.RequestedPeriod.Period() !=
-				scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
-				((SchedulerStateHolder) _schedulerState.SchedulerStateHolder).RequestedPeriod =
-					new DateOnlyPeriodAsDateTimePeriod(
-						scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(timeZone), timeZone);
-				initializeSchedules(uow, scheduleDateTimePeriod);
+				reassociateCommonData(uow);
+				if (_backgroundWorker.CancellationPending)
+					return;
+
+				reassociatePeople(uow);
+				if (_backgroundWorker.CancellationPending)
+					return;
+
+				if (_schedulerState.SchedulerStateHolder.Schedules == null ||
+					_schedulerState.SchedulerStateHolder.RequestedPeriod.Period() !=
+					scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+				{
+					var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+					((SchedulerStateHolder) _schedulerState.SchedulerStateHolder).RequestedPeriod =
+						new DateOnlyPeriodAsDateTimePeriod(
+							scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(timeZone),
+							timeZone);
+					initializeSchedules(uow, scheduleDateTimePeriod);
+				}
+
+				if (_backgroundWorker.CancellationPending)
+					return;
+				initializeSkills(uow);
+				if (_backgroundWorker.CancellationPending)
+					return;
+				initializeSkillDays(uow, skills, staffingCalculatorServiceFacade);
+				if (_backgroundWorker.CancellationPending)
+					return;
+				initializeScheduleData();
 			}
-			if (_backgroundWorker.CancellationPending)
-				return;
-			initializeSkills(uow);
-			if (_backgroundWorker.CancellationPending)
-				return;
-			initializeSkillDays(uow, skills, staffingCalculatorServiceFacade);
-			if (_backgroundWorker.CancellationPending)
-				return;
-			initializeScheduleData();
 		}
 
 		public void EnsureSkillsLoaded(DateOnlyPeriod period)
