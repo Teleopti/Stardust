@@ -146,10 +146,7 @@
 							<div nz-row>
 								<span nz-col [nzSpan]="12">{{ 'PreSchedulingValidationIssues' | translate }}</span>
 								<span nz-col [nzSpan]="4">
-									<ng-template #indicatorTemplate
-									><i nz-icon type="loading" style="font-size: 24px;"></i
-									></ng-template>
-									<nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="loadingValidations">
+									<nz-spin [nzSpinning]="loadingValidations">
 										{{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
 										<button
 												nz-button
