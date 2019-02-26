@@ -35,8 +35,10 @@ namespace Teleopti.Ccc.Infrastructure.ETL
 			using (var conn = new SqlConnection(_connectionString.Value))
 			{
 				conn.Open();
-				var cmd = new SqlCommand(sql, conn);
-				cmd.ExecuteNonQuery();
+				using (var cmd = new SqlCommand(sql, conn))
+				{
+					cmd.ExecuteNonQuery();					
+				}
 			}
 		}
 	}
