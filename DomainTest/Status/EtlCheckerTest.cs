@@ -30,21 +30,21 @@ namespace Teleopti.Ccc.DomainTest.Status
 		[Test]
 		public void ShouldSetMessageWhenSuccess()
 		{
-			var lastPing = TimeSpan.FromSeconds(EtlTickFrequency.Value.TotalSeconds - 1);
-			TimeSinceLastEtlPing.SetTime(lastPing);
+			var lastPingInSeconds = EtlTickFrequency.Value.TotalSeconds - 1;
+			TimeSinceLastEtlPing.SetTime(TimeSpan.FromSeconds(lastPingInSeconds));
 
 			Target.Execute().Output
-				.Should().Be.EqualTo(string.Format(EtlChecker.Message, lastPing));
+				.Should().Be.EqualTo(string.Format(EtlChecker.Message, lastPingInSeconds));
 		}
 		
 		[Test]
 		public void ShouldSetMessageWhenFailure()
 		{
-			var lastPing = TimeSpan.FromSeconds(EtlTickFrequency.Value.TotalSeconds + 100);
-			TimeSinceLastEtlPing.SetTime(lastPing);
+			var lastPingInSeconds = EtlTickFrequency.Value.TotalSeconds + 100;
+			TimeSinceLastEtlPing.SetTime(TimeSpan.FromSeconds(lastPingInSeconds));
 
 			Target.Execute().Output
-				.Should().Be.EqualTo(string.Format(EtlChecker.Message, lastPing));
+				.Should().Be.EqualTo(string.Format(EtlChecker.Message, lastPingInSeconds));
 		}
 
 		[Test]

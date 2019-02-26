@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Status
 			var timeSinceLastEtlPing = _timeSinceLastEtlPing.Fetch();
 			return new StatusStepResult(
 				timeSinceLastEtlPing < EtlTickFrequency.Value + TimeSpan.FromSeconds(30), 
-				timeSinceLastEtlPing.TotalDays > 1 ? MessageWhenDeadForLongTime : string.Format(Message, timeSinceLastEtlPing));
+				timeSinceLastEtlPing.TotalDays > 1 ? MessageWhenDeadForLongTime : string.Format(Message, timeSinceLastEtlPing.TotalSeconds));
 		}
 
 		public string Name { get; } = "ETL";
