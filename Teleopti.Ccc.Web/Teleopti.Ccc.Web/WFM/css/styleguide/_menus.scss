@@ -223,3 +223,19 @@
 		background: transparent;
 	}
 }
+
+//Shortcut trick for IE, hijacking ALT+[key] keypresses
+//Disable in other browsers
+.shortcut-trick-ie {
+	display: none;
+}
+
+//Enable, but hide, in IE
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.shortcut-trick-ie {
+		display: block;
+		position: absolute;
+		left: -999px;
+		top: -999px;
+	}
+}
