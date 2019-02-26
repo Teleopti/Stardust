@@ -1,15 +1,11 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs/';
+import { Subscription } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd';
-import {
-	BankHolidayCalendar,
-	BankHolidayCalendarYear,
-	BankHolidayCalendarDateItem,
-	BankHolidayCalendarItem
-} from '../../interface';
+import { BankHolidayCalendar, BankHolidayCalendarYear, BankHolidayCalendarDateItem } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { DeepCopyService } from 'src/app/shared/services/deep-copy.service';
 
 @Component({
 	selector: 'bank-holiday-calendar-add',
@@ -33,16 +29,19 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 	newCalendarYears: BankHolidayCalendarYear[] = [];
 	newCalendarYearsForDisplay: BankHolidayCalendarYear[] = [];
 	selectedDatesTimeList: number[] = [];
-	bankHolidayCalendarsList: BankHolidayCalendar[];
+	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
 
 	menuSubscription: Subscription;
 	bankHolidayListSubscription: Subscription;
+	timestampListSubscription: Subscription;
+	isSavingCalendar = false;
 
 	constructor(
 		public bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
 		private noticeService: NzNotificationService,
-		private menuService: ToggleMenuService
+		private menuService: ToggleMenuService,
+		private copyService: DeepCopyService
 	) {}
 
 	ngOnInit(): void {
@@ -73,7 +72,7 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 		this.menuSubscription.unsubscribe();
 	}
 
-	checkNewCalendarName() {
+	saveNewCalendarName() {
 		if (this.checkNameAlreadyExisting() || this.checkNameIsEmpty()) {
 			return;
 		}
@@ -113,10 +112,8 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 		if (this.checkNameAlreadyExisting() || this.checkNameIsEmpty()) {
 			return;
 		}
-
 		const dateString = moment(date, this.dateFormat).format(this.dateFormat);
 		const timeStamp = new Date(dateString).getTime();
-
 		if (this.selectedDatesTimeList.filter(time => time === timeStamp).length > 0) return;
 
 		this.resetLastAddedDateItem();
@@ -126,8 +123,6 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 			Description: this.translate.instant('BankHoliday'),
 			IsLastAdded: true
 		};
-
-		this.selectedDatesTimeList.push(timeStamp);
 
 		this.addDateToYear(newDate);
 		this.saveNewBankCalendar(newDate);
@@ -161,6 +156,8 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 				return this.sortDateOrYearAscending(c.Year, n.Year);
 			});
 		} else {
+			if (curYearItem[0].Dates.filter(date => date.Date === newDate.Date).length > 0) return;
+
 			curYearItem[0].Dates.push(newDate);
 			curYearItem[0].Dates.sort((c, n) => {
 				return this.sortDateOrYearAscending(c.Date, n.Date);
@@ -174,11 +171,8 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 		year.Active = status;
 	}
 
-	removeDate(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYear) {
+	removeDate(date: BankHolidayCalendarDateItem) {
 		date.IsDeleted = true;
-
-		const timeStampIdx = this.selectedDatesTimeList.indexOf(new Date(date.Date).getTime());
-		this.selectedDatesTimeList.splice(timeStampIdx, 1);
 
 		this.saveNewBankCalendar(date);
 	}
@@ -188,6 +182,10 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 	}
 
 	saveNewBankCalendar(newDate?: BankHolidayCalendarDateItem) {
+		if (this.isSavingCalendar) return;
+
+		this.isSavingCalendar = true;
+
 		const bankHolidayCalendar: BankHolidayCalendar = {
 			Id: this.newCalendarId,
 			Name: this.newCalendarName,
@@ -212,10 +210,14 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 					});
 					y.Active = true;
 				});
-				this.newCalendarYearsForDisplay = result.Years;
+				this.newCalendarYearsForDisplay = this.copyService.copy(result.Years);
 				this.newCalendarYears = result.Years;
 
 				this.updateBankHolidayCalendarList(result);
+				if (newDate) {
+					this.updateTimeStampList(newDate);
+				}
+				this.isSavingCalendar = false;
 			} else {
 				this.networkError();
 			}
@@ -259,7 +261,18 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 		}
 	}
 
+	updateTimeStampList(newDate: BankHolidayCalendarDateItem) {
+		const timeStamp = new Date(newDate.Date).getTime();
+		if (newDate.IsDeleted) {
+			const timeStampIdx = this.selectedDatesTimeList.indexOf(timeStamp);
+			if (timeStampIdx > -1) this.selectedDatesTimeList.splice(timeStampIdx, 1);
+		} else {
+			this.selectedDatesTimeList.push(timeStamp);
+		}
+	}
+
 	networkError = (error?: any) => {
+		this.isSavingCalendar = false;
 		this.noticeService.error(
 			this.translate.instant('Error'),
 			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')

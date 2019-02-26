@@ -6,7 +6,8 @@
 			nz-input
 			[placeholder]="'NewCalendarName' | translate"
 			[(ngModel)]="newCalendarName"
-			(blur)="checkNewCalendarName()"
+			(change)="saveNewCalendarName()"
+			(blur)="checkNameAlreadyExisting()"
 		/>
 		<nz-alert
 			*ngIf="isNewCalendarNameEmpty"
@@ -62,7 +63,7 @@
 								nzSize="small"
 								nzType="danger"
 								nzShape="circle"
-								(click)="removeDate(date, year)"
+								(click)="removeDate(date)"
 								class="remove-date-icon"
 							>
 								<i nz-icon type="close" theme="outline"></i>
@@ -87,6 +88,6 @@
 	</div>
 
 	<div class="con-flex operation-buttons">
-		<button nz-button nzType="default" (click)="exit()">{{ 'Back' | translate }}</button>
+		<button nz-button nzType="primary" (click)="exit()">{{ 'Back' | translate }}</button>
 	</div>
 </div>
