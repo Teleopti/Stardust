@@ -253,6 +253,7 @@
     <Compile Include="Status\ICallLegacySystemStatus.cs" />
     <Compile Include="Status\IStatusStep.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
+    <Compile Include="Status\StardustChecker.cs" />
     <Compile Include="Status\StatusStepInfo.cs" />
     <Compile Include="Status\StatusStepResult.cs" />
     <Compile Include="Status\ExecuteStatusStep.cs" />
@@ -278,7 +279,6 @@
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
     <Compile Include="Stardust\IGetAllWorkerNodes.cs" />
-    <Compile Include="Stardust\StardustChecker.cs" />
     <Compile Include="Stardust\WorkerNode.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />

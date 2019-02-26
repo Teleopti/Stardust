@@ -1,7 +1,7 @@
 using System.Linq;
-using Teleopti.Ccc.Domain.Status;
+using Teleopti.Ccc.Domain.Stardust;
 
-namespace Teleopti.Ccc.Domain.Stardust
+namespace Teleopti.Ccc.Domain.Status
 {
 	public class StardustChecker : IStatusStep
 	{
