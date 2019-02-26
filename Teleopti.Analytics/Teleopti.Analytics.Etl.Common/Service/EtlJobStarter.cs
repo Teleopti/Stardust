@@ -119,11 +119,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			);
 
 			log.DebugFormat("Running job {0}", jobToRun.Name);
-			var success = runEtlJob(jobToRun, scheduleToRun, repository, jobScheduleRepository);
-			return success;
+			runEtlJob(jobToRun, scheduleToRun, repository, jobScheduleRepository);
+			return true;
 		}
 
-		private bool runEtlJob(IJob jobToRun, IEtlJobSchedule scheduleJob, IJobLogRepository repository,
+		private void runEtlJob(IJob jobToRun, IEtlJobSchedule scheduleJob, IJobLogRepository repository,
 			IJobScheduleRepository jobScheduleRepository)
 		{
 			var runController = new RunController((IRunControllerRepository) repository);
@@ -132,7 +132,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if (!runController.CanIRunAJob(out var etlRunningInformation))
 			{
 				logConflictingEtlRun(jobToRun, etlRunningInformation);
-				return true;
 			}
 
 			try
@@ -205,8 +204,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					GC.WaitForFullGCComplete();
 				}
 			}
-
-			return true;
 		}
 
 		private static void logConflictingEtlRun(IJob jobToRun, IEtlRunningInformation etlRunningInformation)
