@@ -3,35 +3,29 @@ using System.IO;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain;
 using Teleopti.Support.Library;
+using Teleopti.Support.Library.Folders;
 using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public class DatabaseTestHelper
 	{
-		public void CreateDatabases() => CreateDatabases(null);
-		public void CreateDatabases(string tenant) 
+		public void CreateDatabases(string tenant)
 		{
-			using (testDirectoryFix())
-			{
-				createOrRestoreApplication(tenant);
-				createOrRestoreAnalytics();
-				createOrRestoreAgg();
-			}
+			createOrRestoreApplication(tenant);
+			createOrRestoreAnalytics();
+			createOrRestoreAgg();
 		}
 
 		public void BackupApplicationDatabase(int dataHash)
 		{
-			using (testDirectoryFix())
-				backupByFileCopy(application(), dataHash);
+			backupByFileCopy(application(), dataHash);
 		}
 
 		public void RestoreApplicationDatabase(int dataHash)
 		{
-			using (testDirectoryFix())
-				restoreByFileCopy(application(), dataHash);
+			restoreByFileCopy(application(), dataHash);
 		}
 
 		public void BackupApplicationDatabaseBySql(string path, int dataHash)
@@ -48,14 +42,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void BackupAnalyticsDatabase(int dataHash)
 		{
-			using (testDirectoryFix())
-				backupByFileCopy(analytics(), dataHash);
+			backupByFileCopy(analytics(), dataHash);
 		}
 
 		public void RestoreAnalyticsDatabase(int dataHash)
 		{
-			using (testDirectoryFix())
-				restoreByFileCopy(analytics(), dataHash);
+			restoreByFileCopy(analytics(), dataHash);
 		}
 
 		public void ClearAnalyticsData()
@@ -147,7 +139,7 @@ namespace Teleopti.Ccc.TestCommon
 				DatabaseType.TeleoptiCCC7,
 				new DbManagerLog4Net("DbManager.Application"),
 				new WfmInstallationEnvironment()
-			);
+			) {DbManagerFolderPath = DbManagerFolderLocator.LocateDatabaseFolderUsingBlackMagic(TestContext.CurrentContext.TestDirectory)};
 		}
 
 		private static DatabaseHelper agg()
@@ -157,7 +149,7 @@ namespace Teleopti.Ccc.TestCommon
 				DatabaseType.TeleoptiCCCAgg,
 				new DbManagerLog4Net("DbManager.Agg"),
 				new WfmInstallationEnvironment()
-			);
+			) {DbManagerFolderPath = DbManagerFolderLocator.LocateDatabaseFolderUsingBlackMagic(TestContext.CurrentContext.TestDirectory)};
 		}
 
 		private static DatabaseHelper analytics()
@@ -167,14 +159,7 @@ namespace Teleopti.Ccc.TestCommon
 				DatabaseType.TeleoptiAnalytics,
 				new DbManagerLog4Net("DbManager.Analytics"),
 				new WfmInstallationEnvironment()
-			);
-		}
-
-		private static IDisposable testDirectoryFix()
-		{
-			var path = Directory.GetCurrentDirectory();
-			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-			return new GenericDisposable(() => { Directory.SetCurrentDirectory(path); });
+			) {DbManagerFolderPath = DbManagerFolderLocator.LocateDatabaseFolderUsingBlackMagic(TestContext.CurrentContext.TestDirectory)};
 		}
 
 		public void CreateFirstTenantAdminUser()

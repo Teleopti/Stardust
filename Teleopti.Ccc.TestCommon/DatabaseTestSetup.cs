@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.TestCommon
 			var data = default(T);
 			withContainer(container =>
 			{
-				container.Resolve<DatabaseTestHelper>().CreateDatabases(InfraTestConfigReader.TenantName());
+				container.Resolve<DatabaseTestHelper>()
+					.CreateDatabases(InfraTestConfigReader.TenantName());
 
 				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
 

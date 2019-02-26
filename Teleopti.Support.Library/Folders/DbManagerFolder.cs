@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Linq;
 
 namespace Teleopti.Support.Library.Folders
 {
@@ -25,26 +27,39 @@ namespace Teleopti.Support.Library.Folders
 					return System.IO.Path.GetDirectoryName(assembly.Location);
 				}
 			}
-			return locateDatabaseFolderUsingBlackMagic();
-		}
 
-		 
-		private static string locateDatabaseFolderUsingBlackMagic()
-		{
-			if (System.IO.Directory.Exists(@"..\..\..\..\Database"))
-				return @"..\..\..\..\Database";
-			if (System.IO.Directory.Exists(@"..\..\..\Database"))
-				return @"..\..\..\Database";
-			if (System.IO.Directory.Exists(@"..\..\Database"))
-				return @"..\..\Database";
-			if (System.IO.Directory.Exists(@"..\Database"))
-				return @"..\Database";
-			return null;
+			return DbManagerFolderLocator.LocateDatabaseFolderUsingBlackMagic();
 		}
 
 		public override string ToString()
 		{
 			return Path();
+		}
+	}
+
+	public static class DbManagerFolderLocator
+	{
+		public static string LocateDatabaseFolderUsingBlackMagic(string testDirectory = null)
+		{
+			var relativeLookups = new[]
+			{
+				@"..\..\..\..\Database",
+				@"..\..\..\Database",
+				@"..\..\Database",
+				@"..\Database",
+			};
+			var lookupsFromTestDirectory = Enumerable.Empty<string>();
+			if (testDirectory != null)
+			{
+				lookupsFromTestDirectory = relativeLookups
+					.Select(x => Path.Combine(testDirectory, x))
+					.ToArray();
+			}
+
+			var lookups = lookupsFromTestDirectory
+				.Concat(relativeLookups)
+				.ToArray();
+			return lookups.FirstOrDefault(Directory.Exists);
 		}
 	}
 }

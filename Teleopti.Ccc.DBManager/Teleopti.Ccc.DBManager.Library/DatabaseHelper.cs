@@ -15,13 +15,24 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly ExecuteSql _usingDatabase;
 		private readonly Lazy<SqlVersion> _sqlVersion;
 		private readonly IInstallationEnvironment _installationEnvironment;
-
+		
+		public DatabaseHelper(
+			string connectionString, 
+			DatabaseType databaseType, 
+			IInstallationEnvironment installationEnvironment)
+			: this(
+				connectionString, 
+				databaseType, 
+				new NullLog(), 
+				installationEnvironment)
+		{
+		}
+		
 		public DatabaseHelper(
 			string connectionString, 
 			DatabaseType databaseType, 
 			IUpgradeLog log, 
-			IInstallationEnvironment installationEnvironment, 
-			bool forceMasterInAzure = false)
+			IInstallationEnvironment installationEnvironment)
 		{
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
@@ -32,7 +43,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_usingMaster = new ExecuteSql(() =>
 			{
 				if (_installationEnvironment.IsAzure)
-					openConnection(forceMasterInAzure);
+					openConnection(ForceMasterInAzure);
 				return openConnection(true);
 			}, Logger);
 
@@ -43,10 +54,6 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		}
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType, IInstallationEnvironment installationEnvironment, bool forceMasterInAzure = false)
-			: this(connectionString, databaseType, new NullLog(), installationEnvironment, forceMasterInAzure)
-		{
-		}
 
 		public IUpgradeLog Logger { set; get; }
 		public string ConnectionString { get; private set; }
@@ -54,6 +61,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public string DatabaseName { get; private set; }
 
 		public string DbManagerFolderPath { get; set; }
+		public bool ForceMasterInAzure { get; set; } = false;
 
 		public string BackupNameForBackup(int dataHash)
 		{
@@ -177,21 +185,21 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public int DatabaseVersion()
 		{
-			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var versionInfo = new DatabaseVersionInformation(databaseFolder, _usingDatabase);
 			return versionInfo.GetDatabaseVersion();
 		}
 
 		public int SchemaVersion()
 		{
-			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var versionInfo = new SchemaVersionInformation(databaseFolder);
 			return versionInfo.GetSchemaVersion(DatabaseType);
 		}
 
 		public int OtherScriptFilesHash()
 		{
-			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var versionInfo = new SchemaVersionInformation(databaseFolder);
 			return versionInfo.GetOtherScriptFilesHash(DatabaseType);
 		}

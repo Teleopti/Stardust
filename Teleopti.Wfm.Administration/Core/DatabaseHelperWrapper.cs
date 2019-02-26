@@ -85,7 +85,7 @@ namespace Teleopti.Wfm.Administration.Core
 				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
 				//
 			}
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType, _installationEnvironment, true) { Logger = new TenantLogger(tenant, tenantId, _config), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType, _installationEnvironment) { ForceMasterInAzure = true, Logger = new TenantLogger(tenant, tenantId, _config), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			if (helper.Tasks().Exists(helper.DatabaseName))
 				return;
 
