@@ -220,7 +220,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	public editPlanningGroup() {
-		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId });
+		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId, planningPeriodId: this.ppId });
 	}
 
 	public isDisabled() {
