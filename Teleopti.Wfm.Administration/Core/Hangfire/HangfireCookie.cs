@@ -38,11 +38,14 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 
 		public void RemoveAdminCookie()
 		{
-			var identity = HttpContext.Current.GetOwinContext().Authentication.User.Identity;
+			var owinContext = HttpContext.Current.GetOwinContext();
+			var identity = owinContext.Authentication.User.Identity;
 			if (!identity.IsAuthenticated)
 				return;
 
-			HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			owinContext.Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			owinContext.Response.Cookies.Delete(AntiForgeryCookieName);
+			owinContext.Response.Cookies.Delete(AntiForgeryConfig.CookieName);
 		}
 	}
 

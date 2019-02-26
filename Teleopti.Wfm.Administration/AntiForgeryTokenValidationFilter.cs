@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -29,8 +30,10 @@ namespace Teleopti.Wfm.Administration
 
 		private string GetCookieToken(HttpActionContext actionContext)
 		{
-			var cookie = actionContext.Request.Headers.GetCookies(HangfireCookie.AntiForgeryCookieName).FirstOrDefault();
-			return cookie?.Cookies?.FirstOrDefault()?.Value;
+			var cookie = actionContext.Request.Headers.GetCookies().SelectMany(cs =>
+				cs.Cookies.Where(c => string.Equals(c.Name, HangfireCookie.AntiForgeryCookieName,
+					StringComparison.InvariantCultureIgnoreCase))).FirstOrDefault();
+			return cookie?.Value;
 		}
 	}
 }
