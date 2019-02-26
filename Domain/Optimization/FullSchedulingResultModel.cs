@@ -32,13 +32,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 				foreach (var dateOnly in period.DayCollection())
 				{
 					var found = skillDaysDic.TryGetValue(dateOnly, out var skillDay);
-					double relativeDifference = !found
-						? 0
-						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
+					double relativeDifference;
+					if (!found){
+						relativeDifference = 0;
+					}
+					else
+					{
+						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+						{
+							skillStaffPeriod.Payload.UseShrinkage = true;
+						}
+						relativeDifference = SkillStaffPeriodHelper
+							.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
+					}
+
 					var detail = new FullSchedulingResultSkillDetail
 					{
 						Date = dateOnly,
-						RelativeDifference = Math.Round(relativeDifference,4)
+						RelativeDifference = Math.Round(relativeDifference, 4)
 					};
 
 					if (found)
@@ -50,7 +61,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 							ForecastAgents = Math.Round(x.ForecastedDistributedDemand, 2)
 						});
 					}
-					
 
 					detail.ColorId = skillDay != null && skillDay.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
 					item.AddDetail(detail);
