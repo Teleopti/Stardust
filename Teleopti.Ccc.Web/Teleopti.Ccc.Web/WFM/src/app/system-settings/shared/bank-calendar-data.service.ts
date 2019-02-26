@@ -1,28 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import {
-	BankHolidayCalendar,
-	SiteBankHolidayCalendars,
-	SiteBankHolidayCalendarsFormData,
-	BankHolidayCalendarItem
-} from '../interface';
+import { BankHolidayCalendar, SiteBankHolidayCalendars, SiteBankHolidayCalendarsFormData } from '../interface';
 
 @Injectable()
 export class BankCalendarDataService {
 	public yearFormat = 'YYYY';
 	public dateFormat = 'YYYY-MM-DD';
 
-	public bankHolidayCalendarsList$: BehaviorSubject<BankHolidayCalendarItem[]> = new BehaviorSubject<
-		BankHolidayCalendarItem[]
+	public bankHolidayCalendarsList$: BehaviorSubject<BankHolidayCalendar[]> = new BehaviorSubject<
+		BankHolidayCalendar[]
 	>([]);
 
 	constructor(private http: HttpClient) {
 		this.getBankHolidayCalendars().subscribe(calendars => {
-			const cals = calendars as BankHolidayCalendarItem[];
+			const cals = calendars as BankHolidayCalendar[];
 			const curYear = moment().year();
 			cals.forEach(c => {
-				c.CurrentYearIndex = 0;
+				// c.CurrentYearIndex = 0;
 
 				c.Years.forEach((y, i) => {
 					y.Dates.forEach(d => {
@@ -30,7 +25,7 @@ export class BankCalendarDataService {
 					});
 
 					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
-						c.CurrentYearIndex = i;
+						// c.CurrentYearIndex = i;
 					}
 				});
 			});

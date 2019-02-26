@@ -24,7 +24,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	yearFormat = this.bankCalendarDataService.yearFormat;
 	dateFormat = this.bankCalendarDataService.dateFormat;
 
-	bankHolidayCalendarsList: BankHolidayCalendarItem[];
+	bankHolidayCalendarsList: BankHolidayCalendar[];
 	nameAlreadyExisting = false;
 	selectedYearDate: Date;
 	edittingCalendarName;

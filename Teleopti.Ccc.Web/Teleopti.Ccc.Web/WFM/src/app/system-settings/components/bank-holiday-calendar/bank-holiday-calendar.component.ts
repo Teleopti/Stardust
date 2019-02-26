@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NzNotificationService, NzModalService } from 'ng-zorro-antd';
 import { TogglesService } from 'src/app/core/services';
-import { BankHolidayCalendarItem } from '../../interface';
+import { BankHolidayCalendarItem, BankHolidayCalendar } from '../../interface';
 import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { BankCalendarDataService } from '../../shared/bank-calendar-data.service
 	styleUrls: ['./bank-holiday-calendar.component.scss']
 })
 export class BankHolidayCalendarComponent implements OnInit {
-	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
+	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
 	isAssignBankHolidayCalendarsToSitesEnabled = false;
 	isAddingNewCalendar = false;
 	isEdittingCalendar = false;
