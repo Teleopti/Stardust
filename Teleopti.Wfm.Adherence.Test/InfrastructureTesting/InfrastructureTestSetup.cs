@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -10,6 +11,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 	{
 		public static (IPerson Person, IBusinessUnit BusinessUnit) Setup()
 		{
+			SqlConnection.ClearAllPools(); // makes restore faster, move inside later
 			return DatabaseTestSetup.Setup(context =>
 			{
 				var businessUnit = new BusinessUnit(RandomName.Make());

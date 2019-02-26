@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -51,7 +50,9 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				var workerId = TestContext.CurrentContext.WorkerId;
 				if (!suffixPerWorkerId.ContainsKey(workerId))
-					suffixPerWorkerId[workerId] = suffixPerWorkerId.Count.ToString();
+					lock (suffixPerWorkerId)
+						if (!suffixPerWorkerId.ContainsKey(workerId))
+							suffixPerWorkerId[workerId] = suffixPerWorkerId.Count.ToString();
 				var suffix = suffixPerWorkerId[workerId];
 				return name + "_" + suffix;
 			}

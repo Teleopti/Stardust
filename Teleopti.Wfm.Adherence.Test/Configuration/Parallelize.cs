@@ -1,3 +1,4 @@
+using System.IO;
 using NUnit.Framework;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration
@@ -6,5 +7,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration
 	[Parallelizable(ParallelScope.Fixtures)]
 	public class Parallelize
 	{
+		[OneTimeSetUp]
+		public void OneTimeSetup()
+		{
+			// when parallelizing, using (testDirectoryFix()) doesnt work properly in DatabaseTestHelper
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
 	}
 }
