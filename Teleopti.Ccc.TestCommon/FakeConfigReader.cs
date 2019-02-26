@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeConfigReader : IConfigReader
 	{
-		private readonly IDictionary<string, string> _settings = new Dictionary<string, string>();
+		private readonly IDictionary<string, Func<string>> _settings = new Dictionary<string, Func<string>>();
 		private readonly IDictionary<string, Func<string>> _connectionStrings = new Dictionary<string, Func<string>>();
 
 		public FakeConfigReader(IEnumerable<KeyValuePair<string, string>> config)
 		{
-			config.ForEach(x => _settings[x.Key] = x.Value);
+			config.ForEach(x => _settings[x.Key] = () => x.Value);
 		}
 
 		public FakeConfigReader()
@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public void FakeSetting(string name, string value)
+		{
+			_settings[name] = () => value;
+		}
+		
+		public void FakeSetting(string name, Func<string> value)
 		{
 			_settings[name] = value;
 		}
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon
 		
 		public string AppConfig(string name)
 		{
-			return _settings.ContainsKey(name) ? _settings[name] : null;
+			return _settings.ContainsKey(name) ? _settings[name].Invoke() : null;
 		}
 
 		public string ConnectionString(string name)
@@ -60,8 +65,9 @@ namespace Teleopti.Ccc.TestCommon
 			config.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("DatamartConnectionString", InfraTestConfigReader.AnalyticsConnectionString);
 			
+			//this connstring is a app setting for some strange reason. not easy to change...
+			config.FakeSetting("DatamartConnectionString", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeSetting("CertificateModulus", ConfigurationManager.AppSettings["CertificateModulus"]);
 			config.FakeSetting("CertificateExponent", ConfigurationManager.AppSettings["CertificateExponent"]);
 			config.FakeSetting("CertificateP", ConfigurationManager.AppSettings["CertificateP"]);

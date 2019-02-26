@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.ETL
 
 		public TimeSinceLastEtlPing(IConfigReader config)
 		{
-			_connectionString = new Lazy<string>(() => config.ConnectionString("DatamartConnectionString"));
+			_connectionString = new Lazy<string>(() => config.AppConfig("DatamartConnectionString"));
 		}
 		
 		public TimeSpan Fetch()
