@@ -77,14 +77,13 @@
                             </md-tooltip>
                         </div>
 
-                        <div ng-if="vm.showAdjustedToNeutralAdherences"
-                             ng-repeat="adjustedToNeutralAdherence in vm.adjustedToNeutralAdherences"
-                             class="adjusted-to-neutral-adherence"
-                             ng-attr-style="left: {{adjustedToNeutralAdherence.Offset}}; width: {{adjustedToNeutralAdherence.Width}};"
-                             data-starttime="{{adjustedToNeutralAdherence.StartTime}}"
-                             data-endtime="{{adjustedToNeutralAdherence.EndTime}}">
+                        <div ng-repeat="neutralAdherence in vm.neutralAdherences"
+                             class="neutral-adherence"
+                             ng-attr-style="left: {{neutralAdherence.Offset}}; width: {{neutralAdherence.Width}};"
+                             data-starttime="{{neutralAdherence.StartTime}}"
+                             data-endtime="{{neutralAdherence.EndTime}}">
                             <md-tooltip md-direction="top">
-                                {{adjustedToNeutralAdherence.StartTime}} - {{adjustedToNeutralAdherence.EndTime}}
+                                {{neutralAdherence.StartTime}} - {{neutralAdherence.EndTime}}
                             </md-tooltip>
                         </div>
 
@@ -123,10 +122,10 @@
 
         <div class="twocolumns">
             <div class="left">
-                {{'RecordedOutOfAdherence' | translate}}
+                {{'RecordedAdherence' | translate}}
             </div>
             <div class="right">
-                <div class="recorded-out-of-adherences">
+                <div class="recorded-adherences">
                     <div ng-click="outOfAdherence.click()"
                          ng-repeat="outOfAdherence in vm.recordedOutOfAdherences"
                          ng-class="{'highlight': outOfAdherence.highlight}"
@@ -134,6 +133,34 @@
                          ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}">
                         <md-tooltip md-direction="top">
                             {{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
+                        </md-tooltip>
+                    </div>
+                    <div ng-click="neutralAdherence.click()"
+                         ng-repeat="neutralAdherence in vm.recordedNeutralAdherences"
+                         ng-class="{'highlight': neutralAdherence.highlight}"
+                         class="recorded-neutral-adherence"
+                         ng-attr-style="left: {{neutralAdherence.Offset}}; width: {{neutralAdherence.Width}}">
+                        <md-tooltip md-direction="top">
+                            {{neutralAdherence.StartTime}} - {{neutralAdherence.EndTime}}
+                        </md-tooltip>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="twocolumns" ng-if="vm.showAdjustedToNeutralAdherences">
+            <div class="left">
+                {{'AdjustedToNeutralAdherence' | translate}}
+            </div>
+            <div class="right">
+                <div class="adjusted-to-neutral-adherences">
+                    <div ng-click="adjustedToNeutral.click()"
+                         ng-repeat="adjustedToNeutral in vm.adjustedToNeutralAdherences"
+                         ng-class="{'highlight': adjustedToNeutral.highlight}"
+                         class="neutral-adherence"
+                         ng-attr-style="left: {{adjustedToNeutral.Offset}}; width: {{adjustedToNeutral.Width}}">
+                        <md-tooltip md-direction="top">
+                            {{adjustedToNeutral.StartTime}} - {{adjustedToNeutral.EndTime}}
                         </md-tooltip>
                     </div>
                 </div>
@@ -160,46 +187,32 @@
             </div>
         </div>
 
-        <div class="twocolumns" ng-if="vm.showAdjustedToNeutralAdherences">
-            <div class="left">
-                {{'AdjustedToNeutralAdherence' | translate}}
-            </div>
-            <div class="right">
-                <div class="adjusted-to-neutral-adherences">
-                    <div ng-click="adjustedToNeutral.click()"
-                         ng-repeat="adjustedToNeutral in vm.adjustedToNeutralAdherences"
-                         ng-class="{'highlight': adjustedToNeutral.highlight}"
-                         class="adjusted-to-neutral-adherence"
-                         ng-attr-style="left: {{adjustedToNeutral.Offset}}; width: {{adjustedToNeutral.Width}}">
-                        <md-tooltip md-direction="top">
-                            {{adjustedToNeutral.StartTime}} - {{adjustedToNeutral.EndTime}}
-                        </md-tooltip>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="con-row con-columns">
         <div class="con-flex">
-            <rta-card-panel open="vm.openRecordedOutOfAdherences" left-border-color="'#66c2ff'">
+            <rta-card-panel open="vm.openRecordedAdherences" left-border-color="'#66c2ff'">
                 <rta-card-panel-header>
-                    {{'RecordedOutOfAdherence' | translate}}
+                    {{'RecordedAdherence' | translate}}
                 </rta-card-panel-header>
                 <rta-card-panel-content>
                     <div style="max-height: 300px; overflow-y: scroll">
                         <table class="wfm-table">
                             <th style="width: 20%">{{'Start' | translate}}</th>
                             <th style="width: 20%">{{'End' | translate}}</th>
-                            <tr ng-repeat="outOfAdherence in vm.recordedOutOfAdherences"
-                                ng-class="{'highlight': outOfAdherence.highlight}"
-                                class="recorded-out-of-adherence"
-                                ng-click="outOfAdherence.click()">
+                            <th style="width: 20%">{{'Adherence' | translate}}</th>
+                            <tr ng-repeat="recordedAdherence in vm.recordedAdherences"
+                                ng-class="{'highlight': recordedAdherence.highlight}"
+                                class="recorded-adherence"
+                                ng-click="recordedAdherence.click()">
                                 <td>
-                                    {{outOfAdherence.StartTime}}
+                                    {{recordedAdherence.StartTime}}
                                 </td>
                                 <td>
-                                    {{outOfAdherence.EndTime}}
+                                    {{recordedAdherence.EndTime}}
+                                </td>
+                                <td>
+                                    {{recordedAdherence.Type}}
                                 </td>
                             </tr>
                         </table>

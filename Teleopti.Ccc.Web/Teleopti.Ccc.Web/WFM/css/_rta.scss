@@ -18,7 +18,7 @@
 
 	$out-of-adherence-color: darkred;
 	$in-adherence-color: darkgreen;
-	$adjusted-to-neutral-color: darkblue;
+	$neutral-adherence-color: darkblue;
 	$adherence-height: 4px;
 
 	.label-alert {
@@ -264,8 +264,8 @@
 				top: ($shift-height - $adherence-height) / 2;
 			}
 
-			.adjusted-to-neutral-adherence {
-				@include adherence-line($adjusted-to-neutral-color);
+			.neutral-adherence {
+				@include adherence-line($neutral-adherence-color);
 				top: ($shift-height - $adherence-height) / 2;
 			}
 
@@ -329,6 +329,31 @@
 			}
 		}
 
+		.recorded-neutral-adherences {
+			@include container;
+			height: $layer-row-height;
+
+			.recorded-neutral-adherence {
+				@include adherence-layer($neutral-adherence-color);
+				cursor: pointer;
+			}
+		}
+
+		.recorded-adherences {
+			@include container;
+			height: $layer-row-height;
+
+			.recorded-out-of-adherence {
+				@include adherence-layer($out-of-adherence-color);
+				cursor: pointer;
+			}
+
+			.recorded-neutral-adherence {
+				@include adherence-layer($neutral-adherence-color);
+				cursor: pointer;
+			}
+		}
+
 		.approved-periods {
 			@include container;
 			height: $layer-row-height;
@@ -349,8 +374,8 @@
 		.adjusted-to-neutral-adherences {
 			@include container;
 			height: $layer-row-height;
-			.adjusted-to-neutral-adherence {
-				@include adherence-layer($adjusted-to-neutral-color);
+			.neutral-adherence {
+				@include adherence-layer($neutral-adherence-color);
 				cursor: pointer;
 				z-index: 20;
 			}

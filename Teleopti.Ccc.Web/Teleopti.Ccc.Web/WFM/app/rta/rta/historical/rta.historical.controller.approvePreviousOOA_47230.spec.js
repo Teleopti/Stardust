@@ -55,7 +55,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		});
 
 		expect(c.recordedOutOfAdherences[0].highlight).toBe(true);
-		expect(c.openRecordedOutOfAdherences).toBe(true);
+		expect(c.openRecordedAdherences).toBe(true);
 	});
 
 	it('should remove highlight from other recorded out of adherences when clicked', function (t) {
@@ -122,7 +122,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		});
 
 		expect(c.approvedPeriods[0].highlight).toBe(true);
-		expect(c.openRecordedOutOfAdherences).toBe(false);
+		expect(c.openRecordedAdherences).toBe(false);
 		expect(c.openApprovedPeriods).toBe(true);
 	});
 
@@ -174,7 +174,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		});
 
 		expect(c.recordedOutOfAdherences[0].highlight).toBe(true);
-		expect(c.openRecordedOutOfAdherences).toBe(true);
+		expect(c.openRecordedAdherences).toBe(true);
 		expect(c.approvedPeriods[0].highlight).toBe(true);
 		expect(c.openApprovedPeriods).toBe(true);
 	});
@@ -196,7 +196,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			c.recordedOutOfAdherences[0].click();
 		});
 
-		expect(c.openRecordedOutOfAdherences).toBe(true);
+		expect(c.openRecordedAdherences).toBe(true);
 		expect(c.openApprovedPeriods).toBe(true);
 		expect(c.openApproveForm).toBe(true);
 		expect(c.approveStartTime).toEqual(moment('2018-01-29T08:00:00').toDate());

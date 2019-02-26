@@ -12,7 +12,7 @@
         vm.diamonds = [];
         vm.cards = [];
         $stateParams.open = $stateParams.open === "true";
-        vm.openRecordedOutOfAdherences = $stateParams.open;
+        vm.openRecordedAdherences = $stateParams.open;
         vm.openApprovedPeriods = $stateParams.open;
         vm.openApproveForm = $stateParams.open;
         vm.hasModifyAdherencePermission = false;
@@ -44,9 +44,11 @@
 
                 data.Schedules = data.Schedules || [];
                 data.OutOfAdherences = data.OutOfAdherences || [];
+                data.NeutralAdherences = data.NeutralAdherences || [];
                 data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
-                data.ApprovedPeriods = data.ApprovedPeriods || [];
+                data.RecordedNeutralAdherences = data.RecordedNeutralAdherences || [];
                 data.AdjustedToNeutralAdherences = data.AdjustedToNeutralAdherences || [];
+                data.ApprovedPeriods = data.ApprovedPeriods || [];
                 data.Changes = data.Changes || [];
                 data.Timeline = data.Timeline || {};
                 data.Navigation = data.Navigation || {};
@@ -63,13 +65,39 @@
 
                 vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
-                vm.outOfAdherences = buildOutOfAdherence(data.Timeline, data.OutOfAdherences);
-                vm.recordedOutOfAdherences = buildRecordedOutOfAdherences(data.Timeline, data.RecordedOutOfAdherences);
+                vm.outOfAdherences = buildResultingAdherences(data.Timeline, data.OutOfAdherences);
+                vm.neutralAdherences = buildResultingAdherences(data.Timeline, data.NeutralAdherences);
+
+                var outs = data.RecordedOutOfAdherences.map(function (o) {
+                    return {
+                        StartTime: o.StartTime,
+                        EndTime: o.EndTime,
+                        Type: "Out"
+                    }
+                });
+                var neutrals = data.RecordedNeutralAdherences.map(function (n) {
+                    return {
+                        StartTime: n.StartTime,
+                        EndTime: n.EndTime,
+                        Type: "Neutral"
+                    }
+                });
+
+                var recordedAdherences = outs
+                    .concat(neutrals)
+                    .sort(function (a, b) {
+                        return a.StartTime.localeCompare(b.StartTime);
+                    });
+
+                vm.recordedAdherences = buildRecordedAdherences(data.Timeline, recordedAdherences);
+                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function(a) { return a.Type === "Out"; });
+                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function(a) { return a.Type === "Neutral"; });
+
                 vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
-                
+
                 vm.showAdjustedToNeutralAdherences = data.AdjustedToNeutralAdherences.length > 0;
-                vm.adjustedToNeutralAdherences = buildAdjustedToNeutralAdherences(data.Timeline, data.AdjustedToNeutralAdherences);
-                
+                vm.adjustedToNeutralAdherences = buildAdjustedToNeutralPeriods(data.Timeline, data.AdjustedToNeutralAdherences);
+
                 vm.fullTimeline = buildTimeline(data);
                 timelineStart = data.Timeline.StartTime;
                 timelineEnd = data.Timeline.EndTime;
@@ -107,25 +135,22 @@
             return timeline;
         }
 
-        function buildOutOfAdherence(timeline, intervals) {
+        function buildResultingAdherences(timeline, intervals) {
             return intervals
                 .map(function (i) {
-                return buildInterval(timeline, i)
-            });
+                    return buildInterval(timeline, i)
+                });
         }
 
-        function buildRecordedOutOfAdherences(timeline, intervals) {
+        function buildRecordedAdherences(timeline, intervals) {
             return intervals
                 .map(function (interval) {
                     var o = buildInterval(timeline, interval);
-
+                    o.Type = interval.Type;
                     o.click = function () {
-                        vm.recordedOutOfAdherences.forEach(function (r) {
-                            r.highlight = false;
-                        });
-                        o.highlight = true;
+                        highlightClickedInterval(vm.recordedAdherences, o);
 
-                        vm.openRecordedOutOfAdherences = true;
+                        vm.openRecordedAdherences = true;
                         vm.openApprovedPeriods = true;
                         vm.openApproveForm = true;
 
@@ -139,24 +164,69 @@
                         startTime = moment(vm.approveStartTime).format("LTS");
                         endTime = moment(vm.approveEndTime).format("LTS");
                     };
-
-                    return o
+                    return o;
                 });
         }
 
-        function buildAdjustedToNeutralAdherences(timeline, intervals) {
+        function buildApprovedPeriods(timeline, intervals) {
             return intervals
-                .map(function (i) {
-                    var interval = buildInterval(timeline, i);
-                    interval.click = function() {
-                        vm.adjustedToNeutralAdherences.forEach(function(a){
-                            a.highlight = false;
-                        });
-                        interval.highlight = true;
+                .map(function (interval) {
+                    var o = buildInterval(timeline, interval);
+                    o.click = function () {
+                        highlightClickedInterval(vm.approvedPeriods, o);
+                        vm.openApprovedPeriods = true;
+                    };
+                    o.remove = function () {
+                        $http.post('../api/HistoricalAdherence/RemoveApprovedPeriod',
+                            {
+                                PersonId: $stateParams.personId,
+                                StartDateTime: moment(interval.StartTime).format("YYYY-MM-DD HH:mm:ss"),
+                                EndDateTime: moment(interval.EndTime).format("YYYY-MM-DD HH:mm:ss")
+                            }
+                        ).then(loadData);
+                    };
+                    return o;
+                });
+        }
+
+        function buildAdjustedToNeutralPeriods(timeline, intervals) {
+            return intervals
+                .map(function (interval) {
+                    var o = buildInterval(timeline, interval);
+                    o.click = function () {
+                        highlightClickedInterval(vm.adjustedToNeutralAdherences, o);
                         vm.openAdjustedToNeutralAdherences = true;
                     };
-                    return interval;
+                    return o;
                 });
+        }
+
+        function buildInterval(timeline, interval) {
+            var startTime = interval.StartTime ? moment(interval.StartTime) : moment(timeline.StartTime);
+            var startTimeDisplay = undefined;
+            if (interval.StartTime) {
+                startTimeDisplay = startTime.isBefore(timeline.StartTime) ?
+                    startTime.format('LLL') :
+                    startTime.format('LTS');
+            }
+            var endTime = interval.EndTime ? moment(interval.EndTime) : moment(timeline.EndTime);
+            var endTimeDisplay = undefined;
+            if (interval.EndTime) {
+                endTimeDisplay = endTime.format('LTS');
+            }
+
+            return {
+                Width: calculate.Width(startTime, endTime),
+                Offset: calculate.Offset(startTime),
+                StartTime: startTimeDisplay,
+                EndTime: endTimeDisplay
+            };
+        }
+
+        function highlightClickedInterval(intervals, clickedInterval) {
+            intervals.forEach(function (interval) {
+                interval.highlight = interval === clickedInterval;
+            });
         }
 
         var startTime;
@@ -292,52 +362,6 @@
                 }
             ).then(loadData);
         };
-
-        function buildApprovedPeriods(timeline, intervals) {
-            return intervals
-                .map(function (interval) {
-                    var o = buildInterval(timeline, interval);
-                    o.click = function () {
-                        vm.approvedPeriods.forEach(function (a) {
-                            a.highlight = false;
-                        });
-                        o.highlight = true;
-                        vm.openApprovedPeriods = true;
-                    };
-                    o.remove = function () {
-                        $http.post('../api/HistoricalAdherence/RemoveApprovedPeriod',
-                            {
-                                PersonId: $stateParams.personId,
-                                StartDateTime: moment(interval.StartTime).format("YYYY-MM-DD HH:mm:ss"),
-                                EndDateTime: moment(interval.EndTime).format("YYYY-MM-DD HH:mm:ss")
-                            }
-                        ).then(loadData);
-                    };
-                    return o;
-                });
-        }
-
-        function buildInterval(timeline, interval) {
-            var startTime = interval.StartTime ? moment(interval.StartTime) : moment(timeline.StartTime);
-            var startTimeDisplay = undefined;
-            if (interval.StartTime) {
-                startTimeDisplay = startTime.isBefore(timeline.StartTime) ?
-                    startTime.format('LLL') :
-                    startTime.format('LTS');
-            }
-            var endTime = interval.EndTime ? moment(interval.EndTime) : moment(timeline.EndTime);
-            var endTimeDisplay = undefined;
-            if (interval.EndTime) {
-                endTimeDisplay = endTime.format('LTS');
-            }
-
-            return {
-                Width: calculate.Width(startTime, endTime),
-                Offset: calculate.Offset(startTime),
-                StartTime: startTimeDisplay,
-                EndTime: endTimeDisplay
-            };
-        }
 
         function buildAgentsFullSchedule(schedules) {
             return schedules.map(function (layer) {
