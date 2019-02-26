@@ -302,7 +302,8 @@ namespace SdkTestWinGui
 		{
             if (backgroundWorkerLoadPersonPeriods.IsBusy)
                 return;
-            backgroundWorkerLoadPersonPeriods.RunWorkerAsync(selectedNode);
+
+			backgroundWorkerLoadPersonPeriods.RunWorkerAsync(selectedNode);
 		}
 
         private void button1_Click(object sender, EventArgs e)
@@ -601,7 +602,7 @@ namespace SdkTestWinGui
         }
 
 		private void backgroundWorkerLoadPersonPeriods_DoWork(object sender, DoWorkEventArgs e)
-		{
+		{			
 			_organization.LoadAllPersonPeriods(Service);
 		    e.Result = e.Argument;
 		}
@@ -727,5 +728,46 @@ namespace SdkTestWinGui
 			_permissionView.RevokeRole();
 		}
 
-    }
+		private void listViewPersonPeriods_RightClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right) return;
+
+			var firstSelectedItem = listViewPersonPeriods.SelectedItems[0];
+			var period = (PersonPeriod)firstSelectedItem.Tag;
+
+			if (!listViewPersonPeriods.FocusedItem.Bounds.Contains(e.Location)) return;
+
+			var indexOfMenuItem = personPeriodContextMenuStrip.Items.IndexOfKey("cancelPersonPeriodAfterMenuItem");
+			if (indexOfMenuItem != -1)
+			{
+				var menuItem = personPeriodContextMenuStrip.Items[indexOfMenuItem];
+				menuItem.Text = $@"Cancel person periods for {DateTime.Parse(period.StartDate).ToShortDateString()} and forward";
+			}
+
+			personPeriodContextMenuStrip.Show(Cursor.Position);
+		}
+		
+		private void cancelPersonPeriodAfterMenuItem_Click(object sender, EventArgs e)
+		{
+			var firstSelectedItem = listViewPersonPeriods.SelectedItems[0];
+
+			var period = (PersonPeriod)firstSelectedItem.Tag;
+			
+			var result = _service.InternalService.ExecuteCommand(
+				new CancelPersonEmploymentChangeCommandDto
+				{
+					PersonId = period.PersonId,
+					Date = new DateOnlyDto
+					{
+						DateTime = DateTime.Parse(period.StartDate),
+						DateTimeSpecified = true
+					}
+				});
+
+			if (result.AffectedItems <= 0) return;
+
+			toolStripStatusLabel1.Text = $@"Removed {result.AffectedItems.ToString()} person periods";
+			DrawPersonPeriods(treeView1.SelectedNode);
+		}
+	}
 }
