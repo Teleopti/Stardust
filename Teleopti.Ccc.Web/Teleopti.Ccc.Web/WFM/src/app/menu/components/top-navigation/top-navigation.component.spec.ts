@@ -34,7 +34,7 @@ class MockToggleMenuService implements Partial<ToggleMenuService> {
 	}
 }
 
-fdescribe('TopNavigation', () => {
+describe('TopNavigation', () => {
 	let component: TopNavigationComponent;
 	let fixture: ComponentFixture<TopNavigationComponent>;
 	let httpMock: HttpTestingController;
