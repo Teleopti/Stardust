@@ -16,41 +16,51 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DatabaseTestSetup
 	{
-		private static readonly ThreadLocal<object> createDataResult = new ThreadLocal<object>();
-		private static object setupLock = new object();
-
 		public static T Setup<T>(Func<CreateDataContext, CreateDataResult<T>> createData)
 		{
-			lock (setupLock)
+			var data = default(T);
+			withContainer(container =>
 			{
-				withContainer(container =>
+				container.Resolve<DatabaseTestHelper>().CreateDatabases(InfraTestConfigReader.TenantName());
+
+				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
+
+				var dataSourceScope = container.Resolve<IDataSourceScope>();
+				using (dataSourceScope.OnThisThreadUse(dataSource))
 				{
-					container.Resolve<DatabaseTestHelper>().CreateDatabases(InfraTestConfigReader.TenantName());
-
-					var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
-
-					var dataSourceScope = container.Resolve<IDataSourceScope>();
-					using (dataSourceScope.OnThisThreadUse(dataSource))
+					var result = createData.Invoke(new CreateDataContext
 					{
-						var result = createData.Invoke(new CreateDataContext
-						{
-							DataSource = dataSource,
-							DataSourceScope = dataSourceScope,
-							WithUnitOfWork = container.Resolve<WithUnitOfWork>(),
-							UpdatedByScope = container.Resolve<IUpdatedByScope>(),
-							BusinessUnits = container.Resolve<IBusinessUnitRepository>(),
-							Persons = container.Resolve<IPersonRepository>()
-						});
-						if (result.Hash == 0)
-							throw new Exception("create data function needs to return a number representing the data created");
-						createDataResult.Value = result;
-					}
-				});
-
-				return (createDataResult.Value as CreateDataResult<T>).Data;
-			}
+						DataSource = dataSource,
+						DataSourceScope = dataSourceScope,
+						WithUnitOfWork = container.Resolve<WithUnitOfWork>(),
+						UpdatedByScope = container.Resolve<IUpdatedByScope>(),
+						BusinessUnits = container.Resolve<IBusinessUnitRepository>(),
+						Persons = container.Resolve<IPersonRepository>()
+					});
+					if (result.Hash == 0)
+						throw new Exception("create data function needs to return a number representing the data created");
+					data = result.Data;
+				}
+			});
+			return data;
 		}
+		
+		// stuff for optimization later
 
+		//private static readonly ThreadLocal<object> createDataResult = new ThreadLocal<object>();
+
+//		if (createdDataHash != 0)
+//		{
+//			DataSourceHelper.RestoreApplicationDatabase(createdDataHash);
+//			DataSourceHelper.RestoreAnalyticsDatabase(createdDataHash);
+//			return;
+//		}
+
+
+//		DataSourceHelper.BackupApplicationDatabase(createdDataHash);
+//		DataSourceHelper.BackupAnalyticsDatabase(createdDataHash);
+
+		
 		private static void withContainer(Action<IComponentContext> action)
 		{
 			var builder = new ContainerBuilder();
