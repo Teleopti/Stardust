@@ -302,6 +302,7 @@
     <Compile Include="Areas\Staffing\StaffingControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\BankHolidayCalendarControllerTest.cs" />
+    <Compile Include="Areas\SystemSetting\SystemSettingControllerTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsencePersisterTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\ChangeActivityTypeFormValidatorTest.cs" />
     <Compile Include="Areas\TeamSchedule\FakeCommandHandler.cs" />

@@ -436,6 +436,7 @@
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
+    <Compile Include="Areas\SystemSetting\SystemSettingController.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -2525,6 +2526,7 @@
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.ts" />
     <Content Include="WFM\src\app\system-settings\shared\bank-calendar-data.service.ts" />
     <Content Include="WFM\src\app\system-settings\shared\index.ts" />
+	<Content Include="WFM\src\app\system-settings\shared\system-settings.service.ts" />
     <Content Include="WFM\src\app\system-settings\system-settings.module.ts" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.html" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.scss" />
