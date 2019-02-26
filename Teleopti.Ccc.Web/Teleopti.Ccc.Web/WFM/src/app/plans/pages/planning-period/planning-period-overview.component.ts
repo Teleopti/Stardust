@@ -35,6 +35,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	planningGroupInfo: any = {};
 	totalAgents = 0;
 	valLoading = true;
+	loadingLastResult = true;
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
 	months : any;
@@ -389,6 +390,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	private loadLastResult() {
+		this.loadingLastResult = true;
 		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data => {
 			const fullSchedulingResult = data.FullSchedulingResult;
 			if (fullSchedulingResult) {
@@ -460,6 +462,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			} else {
 				this.isScheduled = false;
 			}
+			this.loadingLastResult = false;
 		});
 	}
 

@@ -70,7 +70,7 @@ export class IntradayComponent implements OnChanges {
 			return {
 				x: 'x',
 				columns: [],
-				type: 'area-spline',
+				type: 'bar',
 				empty: { label: { text: this.translate.instant('NoDataAvailable') } }
 			};
 		}
