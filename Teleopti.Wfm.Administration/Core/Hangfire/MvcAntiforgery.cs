@@ -50,7 +50,8 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		private string GetCookieToken()
 		{
 			var cookie = HttpContext.Current.Request.Cookies[HangfireCookie.AntiForgeryCookieName];
-			return cookie != null && !String.IsNullOrEmpty(cookie.Value) ? cookie.Value : null;
+			var oldCookie = HttpContext.Current.Request.Cookies[AntiForgeryConfig.CookieName];
+			return cookie != null && !string.IsNullOrEmpty(cookie.Value) ? cookie.Value : (oldCookie != null && !string.IsNullOrEmpty(oldCookie.Value) ? oldCookie.Value : null);
 		}
 	}
 }
