@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd';
 
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
 import { GroupPageSiteItem } from 'src/app/shared/interface';
-import { BankHolidayCalendarItem, SiteBankHolidayCalendars } from '../../interface';
+import { SiteBankHolidayCalendars, BankHolidayCalendar } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 
 @Component({
@@ -13,7 +13,7 @@ import { BankCalendarDataService } from '../../shared';
 	styleUrls: ['./bank-holiday-calendar-assign-to-sites.component.scss']
 })
 export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
-	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
+	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
 	siteCalendarsList: SiteBankHolidayCalendars[] = [];
 	sitesList: GroupPageSiteItem[] = [];
 
@@ -44,7 +44,7 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 			}, this.networkError);
 	}
 
-	updateSiteAndCalsList(calendars: BankHolidayCalendarItem[]) {
+	updateSiteAndCalsList(calendars: BankHolidayCalendar[]) {
 		const calIds = calendars.map(c => {
 			return c.Id;
 		});
