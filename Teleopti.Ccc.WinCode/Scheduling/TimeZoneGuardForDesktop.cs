@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public static class TimeZoneGuardForDesktop
 	{
-		//Use ITimeZoneGuard or field in schedulingscreen instead
+		//Use SchedulingScreen._timeZoneGuard or inject ITimeZoneGuard instead!
 		public static ITimeZoneGuard Instance_DONTUSE { get; private set; }
 
 		public static void Set(ITimeZoneGuard timeZoneGuard)
