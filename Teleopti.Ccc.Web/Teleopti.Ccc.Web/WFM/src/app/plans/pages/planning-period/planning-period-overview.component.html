@@ -19,7 +19,7 @@
 
 	<nz-tabset>
 		<nz-tab nzTitle="{{ 'Overview' | translate }}">
-			<nz-spin [nzSize]="'large'" [nzSpinning]="loadingLastResult">
+			<nz-spin nzSize="large" [nzSpinning]="loadingLastResult">
 				<div nz-row style="margin-bottom: 15px">
 					<div class="wfm-chip-wrap">
 						<span class="wfm-chip" style="cursor: default">
@@ -190,32 +190,30 @@
 									></ng-template>
 								</div>
 							</div>
-							<div nz-row>
-								<table class="wfm-table">
-									<thead>
-									<tr>
-										<th>{{ 'Resource' | translate }}</th>
-										<th>{{ 'Area' | translate }}</th>
-										<th>{{ 'Description' | translate }}</th>
-									</tr>
-									</thead>
-									<tbody>
-									<tr *ngFor="let msg of filteredPreValidations">
-										<td class="data-test-pre-validation">{{ msg.ResourceName }}</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ResourceType | translate }}
-											</div>
-										</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ErrorMessageLocalized }}
-											</div>
-										</td>
-									</tr>
-									</tbody>
-								</table>
-							</div>
+							<nz-table #preValidationTable nzSize="small" nzFrontPagination="false" nzShowPagination="false" [nzData]="filteredPreValidations">
+								<thead>
+								<tr>
+									<th>{{ 'Resource' | translate }}</th>
+									<th>{{ 'Area' | translate }}</th>
+									<th>{{ 'Description' | translate }}</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr *ngFor="let msg of preValidationTable.data">
+									<td class="data-test-pre-validation">{{ msg.ResourceName }}</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ResourceType | translate }}
+										</div>
+									</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ErrorMessageLocalized }}
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</nz-table>
 						</div>
 						
 					</nz-collapse-panel>
@@ -253,32 +251,30 @@
 								></ng-template>
 							</div>
 						</div>
-						<div nz-row>
-							<table class="wfm-table">
-								<thead>
-									<tr>
-										<th>{{ 'Resource' | translate }}</th>
-										<th>{{ 'Area' | translate }}</th>
-										<th>{{ 'Description' | translate }}</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let msg of filteredScheduleIssues">
-										<td class="data-test-schedule-issue">{{ msg.ResourceName }}</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ResourceType | translate }}
-											</div>
-										</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ErrorMessageLocalized }}
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+						<nz-table  #scheduleIssuesTable nzSize="small" nzFrontPagination="false" nzShowPagination="false" [nzData]="filteredScheduleIssues">
+							<thead>
+								<tr>
+									<th>{{ 'Resource' | translate }}</th>
+									<th>{{ 'Area' | translate }}</th>
+									<th>{{ 'Description' | translate }}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let msg of scheduleIssuesTable.data">
+									<td class="data-test-schedule-issue">{{ msg.ResourceName }}</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ResourceType | translate }}
+										</div>
+									</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ErrorMessageLocalized }}
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</nz-table>
 					</nz-collapse-panel>
 				</nz-collapse>
 			</div>
