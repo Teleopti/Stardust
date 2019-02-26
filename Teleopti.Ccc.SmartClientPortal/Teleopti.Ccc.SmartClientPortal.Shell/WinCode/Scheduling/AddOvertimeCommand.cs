@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             var addPeriod = DefaultPeriod ?? filteredScheduleParts[0].Period;
             var dialog1 = ScheduleViewBase.CreateAddOvertimeViewModel( SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
                                                             _definitionSets, defaultActivity,
-                                                            addPeriod, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+                                                            addPeriod, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
 
 
             var result = dialog1.Result;

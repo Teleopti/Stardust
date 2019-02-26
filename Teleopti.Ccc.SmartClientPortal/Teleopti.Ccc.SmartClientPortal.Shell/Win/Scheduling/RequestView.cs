@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _authorization = new PersonRequestCheckAuthorization();
 			_presenter = new RequestPresenter(_authorization);
 			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.SchedulerStateHolder.Schedules,_authorization);
-            _model = new HandlePersonRequestViewModel(schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+            _model = new HandlePersonRequestViewModel(schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
             
             InitObservableListEvents();

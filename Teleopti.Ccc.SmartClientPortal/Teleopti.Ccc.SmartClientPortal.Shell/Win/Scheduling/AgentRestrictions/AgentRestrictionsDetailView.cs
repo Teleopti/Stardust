@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				return;
 
 			var options = new PasteOptions { Preference = true, StudentAvailability = true };
-			var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuardForDesktop.Instance_DONTUSE);
+			var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE);
 			undoRedo.CreateBatch(Resources.UndoRedoPaste);
 			IList<IScheduleDay> pasteList =
 							   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);

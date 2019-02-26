@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             IAddLayerViewModel<IActivity> dialog1 =
                 ScheduleViewBase.CreateAddPersonalActivityViewModel(SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
                                                                     periodSetup.Period,
-																	TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+																	TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
             bool result = dialog1.Result;
             if (!result) return;
 

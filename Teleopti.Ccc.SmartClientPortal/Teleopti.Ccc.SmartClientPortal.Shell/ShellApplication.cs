@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			setDummyPrincipalBeforeContainerRegistrations();
 			ContainerForLegacy.Container = configureContainer();
-			TimeZoneGuardForDesktop.Set(ContainerForLegacy.Container.Resolve<ITimeZoneGuard>());
+			TimeZoneGuardForDesktop_DONOTUSE.Set(ContainerForLegacy.Container.Resolve<ITimeZoneGuard>());
 
 			SetReleaseMode();
 			 var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();

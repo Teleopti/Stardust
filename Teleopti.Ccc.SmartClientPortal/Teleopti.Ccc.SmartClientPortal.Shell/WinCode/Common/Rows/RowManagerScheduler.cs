@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         {
             get
             {
-                return TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+                return TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
             }
         }
 

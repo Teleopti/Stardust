@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 			{
 				deciderResult = _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
 			}
-			_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()));     
+			_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()));     
 			var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
 			deciderResult.FilterSkills(tempSkills.ToArray(),s => tempSkills.Remove(s),s => tempSkills.Add(s));
 			if (_schedulingResultStateHolder.SkillDays != null && tempSkills.SetEquals(_filteredSkills) && _lastPeriod.Contains(args.Period))

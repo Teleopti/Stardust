@@ -2,7 +2,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public static class TimeZoneGuardForDesktop
+	public static class TimeZoneGuardForDesktop_DONOTUSE
 	{
 		//Use SchedulingScreen._timeZoneGuard or inject ITimeZoneGuard instead!
 		public static ITimeZoneGuard Instance_DONTUSE { get; private set; }

@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 					if(start != DateTime.MaxValue) return new DateTimePeriod(start,end);
 				}
 
-				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
 		  }
 
 		  public static IPerson GetPerson(EntityContainer<IPerson> personViewModel)
