@@ -4,31 +4,10 @@ using log4net;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Foundation;
-
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 {
-    public interface IAuditHistoryPresenter
-    {
-        IAuditHistoryModel Model { get; }
-        void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e);
-        int GridQueryRowHeight(int index, int height, int fontHeight, int rows);
-        int GridQueryColWidth(int index, int size);
-        int GridQueryColCount();
-        int GridQueryRowCount();
-        void Close();
-        void  Restore(IScheduleDay scheduleDay);
-        void Load();
-        void DoWork(DoWorkEventArgs e);
-        void WorkCompleted(RunWorkerCompletedEventArgs e);
-        void StartBackgroundWork(AuditHistoryDirection direction);
-        void LinkLabelEarlierClicked();
-        void LinkLabelLaterClicked();
-        DateTimePeriod MergedOrDefaultPeriod();
-    }
-
-    public class AuditHistoryPresenter : IAuditHistoryPresenter
+    public class AuditHistoryPresenter
     {
         private readonly IAuditHistoryView _view;
         private const int Colcount = 1;
