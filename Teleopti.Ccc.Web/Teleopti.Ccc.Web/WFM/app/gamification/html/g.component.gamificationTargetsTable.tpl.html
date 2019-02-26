@@ -2,7 +2,7 @@
 <md-virtual-repeat-container ng-class="{'show': $ctrl.tableIsReady}">
 	<header ng-if="$ctrl.tableHasData()" class="header">
 		<div class="selection">
-			<md-checkbox ng-checked="$ctrl.allRowsSelected()" md-indeterminate="$ctrl.isIndeterminate()" ng-click="$ctrl.toggleAllRows()" aria-label="Checkbox"></md-checkbox>
+			<md-checkbox ng-checked="$ctrl.allRowsSelected()" md-indeterminate="$ctrl.isIndeterminate()" ng-click="$ctrl.toggleAllRows()"></md-checkbox>
 		</div>
 		<div class="team">{{'Team'|translate}}</div>
 		<div class="setting">{{'AppliedSetting'|translate}}</div>

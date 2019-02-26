@@ -31,8 +31,7 @@
 				 ng-click="vm.togglePerson(personSchedule, null)">
 				<div class="person-name-column" ng-click="vm.updatePersonSelection(personSchedule, $event)">
 					<label>
-						<md-checkbox ng-model="personSchedule.IsSelected"
-									 aria-label="Checkbox">
+						<md-checkbox ng-model="personSchedule.IsSelected">
 							{{personSchedule.Name}}
 							<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
 								<i class="mdi mdi-earth"></i>

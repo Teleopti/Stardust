@@ -38,8 +38,7 @@
 			
 			<md-checkbox class="fullDayAbsenceCheckBox" ng-if="vm.isAddFullDayAbsenceAvailable()"
 						 ng-model="vm.isFullDayAbsence"
-						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"
-						 aria-label="Checkbox">
+						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()">
 				{{'FullDayAbsence'|translate}}
 			</md-checkbox>
 

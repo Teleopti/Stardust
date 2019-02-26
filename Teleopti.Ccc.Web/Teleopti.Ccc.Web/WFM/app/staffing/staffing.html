@@ -23,7 +23,7 @@
 					<wfm-date-picker class="con-flex" style="margin-left: 10px" ng-model="vm.selectedDate" show-week="true" popup-mode="true"
 					 on-date-change="vm.navigateToNewDay(vm.selectedDate)"></wfm-date-picker>
 					<md-checkbox class="pull-right" style="margin-right: 10px" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage"
-					 aria-label="Checkbox">{{'UseShrinkage'|translate}}</md-checkbox>
+					>{{'UseShrinkage'|translate}}</md-checkbox>
 					<md-progress-linear md-mode="indeterminate" ng-if="vm.isSearchRequested"></md-progress-linear>
 				</div>
 			</div>

@@ -24,7 +24,7 @@
 										<div ng-if="o.origin.isParent" ng-class="{focused: o.isFocused}" class="group md-button-toggle md-button md-ink-ripple">
 											<label class="clickable-area" tabindex="-1">
 												<div flex layout="row">
-													<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-class="{'indeterminate': o.isIndeterminate()}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"
+													<md-checkbox id="group-{{o.id}}" ng-class="{'indeterminate': o.isIndeterminate()}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"
 																 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
 													<span class="md-checkbox-label" tabindex="-1" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleGroup(o)"></span>
 													<div id="toggle-{{o.id}}" class="group-toggle"
@@ -39,7 +39,7 @@
 										<div ng-if=" !o.origin.isParent " ng-class="{focused: o.isFocused}" class="child md-button md-ink-ripple">
 											<label class="clickable-area" tabindex="-1">
 												<div flex layout="row">
-													<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"
+													<md-checkbox id="group-{{o.id}}" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"
 																 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
 													<span class="md-checkbox-label" tabindex="-1"	 ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleSubGroup(o)"></span>
 												</div>

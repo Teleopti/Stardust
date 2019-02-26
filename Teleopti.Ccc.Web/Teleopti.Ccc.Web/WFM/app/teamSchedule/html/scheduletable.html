@@ -28,8 +28,7 @@
 				<div class="inline-block">
 					<label>
 						<md-checkbox ng-model="personSchedule.IsSelected"
-									 ng-change="vm.updatePersonSelection(personSchedule)"
-									 aria-label="Checkbox">
+									 ng-change="vm.updatePersonSelection(personSchedule)">
 							{{::personSchedule.Name}}
 						</md-checkbox>
 						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">

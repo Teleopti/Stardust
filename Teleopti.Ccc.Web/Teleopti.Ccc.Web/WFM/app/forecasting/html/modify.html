@@ -423,7 +423,7 @@
 
 			<form class="form-radio-forecast">
 				<md-radio-group ng-model="vm.targetScenario" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
-					<md-radio-button ng-repeat="scenario in vm.scenarios" ng-value="scenario" aria-label="radio">{{
+					<md-radio-button ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{
 						scenario.Name
 					}}</md-radio-button>
 				</md-radio-group>
