@@ -2,10 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.Threading;
 using log4net;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Infrastructure.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Domain.ETL;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -27,7 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
-			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
+			_timer.Change(EtlTickFrequency.Value, TimeSpan.FromMilliseconds(-1));
 		}
 
 		void tick(object state)

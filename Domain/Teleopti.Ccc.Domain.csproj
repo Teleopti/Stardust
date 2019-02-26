@@ -230,6 +230,7 @@
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
     <Compile Include="ApplicationLayer\Forecast\ISkillForecastJobStartTimeRepository.cs" />
     <Compile Include="Common\Time\IUserNowExtensions.cs" />
+    <Compile Include="ETL\EtlTickFrequency.cs" />
     <Compile Include="ETL\IMarkEtlPing.cs" />
     <Compile Include="ETL\ITimeSinceLastEtlPing.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
