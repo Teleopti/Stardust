@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
     public class AuditHistoryPresenter
     {
         private readonly IAuditHistoryView _view;
+        private readonly IAuditHistoryModel _model;
         private const int Colcount = 1;
         private const int ChangedByColWidth = 200;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(AuditHistoryPresenter));
@@ -20,17 +21,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
             if(model == null) throw new ArgumentNullException(nameof(model));
 
             _view = view;
-            Model = model;
+            _model = model;
         }
-
-        public IAuditHistoryModel Model { get; }
-
        
         public void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
             InParameter.NotNull("e", e);
-			if (Model.PageRows.Count == 0) return;
-			if (e.RowIndex - 1 > Model.PageRows.Count)
+			if (_model.PageRows.Count == 0) return;
+			if (e.RowIndex - 1 > _model.PageRows.Count)
                 return;
 
             if (e.RowIndex == 0 && e.ColIndex == 1)
@@ -44,14 +42,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
             if (e.RowIndex > 0 && e.ColIndex == 0)
             {
                 e.Style.CellType = "RevisionChangedByCell";
-                e.Style.CellValue = Model.PageRows[e.RowIndex - 1];
+                e.Style.CellValue = _model.PageRows[e.RowIndex - 1];
             }
 
             if (e.RowIndex > 0 && e.ColIndex > 0)
             {
                 e.Style.CellType = "RevisionChangeCell";
                 e.Style.Tag = MergedOrDefaultPeriod();
-                e.Style.CellValue = Model.PageRows[e.RowIndex - 1];
+                e.Style.CellValue = _model.PageRows[e.RowIndex - 1];
             }    
         }
 
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 
         public int GridQueryRowCount()
         {
-            return Model.PageRows.Count;
+            return _model.PageRows.Count;
         }
 
         public void Close()
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 
         public void  Restore(IScheduleDay scheduleDay)
         {
-            Model.SelectedScheduleDay = scheduleDay;
+            _model.SelectedScheduleDay = scheduleDay;
             _view.CloseView();
         }
 
@@ -108,13 +106,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
             switch (direction)
             {
                 case AuditHistoryDirection.InitializeAndFirst:
-                    Model.First();
+                    _model.First();
                     break;
                 case AuditHistoryDirection.Previous:
-                    new PreviousPageCommand(Model).Execute();
+                    new PreviousPageCommand(_model).Execute();
                     break;
                 case AuditHistoryDirection.Next:
-                    new NextPageCommand(Model).Execute();
+                    new NextPageCommand(_model).Execute();
                     break;
             }
         }
@@ -138,10 +136,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 
         private void RefreshView()
         {
-            _view.LinkLabelEarlierStatus = new NextPageCommand(Model).CanExecute();
-            _view.LinkLabelLaterStatus = new PreviousPageCommand(Model).CanExecute();
-				_view.LinkLabelEarlierVisibility = Model.NumberOfPages > 1;
-				_view.LinkLabelLaterVisibility = Model.NumberOfPages > 1;
+            _view.LinkLabelEarlierStatus = new NextPageCommand(_model).CanExecute();
+            _view.LinkLabelLaterStatus = new PreviousPageCommand(_model).CanExecute();
+				_view.LinkLabelEarlierVisibility = _model.NumberOfPages > 1;
+				_view.LinkLabelLaterVisibility = _model.NumberOfPages > 1;
             _view.EnableView = true;
             _view.ShowDefaultCursor();
             _view.RefreshGrid();
@@ -189,7 +187,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
             var start = DateTime.MaxValue;
             var end = DateTime.MinValue;
 
-            foreach (var row in Model.PageRows)
+            foreach (var row in _model.PageRows)
             {
                 var visualLayerCollection = row.ScheduleDay.ProjectionService().CreateProjection();
                 var period = visualLayerCollection.Period();
@@ -208,7 +206,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
                 return new DateTimePeriod(start.AddHours(-1), end.AddHours(1));
             }
 
-            DateTimePeriod scheduleDayPeriod = Model.CurrentScheduleDay.Period;
+            DateTimePeriod scheduleDayPeriod = _model.CurrentScheduleDay.Period;
             start = scheduleDayPeriod.StartDateTime.AddHours(7);
             end = start.AddHours(11);
 
