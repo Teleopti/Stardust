@@ -249,6 +249,7 @@
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="Status\CallLegacySystemStatus.cs" />
     <Compile Include="Status\CheckLegacySystemStatus.cs" />
+    <Compile Include="Status\EtlChecker.cs" />
     <Compile Include="Status\ICallLegacySystemStatus.cs" />
     <Compile Include="Status\IStatusStep.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
