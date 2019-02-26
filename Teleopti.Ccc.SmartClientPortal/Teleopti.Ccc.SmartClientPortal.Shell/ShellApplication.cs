@@ -22,6 +22,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -48,6 +49,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Application = System.Windows.Forms.Application;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -102,6 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			setDummyPrincipalBeforeContainerRegistrations();
 			ContainerForLegacy.Container = configureContainer();
+			TimeZoneGuardForDesktop.Set(ContainerForLegacy.Container.Resolve<ITimeZoneGuard>());
 
 			SetReleaseMode();
 			 var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();

@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -7,7 +6,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 #pragma warning disable 618
 		//Use ITimeZoneGuard or field in schedulingscreen instead
-		public static ITimeZoneGuard Instance_DONTUSE => ServiceLocator_DONTUSE.TimeZoneGuard_DONOTCALLTHIS_JUSTHERETEMP_FOR_DESKTOP;
+		public static ITimeZoneGuard Instance_DONTUSE { get; private set; }
 #pragma warning restore 618
+
+		public static void Set(ITimeZoneGuard timeZoneGuard)
+		{
+			Instance_DONTUSE = timeZoneGuard;
+		}
 	}
 }
