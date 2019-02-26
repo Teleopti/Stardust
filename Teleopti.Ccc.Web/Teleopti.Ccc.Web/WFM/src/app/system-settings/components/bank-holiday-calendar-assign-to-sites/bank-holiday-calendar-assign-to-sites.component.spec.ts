@@ -399,7 +399,6 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar renamed',
-				CurrentYearIndex: 0,
 				Years: [
 					{
 						Year: '2013',

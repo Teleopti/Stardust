@@ -78,7 +78,6 @@
 							<nz-tabset
 								*ngIf="calendar.Years.length > 0"
 								nzSize="small"
-								[nzSelectedIndex]="calendar.CurrentYearIndex"
 								(nzSelectChange)="selectedTabChange($event, calendar)"
 							>
 								<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
