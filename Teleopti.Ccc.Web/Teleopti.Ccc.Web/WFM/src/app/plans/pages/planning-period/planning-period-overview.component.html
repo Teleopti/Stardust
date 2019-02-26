@@ -135,8 +135,8 @@
 		<nz-tab [nzTitle]="titleTemplate">
 			<ng-template #titleTemplate>
 				{{ 'Validations' | translate }}
-				<nz-spin nzSize="small" [nzSpinning]="valLoading">
-					<nz-badge [nzCount]="valData.totalValNum" *ngIf="!valLoading"></nz-badge>
+				<nz-spin nzSize="small" [nzSpinning]="loadingValidations">
+					<nz-badge [nzCount]="valData.totalValNum" *ngIf="!loadingValidations"></nz-badge>
 				</nz-spin>
 			</ng-template>
 			<div *ngIf="valData.totalValNum !== 0">
@@ -149,7 +149,7 @@
 									<ng-template #indicatorTemplate
 									><i nz-icon type="loading" style="font-size: 24px;"></i
 									></ng-template>
-									<nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="valLoading">
+									<nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="loadingValidations">
 										{{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
 										<button
 												nz-button
@@ -282,10 +282,10 @@
 				<div>
 					<div nz-row class="panel">
 						<div class="con-flex">
-							<span *ngIf="!valLoading">
+							<span *ngIf="!loadingValidations">
 								<i class="mdi mdi-information-outline"></i> {{ 'NoValidIssuesForPp' | translate }}</span
 							>
-							<span *ngIf="valLoading" class="text-warning">
+							<span *ngIf="loadingValidations" class="text-warning">
 								<i class="mdi mdi-alert"></i> Loading validation issues...
 							</span>
 						</div>

@@ -34,7 +34,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	planningPeriodInfo: any = {};
 	planningGroupInfo: any = {};
 	totalAgents = 0;
-	valLoading = true;
+	loadingValidations = true;
 	loadingLastResult = true;
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
@@ -467,11 +467,11 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	private loadValidations() {
-		this.valLoading = true;
+		this.loadingValidations = true;
 		this.planningPeriodService.getValidation(this.ppId).subscribe(data => {
 			this.valData.preValidation = data.InvalidResources;
 			this.preValidationFilterControl.updateValueAndValidity();
-			this.valLoading = false;
+			this.loadingValidations = false;
 			this.updateValidationErrorsNumber();
 		});
 	}
