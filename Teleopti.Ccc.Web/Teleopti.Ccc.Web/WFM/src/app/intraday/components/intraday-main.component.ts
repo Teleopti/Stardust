@@ -527,16 +527,22 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				? [
 						{
 							Heading: this.translate.instant('Average'),
-							ServiceLevel: input.ServiceLevel,
-							EstimatedServiceLevel: input.EstimatedServiceLevel,
+							ServiceLevel: input.ServiceLevel <= 1 ? input.ServiceLevel * 100 : input.ServiceLevel,
+							EstimatedServiceLevel:
+								input.EstimatedServiceLevel <= 1
+									? input.EstimatedServiceLevel * 100
+									: input.EstimatedServiceLevel,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
 						}
 				  ]
 				: [
 						{
 							Heading: this.translate.instant('Average'),
-							ServiceLevel: input.ServiceLevel,
-							EstimatedServiceLevel: input.EstimatedServiceLevel,
+							ServiceLevel: input.ServiceLevel <= 1 ? input.ServiceLevel * 100 : input.ServiceLevel,
+							EstimatedServiceLevel:
+								input.EstimatedServiceLevel <= 1
+									? input.EstimatedServiceLevel * 100
+									: input.EstimatedServiceLevel,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer,
 							AbandonRate: input.AbandonRate
 						}
