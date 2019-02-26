@@ -10190,7 +10190,7 @@ These options are activated:
     <value>Schedule audit trail is not running.</value>
     <comment>Schedule audit trail is not running.</comment>
   </data>
-    <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+  <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
     <value>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</value>
     <comment>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</comment>
   </data>
@@ -18212,5 +18212,13 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="ReadOnlyDistribution" xml:space="preserve">
     <value>Distribution change is not allowed</value>
     <comment>Distribution change is not allowed when saving as template on multi site skill</comment>
+  </data>
+  <data name="HideMenu" xml:space="preserve">
+    <value>Hide menu</value>
+    <comment>On button to hide main navigation menu</comment>
+  </data>
+  <data name="ShowMenu" xml:space="preserve">
+    <value>Show menu</value>
+    <comment>On button to show main navigation menu</comment>
   </data>
 </root>

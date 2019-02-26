@@ -16169,4 +16169,10 @@ Applikationen kommer nu att stängas. </value>
   <data name="TeamSchedulingColon" xml:space="preserve">
     <value>Teamschemaläggning</value>
   </data>
+  <data name="HideMenu" xml:space="preserve">
+    <value>Dölj meny</value>
+  </data>
+  <data name="ShowMenu" xml:space="preserve">
+    <value>Visa meny</value>
+  </data>
 </root>
