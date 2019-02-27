@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Models
 	/// </summary>
 	public class FecthPersonsInputModel
 	{
-		public DateTime Date { get; set; }
 		public IEnumerable<Guid> PersonIdList { get; set; }
 	}
 
