@@ -64,9 +64,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				};
 
 			var week = DateHelper.GetWeekPeriod(input.DateInUserTimeZone, DateTimeFormatExtensions.FirstDayOfWeek);
-			var personIds =  !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary)
+			var personIds = !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary)
 												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(week, input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary);
-			
+
 			return createWeekViewModelForPeople(personIds, input);
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							  let scheduleDay = personScheduleRange.ScheduledDay(date)
 							  where scheduleDay != null
 							  select _shiftViewModelProvider.MakeViewModel(person, date, scheduleDay, personScheduleRange.ScheduledDay(date.AddDays(-1)), canViewConfidential,
-								  canSeeUnpublishedSchedules));
+								  canSeeUnpublishedSchedules, date == scheduleDate));
 			}
 
 			return new GroupScheduleViewModel
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			if (!input.IsOnlyAbsences)
 			{
-				scheduleDays = _scheduleProvider.GetScheduleForPersonsInPeriod(date.ToDateOnlyPeriod().Inflate(1), permittedPersons, new ScheduleDictionaryLoadOptions(false,true)).ToList();
+				scheduleDays = _scheduleProvider.GetScheduleForPersonsInPeriod(date.ToDateOnlyPeriod().Inflate(1), permittedPersons, new ScheduleDictionaryLoadOptions(false, true)).ToList();
 				peopleCanViewUnpublishedFor = _searchProvider
 				.GetPermittedPersonIdList(permittedPersons, date, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules).ToList();
 			}
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var scheduleDayLookup = scheduleDays.ToLookup(s => (s.Person, s.DateOnlyAsPeriod.DateOnly));
 
 			var personScheduleDaysToSort = permittedPersons
-				.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDayLookup[(p,date)].FirstOrDefault())).ToArray();
+				.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDayLookup[(p, date)].FirstOrDefault())).ToArray();
 			personScheduleDaysToSort = sortSchedules(personScheduleDaysToSort, input.SortOption, peopleCanViewUnpublishedFor.ToArray());
 
 			var personScheduleDayPairsForCurrentPage = input.PageSize > 0
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var previousDay = date.AddDays(-1);
 			var nextDay = date.AddDays(1);
-			
+
 			var list = new List<GroupScheduleShiftViewModel>();
 
 			foreach (var pair in personScheduleDayPairsForCurrentPage)
@@ -221,11 +221,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var currentScheduleDay = pair.Item2;
 				var canSeeUnpublishedSchedules = peopleCanViewUnpublishedFor.Contains(personId);
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(personId);
-				var schedulePreviousDay = scheduleDayLookup[(person,previousDay)].FirstOrDefault();
+				var schedulePreviousDay = scheduleDayLookup[(person, previousDay)].FirstOrDefault();
 				var scheduleNextDay = scheduleDayLookup[(person, nextDay)].FirstOrDefault();
 
 				if (currentScheduleDay != null)
-					list.Add(_shiftViewModelProvider.MakeViewModel(person, date, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules));
+					list.Add(_shiftViewModelProvider.MakeViewModel(person, date, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules, true));
 
 				if (schedulePreviousDay != null)
 					list.Add(_shiftViewModelProvider.MakeViewModel(person, previousDay, schedulePreviousDay, null, canViewConfidential, canSeeUnpublishedSchedules));
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					};
 				}
 			}
-			
+
 			var allPermittedPeople = permittedPeopleByDate
 					.SelectMany(pg => pg.Value)
 					.ToLookup(p => p.Id)

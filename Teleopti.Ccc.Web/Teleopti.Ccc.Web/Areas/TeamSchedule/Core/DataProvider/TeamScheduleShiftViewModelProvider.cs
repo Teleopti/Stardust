@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			IScheduleDay scheduleDay,
 			IScheduleDay previousScheduleDay,
 			bool canViewConfidential,
-			bool canViewUnpublished)
+			bool canViewUnpublished,
+			bool needToLoadNoteAndUnderlyingSummary = false)
 		{
 			var timezone = person.PermissionInformation.DefaultTimeZone();
 			var vm = new GroupScheduleShiftViewModel
@@ -67,8 +68,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					DisplayName = timezone.DisplayName
 				}
 			};
-
-			var needToLoadNoteAndUnderlyingSummary = date == scheduleDay.DateOnlyAsPeriod.DateOnly;
 
 			if (scheduleDay.IsFullyPublished || canViewUnpublished)
 			{

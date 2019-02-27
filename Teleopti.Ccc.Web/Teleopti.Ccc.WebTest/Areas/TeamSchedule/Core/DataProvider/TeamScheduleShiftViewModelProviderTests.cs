@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			isolate.UseTestDouble<FakeIanaTimeZoneProvider>().For<IIanaTimeZoneProvider>();
 			isolate.UseTestDouble(new FakeCommonAgentNameProvider("{FirstName}{LastName}")).For<ICommonAgentNameProvider>();
 		}
-	
+
 
 
 		[Test]
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewUnpublished = false;
 
 			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
-			
+
 			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Null();
 		}
 
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var note = new PublicNote(person, date, scenario, "Oh my God");
 			scheduleDay.Add(note);
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, false, false);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, false, false, true);
 
 			viewModel.PublicNotes.Should().Be.EqualTo("Oh my God");
 		}
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		public void ShouldGetProjectionWithEndInDST()
 		{
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.GmtTimeZoneInfo());
-			
+
 			var date = new DateTime(2018, 10, 28, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
 
@@ -1148,6 +1148,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 				start.ToShortTimeString(), end.ToShortTimeString());
 		}
 
-		
+
 	}
 }
