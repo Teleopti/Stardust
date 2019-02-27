@@ -90,8 +90,8 @@
                     });
 
                 vm.recordedAdherences = buildRecordedAdherences(data.Timeline, recordedAdherences);
-                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function(a) { return a.Type === "Out"; });
-                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function(a) { return a.Type === "Neutral"; });
+                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === "Out"; });
+                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === "Neutral"; });
 
                 vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
 
@@ -154,15 +154,7 @@
                         vm.openApprovedPeriods = true;
                         vm.openApproveForm = true;
 
-                        var start = moment(interval.StartTime).isValid() ? moment(interval.StartTime) : moment(timelineStart);
-                        vm.approveStartTime = putTimeBetween(start, moment(timelineStart), moment(timelineEnd)).toDate();
-
-                        var end = moment(interval.EndTime).isValid() ? moment(interval.EndTime) : moment(timelineEnd);
-                        vm.approveEndTime = putTimeBetween(end, moment(timelineStart), moment(timelineEnd)).toDate();
-
-                        //string format representation
-                        startTime = moment(vm.approveStartTime).format("LTS");
-                        endTime = moment(vm.approveEndTime).format("LTS");
+                        setPeriodForApproval(interval, timelineStart, timelineEnd)
                     };
                     return o;
                 });
@@ -195,7 +187,12 @@
                     var o = buildInterval(timeline, interval);
                     o.click = function () {
                         highlightClickedInterval(vm.adjustedToNeutralAdherences, o);
+
                         vm.openAdjustedToNeutralAdherences = true;
+                        vm.openApprovedPeriods = true;
+                        vm.openApproveForm = true;
+
+                        setPeriodForApproval(interval, timelineStart, timelineEnd);
                     };
                     return o;
                 });
@@ -227,6 +224,18 @@
             intervals.forEach(function (interval) {
                 interval.highlight = interval === clickedInterval;
             });
+        }
+
+        function setPeriodForApproval(interval, timelineStart, timelineEnd) {
+            var start = moment(interval.StartTime).isValid() ? moment(interval.StartTime) : moment(timelineStart);
+            vm.approveStartTime = putTimeBetween(start, moment(timelineStart), moment(timelineEnd)).toDate();
+
+            var end = moment(interval.EndTime).isValid() ? moment(interval.EndTime) : moment(timelineEnd);
+            vm.approveEndTime = putTimeBetween(end, moment(timelineStart), moment(timelineEnd)).toDate();
+
+            //string format representation
+            startTime = moment(vm.approveStartTime).format("LTS");
+            endTime = moment(vm.approveEndTime).format("LTS");
         }
 
         var startTime;

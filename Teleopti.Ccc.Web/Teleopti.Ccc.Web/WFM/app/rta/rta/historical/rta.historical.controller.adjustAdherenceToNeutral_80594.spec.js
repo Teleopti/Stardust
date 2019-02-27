@@ -164,4 +164,27 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
         expect(vm.openAdjustedToNeutralAdherences).toBe(true);
     });
+
+    it('should open approved periods card and form and set times', function (t) {
+        t.backend.with.historicalAdherence({
+            Timeline: {
+                StartTime: '2019-02-27T07:00:00',
+                EndTime: '2019-02-27T17:00:00'
+            },
+            AdjustedToNeutralAdherences: [{
+                StartTime: '2019-02-27T08:00:00',
+                EndTime: '2019-02-27T09:00:00'
+            }]
+        });
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.adjustedToNeutralAdherences[0].click();
+        });
+
+        expect(vm.openApprovedPeriods).toBe(true);
+        expect(vm.openApproveForm).toBe(true);
+        expect(vm.approveStartTime).toEqual(moment('2019-02-27T08:00:00').toDate());
+        expect(vm.approveEndTime).toEqual(moment('2019-02-27T09:00:00').toDate());
+    });
 });
