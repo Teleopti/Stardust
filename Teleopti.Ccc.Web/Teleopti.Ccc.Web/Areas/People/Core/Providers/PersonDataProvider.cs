@@ -19,19 +19,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public IEnumerable<PersonDataModel> RetrievePeople(DateTime date, IEnumerable<Guid> personIdList)
 		{
+			var day = new DateOnly(date);
 			var people = _personRepo.FindPeople(personIdList);
 			var result = people.Select(p =>
 			{
-				var currentPeriod =
-					p.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).ToList().Single();
+				var currentPeriod = p.Period(day);
                 return new PersonDataModel
 				{
 					PersonId = p.Id.GetValueOrDefault(),
 					FirstName = p.Name.FirstName,
 					LastName = p.Name.LastName,
-					Team = currentPeriod.Team.SiteAndTeam,
-					SkillIdList = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList(),
-					ShiftBagId = currentPeriod.RuleSetBag != null ? currentPeriod.RuleSetBag.Id : null
+					Team = currentPeriod?.Team?.SiteAndTeam,
+					SkillIdList = currentPeriod?.PersonSkillCollection?.Select(s => s.Skill.Id.GetValueOrDefault()).ToList(),
+					ShiftBagId = currentPeriod?.RuleSetBag?.Id
 				};
 			}).ToList();
 

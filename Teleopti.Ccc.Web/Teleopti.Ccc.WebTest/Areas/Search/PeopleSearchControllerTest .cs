@@ -7,6 +7,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -15,23 +16,17 @@ using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
 
-
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
 	[GlobalSearchTest]
-	public class PeopleSearchControllerTest : IoCTestAttribute
+	public class PeopleSearchControllerTest : IExtendSystem
 	{
-		public PeopleSearchController target;
+		public PeopleSearchController Target;
 		public FakePersonFinderReadOnlyRepository PersonFinderRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeCurrentBusinessUnit CurrentFakeBusinessUnit;
-		private ILoggedOnUser loggonUser;
-		
-		[SetUp]
-		public void Setup()
-		{
-			loggonUser = new FakeLoggedOnUser();
-		}
+		public FakeLoggedOnUser LoggonUser;
+		public FakePeopleSearchProvider PeopleSearchProvider;
 
 		[Test]
 		public void ShouldReturnPeopleSummary()
@@ -54,10 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person }, new[] { optionalColumn }), loggonUser,
-				new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
-
-			var result = ((dynamic)target).GetResult("Ashley", 10, 1, "");
+			PeopleSearchProvider.Set(new[] { person }, new[] { optionalColumn });
+			var result = ((dynamic)Target).GetResult("Ashley", 10, 1, "");
 
 			var optionalColumns = (IEnumerable<string>)result.Content.OptionalColumns;
 			Assert.AreEqual(1, optionalColumns.Count());
@@ -87,12 +80,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			var secondPerson = PersonFactory.CreatePersonWithGuid("Abc", "Bac");
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser,
-					new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
-
-			var result = ((dynamic)target).GetResult("a", 10, 1, "");
+			PeopleSearchProvider.Set(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>());
+			var result = ((dynamic)Target).GetResult("a", 10, 1, "");
 
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			Assert.AreEqual(firstPerson.Name.FirstName, peopleList.First().FirstName);
@@ -104,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
 
-			var currentUser = loggonUser.CurrentUser();
+			var currentUser = LoggonUser.CurrentUser();
 			currentUser.SetId(Guid.NewGuid());
 			currentUser.WithName(new Name("firstName", "lastName"));
 			var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
@@ -113,11 +102,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			currentUser.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(-1),
 				PersonContractFactory.CreatePersonContract(), team));
 
-			target =
-				new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
-
-			var result = ((dynamic)target).GetResult("", 10, 1, "");
+			PeopleSearchProvider.Set(new[] { person, currentUser }, new List<IOptionalColumn>());
+			
+			var result = ((dynamic)Target).GetResult("", 10, 1, "");
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 
 			Assert.AreEqual(2, peopleList.Count());
@@ -137,12 +124,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var thirdPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			thirdPerson.SetEmploymentNumber("2");
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
-
-			var result = ((dynamic)target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
+			PeopleSearchProvider.Set(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>());
+			
+			var result = ((dynamic)Target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
 
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			var pe = peopleList.ToList();
@@ -173,12 +157,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PageIndex = 0
 			};
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] { p1, p2, p3 }, new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
-
-			var result = target.FindPeople(inputModel);
+			PeopleSearchProvider.Set(new[] { p1,p2,p3}, new List<IOptionalColumn>());
+			
+			var result = Target.FindPeople(inputModel);
 
 			result.People.Count().Should().Be.EqualTo(2);
 			result.People.SingleOrDefault(p => p.FirstName.Equals("Ashley")).Should().Not.Be.Null();
@@ -219,32 +200,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PageIndex = 0
 			};
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
-
-			var result = target.FindPeople(inputModel);
+			PeopleSearchProvider.Set(new IPerson[0], new List<IOptionalColumn>());
+			
+			var result = Target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(10);
 			result.TotalRows.Should().Be.EqualTo(33);
 			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
 
 			inputModel.PageIndex = 3;
-			result = target.FindPeople(inputModel);
+			result = Target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(3);
 			result.TotalRows.Should().Be.EqualTo(33);
 			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
 
 			inputModel.PageIndex = 0;
 			inputModel.PageSize = 100;
-			result = target.FindPeople(inputModel);
+			result = Target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(33);
 			result.TotalRows.Should().Be.EqualTo(33);
 			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
 
 			inputModel.PageIndex = 4;
 			inputModel.PageSize = 10;
-			result = target.FindPeople(inputModel);
+			result = Target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(0);
 			result.TotalRows.Should().Be.EqualTo(33);
 			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
@@ -270,13 +248,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PageIndex = 0
 			};
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] { ash }, new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
+			PeopleSearchProvider.Set(new[] { ash }, new List<IOptionalColumn>());
 			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
 
-			var result = target.FindPeople(inputModel);
+			var result = Target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(1);
 			var person = result.People.First();
 			person.Id.Should().Be.EqualTo(ash.Id.GetValueOrDefault().ToString());
@@ -319,12 +294,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			};
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
-
-			var result = target.FindPeople(inputModel);
+			PeopleSearchProvider.Set(new IPerson[0], new List<IOptionalColumn>());
+			
+			var result = Target.FindPeople(inputModel);
 			var person = result.People.First();
 			person.FirstName.Should().StartWith("A");
 		}
@@ -358,15 +330,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			};
 
-			target =
-				new PeopleSearchController(
-					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
-
-
-			var result = target.FindPeople(inputModel);
+			PeopleSearchProvider.Set(new IPerson[0], new List<IOptionalColumn>());
+			
+			var result = Target.FindPeople(inputModel);
 			var person = result.People.First();
 			person.FirstName.Should().StartWith("Z");
+		}
+
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddService<FakeLoggedOnUser>();
+			extend.AddService<FakePeopleSearchProvider>();
 		}
 	}
 }

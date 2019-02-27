@@ -11,29 +11,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	public class FakePeopleSearchProvider : IPeopleSearchProvider
 	{
-		private readonly PeopleSummaryModel _model;
-		private readonly List<IPerson> _permittedPeople;
-		private readonly List<IPerson> _peopleWithConfidentialAbsencePermission;
-		private readonly IDictionary<DateOnly, List<IPerson>> _permittedPeopleByDate;
+		private PeopleSummaryModel _model;
+		private readonly List<IPerson> _permittedPeople = new List<IPerson>();
+		private readonly List<IPerson> _peopleWithConfidentialAbsencePermission = new List<IPerson>();
+		private readonly IDictionary<DateOnly, List<IPerson>> _permittedPeopleByDate = new Dictionary<DateOnly, List<IPerson>>();
 		private bool _enableDateFilter;
-		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary;
+		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary = new Dictionary<IPerson, string>();
 		private readonly Dictionary<Guid, List<IPerson>> _permittedPeopleInTeam = new Dictionary<Guid, List<IPerson>>();
 		private bool _enablePermittedPeopleInTeams = false;
-
-
+		
 		const string quotePattern = "(?!\")[^\"]*?(?=\")";
 
-		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns)
+		public FakePeopleSearchProvider()
 		{
-			_permittedPeople = new List<IPerson>();
-			_peopleWithConfidentialAbsencePermission = new List<IPerson>();
-			_permittedPeopleByDate = new Dictionary<DateOnly, List<IPerson>>();
+		}
+
+		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns) : this()
+		{
+			Set(peopleList, optionalColumns);
+		}
+
+		public void Set(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns)
+		{
 			_model = new PeopleSummaryModel
 			{
 				People = peopleList.ToList(),
 				OptionalColumns = optionalColumns.ToList()
 			};
-			_personApplicationRoleDictionary = new Dictionary<IPerson, string>();
 		}
 
 		public void EnableDateFilter()
