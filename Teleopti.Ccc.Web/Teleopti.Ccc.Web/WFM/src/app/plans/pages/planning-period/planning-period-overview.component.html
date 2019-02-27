@@ -28,8 +28,8 @@
 						</span>
 					</div>
 				</div>
-	
-				<div style="overflow: auto" *ngIf="skills&&skills.length>0">
+			</nz-spin>
+			<div style="overflow: auto" *ngIf="skills&&skills.length>0">
 					<h2>Scheduled skills heatmap</h2>
 					<div>Updated: {{lastUpdated}}</div>
 		
@@ -127,10 +127,10 @@
 						</nz-table>
 					</div>
 				</div>
-				<div *ngIf="selectedDay" style="margin-top: 10px;">
-					<plans-intraday [chartData]="selectedDay" [skill]="selectedSkill"></plans-intraday>
-				</div>
-			</nz-spin>
+			<div *ngIf="selectedDay" style="margin-top: 10px;">
+				<plans-intraday [chartData]="selectedDay" [skill]="selectedSkill"></plans-intraday>
+			</div>
+			
 		</nz-tab>
 		<nz-tab [nzTitle]="titleTemplate">
 			<ng-template #titleTemplate>
