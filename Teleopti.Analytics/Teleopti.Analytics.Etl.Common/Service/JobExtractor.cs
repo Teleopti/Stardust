@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Autofac;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
@@ -32,11 +33,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			bool insightsEnabled,
 			CultureInfo culture)
 		{
-			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
+			var jobName = etlJobScheduleToRun.JobName;
+			var scheduleName = etlJobScheduleToRun.ScheduleName;
+			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", scheduleName);
 
 			var jobParameters =
 				new JobParameters(
-					GetJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
+					getJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
 					etlJobScheduleToRun.DataSourceId, timeZoneId,
 					intervalLengthMinutes,
 					cube,
@@ -49,28 +52,24 @@ namespace Teleopti.Analytics.Etl.Common.Service
 						Helper = jobHelper
 					};
 
-			var jobCollection = new JobCollection(jobParameters);
+			var jobToRun = new JobCollection(jobParameters).SingleOrDefault(job =>
+				string.Compare(job.Name, jobName, StringComparison.Ordinal) == 0);
 
-			IJob jobToRun = null;
-
-			foreach (var job in jobCollection)
+			if (jobToRun == null)
 			{
-				if (String.Compare(job.Name, etlJobScheduleToRun.JobName, StringComparison.Ordinal) == 0)
-					jobToRun = job;
+				throw new Exception($"Job name '{jobName}' in schedule '{scheduleName}' does not exist");
 			}
-
-			if (jobToRun == null) throw new Exception("Job name in schedule does not exist");
 
 			log.InfoFormat(CultureInfo.InvariantCulture, "Job to run is '{0}'", jobToRun.Name);
 			return jobToRun;
 		}
 
-		private static IJobMultipleDate GetJobCategoryDatePeriods(IEtlJobSchedule etlJobSchedule, string timeZoneId)
+		private static IJobMultipleDate getJobCategoryDatePeriods(IEtlJobSchedule etlJobSchedule, string timeZoneId)
 		{
 			IJobMultipleDate jobMultipleDate = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 			var today = DateTime.Today;
 
-			foreach (IEtlJobRelativePeriod jobRelativePeriod in etlJobSchedule.RelativePeriodCollection)
+			foreach (var jobRelativePeriod in etlJobSchedule.RelativePeriodCollection)
 			{
 				jobMultipleDate.Add(today.AddDays(jobRelativePeriod.RelativePeriod.Minimum),
 									today.AddDays(jobRelativePeriod.RelativePeriod.Maximum),

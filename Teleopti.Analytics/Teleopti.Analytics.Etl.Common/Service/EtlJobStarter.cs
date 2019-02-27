@@ -141,6 +141,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if (!runController.CanIRunAJob(out var etlRunningInformation))
 			{
 				logConflictingEtlRun(jobToRun, etlRunningInformation);
+				return;
 			}
 
 			try
