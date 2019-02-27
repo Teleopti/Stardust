@@ -251,9 +251,9 @@
 						<nz-table  #scheduleIssuesTable nzSize="small" nzFrontPagination="false" nzShowPagination="false" [nzData]="filteredScheduleIssues">
 							<thead>
 								<tr>
-									<th>{{ 'Resource' | translate }}</th>
-									<th>{{ 'Area' | translate }}</th>
-									<th>{{ 'Description' | translate }}</th>
+									<th nzShowSort [(nzSort)]="scheduleIssuesSortMap.Resource" (nzSortChange)="sortScheduleIssues('Resource',$event)">{{ 'Resource' | translate }}</th>
+									<th nzShowSort [(nzSort)]="scheduleIssuesSortMap.Area" (nzSortChange)="sortScheduleIssues('Area',$event)">{{ 'Area' | translate }}</th>
+									<th nzShowSort [(nzSort)]="scheduleIssuesSortMap.Description" (nzSortChange)="sortScheduleIssues('Description',$event)">{{ 'Description' | translate }}</th>
 								</tr>
 							</thead>
 							<tbody>

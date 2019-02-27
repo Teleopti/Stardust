@@ -68,13 +68,21 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		SkillName   : null
 	};
 
-    preValidationsSortName = 'Resource';
+    preValidationsSortName = null;
     preValidationsSortValue = null;
 	preValidationsSortMap = {
 		Resource: null,
 		Area: null,
 		Description: null
     };
+	
+	scheduleIssuesSortName = null;
+	scheduleIssuesSortValue = null;
+	scheduleIssuesSortMap = {
+		Resource: null,
+		Area: null,
+		Description: null
+	};
 
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
@@ -98,23 +106,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			});
 
 		this.scheduleIssuesFilterControl.valueChanges
-			.pipe(
-				map(filterString => {
-					return this.valData.scheduleIssues.filter(
-						g =>
-							g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
-							g.ValidationErrors.some(
-								item =>
-									item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
-									this.translate
-										.instant(item.ResourceType.toLowerCase())
-										.includes(filterString.toLowerCase())
-							)
-					);
-				})
-			)
-			.subscribe(filteredScheduleIssues => {
-				this.filteredScheduleIssues = filteredScheduleIssues;
+			.subscribe(filterString => {
+				this.searchScheduleIssues(filterString);
 			});
 
 		this.skillFilterControl.valueChanges
@@ -193,6 +186,48 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.preValidationsSortValue = value;
 		this.searchPreValidations(this.preValidationFilterControl.value);
 	}
+	
+	private searchScheduleIssues(filterString: string){
+		const data = this.valData.scheduleIssues.filter(
+			g =>
+				g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
+				g.ValidationErrors.some(
+					item =>
+						item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
+						this.translate
+							.instant(item.ResourceType.toLowerCase())
+							.includes(filterString.toLowerCase())
+				)
+		);
+		if (this.scheduleIssuesSortName && this.scheduleIssuesSortValue) {
+			this.filteredScheduleIssues = data.sort((a, b) =>
+			{
+				if(this.scheduleIssuesSortName == 'Resource'){
+					return (this.scheduleIssuesSortValue === 'ascend') ?
+						(a['ResourceName'].toLowerCase() > b['ResourceName'].toLowerCase() ? 1 : -1) :
+						(b['ResourceName'].toLowerCase() > a['ResourceName'].toLowerCase() ? 1 : -1)
+				}else if(this.scheduleIssuesSortName == 'Area'){
+					return (this.scheduleIssuesSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ResourceType > b['ValidationErrors'][0].ResourceType ? 1 : -1) :
+						(b['ValidationErrors'][0].ResourceType > a['ValidationErrors'][0].ResourceType ? 1 : -1)
+				}else if(this.scheduleIssuesSortName == 'Description'){
+					return (this.scheduleIssuesSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ErrorMessageLocalized > b['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1) :
+						(b['ValidationErrors'][0].ErrorMessageLocalized > a['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1)
+				}else{
+					throw new Error('Not supported!');
+				}
+			});
+		}else{
+			this.filteredScheduleIssues = data;
+		}
+	}
+
+	public sortScheduleIssues(key: string, value: string): void{
+		this.scheduleIssuesSortName = key;
+		this.scheduleIssuesSortValue = value;
+		this.searchScheduleIssues(this.scheduleIssuesFilterControl.value);
+	} 
 
 	private initLegends(){
 		for(let i = 0; i <41;i++){
