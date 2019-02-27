@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonRepository _personRepository;
 		private readonly IUserUiCulture _userUiCulture;
 		private readonly IScheduleDayProvider _scheduleDayProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,
 			IScheduleProvider scheduleProvider,
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository,
 			IUserUiCulture userUiCulture,
-			IScheduleDayProvider scheduleDayProvider)
+			IScheduleDayProvider scheduleDayProvider,
+			ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personRepository = personRepository;
 			_userUiCulture = userUiCulture;
 			_scheduleDayProvider = scheduleDayProvider;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
@@ -92,6 +95,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			var dates = new[] { scheduleDate, scheduleDate.AddDays(-1), scheduleDate.AddDays(1) };
+
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			foreach (var person in people)
 			{
 				var personId = person.Id.GetValueOrDefault();
@@ -102,8 +107,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				list.AddRange(from date in dates
 							  let scheduleDay = personScheduleRange.ScheduledDay(date)
 							  where scheduleDay != null
-							  select _shiftViewModelProvider.MakeViewModel(person, date, scheduleDay, personScheduleRange.ScheduledDay(date.AddDays(-1)), canViewConfidential,
-								  canSeeUnpublishedSchedules, date == scheduleDate));
+							  select _shiftViewModelProvider.MakeViewModel(person, date, scheduleDay,
+								  personScheduleRange.ScheduledDay(date.AddDays(-1)),
+								  commonAgentNameSettings,
+								  canViewConfidential,
+									canSeeUnpublishedSchedules,
+									date == scheduleDate));
 			}
 
 			return new GroupScheduleViewModel
@@ -212,6 +221,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var previousDay = date.AddDays(-1);
 			var nextDay = date.AddDays(1);
 
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			var list = new List<GroupScheduleShiftViewModel>();
 
 			foreach (var pair in personScheduleDayPairsForCurrentPage)
@@ -225,13 +235,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var scheduleNextDay = scheduleDayLookup[(person, nextDay)].FirstOrDefault();
 
 				if (currentScheduleDay != null)
-					list.Add(_shiftViewModelProvider.MakeViewModel(person, date, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules, true));
+					list.Add(_shiftViewModelProvider.MakeViewModel(person, date, currentScheduleDay, schedulePreviousDay, commonAgentNameSettings, canViewConfidential, canSeeUnpublishedSchedules, true));
 
 				if (schedulePreviousDay != null)
-					list.Add(_shiftViewModelProvider.MakeViewModel(person, previousDay, schedulePreviousDay, null, canViewConfidential, canSeeUnpublishedSchedules));
+					list.Add(_shiftViewModelProvider.MakeViewModel(person, previousDay, schedulePreviousDay, null, commonAgentNameSettings, canViewConfidential, canSeeUnpublishedSchedules));
 
 				if (scheduleNextDay != null)
-					list.Add(_shiftViewModelProvider.MakeViewModel(person, nextDay, scheduleNextDay, currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules));
+					list.Add(_shiftViewModelProvider.MakeViewModel(person, nextDay, scheduleNextDay, currentScheduleDay, commonAgentNameSettings, canViewConfidential, canSeeUnpublishedSchedules));
 
 			}
 

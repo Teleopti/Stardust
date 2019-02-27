@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			DateOnly date,
 			IScheduleDay scheduleDay,
 			IScheduleDay previousScheduleDay,
+			ICommonNameDescriptionSetting commonNameDescriptionSetting,
 			bool canViewConfidential,
 			bool canViewUnpublished,
 			bool needToLoadNoteAndUnderlyingSummary = false)
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
-				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
+				Name = commonNameDescriptionSetting.BuildFor(person),
 				Date = date.Date.ToServiceDateFormat(),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
 				MultiplicatorDefinitionSetIds = person.Period(date)?
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			if (scheduleDay.IsFullyPublished || canViewUnpublished)
 			{
-				vm = Projection(scheduleDay, canViewConfidential);
+				vm = Projection(scheduleDay, commonNameDescriptionSetting, canViewConfidential);
 				if (needToLoadNoteAndUnderlyingSummary)
 				{
 					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(timezone, scheduleDay, previousScheduleDay, canViewConfidential);
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return null;
 		}
 
-		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
+		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, ICommonNameDescriptionSetting commonNameDescriptionSetting, bool canViewConfidential)
 		{
 			var projections = new List<GroupScheduleProjectionViewModel>();
 			var userTimeZone = _userTimeZone.TimeZone();
@@ -267,7 +268,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var scheduleVm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
-				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
+				Name = commonNameDescriptionSetting.BuildFor(person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToServiceDateFormat(),
 				IsFullDayAbsence = scheduleDay.IsFullDayAbsence(),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),

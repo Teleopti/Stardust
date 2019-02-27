@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		public FakeUserTimeZone UserTimeZone;
 		public IScheduleStorage ScheduleStorage;
 		public FakeMeetingRepository MeetingRepository;
+		private ICommonNameDescriptionSetting commonNameDescriptionSetting;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeIanaTimeZoneProvider>().For<IIanaTimeZoneProvider>();
 			isolate.UseTestDouble(new FakeCommonAgentNameProvider("{FirstName}{LastName}")).For<ICommonAgentNameProvider>();
+			commonNameDescriptionSetting = new FakeCommonAgentNameProvider("{FirstName}{LastName}").CommonAgentNameSettings;
 		}
-
-
 
 		[Test]
 		public void ShouldMakeViewModelForAgent()
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, commonNameDescriptionSetting, canViewConfidential, canViewUnpublished);
 
 			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
 			viewModel.Name.Should().Be.EqualTo("billgates");
@@ -115,9 +115,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, commonNameDescriptionSetting, canViewConfidential, canViewUnpublished);
 
-			var viewModelForPerson2 = Target.MakeViewModel(person2, date, scheduleDayForPerson2, null, canViewConfidential, canViewUnpublished);
+			var viewModelForPerson2 = Target.MakeViewModel(person2, date, scheduleDayForPerson2, null, commonNameDescriptionSetting, canViewConfidential, canViewUnpublished);
 
 			viewModel.IsProtected.Should().Be(true);
 			viewModelForPerson2.IsProtected.Should().Be(false);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, commonNameDescriptionSetting, canViewConfidential, canViewUnpublished);
 
 			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Null();
 		}
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, commonNameDescriptionSetting, canViewConfidential, canViewUnpublished);
 			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Empty();
 		}
 
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var note = new PublicNote(person, date, scenario, "Oh my God");
 			scheduleDay.Add(note);
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, false, false, true);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, commonNameDescriptionSetting, false, false, true);
 
 			viewModel.PublicNotes.Should().Be.EqualTo("Oh my God");
 		}
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			scheduleDayOnePerson1.Add(personMeeting);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.Date.Should().Be.EqualTo("2015-01-01");
 
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 			vm.Projection.ElementAt(0).End.Should().Be.EqualTo("2018-10-28 01:00");
 		}
 
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 			vm.Projection.Single().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Second().Id.Value);
 		}
 
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 			vm.Projection.Last().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Last().Id.Value);
 
 		}
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 			vm.Projection.Third().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Third().Id.Value);
 		}
 
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 			vm.Projection.Last().TopShiftLayerId.Should().Be.EqualTo(null);
 
 		}
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 			vm.Projection.Single().TopShiftLayerId.Should().Be(null);
 		}
 
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDay.Add(pa);
 
-			var result = Target.Projection(scheduleDay, true);
+			var result = Target.Projection(scheduleDay, commonNameDescriptionSetting, true);
 
 			result.Projection.Second().TopShiftLayerId.Should().Be.EqualTo(pa.ShiftLayers.Last().Id);
 		}
@@ -528,7 +528,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			});
 			scheduleDay.Add(pa);
 
-			var result = Target.Projection(scheduleDay, true);
+			var result = Target.Projection(scheduleDay, commonNameDescriptionSetting, true);
 
 			result.Projection.Second().TopShiftLayerId.Should().Be(null);
 		}
@@ -556,7 +556,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.AddOvertimeActivity(overTimeActivity, overTimeActivityPeriod, def);
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
@@ -587,7 +587,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
@@ -622,7 +622,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			scheduleDay.Add(assignment);
 
-			var vm = Target.Projection(scheduleDay, true);
+			var vm = Target.Projection(scheduleDay, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
@@ -654,7 +654,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			scheduleDay.Add(assignment);
 
-			var vm = Target.Projection(scheduleDay, true);
+			var vm = Target.Projection(scheduleDay, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person.Id.ToString());
 			vm.Projection.Count().Should().Be(3);
@@ -689,7 +689,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			scheduleDay.Add(assignment);
 
-			var vm = Target.Projection(scheduleDay, true);
+			var vm = Target.Projection(scheduleDay, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person.Id.ToString());
 
@@ -730,7 +730,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
@@ -769,7 +769,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(3);
@@ -826,7 +826,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(3);
@@ -880,7 +880,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
-			var vm = Target.Projection(scheduleDayOnePerson1, true);
+			var vm = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, true);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(4);
@@ -1127,12 +1127,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			personAbsence.SetId(Guid.NewGuid());
 
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-			var vmInEnglish = Target.Projection(scheduleDayOnePerson1, false);
+			var vmInEnglish = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, false);
 			var personAbsenceProjectionInEnglish = vmInEnglish.Projection.ElementAt(1);
 			personAbsenceProjectionInEnglish.Description.Should().Be("Other");
 
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
-			var vmInChineses = Target.Projection(scheduleDayOnePerson1, false);
+			var vmInChineses = Target.Projection(scheduleDayOnePerson1, commonNameDescriptionSetting, false);
 			var personAbsenceProjectionInChineses = vmInChineses.Projection.ElementAt(1);
 			personAbsenceProjectionInChineses.Description.Should().Be("其他");
 		}
