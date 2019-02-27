@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IBankHolidayCalendar> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new BankHolidayCalendarRepository(currentUnitOfWork);
+			return BankHolidayCalendarRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(calendar2);
 			var ids = new List<Guid> {calendar1.Id.GetValueOrDefault(), calendar2.Id.GetValueOrDefault()};
 
-			var result = new BankHolidayCalendarRepository(CurrUnitOfWork).FindBankHolidayCalendars(ids).ToList().OrderBy(calendar=> calendar.Name);
+			var result = BankHolidayCalendarRepository.DONT_USE_CTOR(CurrUnitOfWork).FindBankHolidayCalendars(ids).ToList().OrderBy(calendar=> calendar.Name);
 			Assert.AreEqual(result.First().Name, "calendar1");
 			Assert.AreEqual(result.Last().Name, "calendar2");
 		}
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(calendar2);
 			var ids = new List<Guid>();
 
-			var result = new BankHolidayCalendarRepository(CurrUnitOfWork).FindBankHolidayCalendars(ids);
+			var result = BankHolidayCalendarRepository.DONT_USE_CTOR(CurrUnitOfWork).FindBankHolidayCalendars(ids);
 			Assert.AreEqual(result.Count, 0);
 		}
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(calendar1);
 			PersistAndRemoveFromUnitOfWork(calendar2);
 
-			var result = new BankHolidayCalendarRepository(CurrUnitOfWork).FindBankHolidayCalendars(null);
+			var result = BankHolidayCalendarRepository.DONT_USE_CTOR(CurrUnitOfWork).FindBankHolidayCalendars(null);
 			Assert.AreEqual(result.Count, 0);
 		}
 	}

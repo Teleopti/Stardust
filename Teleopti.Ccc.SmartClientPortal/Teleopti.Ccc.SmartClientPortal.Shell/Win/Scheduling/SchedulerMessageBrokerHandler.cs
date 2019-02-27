@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IAgentDayScheduleTag)))
 			{
-				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new AgentDayScheduleTagRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork), eventMessage.DomainObjectId);
 			}
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))

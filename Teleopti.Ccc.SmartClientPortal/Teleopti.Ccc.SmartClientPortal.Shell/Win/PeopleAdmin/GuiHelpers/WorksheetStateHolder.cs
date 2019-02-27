@@ -828,7 +828,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadAllAvailabilities(IUnitOfWork uow)
 		{
 			AllAvailabilities.Clear();
-			var availabilities = new AvailabilityRepository(uow).LoadAllSortedByNameAscending();
+			var availabilities = AvailabilityRepository.DONT_USE_CTOR(uow).LoadAllSortedByNameAscending();
 			availabilities.ForEach(AllAvailabilities.Add);
 		}
 

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var availabilityRotation = new AvailabilityRepository(unitOfWork.Current())
+			var availabilityRotation = AvailabilityRepository.DONT_USE_CTOR(unitOfWork.Current())
 				.LoadAll()
 				.Single(r => r.Name == Rotation);
 			var personAvailability = new PersonAvailability(person, availabilityRotation, new DateOnly(StartDate));

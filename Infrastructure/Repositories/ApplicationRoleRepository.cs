@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
@@ -7,6 +8,8 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -19,14 +22,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class ApplicationRoleRepository : Repository<IApplicationRole>, IApplicationRoleRepository
     {
-#pragma warning disable 618
-        public ApplicationRoleRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static ApplicationRoleRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new ApplicationRoleRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
 
-		 public ApplicationRoleRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static ApplicationRoleRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new ApplicationRoleRepository(currentUnitOfWork, null, null);
+		}
+		
+		public ApplicationRoleRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
 		    
 	    }

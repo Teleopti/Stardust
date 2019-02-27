@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
+			var applicationFunctionRepository = ApplicationFunctionRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var matrixReportsParent = applicationFunctionRepository.LoadAll().First(x => x.FunctionCode == "Reports");
 
 			applicationFunctionRepository.AddRange(

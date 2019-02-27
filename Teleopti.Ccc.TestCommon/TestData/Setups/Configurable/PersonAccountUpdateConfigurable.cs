@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var personAbsenceRepository = new PersonAbsenceRepository(unitOfWork);
 			var noteRepository = new NoteRepository(unitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(unitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(unitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(unitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(unitOfWork);
 			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(unitOfWork);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(unitOfWork);

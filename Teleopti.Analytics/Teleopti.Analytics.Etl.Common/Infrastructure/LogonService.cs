@@ -45,7 +45,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 						new ClaimSetForApplicationRole(
 							new ApplicationFunctionsForRole(
 								new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-								new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
+								ApplicationFunctionRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow))
 								)
 							)
 						);

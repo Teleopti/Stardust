@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
-				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
 				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);

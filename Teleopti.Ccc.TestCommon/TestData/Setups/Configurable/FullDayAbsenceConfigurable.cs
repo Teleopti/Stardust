@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var scenario = ScenarioRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var absence = new AbsenceRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
+			var absence = AbsenceRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(unitOfWork);
 			var noteRepository = new NoteRepository(unitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(unitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(unitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(unitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(unitOfWork);
 			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(unitOfWork);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(unitOfWork);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(new EmptyScheduleDayDifferenceSaver(), new PersistScheduleChanges(scheduleRepository, CurrentUnitOfWork.Make())), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var personAbsenceCreator = new NoScheduleChangedEventPersonAbsenceCreator(scheduleDifferenceSaver, businessRulesForAccountUpdate);
-			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(unitOfWork, null, null), new AbsenceRepository(unitOfWork), scheduleRepository, UserTimeZone.Make());
+			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(unitOfWork, null, null), AbsenceRepository.DONT_USE_CTOR(unitOfWork), scheduleRepository, UserTimeZone.Make());
 			var handler = new AddFullDayAbsenceCommandHandler(personAbsenceCreator, commandConverter);
 			handler.Handle(new AddFullDayAbsenceCommand
 			{

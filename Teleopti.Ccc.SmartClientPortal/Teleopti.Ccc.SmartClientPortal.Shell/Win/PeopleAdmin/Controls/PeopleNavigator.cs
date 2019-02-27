@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
-				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
 				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
-				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
 				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			availabilityRotation.AvailabilityDays.ForEach(d => d.Restriction = availabilityRestriction);
 
-			new AvailabilityRepository(currentUnitOfWork.Current()).Add(availabilityRotation);
+			AvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork.Current()).Add(availabilityRotation);
 		}
 	}
 }

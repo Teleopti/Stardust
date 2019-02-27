@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (DayOffTemplate == null)
 			{
 				DayOffTemplate = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(unitOfWork);
+				var repository = DayOffTemplateRepository.DONT_USE_CTOR2(unitOfWork);
 				repository.Add(DayOffTemplate);
 			}
 

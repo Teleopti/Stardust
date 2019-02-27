@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
 			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
 			return new ScheduleStorage(currentUnitOfWork, _personAssignmentRepository,
 				personAbsenceRepository, new MeetingRepository(currentUnitOfWork),

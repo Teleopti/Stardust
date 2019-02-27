@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var person = new PersonRepository(CurrentUnitOfWork, null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 			ISettingData data = FindByKey(key)
-								?? new GlobalSettingDataRepository(CurrentUnitOfWork).FindByKey(key)
+								?? GlobalSettingDataRepository.DONT_USE_CTOR(CurrentUnitOfWork).FindByKey(key)
 								??
 								new PersonalSettingData(key, person);
 //									TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(CurrentUnitOfWork)));

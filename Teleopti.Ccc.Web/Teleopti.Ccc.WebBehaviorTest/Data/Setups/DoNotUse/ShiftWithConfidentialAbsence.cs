@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				confidentialAbsence = AbsenceFactory.CreateAbsence(RandomName.Make());
 				confidentialAbsence.Confidential = true;
 				confidentialAbsence.DisplayColor = Color.GreenYellow;
-				new AbsenceRepository(unitOfWork).Add(confidentialAbsence);
+				AbsenceRepository.DONT_USE_CTOR(unitOfWork).Add(confidentialAbsence);
 			}
 			else
 			{
-				confidentialAbsence = new AbsenceRepository(unitOfWork).LoadAll().Single(x => x.Name == Absence);
+				confidentialAbsence = AbsenceRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(x => x.Name == Absence);
 			}
 
 			var absenseLayer = new AbsenceLayer(confidentialAbsence, new DateTimePeriod(date.AddHours(8), date.AddHours(17)));

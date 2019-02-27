@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				ActivityRepository.DONT_USE_CTOR(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				ScenarioRepository.DONT_USE_CTOR(unitOfWork).Add(Scenario);
-				new AbsenceRepository(unitOfWork).Add(Absence);
+				AbsenceRepository.DONT_USE_CTOR(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
-				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
+				DayOffTemplateRepository.DONT_USE_CTOR(unitOfWork).Add(DayOffTemplate);
 				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
-				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
 				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
-				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
 				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			
 			if (!string.IsNullOrEmpty(BudgetGroup))
 			{
-				var budgetGroupRepository = new BudgetGroupRepository(uow);
+				var budgetGroupRepository = BudgetGroupRepository.DONT_USE_CTOR(uow);
 				var budgetGroup = budgetGroupRepository.LoadAll().Single(b => b.Name == BudgetGroup);
 				personPeriod.BudgetGroup = budgetGroup;
 			}

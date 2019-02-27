@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			
 			var today = DateTime.UtcNow.Date;
 
-			var absenceRepository = new AbsenceRepository(unitOfWork);
+			var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 			var absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 			absenceRepository.Add(absence);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		{
 			var today = DateTime.UtcNow.Date;
 
-			var absenceRepository = new AbsenceRepository(unitOfWork);
+			var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 			var absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 			absenceRepository.Add(absence);
 			
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 			else
 			{
-				var absenceRepository = new AbsenceRepository(unitOfWork);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 				absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 				absenceRepository.Add(absence);
 			}

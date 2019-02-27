@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (Requestable.HasValue)
 				Absence.Requestable = Requestable.Value;
 			
-			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+			var absenceRepository = AbsenceRepository.DONT_USE_CTOR(currentUnitOfWork);
 			absenceRepository.Add(Absence);
 		}
 	}

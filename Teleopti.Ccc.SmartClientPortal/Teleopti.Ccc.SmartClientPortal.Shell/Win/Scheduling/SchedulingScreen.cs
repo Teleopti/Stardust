@@ -3881,7 +3881,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var currentUnitOfWork = new FromFactory(() => uowFactory);
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
 				PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
-				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
+				new MeetingRepository(currentUnitOfWork), AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork),
 				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
 				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
 				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
@@ -4145,7 +4145,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				var approveRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
@@ -4202,7 +4202,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
@@ -4720,7 +4720,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				changeRequestStatus(
@@ -4758,7 +4758,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				replyAndChangeStatus(new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,

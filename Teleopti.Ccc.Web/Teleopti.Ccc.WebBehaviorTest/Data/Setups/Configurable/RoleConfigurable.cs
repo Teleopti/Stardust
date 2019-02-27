@@ -181,17 +181,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					.ForEach(role.AvailableData.AddAvailableSite);
 			}
 
-			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork, null, null);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 			var businessUnit = businessUnitRepository.LoadAllBusinessUnitSortedByName().Single(b => b.Name == BusinessUnit);
 			role.SetBusinessUnit(businessUnit);
 
-			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
+			var applicationFunctionRepository = ApplicationFunctionRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var allApplicationFunctions = applicationFunctionRepository.LoadAll();
 			var filteredApplicationFunctions = filterApplicationFunctions(allApplicationFunctions);
 			filteredApplicationFunctions.ToList().ForEach(role.AddApplicationFunction);
 
-			var applicationRoleRepository = new ApplicationRoleRepository(currentUnitOfWork);
-			var availableDataRepository = new AvailableDataRepository(currentUnitOfWork);
+			var applicationRoleRepository = ApplicationRoleRepository.DONT_USE_CTOR(currentUnitOfWork);
+			var availableDataRepository = AvailableDataRepository.DONT_USE_CTOR(currentUnitOfWork);
 
 			applicationRoleRepository.Add(role);
 			availableDataRepository.Add(availableData);

@@ -828,7 +828,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadBudgetGroup()
 		{
 			_budgetGroupBindingCollection.Clear();
-			var repository = new BudgetGroupRepository(GetUnitOfWork);
+			var repository = BudgetGroupRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var list = repository.LoadAll().OrderBy(n2 => n2.Name);
 			
 			_budgetGroupBindingCollection.Add(PersonPeriodModel.NullBudgetGroup);
@@ -1003,7 +1003,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_applicationRoleCollection.Clear();
 
-			var r = new ApplicationRoleRepository(GetUnitOfWork);
+			var r = ApplicationRoleRepository.DONT_USE_CTOR(GetUnitOfWork);
 			_applicationRoleCollection.AddRange(r.LoadAllApplicationRolesSortedByName().OrderBy(x => x.DescriptionText));
 			_rolesViewAdapterCollection.AddRange(_applicationRoleCollection.ConvertAll((EntityConverter.ConvertToOther<IApplicationRole, RolesModel>)));
 		}
@@ -1076,7 +1076,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private void LoadSettings()
 		{
 			IUnitOfWork uow = UnitOfWorkFactory.CurrentUnitOfWork().Current();
-			ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+			ISettingDataRepository settingDataRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 			CommonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 		}
 
@@ -1185,7 +1185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_absenceCollection.Clear();
 
-			var absenceRepository = new AbsenceRepository(GetUnitOfWork);
+			var absenceRepository = AbsenceRepository.DONT_USE_CTOR(GetUnitOfWork);
 			_absenceCollection.AddRange(absenceRepository.LoadAllSortByName());
 		}
 

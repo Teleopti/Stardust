@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IAvailableData> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AvailableDataRepository(currentUnitOfWork);
+            return AvailableDataRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(availableData);
 
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
 
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
             Assert.AreEqual(availableData.AvailableTeams.Count, loadedAvailableData.AvailableTeams.Count);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             availableData.AddAvailableSite(site3);
 
             PersistAndRemoveFromUnitOfWork(availableData);
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
             Assert.AreEqual(availableData.AvailableSites.Count, loadedAvailableData.AvailableSites.Count);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(availableData);
 
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
 
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
 
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(availableData);
 
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
 
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(availableData);
 
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
 
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             loadedAvailableData.AddAvailableSite(site2);
 
             PersistAndRemoveFromUnitOfWork(loadedAvailableData);
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
             loadedAvailableData = _target.Load(availableData.Id.Value);
 
             Assert.AreEqual(2, loadedAvailableData.AvailableTeams.Count);
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             loadedAvailableData.DeleteAvailableSite(site2);
 
             PersistAndRemoveFromUnitOfWork(loadedAvailableData);
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
             loadedAvailableData = _target.Load(availableData.Id.Value);
 
             Assert.AreEqual(1, loadedAvailableData.AvailableTeams.Count);
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(availableData1);
             PersistAndRemoveFromUnitOfWork(availableData2);
 
-            _target = new AvailableDataRepository(UnitOfWork);
+            _target = AvailableDataRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IAvailableData> resultList = _target.LoadAllAvailableData();
 
             Assert.AreEqual(2, resultList.Count);

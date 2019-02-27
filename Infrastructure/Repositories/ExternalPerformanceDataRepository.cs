@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class ExternalPerformanceDataRepository : Repository<IExternalPerformanceData>, IExternalPerformanceDataRepository
 	{
 		private readonly IBusinessUnitRepository _businessUnitRepository;
+		
 		public ExternalPerformanceDataRepository(ICurrentUnitOfWork currentUnitOfWork, IBusinessUnitRepository businessUnitRepository) : base(currentUnitOfWork, null, null)
 		{
 			_businessUnitRepository = businessUnitRepository;

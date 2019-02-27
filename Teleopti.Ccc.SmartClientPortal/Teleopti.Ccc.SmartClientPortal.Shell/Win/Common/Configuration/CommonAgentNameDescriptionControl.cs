@@ -381,10 +381,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				if(_type == CommonAgentNameDescriptionType.Common)
-					_commonNameDescriptionSetting = new GlobalSettingDataRepository(uow).FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+					_commonNameDescriptionSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
 				if (_type == CommonAgentNameDescriptionType.ScheduleExport)
-					_commonNameDescriptionSettingScheduleExport = new GlobalSettingDataRepository(uow).FindValueByKey("CommonNameDescriptionScheduleExport", new CommonNameDescriptionSettingScheduleExport());
+					_commonNameDescriptionSettingScheduleExport = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("CommonNameDescriptionScheduleExport", new CommonNameDescriptionSettingScheduleExport());
 				changedInfo();
 			}
 
@@ -451,10 +451,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				if(_type == CommonAgentNameDescriptionType.Common)
-					_commonNameDescriptionSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_commonNameDescriptionSetting).GetValue(new CommonNameDescriptionSetting());
+					_commonNameDescriptionSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_commonNameDescriptionSetting).GetValue(new CommonNameDescriptionSetting());
 
 				if (_type == CommonAgentNameDescriptionType.ScheduleExport)
-					_commonNameDescriptionSettingScheduleExport = new GlobalSettingDataRepository(uow).PersistSettingValue(_commonNameDescriptionSettingScheduleExport).GetValue(new CommonNameDescriptionSettingScheduleExport());
+					_commonNameDescriptionSettingScheduleExport = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_commonNameDescriptionSettingScheduleExport).GetValue(new CommonNameDescriptionSettingScheduleExport());
 				
 				uow.PersistAll();
 				changedInfo();

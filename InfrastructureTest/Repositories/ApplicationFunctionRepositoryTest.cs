@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             //sortOrder1.FunctionDescription = "A";
             PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-            IList<IApplicationFunction> functions = new ApplicationFunctionRepository(UnitOfWork).GetAllApplicationFunctionSortedByCode();
+            IList<IApplicationFunction> functions = ApplicationFunctionRepository.DONT_USE_CTOR(UnitOfWork).GetAllApplicationFunctionSortedByCode();
 
             //load
             Assert.AreEqual(functions[0], sortOrder1);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             sortOrder1.ForeignSource = DefinedForeignSourceNames.SourceRaptor;
             PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-            var functions = new ApplicationFunctionRepository(UnitOfWork).ExternalApplicationFunctions();
+            var functions = ApplicationFunctionRepository.DONT_USE_CTOR(UnitOfWork).ExternalApplicationFunctions();
 
             //load
             functions.Single().Should().Be.EqualTo(sortOrder2);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             applicationFunction.ForeignId = DefinedRaptorApplicationFunctionForeignIds.OpenRaptorApplication;
             PersistAndRemoveFromUnitOfWork(applicationFunction);
             
-            IList<IApplicationFunction> functions = new ApplicationFunctionRepository(UnitOfWork).GetAllApplicationFunctionSortedByCode();
+            IList<IApplicationFunction> functions = ApplicationFunctionRepository.DONT_USE_CTOR(UnitOfWork).GetAllApplicationFunctionSortedByCode();
 
             //load
             Assert.AreEqual(functions[0], applicationFunction);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			  PersistAndRemoveFromUnitOfWork(child1);
 			  PersistAndRemoveFromUnitOfWork(child2);
 
-			  IList<IApplicationFunction> functions = new ApplicationFunctionRepository(UnitOfWork).GetChildFunctions(parent.Id.Value);
+			  IList<IApplicationFunction> functions = ApplicationFunctionRepository.DONT_USE_CTOR(UnitOfWork).GetChildFunctions(parent.Id.Value);
 
 			  //load
 			  Assert.AreEqual(functions.Count, 2);
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IApplicationFunction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ApplicationFunctionRepository(currentUnitOfWork);
+            return ApplicationFunctionRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

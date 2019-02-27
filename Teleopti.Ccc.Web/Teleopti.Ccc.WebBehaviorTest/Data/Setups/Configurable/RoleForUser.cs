@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var roleRepository = new ApplicationRoleRepository(uow);
+			var roleRepository = ApplicationRoleRepository.DONT_USE_CTOR(uow);
 			var role = roleRepository.LoadAll().Single(b => b.Name == Name);
 			user.PermissionInformation.AddApplicationRole(role);
 		}

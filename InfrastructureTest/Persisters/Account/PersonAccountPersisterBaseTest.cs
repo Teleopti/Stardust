@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
 			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);

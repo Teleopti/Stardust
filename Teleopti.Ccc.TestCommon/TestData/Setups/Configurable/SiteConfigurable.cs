@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				if (Name == null)
 					Name = RandomName.Make("site");
 				Site = SiteFactory.CreateSimpleSite(Name);
-				var businessUnit = new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
+				var businessUnit = BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
 				if (!string.IsNullOrEmpty(BusinessUnit))
 					Site.SetBusinessUnit(businessUnit);
 				siteRepository.Add(Site);

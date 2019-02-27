@@ -103,10 +103,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				IGroupPageRepository repository = new GroupPageRepository(uow);
+				IGroupPageRepository repository = GroupPageRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAllGroupPageBySortedByDescription();
 			}
 		}
@@ -136,7 +136,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				ICommonNameDescriptionSetting commonNameDescription;
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+					ISettingDataRepository settingDataRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 
 					commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription",
 																				 new CommonNameDescriptionSetting());
@@ -220,7 +220,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				BusinessUnitRepository repository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository repository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAll().ToList();
 			}
 		}
@@ -436,7 +436,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
 					//Avoid lazy load
-					BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+					BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 					ActivityRepository repository = ActivityRepository.DONT_USE_CTOR(uow);
@@ -451,10 +451,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				ApplicationFunctionRepository repository = new ApplicationFunctionRepository(uow);
+				ApplicationFunctionRepository repository = ApplicationFunctionRepository.DONT_USE_CTOR(uow);
 
 				return repository.LoadAll().ToList();
 			}
@@ -465,10 +465,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				AvailableDataRepository repository = new AvailableDataRepository(uow);
+				AvailableDataRepository repository = AvailableDataRepository.DONT_USE_CTOR(uow);
 
 				return repository.LoadAllAvailableData();
 			}
@@ -481,10 +481,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				uow.Reassociate(applicationFunctions);
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				ApplicationRoleRepository repository = new ApplicationRoleRepository(uow);
+				ApplicationRoleRepository repository = ApplicationRoleRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAll().ToList();
 			}
 		}
@@ -496,10 +496,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
 					//Avoid lazy load
-					BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+					BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-					AbsenceRepository repository = new AbsenceRepository(uow);
+					AbsenceRepository repository = AbsenceRepository.DONT_USE_CTOR(uow);
 					return repository.LoadAll().ToList();
 				}
 			}
@@ -577,7 +577,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
 					//Avoid lazy load
-					BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+					BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 					ScenarioRepository repository = ScenarioRepository.DONT_USE_CTOR(uow);
@@ -604,7 +604,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				var currentAuthorization = CurrentAuthorization.Make();
 				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
-				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
 				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
@@ -665,15 +665,15 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (uow.DisableFilter(QueryFilter.Deleted))
 			{
 				ActivityRepository.DONT_USE_CTOR(uow).LoadAll();
-				new AbsenceRepository(uow).LoadAll();
+				AbsenceRepository.DONT_USE_CTOR(uow).LoadAll();
 				new ShiftCategoryRepository(uow).LoadAll();
-				new DayOffTemplateRepository(uow).LoadAll();
+				DayOffTemplateRepository.DONT_USE_CTOR(uow).LoadAll();
 				new MultiplicatorDefinitionSetRepository(uow).LoadAll();
 			}
 
 			uow.Reassociate(persons);
 
-			var businessUnitRepository = new BusinessUnitRepository(uow);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 			var businessUnitList = businessUnitRepository.LoadAll();
 			var scenarioRep = ScenarioRepository.DONT_USE_CTOR(uow);
 			IList<IScenario> scenarioList = scenarioRep.FindAllSorted();
@@ -839,10 +839,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				var repository = new DayOffTemplateRepository(uow);
+				var repository = DayOffTemplateRepository.DONT_USE_CTOR(uow);
 				return repository.FindAllDayOffsSortByDescription();
 			}
 		}
@@ -867,7 +867,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
 					//Avoid lazy load
-					BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+					BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 					ShiftCategoryRepository repository = new ShiftCategoryRepository(uow);
@@ -1057,7 +1057,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				BusinessUnitRepository bur = new BusinessUnitRepository(uow);
+				BusinessUnitRepository bur = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				return bur.LoadAllTimeZones();
 			}
 		}
@@ -1164,7 +1164,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				WorkloadRepository repository = new WorkloadRepository(uow);
@@ -1457,7 +1457,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				KpiRepository repository = new KpiRepository(uow);
@@ -1490,11 +1490,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = new PersonRepository(new ThisUnitOfWork(uow), null, null);
-				new ApplicationRoleRepository(uow).LoadAll();
+				ApplicationRoleRepository.DONT_USE_CTOR(uow).LoadAll();
 				var permissionsResolver = new MatrixPermissionsResolver(personRepository,
 					new ApplicationFunctionsForRole(
 						new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-						new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
+						ApplicationFunctionRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow))
 						),
 					SiteRepository.DONT_USE_CTOR(uow)
 					);
@@ -1588,7 +1588,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				ScorecardRepository repository = new ScorecardRepository(uow);
@@ -1634,7 +1634,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load
-				BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
+				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				KpiTargetRepository repository = new KpiTargetRepository(uow);

@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private static void loadNeededStuffIntoUnitOfWork(IUnitOfWork uow)
 		{
-			var businessUnitRepository = new BusinessUnitRepository(uow);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 			businessUnitRepository.Get(
 				((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnitId.GetValueOrDefault());
 			using (uow.DisableFilter(QueryFilter.Deleted))

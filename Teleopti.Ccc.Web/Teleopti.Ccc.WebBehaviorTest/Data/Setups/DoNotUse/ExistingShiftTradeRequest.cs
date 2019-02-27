@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var currentAuthorization = new FullPermission();
 			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(uow);
 			var personAbsenceRepository = new PersonAbsenceRepository(uow);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(uow);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(uow);
 			var noteRepository = new NoteRepository(uow);
 			var publicNoteRepository = new PublicNoteRepository(uow);
 			var preferenceDayRepository = new PreferenceDayRepository(uow);

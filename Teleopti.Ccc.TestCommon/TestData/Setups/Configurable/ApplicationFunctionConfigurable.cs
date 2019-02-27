@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			Function = new ApplicationFunction(Name);
-			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
+			var applicationFunctionRepository = ApplicationFunctionRepository.DONT_USE_CTOR(currentUnitOfWork);
 			applicationFunctionRepository.Add(Function);
 		}
 	}

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
                         var claimSet = _claimCache.Get(applicationRoleId);
                         if (claimSet == null)
                         {
-                            var roleRepository = new ApplicationRoleRepository(unitOfWork);
+                            var roleRepository = ApplicationRoleRepository.DONT_USE_CTOR(unitOfWork);
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
 	                        var licensedFunctionsProvider = new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 		                        new ClaimSetForApplicationRole(
 			                        new ApplicationFunctionsForRole(
 				                        licensedFunctionsProvider,
-					                        new ApplicationFunctionRepository(new ThisUnitOfWork(unitOfWork))
+					                        ApplicationFunctionRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork))
 				                        )
 			                        );
 

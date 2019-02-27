@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				RollingPeriodSet = RollingPeriodSet
 			};
 
-			var rep = new GamificationSettingRepository(currentUnitOfWork);
+			var rep = GamificationSettingRepository.DONT_USE_CTOR(currentUnitOfWork);
 			rep.Add(setting);
 		}
 	}

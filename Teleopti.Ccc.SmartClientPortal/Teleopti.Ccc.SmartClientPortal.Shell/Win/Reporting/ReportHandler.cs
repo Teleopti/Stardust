@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 			var noteRepository = new NoteRepository(currentUnitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
 			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);

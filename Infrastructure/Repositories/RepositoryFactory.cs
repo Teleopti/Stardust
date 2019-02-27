@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IAbsenceRepository CreateAbsenceRepository(IUnitOfWork unitOfWork)
 		{
-			return new AbsenceRepository(unitOfWork);
+			return AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IApplicationFunctionRepository CreateApplicationFunctionRepository(IUnitOfWork unitOfWork)
 		{
-			return new ApplicationFunctionRepository(unitOfWork);
+			return ApplicationFunctionRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="unitOfWork">The uow.</param>
 		public IApplicationRoleRepository CreateApplicationRoleRepository(IUnitOfWork unitOfWork)
 		{
-			return new ApplicationRoleRepository(unitOfWork);
+			return ApplicationRoleRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="unitOfWork">The unit of work.</param>
 		public IAvailableDataRepository CreateAvailableDataRepository(IUnitOfWork unitOfWork)
 		{
-			return new AvailableDataRepository(unitOfWork);
+			return AvailableDataRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IBusinessUnitRepository CreateBusinessUnitRepository(IUnitOfWork unitOfWork)
 		{
-			return new BusinessUnitRepository(unitOfWork);
+			return BusinessUnitRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
 		{
-			return new DayOffTemplateRepository(unitOfWork);
+			return DayOffTemplateRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMeetingRepository CreateMeetingRepository(IUnitOfWork unitOfWork)
@@ -234,12 +234,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISettingDataRepository CreateGlobalSettingDataRepository(IUnitOfWork unitOfWork)
 		{
-			return new GlobalSettingDataRepository(unitOfWork);
+			return GlobalSettingDataRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IGroupPageRepository CreateGroupPageRepository(IUnitOfWork unitOfWork)
 		{
-			return new GroupPageRepository(unitOfWork);
+			return GroupPageRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPartTimePercentageRepository CreatePartTimePercentageRepository(IUnitOfWork unitOfWork)
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IRepository<IBudgetGroup> CreateBudgetGroupRepository(IUnitOfWork unitOfWork)
 		{
-			return new BudgetGroupRepository(unitOfWork);
+			return BudgetGroupRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMasterActivityRepository CreateMasterActivityRepository(IUnitOfWork unitOfWork)

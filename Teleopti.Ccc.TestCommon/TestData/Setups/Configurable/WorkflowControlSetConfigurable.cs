@@ -92,13 +92,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AvailableDayOff))
 			{
-				var dayOffTemplate = new DayOffTemplateRepository(currentUnitOfWork).FindAllDayOffsSortByDescription().Single(c => c.Description.Name == AvailableDayOff);
+				var dayOffTemplate = DayOffTemplateRepository.DONT_USE_CTOR2(currentUnitOfWork).FindAllDayOffsSortByDescription().Single(c => c.Description.Name == AvailableDayOff);
 				workflowControlSet.AddAllowedPreferenceDayOff(dayOffTemplate);
 			}
 
 			if (!string.IsNullOrEmpty(AvailableAbsence))
 			{
-				var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
+				var absence = AbsenceRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
 				workflowControlSet.AbsenceRequestWaitlistEnabled = AbsenceRequestWaitlistEnabled;
 				workflowControlSet.AbsenceProbabilityEnabled = AbsenceProbabilityEnabled;
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(ReportableAbsence))
 			{
-				var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == ReportableAbsence);
+				var absence = AbsenceRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == ReportableAbsence);
 				workflowControlSet.AddAllowedAbsenceForReport(absence);
 			}
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
-				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit));
+				workflowControlSet.SetBusinessUnit(BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit));
 
 			workflowControlSet.AnonymousTrading = AnonymousTrading;
 

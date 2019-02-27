@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldReturnFalseIfNoSkillDays()
 		{
 			var skillDayRepository = new SkillDayRepository(UnitOfWork);
-			var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
 			var bu = businessUnitRepository.LoadAll().First();
 			skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.MinValue, DateOnly.MaxValue, bu, _scenario).Should().Be.False();
 		}
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldReturnTrueIfSkillDays()
 		{
 			var skillDayRepository = new SkillDayRepository(UnitOfWork);
-			var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
 
 			ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
 			ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();

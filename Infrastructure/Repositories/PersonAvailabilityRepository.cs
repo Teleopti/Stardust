@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
-			var rep2 = new AvailabilityRepository(UnitOfWork);
+			var rep2 = AvailabilityRepository.DONT_USE_CTOR(UnitOfWork);
 			rep2.LoadAvailabilitiesWithHierarchyData(persons,startDate);
 
 			return loadForPersons(persons);

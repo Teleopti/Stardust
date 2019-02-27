@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
         {
             if (AdherenceSetting.HasValue)
             {
-                var globalSettingRep = new GlobalSettingDataRepository(CurrUnitOfWork);
+                var globalSettingRep = GlobalSettingDataRepository.DONT_USE_CTOR(CurrUnitOfWork);
                 var adherenceSetting = globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
                 adherenceSetting.CalculationMethod = AdherenceSetting.Value;
                 globalSettingRep.PersistSettingValue(adherenceSetting);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			return createTarget(new FakeLoggedOnUser(_loggedOnUser),
                 CurrentDataSource.Make(),
 				currentBusinessUnit, 
-				new GlobalSettingDataRepository(CurrUnitOfWork));
+				GlobalSettingDataRepository.DONT_USE_CTOR(CurrUnitOfWork));
         }
 
         protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting

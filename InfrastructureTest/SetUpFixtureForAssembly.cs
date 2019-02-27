@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new BusinessUnitRepository(uow).Add(BusinessUnitUsedInTests.BusinessUnit);
+				BusinessUnitRepository.DONT_USE_CTOR(uow).Add(BusinessUnitUsedInTests.BusinessUnit);
 				uow.PersistAll();
 			}
 		}

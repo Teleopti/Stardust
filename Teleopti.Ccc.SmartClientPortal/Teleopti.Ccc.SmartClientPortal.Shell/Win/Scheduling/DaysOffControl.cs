@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			UnitOfWork = value;
 
 			// Creates a new repository.
-			Repository = new DayOffTemplateRepository(UnitOfWork);
+			Repository = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()

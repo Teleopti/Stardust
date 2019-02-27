@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void addDayOff(IEventMessage message)
 		{
-			var instance = new DayOffTemplateRepository(UnitOfWork)
+			var instance = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork)
 				.Get(message.DomainObjectId);
 			_dayOffList.Add(instance);
 		}
@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_dayOffList.Add(RotationRestrictionView.DefaultDayOff);
 
 			// Loads all categories.
-			var repository = new DayOffTemplateRepository(UnitOfWork);
+			var repository = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var list = repository.LoadAll();
 			IEnumerable<IDayOffTemplate> sortedList = (from d in list

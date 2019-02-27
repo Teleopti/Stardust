@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			IAbsence absence;
 			if (Absence != null)
 			{
-				absence = new AbsenceRepository(unitOfWork).LoadAll().Single(a => a.Name == Absence);
+				absence = AbsenceRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(a => a.Name == Absence);
 			}
 			else
 			{
 				absence  = AbsenceFactory.CreateAbsence("Legacy common absence", "LCA", Color.FromArgb(210, 150, 150));
-				var absenceRepository = new AbsenceRepository(unitOfWork);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 				absenceRepository.Add(absence);
 			}
 

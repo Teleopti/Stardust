@@ -59,13 +59,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_defaultSegmentSetting = new GlobalSettingDataRepository(uow).FindValueByKey("DefaultSegment", new DefaultSegment());
-				_adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-				_supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
-				_asmAlertTime = new GlobalSettingDataRepository(uow).FindValueByKey("AsmAlertTime", new AsmAlertTime());
-				_notificationDuration = new GlobalSettingDataRepository(uow).FindValueByKey("NotificationDurationTime", new NotificationDurationTime());
-				_fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
-				_fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
+				_defaultSegmentSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("DefaultSegment", new DefaultSegment());
+				_adherenceReportSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+				_supportEmailSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
+				_asmAlertTime = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("AsmAlertTime", new AsmAlertTime());
+				_notificationDuration = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("NotificationDurationTime", new NotificationDurationTime());
+				_fullDayAbsenceRequestStartTimeSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
+				_fullDayAbsenceRequestEndTimeSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 			}
 			var calculatorTypeCollection = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();
 			var adherenceSetting = _adherenceReportSetting.CalculationMethod;
@@ -136,19 +136,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_defaultSegmentSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_defaultSegmentSetting).GetValue(new DefaultSegment());
-				_adherenceReportSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_adherenceReportSetting).GetValue(new AdherenceReportSetting());
+				_defaultSegmentSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_defaultSegmentSetting).GetValue(new DefaultSegment());
+				_adherenceReportSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_adherenceReportSetting).GetValue(new AdherenceReportSetting());
 				supportEmailToSetting();
-				_supportEmailSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
+				_supportEmailSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
 				_asmAlertTime.SecondsBeforeChange = (int)numericUpDownAsmSetting.Value;
-				_asmAlertTime = new GlobalSettingDataRepository(uow).PersistSettingValue(_asmAlertTime).GetValue(new AsmAlertTime());
+				_asmAlertTime = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_asmAlertTime).GetValue(new AsmAlertTime());
 				_notificationDuration.DurationInSecond = (int)numericUpDownNotificationDurationTime.Value;
-				_notificationDuration = new GlobalSettingDataRepository(uow).PersistSettingValue(_notificationDuration).GetValue(new NotificationDurationTime());
+				_notificationDuration = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_notificationDuration).GetValue(new NotificationDurationTime());
 
 				_fullDayAbsenceRequestStartTimeSetting.TimeSpanValue = tsTextBoxFullDayAbsenceRequestStart.Value;
 				_fullDayAbsenceRequestEndTimeSetting.TimeSpanValue = tsTextBoxFullDayAbsenceRequestEnd.Value;
-				_fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_fullDayAbsenceRequestStartTimeSetting).GetValue(new TimeSpanSetting(new TimeSpan(0,0,0)));
-				_fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_fullDayAbsenceRequestEndTimeSetting).GetValue(new TimeSpanSetting(new TimeSpan(23,59,0)));
+				_fullDayAbsenceRequestStartTimeSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_fullDayAbsenceRequestStartTimeSetting).GetValue(new TimeSpanSetting(new TimeSpan(0,0,0)));
+				_fullDayAbsenceRequestEndTimeSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_fullDayAbsenceRequestEndTimeSetting).GetValue(new TimeSpanSetting(new TimeSpan(23,59,0)));
 				
 				uow.PersistAll();
 			}
