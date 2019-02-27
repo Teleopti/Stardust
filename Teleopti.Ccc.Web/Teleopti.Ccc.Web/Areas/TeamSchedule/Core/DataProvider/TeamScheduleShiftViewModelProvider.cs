@@ -53,22 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			bool needToLoadNoteAndUnderlyingSummary = false)
 		{
 			var timezone = person.PermissionInformation.DefaultTimeZone();
-			var vm = new GroupScheduleShiftViewModel
-			{
-				PersonId = person.Id.GetValueOrDefault().ToString(),
-				Name = commonNameDescriptionSetting.BuildFor(person),
-				Date = date.Date.ToServiceDateFormat(),
-				Projection = new List<GroupScheduleProjectionViewModel>(),
-				MultiplicatorDefinitionSetIds = person.Period(date)?
-												.PersonContract?
-												.Contract?
-												.MultiplicatorDefinitionSetCollection?.Select(s => s.Id.GetValueOrDefault()).ToList(),
-				Timezone = new TimeZoneViewModel
-				{
-					IanaId = _ianaTimeZoneProvider.WindowsToIana(timezone.Id),
-					DisplayName = timezone.DisplayName
-				}
-			};
+			GroupScheduleShiftViewModel vm = null;
 
 			if (scheduleDay.IsFullyPublished || canViewUnpublished)
 			{
@@ -77,6 +62,25 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(timezone, scheduleDay, previousScheduleDay, canViewConfidential);
 				}
+			}
+			else
+			{
+				vm = new GroupScheduleShiftViewModel
+				{
+					PersonId = person.Id.GetValueOrDefault().ToString(),
+					Name = commonNameDescriptionSetting.BuildFor(person),
+					Date = date.Date.ToServiceDateFormat(),
+					Projection = new List<GroupScheduleProjectionViewModel>(),
+					MultiplicatorDefinitionSetIds = person.Period(date)?
+												.PersonContract?
+												.Contract?
+												.MultiplicatorDefinitionSetCollection?.Select(s => s.Id.GetValueOrDefault()).ToList(),
+					Timezone = new TimeZoneViewModel
+					{
+						IanaId = _ianaTimeZoneProvider.WindowsToIana(timezone.Id),
+						DisplayName = timezone.DisplayName
+					}
+				};
 			}
 
 			if (needToLoadNoteAndUnderlyingSummary)
