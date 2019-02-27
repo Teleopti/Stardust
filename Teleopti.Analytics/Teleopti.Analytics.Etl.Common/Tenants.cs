@@ -3,12 +3,10 @@ using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.Common
@@ -20,11 +18,11 @@ namespace Teleopti.Analytics.Etl.Common
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
-		private static readonly Dictionary<string, TenantInfo> listofTenants = new Dictionary<string, TenantInfo>();
+		private static readonly Dictionary<string, TenantInfo> allTenants = new Dictionary<string, TenantInfo>();
 
 		public Tenants(
-			ITenantUnitOfWork tenantUnitOfWork, 
-			ILoadAllTenants loadAllTenants, 
+			ITenantUnitOfWork tenantUnitOfWork,
+			ILoadAllTenants loadAllTenants,
 			IDataSourcesFactory dataSourcesFactory,
 			IBaseConfigurationRepository baseConfigurationRepository)
 		{
@@ -39,21 +37,21 @@ namespace Teleopti.Analytics.Etl.Common
 			return tenantName == NameForOptionAll;
 		}
 
-		public IEnumerable<TenantInfo> CurrentTenants()
+		public IEnumerable<TenantInfo> CurrentTenants(bool reloadConfiguration = false)
 		{
-			return LoadedTenants();
+			return LoadedTenants(reloadConfiguration);
 		}
 
-		public IEnumerable<TenantInfo> EtlTenants()
+		public IEnumerable<TenantInfo> EtlTenants(bool reloadConfiguration = false)
 		{
-			return LoadedTenants()
+			return LoadedTenants(reloadConfiguration)
 				.Where(t => t.EtlConfiguration != null)
 				.ToList();
 		}
 
-		public TenantInfo Tenant(string name)
+		public TenantInfo Tenant(string name, bool reloadConfiguration = false)
 		{
-			return LoadedTenants()
+			return LoadedTenants(reloadConfiguration)
 				.Where(t => t.EtlConfiguration != null)
 				.FirstOrDefault(x => x.Tenant.Name.Equals(name));
 		}
@@ -64,7 +62,7 @@ namespace Teleopti.Analytics.Etl.Common
 			return tenant?.DataSource;
 		}
 
-		public IEnumerable<TenantInfo> LoadedTenants()
+		public IEnumerable<TenantInfo> LoadedTenants(bool reloadConfiguration = false)
 		{
 			Dictionary<string, TenantInfo> retList;
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -76,17 +74,21 @@ namespace Teleopti.Analytics.Etl.Common
 				var tenantsInApp = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in tenantsInApp)
 				{
-					if (listofTenants.ContainsKey(tenant.Name))
+					if (allTenants.ContainsKey(tenant.Name))
 					{
-						if(listofTenants[tenant.Name].EtlConfiguration == null)
-							listofTenants[tenant.Name] = getTenantInfo(tenant, configurationHandler);
+						if (reloadConfiguration || allTenants[tenant.Name].EtlConfiguration == null)
+						{
+							allTenants[tenant.Name] = getTenantInfo(tenant, configurationHandler);
+						}
 						continue;
 					}
 
 					var tenantInfo = getTenantInfo(tenant, configurationHandler);
-					listofTenants.Add(tenant.Name, tenantInfo);
+					allTenants.Add(tenant.Name, tenantInfo);
 				}
-				retList = listofTenants.Where(x => tenantsInApp.Any(y => y.Name == x.Value.Tenant.Name)).ToDictionary(x => x.Key, x => x.Value);
+
+				retList = allTenants.Where(x => tenantsInApp.Any(y => y.Name == x.Value.Tenant.Name))
+					.ToDictionary(x => x.Key, x => x.Value);
 			}
 
 			return retList.Values.ToList();
