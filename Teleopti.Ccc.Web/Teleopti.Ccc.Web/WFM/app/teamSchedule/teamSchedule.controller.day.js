@@ -361,7 +361,6 @@
 		vm.onScheduleDateChanged = function () {
 			vm.isLoading = true;
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			personSelectionSvc.clearPersonInfo();
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
 			vm.getGroupPagesAsync();
@@ -371,7 +370,6 @@
 			if (vm.searchOptions.searchKeywordChanged) {
 				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			}
-			personSelectionSvc.clearPersonInfo();
 			vm.selectedFavorite = false;
 			vm.resetSchedulePage();
 		};
@@ -497,7 +495,6 @@
 			vm.isLoading = true;
 			resetHavingScheduleChange(personIdList);
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
-				personSelectionSvc.clearPersonInfo();
 				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
@@ -589,7 +586,6 @@
 
 		vm.onSelectedTeamsChanged = function () {
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			personSelectionSvc.clearPersonInfo();
 			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
 		};
