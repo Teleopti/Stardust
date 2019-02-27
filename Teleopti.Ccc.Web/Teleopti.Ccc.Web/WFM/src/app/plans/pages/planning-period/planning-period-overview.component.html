@@ -190,9 +190,9 @@
 							<nz-table #preValidationTable nzSize="small" nzFrontPagination="false" nzShowPagination="false" [nzData]="filteredPreValidations">
 								<thead>
 								<tr>
-									<th>{{ 'Resource' | translate }}</th>
-									<th>{{ 'Area' | translate }}</th>
-									<th>{{ 'Description' | translate }}</th>
+									<th nzShowSort [(nzSort)]="preValidationsSortMap.Resource" (nzSortChange)="sortPreValidations('Resource',$event)">{{ 'Resource' | translate }}</th>
+									<th nzShowSort [(nzSort)]="preValidationsSortMap.Area" (nzSortChange)="sortPreValidations('Area',$event)">{{ 'Area' | translate }}</th>
+									<th nzShowSort [(nzSort)]="preValidationsSortMap.Description" (nzSortChange)="sortPreValidations('Description',$event)">{{ 'Description' | translate }}</th>
 								</tr>
 								</thead>
 								<tbody>

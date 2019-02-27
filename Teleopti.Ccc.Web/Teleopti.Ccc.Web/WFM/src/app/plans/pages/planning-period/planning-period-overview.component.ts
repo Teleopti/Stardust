@@ -68,6 +68,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		SkillName   : null
 	};
 
+    preValidationsSortName = 'Resource';
+    preValidationsSortValue = null;
+	preValidationsSortMap = {
+		Resource: null,
+		Area: null,
+		Description: null
+    };
+
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
 		private planningPeriodActionService: PlanningPeriodActionService,
@@ -85,23 +93,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.preValidationFilterControl.valueChanges
-			.pipe(
-				map(filterString => {
-					return this.valData.preValidation.filter(
-						g =>
-							g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
-							g.ValidationErrors.some(
-								item =>
-									item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
-									this.translate
-										.instant(item.ResourceType.toLowerCase())
-										.includes(filterString.toLowerCase())
-							)
-					);
-				})
-			)
-			.subscribe(filteredPreValidations => {
-				this.filteredPreValidations = filteredPreValidations;
+			.subscribe(filterString => {
+				this.searchPreValidations(filterString);
 			});
 
 		this.scheduleIssuesFilterControl.valueChanges
@@ -142,7 +135,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		clearInterval(this.timer);
 	}
 
-	public search(filterString: string){
+	private search(filterString: string){
 		const data = this.skills.filter(g => g.SkillName.toLowerCase().includes(filterString.toLowerCase()));
 		if (this.sortName && this.sortValue) {
 			this.filteredSkills = data.sort((a, b) => (this.sortValue === 'ascend') ?
@@ -157,6 +150,48 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.sortName = key;
 		this.sortValue = value;
 		this.search(this.skillFilterControl.value);
+	}
+	
+	private searchPreValidations(filterString: string){
+		const data = this.valData.preValidation.filter(
+			g =>
+				g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
+				g.ValidationErrors.some(
+					item =>
+						item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
+						this.translate
+							.instant(item.ResourceType.toLowerCase())
+							.includes(filterString.toLowerCase())
+				)
+		);
+		if (this.preValidationsSortName && this.preValidationsSortValue) {
+			this.filteredPreValidations = data.sort((a, b) => 
+			{
+				if(this.preValidationsSortName == 'Resource'){
+					return (this.preValidationsSortValue === 'ascend') ?
+						(a['ResourceName'].toLowerCase() > b['ResourceName'].toLowerCase() ? 1 : -1) :
+						(b['ResourceName'].toLowerCase() > a['ResourceName'].toLowerCase() ? 1 : -1)
+				}else if(this.preValidationsSortName == 'Area'){
+					return (this.preValidationsSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ResourceType > b['ValidationErrors'][0].ResourceType ? 1 : -1) :
+						(b['ValidationErrors'][0].ResourceType > a['ValidationErrors'][0].ResourceType ? 1 : -1)
+				}else if(this.preValidationsSortName == 'Description'){
+					return (this.preValidationsSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ErrorMessageLocalized > b['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1) :
+						(b['ValidationErrors'][0].ErrorMessageLocalized > a['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1)
+				}else{
+					throw new Error('Not supported!');
+				}
+			});
+		}else{
+			this.filteredPreValidations = data;
+		}
+	}
+	
+	public sortPreValidations(key: string, value: string): void{
+		this.preValidationsSortName = key;
+		this.preValidationsSortValue = value;
+		this.searchPreValidations(this.preValidationFilterControl.value);
 	}
 
 	private initLegends(){
