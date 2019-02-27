@@ -116,7 +116,7 @@ Layout = null;
 						<div>
 							<div class="day-header">
 								<span class="floatleft badge day-header-month">@day.Header.DayDescription</span>
-								<span class="floatright badge day-header-right day-header-day" data-bind="click: function(d,e){e.stopPropagation();}">
+								<span class="floatright badge day-header-right day-header-day" data-bind="click: function(d,e){e.stopPropagation();},css:{'bank-holiday-day-shape': HasBankHolidayCalendar}, tooltip:{title: DateDescription, html: true}">
 									@day.Header.DayNumber
 								</span>
 							</div>

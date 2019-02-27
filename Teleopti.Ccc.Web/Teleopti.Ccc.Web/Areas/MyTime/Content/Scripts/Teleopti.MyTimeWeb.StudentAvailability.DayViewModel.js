@@ -7,6 +7,8 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');
 	this.HasAvailability = ko.observable(false);
+	this.HasBankHolidayCalendar = ko.observable(false);
+	this.DateDescription = ko.observable();
 
 	this.FeedbackError = ko.observable();
 	this.PossibleStartTimes = ko.observable();
@@ -97,6 +99,13 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 		var hasAvailability = data && data.AvailableTimeSpan;
 		self.HasAvailability(hasAvailability);
 		self.AvailableTimeSpan(hasAvailability ? data.AvailableTimeSpan : null);
+		self.ReadBankHolidayCalendar(data);
+	};
+
+	this.ReadBankHolidayCalendar = function (data) {
+		var hasBankHolidayCalendar = data != null && data.BankHolidayCalendar != null && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Availability_Indicate_BankHoliday_81656');
+		self.HasBankHolidayCalendar(hasBankHolidayCalendar);
+		self.DateDescription(hasBankHolidayCalendar ? data.BankHolidayCalendar.DateDescription : null)
 	};
 
 	this.LoadFeedback = function () {
