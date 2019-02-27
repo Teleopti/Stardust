@@ -3215,7 +3215,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSeniorityWorkingDays(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
+			var result = SeniorityWorkDayRanksRepository.DONT_USE_CTOR(uow).LoadAll();
 			var seniorityWorkDayRanks = result as ISeniorityWorkDayRanks[] ?? result.ToArray();
 			var workDayRanks = seniorityWorkDayRanks.IsEmpty() ? new SeniorityWorkDayRanks() : seniorityWorkDayRanks.First();
 			stateHolder.SchedulerStateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;

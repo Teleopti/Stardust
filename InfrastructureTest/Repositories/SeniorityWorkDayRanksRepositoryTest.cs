@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seniorityWorkDayRanks = CreateAggregateWithCorrectBusinessUnit();
 
 			PersistAndRemoveFromUnitOfWork(seniorityWorkDayRanks);
-			var loadedRanks = new SeniorityWorkDayRanksRepository(UnitOfWork).LoadAll().ToList();
+			var loadedRanks = SeniorityWorkDayRanksRepository.DONT_USE_CTOR(UnitOfWork).LoadAll().ToList();
 
 			Assert.AreEqual(1, loadedRanks.Count);
 			Assert.AreEqual(7, loadedRanks[0].Monday);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<ISeniorityWorkDayRanks> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SeniorityWorkDayRanksRepository(currentUnitOfWork.Current());
+			return SeniorityWorkDayRanksRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
 		}
 	}
 }

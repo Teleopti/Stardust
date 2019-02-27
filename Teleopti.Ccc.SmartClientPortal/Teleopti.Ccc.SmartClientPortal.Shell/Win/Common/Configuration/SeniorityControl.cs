@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void LoadControl()
 		{
 			if (Disposing) return;
-			var seniorityWorkDayRankingsRepository = new SeniorityWorkDayRanksRepository(_unitOfWork);
+			var seniorityWorkDayRankingsRepository = SeniorityWorkDayRanksRepository.DONT_USE_CTOR(_unitOfWork);
 			var shiftCategoryRepository = new ShiftCategoryRepository(_unitOfWork);
 			_presenter = new SeniorityControlPresenter(this, seniorityWorkDayRankingsRepository, shiftCategoryRepository);
 			_presenter.Initialize();
