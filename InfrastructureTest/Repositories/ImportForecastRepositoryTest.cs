@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IForecastFile> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ImportForecastsRepository(currentUnitOfWork);
+            return ImportForecastsRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

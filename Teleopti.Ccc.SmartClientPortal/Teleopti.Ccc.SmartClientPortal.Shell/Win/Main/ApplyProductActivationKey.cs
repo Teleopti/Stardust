@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 				try
 				{
 					var currentUnitOfWork = new FromFactory(() => _unitOfWorkFactory);
-					var licenseRepository = new LicenseRepository(currentUnitOfWork);
+					var licenseRepository = LicenseRepository.DONT_USE_CTOR(currentUnitOfWork);
 					var personRepository = new PersonRepository(currentUnitOfWork, null, null);
 
 					XDocument signedXml = XDocument.Load(licenseFilePath);

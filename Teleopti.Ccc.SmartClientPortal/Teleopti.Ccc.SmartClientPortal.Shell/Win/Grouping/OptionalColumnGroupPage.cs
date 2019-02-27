@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var optionalColumnRepository = new OptionalColumnRepository(uow);
+                var optionalColumnRepository = OptionalColumnRepository.DONT_USE_CTOR(uow);
                 IList<IOptionalColumn> optionalColumnCollection = optionalColumnRepository.GetOptionalColumns<Person>();
 
                 if (optionalColumnCollection != null)

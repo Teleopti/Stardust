@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,26 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PersonAbsenceAccountRepository : Repository<IPersonAbsenceAccount>,
 													IPersonAbsenceAccountRepository
 	{
-		public PersonAbsenceAccountRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
+		public static PersonAbsenceAccountRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new PersonAbsenceAccountRepository(currentUnitOfWork, null, null);
 		}
 
-		public PersonAbsenceAccountRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static PersonAbsenceAccountRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new PersonAbsenceAccountRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public PersonAbsenceAccountRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

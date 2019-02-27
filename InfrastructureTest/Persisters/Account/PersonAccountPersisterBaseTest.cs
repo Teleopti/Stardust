@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		{
 			using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAbsenceAccountRepository(uow);
+				var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 				var accounts = rep.Find(personAbsenceAccount.Person).ToList();
 				//needed because deep inside account stuff references are DI:ed instead of services
 				foreach (var absenceAccount in accounts)
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		{
 			var uowFactory = CurrentUnitOfWorkFactory.Make();
 			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
-			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
 			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currUnitOfWork);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 							noteRepository, publicNoteRepository,
 							preferenceDayRepository,
 							studentAvailabilityDayRepository,
-							new PersonAvailabilityRepository(currUnitOfWork),
+							PersonAvailabilityRepository.DONT_USE_CTOR(currUnitOfWork),
 							new PersonRotationRepository(currUnitOfWork),
 							overtimeAvailabilityRepository,
 							new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				agentDayScheduleTagRepository, noteRepository,
 				publicNoteRepository, preferenceDayRepository,
 				studentAvailabilityDayRepository,
-				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
 				overtimeAvailabilityRepository,
 				new PersistableScheduleDataPermissionChecker(authorization),
 				new ScheduleStorageRepositoryWrapper(() => _personAssignmentRepository,

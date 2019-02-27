@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new MultisiteDayRepository(unitOfWork);
+			return MultisiteDayRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMultiplicatorDefinitionSetRepository CreateMultiplicatorDefinitionSetRepository(IUnitOfWork unitOfWork)
 		{
-			return new MultiplicatorDefinitionSetRepository(unitOfWork);
+			return MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ITeamRepository CreateTeamRepository(IUnitOfWork unitOfWork)
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMultiplicatorRepository CreateMultiplicatorRepository(IUnitOfWork unitOfWork)
 		{
-			return new MultiplicatorRepository(unitOfWork);
+			return MultiplicatorRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPushMessageRepository CreatePushMessageRepository(IUnitOfWork unitOfWork)
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IOptionalColumnRepository CreateOptionalColumnRepository(IUnitOfWork unitOfWork)
 		{
-			return new OptionalColumnRepository(unitOfWork);
+			return OptionalColumnRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IWorkflowControlSetRepository CreateWorkflowControlSetRepository(IUnitOfWork unitOfWork)
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMasterActivityRepository CreateMasterActivityRepository(IUnitOfWork unitOfWork)
 		{
-			return new MasterActivityRepository(unitOfWork);
+			return MasterActivityRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork)
 		{
-			return new LicenseRepository(unitOfWork);
+			return LicenseRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork)
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonalSettingDataRepository(unitOfWork);
+			return PersonalSettingDataRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)

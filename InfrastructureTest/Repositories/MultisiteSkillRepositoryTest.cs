@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IMultisiteSkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultisiteSkillRepository(currentUnitOfWork);
+            return MultisiteSkillRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
 

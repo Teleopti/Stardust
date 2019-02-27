@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				{
 					 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					 {
-						  var repository = new PersonalSettingDataRepository(uow);
+						  var repository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 						  setting = repository.FindValueByKey("PersonFinderSettings", new PersonFinderSettings());
 					 }
 				});
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				{
 					 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					 {
-						  var repository = new PersonalSettingDataRepository(uow);
+						  var repository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 						  var setting = repository.FindValueByKey("PersonFinderSettings", new PersonFinderSettings());
 						  setting.NumberOfRowsPerPage = (RowsPerPage) comboBox2.SelectedValue;
 						  setting.TerminalDate = dateTimePickerAdv1.Value;

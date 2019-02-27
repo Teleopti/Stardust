@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void loadKpi()
 		{
 			if (_kpiList != null) return;
-			var kpiRep = new KpiRepository(_unitOfWork);
+			var kpiRep = KpiRepository.DONT_USE_CTOR(_unitOfWork);
 			_kpiList = kpiRep.LoadAll().ToList();
 			_kpiList = _kpiList.OrderBy(p => p.Name).ToList();
 			checkedListBoxKpi.Items.Clear();

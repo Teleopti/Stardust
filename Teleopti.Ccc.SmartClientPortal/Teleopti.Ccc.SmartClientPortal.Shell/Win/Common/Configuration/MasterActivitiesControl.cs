@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
-			IMasterActivityViewModel model = new MasterActivityViewModel(ActivityRepository.DONT_USE_CTOR(value), new MasterActivityRepository(value));
+			IMasterActivityViewModel model = new MasterActivityViewModel(ActivityRepository.DONT_USE_CTOR(value), MasterActivityRepository.DONT_USE_CTOR(value));
 			_presenter = new MasterActivityPresenter(this, model);
 		}
 

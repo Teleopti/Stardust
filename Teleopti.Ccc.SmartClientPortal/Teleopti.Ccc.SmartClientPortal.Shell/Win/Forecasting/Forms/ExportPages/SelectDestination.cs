@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 			{
 				foreach (var selection in stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels)
 				{
-					var skill = new MultisiteSkillRepository(uow).Get(selection.MultisiteSkillModel.Id);
+					var skill = MultisiteSkillRepository.DONT_USE_CTOR(uow).Get(selection.MultisiteSkillModel.Id);
 					if (((IDeleteTag)skill).IsDeleted) continue;
 
 					foreach (var childSkill in skill.ChildSkills)

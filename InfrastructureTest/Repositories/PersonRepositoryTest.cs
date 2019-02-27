@@ -1772,7 +1772,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			CleanUpAfterTest();
 
-			var optionalColumnRepository = new OptionalColumnRepository(new ThisUnitOfWork(UnitOfWork));
+			var optionalColumnRepository = OptionalColumnRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork));
 			var personRepository = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
 			var samePerson = personRepository.Get(person.Id.Value);
 			samePerson.SetOptionalColumnValue(new OptionalColumnValue("A VALUE"), column);

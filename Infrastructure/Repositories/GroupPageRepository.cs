@@ -26,11 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class GroupPageRepository : Repository<IGroupPage>, IGroupPageRepository
     {
-		public static GroupPageRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
-		{
-			return new GroupPageRepository(currentUnitOfWork, null, null);
-		}
-
 		public static GroupPageRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
 		{
 			return new GroupPageRepository(new ThisUnitOfWork(unitOfWork), null, null);

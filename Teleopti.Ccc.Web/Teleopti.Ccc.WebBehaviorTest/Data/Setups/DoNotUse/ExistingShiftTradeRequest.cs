@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				new ScheduleStorage(uow, personAssignmentRepository, personAbsenceRepository,
 					new MeetingRepository(uow), agentDayScheduleTagRepository, noteRepository,
 					publicNoteRepository, preferenceDayRepository,
-					studentAvailabilityDayRepository, new PersonAvailabilityRepository(uow),
+					studentAvailabilityDayRepository, PersonAvailabilityRepository.DONT_USE_CTOR(uow),
 					new PersonRotationRepository(uow), overtimeAvailabilityRepository,
 					new PersistableScheduleDataPermissionChecker(currentAuthorization),
 					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,

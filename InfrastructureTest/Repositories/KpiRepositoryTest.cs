@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IKeyPerformanceIndicator> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new KpiRepository(currentUnitOfWork.Current());
+            return KpiRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
     }
 }

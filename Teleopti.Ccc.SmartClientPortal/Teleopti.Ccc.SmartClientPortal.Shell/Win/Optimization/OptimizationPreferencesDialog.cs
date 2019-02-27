@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var settingRepository = new PersonalSettingDataRepository(uow);
+					var settingRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 					_defaultGeneralPreferences = settingRepository.FindValueByKey("GeneralPreferencesPersonalSettings", new GeneralPreferencesPersonalSettings());
 					_defaultDaysOffPreferences = settingRepository.FindValueByKey("DaysOffPreferencesPersonalSettings", new DaysOffPreferencesPersonalSettings());
 					_defaultExtraPreferences = settingRepository.FindValueByKey("ExtraPreferencesPersonalSettings", new ExtraPreferencesPersonalSettings());
@@ -158,15 +158,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultGeneralPreferences);
+					PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_defaultGeneralPreferences);
 					uow.PersistAll();
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultDaysOffPreferences);
+					PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_defaultDaysOffPreferences);
 					uow.PersistAll();
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultExtraPreferences);
+					PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_defaultExtraPreferences);
 					uow.PersistAll();
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedPreferences);
+					PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_defaultAdvancedPreferences);
 					uow.PersistAll();
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultshiftsPreferences);
+					PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_defaultshiftsPreferences);
 					uow.PersistAll();
 				}
 			}

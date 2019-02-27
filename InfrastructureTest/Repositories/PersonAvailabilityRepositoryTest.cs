@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IPersonAvailability> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PersonAvailabilityRepository(currentUnitOfWork.Current());
+            return PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
 
         [Test]
@@ -71,14 +71,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(person);
             
             var thePeriod = new DateOnlyPeriod(org.StartDate, org.StartDate);
-            ICollection<IPersonAvailability> result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson>{org.Person},thePeriod);
+            ICollection<IPersonAvailability> result = PersonAvailabilityRepository.DONT_USE_CTOR(UnitOfWork).Find(new List<IPerson>{org.Person},thePeriod);
             Assert.AreEqual(1,result.Count);
 
-	        result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson> {org.Person},
+	        result = PersonAvailabilityRepository.DONT_USE_CTOR(UnitOfWork).Find(new List<IPerson> {org.Person},
 		        new DateOnlyPeriod(thePeriod.StartDate.AddDays(1), thePeriod.EndDate.AddDays(1)));
             Assert.AreEqual(0, result.Count);
 
-            result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson> { person }, thePeriod);
+            result = PersonAvailabilityRepository.DONT_USE_CTOR(UnitOfWork).Find(new List<IPerson> { person }, thePeriod);
             Assert.AreEqual(0, result.Count);
         }
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(newPersonAvail1);
             PersistAndRemoveFromUnitOfWork(newPersonAvail2);
 
-			var testList = new PersonAvailabilityRepository(UnitOfWork).LoadPersonAvailabilityWithHierarchyData(new[] { person2 }, _startDate);
+			var testList = PersonAvailabilityRepository.DONT_USE_CTOR(UnitOfWork).LoadPersonAvailabilityWithHierarchyData(new[] { person2 }, _startDate);
 
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList.First().Availability));
         }

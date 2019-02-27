@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 			DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_settings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, new ScheduleReportDialogSettings());
+				_settings = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(settingName, new ScheduleReportDialogSettings());
 				if(_shiftsPerDay && _settings.DetailLevel == ScheduleReportDetail.All) _settings.DetailLevel = ScheduleReportDetail.Break;
 			}
 		}
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_settings);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_settings);
 				uow.PersistAll();
 			}
 		}

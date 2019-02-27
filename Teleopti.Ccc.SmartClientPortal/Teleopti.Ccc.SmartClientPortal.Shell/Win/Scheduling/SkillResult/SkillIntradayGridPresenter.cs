@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             //temp
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
+                _chartSettings = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(settingName, _defaultChartSettings);
             }
         }
 
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                new PersonalSettingDataRepository(uow).PersistSettingValue(_chartSettings);
+                PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_chartSettings);
                 uow.PersistAll();
             }
         }

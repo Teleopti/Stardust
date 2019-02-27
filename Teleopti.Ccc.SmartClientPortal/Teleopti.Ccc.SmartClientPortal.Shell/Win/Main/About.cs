@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new LicenseRepository(uow);
+				var rep = LicenseRepository.DONT_USE_CTOR(uow);
 				var arr = rep.GetActiveAgents();
 				var strings = new string[arr.Count + 1];
 				strings[0] = string.Join(",", Resources.BusinessUnit, Resources.FirstName, Resources.LastName,

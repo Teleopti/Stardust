@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_logOnOff.LogOnWithoutPermissions(selectedDataSource.DataSource, selectedDataSource.User, businessUnit);
 
 			var unitOfWorkFactory = selectedDataSource.DataSource.Application;
-			var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
+			var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, LicenseRepository.DONT_USE_CTOR(new FromFactory(() => unitOfWorkFactory)));
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();

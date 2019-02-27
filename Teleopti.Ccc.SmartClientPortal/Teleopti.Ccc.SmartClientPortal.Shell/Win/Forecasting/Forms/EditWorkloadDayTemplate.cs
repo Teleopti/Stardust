@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			List<IWorkloadDayBase> workloadDays;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var wr = new WorkloadDayTemplateCalculator(_statisticsHelper, new OutlierRepository(uow));
+				var wr = new WorkloadDayTemplateCalculator(_statisticsHelper, OutlierRepository.DONT_USE_CTOR(uow));
 				wr.RecalculateWorkloadDayTemplate(_selectedDates, _workload, _templateIndex);
 
 				workloadDays = getWorkloadDaysForTemplatesWithStatistics(_statisticsHelper, _selectedDates);
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var wr = new WorkloadDayTemplateCalculator(_statisticsHelper, new OutlierRepository(uow));
+				var wr = new WorkloadDayTemplateCalculator(_statisticsHelper, OutlierRepository.DONT_USE_CTOR(uow));
 				wr.RecalculateWorkloadDayTemplate(_selectedDates, _workload, _templateIndex, filteredDates.FilteredDateList());
 			}
 		}

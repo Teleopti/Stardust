@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				agentDayScheduleTagRepository, noteRepository,
 				publicNoteRepository, preferenceDayRepository,
 				studentAvailabilityDayRepository,
-				new PersonAvailabilityRepository(currUnitOfWork), new PersonRotationRepository(currUnitOfWork),
+				PersonAvailabilityRepository.DONT_USE_CTOR(currUnitOfWork), new PersonRotationRepository(currUnitOfWork),
 				overtimeAvailabilityRepository,
 				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				ScenarioRepository.DONT_USE_CTOR(unitOfWork).Add(Scenario);
 				AbsenceRepository.DONT_USE_CTOR(unitOfWork).Add(Absence);
-				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
+				MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(unitOfWork).Add(DefinitionSet);
 				DayOffTemplateRepository.DONT_USE_CTOR(unitOfWork).Add(DayOffTemplate);
 				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 					noteRepository, publicNoteRepository,
 					preferenceDayRepository,
 					studentAvailabilityDayRepository,
-					new PersonAvailabilityRepository(currentUnitOfWork),
+					PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
 					new PersonRotationRepository(currentUnitOfWork),
 					overtimeAvailabilityRepository,
 					new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 					agentDayScheduleTagRepository, noteRepository,
 					publicNoteRepository, preferenceDayRepository,
 					studentAvailabilityDayRepository,
-					new PersonAvailabilityRepository(currentUnitOfWork),
+					PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
 					new PersonRotationRepository(currentUnitOfWork),
 					overtimeAvailabilityRepository,
 					new PersistableScheduleDataPermissionChecker(new FullPermission()),
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				personAbsenceRepository, new MeetingRepository(currUnitOfWork),
 				agentDayScheduleTagRepository, noteRepository,
 				publicNoteRepository, preferenceDayRepository,
-				studentAvailabilityDayRepository, new PersonAvailabilityRepository(currUnitOfWork),
+				studentAvailabilityDayRepository, PersonAvailabilityRepository.DONT_USE_CTOR(currUnitOfWork),
 				new PersonRotationRepository(currUnitOfWork), overtimeAvailabilityRepository,
 				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,

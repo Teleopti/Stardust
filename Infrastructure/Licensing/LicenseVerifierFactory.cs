@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 	{
 		public ILicenseRepository MakeRepository(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			return new LicenseRepository(new FromFactory(() => unitOfWorkFactory));
+			return LicenseRepository.DONT_USE_CTOR(new FromFactory(() => unitOfWorkFactory));
 		}
 	}
 

@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 				_setting.EndDate = Period.EndDate.Date;
 				_setting.GroupPage = reportAgentSelector1.SelectedGroupPageKey;
 
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_setting);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_setting);
 				uow.PersistAll();
 			}
 		}
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_setting = new PersonalSettingDataRepository(uow).FindValueByKey("ReportSettingsScheduledTimeVersusTarget",
+				_setting = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("ReportSettingsScheduledTimeVersusTarget",
 					new ReportSettingsScheduledTimeVersusTarget());
 			}
 

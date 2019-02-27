@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var absence = AbsenceRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(x => x.Description.Name == Absence);
-			var repository = new PersonAbsenceAccountRepository(unitOfWork);
+			var repository = PersonAbsenceAccountRepository.DONT_USE_CTOR(unitOfWork);
 			var result = repository.Find(person);
 			IPersonAbsenceAccount personAbsenceAccount = null;
 			if (result.Any())

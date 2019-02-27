@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
 
 				var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
-				var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
+				var accounts = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow).FindByUsers(foundPeople);
 				var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 						agentDayScheduleTagRepository, noteRepository,
 						publicNoteRepository, preferenceDayRepository,
 						studentAvailabilityDayRepository,
-						new PersonAvailabilityRepository(currentUnitOfWork),
+						PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
 						new PersonRotationRepository(currentUnitOfWork),
 						overtimeAvailabilityRepository,
 						new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
@@ -278,11 +278,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				IDictionary<IPerson, IPersonAccountCollection> accounts = new Dictionary<IPerson, IPersonAccountCollection>();
 				if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
 				{
-					accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(new List<IPerson>());
+					accounts = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow).FindByUsers(new List<IPerson>());
 				}
 				else
 				{
-					accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+					accounts = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow).LoadAllAccounts();
 				}
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 						agentDayScheduleTagRepository, noteRepository,
 						publicNoteRepository, preferenceDayRepository,
 						studentAvailabilityDayRepository,
-						new PersonAvailabilityRepository(currentUnitOfWork),
+						PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
 						new PersonRotationRepository(currentUnitOfWork),
 						overtimeAvailabilityRepository,
 						new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),

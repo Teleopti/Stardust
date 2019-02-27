@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var settingRepository = new PersonalSettingDataRepository(uow);
+					var settingRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 					return settingRepository.FindValueByKey("SchedulingScreen", new SchedulingScreenSettings());
 				}
 			}
@@ -983,7 +983,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
-						var settingDataRepository = new PersonalSettingDataRepository(uow);
+						var settingDataRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 						OpenScenarioForPeriodSetting openScenarioForPeriodSetting = settingDataRepository.FindValueByKey("OpenScheduler",
 							new OpenScenarioForPeriodSetting());
 						openScenarioForPeriodSetting.NoShrinkage = !toolStripButtonShrinkage.Checked;
@@ -3025,7 +3025,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadAccounts(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var rep = new PersonAbsenceAccountRepository(uow);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts =
 				_container.Resolve<IToggleManager>()
 					.IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487)
@@ -3036,7 +3036,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadDefinitionSets(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository =
-				new MultiplicatorDefinitionSetRepository(uow);
+				MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(uow);
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSetRepository.FindAllDefinitions();
 		}
 
@@ -3168,7 +3168,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
-				_optionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
+				_optionalColumns = OptionalColumnRepository.DONT_USE_CTOR(uow).GetOptionalColumns<Person>();
 				var personRep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
@@ -3884,7 +3884,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				new MeetingRepository(currentUnitOfWork), AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork),
 				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
 				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
-				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
 				new OvertimeAvailabilityRepository(currentUnitOfWork),
 				new PersistableScheduleDataPermissionChecker(currentAuthorization),
 				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
@@ -4146,7 +4146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				var approveRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
@@ -4203,7 +4203,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
@@ -4721,7 +4721,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				changeRequestStatus(
 					new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules, SchedulerState.SchedulerStateHolder.RequestedScenario,
@@ -4759,7 +4759,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 				var personRequestRepository = new PersonRequestRepository(uow);
 				replyAndChangeStatus(new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,

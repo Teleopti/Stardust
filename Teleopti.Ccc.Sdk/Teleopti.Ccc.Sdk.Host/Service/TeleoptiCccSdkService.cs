@@ -1847,7 +1847,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-				var accRep = new PersonAbsenceAccountRepository(currentUnitOfWork);
+				var accRep = PersonAbsenceAccountRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var perRep = new PersonRepository(currentUnitOfWork, null, null);
 				var loadedPerson = perRep.Load(person.Id.GetValueOrDefault());
 				var accounts = accRep.Find(loadedPerson);

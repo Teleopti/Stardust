@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IMultiplicatorDefinitionSetRepository repository = new MultiplicatorDefinitionSetRepository(uow);
+				IMultiplicatorDefinitionSetRepository repository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(uow);
 				var multiplicatorDefninitionSets = repository.LoadAll().ToList();
 
 				foreach (IMultiplicatorDefinitionSet multiplicatorDefinitionSet in multiplicatorDefninitionSets)
@@ -616,7 +616,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					noteRepository, publicNoteRepository,
 					preferenceDayRepository,
 					studentAvailabilityDayRepository,
-					new PersonAvailabilityRepository(currentUnitOfWork),
+					PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
 					new PersonRotationRepository(currentUnitOfWork),
 					overtimeAvailabilityRepository,
 					new PersistableScheduleDataPermissionChecker(currentAuthorization),
@@ -668,7 +668,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				AbsenceRepository.DONT_USE_CTOR(uow).LoadAll();
 				new ShiftCategoryRepository(uow).LoadAll();
 				DayOffTemplateRepository.DONT_USE_CTOR(uow).LoadAll();
-				new MultiplicatorDefinitionSetRepository(uow).LoadAll();
+				MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(uow).LoadAll();
 			}
 
 			uow.Reassociate(persons);
@@ -1237,7 +1237,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				}
 
 				ISkillDayRepository skillDayRepository = new SkillDayRepository(uow);
-				IMultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(uow);
+				IMultisiteDayRepository multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(uow);
 				IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository, staffingCalculatorServiceFacade).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(TimeZoneInfo.Utc),
 																											skills,
 																											scenario);
@@ -1326,7 +1326,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var optionalColumnRepo = new OptionalColumnRepository(uow);
+				var optionalColumnRepo = OptionalColumnRepository.DONT_USE_CTOR(uow);
 				return optionalColumnRepo.LoadAll()
 					.Where(x => x.AvailableAsGroupPage)
 					.ToList();
@@ -1460,7 +1460,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				KpiRepository repository = new KpiRepository(uow);
+				KpiRepository repository = KpiRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAll().ToList();
 			}
 		}
@@ -1637,7 +1637,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				BusinessUnitRepository businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(uow);
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-				KpiTargetRepository repository = new KpiTargetRepository(uow);
+				KpiTargetRepository repository = KpiTargetRepository.DONT_USE_CTOR(uow);
 				var ret = repository.LoadAll().ToList();
 				foreach (IKpiTarget target in ret)
 				{

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var multiplicator = new MultiplicatorDefinitionSet("test multiplicator", MultiplicatorType.Overtime);
-			var multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(unitOfWork);
+			var multiplicatorDefinitionSetRepository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(unitOfWork);
 			multiplicatorDefinitionSetRepository.Add(multiplicator);
 
 			var overtimeRequest = new OvertimeRequest(multiplicator,

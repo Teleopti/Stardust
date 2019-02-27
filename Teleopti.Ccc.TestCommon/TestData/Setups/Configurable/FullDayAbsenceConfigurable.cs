@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				personAbsenceRepository, new MeetingRepository(unitOfWork),
 				agentDayScheduleTagRepository, noteRepository,
 				publicNoteRepository, preferenceDayRepository,
-				studentAvailabilityDayRepository, new PersonAvailabilityRepository(unitOfWork),
+				studentAvailabilityDayRepository, PersonAvailabilityRepository.DONT_USE_CTOR(unitOfWork),
 				new PersonRotationRepository(unitOfWork), overtimeAvailabilityRepository,
 				new PersistableScheduleDataPermissionChecker(new FullPermission()),
 				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,

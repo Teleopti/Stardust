@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				.LoadAll()
 				.Single(r => r.Name == Rotation);
 			var personAvailability = new PersonAvailability(person, availabilityRotation, new DateOnly(StartDate));
-			new PersonAvailabilityRepository(unitOfWork.Current()).Add(personAvailability);
+			PersonAvailabilityRepository.DONT_USE_CTOR(unitOfWork.Current()).Add(personAvailability);
 		}
 	}
 }

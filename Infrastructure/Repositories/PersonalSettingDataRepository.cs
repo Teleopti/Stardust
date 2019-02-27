@@ -4,19 +4,20 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PersonalSettingDataRepository : SettingDataRepository, IPersonalSettingDataRepository
 	{
-		public PersonalSettingDataRepository(IUnitOfWork unitOfWork)
-			: base(unitOfWork)
+		public static PersonalSettingDataRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new PersonalSettingDataRepository(currentUnitOfWork);
 		}
 
-		public PersonalSettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			: base(unitOfWorkFactory)
+		public static PersonalSettingDataRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
 		{
+			return new PersonalSettingDataRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public PersonalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)

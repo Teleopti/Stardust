@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IPersonAbsenceAccount> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PersonAbsenceAccountRepository(currentUnitOfWork);
+            return PersonAbsenceAccountRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(paAcc1);
             PersistAndRemoveFromUnitOfWork(paAcc2);
 
-            var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+            var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
             var result = rep.LoadAllAccounts();
             Assert.AreEqual(1, result[person].Count());
             Assert.AreEqual(1, result[person2].Count());
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(paAcc1);
             PersistAndRemoveFromUnitOfWork(paAcc2);
 
-            var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+            var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IPerson> persons = new List<IPerson> {person};
             var result = rep.FindByUsers(persons);
             Assert.AreEqual(1, result[person].Count());
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			otherPersonAbsenceAccount.Add(otherPersonAccount);
 			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
 			PersistAndRemoveFromUnitOfWork(otherPersonAbsenceAccount);
-			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
+			var repository = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var result = repository.LoadByUsers(new[] {person});
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personToFindAbsenceAccount.Add(accountToFind);
 			personToFindAbsenceAccount.Add(otherAccount);
 			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
-			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
+			var repository = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var result = repository.LoadByUsers(new[] { person });
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             try
             {
                 CleanUpAfterTest();
-                var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+                var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
                 rep.Add(one);
                 rep.Add(two);
                 Assert.Throws<ConstraintViolationException>(()=>UnitOfWork.PersistAll());
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyLoadAllAccountsReturnGenerousDictionary()
         {
-            var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+            var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
             var dic = rep.LoadAllAccounts();
             var p = new Person();
             Assert.IsNotNull(dic[p]);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var account = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(account);
 
-			var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
 			var foundAccount = rep.Find(person, absence);
 
 			Assert.IsNotNull(foundAccount);
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var account = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(account);
 
-            var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+            var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(UnitOfWork);
             var foundAccount = rep.Find(person);
             
             Assert.IsNotNull(foundAccount);

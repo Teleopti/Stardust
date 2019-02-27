@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_portalSettings);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_portalSettings);
 				uow.PersistAll();
 			}
 		}

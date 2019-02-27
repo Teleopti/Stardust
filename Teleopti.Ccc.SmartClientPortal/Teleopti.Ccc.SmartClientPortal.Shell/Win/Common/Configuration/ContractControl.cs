@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			UnitOfWork = value;
 			Repository = ContractRepository.DONT_USE_CTOR(UnitOfWork);
-			_multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(UnitOfWork);
+			_multiplicatorDefinitionSetRepository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()

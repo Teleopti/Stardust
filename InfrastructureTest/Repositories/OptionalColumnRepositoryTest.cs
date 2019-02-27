@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override void ConcreteSetup()
 		{
-			repository = new OptionalColumnRepository(UnitOfWork);
+			repository = OptionalColumnRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		protected override IOptionalColumn CreateAggregateWithCorrectBusinessUnit()
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IOptionalColumn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new OptionalColumnRepository(currentUnitOfWork);
+			return OptionalColumnRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		[Test]

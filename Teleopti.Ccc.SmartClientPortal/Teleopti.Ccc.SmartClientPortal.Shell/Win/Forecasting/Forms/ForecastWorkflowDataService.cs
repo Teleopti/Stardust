@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
             IList<IOutlier> outliers;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var outlierRepository = new OutlierRepository(uow);
+                var outlierRepository = OutlierRepository.DONT_USE_CTOR(uow);
                 outliers = outlierRepository.FindByWorkload(workload);
             }
             
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var wr = new WorkloadDayTemplateCalculator(_statHelper, new OutlierRepository(uow));
+                var wr = new WorkloadDayTemplateCalculator(_statHelper, OutlierRepository.DONT_USE_CTOR(uow));
                 wr.LoadWorkloadDayTemplates(dates, workload);
             }
         }
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var wr = new WorkloadDayTemplateCalculator(_statHelper, new OutlierRepository(uow));
+                var wr = new WorkloadDayTemplateCalculator(_statHelper, OutlierRepository.DONT_USE_CTOR(uow));
 				wr.LoadFilteredWorkloadDayTemplates(selectedDates, workload, filteredDates, templateIndex);
             }
         }
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var outlierRepository = new OutlierRepository(uow);
+                var outlierRepository = OutlierRepository.DONT_USE_CTOR(uow);
                 outlierRepository.Add(outlier);
                 uow.PersistAll();
             }
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var outlierRepository = new OutlierRepository(uow);
+                var outlierRepository = OutlierRepository.DONT_USE_CTOR(uow);
                 
                 outlierRepository.Remove(outlier);
                 uow.PersistAll();

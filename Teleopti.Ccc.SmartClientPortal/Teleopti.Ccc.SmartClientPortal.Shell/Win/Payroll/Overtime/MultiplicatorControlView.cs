@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
         {
             UnitOfWork = value;
             // Creates a new repository.
-            _multiplicatorRep = new MultiplicatorRepository(UnitOfWork);
+            _multiplicatorRep = MultiplicatorRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
         public void Persist()

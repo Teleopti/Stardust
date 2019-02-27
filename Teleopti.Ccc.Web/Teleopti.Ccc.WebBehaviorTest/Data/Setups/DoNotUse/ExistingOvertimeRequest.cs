@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		{
 			var today = DateTime.UtcNow;
 
-			var multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(unitOfWork);
+			var multiplicatorDefinitionSetRepository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(unitOfWork);
 			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime);
 			multiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
 

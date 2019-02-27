@@ -1189,7 +1189,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
 
-			IMultisiteSkill skill = new MultisiteSkillRepository(uow).Get(e.SavedAggregateRoot.Id.Value);
+			IMultisiteSkill skill = MultisiteSkillRepository.DONT_USE_CTOR(uow).Get(e.SavedAggregateRoot.Id.Value);
 			skill.SkillType.ForecastSource = skill.SkillType.ForecastSource;
 			//If child exist then dispose and return.
 			if (skill.ChildSkills.Any())

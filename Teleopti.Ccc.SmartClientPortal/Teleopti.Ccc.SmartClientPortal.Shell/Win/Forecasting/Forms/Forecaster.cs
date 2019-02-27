@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				{
 					try
 					{
-						var multisiteDayRepository = new MultisiteDayRepository(uow);
+						var multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(uow);
 						multisiteDayRepository.Add(multisiteDay);
 						uow.PersistAll();
 						removeMultisiteDayFromDirtyList(multisiteDay);
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_currentForecasterSettings = new PersonalSettingDataRepository(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
+				_currentForecasterSettings = PersonalSettingDataRepository.DONT_USE_CTOR(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
 				
 				unitOfWork.Reassociate(_skill);
 				if (isMultisiteSkill)
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			{
 				backgroundWorker1.ReportProgress(5, UserTexts.Resources.MultisiteSkillLoading);
 				var multisiteDays = MultisiteHelper.LoadMultisiteDays(periodToLoad, _multisiteSkill, _scenario,
-					new MultisiteDayRepository(unitOfWork), false).ToList();
+					MultisiteDayRepository.DONT_USE_CTOR(unitOfWork), false).ToList();
 				var multisiteCalculator = new MultisiteSkillDayCalculator(_multisiteSkill, skillDays, multisiteDays, _dateTimePeriod);
 				
 				foreach (var childSkill in _multisiteSkill.ChildSkills)
@@ -1528,7 +1528,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repository = new PersonalSettingDataRepository(uow);
+				var repository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 				repository.PersistSettingValue(_currentForecasterSettings);
 				_skillChartSetting.SaveSettings(repository);
 				_workloadChartSetting.SaveSettings(repository);
@@ -1541,7 +1541,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			setDisplaySettings();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repository = new PersonalSettingDataRepository(uow);
+				var repository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 				repository.PersistSettingValue(_currentForecasterSettings);
 				uow.PersistAll();
 			}

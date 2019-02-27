@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Contract.NegativePeriodWorkTimeTolerance = TimeSpan.Parse(NegativeTargetTolerance);
 			if (MultiplicatorDefinitionSet != null)
 			{
-				var multiplicatorDefinitionSet = new MultiplicatorDefinitionSetRepository(currentUnitOfWork).LoadAll().FirstOrDefault(m => m.Name == MultiplicatorDefinitionSet);
+				var multiplicatorDefinitionSet = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().FirstOrDefault(m => m.Name == MultiplicatorDefinitionSet);
 				Contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
 			}
 
