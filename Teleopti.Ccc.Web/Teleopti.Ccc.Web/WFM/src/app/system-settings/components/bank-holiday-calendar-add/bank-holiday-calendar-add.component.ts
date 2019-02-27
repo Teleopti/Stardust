@@ -181,6 +181,10 @@ export class BankHolidayCalendarAddComponent implements OnInit, OnDestroy, After
 		return moment(currentDate, this.dateFormat) < moment(nextDate, this.dateFormat) ? -1 : 0;
 	}
 
+	saveDescription(newDate: BankHolidayCalendarDateItem) {
+		this.saveNewBankCalendar(newDate);
+	}
+
 	saveNewBankCalendar(newDate?: BankHolidayCalendarDateItem) {
 		if (this.isSavingCalendar) return;
 

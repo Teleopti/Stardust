@@ -55,6 +55,7 @@
 									nz-input
 									[placeholder]="'Description' | translate"
 									[(ngModel)]="date.Description"
+									(change)="saveDescription(date)"
 								/>
 							</span>
 							<button
