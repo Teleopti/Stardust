@@ -16175,4 +16175,22 @@ Applikationen kommer nu att stängas. </value>
   <data name="ShowMenu" xml:space="preserve">
     <value>Visa meny</value>
   </data>
+  <data name="PreviousDay" xml:space="preserve">
+    <value>Föregående dag</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Föregående vecka</value>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>Nästa vecka</value>
+  </data>
+  <data name="SelectPeriod" xml:space="preserve">
+    <value>Välj period</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>Välj datum</value>
+  </data>
+  <data name="SelectTime" xml:space="preserve">
+    <value>Välj tid</value>
+  </data>
 </root>

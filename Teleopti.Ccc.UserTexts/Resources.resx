@@ -18221,4 +18221,28 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Show menu</value>
     <comment>On button to show main navigation menu</comment>
   </data>
+  <data name="PreviousDay" xml:space="preserve">
+    <value>Previous day</value>
+    <comment>Previous day</comment>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Previous week</value>
+    <comment>Previous week</comment>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>Next week</value>
+    <comment>Next week</comment>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>Select date</value>
+    <comment>Select date</comment>
+  </data>
+  <data name="SelectTime" xml:space="preserve">
+    <value>Select time</value>
+    <comment>Select time</comment>
+  </data>
+  <data name="SelectPeriod" xml:space="preserve">
+    <value>Select period</value>
+    <comment>Select period</comment>
+  </data>
 </root>
