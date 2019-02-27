@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.Historical;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
-	public class RecordedAdherencesTest
+	public class RecordedOutOfAdherencesTest
 	{
 		public IHistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;

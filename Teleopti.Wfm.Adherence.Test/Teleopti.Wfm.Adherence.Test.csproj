@@ -232,7 +232,8 @@
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />
-    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedAdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedOutOfAdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />

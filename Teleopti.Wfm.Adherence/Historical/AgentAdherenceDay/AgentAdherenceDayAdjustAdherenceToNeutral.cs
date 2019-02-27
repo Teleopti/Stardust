@@ -20,6 +20,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private DateTimePeriod? _calculatedDisplayPeriod;
 		private IEnumerable<AdherencePeriod> _calculatedRecordedOutOfAdherences;
 		private IEnumerable<AdherencePeriod> _calculatedOutOfAdherences;
+		private IEnumerable<AdherencePeriod> _calculatedRecordedNeutralAdherences;
 		private IEnumerable<AdherencePeriod> _calculatedApprovedPeriods;
 		private IEnumerable<AdherencePeriod> _calculatedAdjustedToNeutralAdherences;
 		private IEnumerable<HistoricalChangeModel> _calculatedChanges;
@@ -42,6 +43,8 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		public DateTimePeriod DisplayPeriod() => _calculatedDisplayPeriod.GetValueOrDefault();
 		public IEnumerable<HistoricalChangeModel> Changes() => _calculatedChanges;
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _calculatedRecordedOutOfAdherences.ToArray();
+		public IEnumerable<AdherencePeriod> RecordedNeutralAdherences() => _calculatedRecordedNeutralAdherences.ToArray();
+
 		public IEnumerable<AdherencePeriod> ApprovedPeriods() => _calculatedApprovedPeriods;
 		public IEnumerable<AdherencePeriod> OutOfAdherences() => _calculatedOutOfAdherences;
 		public IEnumerable<AdherencePeriod> AdjustedToNeutralAdherences() => _calculatedAdjustedToNeutralAdherences;
@@ -126,16 +129,16 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_calculatedChanges = calculateChanges(_collectedChanges, _calculatedDisplayPeriod.Value);
 
 			var recordedOutOfAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Out);
+			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
 
-			_calculatedRecordedOutOfAdherences = calculateRecordedOutOfAdherences(recordedOutOfAdherences);
+			_calculatedRecordedOutOfAdherences = calculateRecordedAdherences(recordedOutOfAdherences);
+			_calculatedRecordedNeutralAdherences = calculateRecordedAdherences(recordedNeutralAdherences);
 			_calculatedOutOfAdherences = calculateOutOfAdherences(recordedOutOfAdherences, _collectedApprovedPeriods);
 			_calculatedApprovedPeriods = calculateApprovedPeriods(_collectedApprovedPeriods);
 			_calculatedAdjustedToNeutralAdherences = calculateAdjustedToNeutralPeriods(_collectedAdjustedToNeutralPeriods);
 
 			if (!shift.HasValue)
 				return;
-
-			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
 
 			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, recordedNeutralAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
 			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
@@ -219,8 +222,8 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				return acc;
 			});
 
-		private static IEnumerable<AdherencePeriod> calculateRecordedOutOfAdherences(IEnumerable<OpenPeriod> recordedOutOfAdherences) =>
-			recordedOutOfAdherences
+		private static IEnumerable<AdherencePeriod> calculateRecordedAdherences(IEnumerable<OpenPeriod> recordedAdherences) =>
+			recordedAdherences
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
 
