@@ -99,7 +99,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				IScheduleRange scheduleRange,
 				IDictionary<DateOnly, HashSet<Guid>> peopleCanSeeSchedulesFor,
 				IDictionary<DateOnly, HashSet<Guid>> peopleCanSeeUnpublishedSchedulesFor,
-				IDictionary<DateOnly, HashSet<Guid>> viewableConfidentialAbsenceAgents)
+				IDictionary<DateOnly, HashSet<Guid>> viewableConfidentialAbsenceAgents,
+				ICommonNameDescriptionSetting nameDescriptionSetting)
 		{
 			var daySchedules = weekDays
 				.Select(date =>
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return new PersonWeekScheduleViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
+				Name = nameDescriptionSetting.BuildFor(person),
 				DaySchedules = daySchedules,
 				ContractTimeMinutes = daySchedules.Sum(s => s.ContractTimeMinutes)
 			};

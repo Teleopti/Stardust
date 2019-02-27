@@ -308,10 +308,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, d,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential));
 
+			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			return new GroupWeekScheduleViewModel
 			{
 				PersonWeekSchedules = pagedPeople
-				.Select(person => _shiftViewModelProvider.MakeWeekViewModel(person, weekDays, scheduleDic[person], peopleCanSeeSchedulesFor, peopleCanSeeUnpublishedSchedulesFor, peopleCanSeeConfidentialFor))
+				.Select(person => _shiftViewModelProvider.MakeWeekViewModel(person, 
+																			weekDays,
+																			scheduleDic[person], 
+																			peopleCanSeeSchedulesFor,
+																			peopleCanSeeUnpublishedSchedulesFor,
+																			peopleCanSeeConfidentialFor,
+																			nameDescriptionSetting))
 				.ToList(),
 				Total = permittedPeopleIds.Count
 			};
