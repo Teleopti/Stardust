@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		private ICollection<skillTypeModel> loadSkillTypeCollection(IUnitOfWork uow)
 		{
-			ISkillTypeRepository skillTypeRep = new SkillTypeRepository(uow);
+			ISkillTypeRepository skillTypeRep = SkillTypeRepository.DONT_USE_CTOR(uow);
 			var skillTypes = skillTypeRep.LoadAll();
 			skillTypes = skillTypes.Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 
@@ -1152,7 +1152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			ISkillType skillType;
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var repsoitory = new SkillTypeRepository(uow);
+				var repsoitory = SkillTypeRepository.DONT_USE_CTOR(uow);
 				skillType = repsoitory.Get(skillTypeModel.Id);
 			}
 			return skillType;

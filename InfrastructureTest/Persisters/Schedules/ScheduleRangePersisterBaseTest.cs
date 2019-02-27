@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 				new PersonRepository(currentUnitOfWork, null, null).Add(Person);
-				new ActivityRepository(unitOfWork).Add(Activity);
+				ActivityRepository.DONT_USE_CTOR(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
-				new ScenarioRepository(unitOfWork).Add(Scenario);
+				ScenarioRepository.DONT_USE_CTOR(unitOfWork).Add(Scenario);
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);

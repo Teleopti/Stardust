@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			ITeam team = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(team);
-			ICollection<ITeam> teams = new TeamRepository(UnitOfWork).FindAllTeamByDescription();
+			ICollection<ITeam> teams = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindAllTeamByDescription();
 			Assert.AreEqual(1, teams.Count);
 			teams.First().Site.GetType()
 				.Should().Be.EqualTo(typeof(Site));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IList<ITeam> teams = new TeamRepository(UnitOfWork).FindTeamByDescriptionName(teamName).ToList();
+			IList<ITeam> teams = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeamByDescriptionName(teamName).ToList();
 			Assert.AreEqual(teamName, teams[0].Description.Name);
 		}
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(team2);
 
-			var teams = new TeamRepository(UnitOfWork).FindTeams(new List<Guid> { team.Id.Value, team2.Id.Value });
+			var teams = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeams(new List<Guid> { team.Id.Value, team2.Id.Value });
 			Assert.That(teams.Count, Is.EqualTo(2));
 			Assert.That(LazyLoadingManager.IsInitialized(teams.First().Site), Is.True);
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = new Team { Site = teamSite }.WithDescription(new Description(RandomName.Make() + name + RandomName.Make()));
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, 20);
+			var loaded = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeamsContain(name, 20);
 
 			loaded.Should().Have.SameValuesAs(team);
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = new Team { Site = teamSite }.WithDescription(new Description(RandomName.Make()));
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(RandomName.Make(), 20);
+			var loaded = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeamsContain(RandomName.Make(), 20);
 
 			loaded.Should().Be.Empty();
 		}
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(new Team { Site = teamSite }.WithDescription(new Description(name)));
 			PersistAndRemoveFromUnitOfWork(new Team { Site = teamSite }.WithDescription(new Description(name)));
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, maxHits);
+			var loaded = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeamsContain(name, maxHits);
 
 			loaded.Count().Should().Be.EqualTo(maxHits);
 		}
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-				new TeamRepository(UnitOfWork).FindTeamsContain(RandomName.Make(), 0);
+				TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeamsContain(RandomName.Make(), 0);
 
 				var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 				(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(anotherSite);
 			PersistAndRemoveFromUnitOfWork(new Team { Site = site }
 				.WithDescription(new Description("A")));
-			var teams = new TeamRepository(UnitOfWork).FindTeamsForSite(site.Id.Value);
+			var teams = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeamsForSite(site.Id.Value);
 
 			teams.Select(x => x.Description.Name).Single().Should().Be("A");
 		}
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			for (var i = 0; i < 500; i++) {
 				teamIds.Add(team.Id.Value);
 			}
-			var teams = new TeamRepository(UnitOfWork).FindTeams(teamIds);
+			var teams = TeamRepository.DONT_USE_CTOR(UnitOfWork).FindTeams(teamIds);
 
 			teams.Count.Should().Be.EqualTo(1);
 		}
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<ITeam> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new TeamRepository(currentUnitOfWork);
+			return TeamRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 	}
 }

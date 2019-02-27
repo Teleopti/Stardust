@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				if (_lstTeams == null)
 				{
-					var teamRep = new TeamRepository(_unitOfWork);
+					var teamRep = TeamRepository.DONT_USE_CTOR(_unitOfWork);
 					_lstTeams = teamRep.LoadAll().ToList();
 				}
 				return _lstTeams;

@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillRepository = new SkillRepository(currentUnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var skill = skillRepository.LoadAllSkills().Single(x => x.Name == Skill);
-			var scenarioRepository = new ScenarioRepository(currentUnitOfWork);
+			var scenarioRepository = ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var scenario = scenarioRepository.LoadAll().Single(x => x.Description.Name == Scenario);
 
 			var defaultDemandTimespan = TimeSpan.FromMinutes(DefaultDemand * skill.DefaultResolution * (TimeSpan.FromHours(1).Ticks/TimeSpan.FromMinutes(skill.DefaultResolution).Ticks));

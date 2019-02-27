@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skill = new SkillRepository(currentUnitOfWork).LoadAll().Single(x => x.Name.Equals(SkillName));
+			var skill = SkillRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().Single(x => x.Name.Equals(SkillName));
 			var wl = new Workload(skill) {Name = WorkloadName};
 			if (QueueSourceName != null)
 			{

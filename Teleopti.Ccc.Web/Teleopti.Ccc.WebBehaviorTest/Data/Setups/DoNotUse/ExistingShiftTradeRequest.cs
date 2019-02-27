@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(uow);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(uow);
 			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(
-				new DefaultScenarioFromRepository(new ScenarioRepository(uow)),
+				new DefaultScenarioFromRepository(ScenarioRepository.DONT_USE_CTOR(uow)),
 				new ScheduleStorage(uow, personAssignmentRepository, personAbsenceRepository,
 					new MeetingRepository(uow), agentDayScheduleTagRepository, noteRepository,
 					publicNoteRepository, preferenceDayRepository,
@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var person = people.FirstOrDefault(p => p.Name == personName);
 			if (person == null)
 			{
-				var partTimePercentageRepository = new PartTimePercentageRepository(uow);
-				var contractRepository = new ContractRepository(uow, null, null);
-				var contractScheduleRepository = new ContractScheduleRepository(uow);
+				var partTimePercentageRepository = PartTimePercentageRepository.DONT_USE_CTOR(uow);
+				var contractRepository = ContractRepository.DONT_USE_CTOR(uow, null, null);
+				var contractScheduleRepository = ContractScheduleRepository.DONT_USE_CTOR(uow);
 				person = PersonFactory.CreatePerson(personName);
 				
 				var contract = PersonContractFactory.CreatePersonContract();

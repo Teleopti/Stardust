@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<SkillInIntraday> Skills()
 		{
-			var skillRepo = new SkillRepository(_currentUnitOfWork.Current());
+			var skillRepo = SkillRepository.DONT_USE_CTOR(_currentUnitOfWork.Current());
 			var skills = skillRepo.FindSkillsWithAtLeastOneQueueSource();
 
 			return map(skills);

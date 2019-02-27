@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private void LoadTeams()
 		{
 			_siteTeamBindingCollection.Clear();
-			var repository = new TeamRepository(GetUnitOfWork);
+			var repository = TeamRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var list = repository.FindAllTeamByDescription().ToList();
 
 			foreach (ITeam item in list)
@@ -868,7 +868,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			_personSkillCollection.Clear();
 			_personSkillAdapterCollection.Clear();
 
-			ISkillRepository rep = new SkillRepository(GetUnitOfWork);
+			ISkillRepository rep = SkillRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 			ICollection<ISkill> skillCollection = rep.FindAllWithoutMultisiteSkills();
 			_personSkillCollection.AddRange(skillCollection.Select(skill => new PersonSkill(skill, new Percent(1)) { Active = false }));
@@ -881,7 +881,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_externalLogOnCollection.Clear();
 
-			var r = new ExternalLogOnRepository(GetUnitOfWork);
+			var r = ExternalLogOnRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var externalLogOnList = r.LoadAll();
 			
 			_externalLogOnCollection.AddRange(externalLogOnList);

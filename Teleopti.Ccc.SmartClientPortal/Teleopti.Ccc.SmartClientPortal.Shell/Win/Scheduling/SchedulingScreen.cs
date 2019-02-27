@@ -3067,7 +3067,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSkills(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			ICollection<ISkill> skills = SkillRepository.DONT_USE_CTOR(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 		}
 
@@ -3179,9 +3179,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				else
 				{
-					loader = new PeopleLoader(personRep, new ContractRepository(uow), 
+					loader = new PeopleLoader(personRep, ContractRepository.DONT_USE_CTOR(uow), 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
-							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new SkillRepository(uow));
+							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), SkillRepository.DONT_USE_CTOR(uow));
 				}
 
 				loader.Initialize(SchedulerState.SchedulerStateHolder);
@@ -3814,7 +3814,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IList<IScenario> scenarios;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScenarioRepository scenarioRepository = new ScenarioRepository(uow);
+				IScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(uow);
 				scenarios = scenarioRepository.FindAllSorted(); // Ascending or Descending ?
 			}
 			var authorization = PrincipalAuthorization.Current_DONTUSE();

@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					if (SelectorPresenter.IsOnOrganizationTab)
 					{
-						var teamRep = new TeamRepository(uow);
+						var teamRep = TeamRepository.DONT_USE_CTOR(uow);
 						var teams = teamRep.FindTeams(SelectorPresenter.SelectedTeamGuids);
 						entityList.AddRange(teams.Cast<IEntity>());
 					}
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (uow.DisableFilter(QueryFilter.Deleted))
 			{
 				SiteRepository.DONT_USE_CTOR(uow).LoadAll();
-				new TeamRepository(uow).LoadAll();
+				TeamRepository.DONT_USE_CTOR(uow).LoadAll();
 			}
 			
 		}

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -17,13 +18,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
 	public class ActivityRepository : Repository<IActivity>, IActivityRepository, IProxyForId<IActivity>
     {
-#pragma warning disable 618
-        public ActivityRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static ActivityRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+		{
+			return new ActivityRepository(currentUnitOfWork, currentBusinessUnit, updatedBy);
+		}
 
-	    public ActivityRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy) : base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		public static ActivityRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new ActivityRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+		
+		public ActivityRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy) : base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
 	    }
 

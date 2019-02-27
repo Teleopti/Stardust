@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
                                                  new CopyToSkillCommand(this, model,
                                                                         new WorkloadRepository(currentUnitOfWork),
                                                                         UnitOfWorkFactory.Current),
-                                                 new SkillRepository(currentUnitOfWork),
+                                                 SkillRepository.DONT_USE_CTOR(currentUnitOfWork),
                                                  UnitOfWorkFactory.Current);
             SetTexts();
         }

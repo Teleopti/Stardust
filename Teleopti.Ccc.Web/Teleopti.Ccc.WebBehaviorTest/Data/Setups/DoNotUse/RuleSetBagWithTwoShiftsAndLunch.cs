@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				new TimePeriodWithSegment(new TimePeriod(_lunchEnd2 - _lunchStart2, 0, _lunchEnd2 - _lunchStart2, 0),
 				                          new TimeSpan(0, 15, 0));
 
-			var activityRepository = new ActivityRepository(unitOfWork, null, null);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null);
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityLunch1 = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
-			var activityLunch2 = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
+			var activityLunch1 = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
+			var activityLunch2 = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
 			activityRepository.Add(activity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");

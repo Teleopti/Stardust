@@ -9,6 +9,11 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 		Repository<IRtaMap>,
 		IRtaMapRepository
 	{
+		public static RtaMapRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new RtaMapRepository(currentUnitOfWork);
+		}
+
 		public RtaMapRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

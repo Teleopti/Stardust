@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheTeam = TeamFactory.CreateSimpleTeam(TeamNameGenerator.Generate());
 			TheTeam.Site = Site;
 
-			var teamRepository = new TeamRepository(currentUnitOfWork);
+			var teamRepository = TeamRepository.DONT_USE_CTOR(currentUnitOfWork);
 			teamRepository.Add(TheTeam);
 		}
 	}

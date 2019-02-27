@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void deleteScorecard()
 		{
 			//Make sure that teams with this scorecard gets disconnected, otherwise there will be a FK error!
-			var teamRepository = new TeamRepository(_unitOfWork);
+			var teamRepository = TeamRepository.DONT_USE_CTOR(_unitOfWork);
 			using (_unitOfWork.DisableFilter(QueryFilter.Deleted))
 			{
 				var allTeams = teamRepository.LoadAll();

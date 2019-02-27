@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var repository = new RtaStateGroupRepository(new ThisUnitOfWork(uow));
+				var repository = RtaStateGroupRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
 				return repository.LoadAllCompleteGraph().ToList();
 			}
 		}
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var stateGroupRepository = new RtaStateGroupRepository(new ThisUnitOfWork(uow));
-				var alarmMappingRepository = new RtaMapRepository(new ThisUnitOfWork(uow));
+				var stateGroupRepository = RtaStateGroupRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
+				var alarmMappingRepository = RtaMapRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
 				foreach (var removedGroup in removedGroups.Where(x => x.Id.HasValue))
 				{
 					removeGroupActivityAlarmMappingsWithGroup(removedGroup, alarmMappingRepository);

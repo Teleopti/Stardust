@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var businessUnit = new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
 			Scenario.SetBusinessUnit(businessUnit);
 
-			new ScenarioRepository(currentUnitOfWork).Add(Scenario);
+			ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork).Add(Scenario);
 		}
 	}
 }

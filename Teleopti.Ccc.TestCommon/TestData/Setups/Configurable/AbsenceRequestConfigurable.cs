@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				personRequest.ForcePending();
 				personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest(), true);
-				var scenarioRepository = new ScenarioRepository(unitOfWork);
+				var scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 				var scenario = scenarioRepository.LoadDefaultScenario();
 				personAbsence = createPersonAbsence(absence, personRequest, scenario);
 			}

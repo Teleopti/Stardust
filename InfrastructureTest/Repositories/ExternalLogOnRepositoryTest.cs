@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IExternalLogOn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ExternalLogOnRepository(currentUnitOfWork);
+            return ExternalLogOnRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(source2);
 			
 
-			IList<IExternalLogOn> logins = new ExternalLogOnRepository(CurrUnitOfWork).LoadAll().ToList();
+			IList<IExternalLogOn> logins = ExternalLogOnRepository.DONT_USE_CTOR(CurrUnitOfWork).LoadAll().ToList();
 
             Assert.AreEqual(2,logins.Count);
             Assert.IsTrue(logins.Contains(source1));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(source2);
 			PersistAndRemoveFromUnitOfWork(source3);
 
-			var logins = new ExternalLogOnRepository(CurrUnitOfWork).LoadByAcdLogOnNames(new[] {source1.AcdLogOnName, source2.AcdLogOnName});
+			var logins = ExternalLogOnRepository.DONT_USE_CTOR(CurrUnitOfWork).LoadByAcdLogOnNames(new[] {source1.AcdLogOnName, source2.AcdLogOnName});
 
 			Assert.AreEqual(2, logins.Count);
 			Assert.IsTrue(logins.Contains(source1));

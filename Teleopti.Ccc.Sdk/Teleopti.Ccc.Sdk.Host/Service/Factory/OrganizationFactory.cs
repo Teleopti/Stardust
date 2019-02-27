@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
         internal static ITeamCollection CreateTeamCollectionLight(IUnitOfWork unitOfWork, string functionPath, DateOnly queryDateTime)
         {
-            var rep = new TeamRepository(unitOfWork);
+            var rep = TeamRepository.DONT_USE_CTOR(unitOfWork);
             var coll = rep.LoadAll();
             var ret = new TeamCollection(functionPath, coll, queryDateTime);
 

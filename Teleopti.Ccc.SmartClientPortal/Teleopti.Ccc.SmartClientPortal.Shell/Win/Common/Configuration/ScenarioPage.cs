@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			UnitOfWork = value;
 
 			// Creates a new repository.
-			Repository = new ScenarioRepository(UnitOfWork);
+			Repository = ScenarioRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()

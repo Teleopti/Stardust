@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skillDay);
 			UnitOfWork.Clear();
 
-			var skillRepository = new SkillRepository(UnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 			var skillDayRepository = new SkillDayRepository(UnitOfWork);
 			var orgSkillDays =
 				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), skillRepository.LoadAll(),

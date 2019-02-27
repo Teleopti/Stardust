@@ -7,7 +7,12 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 {
     public class RtaStateGroupRepository : Repository<IRtaStateGroup>, IRtaStateGroupRepository
     {
-	    public RtaStateGroupRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public static RtaStateGroupRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new RtaStateGroupRepository(currentUnitOfWork);
+		}
+
+		public RtaStateGroupRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 	    }
 

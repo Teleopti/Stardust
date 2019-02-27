@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IScenarioRepository CreateScenarioRepository(IUnitOfWork unitOfWork)
 		{
-			return new ScenarioRepository(unitOfWork);
+			return ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public ISkillRepository CreateSkillRepository(IUnitOfWork unitOfWork)
 		{
-			return new SkillRepository(unitOfWork);
+			return SkillRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 
@@ -144,12 +144,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)
 		{
-			return new ContractScheduleRepository(unitOfWork);
+			return ContractScheduleRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IContractRepository CreateContractRepository(IUnitOfWork unitOfWork)
 		{
-			return new ContractRepository(unitOfWork);
+			return ContractRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		public IPreferenceDayRepository CreatePreferenceDayRepository(IUnitOfWork unitOfWork)
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IActivityRepository CreateActivityRepository(IUnitOfWork unitOfWork)
 		{
-			return new ActivityRepository(unitOfWork);
+			return ActivityRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMultiplicatorDefinitionSetRepository CreateMultiplicatorDefinitionSetRepository(IUnitOfWork unitOfWork)
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ITeamRepository CreateTeamRepository(IUnitOfWork unitOfWork)
 		{
-			return new TeamRepository(unitOfWork);
+			return TeamRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ISiteRepository CreateSiteRepository(IUnitOfWork unitOfWork)
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPartTimePercentageRepository CreatePartTimePercentageRepository(IUnitOfWork unitOfWork)
 		{
-			return new PartTimePercentageRepository(unitOfWork);
+			return PartTimePercentageRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IOptionalColumnRepository CreateOptionalColumnRepository(IUnitOfWork unitOfWork)
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)
 		{
-			return new SkillTypeRepository(unitOfWork);
+			return SkillTypeRepository.DONT_USE_CTOR(unitOfWork);
 		}
 	}
 }

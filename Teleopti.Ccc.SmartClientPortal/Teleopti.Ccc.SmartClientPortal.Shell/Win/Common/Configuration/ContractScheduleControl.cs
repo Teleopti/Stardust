@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
         private ContractScheduleRepository ContractSchRepository
         {
-            get { return _contractSchRep ?? (_contractSchRep = new ContractScheduleRepository(_unitOfWork)); }
+            get { return _contractSchRep ?? (_contractSchRep = ContractScheduleRepository.DONT_USE_CTOR(_unitOfWork)); }
         }
         private void changedInfo()
         {
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
         public void SetUnitOfWork(IUnitOfWork value)
         {
             _unitOfWork = value;
-            _contractSchRep = new ContractScheduleRepository(value);
+            _contractSchRep = ContractScheduleRepository.DONT_USE_CTOR(value);
         }
 
         public void Persist()

@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			ContractScheduleCollection.Clear();
 
-			var repository = new ContractScheduleRepository(filterPeopleHolder.GetUnitOfWork);
+			var repository = ContractScheduleRepository.DONT_USE_CTOR(filterPeopleHolder.GetUnitOfWork);
 			var list = repository.FindAllContractScheduleByDescription().Where(ptp => !((IDeleteTag)ptp).IsDeleted);
 
 			foreach (IContractSchedule item in list)
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadPartTimePercentages(FilteredPeopleHolder filterPeopleHolder)
 		{
 			PartTimePercentageCollection.Clear();
-			var partTimePercentageRepository = new PartTimePercentageRepository(filterPeopleHolder.GetUnitOfWork);
+			var partTimePercentageRepository = PartTimePercentageRepository.DONT_USE_CTOR(filterPeopleHolder.GetUnitOfWork);
 			var list = partTimePercentageRepository.FindAllPartTimePercentageByDescription().Where(ptp => ptp.IsChoosable);
 
 			IEnumerable<IPartTimePercentage> sorted = list.OrderByDescending(n2 => n2.Percentage.Value);
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadContracts(FilteredPeopleHolder filterPeopleHolder)
 		{
 			ContractCollection.Clear();
-			var repository = new ContractRepository(filterPeopleHolder.GetUnitOfWork);
+			var repository = ContractRepository.DONT_USE_CTOR(filterPeopleHolder.GetUnitOfWork);
 			var list = repository.FindAllContractByDescription().Where(ptp => ptp.IsChoosable).ToList();
 
 			foreach (IContract item in list)

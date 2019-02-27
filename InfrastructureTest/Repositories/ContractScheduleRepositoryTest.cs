@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// </summary>
         protected override void ConcreteSetup()
         {
-            rep = new ContractScheduleRepository(UnitOfWork);
+            rep = ContractScheduleRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IContractSchedule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ContractScheduleRepository(currentUnitOfWork);
+            return ContractScheduleRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]

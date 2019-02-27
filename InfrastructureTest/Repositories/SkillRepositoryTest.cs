@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(skill2);
 
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-10)), new DateOnly(date.AddDays(10)));
-            var rep = new SkillRepository(UnitOfWork);
+            var rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             var skills = new List<ISkill>(rep.FindAllWithSkillDays(period));
             Assert.AreEqual(1, skills.Count);
             Assert.IsFalse(skills[0].GetType().FullName.Contains("SkillProxy"));
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(skill2);
 
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-10)), new DateOnly(date.AddDays(10)));
-            SkillRepository rep = new SkillRepository(UnitOfWork);
+            SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkill> skills = new List<ISkill>(rep.FindAllWithSkillDays(period));
             Assert.AreEqual(2, skills.Count);
             Assert.IsFalse(skills[0].GetType().FullName.Contains("SkillProxy"));
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             new WorkloadRepository(UnitOfWork).Remove(wl3);
             Session.Flush();
 
-            SkillRepository rep = new SkillRepository(UnitOfWork);
+            SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkill> skills = new List<ISkill>(rep.FindAllWithWorkloadAndQueues());
 
             ISkill skillToTest = skills[0];
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             wl.AddQueueSource(q);
             PersistAndRemoveFromUnitOfWork(wl);
 
-            SkillRepository rep = new SkillRepository(UnitOfWork);
+            SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkill> skills = new List<ISkill>(rep.FindAllWithWorkloadAndQueues());
 
             ISkill skillToTest = skills[0];
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             wl.AddQueueSource(q);
             PersistAndRemoveFromUnitOfWork(wl);
 
-            SkillRepository rep = new SkillRepository(UnitOfWork);
+            SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkill> skills = new List<ISkill>(rep.FindAllWithWorkloadAndQueues());
 
             ISkill skillToTest = skills.OfType<IMultisiteSkill>().First();
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IList<ISkill> children = new List<ISkill> { child1, child2 };
             PersistAndRemoveFromUnitOfWork(children);
 
-            SkillRepository rep = new SkillRepository(UnitOfWork);
+            SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkill> skills = new List<ISkill>(rep.FindAllWithoutMultisiteSkills());
 
             Assert.AreEqual(3, skills.Count);
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(wl2);
 
-            SkillRepository rep = new SkillRepository(UnitOfWork);
+            SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkill> skills = new List<ISkill>(rep.FindAllWithWorkloadAndQueues());
 
             ISkill skillToTest = skills[0];
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(skill);
 
-            IRepository<ISkill> skillRepository = new SkillRepository(UnitOfWork);
+            IRepository<ISkill> skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             skill = skillRepository.Get(skill.Id.Value);
             skillDay = skill.TemplateWeekCollection[0];
 
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skillDay.MergeTemplateSkillDataPeriods(new List<ITemplateSkillDataPeriod>(skillDay.TemplateSkillDataPeriodCollection));
             PersistAndRemoveFromUnitOfWork(skill);
 
-            skillRepository = new SkillRepository(UnitOfWork);
+            skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             skill = skillRepository.Get(skill.Id.Value);
             skillDay = skill.TemplateWeekCollection[0];
 
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(wl2);
 
-            var rep = new SkillRepository(UnitOfWork);
+            var rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             var skillToTest = rep.LoadSkill(skill);
 
             Assert.IsTrue(LazyLoadingManager.IsInitialized(skillToTest.SkillType)); 
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             wl.AddQueueSource(q);
             PersistAndRemoveFromUnitOfWork(wl);
 
-            var rep = new SkillRepository(UnitOfWork);
+            var rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             var skillToTest = rep.LoadMultisiteSkill(skill1);
 
             Assert.IsTrue(LazyLoadingManager.IsInitialized(skillToTest.SkillType)); 
@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill5.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill5);
 
-            var rep = new SkillRepository(UnitOfWork);
+            var rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             var skillToTest = rep.LoadInboundTelephonySkills(15);
           
             CollectionAssert.Contains(skillToTest,skill1);
@@ -517,7 +517,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
 		    PersistAndRemoveFromUnitOfWork(wl);
 
-		    var target = new SkillRepository(UnitOfWork);
+		    var target = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 		    var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
 		    loadedSkill.Should().Be.EqualTo(skill);
 	    }
@@ -530,7 +530,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    var wl = WorkloadFactory.CreateWorkload(skill);
 		    PersistAndRemoveFromUnitOfWork(wl);
 
-		    var target = new SkillRepository(UnitOfWork);
+		    var target = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 		    target.FindSkillsWithAtLeastOneQueueSource().Should().Be.Empty();
 	    }
 
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
 		    PersistAndRemoveFromUnitOfWork(wl);
 
-		    var target = new SkillRepository(UnitOfWork);
+		    var target = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 		    var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
 		    LazyLoadingManager.IsInitialized(loadedSkill.WorkloadCollection).Should().Be.True();
 	    }
@@ -575,7 +575,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    PersistAndRemoveFromUnitOfWork(wl);
 		    PersistAndRemoveFromUnitOfWork(wl2);
 
-		    var target = new SkillRepository(UnitOfWork);
+		    var target = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 		    target.FindSkillsWithAtLeastOneQueueSource().Count().Should().Be.EqualTo(1);
 	    }
 
@@ -585,7 +585,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType) {Activity = _activity, TimeZone = TimeZoneInfo.Utc};
 		    PersistAndRemoveFromUnitOfWork(skill);
 
-		    var target = new SkillRepository(UnitOfWork);
+		    var target = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 		    target.FindSkillsWithAtLeastOneQueueSource().Should().Be.Empty();
 	    }
 
@@ -597,7 +597,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skill.SetCascadingIndex(index);
 			PersistAndRemoveFromUnitOfWork(skill);
 
-			var target = new SkillRepository(CurrUnitOfWork);
+			var target = SkillRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			target.Get(skill.Id.Value).CascadingIndex
 				.Should().Be.EqualTo(index);
 		}
@@ -614,7 +614,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			PersistAndRemoveFromUnitOfWork(skill);
 
-			var target = new SkillRepository(CurrUnitOfWork);
+			var target = SkillRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			target.Get(skill.Id.Value).AbandonRate.Value.Should().Be.EqualTo(abandonRate);
 		}
 
@@ -629,14 +629,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skill1);
 			PersistAndRemoveFromUnitOfWork(skill2);
 
-			var skills = new SkillRepository(CurrUnitOfWork).LoadSkills(new Guid[] { skill1.Id.Value, skill2.Id.Value });
+			var skills = SkillRepository.DONT_USE_CTOR(CurrUnitOfWork).LoadSkills(new Guid[] { skill1.Id.Value, skill2.Id.Value });
 
 			skills.Count.Should().Be.EqualTo(2);
 		}
 
 		protected override Repository<ISkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SkillRepository(currentUnitOfWork);
+            return SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

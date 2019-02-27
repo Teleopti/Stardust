@@ -66,7 +66,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IContractRepository repository = new ContractRepository(uow);
+				IContractRepository repository = ContractRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAll().ToList();
 			}
 		}
@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IContractScheduleRepository repository = new ContractScheduleRepository(uow);
+				IContractScheduleRepository repository = ContractScheduleRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAll().ToList();
 			}
 		}
@@ -84,7 +84,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPartTimePercentageRepository repository = new PartTimePercentageRepository(uow);
+				IPartTimePercentageRepository repository = PartTimePercentageRepository.DONT_USE_CTOR(uow);
 				return repository.LoadAll().ToList();
 			}
 		}
@@ -439,7 +439,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-					ActivityRepository repository = new ActivityRepository(uow);
+					ActivityRepository repository = ActivityRepository.DONT_USE_CTOR(uow);
 
 					return repository.LoadAll().ToList();
 				}
@@ -519,12 +519,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
-					new ContractScheduleRepository(uow).LoadAllAggregate();
-					new ContractRepository(uow).LoadAll();
-					new PartTimePercentageRepository(uow).LoadAll();
+					ContractScheduleRepository.DONT_USE_CTOR(uow).LoadAllAggregate();
+					ContractRepository.DONT_USE_CTOR(uow).LoadAll();
+					PartTimePercentageRepository.DONT_USE_CTOR(uow).LoadAll();
 					new RuleSetBagRepository(uow).LoadAll();
 					new ScorecardRepository(uow).LoadAll();
-					new SkillTypeRepository(uow).LoadAll();
+					SkillTypeRepository.DONT_USE_CTOR(uow).LoadAll();
 				}
 
 				PersonRepository repository = new PersonRepository(new ThisUnitOfWork(uow), null, null);
@@ -580,7 +580,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(uow);
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
-					ScenarioRepository repository = new ScenarioRepository(uow);
+					ScenarioRepository repository = ScenarioRepository.DONT_USE_CTOR(uow);
 					return repository.FindEnabledForReportingSorted();
 				}
 			}
@@ -664,7 +664,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			//just dirty fix for now
 			using (uow.DisableFilter(QueryFilter.Deleted))
 			{
-				new ActivityRepository(uow).LoadAll();
+				ActivityRepository.DONT_USE_CTOR(uow).LoadAll();
 				new AbsenceRepository(uow).LoadAll();
 				new ShiftCategoryRepository(uow).LoadAll();
 				new DayOffTemplateRepository(uow).LoadAll();
@@ -675,7 +675,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			var businessUnitRepository = new BusinessUnitRepository(uow);
 			var businessUnitList = businessUnitRepository.LoadAll();
-			var scenarioRep = new ScenarioRepository(uow);
+			var scenarioRep = ScenarioRepository.DONT_USE_CTOR(uow);
 			IList<IScenario> scenarioList = scenarioRep.FindAllSorted();
 
 			Trace.WriteLine("Lazy load business unit list: " + businessUnitList.Count());
@@ -1223,7 +1223,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					var workloadList = workloadRep.LoadAll();
 					Trace.WriteLine("Lazy load Workload list: " + workloadList.Count());
 
-					SkillTypeRepository skillTypeRepository = new SkillTypeRepository(uow);
+					SkillTypeRepository skillTypeRepository = SkillTypeRepository.DONT_USE_CTOR(uow);
 					var skillTypeList = skillTypeRepository.LoadAll();
 					Trace.WriteLine("Lazy load Skill Type list: " + skillTypeList.Count());
 				}
@@ -1671,11 +1671,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				uow.Reassociate(activities);
 
-				var repository = new SkillRepository(uow);
+				var repository = SkillRepository.DONT_USE_CTOR(uow);
 				IList<ISkill> ret;
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
-					new SkillTypeRepository(uow).LoadAll();
+					SkillTypeRepository.DONT_USE_CTOR(uow).LoadAll();
 
 					ret = repository.LoadAll().ToList();
 					foreach (ISkill skill in ret)
@@ -1697,7 +1697,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 
-				var repository = new SkillRepository(uow);
+				var repository = SkillRepository.DONT_USE_CTOR(uow);
 				return new List<ISkill>(repository.FindAllWithSkillDays(period));
 			}
 		}

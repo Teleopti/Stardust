@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 				new PersonAccountConflictResolver(
 					uowFactory,
 					new TraceableRefreshService(
-						new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)),
+						new DefaultScenarioFromRepository(ScenarioRepository.DONT_USE_CTOR(currUnitOfWork)),
 						new ScheduleStorage(
 							currUnitOfWork,
 							personAssignmentRepository, personAbsenceRepository,

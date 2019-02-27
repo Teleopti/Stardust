@@ -31,16 +31,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public virtual void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var contractRepository = new ContractRepository(uow);
+			var contractRepository = ContractRepository.DONT_USE_CTOR(uow);
 			var contract = contractRepository.LoadAll().Single(c => c.Description.Name == Contract);
 
-			var partTimePercentageRepository = new PartTimePercentageRepository(uow);
+			var partTimePercentageRepository = PartTimePercentageRepository.DONT_USE_CTOR(uow);
 			var partTimePercentage = partTimePercentageRepository.LoadAll().Single(c => c.Description.Name == PartTimePercentage);
 
-			var contractScheduleRepository = new ContractScheduleRepository(uow);
+			var contractScheduleRepository = ContractScheduleRepository.DONT_USE_CTOR(uow);
 			var contractSchedule = contractScheduleRepository.LoadAll().Single(c => c.Description.Name == ContractSchedule);
 
-			var teamRepository = new TeamRepository(uow);
+			var teamRepository = TeamRepository.DONT_USE_CTOR(uow);
 			var team = teamRepository.LoadAll().Single(c => c.Description.Name == Team);
 
 			var personContract = new PersonContract(contract,
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(Skill))
 			{
-				var skillRepository = new SkillRepository(uow);
+				var skillRepository = SkillRepository.DONT_USE_CTOR(uow);
 				var skill = skillRepository.LoadAll().Single(c => c.Name == Skill);
 				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)));
 			}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(ExternalLogon))
 			{
-				var externalLogonRepository = new ExternalLogOnRepository(uow);
+				var externalLogonRepository = ExternalLogOnRepository.DONT_USE_CTOR(uow);
 				var logon = externalLogonRepository.LoadAll().FirstOrDefault(b => b.AcdLogOnName == user.Name.ToString());
 				// if it doesnt exist, create it, but then we need the datasourceid
 				if (logon == null && ExternalLogonDataSourceId != -1)

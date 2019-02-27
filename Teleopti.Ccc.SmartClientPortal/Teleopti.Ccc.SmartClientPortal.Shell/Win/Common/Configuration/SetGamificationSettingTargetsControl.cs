@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_presenter = new SetGamificationSettingPresenter(this, UnitOfWorkFactory.Current,
 															new TeamGamificationSettingRepository(currentUow),
 															new SiteProvider(SiteRepository.DONT_USE_CTOR(currentUow)),
-															new TeamProvider(new TeamRepository(currentUow)),
+															new TeamProvider(TeamRepository.DONT_USE_CTOR(currentUow)),
 															new GamificationSettingProvider(new GamificationSettingRepository(currentUow))
 															);
 		}

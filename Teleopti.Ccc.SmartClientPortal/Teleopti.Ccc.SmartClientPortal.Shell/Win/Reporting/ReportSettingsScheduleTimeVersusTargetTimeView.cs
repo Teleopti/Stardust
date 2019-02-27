@@ -106,11 +106,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					new ContractScheduleRepository(unitOfWork).LoadAllAggregate();
-					new ContractRepository(unitOfWork).LoadAll();
+					ContractScheduleRepository.DONT_USE_CTOR(unitOfWork).LoadAllAggregate();
+					ContractRepository.DONT_USE_CTOR(unitOfWork).LoadAll();
 				}
 
-				new PartTimePercentageRepository(unitOfWork).LoadAll();
+				PartTimePercentageRepository.DONT_USE_CTOR(unitOfWork).LoadAll();
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
 				var dateTimePeriod =
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var scenarioRepository = new ScenarioRepository(unitOfWork);
+				var scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 				var scenarios = scenarioRepository.LoadAll();
 
 				foreach (var scenario in scenarios)

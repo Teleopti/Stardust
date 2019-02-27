@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
 
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityRepository = new ActivityRepository(unitOfWork, null, null);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null);
 			activityRepository.Add(activity);
 
 			IShiftCategory shiftCategory;

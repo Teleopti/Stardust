@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillRepo = new SkillRepository(currentUnitOfWork);
+			var skillRepo = SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var theSkill = skillRepo.LoadAll().SingleOrDefault(x => x.Name == _skill);
 			
 			var currentBu = new FakeCurrentBusinessUnit();

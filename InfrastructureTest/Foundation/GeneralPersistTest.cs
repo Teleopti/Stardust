@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IActivity activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
             ISkill skill = SkillFactory.CreateSkill("Skill - Name", skillType, 15);
 
-            new SkillTypeRepository(UnitOfWork).Add(skillType);
-            new ActivityRepository(UnitOfWork).Add(activity);
+            SkillTypeRepository.DONT_USE_CTOR(UnitOfWork).Add(skillType);
+            ActivityRepository.DONT_USE_CTOR(UnitOfWork).Add(activity);
             skill.Activity = activity;
-            new SkillRepository(UnitOfWork).Add(skill);
+            SkillRepository.DONT_USE_CTOR(UnitOfWork).Add(skill);
 
             IWorkload workload = WorkloadFactory.CreateWorkload(skill);
             IWorkloadDayTemplate template = new WorkloadDayTemplate();
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             }
             finally
             {
-                new ActivityRepository(UnitOfWork).Remove(activity);
-                new SkillTypeRepository(UnitOfWork).Remove(skillType);
-                new SkillRepository(UnitOfWork).Remove(skill);
+                ActivityRepository.DONT_USE_CTOR(UnitOfWork).Remove(activity);
+                SkillTypeRepository.DONT_USE_CTOR(UnitOfWork).Remove(skillType);
+                SkillRepository.DONT_USE_CTOR(UnitOfWork).Remove(skill);
                 new WorkloadRepository(UnitOfWork).Remove(workload);
                 UnitOfWork.PersistAll();
                 UnitOfWork.Clear();

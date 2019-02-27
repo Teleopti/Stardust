@@ -839,7 +839,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			ICollection<TeamDto> teamsOnSite = new Collection<TeamDto>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ITeamRepository repository = new TeamRepository(unitOfWork);
+				ITeamRepository repository = TeamRepository.DONT_USE_CTOR(unitOfWork);
 				var teams = repository.LoadAll();
 
 				foreach (ITeam team in teams)
@@ -1058,7 +1058,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 					return adherenceInfoDtos;
 				}
 
-				defaultScenario = new ScenarioRepository(uow).LoadDefaultScenario();
+				defaultScenario = ScenarioRepository.DONT_USE_CTOR(uow).LoadDefaultScenario();
 			}
 			
 			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();

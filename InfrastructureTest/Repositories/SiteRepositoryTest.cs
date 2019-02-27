@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    PersistAndRemoveFromUnitOfWork(site);
 		    PersistAndRemoveFromUnitOfWork(team);
 
-		    new TeamRepository(UnitOfWork).Remove(team);
+		    TeamRepository.DONT_USE_CTOR(UnitOfWork).Remove(team);
 		    PersistAndRemoveFromUnitOfWork(team);
 
 		    var loaded = SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSiteByDescriptionName(name);

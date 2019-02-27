@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var assignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 
 			IActivity activity;
-			var activityRepository = new ActivityRepository(unitOfWork, null, null);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null);
 			if (Activity != null)
 			{
-				activity = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+				activity = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			}
 			else
 			{

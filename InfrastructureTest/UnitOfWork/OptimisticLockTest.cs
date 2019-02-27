@@ -63,16 +63,16 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			uow1.PersistAll();
 			var team = TeamFactory.CreateSimpleTeam(".");
 			team.Site = site;
-			new TeamRepository(new ThisUnitOfWork(uow1)).Add(team);
+			TeamRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(team);
 			uow1.PersistAll();
 			var partTimePercentage = new PartTimePercentage(".");
-			new PartTimePercentageRepository(new ThisUnitOfWork(uow1)).Add(partTimePercentage);
+			PartTimePercentageRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(partTimePercentage);
 			uow1.PersistAll();
 			var contract = new Contract(".");
-			new ContractRepository(new ThisUnitOfWork(uow1), null, null).Add(contract);
+			ContractRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1), null, null).Add(contract);
 			uow1.PersistAll();
 			var contratSchedule = new ContractSchedule(".");
-			new ContractScheduleRepository(new ThisUnitOfWork(uow1)).Add(contratSchedule);
+			ContractScheduleRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(contratSchedule);
 			uow1.PersistAll();
 
 			//client 1

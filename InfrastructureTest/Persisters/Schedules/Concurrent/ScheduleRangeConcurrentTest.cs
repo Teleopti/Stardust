@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
 			new PersonRepository(new ThisUnitOfWork(uow), null, null).FindPeople(new[]{person.Id.Value});
-			new ActivityRepository(uow).Get(Activity.Id.Value);
+			ActivityRepository.DONT_USE_CTOR(uow).Get(Activity.Id.Value);
 			new ShiftCategoryRepository(uow).Get(ShiftCategory.Id.Value);
-			new ScenarioRepository(uow).Get(Scenario.Id.Value);
+			ScenarioRepository.DONT_USE_CTOR(uow).Get(Scenario.Id.Value);
 		}
 	}
 }

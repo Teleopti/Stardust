@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
         public static int SynchronizeExternalLogOns(IUnitOfWork uow, IList<IExternalLogOn> matrixAgentLogins)
         {
-            IExternalLogOnRepository rep = new ExternalLogOnRepository(uow);
+            IExternalLogOnRepository rep = ExternalLogOnRepository.DONT_USE_CTOR(uow);
             var matrixSync = new MatrixRaptorExternalLogOnSynchronization(rep);
             return matrixSync.SynchronizeExternalLogOns(matrixAgentLogins);
         }

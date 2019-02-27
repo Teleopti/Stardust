@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			var scenario = DefaultScenario.Scenario;
 
-			var activity = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(a => a.Name == Activity);
+			var activity = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(a => a.Name == Activity);
 
 			var startTimeUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);

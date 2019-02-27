@@ -187,10 +187,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
             UnitOfWork.Clear();
-            new SkillTypeRepository(UnitOfWork).Remove(_skillType);
-	        new ScenarioRepository(UnitOfWork).Remove(_scenario);
-	        new ActivityRepository(UnitOfWork).Remove(_skill.Activity);
-            foreach (var childSkill in new SkillRepository(UnitOfWork).LoadAll())
+            SkillTypeRepository.DONT_USE_CTOR(UnitOfWork).Remove(_skillType);
+	        ScenarioRepository.DONT_USE_CTOR(UnitOfWork).Remove(_scenario);
+	        ActivityRepository.DONT_USE_CTOR(UnitOfWork).Remove(_skill.Activity);
+            foreach (var childSkill in SkillRepository.DONT_USE_CTOR(UnitOfWork).LoadAll())
             {
 							Session.Delete(childSkill);
             }

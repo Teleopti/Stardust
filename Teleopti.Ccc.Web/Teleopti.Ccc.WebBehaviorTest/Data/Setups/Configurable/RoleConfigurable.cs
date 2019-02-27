@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
-				var teamRepository = new TeamRepository(currentUnitOfWork);
+				var teamRepository = TeamRepository.DONT_USE_CTOR(currentUnitOfWork);
 				AccessToTeam.Split(',')
 					.Select(t => teamRepository.FindTeamByDescriptionName(t.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableTeam);

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
             {
                 using (uow.DisableFilter(QueryFilter.BusinessUnit))
                 {
-                    var skills = new SkillRepository(uow).LoadInboundTelephonySkills(_model.Skill.DefaultResolution);                       
+                    var skills = SkillRepository.DONT_USE_CTOR(uow).LoadInboundTelephonySkills(_model.Skill.DefaultResolution);                       
 
                     foreach (var skill in skills)
                     {

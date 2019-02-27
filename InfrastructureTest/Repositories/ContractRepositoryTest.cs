@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _contract.WorkTimeSource = WorkTimeSource.FromContract;
 
             PersistAndRemoveFromUnitOfWork(_contract);
-            var loadedContracts = new ContractRepository(UnitOfWork).LoadAll().ToList();
+            var loadedContracts = ContractRepository.DONT_USE_CTOR(UnitOfWork).LoadAll().ToList();
             Assert.AreEqual(1, loadedContracts.Count);
             Assert.AreEqual(1, loadedContracts[0].MultiplicatorDefinitionSetCollection.Count);
             Assert.AreEqual(definitionSet.MultiplicatorType, loadedContracts[0].MultiplicatorDefinitionSetCollection[0].MultiplicatorType);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(definitionSet);
             _contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
             PersistAndRemoveFromUnitOfWork(_contract);
-            ICollection<IContract> loadedContracts = new ContractRepository(UnitOfWork).FindAllContractByDescription();
+            ICollection<IContract> loadedContracts = ContractRepository.DONT_USE_CTOR(UnitOfWork).FindAllContractByDescription();
             Assert.AreEqual(1, loadedContracts.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedContracts.First().MultiplicatorDefinitionSetCollection));
         }
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var contract = new Contract(RandomName.Make() + name + RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(contract);
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsContain(name, 10);
+			var loadedContracts = ContractRepository.DONT_USE_CTOR(UnitOfWork).FindContractsContain(name, 10);
 
 			loadedContracts.Should().Have.SameValuesAs(contract);
 		}
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var contract = new Contract(RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(contract);
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsContain(RandomName.Make(), 10);
+			var loadedContracts = ContractRepository.DONT_USE_CTOR(UnitOfWork).FindContractsContain(RandomName.Make(), 10);
 
 			loadedContracts.Should().Be.Empty();
 		}
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(new Contract(name));
 			PersistAndRemoveFromUnitOfWork(new Contract(name));
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsContain(name, maxHits);
+			var loadedContracts = ContractRepository.DONT_USE_CTOR(UnitOfWork).FindContractsContain(name, maxHits);
 
 			loadedContracts.Count().Should().Be.EqualTo(maxHits);
 		}
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-				new ContractRepository(UnitOfWork).FindContractsContain(RandomName.Make(), 0);
+				ContractRepository.DONT_USE_CTOR(UnitOfWork).FindContractsContain(RandomName.Make(), 0);
 
 				var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 				(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IContract> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ContractRepository(currentUnitOfWork, null, null);
+            return ContractRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
         }
 
     }

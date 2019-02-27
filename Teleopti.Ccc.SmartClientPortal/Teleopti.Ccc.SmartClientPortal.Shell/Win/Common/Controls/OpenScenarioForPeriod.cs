@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					_setting = new PersonalSettingDataRepository(uow).FindValueByKey(_openMode.SettingName, new OpenScenarioForPeriodSetting());
-					_scenarios = new ScenarioRepository(uow).FindAllSorted();
+					_scenarios = ScenarioRepository.DONT_USE_CTOR(uow).FindAllSorted();
 				}
 			}
 			catch (DataSourceException dataSourceException)
