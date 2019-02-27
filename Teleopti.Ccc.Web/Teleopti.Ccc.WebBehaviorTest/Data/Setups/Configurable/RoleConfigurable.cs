@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AccessToSite))
 			{
-				var siteRepository = new SiteRepository(currentUnitOfWork);
+				var siteRepository = SiteRepository.DONT_USE_CTOR(currentUnitOfWork);
 				AccessToSite.Split(',')
 					.Select(s => siteRepository.FindSiteByDescriptionName(s.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableSite);

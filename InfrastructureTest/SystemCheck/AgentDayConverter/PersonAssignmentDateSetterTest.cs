@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDateForResettedPersonAssignment()
 		{
-			var paRep = new PersonAssignmentRepository(CurrUnitOfWork);
+			var paRep = PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldNotTouchAssignmentIfNotRestoreDate()
 		{
-			var paRep = new PersonAssignmentRepository(CurrUnitOfWork);
+			var paRep = PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldNotConvertWrongPerson()
 		{
-			var paRep = new PersonAssignmentRepository(CurrUnitOfWork);
+			var paRep = PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 
 			var pa = createAndStoreAssignment(start);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDayWhenTimeZoneIsCrazy()
 		{
-			var paRep = new PersonAssignmentRepository(CurrUnitOfWork);
+			var paRep = PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 
 			var pa = createAndStoreAssignment(start);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var versionBefore = pa.Version;
 			new PersonAssignmentDateSetter().ExecutePersonAssignmentSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
-			new PersonAssignmentRepository(CurrUnitOfWork).Get(pa.Id.Value).Version
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Get(pa.Id.Value).Version
 			                                          .Should().Be.EqualTo(versionBefore + 1);
 		}
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			PersistAndRemoveFromUnitOfWork(pa.MainActivities().First().Payload);
 			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(pa);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(pa);
 			Session.Flush();
 			Session.Clear();
 			return pa;

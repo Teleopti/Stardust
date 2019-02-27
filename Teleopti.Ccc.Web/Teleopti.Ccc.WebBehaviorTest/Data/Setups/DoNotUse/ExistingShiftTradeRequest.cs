@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
 			var currentAuthorization = new FullPermission();
-			var personAssignmentRepository = new PersonAssignmentRepository(uow);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(uow);
 			var personAbsenceRepository = new PersonAbsenceRepository(uow);
 			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(uow);
 			var noteRepository = new NoteRepository(uow);

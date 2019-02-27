@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var uowFactory = CurrentUnitOfWorkFactory.Make();
 			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
-			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
 			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);

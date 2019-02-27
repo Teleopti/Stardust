@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var assignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			var assignment = assignmentRepository.Find(new List<IPerson> {person}, new DateOnlyPeriod(_theDateOnly, _theDateOnly), _scenario).First();
 			
 			assignmentRepository.Remove(assignment);

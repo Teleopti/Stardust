@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 			}
 
-			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var assignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(x => x.Description.Name == Scenario);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(StartTime));
 			personAssignment.SetShiftCategory(shiftCategory);

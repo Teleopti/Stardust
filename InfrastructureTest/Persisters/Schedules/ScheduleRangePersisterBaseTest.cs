@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangePersister CreateTarget()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
 			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			{
 				ReassociateDataFor(Person);
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangeConflictCollector ConflictCollector()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
 			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);

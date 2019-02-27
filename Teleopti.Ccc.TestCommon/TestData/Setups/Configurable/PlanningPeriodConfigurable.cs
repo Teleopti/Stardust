@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				var scenario = DefaultScenario.Scenario;
 				var activity = new ActivityRepository(currentUnitOfWork, null, null).LoadAll().FirstOrDefault();
 				var perons = personRepository.FindPeopleInPlanningGroup(planningGroup, Period.Range);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				foreach (var person in perons)
 				{
 					foreach (var date in Period.Range.DayCollection())

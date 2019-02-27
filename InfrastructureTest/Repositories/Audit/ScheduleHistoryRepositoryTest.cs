@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, new DateTimePeriod(Today.AddHours(23), Today.AddHours(30)));
-				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Add(PersonAssignment);
+				PersonAssignmentRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).Add(PersonAssignment);
 				uow.PersistAll();
 			}
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Remove(PersonAssignment);
+				PersonAssignmentRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).Remove(PersonAssignment);
 				uow.PersistAll();
 			}
 
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, new DateTimePeriod(Today.AddHours(23), Today.AddHours(30)));
-				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Add(PersonAssignment);
+				PersonAssignmentRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).Add(PersonAssignment);
 
 				new PersonAbsenceRepository(new ThisUnitOfWork(uow)).Add(newAbsence);
 				uow.PersistAll();

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			using (var uow = uowFactory.CreateAndOpenUnitOfWork())
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);

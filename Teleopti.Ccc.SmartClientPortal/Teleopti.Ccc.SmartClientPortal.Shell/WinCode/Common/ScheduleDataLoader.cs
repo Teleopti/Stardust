@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			IList<IPerson> persons = new List<IPerson> { person };
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 			var noteRepository = new NoteRepository(currentUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);

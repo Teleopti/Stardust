@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
         {
             _unitOfWork = value;
 
-            _siteRepository = new SiteRepository(_unitOfWork);
+            _siteRepository = SiteRepository.DONT_USE_CTOR(_unitOfWork);
             _teamRepository = new TeamRepository(_unitOfWork);
         }
 

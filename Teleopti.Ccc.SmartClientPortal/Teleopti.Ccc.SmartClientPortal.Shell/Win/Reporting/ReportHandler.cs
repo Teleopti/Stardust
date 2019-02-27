@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			unitOfWork.Reassociate(persons);
 
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 			var noteRepository = new NoteRepository(currentUnitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);

@@ -3880,7 +3880,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var currentAuthorization = CurrentAuthorization.Make();
 			var currentUnitOfWork = new FromFactory(() => uowFactory);
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
-				new PersonAssignmentRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
+				PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
 				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
 				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
 				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),

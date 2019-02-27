@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var ass2 = new PersonAssignment(per1, scenario, new DateOnly(2000,1,1));
 			try
 			{
-				var rep = new PersonAssignmentRepository(CurrUnitOfWork);
+				var rep = PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork);
 				rep.Add(ass1);
 				rep.Add(ass2);
 				UnitOfWork.PersistAll();

@@ -819,7 +819,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			ICollection<SiteDto> sitesOnBusinessUnit = new Collection<SiteDto>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ISiteRepository repository = new SiteRepository(unitOfWork);
+				ISiteRepository repository = SiteRepository.DONT_USE_CTOR(unitOfWork);
 				var sites = repository.LoadAll();
 
 				foreach (ISite site in sites)

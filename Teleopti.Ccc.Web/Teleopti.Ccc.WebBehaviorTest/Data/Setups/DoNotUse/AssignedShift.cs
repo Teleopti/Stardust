@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(StartTime,SwedishCultureInfo)));
 		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(EndTime,SwedishCultureInfo)));
 
-			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var assignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 
 			IActivity activity;
 			var activityRepository = new ActivityRepository(unitOfWork, null, null);

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<ISite> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SiteRepository(currentUnitOfWork);
+            return SiteRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISite site = new Site(name);
             PersistAndRemoveFromUnitOfWork(site);
 
-            var sites = new SiteRepository(UnitOfWork).FindSiteByDescriptionName(name).ToList();
+            var sites = SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSiteByDescriptionName(name).ToList();
             Assert.AreEqual(name, sites[0].Description.Name);
         }
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = new Site(RandomName.Make() + name + RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(site);
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesContain(name, 20);
+			var loaded = SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSitesContain(name, 20);
 
 			loaded.Should().Have.SameValuesAs(site);
 		}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = new Site(RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(site);
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesContain(RandomName.Make(), 20);
+			var loaded = SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSitesContain(RandomName.Make(), 20);
 
 			loaded.Should().Be.Empty();
 		}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(new Site(name));
 			PersistAndRemoveFromUnitOfWork(new Site(name));
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesContain(name, maxHits);
+			var loaded = SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSitesContain(name, maxHits);
 
 			loaded.Count().Should().Be.EqualTo(maxHits);
 		}
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-				new SiteRepository(UnitOfWork).FindSitesContain(RandomName.Make(), 0);
+				SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSitesContain(RandomName.Make(), 0);
 
 				var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 				(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    new TeamRepository(UnitOfWork).Remove(team);
 		    PersistAndRemoveFromUnitOfWork(team);
 
-		    var loaded = new SiteRepository(UnitOfWork).FindSiteByDescriptionName(name);
+		    var loaded = SiteRepository.DONT_USE_CTOR(UnitOfWork).FindSiteByDescriptionName(name);
 		    loaded.Single().TeamCollection.Count.Should().Be(0);
 	    }
 
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site1);
 			PersistAndRemoveFromUnitOfWork(site2);
 
-			var sites = new SiteRepository(UnitOfWork).LoadAllOrderByName().ToList();
+			var sites = SiteRepository.DONT_USE_CTOR(UnitOfWork).LoadAllOrderByName().ToList();
 			Assert.AreEqual(2, sites.Count);
 			Assert.AreEqual(name1, sites[0].Description.Name);
 			Assert.AreEqual(name2, sites[1].Description.Name);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site2OpenHour1);
 			PersistAndRemoveFromUnitOfWork(site2OpenHour2);
 
-			var sites = new SiteRepository(UnitOfWork).LoadAllOrderByName().ToList();
+			var sites = SiteRepository.DONT_USE_CTOR(UnitOfWork).LoadAllOrderByName().ToList();
 			Assert.AreEqual(2, sites.Count);
 			Assert.AreEqual(name1, sites[0].Description.Name);
 			Assert.AreEqual(name2, sites[1].Description.Name);

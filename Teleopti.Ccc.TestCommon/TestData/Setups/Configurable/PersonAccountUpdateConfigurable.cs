@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var repository = new PersonAbsenceAccountRepository(unitOfWork);
-			var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(unitOfWork);
 			var noteRepository = new NoteRepository(unitOfWork);
 			var publicNoteRepository = new PublicNoteRepository(unitOfWork);

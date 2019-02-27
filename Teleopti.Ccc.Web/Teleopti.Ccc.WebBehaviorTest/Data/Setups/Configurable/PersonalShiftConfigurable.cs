@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(person,
 				scenario, activity, new DateTimePeriod(startTimeUtc, endTimeUtc));
-			var repository = new PersonAssignmentRepository(unitOfWork);
+			var repository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			repository.Add(assignment);
 		}
 	}

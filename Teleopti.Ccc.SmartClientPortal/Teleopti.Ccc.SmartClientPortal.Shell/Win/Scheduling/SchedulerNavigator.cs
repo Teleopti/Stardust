@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnitId.GetValueOrDefault());
 			using (uow.DisableFilter(QueryFilter.Deleted))
 			{
-				new SiteRepository(uow).LoadAll();
+				SiteRepository.DONT_USE_CTOR(uow).LoadAll();
 				new TeamRepository(uow).LoadAll();
 			}
 			

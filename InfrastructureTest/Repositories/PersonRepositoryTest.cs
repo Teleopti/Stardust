@@ -1381,7 +1381,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
 																	scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
@@ -1409,7 +1409,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0], scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
 			var buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
@@ -1443,7 +1443,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
 																	scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
 			Assert.AreEqual(1, target.NumberOfActiveAgents());
@@ -1480,7 +1480,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
 			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(p,
 				scenarioNew, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(assNew);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(assNew);
 			Session.Flush();
 		}
 

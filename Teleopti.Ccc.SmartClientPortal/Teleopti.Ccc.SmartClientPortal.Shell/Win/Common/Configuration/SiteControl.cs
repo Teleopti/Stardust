@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			_unitOfWork = value;
-			_presenter = new SitePresenter(this, new SiteRepository(_unitOfWork));
+			_presenter = new SitePresenter(this, SiteRepository.DONT_USE_CTOR(_unitOfWork));
 		}
 
 		public void Persist()

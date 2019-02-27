@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadSites()
 		{
-			var repSite = new SiteRepository(_unitOfWork);
+			var repSite = SiteRepository.DONT_USE_CTOR(_unitOfWork);
 			var lst = repSite.LoadAll();
 			comboBoxSite.Sorted = false;
 			comboBoxSite.DisplayMember = "Description";

@@ -602,7 +602,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var currentAuthorization = CurrentAuthorization.Make();
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
@@ -1496,7 +1496,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 						new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
 						new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
 						),
-					new SiteRepository(uow)
+					SiteRepository.DONT_USE_CTOR(uow)
 					);
 
 				var permissionHolders = permissionsResolver.ResolvePermission(DateOnly.Today, UnitOfWorkFactory.Current);

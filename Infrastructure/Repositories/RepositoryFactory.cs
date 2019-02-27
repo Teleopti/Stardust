@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISiteRepository CreateSiteRepository(IUnitOfWork unitOfWork)
 		{
-			return new SiteRepository(unitOfWork);
+			return SiteRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPayrollExportRepository CreatePayrollExportRepository(IUnitOfWork unitOfWork)

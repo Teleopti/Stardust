@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				repository.Add(DayOff);
 			}
 
-			var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			var ass = new PersonAssignment(person, Scenario, new DateOnly(DateTime.Parse(Date)));
 			ass.SetDayOff(DayOff);
 			personAssignmentRepository.Add(ass);

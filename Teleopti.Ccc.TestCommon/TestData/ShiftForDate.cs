@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 		{
 			var dateUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
 
-			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var assignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));

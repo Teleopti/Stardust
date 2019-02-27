@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var emptyPersonAssignment = new PersonAssignment(person, scenario, new DateOnly(Date));
 			emptyPersonAssignment.Clear();
 
-			var repository = new PersonAssignmentRepository(unitOfWork);
+			var repository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			
 			repository.Add(emptyPersonAssignment);
 		}

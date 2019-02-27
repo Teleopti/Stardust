@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAssignmentRepository(new ThisUnitOfWork(uow));
+				var rep = PersonAssignmentRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
 				rep.Remove(PersonAssignment);
 				uow.PersistAll();
 			}
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			//remove assignment
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAssignmentRepository(new ThisUnitOfWork(uow));
+				var rep = PersonAssignmentRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
 				rep.Remove(PersonAssignment);
 				uow.PersistAll();
 			}

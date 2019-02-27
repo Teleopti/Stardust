@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			//setup
 			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			var site = SiteFactory.CreateSimpleSite();
-			new SiteRepository(new ThisUnitOfWork(uow1)).Add(site);
+			SiteRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(site);
 			uow1.PersistAll();
 			var team = TeamFactory.CreateSimpleTeam(".");
 			team.Site = site;

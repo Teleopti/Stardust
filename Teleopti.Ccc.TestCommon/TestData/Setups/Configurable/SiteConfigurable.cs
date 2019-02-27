@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var siteRepository = new SiteRepository(currentUnitOfWork);
+			var siteRepository = SiteRepository.DONT_USE_CTOR(currentUnitOfWork);
 			if (_createSite)
 			{
 				if (Name == null)
