@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var wl = new Workload(skill) {Name = WorkloadName};
 			if (QueueSourceName != null)
 			{
-				var qs = new QueueSourceRepository(currentUnitOfWork).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
+				var qs = QueueSourceRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
 				wl.AddQueueSource(qs);
 			}
 			foreach (var dayTemplate in wl.TemplateWeekCollection)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				    dayTemplate.Value.ChangeOpenHours(new List<TimePeriod>(){OpenHourPeriod});
 				}
 			}
-			new WorkloadRepository(currentUnitOfWork).Add(wl);
+			WorkloadRepository.DONT_USE_CTOR(currentUnitOfWork).Add(wl);
 		}
 
 	}

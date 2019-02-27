@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IPersonRequest> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PersonRequestRepository(currentUnitOfWork);
+			return PersonRequestRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		protected override IPersonRequest CreateAggregateWithCorrectBusinessUnit()

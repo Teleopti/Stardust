@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 			IList<DayOfWeek> weekDays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
 
 			var current = new FromFactory(() => UnitOfWorkFactory.Current);
-			IStatisticHelper statisticsHelper = new StatisticHelper(new RepositoryFactory(), new SkillDayRepository(current),
-				new ValidatedVolumeDayRepository(current));
+			IStatisticHelper statisticsHelper = new StatisticHelper(new RepositoryFactory(), SkillDayRepository.DONT_USE_CTOR_asdasd(current),
+				ValidatedVolumeDayRepository.DONT_USE_CTOR(current));
 
 			for (int i = 0; i < weekDays.Count; i++)
 			{

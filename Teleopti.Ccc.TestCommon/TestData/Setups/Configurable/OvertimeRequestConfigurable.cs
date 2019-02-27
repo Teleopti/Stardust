@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var personRequest = new PersonRequest(person, overtimeRequest) { Subject = Subject };
 			personRequest.TrySetMessage(Message);
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 
 			if (Status == "AutoDenied")
 			{

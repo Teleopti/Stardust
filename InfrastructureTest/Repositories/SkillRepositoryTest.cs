@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Workload wl3 = new Workload(skill1);
             Session.Save(wl3);
-            new WorkloadRepository(UnitOfWork).Remove(wl3);
+            WorkloadRepository.DONT_USE_CTOR(UnitOfWork).Remove(wl3);
             Session.Flush();
 
             SkillRepository rep = SkillRepository.DONT_USE_CTOR(UnitOfWork);

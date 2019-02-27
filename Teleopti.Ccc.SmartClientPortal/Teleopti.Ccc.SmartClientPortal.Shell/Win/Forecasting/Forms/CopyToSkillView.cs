@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
             Presenter = new CopyToSkillPresenter(this, model,
                                                  new CopyToSkillCommand(this, model,
-                                                                        new WorkloadRepository(currentUnitOfWork),
+                                                                        WorkloadRepository.DONT_USE_CTOR(currentUnitOfWork),
                                                                         UnitOfWorkFactory.Current),
                                                  SkillRepository.DONT_USE_CTOR(currentUnitOfWork),
                                                  UnitOfWorkFactory.Current);

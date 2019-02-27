@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IScheduleTag> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ScheduleTagRepository(currentUnitOfWork);
+            return ScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(tag);
 			PersistAndRemoveFromUnitOfWork(tagFirst);
 
-			var repository = new ScheduleTagRepository(UnitOfWork);
+			var repository = ScheduleTagRepository.DONT_USE_CTOR(UnitOfWork);
 			repository.FindAllScheduleTags()[0].Description.Should().Be.EqualTo("A");
 		}
     }

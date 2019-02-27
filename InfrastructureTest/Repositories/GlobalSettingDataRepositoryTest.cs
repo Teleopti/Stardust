@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		  public void SaveGlobalSettingForTwoBU()
 		  {
 			  var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
-			  var personRepository = new PersonRepository( new ThisUnitOfWork(UnitOfWork), null, null);
+			  var personRepository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			  const string key = "SMS";
 
 			  var businessUnit1 = BusinessUnitFactory.CreateSimpleBusinessUnit("BU1");

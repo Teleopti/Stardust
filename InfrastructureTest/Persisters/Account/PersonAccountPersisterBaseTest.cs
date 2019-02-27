@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
 			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);
-			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
+			var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(currUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);
-			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currUnitOfWork);
+			var studentAvailabilityDayRepository = StudentAvailabilityDayRepository.DONT_USE_CTOR(currUnitOfWork);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currUnitOfWork);
 			Target = new PersonAccountPersister(
 				uowFactory,
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 							preferenceDayRepository,
 							studentAvailabilityDayRepository,
 							PersonAvailabilityRepository.DONT_USE_CTOR(currUnitOfWork),
-							new PersonRotationRepository(currUnitOfWork),
+							PersonRotationRepository.DONT_USE_CTOR(currUnitOfWork),
 							overtimeAvailabilityRepository,
 							new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 							new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,

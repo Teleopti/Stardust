@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				}
 			}
 
-			var scoreRep = new ScorecardRepository(_unitOfWork);
+			var scoreRep = ScorecardRepository.DONT_USE_CTOR(_unitOfWork);
 			scoreRep.Remove(SelectedScorecard);
 
 			_scorecardList.Remove(SelectedScorecard);
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadScorecards()
 		{
-				var scoreRep = new ScorecardRepository(_unitOfWork);
+				var scoreRep = ScorecardRepository.DONT_USE_CTOR(_unitOfWork);
 				_scorecardList.Clear();
 				_scorecardList.AddRange(scoreRep.LoadAll().OrderBy(p => p.Name).ToList());
 		   
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			var ret = new Scorecard();
 			var description = PageHelper.CreateNewName(_scorecardList, "Name", Resources.NewScorecard);
 			ret.Name = description.Name;
-			var scoreRep = new ScorecardRepository(_unitOfWork);
+			var scoreRep = ScorecardRepository.DONT_USE_CTOR(_unitOfWork);
 			scoreRep.Add(ret);
 			return ret;
 		}

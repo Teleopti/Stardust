@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var item = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(item);
 
-            var foundItem = new StudentAvailabilityDayRepository(UnitOfWork).LoadAggregate(item.Id.GetValueOrDefault());
+            var foundItem = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).LoadAggregate(item.Id.GetValueOrDefault());
             Assert.AreEqual(item, foundItem);
         }
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2009, 2, 3), _person, true));
             PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2009, 3, 2), _person, false));
             IEnumerable<IPerson> persons = new Collection<IPerson> { _person };
-            IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(period, persons);
+            IList<IStudentAvailabilityDay> days = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).Find(period, persons);
             Assert.AreEqual(2, days.Count);
             Assert.IsTrue(days[1].NotAvailable);
             Assert.IsFalse(days[0].NotAvailable);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			
 			// load again
-			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(dateOnly, _person);
+			IList<IStudentAvailabilityDay> days = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).Find(dateOnly, _person);
 
 			var loadedStudentAvailabilityDay = days[0];
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(loadedStudentAvailabilityDay);
 
 
-			IList<IStudentAvailabilityDay> daysAgain = new StudentAvailabilityDayRepository(UnitOfWork).Find(dateOnly, _person);
+			IList<IStudentAvailabilityDay> daysAgain = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).Find(dateOnly, _person);
 			var loadedStudentAvailabilityDayAgain = daysAgain[0];
 
 			var restrictionAgain = loadedStudentAvailabilityDayAgain.RestrictionCollection[0];
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2009, 2, 3), _person, true));
             PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2009, 3, 2), _person, false));
             IEnumerable<IPerson> persons = new Collection<IPerson>();
-            IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(period, persons);
+            IList<IStudentAvailabilityDay> days = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).Find(period, persons);
             Assert.AreEqual(0, days.Count);
         }
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(date, person2, false));
             PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(date.AddDays(1), _person, false));
 
-            IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(date, _person);
+            IList<IStudentAvailabilityDay> days = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).Find(date, _person);
             Assert.AreEqual(1, days.Count);
 
             Assert.IsTrue(days[0].NotAvailable);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IStudentAvailabilityDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new StudentAvailabilityDayRepository(currentUnitOfWork);
+            return StudentAvailabilityDayRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
 		[Test]
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2013, 2, 2), _person, false));
 			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(new DateOnly(2013, 3, 2), _person, false));
 
-			var days = new StudentAvailabilityDayRepository(UnitOfWork).FindNewerThan(newerThan);
+			var days = StudentAvailabilityDayRepository.DONT_USE_CTOR(UnitOfWork).FindNewerThan(newerThan);
 			Assert.AreEqual(3, days.Count);
 			LazyLoadingManager.IsInitialized(days[0].RestrictionCollection.First().StartTimeLimitation).Should().Be.True();
 		}

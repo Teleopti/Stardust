@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			IShiftCategory shiftCategory;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = ShiftCategoryRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			}
 			else
 			{
 				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-				new ShiftCategoryRepository(currentUnitOfWork).Add(shiftCategory);
+				ShiftCategoryRepository.DONT_USE_CTOR(currentUnitOfWork).Add(shiftCategory);
 			}
 
 			return new PreferenceRestriction

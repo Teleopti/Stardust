@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IRotation> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RotationRepository(currentUnitOfWork.Current());
+            return RotationRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
 
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(rotation);
 
-            IList<IRotation> res = new List<IRotation>(new RotationRepository(UnitOfWork).LoadAllRotationsWithHierarchyData());
+            IList<IRotation> res = new List<IRotation>(RotationRepository.DONT_USE_CTOR(UnitOfWork).LoadAllRotationsWithHierarchyData());
 
             Assert.AreEqual(1, res.Count);
             Assert.AreEqual(21, res[0].RotationDays.Count);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(rotation);
 
-            IList<IRotation> res = new List<IRotation>(new RotationRepository(UnitOfWork).LoadAllRotationsWithDays());
+            IList<IRotation> res = new List<IRotation>(RotationRepository.DONT_USE_CTOR(UnitOfWork).LoadAllRotationsWithDays());
 
             Assert.AreEqual(1, res.Count);
             Assert.AreEqual(21, res[0].RotationDays.Count);
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var aggregate = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(aggregate);
 
-            var loaded = new RotationRepository(UnitOfWork).LoadAggregate(aggregate.Id.Value);
+            var loaded = RotationRepository.DONT_USE_CTOR(UnitOfWork).LoadAggregate(aggregate.Id.Value);
             Assert.IsNotNull(loaded);
         }
     }

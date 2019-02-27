@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var rep = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
+                var rep = ValidatedVolumeDayRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
                 return rep.FindLastValidatedDay(workload);
             }
         }
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var rep = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
+                var rep = ValidatedVolumeDayRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
                 var validatedVolumeDays = rep.FindRange(dateTimePeriod, workload);
                 if (validatedVolumeDays == null || workloadDaysToValidate == null)
                     return new List<IValidatedVolumeDay>(0);
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
         private static void SaveValidatedVolumeDays(IEnumerable<IValidatedVolumeDay> validatedVolumeDays, IUnitOfWork uow)
         {
-            var rep = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
+            var rep = ValidatedVolumeDayRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
             foreach (var validatedVolumeDay in validatedVolumeDays)
             {
                 rep.Add(validatedVolumeDay);
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
         private void SaveSkillDays(IEnumerable<ITaskOwner> workloadDays, IUnitOfWork uow)
         {
-            var rep = new SkillDayRepository(uow);
+            var rep = SkillDayRepository.DONT_USE_CTOR(uow);
             foreach (var taskOwner in workloadDays)
             {
                 rep.Add((ISkillDay)((IWorkloadDay)taskOwner).Parent); //todo: why dont we use skilldays instead?

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			PersonRequest = new PersonRequest(person, AbsenceRequest) {Subject = "I need some vacation"};
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			PersonRequest.Pending();
 			PersonRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 			PersonRequest.Deny(_denyReason, new PersonRequestAuthorizationCheckerForTest(), null, denyOption);
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}

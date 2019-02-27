@@ -12,23 +12,28 @@ using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Property = NHibernate.Criterion.Property;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SkillDayRepository : Repository<ISkillDay>, ISkillDayRepository, IFillWithEmptySkillDays
 	{
-		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
-
-		public SkillDayRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
+		public static SkillDayRepository DONT_USE_CTOR_asdasd(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new SkillDayRepository(currentUnitOfWork, null, null);
 		}
 
-		public SkillDayRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static SkillDayRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new SkillDayRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
+
+		public SkillDayRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

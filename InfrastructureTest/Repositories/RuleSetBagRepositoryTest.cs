@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IRuleSetBag> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RuleSetBagRepository(currentUnitOfWork);
+            return RuleSetBagRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             var bag = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(bag);
-            var bags = new RuleSetBagRepository(UnitOfWork).LoadAllWithRuleSets();
+            var bags = RuleSetBagRepository.DONT_USE_CTOR(UnitOfWork).LoadAllWithRuleSets();
             Assert.That(bags.Count(),Is.EqualTo(1));
             Assert.That(bags.First().RuleSetCollection.Count,Is.EqualTo(1));
         }
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var bag = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(bag);
 
-			var bags = new RuleSetBagRepository(UnitOfWork).FindWithRuleSetsAndAccessibility(bag.Id.GetValueOrDefault());
+			var bags = RuleSetBagRepository.DONT_USE_CTOR(UnitOfWork).FindWithRuleSetsAndAccessibility(bag.Id.GetValueOrDefault());
 			Assert.That(bags.RuleSetCollection.Count, Is.EqualTo(1));
 			Assert.That(LazyLoadingManager.IsInitialized(bags.RuleSetCollection[0].AccessibilityDates), Is.True);
 			Assert.That(LazyLoadingManager.IsInitialized(bags.RuleSetCollection[0].AccessibilityDaysOfWeek), Is.True);

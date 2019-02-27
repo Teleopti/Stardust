@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 							studentAvailabilityRestriction
 						}));
 
-			var studentAvailabilityRepository = new StudentAvailabilityDayRepository(unitOfWork);
+			var studentAvailabilityRepository = StudentAvailabilityDayRepository.DONT_USE_CTOR(unitOfWork);
 			studentAvailabilityRepository.Add(studentAvailabilityDay);
 		}
 	}

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			defaultScenario.EnableReporting = true;
 
 			var date = new DateOnly(_date);
-			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR_asdasd(currentUnitOfWork);
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(defaultScenario, date, 5, new Tuple<TimePeriod, double>(openHours, 5));
 			skillDayRepository.Add(skillDay);
 			var workloadDay = skillDay.WorkloadDayCollection[0];

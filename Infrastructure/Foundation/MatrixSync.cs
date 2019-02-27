@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     {
         public static int SynchronizeQueueSources(IUnitOfWork uow, IList<IQueueSource> matrixQueues)
         {
-            IQueueSourceRepository rep = new QueueSourceRepository(uow);
+            IQueueSourceRepository rep = QueueSourceRepository.DONT_USE_CTOR(uow);
             var matrixSync = new MatrixRaptorQueueSynchronization(rep);
             return matrixSync.SynchronizeQueues(matrixQueues);
         }

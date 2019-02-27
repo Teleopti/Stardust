@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (!string.IsNullOrEmpty(BusinessUnit))
 				ShiftCategory.SetBusinessUnit(BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit));
 
-			var shiftCategoryRepository = new ShiftCategoryRepository(currentUnitOfWork);
+			var shiftCategoryRepository = ShiftCategoryRepository.DONT_USE_CTOR(currentUnitOfWork);
 			shiftCategoryRepository.Add(ShiftCategory);
 		}
 

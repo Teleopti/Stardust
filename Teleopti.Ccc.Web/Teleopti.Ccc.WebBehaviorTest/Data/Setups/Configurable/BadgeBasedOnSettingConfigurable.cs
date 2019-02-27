@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 			var totalBadgeAmount = (Gold * goldToSilverBadgeRate + Silver) * silverToBronzeBadgeRate + Bronze;
 
-			var rep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
+			var rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null);
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);
 

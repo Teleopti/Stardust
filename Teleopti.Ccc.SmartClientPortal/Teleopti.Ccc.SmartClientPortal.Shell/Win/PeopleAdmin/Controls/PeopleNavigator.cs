@@ -169,9 +169,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
-				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+				var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
-				var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+				var studentAvailabilityDayRepository = StudentAvailabilityDayRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
 				ITraceableRefreshService service = new TraceableRefreshService(_currentScenario,
 					new ScheduleStorage(currentUnitOfWork, personAssignmentRepository,
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 						publicNoteRepository, preferenceDayRepository,
 						studentAvailabilityDayRepository,
 						PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
-						new PersonRotationRepository(currentUnitOfWork),
+						PersonRotationRepository.DONT_USE_CTOR(currentUnitOfWork),
 						overtimeAvailabilityRepository,
 						new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 						new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
@@ -289,9 +289,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
-				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+				var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
-				var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+				var studentAvailabilityDayRepository = StudentAvailabilityDayRepository.DONT_USE_CTOR(currentUnitOfWork);
 				var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
 				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario,
 					new ScheduleStorage(currentUnitOfWork, personAssignmentRepository,
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 						publicNoteRepository, preferenceDayRepository,
 						studentAvailabilityDayRepository,
 						PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork),
-						new PersonRotationRepository(currentUnitOfWork),
+						PersonRotationRepository.DONT_USE_CTOR(currentUnitOfWork),
 						overtimeAvailabilityRepository,
 						new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 						new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,

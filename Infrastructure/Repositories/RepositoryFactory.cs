@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null);
+			return PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null);
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IWorkloadRepository CreateWorkloadRepository(IUnitOfWork unitOfWork)
 		{
-			return new WorkloadRepository(unitOfWork);
+			return WorkloadRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public ISkillDayRepository CreateSkillDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new SkillDayRepository(unitOfWork);
+			return SkillDayRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
@@ -159,27 +159,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IStudentAvailabilityDayRepository CreateStudentAvailabilityDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new StudentAvailabilityDayRepository(unitOfWork);
+			return StudentAvailabilityDayRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		public IWorkShiftRuleSetRepository CreateWorkShiftRuleSetRepository(IUnitOfWork unitOfWork)
 		{
-			return new WorkShiftRuleSetRepository(unitOfWork);
+			return WorkShiftRuleSetRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IRuleSetBagRepository CreateRuleSetBagRepository(IUnitOfWork unitOfWork)
 		{
-			return new RuleSetBagRepository(unitOfWork);
+			return RuleSetBagRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPersonRequestRepository CreatePersonRequestRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRequestRepository(unitOfWork);
+			return PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IShiftCategoryRepository CreateShiftCategoryRepository(IUnitOfWork unitOfWork)
 		{
-			return new ShiftCategoryRepository(unitOfWork);
+			return ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
@@ -224,12 +224,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPushMessageRepository CreatePushMessageRepository(IUnitOfWork unitOfWork)
 		{
-			return new PushMessageRepository(unitOfWork);
+			return PushMessageRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPushMessageDialogueRepository CreatePushMessageDialogueRepository(IUnitOfWork unitOfWork)
 		{
-			return new PushMessageDialogueRepository(unitOfWork);
+			return PushMessageDialogueRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ISettingDataRepository CreateGlobalSettingDataRepository(IUnitOfWork unitOfWork)
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IWorkflowControlSetRepository CreateWorkflowControlSetRepository(IUnitOfWork unitOfWork)
 		{
-			return new WorkflowControlSetRepository(unitOfWork);
+			return WorkflowControlSetRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IExtendedPreferenceTemplateRepository CreateExtendedPreferenceTemplateRepository(IUnitOfWork unitOfWork)
