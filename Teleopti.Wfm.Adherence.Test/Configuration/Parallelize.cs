@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
+namespace Teleopti.Wfm.Adherence.Test.Configuration
 {
 	[SetUpFixture]
 	[Parallelizable(ParallelScope.Fixtures)]
