@@ -393,7 +393,7 @@
 						});
 					});
 				});
-				sched.IsSelected = personInfo[sched.PersonId].Checked || svc.isAllProjectionSelected(sched, date);
+				sched.IsSelected = personInfo[sched.PersonId].Checked; 
 			}, this);
 		}
 
