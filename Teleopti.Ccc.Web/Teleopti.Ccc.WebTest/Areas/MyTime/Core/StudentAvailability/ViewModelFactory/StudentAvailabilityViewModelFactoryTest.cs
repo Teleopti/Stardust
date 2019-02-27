@@ -10,10 +10,14 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 
@@ -23,29 +27,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 	[TestFixture]
 	public class StudentAvailabilityViewModelFactoryTest
 	{
+		private ILoggedOnUser _loggedOnUser = new FakeLoggedOnUser();
+
 		[Test]
 		public void ShoudCreateViewModelByMapping()
 		{
 			var scheduleProvider = new FakeScheduleProvider();
-			var loggedOnUser = new FakeLoggedOnUser();
-			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(loggedOnUser.CurrentUser(),new DateOnly(2000, 1, 1));
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_loggedOnUser.CurrentUser(),new DateOnly(2000, 1, 1));
 			var now = new Now();
 			var target =
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider),
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
-						loggedOnUser, now),
+						new VirtualSchedulePeriodProvider(_loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
+						_loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
 							new WorkTimeMinMaxCalculator(
 								new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))),
 								new WorkTimeMinMaxRestrictionCreator(
 									new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner()))),
-							loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
+							_loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
 					new StudentAvailabilityDayViewModelMapper(
-						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider)),
-					new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider));
+						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider), new BankHolidayCalendarViewModelMapper()),
+					new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider),
+					createBankHolidayCalendarProvider());
 			var date = DateOnly.Today;
 			
 			target.CreateViewModel(date).Should().Not.Be.Null();
@@ -56,25 +62,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 		{
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			var scheduleProvider = new FakeScheduleProvider();
-			var loggedOnUser = new FakeLoggedOnUser();
-			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(loggedOnUser.CurrentUser(), new DateOnly(2000, 1, 1));
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_loggedOnUser.CurrentUser(), new DateOnly(2000, 1, 1));
 			var now = new Now();
 			var target =
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						studentAvailabilityProvider,
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
-						loggedOnUser, now),
+						new VirtualSchedulePeriodProvider(_loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
+						_loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
 							new WorkTimeMinMaxCalculator(
 								new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))),
 								new WorkTimeMinMaxRestrictionCreator(
 									new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner()))),
-							loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
+							_loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
 					new StudentAvailabilityDayViewModelMapper(
-						studentAvailabilityProvider),
-					studentAvailabilityProvider);
+						studentAvailabilityProvider, new BankHolidayCalendarViewModelMapper()),
+					studentAvailabilityProvider, createBankHolidayCalendarProvider());
 			var date = DateOnly.Today;
 			var studentAvailabilityDay = new StudentAvailabilityDay(new Person(), date, new List<IStudentAvailabilityRestriction> {new StudentAvailabilityRestriction()});
 			
@@ -88,25 +93,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 		{
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			var scheduleProvider = new FakeScheduleProvider();
-			var loggedOnUser = new FakeLoggedOnUser();
-			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(loggedOnUser.CurrentUser(), new DateOnly(2000, 1, 1));
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_loggedOnUser.CurrentUser(), new DateOnly(2000, 1, 1));
 			var now = new Now();
 			var target =
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						studentAvailabilityProvider,
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
-						loggedOnUser, now),
+						new VirtualSchedulePeriodProvider(_loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
+						_loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
 							new WorkTimeMinMaxCalculator(
 								new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))),
 								new WorkTimeMinMaxRestrictionCreator(
 									new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner()))),
-							loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
+							_loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
 					new StudentAvailabilityDayViewModelMapper(
-						studentAvailabilityProvider),
-					studentAvailabilityProvider);
+						studentAvailabilityProvider, new BankHolidayCalendarViewModelMapper()),
+					studentAvailabilityProvider, createBankHolidayCalendarProvider());
 			var date = DateOnly.Today;
 			var studentAvailabilityDays = new List<StudentAvailabilityDay>
 			{
@@ -124,27 +128,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 		public void ShouldCreateFeedbackDayViewModelByMapping()
 		{
 			var scheduleProvider = new FakeScheduleProvider();
-			var loggedOnUser = new FakeLoggedOnUser();
-			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(loggedOnUser.CurrentUser(), new DateOnly(2000, 1, 1));
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_loggedOnUser.CurrentUser(), new DateOnly(2000, 1, 1));
 			var now = new Now();
 			var target =
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider),
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
-						loggedOnUser, now),
+						new VirtualSchedulePeriodProvider(_loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
+						_loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
 							new WorkTimeMinMaxCalculator(
 								new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))),
 								new WorkTimeMinMaxRestrictionCreator(
 									new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner()))),
-							loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
+							_loggedOnUser, scheduleProvider, new FakePersonRuleSetBagProvider())),
 					new StudentAvailabilityDayViewModelMapper(
-						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider)),
-					new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider));
+						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider), new BankHolidayCalendarViewModelMapper()),
+					new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider), createBankHolidayCalendarProvider());
 			
 			target.CreateDayFeedbackViewModel(DateOnly.Today).Should().Not.Be.Null();
+		}
+
+		private IBankHolidayCalendarProvider createBankHolidayCalendarProvider()
+		{
+			var bankHolidayRepository = new FakeBankHolidayCalendarRepository();
+			var bankHolidayDateRepository = new FakeBankHolidayDateRepository();
+			var bankHolidayCalendarSiteRepository = new FakeBankHolidayCalendarSiteRepository();
+			return new BankHolidayCalendarProvider(bankHolidayRepository, bankHolidayDateRepository, new BankHolidayModelMapper(), 
+				_loggedOnUser, bankHolidayCalendarSiteRepository);
 		}
 	}
 }

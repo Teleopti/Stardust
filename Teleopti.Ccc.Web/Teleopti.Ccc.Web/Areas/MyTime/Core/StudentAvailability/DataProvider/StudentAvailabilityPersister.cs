@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 				studentAvailabilityDay = _formMapper.Map(input);
 				_studentAvailabilityDayRepository.Add(studentAvailabilityDay);
 			}
-			return _modelMapper.Map(studentAvailabilityDay);
+			return _modelMapper.Map(studentAvailabilityDay, null);
 		}
 
 		public StudentAvailabilityDayViewModel Delete(DateOnly date)
