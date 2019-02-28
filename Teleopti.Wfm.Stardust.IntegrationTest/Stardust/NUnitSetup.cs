@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			IntegrationIoCTest.Setup(builder =>
 			{
-				builder.RegisterType<TestConfigReader>().As<IConfigReader>().SingleInstance();
+				//builder.RegisterType<FakeConfigReader>().As<IConfigReader>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 				builder.RegisterType<SyncAllEventPublisherWithStardust>().As<IEventPublisher>().SingleInstance();
 

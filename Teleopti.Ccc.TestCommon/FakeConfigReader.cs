@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -76,7 +77,10 @@ namespace Teleopti.Ccc.TestCommon
 			config.FakeSetting("CertificateDQ", ConfigurationManager.AppSettings["CertificateDQ"]);
 			config.FakeSetting("CertificateInverseQ", ConfigurationManager.AppSettings["CertificateInverseQ"]);
 			config.FakeSetting("CertificateD", ConfigurationManager.AppSettings["CertificateD"]);
-
+			config.FakeSetting("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeSetting("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
+			config.FakeSetting("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri);
+			config.FakeSetting("NumberOfNodes", "1");
 			return config;
 		}
 

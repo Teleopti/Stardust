@@ -162,7 +162,6 @@
     <Compile Include="Stardust\PayrollEndToEndTest.cs" />
     <Compile Include="Stardust\StardustManagerPingHelper.cs" />
     <Compile Include="Stardust\StardustTestAttribute.cs" />
-    <Compile Include="Stardust\TestConfigReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

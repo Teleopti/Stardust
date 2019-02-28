@@ -63,12 +63,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true; //ignoreInvalidCertificate
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader())
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(_configReader)
 			{
 				TeleoptiPrincipalForLegacy = true
 			});
 			_sharedContainer = new ContainerBuilder().Build();
-			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
+			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null, _configReader);
 			_sharedContainer.Resolve<IHangfireClientStarter>().Start();
 
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				Task.Run(() =>
 				{
-					var container = makeContainer(toggleManager, _sharedContainer);
+					var container = makeContainer(toggleManager, _sharedContainer, _configReader);
 					if (!toggleManager.IsEnabled(Toggles.Wfm_Payroll_SupportMultiDllPayrolls_75959))
 					{
 						var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
@@ -112,10 +112,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
+		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer, IConfigReader configReader)
 		{
 			var container = new ContainerBuilder().Build();
-			new ContainerConfiguration(container, toggleManager).Configure(sharedContainer);
+			new ContainerConfiguration(container, toggleManager).Configure(sharedContainer, configReader);
 			return container;
 		}
 
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var fixedNodeIp = _configReader.ReadValue("FixedNodeIp", "");
 
-			var iocArgs = new IocArgs(new ConfigReader())
+			var iocArgs = new IocArgs(_configReader)
 			{
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true,
 				TeleoptiPrincipalForLegacy = true

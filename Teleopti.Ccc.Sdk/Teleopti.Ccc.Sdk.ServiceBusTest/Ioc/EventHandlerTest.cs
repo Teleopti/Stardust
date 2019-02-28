@@ -13,12 +13,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Ioc
 	[TestFixture]
 	public class EventHandlerTest : IocRegistrationTest
 	{
-		[SetUp]
-		public void Setup()
-		{
-			
-		}
-
 		[Test]
 		public void ShouldResolveAllHandlers([Values("Customer", "RC")] string toggleMode)
 		{

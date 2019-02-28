@@ -1,12 +1,10 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using Autofac;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -30,7 +28,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IBusinessUnitRepository BusinessUnits;
 		public IHangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
-		public IConfigReader ConfigReader;
+		public FakeConfigReader ConfigReader;
 		public TestLog TestLog;
 
 		private static int lastPortUsed = 57000;
@@ -101,14 +99,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			AsSystem.Logon(InfraTestConfigReader.TenantName(), businessUnitId);
 
 			TestLog.Debug("Setting up ConfigValues..");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("MessageBroker");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("NumberOfNodes");
-
-			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
-			((TestConfigReader)ConfigReader).ConfigValues.Add("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri );
-			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
-			
+			ConfigReader = ConfigReader.FakeInfraTestConfig();
 		}
 
 		

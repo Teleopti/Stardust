@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
 			builder.RegisterType<Http>().SingleInstance();
-
-			//var container = builder.Build();
 			builder.Build();
 		}
 
