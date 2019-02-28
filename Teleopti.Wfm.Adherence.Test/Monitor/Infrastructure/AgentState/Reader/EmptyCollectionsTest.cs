@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
@@ -14,6 +15,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 	{
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldLoadAllWhenEmptyCollections()
@@ -21,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId
 			});
 

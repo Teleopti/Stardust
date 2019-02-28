@@ -20,9 +20,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 	{
 		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
-		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
-		public ICurrentBusinessUnit BusinessUnit;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldOrderByAlarmStartTimeForStatesInAlarm()
@@ -33,6 +32,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:02".Utc(),
@@ -40,6 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
@@ -61,17 +62,17 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		{
 			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			Persister.UpsertAssociation(new AssociationInfo
+			Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = person1,
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				FirstName = "Pierre",
 				LastName = "Baldi"
 			});
-			Persister.UpsertAssociation(new AssociationInfo
+			Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = person2,
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				FirstName = "Ashley",
 				LastName = "Andeen"
 			});
@@ -87,17 +88,17 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		{
 			var person1 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
-			Persister.UpsertAssociation(new AssociationInfo
+			Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = person1,
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				FirstName = "Pierre",
 				LastName = "Baldi"
 			});
-			Persister.UpsertAssociation(new AssociationInfo
+			Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = person2,
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				FirstName = "Ashley",
 				LastName = "Andeen"
 			});
@@ -114,18 +115,18 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var pierre = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f8");
 			var ashley = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 
-			Persister.UpsertAssociation(new AssociationInfo
+			Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = pierre,
-				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				FirstName = "Pierre",
 				LastName = "Baldi"
 			});
 
-			Persister.UpsertAssociation(new AssociationInfo
+			Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = ashley,
-				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				FirstName = "Ashley",
 				LastName = "Andeen"
 			});
@@ -147,12 +148,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteName = "aSite",
 				TeamName = "bTeam",
 				PersonId = person1
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteName = "aSite",
 				TeamName = "aTeam",
 				PersonId = person2
@@ -175,11 +178,13 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				StateName = "Phone"
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				StateName = "Lunch"
 			});
@@ -202,12 +207,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				StateName = "Lunch",
 				StateStartTime = "2017-11-03 11:15".Utc(),
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				StateName = "Email",
 				StateStartTime = "2017-11-03 11:30".Utc(),
@@ -231,12 +238,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				StateName = "Lunch",
 				AlarmStartTime = "2017-11-03 11:15".Utc(),
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				StateName = "Email",
 				AlarmStartTime = "2017-11-03 11:30".Utc(),
@@ -260,12 +269,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				StateName = "Lunch",
 				OutOfAdherenceStartTime = "2017-11-03 11:15".Utc(),
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				StateName = "Email",
 				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
@@ -289,12 +300,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				StateName = "Lunch",
 				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				StateName = "Email",
 				OutOfAdherenceStartTime = null,
@@ -318,12 +331,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				StateName = "Lunch",
 				OutOfAdherenceStartTime = "2017-11-03 11:15".Utc(),
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				StateName = "Email",
 				OutOfAdherenceStartTime = "2017-11-03 11:30".Utc(),
@@ -346,11 +361,13 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId1,
 				RuleName = "In Adherence"
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId2,
 				RuleName = "Positive"
 			});

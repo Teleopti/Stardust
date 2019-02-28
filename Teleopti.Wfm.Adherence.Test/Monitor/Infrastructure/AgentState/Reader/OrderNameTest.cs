@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 	{
 		public IAgentStateReadModelPersister Persister;
 		public IAgentStateReadModelReader Target;
-		public ICurrentBusinessUnit BusinessUnit;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public IGlobalSettingDataRepository Settings;
 		public WithUnitOfWork UnitOfWork;
 
@@ -29,17 +29,17 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			UnitOfWork.Do(() =>
 			{
-				Persister.UpsertAssociation(new AssociationInfo
+				Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 				{
 					PersonId = person1,
-					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					FirstName = "Ashley",
 					LastName = "Baldi",
 				});
-				Persister.UpsertAssociation(new AssociationInfo
+				Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 				{
 					PersonId = person2,
-					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					FirstName = "Pierre",
 					LastName = "Andeen",
 				});
@@ -62,18 +62,18 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var person2 = Guid.Parse("aeca77e1-bdc5-4f6d-bab1-bcfcdafa53f9");
 			UnitOfWork.Do(() =>
 			{
-				Persister.UpsertAssociation(new AssociationInfo
+				Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 				{
 					PersonId = person1,
-					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					FirstName = "Ashley",
 					LastName = "Andeen",
 					EmploymentNumber = "2"
 				});
-				Persister.UpsertAssociation(new AssociationInfo
+				Persister.UpsertAssociation(new Adherence.States.AssociationInfo
 				{
 					PersonId = person2,
-					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					FirstName = "Pierre",
 					LastName = "Baldi",
 					EmploymentNumber = "1"

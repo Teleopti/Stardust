@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -22,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public IGroupingReadOnlyRepository Groupings;
 		public IAgentStateReadModelPersister StatePersister;
 		public ITeamCardReader Target;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldRead()
@@ -37,6 +39,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 				Groupings.UpdateGroupingReadModel(new[] { personId });
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()
@@ -64,12 +67,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 				Groupings.UpdateGroupingReadModel(new[] { personWithSkill, personWithoutSkill });
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personWithSkill,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personWithoutSkill,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()

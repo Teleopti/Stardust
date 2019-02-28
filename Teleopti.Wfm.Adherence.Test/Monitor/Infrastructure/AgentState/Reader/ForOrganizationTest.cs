@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.Monitor;
@@ -22,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
 		public ICurrentUnitOfWork UnitOfWork;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldLoadStatesInAlarmOnly()
@@ -32,6 +34,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
@@ -39,6 +42,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
@@ -46,6 +50,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = Guid.NewGuid(),
 				AlarmStartTime = null,
@@ -70,6 +75,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 11:30".Utc(),
@@ -77,6 +83,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 11:00".Utc(),
@@ -102,6 +109,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteId = siteId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
@@ -109,6 +117,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteId = siteId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
@@ -116,6 +125,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteId = siteId,
 				PersonId = Guid.NewGuid(),
 				AlarmStartTime = null,
@@ -140,6 +150,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var phoneState = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = person,
 				SiteId = site,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
@@ -164,6 +175,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteId = siteId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 11:30".Utc(),
@@ -171,6 +183,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			});
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				SiteId = siteId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 11:00".Utc(),
@@ -194,6 +207,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId,
 				Shift = new[]
@@ -222,6 +236,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var teamId = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				OutOfAdherences = new[]
 				{
@@ -246,6 +261,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId,
 			});

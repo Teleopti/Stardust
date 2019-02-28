@@ -25,7 +25,8 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
         {
             var created = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(created.Name, loaded.Name);
-            Assert.AreEqual(saved.BusinessUnit, ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId());
+            Assert.AreEqual(saved.BusinessUnit, _businessUnit.Id);
+            Assert.AreEqual(saved.BusinessUnit, CurrentBusinessUnit.CurrentId());
             Assert.AreEqual(saved.BusinessUnit, loaded.BusinessUnit);
             Assert.AreEqual(created.Available, loaded.Available);
             Assert.AreEqual(created.DefaultStateGroup, loaded.DefaultStateGroup);

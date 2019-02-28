@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
@@ -15,6 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 	{
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldLoadAgentStateByTeamId()
@@ -23,6 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId
 			});
@@ -36,9 +39,21 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		public void ShouldLoadAgentStatesByTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				TeamId = teamId, PersonId = Guid.NewGuid()
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				TeamId = teamId, PersonId = Guid.NewGuid()
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				TeamId = Guid.Empty, PersonId = Guid.NewGuid()
+			});
 
 			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
 
@@ -53,11 +68,13 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId2 = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				TeamId = teamId,
 				PersonId = personId2
 			});
@@ -73,9 +90,21 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId1, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId2, PersonId = Guid.NewGuid()});
-			Persister.Upsert(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				TeamId = teamId1, PersonId = Guid.NewGuid()
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				TeamId = teamId2, PersonId = Guid.NewGuid()
+			});
+			Persister.Upsert(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				TeamId = Guid.Empty, PersonId = Guid.NewGuid()
+			});
 
 			var result = Target.Read(new AgentStateFilter {TeamIds = new[] {teamId1, teamId2}});
 

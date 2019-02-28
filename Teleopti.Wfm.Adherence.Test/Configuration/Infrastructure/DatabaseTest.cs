@@ -20,12 +20,13 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 	{
 		private ISession _session;
 		private IUnitOfWork _unitOfWork;
-		private IContainer container;
+		private IContainer _container;
 		
 		protected IBusinessUnit _businessUnit;
 		protected ISession Session => _session;
 		protected IUnitOfWork UnitOfWork => _unitOfWork;
-		protected ICurrentUnitOfWork CurrentUnitOfWork => new ThisUnitOfWork(_unitOfWork);
+		protected ICurrentUnitOfWork CurrentUnitOfWork;
+		protected ICurrentBusinessUnit CurrentBusinessUnit;
 		
 		[SetUp]
 		public void Setup()
@@ -37,9 +38,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
 			builder.RegisterType<FakeLicenseRepository>().AsSelf().As<ILicenseRepository>().SingleInstance();
 			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
-			container = builder.Build();
-			
-			var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
+			_container = builder.Build();
+
+			CurrentUnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
+			CurrentBusinessUnit = _container.Resolve<ICurrentBusinessUnit>();
+			var dataSource = _container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
 			Login(person, businessUnit, dataSource);
 			_unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork();
 			_session = _unitOfWork.FetchSession();
@@ -55,7 +58,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		{
 			_unitOfWork.Dispose();
 			_unitOfWork = null;
-			container.Dispose();
+			_container.Dispose();
 		}
 
 		protected void PersistAndRemoveFromUnitOfWork(IEntity obj)

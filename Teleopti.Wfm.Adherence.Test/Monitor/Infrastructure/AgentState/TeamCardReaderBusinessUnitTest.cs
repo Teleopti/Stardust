@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 	[UnitOfWorkTest]
 	public class TeamCardReaderBusinessUnitTest
 	{
-		public ICurrentBusinessUnit BusinessUnit;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public IAgentStateReadModelPersister Persister;
 		public ITeamCardReader Target;
 		public MutableNow Now;
@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var site = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = Guid.NewGuid(),
 				SiteId = site
 			});

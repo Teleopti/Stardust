@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 	[UnitOfWorkTest]
 	public class OrganizationReaderTest
 	{
-		public ICurrentBusinessUnit BusinessUnit;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public IAgentStateReadModelPersister Persister;
 		public IOrganizationReader Target;
 
@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var site = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = Guid.NewGuid(),
 				TeamId = team,
 				TeamName = "team",
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var site = Guid.NewGuid();
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = Guid.NewGuid(),
 				TeamId = team1,
 				TeamName = "team1",
@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			});
 			Persister.Upsert(new AgentStateReadModelForTest
 			{
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = Guid.NewGuid(),
 				TeamId = team2,
 				TeamName = "team2",
@@ -80,8 +80,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var person = Guid.NewGuid();
 			Persister.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = person,
-				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				SiteId = site,
 				TeamId = team,
 			});
