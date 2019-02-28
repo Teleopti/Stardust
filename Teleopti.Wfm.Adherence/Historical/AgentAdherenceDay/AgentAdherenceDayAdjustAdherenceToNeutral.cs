@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.States.Events;
 
@@ -131,29 +132,32 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_calculatedDisplayPeriod = calculatePeriod(_fullDay, shift);
 			_calculatedChanges = calculateChanges(_collectedChanges, _calculatedDisplayPeriod.Value);
 
-			var recordedOutOfAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Out);
-			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
+			var recordedOutOfAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Out).ToArray();
+			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral).ToArray();
+			var projectedOutOfAdherences = recordedOutOfAdherences
+				.Subtract(_collectedApprovedPeriods)
+				.Subtract(_collectedAdjustedToNeutralPeriods)
+				.ToArray();
+			var projectedNeutralAdherences = recordedNeutralAdherences
+				.Subtract(_collectedAdjustedToNeutralPeriods)
+				.Concat(_collectedAdjustedToNeutralPeriods)
+				.Subtract(_collectedApprovedPeriods)
+				.ToArray();
 
-			_calculatedRecordedOutOfAdherences = calculateRecordedAdherences(recordedOutOfAdherences);
-			_calculatedRecordedNeutralAdherences = calculateRecordedAdherences(recordedNeutralAdherences);
-			_calculatedOutOfAdherences = calculateOutOfAdherences(recordedOutOfAdherences, _collectedApprovedPeriods.Concat(_collectedAdjustedToNeutralPeriods));
-			_calculatedNeutralAdherences = calculateNeutralAdherences(recordedNeutralAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
-			_calculatedApprovedPeriods = calculateApprovedPeriods(_collectedApprovedPeriods);
-			_calculatedAdjustedToNeutralAdherences = calculateAdjustedToNeutralPeriods(_collectedAdjustedToNeutralPeriods);
+			_calculatedRecordedOutOfAdherences = mapToAdherencePeriods(recordedOutOfAdherences);
+			_calculatedRecordedNeutralAdherences = mapToAdherencePeriods(recordedNeutralAdherences);
+			_calculatedApprovedPeriods = mapToAdherencePeriods(_collectedApprovedPeriods);
+			_calculatedAdjustedToNeutralAdherences = mapToAdherencePeriods(_collectedAdjustedToNeutralPeriods);
+			_calculatedOutOfAdherences = mapToAdherencePeriods(projectedOutOfAdherences);
+			_calculatedNeutralAdherences = mapToAdherencePeriods(projectedNeutralAdherences);
 
 			if (!shift.HasValue)
 				return;
 
-			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, recordedNeutralAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
-			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
+			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, projectedOutOfAdherences, projectedNeutralAdherences);
+			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, projectedOutOfAdherences);
 			_adherencePercentage = AdherencePercentageCalculation.Calculate(_secondsInAdherence, _secondsOutOfAdherence);
 		}
-
-		private IEnumerable<AdherencePeriod> calculateNeutralAdherences(IEnumerable<OpenPeriod> recordedNeutrals, IList<OpenPeriod> adjustedToNeutralPeriods, IList<OpenPeriod> approvedPeriods) =>
-			recordedNeutrals.Concat(adjustedToNeutralPeriods)
-				.Subtract(approvedPeriods)
-				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
-				.ToArray();
 
 		private static DateTimePeriod? calculateShift(DateTimePeriod? shift, Func<DateTimePeriod?> shiftFromSchedule) =>
 			shift ?? shiftFromSchedule.Invoke();
@@ -232,58 +236,27 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				return acc;
 			});
 
-		private static IEnumerable<AdherencePeriod> calculateRecordedAdherences(IEnumerable<OpenPeriod> recordedAdherences) =>
-			recordedAdherences
+		private static IEnumerable<AdherencePeriod> mapToAdherencePeriods(IEnumerable<OpenPeriod> periods) =>
+			periods
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
 
-		private static IEnumerable<AdherencePeriod> calculateOutOfAdherences(IEnumerable<OpenPeriod> recordedOutOfAdherences, IEnumerable<OpenPeriod> adjustingPeriods) =>
-			recordedOutOfAdherences.Subtract(adjustingPeriods)
-				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
-				.ToArray();
+		private IEnumerable<OpenPeriod> calculateNeutralAdherences(
+			IEnumerable<OpenPeriod> recordedNeutrals,
+			IEnumerable<OpenPeriod> adjustedToNeutralPeriods,
+			IEnumerable<OpenPeriod> approvedPeriods) =>
+			recordedNeutrals
+				.Subtract(adjustedToNeutralPeriods)
+				.Concat(adjustedToNeutralPeriods)
+				.Subtract(approvedPeriods);
 
-		private static IEnumerable<AdherencePeriod> calculateApprovedPeriods(IEnumerable<OpenPeriod> approvedPeriods) =>
-			approvedPeriods
-				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
-				.ToArray();
-
-		private IEnumerable<AdherencePeriod> calculateAdjustedToNeutralPeriods(IEnumerable<OpenPeriod> adjustedToNeutralPeriods)
-		{
-			var displayPeriodAsOpenPeriod = new OpenPeriod
-			{
-				StartTime = _calculatedDisplayPeriod.GetValueOrDefault().StartDateTime,
-				EndTime = _calculatedDisplayPeriod.GetValueOrDefault().EndDateTime
-			};
-			
-			return adjustedToNeutralPeriods
-				.Where(p => p.Intersects(displayPeriodAsOpenPeriod))
-				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
-				.ToArray();
-		}
-		
 		private static int? calculateSecondsInAdherence(
 			DateTimePeriod shift,
 			DateTime now,
 			IEnumerable<OpenPeriod> outOfAdherences,
-			IEnumerable<OpenPeriod> neutralAdherences,
-			IEnumerable<OpenPeriod> adjustedToNeutralPeriods,
-			IEnumerable<OpenPeriod> approvedPeriods)
+			IEnumerable<OpenPeriod> neutralAdherences
+		)
 		{
-			adjustedToNeutralPeriods = adjustedToNeutralPeriods
-				.MergeIntersecting()
-				.ToArray();
-
-			outOfAdherences = outOfAdherences
-				.Subtract(approvedPeriods)
-				.Subtract(adjustedToNeutralPeriods)
-				.ToArray();
-
-			neutralAdherences = neutralAdherences
-				.Subtract(adjustedToNeutralPeriods)
-				.Concat(adjustedToNeutralPeriods)
-				.Subtract(approvedPeriods)
-				.ToArray();
-
 			var timeOut = timeInShift(shift, outOfAdherences);
 			var timeNeutral = timeInShift(shift, neutralAdherences);
 
@@ -294,26 +267,25 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return Convert.ToInt32(timeIn.TotalSeconds);
 		}
 
-		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<OpenPeriod> outOfAdherences, IEnumerable<OpenPeriod> neutralAdherences, IEnumerable<OpenPeriod> approvedPeriods)
+		private static int? calculateSecondsOutOfAdherence(
+			DateTimePeriod shift,
+			IEnumerable<OpenPeriod> outOfAdherences
+		)
 		{
-			outOfAdherences = outOfAdherences
-				.Subtract(approvedPeriods)
-				.Subtract(neutralAdherences)
-				.ToArray();
-			var timeOut = timeInShift(shift, outOfAdherences);
+			var outOfAdherencePeriods = outOfAdherences.Select(x => new OpenPeriod(x.StartTime, x.EndTime));
+			var timeOut = timeInShift(shift, outOfAdherencePeriods);
 			return Convert.ToInt32(timeOut.TotalSeconds);
 		}
 
 		private static TimeSpan timeInShift(DateTimePeriod shift, IEnumerable<OpenPeriod> periods)
 		{
+			var shiftAsOpenPeriod = new OpenPeriod(shift.StartDateTime, shift.EndDateTime);
 			var seconds = from p in periods
-				let startTime = (p.StartTime ?? DateTime.MinValue).Utc()
-				let endTime = (p.EndTime ?? DateTime.MaxValue).Utc()
-				let dateTimePeriod = new DateTimePeriod(startTime, endTime)
-				let intersection = shift.Intersection(dateTimePeriod)
+				let intersection = shiftAsOpenPeriod.Intersection(p)
 				where intersection != null
-				let t = intersection.Value.EndDateTime - intersection.Value.StartDateTime
-				select t.TotalSeconds;
+				let t = intersection.EndTime - intersection.StartTime
+				select t.Value.TotalSeconds;
+
 			return TimeSpan.FromSeconds(seconds.Sum());
 		}
 

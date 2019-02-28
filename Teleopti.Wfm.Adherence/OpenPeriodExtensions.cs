@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,27 +9,30 @@ namespace Teleopti.Wfm.Adherence
 		public static IEnumerable<OpenPeriod> Subtract(this IEnumerable<OpenPeriod> periods, IEnumerable<OpenPeriod> toSubtract)
 		{
 			var result = periods.ToArray().AsEnumerable();
-			toSubtract.ForEach(s =>
-			{
-				result = result.subtract(s);
-			});
+			toSubtract.ForEach(s => { result = result.subtract(s); });
 			return result;
+		}
+
+		public static OpenPeriod Intersection(this OpenPeriod instance, OpenPeriod period)
+		{
+			if (!instance.intersects(period)) return null;
+
+			var start = instance.startsBefore(period) ? period.StartTime : instance.StartTime;
+			var end = instance.endsAfter(period) ? period.EndTime : instance.EndTime;
+			return new OpenPeriod(start, end);
 		}
 
 		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
 		{
 			var result = new List<OpenPeriod>();
-			subtractFroms.ForEach(x =>
-			{
-				result.AddRange(x.subtract(toSubtract));
-			});
+			subtractFroms.ForEach(x => { result.AddRange(x.subtract(toSubtract)); });
 			return result;
 		}
 
 		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, OpenPeriod toSubtract)
 		{
 			var timePeriods = new List<OpenPeriod>();
-			if (subtractFrom.Intersects(toSubtract))
+			if (subtractFrom.intersects(toSubtract))
 			{
 				if (subtractFrom.startsBefore(toSubtract))
 					timePeriods.Add(new OpenPeriod(subtractFrom.StartTime, toSubtract.StartTime));
@@ -44,22 +48,7 @@ namespace Teleopti.Wfm.Adherence
 			return timePeriods;
 		}
 
-		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
-		{
-			var result = new List<OpenPeriod>();
-			periods
-				.OrderBy(x => x.StartTime)
-				.ForEach(x =>
-				{
-					if (result.Any() && result.Last().Intersects(x))
-						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
-					else
-						result.Add(x);
-				});
-			return result;
-		}
-
-		public static bool Intersects(this OpenPeriod instance, OpenPeriod period)
+		private static bool intersects(this OpenPeriod instance, OpenPeriod period)
 		{
 			var startsAfterPeriodEnds = instance.StartTime > period.EndTime;
 
