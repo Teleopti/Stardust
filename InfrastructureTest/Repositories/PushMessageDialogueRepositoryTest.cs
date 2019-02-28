@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override Repository<IPushMessageDialogue> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PushMessageDialogueRepository(currentUnitOfWork);
+            return PushMessageDialogueRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
       

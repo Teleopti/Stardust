@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			IShiftCategory shiftCategory = null;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 				if (ShiftColor != null && shiftCategory != null)
 					shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 			}

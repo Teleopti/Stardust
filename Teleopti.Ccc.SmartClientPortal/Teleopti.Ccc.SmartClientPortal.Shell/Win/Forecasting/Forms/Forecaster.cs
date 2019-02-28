@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				{
 					try
 					{
-						var skillDayRepository = new SkillDayRepository(uow);
+						var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(uow);
 						skillDayRepository.Add(skillDay);
 						
 						removeSkillDayFromDirtyList(skillDay);
@@ -841,7 +841,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ISkillDayRepository skillDayRepository = new SkillDayRepository(unitOfWork);
+				ISkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(unitOfWork);
 				foreach (Guid guid in guidList)
 				{
 					if (currentPeriodInvolved && currentSkillInvolved) break;

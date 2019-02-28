@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AvailableShiftCategory))
 			{
-				var shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).FindAll().Single(c => c.Description.Name == AvailableShiftCategory);
+				var shiftCategory = ShiftCategoryRepository.DONT_USE_CTOR(currentUnitOfWork).FindAll().Single(c => c.Description.Name == AvailableShiftCategory);
 				workflowControlSet.AddAllowedPreferenceShiftCategory(shiftCategory);
 			}
 
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				}
 			}
 
-			var repository = new WorkflowControlSetRepository(currentUnitOfWork);
+			var repository = WorkflowControlSetRepository.DONT_USE_CTOR(currentUnitOfWork);
 			repository.Add(workflowControlSet);
 		}
 	}

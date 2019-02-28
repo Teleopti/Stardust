@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var personRequest = new PersonRequest(person, absenceRequest) { Subject = "I need some vacation" };
 			personRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(unitOfWork);
 			IPersonAbsence personAbsence = null;
 

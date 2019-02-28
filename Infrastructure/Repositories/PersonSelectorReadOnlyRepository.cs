@@ -14,10 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public PersonSelectorReadOnlyRepository(IUnitOfWork unitOfWork)
-		{
-			_unitOfWork = new ThisUnitOfWork(unitOfWork);
-		}
 		public PersonSelectorReadOnlyRepository(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;

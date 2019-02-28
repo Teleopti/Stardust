@@ -65,6 +65,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				Changes = buildChanges(adherenceDay.Changes()),
 				OutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
 				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.RecordedOutOfAdherences()),
+				RecordedNeutralAdherences = buildNeutralAdherences(adherenceDay.RecordedNeutralAdherences()),
 				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
 				AdjustedToNeutralAdherences = buildAdjustedToNeutralAdherences(adherenceDay.AdjustedToNeutralAdherences()),
 				Timeline = new ScheduleTimeline
@@ -120,6 +121,19 @@ namespace Teleopti.Wfm.Adherence.Historical
 			return periods
 				.Select(x =>
 					new OutOfAdherenceViewModel
+					{
+						StartTime = formatForUser(x.StartTime),
+						EndTime = formatForUser(x.EndTime)
+					}
+				)
+				.ToArray();
+		}	
+		
+		private IEnumerable<NeutralAdherenceViewModel> buildNeutralAdherences(IEnumerable<AdherencePeriod> periods)
+		{
+			return periods
+				.Select(x =>
+					new NeutralAdherenceViewModel
 					{
 						StartTime = formatForUser(x.StartTime),
 						EndTime = formatForUser(x.EndTime)

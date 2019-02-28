@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Multi;
@@ -7,6 +8,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -20,17 +23,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class WorkShiftRuleSetRepository : Repository<IWorkShiftRuleSet>, IWorkShiftRuleSetRepository
     {
-#pragma warning disable 618
-        public WorkShiftRuleSetRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static WorkShiftRuleSetRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new WorkShiftRuleSetRepository(currentUnitOfWork, null, null);
+		}
 
-		public WorkShiftRuleSetRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
-	    {
-		    
-	    }
+		public static WorkShiftRuleSetRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new WorkShiftRuleSetRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+		
+		public WorkShiftRuleSetRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
 
         /// <summary>
         /// Finds all with limiters and extenders included.

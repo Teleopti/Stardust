@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(new ThisUnitOfWork(uow), null, null).Add(loggedOnPerson);
+				PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null).Add(loggedOnPerson);
 				uow.PersistAll();
 			}
 		}

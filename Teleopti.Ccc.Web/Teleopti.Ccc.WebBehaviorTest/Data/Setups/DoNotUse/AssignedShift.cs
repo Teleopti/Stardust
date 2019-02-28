@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-			new ShiftCategoryRepository(unitOfWork).Add(shiftCategory);
+			ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork).Add(shiftCategory);
 			ShiftCategory = shiftCategory;
 
 			assignment.SetShiftCategory(shiftCategory);

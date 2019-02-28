@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (HasScheduled)
 			{
-				var personRepository = new PersonRepository(currentUnitOfWork, null, null);
+				var personRepository = PersonRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 				var jobResult = new JobResult(JobCategory.WebSchedule, Period.Range, personRepository.LoadAll().FirstOrDefault(), DateTime.UtcNow)
 				{
 					FinishedOk = true

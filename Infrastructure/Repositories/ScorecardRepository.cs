@@ -1,5 +1,8 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -12,15 +15,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class ScorecardRepository : Repository<IScorecard>
     {
-        /// <summary>
+		public static ScorecardRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new ScorecardRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		/// <summary>
         /// Initializes a new instance of the <see cref="KpiRepository"/> class.
         /// </summary>
         /// <param name="unitOfWork">The unitofwork</param>
-        public ScorecardRepository(IUnitOfWork unitOfWork) 
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public ScorecardRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
     }
 }

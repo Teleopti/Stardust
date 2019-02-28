@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			PersonRequest1 = new PersonRequest(user, textRequest1) {Subject = "I need some cake"};
 			PersonRequest1.TrySetMessage(
 				"This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
-			var requestRepository1 = new PersonRequestRepository(currentUnitOfWork);
+			var requestRepository1 = PersonRequestRepository.DONT_USE_CTOR(currentUnitOfWork);
 			requestRepository1.Add(PersonRequest1);
 					
 			Thread.Sleep(1010);
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var textRequest2 = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5)));
 			PersonRequest2 = new PersonRequest(user, textRequest2) {Subject = "I need some cake"};
 			PersonRequest2.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
-			var requestRepository2 = new PersonRequestRepository(currentUnitOfWork);
+			var requestRepository2 = PersonRequestRepository.DONT_USE_CTOR(currentUnitOfWork);
 			requestRepository2.Add(PersonRequest2);
 
 		}

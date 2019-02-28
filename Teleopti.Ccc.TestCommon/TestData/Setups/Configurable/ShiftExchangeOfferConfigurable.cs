@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			var personRequest = new PersonRequest(person){Request = shiftExchangeOffer, Subject = "Announcement"};
 			personRequest.TrySetMessage("");
-			var personRequestRepository = new PersonRequestRepository(unitOfWork);
+			var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 			personRequestRepository.Add(personRequest);
 		}
 	}

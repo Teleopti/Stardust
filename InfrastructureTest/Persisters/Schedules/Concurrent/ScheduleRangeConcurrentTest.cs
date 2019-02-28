@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 		public override void ReassociateDataFor(IPerson person)
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
-			new PersonRepository(new ThisUnitOfWork(uow), null, null).FindPeople(new[]{person.Id.Value});
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null).FindPeople(new[]{person.Id.Value});
 			ActivityRepository.DONT_USE_CTOR(uow).Get(Activity.Id.Value);
-			new ShiftCategoryRepository(uow).Get(ShiftCategory.Id.Value);
+			ShiftCategoryRepository.DONT_USE_CTOR(uow).Get(ShiftCategory.Id.Value);
 			ScenarioRepository.DONT_USE_CTOR(uow).Get(Scenario.Id.Value);
 		}
 	}

@@ -68,11 +68,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			try
             {
-                IWorkloadRepository rep1 = new WorkloadRepository(UnitOfWork);
+                IWorkloadRepository rep1 = WorkloadRepository.DONT_USE_CTOR(UnitOfWork);
                 rep1.Add(workload);
                 UnitOfWork.PersistAll();
 
-                IWorkloadRepository rep2 = new WorkloadRepository(UnitOfWork2);
+                IWorkloadRepository rep2 = WorkloadRepository.DONT_USE_CTOR(UnitOfWork2);
                 var secondWorkload = rep2.Get(workload.Id.Value);
                 LazyLoadingManager.Initialize(secondWorkload.TemplateWeekCollection);
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 ActivityRepository.DONT_USE_CTOR(UnitOfWork).Remove(activity);
                 SkillTypeRepository.DONT_USE_CTOR(UnitOfWork).Remove(skillType);
                 SkillRepository.DONT_USE_CTOR(UnitOfWork).Remove(skill);
-                new WorkloadRepository(UnitOfWork).Remove(workload);
+                WorkloadRepository.DONT_USE_CTOR(UnitOfWork).Remove(workload);
                 UnitOfWork.PersistAll();
                 UnitOfWork.Clear();
             }
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IPerson per = PersonFactory.CreatePerson("Kalle", "Banan");
             PersistAndRemoveFromUnitOfWork(per);
 
-            PersonRepository rep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+            PersonRepository rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
             rep.Remove(per);
             PersistAndRemoveFromUnitOfWork(per);
 

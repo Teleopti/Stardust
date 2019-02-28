@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var period = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
-                var publicNoteRepository = new PublicNoteRepository(unitOfWork);
+                var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(unitOfWork);
                 ICollection<IPerson> personDomainCollection = _personAssembler.DtosToDomainEntities(personDtoCollection).ToList();
                 
                 ICollection<IPublicNote> publicNotes = publicNoteRepository.Find(period, personDomainCollection, _scenarioRepository.Current());

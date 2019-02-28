@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void LoadShiftCategories(IUnitOfWork unitOfWork)
 		{
-			IShiftCategoryRepository repository = new ShiftCategoryRepository(unitOfWork);
+			IShiftCategoryRepository repository = ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork);
 			ShiftCategories = repository.FindAll();
 		}
 
@@ -817,7 +817,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			AllRotations.Clear();
 
-			var rep = new RotationRepository(uow);
+			var rep = RotationRepository.DONT_USE_CTOR(uow);
 			var rotations = rep.LoadAllRotationsWithDays();
 
 			IEnumerable<IRotation> sorted = rotations.OrderBy(n2 => n2.Name);
@@ -837,7 +837,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			WorkflowControlSetCollection.Clear();
 			WorkflowControlSetCollection.Add(PersonGeneralModel.NullWorkflowControlSet);
 
-			var rep = new WorkflowControlSetRepository(uow);
+			var rep = WorkflowControlSetRepository.DONT_USE_CTOR(uow);
 			var workflowControlSets = rep.LoadAll();
 
 			IEnumerable<IWorkflowControlSet> sorted = workflowControlSets.OrderBy(n2 => n2.Name);

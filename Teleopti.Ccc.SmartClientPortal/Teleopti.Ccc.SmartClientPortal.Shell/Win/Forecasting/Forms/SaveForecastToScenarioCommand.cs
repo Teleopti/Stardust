@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ISkillDayRepository skillDayRepository = new SkillDayRepository(unitOfWork);
+                ISkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(unitOfWork);
                 // Delete existing Skilldays within same period, Skill and Scenario.
                 skillDayRepository.Delete(_period, _skill, _newScenario);
                 unitOfWork.PersistAll();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
             {
                 try
                 {
-                    var skillDayRepository = new SkillDayRepository(uow);
+                    var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(uow);
                     skillDayRepository.Add(skillDay);
                     uow.PersistAll();
                 }
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ISkillDayRepository skillDayRepository = new SkillDayRepository(unitOfWork);
+                ISkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(unitOfWork);
                 var multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(unitOfWork);
                 // Delete existing Skilldays within same period, Skill and Scenario.
                 skillDayRepository.Delete(_period, _skill, _newScenario);

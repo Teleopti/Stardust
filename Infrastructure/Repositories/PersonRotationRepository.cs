@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
@@ -7,6 +8,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -15,22 +18,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class PersonRotationRepository : Repository<IPersonRotation>, IPersonRotationRepository
     {
-        public PersonRotationRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
+		public static PersonRotationRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new PersonRotationRepository(new ThisUnitOfWork(unitOfWork), null, null);
 		}
 
-		public PersonRotationRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static PersonRotationRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new PersonRotationRepository(currentUnitOfWork, null, null);
+		}
 
+		public PersonRotationRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
 		}
 
 		public IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
-			var rep2 = new RotationRepository(UnitOfWork);
+			var rep2 = RotationRepository.DONT_USE_CTOR(UnitOfWork);
 			rep2.LoadRotationsWithHierarchyData(persons,startDate);
 
 			return LoadForPersons(persons);

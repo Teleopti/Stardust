@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldNotEnableFilterWhenNested()
 		{
-			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			personRep.LoadAll().Should().Not.Contain(deletedPerson);
 			using (UnitOfWork.DisableFilter(QueryFilter.Deleted))
 			{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldWorkWithCurrentUnitOfWork()
 		{
-			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			personRep.LoadAll().Should().Not.Contain(deletedPerson);
 			using (UnitOfWorkFactory.Current.CurrentUnitOfWork().DisableFilter(QueryFilter.Deleted))
 			{
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			Session.DisableFilter(QueryFilter.Deleted.Name);
 
-			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			personRep.LoadAll().Should().Contain(deletedPerson);
 			using (UnitOfWorkFactory.Current.CurrentUnitOfWork().DisableFilter(QueryFilter.Deleted))
 			{
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			Session.DisableFilter(QueryFilter.Deleted.Name);
 
-			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			personRep.LoadAll().Should().Contain(deletedPerson);
 			using (UnitOfWork.DisableFilter(QueryFilter.Deleted))
 			{

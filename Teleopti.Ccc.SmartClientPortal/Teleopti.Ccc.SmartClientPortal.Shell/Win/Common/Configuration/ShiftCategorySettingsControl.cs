@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private ShiftCategoryRepository ShiftCatReposiroty
 		{
-			get { return _shiftCatergoryRepository ?? (_shiftCatergoryRepository = new ShiftCategoryRepository(_unitOfWork)); }
+			get { return _shiftCatergoryRepository ?? (_shiftCatergoryRepository = ShiftCategoryRepository.DONT_USE_CTOR(_unitOfWork)); }
 		}
 
 		public ShiftCategorySettingsControl()

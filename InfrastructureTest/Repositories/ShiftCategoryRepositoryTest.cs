@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			cat.Rank = 42;
 			PersistAndRemoveFromUnitOfWork(cat);
 
-			var loadedCat = new ShiftCategoryRepository(UnitOfWork).FindAll();
+			var loadedCat = ShiftCategoryRepository.DONT_USE_CTOR(UnitOfWork).FindAll();
 			Assert.AreEqual(42, loadedCat[0].Rank);
 	    }
 
@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanCreate()
         {
-            new ShiftCategoryRepository(UnitOfWork);
+            ShiftCategoryRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
         protected override Repository<IShiftCategory> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ShiftCategoryRepository(currentUnitOfWork);
+            return ShiftCategoryRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

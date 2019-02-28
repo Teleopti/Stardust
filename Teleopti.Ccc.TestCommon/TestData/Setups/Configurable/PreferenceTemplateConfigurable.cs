@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var restriction = new PreferenceRestrictionTemplate();
 			if (ShiftCategory != null)
 			{
-				var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
+				var shiftCategoryRepository = ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork);
 				var shiftCategory = shiftCategoryRepository.LoadAll().Single(b => b.Description.Name == ShiftCategory);
 				restriction.ShiftCategory = shiftCategory;
 			}

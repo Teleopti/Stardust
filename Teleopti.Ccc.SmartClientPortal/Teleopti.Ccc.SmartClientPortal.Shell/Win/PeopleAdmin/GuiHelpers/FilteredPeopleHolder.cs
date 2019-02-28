@@ -243,8 +243,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			InParameter.NotNull("peopleId", peopleId);
 
-			var rep = new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null);
-			var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+			var rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(GetUnitOfWork), null, null);
+			var personRotationRep = PersonRotationRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var personAvailRep = PersonAvailabilityRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 			clearCollections();
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			if (length > 0)
 			{
-				var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+				var personRotationRep = PersonRotationRepository.DONT_USE_CTOR(GetUnitOfWork);
 				var personAvailRep = PersonAvailabilityRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 				clearCollections();
@@ -817,7 +817,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadRuleSetBag()
 		{
 			_ruleSetBagBindingCollection.Clear();
-			var repository = new RuleSetBagRepository(GetUnitOfWork);
+			var repository = RuleSetBagRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var list = repository.LoadAll().Where(ptp => ptp.IsChoosable).OrderBy(n2 => n2.Description.Name);
 			foreach (IRuleSetBag bag in list)
 			{
@@ -840,14 +840,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void MarkForRemove(IPerson person)
 		{
-			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null).Remove(person);
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(GetUnitOfWork), null, null).Remove(person);
 
 			toBeRemovedList.Add(person.Id.GetValueOrDefault());
 		}
 
 		public void MarkForInsert(IPerson person)
 		{
-			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null).Add(person);
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(GetUnitOfWork), null, null).Add(person);
 		}
 
 		public void DeleteAndSavePerson(IPerson person)
@@ -1149,7 +1149,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			if (_newPersonRotationCollection.Count > 0)
 			{
-				var personRotationRepository = new PersonRotationRepository(GetUnitOfWork);
+				var personRotationRepository = PersonRotationRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 				foreach (IPersonRotation rotation in _newPersonRotationCollection)
 				{

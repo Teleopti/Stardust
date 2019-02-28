@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 {
 	public class StudentAvailabilityPersister : IStudentAvailabilityPersister

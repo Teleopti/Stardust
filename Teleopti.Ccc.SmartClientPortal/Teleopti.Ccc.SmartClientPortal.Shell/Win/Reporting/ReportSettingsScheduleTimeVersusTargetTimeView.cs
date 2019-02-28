@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonRepository(new FromFactory(() => UnitOfWorkFactory.Current), null, null);
+				var rep = PersonRepository.DONT_USE_CTOR(new FromFactory(() => UnitOfWorkFactory.Current), null, null);
 				var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366), DateOnly.Today.AddDays(366));
 
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))

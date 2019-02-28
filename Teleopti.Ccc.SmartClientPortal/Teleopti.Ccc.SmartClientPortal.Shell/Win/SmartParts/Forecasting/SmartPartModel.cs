@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
             {
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    SkillDayRepository skillRepository = new SkillDayRepository(uow);
+                    SkillDayRepository skillRepository = SkillDayRepository.DONT_USE_CTOR(uow);
                     foreach (var scenario in Scenarios)
                     {
                         ISkillDay skillDay = skillRepository.FindLatestUpdated(_skill, scenario, longterm);
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
             {
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
+                    IValidatedVolumeDayRepository validatedVolumeDayRepository = ValidatedVolumeDayRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
                     IValidatedVolumeDay validatedVolumeDay = validatedVolumeDayRepository.FindLatestUpdated(_skill);
                     if (validatedVolumeDay != null)
                     {

@@ -284,11 +284,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPublicNote)))
 				{
-				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PublicNoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(PublicNoteRepository.DONT_USE_CTOR(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
 			{
-				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(StudentAvailabilityDayRepository.DONT_USE_CTOR(currentUnitOfWork), eventMessage.DomainObjectId);
 			}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IOvertimeAvailability)))
 			{
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)
 		{
-			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, _scheduleStorage);
+			return _owner.SchedulerState.RequestUpdateFromBroker(PersonRequestRepository.DONT_USE_CTOR(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, _scheduleStorage);
 		}
 
 		private void NotifySchedulesUpdated()

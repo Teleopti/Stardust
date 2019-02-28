@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(Shrinkage));
-			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR_asdasd(currentUnitOfWork);
 			skillDayRepository.Add(skillDay);
 
 		}

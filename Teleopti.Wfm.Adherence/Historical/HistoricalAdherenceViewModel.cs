@@ -17,6 +17,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 		public ScheduleTimeline Timeline { get; set; }
 		public int? AdherencePercentage { get; set; }
 		public HistoricalAdherenceNavigationViewModel Navigation { get; set; }
+		public IEnumerable<NeutralAdherenceViewModel> RecordedNeutralAdherences { get; set; }
 	}
 
 	public class OutOfAdherenceViewModel
@@ -25,6 +26,12 @@ namespace Teleopti.Wfm.Adherence.Historical
 		public string EndTime { get; set; }
 	}
 
+	public class NeutralAdherenceViewModel
+	{
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+	}
+	
 	public class ApprovedPeriodViewModel
 	{
 		public string StartTime { get; set; }

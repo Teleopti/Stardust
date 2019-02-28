@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var ret = repository.UniqueValuesOnColumn(col.Id.Value);
 			Assert.That(ret.Count, Is.EqualTo(3));
-			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			personRep.Remove(person1);
 			personRep.Remove(person2);
 			personRep.Remove(person3);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var ret = repository.UniqueValuesOnColumnWithValidPerson(col.Id.Value);
 			Assert.That(ret.Count, Is.EqualTo(2));
 			Assert.That(ret.Where(x => x.Description == "VAL3"), Is.Empty);
-			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			personRep.Remove(person1);
 			personRep.Remove(person2);
 			personRep.Remove(person3);

@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -18,18 +20,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class StudentAvailabilityDayRepository : Repository<IStudentAvailabilityDay>, IStudentAvailabilityDayRepository
     {
-        public StudentAvailabilityDayRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static StudentAvailabilityDayRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new StudentAvailabilityDayRepository(currentUnitOfWork, null, null);
+		}
 
-				public StudentAvailabilityDayRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork, null, null)
-	    {
-		    
-	    }
+		public static StudentAvailabilityDayRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new StudentAvailabilityDayRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public StudentAvailabilityDayRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
 
         public IList<IStudentAvailabilityDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
         {

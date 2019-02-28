@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			UnitOfWork = value;
-			Repository = new ScheduleTagRepository(UnitOfWork);
+			Repository = ScheduleTagRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()

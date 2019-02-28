@@ -9,6 +9,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		DateTimePeriod DisplayPeriod();
 		IEnumerable<HistoricalChangeModel> Changes();
 		IEnumerable<AdherencePeriod> RecordedOutOfAdherences();
+		IEnumerable<AdherencePeriod> RecordedNeutralAdherences();
 		IEnumerable<AdherencePeriod> ApprovedPeriods();
 		IEnumerable<AdherencePeriod> OutOfAdherences();
 		IEnumerable<AdherencePeriod> AdjustedToNeutralAdherences();

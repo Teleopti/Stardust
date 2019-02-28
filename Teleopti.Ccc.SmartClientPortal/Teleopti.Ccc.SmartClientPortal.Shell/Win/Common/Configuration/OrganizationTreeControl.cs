@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
             var team = (ITeam)node.TagObject;
             //min date 1/1/1753-
             var period = DateOnly.Today.ToDateOnlyPeriod();
-            var personRep = new PersonRepository(new ThisUnitOfWork(_unitOfWork), null, null);
+            var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(_unitOfWork), null, null);
 
             if (personRep.FindPeopleBelongTeam(team, period).Count == 0)
             {

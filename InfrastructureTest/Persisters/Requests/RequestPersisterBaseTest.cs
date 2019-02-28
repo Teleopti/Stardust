@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			setState();
 			var request = Given();
 			makeTarget();
-			var rep = new PersonRequestRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
+			var rep = Infrastructure.Repositories.PersonRequestRepository.DONT_USE_CTOR(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
 			if (request != null)
 			{
 				using (var givenUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 
 		private void setState()
 		{
-			PersonRequestRepository = new PersonRequestRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
+			PersonRequestRepository = Infrastructure.Repositories.PersonRequestRepository.DONT_USE_CTOR(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
 			Authorization = new FullPermission();
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			Person = PersonFactory.CreatePerson("test person");
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
+				var rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null);
 				rep.Add(Person);
 				uow.PersistAll();
 			}

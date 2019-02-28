@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(ShiftBag))
 			{
-				var bag = new RuleSetBagRepository(uow)
+				var bag = RuleSetBagRepository.DONT_USE_CTOR(uow)
 					.LoadAll()
 					.Single(x => x.Description.Name == ShiftBag);
 				personPeriod.RuleSetBag = bag;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(WorkflowControlSet))
 			{
-				var workflowControlSetRepository = new WorkflowControlSetRepository(uow);
+				var workflowControlSetRepository = WorkflowControlSetRepository.DONT_USE_CTOR(uow);
 				var workflowControlSet = workflowControlSetRepository.LoadAll().Single(b => b.Name == WorkflowControlSet);
 				user.WorkflowControlSet = workflowControlSet;
 			}

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IPersonRotation> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PersonRotationRepository(currentUnitOfWork.Current());
+			return PersonRotationRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(newPersonRotation1);
 			PersistAndRemoveFromUnitOfWork(newPersonRotation2);
 
-			IList<IPersonRotation> personRotations = new PersonRotationRepository(UnitOfWork).Find(_person);
+			IList<IPersonRotation> personRotations = PersonRotationRepository.DONT_USE_CTOR(UnitOfWork).Find(_person);
 
 			Assert.AreEqual(1, personRotations.Count);
 			Assert.AreEqual(newPersonRotation1, personRotations[0]);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(newPersonRotation1);
 			PersistAndRemoveFromUnitOfWork(newPersonRotation2);
 
-			IList<IPersonRotation> personRotations = new PersonRotationRepository(UnitOfWork).Find(new List<IPerson> { _person });
+			IList<IPersonRotation> personRotations = PersonRotationRepository.DONT_USE_CTOR(UnitOfWork).Find(new List<IPerson> { _person });
 
 			Assert.AreEqual(1, personRotations.Count);
 			Assert.AreEqual(newPersonRotation1, personRotations[0]);
@@ -128,12 +128,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(newPersonRotation3);
 			PersistAndRemoveFromUnitOfWork(newPersonRotation4);
 
-			var testList = new PersonRotationRepository(UnitOfWork).LoadPersonRotationsWithHierarchyData(new[] { _person }, _startDate.AddDays(14));
+			var testList = PersonRotationRepository.DONT_USE_CTOR(UnitOfWork).LoadPersonRotationsWithHierarchyData(new[] { _person }, _startDate.AddDays(14));
 
-			var rotations = new RotationRepository(UnitOfWork).LoadRotationsWithHierarchyData(new[] { _person }, _startDate.AddDays(14));
+			var rotations = RotationRepository.DONT_USE_CTOR(UnitOfWork).LoadRotationsWithHierarchyData(new[] { _person }, _startDate.AddDays(14));
 
 			Assert.That(rotations.Count(), Is.EqualTo(2));
-			rotations = new RotationRepository(UnitOfWork).LoadRotationsWithHierarchyData(new[] { person2 }, _startDate.AddDays(14));
+			rotations = RotationRepository.DONT_USE_CTOR(UnitOfWork).LoadRotationsWithHierarchyData(new[] { person2 }, _startDate.AddDays(14));
 			Assert.That(rotations.Count(), Is.EqualTo(1));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList.First().Rotation));
 		}
@@ -141,13 +141,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyPersonCannotBeNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => new PersonRotationRepository(UnitOfWork).Find((IPerson)null));
+			Assert.Throws<ArgumentNullException>(() => PersonRotationRepository.DONT_USE_CTOR(UnitOfWork).Find((IPerson)null));
 		}
 
 		[Test]
 		public void VerifyPersonsCannotBeNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => new PersonRotationRepository(UnitOfWork).Find((IList<IPerson>)null));
+			Assert.Throws<ArgumentNullException>(() => PersonRotationRepository.DONT_USE_CTOR(UnitOfWork).Find((IList<IPerson>)null));
 		}
 	}
 }

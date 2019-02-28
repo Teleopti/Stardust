@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var personAbsenceRepository = new PersonAbsenceRepository(uow);
 			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(uow);
 			var noteRepository = new NoteRepository(uow);
-			var publicNoteRepository = new PublicNoteRepository(uow);
+			var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(uow);
 			var preferenceDayRepository = new PreferenceDayRepository(uow);
-			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(uow);
+			var studentAvailabilityDayRepository = StudentAvailabilityDayRepository.DONT_USE_CTOR(uow);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(uow);
 			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(
 				new DefaultScenarioFromRepository(ScenarioRepository.DONT_USE_CTOR(uow)),
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 					new MeetingRepository(uow), agentDayScheduleTagRepository, noteRepository,
 					publicNoteRepository, preferenceDayRepository,
 					studentAvailabilityDayRepository, PersonAvailabilityRepository.DONT_USE_CTOR(uow),
-					new PersonRotationRepository(uow), overtimeAvailabilityRepository,
+					PersonRotationRepository.DONT_USE_CTOR(uow), overtimeAvailabilityRepository,
 					new PersistableScheduleDataPermissionChecker(currentAuthorization),
 					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
 						() => personAbsenceRepository,
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 						() => overtimeAvailabilityRepository), currentAuthorization));
 
 			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest); 
-			var requestRepository = new PersonRequestRepository(uow);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 			if (Approved)
 			{
 				PersonRequest.ForcePending();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				var splitted = name.Split(' ');
 				personName = new Name(splitted[0], splitted[1]);
 			}
-			var personRepository = new PersonRepository(uow, null, null);
+			var personRepository = PersonRepository.DONT_USE_CTOR(uow, null, null);
 			var people = personRepository.LoadAll();
 			var person = people.FirstOrDefault(p => p.Name == personName);
 			if (person == null)
