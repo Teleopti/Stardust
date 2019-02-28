@@ -411,7 +411,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			yield return new PersistedTypeMapping
 			{
 				CurrentPersistedName = "AgentStateReadModelMaintainer",
-				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.AgentStateReadModelMaintainer, Teleopti.Wfm.Adherence"},
+				LegacyPersistedNames = new[]
+				{
+					"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.AgentStateReadModelMaintainer, Teleopti.Wfm.Adherence",
+					"Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels.AgentStateReadModelMaintainer, Teleopti.Ccc.Domain"
+				},
 				CurrentTypeName = "Teleopti.Wfm.Adherence.Monitor.AgentStateReadModelMaintainer, Teleopti.Wfm.Adherence"
 			};
 			yield return new PersistedTypeMapping

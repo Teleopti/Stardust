@@ -150,5 +150,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			Mapper.TypeForPersistedName("Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Ccc.Domain")
 				.Name.Should().Contain("ScheduleChangeProcessor");
 		}
+
+		[Test]
+		public void LegacyAgentStateReadModelMaintainerNameShouldWork()
+		{
+			Mapper.TypeForPersistedName("Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels.AgentStateReadModelMaintainer, Teleopti.Ccc.Domain")
+				.Name.Should().Contain("AgentStateReadModelMaintainer");
+		}
 	}
 }
