@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import {PlanningGroupService, PlanningPeriodService} from '../../shared';
+import {IntradayHelper, PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
@@ -92,7 +92,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private translate: TranslateService,
 		private navService: NavigationService,
 		private fb: FormBuilder,
-		private heatMapColorHelper:HeatMapColorHelper, 
+		private heatMapColorHelper:HeatMapColorHelper,
 		private amDateFormat: DateFormatPipe
 	) {
 		this.ppId = $state.params.ppId.trim();
@@ -495,6 +495,21 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 							if (weekday === culturalDaysOff.start) {
 								day.weekstart = true;
 							}
+							day.hasCritical = false;
+							if(day.IntervalDetails){
+								let sum = 0;
+								day.IntervalDetails.forEach(interval =>{
+									sum+=interval.f;
+								});
+								day.average = sum/day.IntervalDetails.length;
+								day.IntervalDetails.some(interval=>{
+									if(IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)){
+										day.hasCritical = true;
+										return true;
+									}
+								});
+							}
+							
 							day.RelativeDifferencePercent = relativeDifferencePercent.toFixed(2);
 							if(day.ColorId === 4){
 								day.DisplayedPercent = '';

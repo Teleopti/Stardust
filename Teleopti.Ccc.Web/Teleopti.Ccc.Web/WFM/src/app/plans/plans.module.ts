@@ -2,7 +2,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { DowngradeableComponent } from '@wfm/types';
-import { PlanningGroupService, PlanningPeriodService } from './shared';
+import {IntradayHelper, PlanningGroupService, PlanningPeriodService} from './shared';
 import { IStateService } from 'angular-ui-router';
 import { TitleBarComponent } from './components/title-bar';
 import { PlanningGroupsOverviewComponent } from './pages/planning-groups/planning-groups-overview.component';
@@ -24,6 +24,7 @@ import {IntradayComponent} from "./components/chart";
 		PlanningPeriodActionService,
 		PlanningPeriodService,
 		HeatMapColorHelper,
+		IntradayHelper,
 		DateFormatPipe,
 		{
 			provide: '$state',

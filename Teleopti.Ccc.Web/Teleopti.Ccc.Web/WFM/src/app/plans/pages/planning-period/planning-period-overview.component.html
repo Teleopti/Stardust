@@ -114,7 +114,7 @@
 									>
 										<div nz-tooltip nzTitle="{{node.tooltip}}"
 											class="heatmap-box"
-											[ngClass]="{ 'heatmap-closed': node.ColorId===4, 'selected':node.selected}"
+											[ngClass]="{ 'heatmap-closed': node.ColorId===4, 'selected':node.selected, 'critical': node.hasCritical}"
 											[style.background-color]="node.bgcolor" (click)="updateIntradayDetails(node, subnode.SkillName)"
 										>
 											<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">

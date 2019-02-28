@@ -14177,6 +14177,10 @@ Check your internet connection or contact your administrator.</value>
     <value>Critical Understaffing:</value>
     <comment>Understaffing is critical</comment>
   </data>
+  <data name="CriticalInterval" xml:space="preserve">
+    <value>Critical interval</value>
+	<comment>Used in the plans' interday graph legends</comment>
+  </data>	
   <data name="InvalidInput" xml:space="preserve">
     <value>Invalid input</value>
     <comment>Input is not valid</comment>

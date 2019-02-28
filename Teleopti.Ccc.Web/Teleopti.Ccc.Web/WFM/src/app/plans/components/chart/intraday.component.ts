@@ -2,6 +2,7 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
 import * as moment from 'moment';
+import {IntradayHelper} from "../../shared";
 
 @Component({
 	selector: 'plans-intraday',
@@ -20,23 +21,31 @@ export class IntradayComponent implements OnChanges {
 	constructor(private translate: TranslateService) {}
 
 
-	private intervalDetailsToC3Data(input): c3.Data {
-		if(input && input.length>0){
-			
+	private intervalDetailsToC3Data(day): c3.Data {
+		let intervalDetails = day.IntervalDetails;
+		if(intervalDetails && intervalDetails.length>0){
 			let timeStamps = [];
 			let forecastedAgents = [];
 			let scheduledAgents = [];
 			let overStaffing = [];
 			let staffingScaffold = [];
 			let underStaffing = [];
-			input.forEach(item => {
-				timeStamps.push(moment.utc(item.x, "HH:mm"));
-				forecastedAgents.push(item.f);
-				scheduledAgents.push(item.s);
-				let diff = item.s-item.f;
-				staffingScaffold.push(diff>0?item.f:item.s);
+			let criticalUnderStaffing = [];
+
+			intervalDetails.forEach(interval => {
+				timeStamps.push(moment.utc(interval.x, "HH:mm"));
+				forecastedAgents.push(interval.f);
+				scheduledAgents.push(interval.s);
+				let diff = interval.s-interval.f;
+				staffingScaffold.push(diff>0?interval.f:interval.s);
 				overStaffing.push(diff>0?diff:0);
-				underStaffing.push(diff<0?-diff:0);
+				if(IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)){
+					criticalUnderStaffing.push(diff<0?-diff:0);
+					underStaffing.push(0);
+				}else{
+					criticalUnderStaffing.push(0);
+					underStaffing.push(diff<0?-diff:0);
+				}
 			});
 			
 			return {
@@ -46,8 +55,9 @@ export class IntradayComponent implements OnChanges {
 					['Forecasted'].concat(forecastedAgents),
 					['Scheduled'].concat(scheduledAgents),
 					['StaffingScaffold'].concat(staffingScaffold),
-					['OverStaffing'].concat(overStaffing),
-					['UnderStaffing'].concat(underStaffing)
+					['Overstaffing'].concat(overStaffing),
+					['Understaffing'].concat(underStaffing),
+					['CriticalInterval'].concat(criticalUnderStaffing),
 				],
 				order: 'null',
 				type: 'bar',
@@ -57,14 +67,18 @@ export class IntradayComponent implements OnChanges {
 				},
 				colors: {
 					'StaffingScaffold': '#FFFFFF',
-					'OverStaffing': '#0a84d6',
-					'UnderStaffing': '#D32F2F'
+					'Overstaffing': '#0a84d6',
+					'Understaffing': '#D32F2F',
+					'CriticalInterval': '#FF0000',
 				},
 				names: {
-					Forecasted: this.translate.instant('ForecastedAgents'),
-					Scheduled: this.translate.instant('ScheduledAgents'),
+					'Forecasted': this.translate.instant('ForecastedAgents'),
+					'Scheduled': this.translate.instant('ScheduledAgents'),
+					'Overstaffing': this.translate.instant('Overstaffing'),
+					'Understaffing': this.translate.instant('Understaffing'),
+					'CriticalInterval': this.translate.instant('CriticalInterval'),
 				},
-				groups: [['StaffingScaffold', 'OverStaffing', 'UnderStaffing']]
+				groups: [['StaffingScaffold', 'Overstaffing', 'Understaffing', 'CriticalInterval']]
 			}
 		} else {
 			return {
@@ -79,7 +93,7 @@ export class IntradayComponent implements OnChanges {
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.chartData) {
 			this.date = moment(changes.chartData.currentValue.Date);
-			this.initChart(this.intervalDetailsToC3Data(changes.chartData.currentValue.IntervalDetails));
+			this.initChart(this.intervalDetailsToC3Data(changes.chartData.currentValue));
 		}
 	}
 

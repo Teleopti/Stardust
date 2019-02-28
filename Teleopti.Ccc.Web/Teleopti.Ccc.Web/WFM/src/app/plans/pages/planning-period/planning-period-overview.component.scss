@@ -81,6 +81,9 @@
 .heatmap-box.selected {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
 }
+.heatmap-box.critical {
+	outline: 3px rgba(255, 0, 0, 0.5) solid;
+}
 
 .heatmap-day{
 	background-color: rgba(0, 0, 0, 0.1);
