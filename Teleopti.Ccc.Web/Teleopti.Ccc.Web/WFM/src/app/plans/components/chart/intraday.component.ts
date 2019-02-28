@@ -109,7 +109,7 @@ export class IntradayComponent implements OnChanges {
 		const valueFormat = config.tooltip_format_value || defaultValueFormat;
 		let text: string = null;
 
-		const criticalInterval: number = 0;
+		let criticalInterval: number = 0;
 		for (let d of data) {
 			if (d.id === 'CriticalInterval') {
 				if (d.value !== 0) {
