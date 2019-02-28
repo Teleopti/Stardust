@@ -99,6 +99,27 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			target.Map(skillDays, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
 			Assert.AreEqual(20, target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].IntervalDetails.First().ForecastAgents);
 		}
+		
+		[Test]
+		public void ShouldMapDisplayIntradayInSkillTimeZone()
+		{
+			var skill = new Skill("Skill1").For(new Activity("_")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				RequiresSkill = true
+			});
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(8, 16));
+			var startDate = new DateOnly(2015, 9, 4);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(new Scenario(), startDate, 10);
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			skillDay.SkillStaffPeriodCollection.ForEach(x => x.SetCalculatedResource65(5));
+			var skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, new List<ISkillDay> {skillDay}}};
+			var target = new FullSchedulingResultModel();
+			target.Map(skillDays, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
+			Assert.AreEqual(TimeSpan.FromHours(8), target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].IntervalDetails.First().StartTime);
+		}
 
 		[Test]
 		public void ShouldMapColorId0IfWithinThresholds()

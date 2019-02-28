@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					{
 						detail.IntervalDetails = skillDay.SkillStaffPeriodCollection.Select(x => new IntervalDetail
 						{
-							StartTime = x.Period.StartDateTime.TimeOfDay,
+							StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, skill.TimeZone).TimeOfDay,
 							ScheduledAgents = Math.Round(x.CalculatedResource, 2),
 							ForecastAgents = Math.Round(x.ForecastedDistributedDemand, 2)
 						});
