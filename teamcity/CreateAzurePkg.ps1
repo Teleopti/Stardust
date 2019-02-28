@@ -22,7 +22,6 @@ properties {
 	$XLarge = "Standard_E2_v3"
 	
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
-	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
 	$ToBeArtifacted = "$WorkingDir\tobeartifact"
 	$BinDependencies = "\\a380\T-Files\RnD\MSI_Dependencies"
