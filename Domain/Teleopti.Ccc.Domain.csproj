@@ -1569,7 +1569,6 @@
     <Compile Include="ApplicationLayer\Badge\IAgentBadgeWithRankCalculator.cs" />
     <Compile Include="ApplicationLayer\Badge\IPerformBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\IsTeamGamificationSettingsAvailable.cs" />
-    <Compile Include="ApplicationLayer\Badge\PerformBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\ICancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\IWriteProtectedScheduleCommandValidator.cs" />
