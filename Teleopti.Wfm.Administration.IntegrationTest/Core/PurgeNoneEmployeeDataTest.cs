@@ -85,9 +85,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			{
 				var allTenants = LoadAllTenants.Tenants();
 				allTenants.ForEach(createPersons);
-				
-				updateSetting(allTenants.First().DataSourceConfiguration.ApplicationConnectionString, 1);
-				updateSetting(allTenants.Last().DataSourceConfiguration.ApplicationConnectionString, 2);
 			}
 
 			Target.Purge();
@@ -95,7 +92,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			using (uow.EnsureUnitOfWorkIsStarted())
 			{
 				var personInfos = loadPersonFromTenant(uow.CurrentSession());
-				personInfos.Count.Should().Be.EqualTo(9);
+				personInfos.Count.Should().Be.EqualTo(20);
 			}
 		}
 
@@ -206,14 +203,17 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				personId = Guid.NewGuid();
 				createPersonInTenant(connection, personId, Now.UtcDateTime().AddMonths(1));
 				persistPersonInfo(tenant, personId, 85);
+				
+				personId = Guid.NewGuid();
+				createPersonInTenant(connection, personId, Now.UtcDateTime().AddMonths(-3));
+				persistPersonInfo(tenant, personId, 86);
 
-				foreach (var i in Enumerable.Range(0,5))
+				foreach (var i in Enumerable.Range(0,10))
 				{
 					personId = Guid.NewGuid();
 
-					createPersonInTenant(connection, personId, Now.UtcDateTime().AddMonths(-i));
+					createPersonInTenant(connection, personId, Now.UtcDateTime().AddDays(-i));
 					persistPersonInfo(tenant,personId,i);
-
 				}
 			}
 		}

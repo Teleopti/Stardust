@@ -61,7 +61,7 @@ namespace Teleopti.Wfm.Administration.Core
 				using (var selectCommand = new SqlCommand(
 					@"select Id from Person with (NOLOCK) where TerminalDate < @date and isdeleted = 0 ", connection))
 				{
-					selectCommand.Parameters.AddWithValue("date", _now.UtcDateTime().AddMonths(-monthToKeepSetting));
+					selectCommand.Parameters.AddWithValue("date", _now.UtcDateTime().AddDays(-7));
 
 					using (var reader = selectCommand.ExecuteReader())
 					{
