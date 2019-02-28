@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Stardust;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Authentication;
@@ -40,33 +38,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var repositories = typeof(PersonRepository).Assembly
-				.GetExportedTypes()
-				.Where(RepositoryDetector.RegisteredAsRepository);
-
-			foreach (var type in repositories)
-			{
-				if (type.GetConstructors().Length == 1)
-				{
-					builder.RegisterType(type)
-						.AsImplementedInterfaces()
-						.SingleInstance();
-				}
-				else if (type.GetConstructor(RepositoryDetector.ConstructorFallback1) != null)
-				{
-					builder.RegisterType(type)
-						.UsingConstructor(RepositoryDetector.ConstructorFallback1)
-						.AsImplementedInterfaces()
-						.SingleInstance();
-				}
-				else if (type.GetConstructor(RepositoryDetector.ConstructorFallback2) != null)
-				{
-					builder.RegisterType(type)
-						.UsingConstructor(RepositoryDetector.ConstructorFallback2)
-						.AsImplementedInterfaces()
-						.SingleInstance();
-				}
-			}
+			builder.RegisterAssemblyTypes(typeof(PersonRepository).Assembly)
+				.Where(RepositoryDetector.RegisteredAsRepository)
+				.AsImplementedInterfaces()
+				.SingleInstance();
 
 			specialPersonAssignmentRegistration(builder);
 
@@ -132,32 +107,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}).As<IStardustRepository>().As<IGetAllWorkerNodes>().SingleInstance();
 		}
 	}
-	
+
 	public static class RepositoryDetector
 	{
-		public static readonly Type[] ConstructorFallback1 = {typeof(ICurrentUnitOfWork), typeof(ICurrentBusinessUnit), typeof(Lazy<IUpdatedBy>)};
-		public static readonly Type[] ConstructorFallback2 = typeof(ICurrentUnitOfWork).AsArray();
-
 		public static bool RegisteredAsRepository(Type type)
 		{
-			return isRepository(type) && hasRepositoryConstructor(type);
-		}
-
-		private static bool isRepository(Type infrastructureType)
-		{
-			return infrastructureType.Name.EndsWith("Repository", StringComparison.Ordinal);
-		}
-
-		private static bool hasRepositoryConstructor(Type type)
-		{
-			if (type.GetConstructors().Length == 1)
-				return true;
-			if (type.GetConstructor(ConstructorFallback1) != null)
-				return true;
-			if (type.GetConstructor(ConstructorFallback2) != null)
-				return true;
-			return false;
+			return type.Name.EndsWith("Repository", StringComparison.Ordinal) &&
+				   type.GetConstructors().Length == 1;
 		}
 	}
-	
 }
