@@ -200,9 +200,10 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
     <Compile Include="Historical\Unit\AdjustAdherence\AdjustAdherenceToNeutralCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\NeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageAdjustToNeutralTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\AdherencesTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\OutOfAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ChangesTest.cs" />

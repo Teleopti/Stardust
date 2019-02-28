@@ -10,6 +10,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 		public IEnumerable<HistoricalAdherenceActivityViewModel> Schedules { get; set; }
 		public IEnumerable<OutOfAdherenceViewModel> OutOfAdherences { get; set; }
 		public IEnumerable<OutOfAdherenceViewModel> RecordedOutOfAdherences { get; set; }
+		public IEnumerable<NeutralAdherenceViewModel> RecordedNeutralAdherences { get; set; }
+		public IEnumerable<NeutralAdherenceViewModel> NeutralAdherences { get; set; }
 		public IEnumerable<ApprovedPeriodViewModel> ApprovedPeriods { get; set; }
 		public IEnumerable<AdjustedToNeutralAdherenceViewModel> AdjustedToNeutralAdherences { get; set; }
 		public IEnumerable<HistoricalChangeViewModel> Changes { get; set; }
@@ -17,7 +19,6 @@ namespace Teleopti.Wfm.Adherence.Historical
 		public ScheduleTimeline Timeline { get; set; }
 		public int? AdherencePercentage { get; set; }
 		public HistoricalAdherenceNavigationViewModel Navigation { get; set; }
-		public IEnumerable<NeutralAdherenceViewModel> RecordedNeutralAdherences { get; set; }
 	}
 
 	public class OutOfAdherenceViewModel

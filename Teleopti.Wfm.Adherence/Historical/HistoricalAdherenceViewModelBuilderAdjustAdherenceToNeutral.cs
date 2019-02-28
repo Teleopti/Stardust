@@ -64,6 +64,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				Schedules = buildSchedules(_schedule.Load(personId, date), person),
 				Changes = buildChanges(adherenceDay.Changes()),
 				OutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
+				NeutralAdherences = buildNeutralAdherences(adherenceDay.NeutralAdherences()),
 				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.RecordedOutOfAdherences()),
 				RecordedNeutralAdherences = buildNeutralAdherences(adherenceDay.RecordedNeutralAdherences()),
 				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
