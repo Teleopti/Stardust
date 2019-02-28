@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
@@ -7,41 +6,36 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
     [TestFixture]
     public class RtaStateGroupTest
     {
-        private RtaStateGroup _target;
         private const string _name = "namn";
         private const bool _available = true;
         private const bool _defaultStateGroup = false;
 
-        [SetUp]
-        public void Setup()
-        {
-            _target = new RtaStateGroup(_name, _defaultStateGroup, _available);
-        }
-
         [Test]
         public void CanCreateAndPropertiesWork()
-        {
-            Assert.AreEqual(_name, _target.Name);
-            Assert.AreEqual(_available, _target.Available);
-            Assert.AreEqual(_defaultStateGroup, _target.DefaultStateGroup);
+		{
+			var target = new RtaStateGroup(_name, _defaultStateGroup, _available);
+			Assert.AreEqual(_name, target.Name);
+            Assert.AreEqual(_available, target.Available);
+            Assert.AreEqual(_defaultStateGroup, target.DefaultStateGroup);
 
-            _target.Name = "newName";
-            _target.Available = false;
-            _target.DefaultStateGroup = true;
+            target.Name = "newName";
+            target.Available = false;
+            target.DefaultStateGroup = true;
 
-            Assert.AreEqual("newName",_target.Name);
-            Assert.IsFalse(_target.Available);
-            Assert.IsTrue(_target.DefaultStateGroup);
+            Assert.AreEqual("newName",target.Name);
+            Assert.IsFalse(target.Available);
+            Assert.IsTrue(target.DefaultStateGroup);
         }
 
         [Test]
         public void VerifyAddState()
-        {
-            _target.AddState("100", "state 1");
-            IRtaState state1 = _target.StateCollection[0];
+		{
+			var target = new RtaStateGroup(_name, _defaultStateGroup, _available);
+			target.AddState("100", "state 1");
+            IRtaState state1 = target.StateCollection[0];
 
             Assert.AreEqual(state1.Parent.Name, _name);
-            Assert.AreEqual(1, _target.StateCollection.Count);
+            Assert.AreEqual(1, target.StateCollection.Count);
         }
     }
 }

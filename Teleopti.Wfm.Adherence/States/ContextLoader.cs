@@ -157,7 +157,12 @@ namespace Teleopti.Wfm.Adherence.States
 
 			var tasks = transactions
 				.Batch(taskTransactionCount)
-				.Select(transactionBatch => { return Task.Run(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); }); })
+				.Select(transactionBatch =>
+				{
+					var task = Task.Run(() => { transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); }); });
+					task.ConfigureAwait(false);
+					return task;
+				})
 				.ToArray();
 
 			Task.WaitAll(tasks);
