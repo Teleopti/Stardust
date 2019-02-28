@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 
-		WFM_Gamification_Setting_With_External_Quality_Values_45003,
 		WFM_Gamification_Calculate_Badges_47250,
 		WFM_Gamification_Recalculate_Badges_Within_Period_48403,
 		WFM_Gamification_Create_Rolling_Periods_74866,
