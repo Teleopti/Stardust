@@ -39,7 +39,7 @@ export class IntradayComponent implements OnChanges {
 				let diff = interval.s-interval.f;
 				staffingScaffold.push(diff>0?interval.f:interval.s);
 				overStaffing.push(diff>0?diff:0);
-				if(IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)){
+				if(day.hasCritical && IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)){
 					criticalUnderStaffing.push(diff<0?-diff:0);
 					underStaffing.push(0);
 				}else{

@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_PrepareToRemoveRightToLeft_81112,
 		WFM_Plans_Redesign_81198,
 		WFM_Plans_HeatMap_79112_80785,
+		WFM_Plans_IntradayIssuesInHeatMap_79113,
 
 		Wfm_DisplayOnlineHelp_39402,
 

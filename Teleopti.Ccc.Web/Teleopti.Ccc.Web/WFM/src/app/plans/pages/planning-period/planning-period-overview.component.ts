@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {IntradayHelper, PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
-import { NavigationService } from '../../../core/services';
+import {NavigationService, TogglesService} from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
 import {debounceTime, groupBy, map, mergeMap, reduce, tap, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
@@ -84,6 +84,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		Description: null
 	};
 
+	WFM_Plans_IntradayIssuesInHeatMap_79113 = false;
+
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
 		private planningPeriodActionService: PlanningPeriodActionService,
@@ -93,10 +95,16 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private navService: NavigationService,
 		private fb: FormBuilder,
 		private heatMapColorHelper:HeatMapColorHelper,
-		private amDateFormat: DateFormatPipe
+		private amDateFormat: DateFormatPipe,
+		private togglesService: TogglesService
 	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
+		this.togglesService.toggles$.subscribe({
+			next: toggles => {
+				this.WFM_Plans_IntradayIssuesInHeatMap_79113 = toggles.WFM_Plans_IntradayIssuesInHeatMap_79113;
+			}
+		});
 	}
 
 	ngOnInit() {
@@ -496,7 +504,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 								day.weekstart = true;
 							}
 							day.hasCritical = false;
-							if(day.IntervalDetails){
+							if(day.IntervalDetails&&this.WFM_Plans_IntradayIssuesInHeatMap_79113){
 								let sum = 0;
 								day.IntervalDetails.forEach(interval =>{
 									sum+=interval.f;

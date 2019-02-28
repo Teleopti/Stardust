@@ -11,6 +11,7 @@ import {DateFormatPipe, MomentModule} from "ngx-moment";
 import {HeatMapColorHelper} from "./shared/heatmapcolor.service";
 import {PlanningPeriodActionService} from "./shared/planningperiod.action.service";
 import {IntradayComponent} from "./components/chart";
+import {TogglesService} from "../core/services";
 
 @NgModule({
 	declarations: [TitleBarComponent, IntradayComponent,  PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
@@ -30,7 +31,8 @@ import {IntradayComponent} from "./components/chart";
 			provide: '$state',
 			useFactory: (i: any): IStateService => i.get('$state'),
 			deps: ['$injector']
-		}
+		},
+		TogglesService
 	],
 	exports: [],
 	entryComponents: [PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent]

@@ -6,6 +6,7 @@ export interface Toggles {
 	readonly Wfm_PeopleWeb_PrepareForRelease_47766?: boolean;
 	readonly Wfm_Authentication_ChangePasswordMenu_76666?: boolean;
 	readonly Wfm_PeopleWeb_Improve_Search_81681?: boolean;
+	readonly WFM_Plans_IntradayIssuesInHeatMap_79113?: boolean;
 	readonly [propName: string]: boolean;
 }
 
