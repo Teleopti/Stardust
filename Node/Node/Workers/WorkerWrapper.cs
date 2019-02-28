@@ -364,24 +364,4 @@ namespace Stardust.Node.Workers
 			_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
 		}
 	}
-
-	public interface INow
-	{
-		DateTime UtcDateTime();
-	}
-
-	public sealed class Now : INow
-	{
-		public DateTime UtcDateTime()
-		{
-			return DateTime.UtcNow;
-		}
-	}
-	public interface IMutateNow
-	{
-		void Reset();
-		void Is(DateTime? utc);
-		bool IsMutated();
-	}
-	
 }

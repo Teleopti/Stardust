@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="JobDetailSenderTest.cs" />
     <Compile Include="JobHandlersTests.cs" />
+    <Compile Include="MutableNow.cs" />
     <Compile Include="NodeConfigurationTests.cs" />
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeModuleTest.cs" />

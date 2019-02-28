@@ -147,6 +147,7 @@
     <Compile Include="Workers\InvokeHandler.cs" />
     <Compile Include="Entities\JobDetailEntity.cs" />
     <Compile Include="Workers\JobDetailSender.cs" />
+    <Compile Include="Workers\Now.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
