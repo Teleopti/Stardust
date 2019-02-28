@@ -32,6 +32,7 @@ namespace Stardust.Node
 			builder.RegisterType<TrySendJobFaultedToManagerTimer>().SingleInstance();
 			builder.RegisterType<TrySendJobCanceledToManagerTimer>().SingleInstance();
 			builder.RegisterType<JobDetailSender>().SingleInstance();
+			builder.RegisterType<Now>().As<INow>().SingleInstance();
 
 		}
 	}

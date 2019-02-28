@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Core;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Entities;
@@ -40,6 +41,8 @@ namespace Stardust.Node.Workers
 		private JobQueueItemEntity _currentMessageToProcess;
 		private TrySendStatusToManagerTimer _trySendStatusToManagerTimer;
 		private readonly JobDetailSender _jobDetailSender;
+		private readonly INow _now;
+		private DateTime? _startJobTimeout;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
 							 NodeConfiguration nodeConfiguration,
@@ -48,7 +51,7 @@ namespace Stardust.Node.Workers
 							 TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 							 TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
 							 TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
-							 TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender)
+							 TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender, INow now)
 		{
 			_handler = invokeHandler;
 			_nodeConfiguration = nodeConfiguration;
@@ -64,6 +67,7 @@ namespace Stardust.Node.Workers
 			_trySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 			_trySendJobDetailToManagerTimer = trySendJobDetailToManagerTimer;
 			_jobDetailSender = jobDetailSender;
+			_now = now;
 
 			IsWorking = false;
 
@@ -81,6 +85,7 @@ namespace Stardust.Node.Workers
 		{
 			lock (_startJobLock)
 			{
+				resetIfTimeout();
 				if (_currentMessageToProcess != null || IsWorking)
 				{
 					var responseMsg = new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent(WorkerIsAlreadyWorking) };
@@ -121,8 +126,19 @@ namespace Stardust.Node.Workers
 					return CreateBadRequest(JobToDoCanNotBeDeserialize);
 				}
 				_currentMessageToProcess = jobQueueItemEntity;
+				_startJobTimeout = _now.UtcDateTime().AddMinutes(5);
 				return new HttpResponseMessage(HttpStatusCode.OK);
 			}
+		}
+
+		private void resetIfTimeout()
+		{
+			if (_now.UtcDateTime() >= _startJobTimeout)
+			{
+				_currentMessageToProcess = null;
+				_startJobTimeout = null;
+			}
+
 		}
 
 		private static HttpResponseMessage CreateBadRequest(string content)
@@ -348,4 +364,24 @@ namespace Stardust.Node.Workers
 			_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
 		}
 	}
+
+	public interface INow
+	{
+		DateTime UtcDateTime();
+	}
+
+	public sealed class Now : INow
+	{
+		public DateTime UtcDateTime()
+		{
+			return DateTime.UtcNow;
+		}
+	}
+	public interface IMutateNow
+	{
+		void Reset();
+		void Is(DateTime? utc);
+		bool IsMutated();
+	}
+	
 }

@@ -63,6 +63,7 @@ namespace NodeTest
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
 															   _jobDetailSender,
 															   new FakeHttpSender());
+			_now = new MutableNow();
 
 		}
 
@@ -90,6 +91,7 @@ namespace NodeTest
 		private SendJobFaultedTimerFake _sendJobFaultedTimer;
 		private TrySendJobDetailToManagerTimer _trySendJobDetailToManagerTimer;
 		private JobDetailSender _jobDetailSender;
+		private MutableNow _now;
 
 		[Test]
 		public void ShouldBeAbleToCatchExceptionsFromJob() //faulting job
@@ -102,7 +104,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 		}
@@ -118,7 +121,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 		}
@@ -134,7 +138,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
@@ -153,7 +158,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
@@ -174,7 +180,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 			
 			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity() { JobId = Guid.Empty });
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
@@ -191,7 +198,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 
 			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity());
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
@@ -208,7 +216,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+											   _now);
 
 			var actionResult = _workerWrapper.ValidateStartJob(null);
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);

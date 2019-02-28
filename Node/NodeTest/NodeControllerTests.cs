@@ -12,6 +12,7 @@ using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using SharpTestsEx;
 using Stardust.Node;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
@@ -59,6 +60,7 @@ namespace NodeTest
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
 															   _jobDetailSender,
 			                                                   new FakeHttpSender());
+			_now = new MutableNow();
 		}
 
 		[TestFixtureSetUp]
@@ -84,6 +86,7 @@ namespace NodeTest
 		private SendJobFaultedTimerFake _sendJobFaultedTimer;
 		private TrySendJobDetailToManagerTimer _trySendJobDetailToManagerTimer;
 		private JobDetailSender _jobDetailSender;
+		private MutableNow _now;
 
 		[Test]
 		public void CancelJobShouldReturnNotFoundWhenNodeIsIdle()
@@ -96,7 +99,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender,
+												_now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -121,7 +125,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, 
+												_now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -150,7 +155,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -179,7 +184,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -205,7 +210,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -233,7 +238,7 @@ namespace NodeTest
 											   _sendJobCanceledTimer,
 											   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -254,6 +259,8 @@ namespace NodeTest
 			};
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+			_nodeController.StartJob(_jobQueueItemEntity.JobId);
+			
 
 			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
 
@@ -273,7 +280,7 @@ namespace NodeTest
 											   _sendJobCanceledTimer,
 											   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -300,7 +307,7 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -329,7 +336,7 @@ namespace NodeTest
 											   _sendJobCanceledTimer,
 											   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
-											   _jobDetailSender);
+											   _jobDetailSender, _now);
 
 			_nodeController = new NodeController(_workerWrapper)
 			{
@@ -343,6 +350,126 @@ namespace NodeTest
 							  .Result.StatusCode ==
 						  HttpStatusCode.OK);
 		}
-		
+
+		[Test]
+		public void ShouldTimeoutIfWaitingMoreThan5Minutes()
+		{
+			
+			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+				_nodeConfigurationFake,
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				_sendJobDoneTimer,
+				_sendJobCanceledTimer,
+				_sendJobFaultedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, _now);
+
+			_nodeController = new NodeController(_workerWrapper)
+			{
+				Request = new HttpRequestMessage(),
+				Configuration = new HttpConfiguration()
+			};
+
+			var parameters = new TestJobParams("Test Job",1);
+			var ser = JsonConvert.SerializeObject(parameters);
+
+			var jobToDo2 = new JobQueueItemEntity
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Another name",
+				Serialized = ser,
+				Type = "NodeTest.JobHandlers.TestJobParams"
+			};
+
+			_now.Is(new DateTime(2019,2,28,10,10,0));
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
+
+			_now.Is(_now.UtcDateTime().AddMinutes(6));
+			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
+
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
+				.Result.IsSuccessStatusCode);
+			_workerWrapper.IsWorking.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotTimeoutIfWaitingMoreThan5Minutes()
+		{
+
+			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+				_nodeConfigurationFake,
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				_sendJobDoneTimer,
+				_sendJobCanceledTimer,
+				_sendJobFaultedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, _now);
+
+			_nodeController = new NodeController(_workerWrapper)
+			{
+				Request = new HttpRequestMessage(),
+				Configuration = new HttpConfiguration()
+			};
+
+			var parameters = new TestJobParams("Test Job", 1);
+			var ser = JsonConvert.SerializeObject(parameters);
+
+			var jobToDo2 = new JobQueueItemEntity
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Another name",
+				Serialized = ser,
+				Type = "NodeTest.JobHandlers.TestJobParams"
+			};
+
+			_now.Is(new DateTime(2019, 2, 28, 10, 10, 0));
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+
+			_now.Is(_now.UtcDateTime().AddMinutes(3));
+			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
+
+			Assert.IsFalse(actionResult.ExecuteAsync(new CancellationToken())
+				.Result.IsSuccessStatusCode);
+			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
+		}
+
+	}
+
+	public class MutableNow : INow, IMutateNow
+	{
+		private DateTime? _mutatedUtc;
+
+		public MutableNow()
+		{
+		}
+
+		public MutableNow(DateTime utc)
+		{
+			Is(utc);
+		}
+
+		public DateTime UtcDateTime()
+		{
+			return _mutatedUtc ?? DateTime.UtcNow;
+		}
+
+		public void Reset()
+		{
+			_mutatedUtc = null;
+		}
+
+		public virtual void Is(DateTime? utc)
+		{
+			_mutatedUtc = utc;
+		}
+
+		public bool IsMutated()
+		{
+			return _mutatedUtc.HasValue;
+		}
+
 	}
 }
