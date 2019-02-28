@@ -22,12 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly Lazy<IUpdatedBy> _updatedBy;
 
-		[Obsolete("Should be removed. Don't impl this ctor if you create a new repository!")]
-		protected Repository(IUnitOfWork unitOfWork)
-		{
-			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-		}
-
 		protected Repository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
