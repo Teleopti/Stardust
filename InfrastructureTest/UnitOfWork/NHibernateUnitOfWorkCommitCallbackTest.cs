@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			UnitOfWork.AfterSuccessfulTx(() => isCalled = true);
 			try
 			{
-				new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).Add(person);
+				PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).Add(person);
 				UnitOfWork.PersistAll();
 			}
 			catch (DataSourceException)

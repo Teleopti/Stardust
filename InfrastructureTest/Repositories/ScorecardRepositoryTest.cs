@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IScorecard> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ScorecardRepository(currentUnitOfWork.Current());
+            return ScorecardRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
     }
 }

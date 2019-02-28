@@ -113,8 +113,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.SendPushMessages(
 					_interceptor.ModifiedRoots,
 					new PushMessagePersister(
-						new PushMessageRepository(this),
-						new PushMessageDialogueRepository(this),
+						PushMessageRepository.DONT_USE_CTOR(this),
+						PushMessageDialogueRepository.DONT_USE_CTOR(this),
 						new CreatePushMessageDialoguesService()
 					));
 		}

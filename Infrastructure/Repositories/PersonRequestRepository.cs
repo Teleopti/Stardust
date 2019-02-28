@@ -15,6 +15,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
@@ -25,17 +27,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class PersonRequestRepository : Repository<IPersonRequest>, IPersonRequestRepository
 	{
-		private const char splitter = ' ';
-
-		public PersonRequestRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
+		public static PersonRequestRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new PersonRequestRepository(currentUnitOfWork, null, null);
 		}
 
-		public PersonRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static PersonRequestRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new PersonRequestRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		private const char splitter = ' ';
+
+		public PersonRequestRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

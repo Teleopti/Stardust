@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IWorkShiftRuleSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new WorkShiftRuleSetRepository(currentUnitOfWork);
+            return WorkShiftRuleSetRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(ruleSet);
             PersistAndRemoveFromUnitOfWork(ruleSet2);
 
-            ICollection<IWorkShiftRuleSet> res = new WorkShiftRuleSetRepository(UnitOfWork).FindAllWithLimitersAndExtenders();
+            ICollection<IWorkShiftRuleSet> res = WorkShiftRuleSetRepository.DONT_USE_CTOR(UnitOfWork).FindAllWithLimitersAndExtenders();
 
             Assert.AreEqual(2, res.Count);
             foreach (WorkShiftRuleSet shiftRuleSet in res)
@@ -161,11 +161,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IWorkShiftRuleSet ruleSet = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(ruleSet);
 
-            ruleSet = new WorkShiftRuleSetRepository(UnitOfWork).Get(ruleSet.Id.Value);
+            ruleSet = WorkShiftRuleSetRepository.DONT_USE_CTOR(UnitOfWork).Get(ruleSet.Id.Value);
             ruleSet.DeleteExtender(ruleSet.ExtenderCollection[2]);
             PersistAndRemoveFromUnitOfWork(ruleSet);
 
-            ruleSet = new WorkShiftRuleSetRepository(UnitOfWork).Get(ruleSet.Id.Value);
+            ruleSet = WorkShiftRuleSetRepository.DONT_USE_CTOR(UnitOfWork).Get(ruleSet.Id.Value);
             Assert.AreEqual(3, ruleSet.ExtenderCollection.Count);
         }
 
@@ -175,11 +175,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IWorkShiftRuleSet ruleSet = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(ruleSet);
 
-            ruleSet = new WorkShiftRuleSetRepository(UnitOfWork).Get(ruleSet.Id.Value);
+            ruleSet = WorkShiftRuleSetRepository.DONT_USE_CTOR(UnitOfWork).Get(ruleSet.Id.Value);
             ruleSet.DeleteLimiter(ruleSet.LimiterCollection[1]);
             PersistAndRemoveFromUnitOfWork(ruleSet);
 
-            ruleSet = new WorkShiftRuleSetRepository(UnitOfWork).Get(ruleSet.Id.Value);
+            ruleSet = WorkShiftRuleSetRepository.DONT_USE_CTOR(UnitOfWork).Get(ruleSet.Id.Value);
             Assert.AreEqual(1, ruleSet.LimiterCollection.Count);
         }
     }

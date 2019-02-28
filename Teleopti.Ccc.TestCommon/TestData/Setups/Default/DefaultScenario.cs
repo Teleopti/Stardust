@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			new ScenarioRepository(currentUnitOfWork).Add(Scenario);
+			ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork).Add(Scenario);
 		}
 	}
 }

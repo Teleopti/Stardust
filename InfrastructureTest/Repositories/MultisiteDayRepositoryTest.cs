@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanCreate()
         {
-            Assert.IsNotNull(new MultisiteDayRepository(UnitOfWork));
+            Assert.IsNotNull(MultisiteDayRepository.DONT_USE_CTOR(UnitOfWork));
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMultisiteDay multisiteDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(multisiteDay);
 
-            MultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
+            MultisiteDayRepository multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(UnitOfWork);
             ICollection<IMultisiteDay> multisiteDays = multisiteDayRepository.FindRange(new DateOnlyPeriod(multisiteDay.MultisiteDayDate,multisiteDay.MultisiteDayDate.AddDays(1)),
                 multisiteDay.Skill, multisiteDay.Scenario);
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGetAllMultisiteDaysWork()
         {
-            var multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
+            var multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(UnitOfWork);
             var multisiteDays = multisiteDayRepository.GetAllMultisiteDays(new DateOnlyPeriod(_date,_date.AddDays(1)), new List<IMultisiteDay>(), _skill, _scenario);
             Assert.AreEqual(2, multisiteDays.Count);
             Assert.IsNotNull(multisiteDays.ElementAt(0).Id);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGetAllMultisiteDaysWorkWithoutAddingToRepository()
         {
-            var multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
+            var multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(UnitOfWork);
             var multisiteDays = multisiteDayRepository.GetAllMultisiteDays(new DateOnlyPeriod(_date, _date.AddDays(1)),
                                                            new List<IMultisiteDay>(), _skill, _scenario, false);
             Assert.AreEqual(2, multisiteDays.Count);
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMultisiteDay multisiteDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(multisiteDay);
 
-            MultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
+            MultisiteDayRepository multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(UnitOfWork);
 
             DateOnlyPeriod dateTimePeriod = new DateOnlyPeriod(multisiteDay.MultisiteDayDate,
                                                                multisiteDay.MultisiteDayDate.AddDays(1));
@@ -187,10 +187,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
             UnitOfWork.Clear();
-            new SkillTypeRepository(UnitOfWork).Remove(_skillType);
-	        new ScenarioRepository(UnitOfWork).Remove(_scenario);
-	        new ActivityRepository(UnitOfWork).Remove(_skill.Activity);
-            foreach (var childSkill in new SkillRepository(UnitOfWork).LoadAll())
+            SkillTypeRepository.DONT_USE_CTOR(UnitOfWork).Remove(_skillType);
+	        ScenarioRepository.DONT_USE_CTOR(UnitOfWork).Remove(_scenario);
+	        ActivityRepository.DONT_USE_CTOR(UnitOfWork).Remove(_skill.Activity);
+            foreach (var childSkill in SkillRepository.DONT_USE_CTOR(UnitOfWork).LoadAll())
             {
 							Session.Delete(childSkill);
             }
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IMultisiteDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultisiteDayRepository(currentUnitOfWork);
+            return MultisiteDayRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

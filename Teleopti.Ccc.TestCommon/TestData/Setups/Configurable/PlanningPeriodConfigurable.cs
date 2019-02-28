@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (HasScheduled)
 			{
-				var personRepository = new PersonRepository(currentUnitOfWork, null, null);
+				var personRepository = PersonRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 				var jobResult = new JobResult(JobCategory.WebSchedule, Period.Range, personRepository.LoadAll().FirstOrDefault(), DateTime.UtcNow)
 				{
 					FinishedOk = true
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				new JobResultRepository(currentUnitOfWork).Add(jobResult);
 				Period.JobResults.Add(jobResult);
 				var scenario = DefaultScenario.Scenario;
-				var activity = new ActivityRepository(currentUnitOfWork, null, null).LoadAll().FirstOrDefault();
+				var activity = ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().FirstOrDefault();
 				var perons = personRepository.FindPeopleInPlanningGroup(planningGroup, Period.Range);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork);
 				foreach (var person in perons)
 				{
 					foreach (var date in Period.Range.DayCollection())

@@ -5,7 +5,6 @@ using System.Web.Http;
 using System.Web.WebPages;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,7 +12,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.Web.Filters;
-
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
@@ -25,19 +23,22 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IPersonFinderReadOnlyRepository _personFinder;
 		private readonly IAuthorization _auth;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public PeopleSearchController(
 			IPeopleSearchProvider searchProvider,
 			ILoggedOnUser loggonUser,
 			IPersonFinderReadOnlyRepository personFinder,
 			IPersonRepository personRepository,
-			IAuthorization auth)
+			IAuthorization auth,
+			ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_searchProvider = searchProvider;
 			_loggonUser = loggonUser;
 			_personFinder = personFinder;
 			_personRepository = personRepository;
 			_auth = auth;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		[UnitOfWork]
@@ -45,8 +46,9 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		public virtual FindPeopleViewModel FindPeople(FindPeopleInputModel searchCritera)
 		{
 			searchCritera.SearchDate = DateTime.Now;
-			var canSeeUsers = _auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, DateOnly.Today, _loggonUser.CurrentUser());
-			var currentBusinessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
+			var currentUser = _loggonUser.CurrentUser();
+			var canSeeUsers = _auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, DateOnly.Today, currentUser);
+			var currentBusinessUnit = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 
 			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(
 				PersonFinderField.All, 
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				searchCritera.SortColumn, 
 				searchCritera.Direction,
 				searchCritera.SearchDate.ToDateOnly(), 
-				_loggonUser.CurrentUser().Id.GetValueOrDefault(), 
+				currentUser.Id.GetValueOrDefault(), 
 				DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, 
 				canSeeUsers, 
 				currentBusinessUnit);
@@ -65,15 +67,15 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			_personFinder.FindPeopleWithDataPermission(personFinderSearchCriteria);
 
 			var findPeopleViewModel = new FindPeopleViewModel();
-			var persons = _personRepository.FindPeople(personFinderSearchCriteria.DisplayRows.Select(x => x.PersonId));
+			var persons = _personRepository.FindPeople(personFinderSearchCriteria.DisplayRows.Select(x => x.PersonId)).ToDictionary(p => p.Id.GetValueOrDefault());
 
-			foreach (var personFinderDisplayRow in personFinderSearchCriteria.DisplayRows)
+			var pers = personFinderSearchCriteria.DisplayRows.Select(personFinderDisplayRow =>
 			{
-				var person = persons.FirstOrDefault(x => x.Id == personFinderDisplayRow.PersonId);
+				var person = persons[personFinderDisplayRow.PersonId];
 				var personPeriod = person.Period(searchCritera.SearchDate.ToDateOnly());
 				var team = personPeriod?.Team?.Description.Name ?? string.Empty;
 				var site = personPeriod?.Team?.Site?.Description.Name ?? string.Empty;
-				var pers = new PeopleViewModel
+				return new PeopleViewModel
 				{
 					FirstName = person.Name.FirstName,
 					LastName = person.Name.LastName,
@@ -81,15 +83,16 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					SiteTeam = string.Concat(site, team.IsEmpty() ? "" : "/", team),
 					Team = team,
 					Site = site,
-					Roles = person.PermissionInformation.ApplicationRoleCollection.Select(x => new SearchPersonRoleViewModel
-					{
-						Id = x.Id.GetValueOrDefault(),
-						Name = x.DescriptionText,
-					}).ToList()
+					Roles = person.PermissionInformation.ApplicationRoleCollection.Select(x =>
+						new SearchPersonRoleViewModel
+						{
+							Id = x.Id.GetValueOrDefault(),
+							Name = x.DescriptionText,
+						}).ToList()
 				};
-				findPeopleViewModel.People.Add(pers);
-			}
+			}).ToArray();
 
+			findPeopleViewModel.People.AddRange(pers);
 			findPeopleViewModel.TotalRows = personFinderSearchCriteria.TotalRows;
 			findPeopleViewModel.PageIndex = searchCritera.PageIndex;
 

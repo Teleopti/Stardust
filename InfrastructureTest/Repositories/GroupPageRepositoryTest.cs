@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IGroupPage> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new GroupPageRepository(currentUnitOfWork.Current());
+            return GroupPageRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-		    var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+		    var result = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 		    result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-			var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+			var result = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 			result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-			var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+			var result = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 			result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-			var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+			var result = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 			result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IGroupPage sortOrder1 = new GroupPage("AAA");
 
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
-			IList<IGroupPage> groupPageCollection = new GroupPageRepository(UnitOfWork).LoadGroupPagesByIds(new[] { sortOrder2.Id.Value});
+			IList<IGroupPage> groupPageCollection = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).LoadGroupPagesByIds(new[] { sortOrder2.Id.Value});
 
 			Assert.AreEqual(groupPageCollection[0], sortOrder2);
 
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IGroupPage sortOrder1 = new GroupPage("AAA");
 
             PersistAndRemoveFromUnitOfWork(sortOrder1);
-            IList<IGroupPage> groupPageCollection = new GroupPageRepository(UnitOfWork).LoadAllGroupPageBySortedByDescription();
+            IList<IGroupPage> groupPageCollection = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).LoadAllGroupPageBySortedByDescription();
 
             Assert.AreEqual(groupPageCollection[0], sortOrder1);
             Assert.AreEqual(groupPageCollection[1], sortOrder2);
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IGroupPage sortOrder1 = new GroupPage("AAA");
 
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
-			IList<IGroupPage> groupPageCollection = new GroupPageRepository(UnitOfWork).LoadAllGroupPageWhenPersonCollectionReAssociated();
+			IList<IGroupPage> groupPageCollection = GroupPageRepository.DONT_USE_CTOR(UnitOfWork).LoadAllGroupPageWhenPersonCollectionReAssociated();
 
             Assert.AreEqual(groupPageCollection[0], sortOrder1);
 			Assert.AreEqual(groupPageCollection[1], sortOrder2);

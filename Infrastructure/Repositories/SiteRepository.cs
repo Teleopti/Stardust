@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
@@ -6,6 +7,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -14,16 +17,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class SiteRepository : Repository<ISite>, ISiteRepository
     {
-#pragma warning disable 618
-        public SiteRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static SiteRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new SiteRepository(currentUnitOfWork, null, null);
+		}
 
-				public SiteRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork, null, null)
+		public static SiteRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new SiteRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public SiteRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
-		    
 	    }
 
         public ICollection<ISite> FindSiteByDescriptionName(string name)

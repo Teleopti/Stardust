@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    _selectedAgents = new PersonRepository(new ThisUnitOfWork(uow), null, null).FindPeople(_selectedAgentGuids);
+                    _selectedAgents = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null).FindPeople(_selectedAgentGuids);
                 }
             }
             catch (DataSourceException dataSourceException)

@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			Scenario = ScenarioFactory.CreateScenario(Name, !ExtraScenario, EnableReporting);
 
-			var businessUnit = new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
+			var businessUnit = BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
 			Scenario.SetBusinessUnit(businessUnit);
 
-			new ScenarioRepository(currentUnitOfWork).Add(Scenario);
+			ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork).Add(Scenario);
 		}
 	}
 }

@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			Text = @"Agent Skill Analyzer " + _date.ToShortDateString(CultureInfo.CurrentCulture);
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_allSkills = new SkillRepository(uow).LoadAll().ToList();
+				_allSkills = SkillRepository.DONT_USE_CTOR(uow).LoadAll().ToList();
 				foreach (var skill in _allSkills)
 				{
 					LazyLoadingManager.Initialize(skill.Activity);

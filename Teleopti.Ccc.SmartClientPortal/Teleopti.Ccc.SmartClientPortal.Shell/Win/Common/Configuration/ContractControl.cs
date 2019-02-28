@@ -339,8 +339,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			UnitOfWork = value;
-			Repository = new ContractRepository(UnitOfWork);
-			_multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(UnitOfWork);
+			Repository = ContractRepository.DONT_USE_CTOR(UnitOfWork);
+			_multiplicatorDefinitionSetRepository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()

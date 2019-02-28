@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
+			ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork).Add(ShiftCategory);
 		}
 	}
 }

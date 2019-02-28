@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var alarmColor = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
 			var displayColor = string.IsNullOrEmpty(DisplayColor) ? alarmColor : Color.FromName(DisplayColor);
 
-			var ruleRepository = new RtaRuleRepository(currentUnitOfWork);
+			var ruleRepository = RtaRuleRepository.DONT_USE_CTOR(currentUnitOfWork);
 
 			IRtaRule rule = null;
 			if (Name != null)
@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				ruleRepository.Add(rule);
 			}
 
-			var activityRepository = new ActivityRepository(currentUnitOfWork, null, null);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 
 			IRtaStateGroup stateGroup = null;
 			if (PhoneState != null)
 			{
-				var stateGroupRepository = new RtaStateGroupRepository(currentUnitOfWork);
+				var stateGroupRepository = RtaStateGroupRepository.DONT_USE_CTOR(currentUnitOfWork);
 				stateGroup = (from g in stateGroupRepository.LoadAll()
 					from s in g.StateCollection
 					where s.StateCode == PhoneState
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			};
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
-				var businessUnit = new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
+				var businessUnit = BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit);
 				stateGroup?.SetBusinessUnit(businessUnit);
 				rtaMap.SetBusinessUnit(businessUnit);
 			}
 
-			var rtaMapRepository = new RtaMapRepository(currentUnitOfWork);
+			var rtaMapRepository = RtaMapRepository.DONT_USE_CTOR(currentUnitOfWork);
 			rtaMapRepository.Add(rtaMap);
 		}
 	}

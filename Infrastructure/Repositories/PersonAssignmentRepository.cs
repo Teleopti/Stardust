@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
 	public class PersonAssignmentRepositoryWithQueryHint : PersonAssignmentRepository
 	{
-		public PersonAssignmentRepositoryWithQueryHint(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public PersonAssignmentRepositoryWithQueryHint(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy) : 
+			base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 
@@ -34,8 +36,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository,
 		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
-		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static PersonAssignmentRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new PersonAssignmentRepository(currentUnitOfWork, null, null);
+		}
+
+		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

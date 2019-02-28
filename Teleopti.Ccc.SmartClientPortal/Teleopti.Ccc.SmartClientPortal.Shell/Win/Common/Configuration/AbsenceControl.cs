@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				// Loads the absences.
-				var absenceRepository = new AbsenceRepository(myUow);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(myUow);
 				var absenceCollection = absenceRepository.LoadAll();
 
 				// Get those absences that are used by person account trackers.
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private static IList<IAbsence> getAbsencesUsedByPersonAccount(IUnitOfWork uow)
 		{
-			var repository = new AbsenceRepository(uow);
+			var repository = AbsenceRepository.DONT_USE_CTOR(uow);
 			return repository.FindAbsenceTrackerUsedByPersonAccount();
 		}
 
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repository = new AbsenceRepository(uow);
+				var repository = AbsenceRepository.DONT_USE_CTOR(uow);
 
 				foreach (var absenceView in _absenceViewsToBeDeleted)
 				{

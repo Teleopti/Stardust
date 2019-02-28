@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			using (var uow = JobParameters.Helper.SelectedDataSource.Application.CreateAndOpenUnitOfWork())
 			using (var auow = JobParameters.Helper.SelectedDataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
-				_dayOffTemplateRepository = new DayOffTemplateRepository(new ThisUnitOfWork(uow));
+				_dayOffTemplateRepository = DayOffTemplateRepository.DONT_USE_CTOR2(new ThisUnitOfWork(uow));
 				var currentAnalyticsUnitOfWork = new ThisAnalyticsUnitOfWork(auow);
 				_analyticsDayOffRepository = new AnalyticsDayOffRepository(currentAnalyticsUnitOfWork);
 				_analyticsBusinessUnitRepository = new AnalyticsBusinessUnitRepository(currentAnalyticsUnitOfWork);

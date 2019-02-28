@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IMultiplicatorDefinitionSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultiplicatorDefinitionSetRepository(currentUnitOfWork);
+            return MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(multiplicatorSet);
 
-            IMultiplicatorDefinitionSetRepository rep = new MultiplicatorDefinitionSetRepository(UnitOfWork);
+            IMultiplicatorDefinitionSetRepository rep = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IMultiplicatorDefinitionSet> lst = rep.LoadAll().ToList();
 
             Assert.AreEqual(1, lst.Count);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMultiplicatorDefinitionSet multiplicatorSet = new MultiplicatorDefinitionSet("MyOvertimeSet", MultiplicatorType.Overtime);
             PersistAndRemoveFromUnitOfWork(multiplicatorSet);
 
-            IMultiplicatorDefinitionSetRepository rep = new MultiplicatorDefinitionSetRepository(UnitOfWork);
+            IMultiplicatorDefinitionSetRepository rep = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IMultiplicatorDefinitionSet> lst = rep.FindAllOvertimeDefinitions();
 
             Assert.AreEqual(1, lst.Count);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             multiplicatorDefinitionSet.RemoveDefinition(multiplicatorDefinitionSet.DefinitionCollection[0]);
             PersistAndRemoveFromUnitOfWork(multiplicatorDefinitionSet);
 
-            IMultiplicatorDefinitionSetRepository rep = new MultiplicatorDefinitionSetRepository(UnitOfWork);
+            IMultiplicatorDefinitionSetRepository rep = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(UnitOfWork);
             multiplicatorDefinitionSet = rep.Load(multiplicatorDefinitionSet.Id.Value);
 
             Assert.AreEqual(1,multiplicatorDefinitionSet.DefinitionCollection.Count);

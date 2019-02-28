@@ -4,20 +4,23 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class GlobalSettingDataRepository : SettingDataRepository, IGlobalSettingDataRepository
 	{
-		public GlobalSettingDataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public static GlobalSettingDataRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new GlobalSettingDataRepository(currentUnitOfWork);
+		}
+
+		public static GlobalSettingDataRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new GlobalSettingDataRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public GlobalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
-		{
-		}
-
-		public GlobalSettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
 		{
 		}
 

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			_personAccountUpdater = new PersonAccountUpdaterDummy();
 
-			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			target = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 
 			absence = AbsenceFactory.CreateAbsence("for test");
 			PersistAndRemoveFromUnitOfWork(absence);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void CanCreate()
 		{
-			new PersonRepository(new FromFactory(() => UnitOfWorkFactory.Current), null, null).Should().Not.Be.Null();
+			PersonRepository.DONT_USE_CTOR(new FromFactory(() => UnitOfWorkFactory.Current), null, null).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), teamBu));
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1999, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count);
+			Assert.AreEqual(0, PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count);
 		}
 
 		[Test]
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count);
+			Assert.AreEqual(0, PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count);
 		}
 
 		/// <summary>
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personToTest);
 
 			//load person
-			IPerson personLoaded = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).Load(personToTest.Id.Value);
+			IPerson personLoaded = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).Load(personToTest.Id.Value);
 			var personPeriodLoaded = personLoaded.PersonPeriodCollection.Single();
 			//asserts
 			Assert.AreEqual(personPeriod.StartDate, personPeriodLoaded.StartDate);
@@ -478,7 +478,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 
 			//load
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
+			IList<IPerson> testList = new List<IPerson>(PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
 			//verify
 			testList.Remove(LoggedOnPerson);
 			Assert.AreEqual(2, testList.Count);
@@ -524,7 +524,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(per);
 			//load
-			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			IPersonRepository repository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
 			//verify
 			personList.Remove(LoggedOnPerson);
@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per);
 
 			//load
-			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			IPersonRepository repository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(DateOnly.Today));
 			//verify
 			personList.Remove(LoggedOnPerson);
@@ -963,7 +963,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(per);
 
-			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			IPersonRepository repository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(2000, 2, 1)));
 			((PersonPeriod)personList[0].Period(new DateOnly(2000, 1, 10))).internalEndDate.Should()
 				.Be.EqualTo(secondPersonPeriodStartDate.AddDays(-1));
@@ -1204,7 +1204,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			//load
 			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeam(team1, testeriod));
+			IList<IPerson> testList = new List<IPerson>(PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeam(team1, testeriod));
 
 			//verify
 			testList.Remove(LoggedOnPerson);
@@ -1216,7 +1216,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, testList[0].PersonPeriodCollection.Count);
 			Assert.AreEqual(1, testList[1].PersonPeriodCollection.Count);
 
-			testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
+			testList = new List<IPerson>(PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
 		}
 
@@ -1247,7 +1247,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			var testeriod = new DateOnlyPeriod(2002, 12, 31, 2059, 01, 01);
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeam(team1, testeriod));
+			IList<IPerson> testList = new List<IPerson>(PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeam(team1, testeriod));
 			testList.Should().Be.Empty();
 		}
 
@@ -1318,7 +1318,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			#endregion
 
 			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
-			var testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
+			var testList = new List<IPerson>(PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
 		}
 
@@ -1381,7 +1381,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
 																	scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
@@ -1409,7 +1409,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0], scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
 			var buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
@@ -1443,7 +1443,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(resTemp[0],
 																	scenario, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
 			Assert.AreEqual(1, target.NumberOfActiveAgents());
@@ -1480,14 +1480,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
 			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(p,
 				scenarioNew, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(assNew);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(assNew);
 			Session.Flush();
 		}
 
 		[Test]
 		public void VerifyNumberOfActiveAgentsWhenNone()
 		{
-			IPersonRepository pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			IPersonRepository pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			Assert.AreEqual(0, pr.NumberOfActiveAgents());
 		}
 
@@ -1501,7 +1501,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson person3 = PersonFactory.CreatePerson("Fname", "lname");
 			PersistAndRemoveFromUnitOfWork(person3);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 
 			IList<IPerson> personList = pr.FindPersonsThatAlsoAreUsers();
 			Assert.IsTrue(personList.Contains(person1));
@@ -1517,7 +1517,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person.SetEmploymentNumber(employmentNumber);
 			PersistAndRemoveFromUnitOfWork(person);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			IList<IPerson> personList = pr.FindPeopleByEmploymentNumber(employmentNumber).ToList();
 			Assert.AreEqual(employmentNumber, personList[0].EmploymentNumber);
 		}
@@ -1535,7 +1535,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person2.SetEmploymentNumber(employmentNumber2);
 			PersistAndRemoveFromUnitOfWork(person2);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			IList<IPerson> personList = pr.FindPeopleByEmploymentNumbers(new[] { employmentNumber1, employmentNumber2 }).ToList();
 			Assert.AreEqual(employmentNumber1, personList[0].EmploymentNumber);
 			Assert.AreEqual(employmentNumber2, personList[1].EmploymentNumber);
@@ -1552,7 +1552,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person2.Email = "test@teleopti.com";
 			PersistAndRemoveFromUnitOfWork(person2);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var foundPeople = pr.FindPeopleByEmail(person1.Email);
 			Assert.AreEqual(2, foundPeople.Count);
 		}
@@ -1585,7 +1585,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person2 = PersonFactory.CreatePerson("Fname2", "lname2");
 			PersistAndRemoveFromUnitOfWork(person2);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var foundPeople = pr.FindUsers(DateOnly.Today);
 			Assert.AreEqual(1, foundPeople.Count);
 		}
@@ -1615,7 +1615,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(per1);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var foundPeople = pr.FindUsers(new DateOnly(2010, 1, 1));
 			Assert.AreEqual(1, foundPeople.Count);
 		}
@@ -1627,7 +1627,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person2.TerminatePerson(new DateOnly(2010, 1, 1), new PersonAccountUpdaterDummy());
 			PersistAndRemoveFromUnitOfWork(person2);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var foundPeople = pr.FindUsers(new DateOnly(2010, 1, 2));
 			Assert.AreEqual(0, foundPeople.Count);
 		}
@@ -1682,7 +1682,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person.FirstDayOfWeek = DayOfWeek.Saturday;
 			PersistAndRemoveFromUnitOfWork(person);
 
-			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var pr = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var loaded = pr.Load(person.Id.Value);
 			Assert.That(loaded.FirstDayOfWeek.Equals(DayOfWeek.Saturday));
 		}
@@ -1710,7 +1710,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			//load
 			IList<IPerson> testList = new List<IPerson>(
-					new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindAllSortByName());
+					PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindAllSortByName());
 			//verify
 			testList.Remove(LoggedOnPerson);
 			Assert.AreEqual(3, testList.Count);
@@ -1740,7 +1740,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			//load
 			IList<IPerson> testList = new List<IPerson>(
-					new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindAllSortByName());
+					PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindAllSortByName());
 			//verify
 			Assert.AreEqual(0, testList.Count);
 		}
@@ -1755,7 +1755,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			IList<IPerson> testList = new List<IPerson>(
-					new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).FindAllSortByName());
+					PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count, Is.EqualTo(1));
 		}
@@ -1772,8 +1772,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			CleanUpAfterTest();
 
-			var optionalColumnRepository = new OptionalColumnRepository(new ThisUnitOfWork(UnitOfWork));
-			var personRepository = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			var optionalColumnRepository = OptionalColumnRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork));
+			var personRepository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var samePerson = personRepository.Get(person.Id.Value);
 			samePerson.SetOptionalColumnValue(new OptionalColumnValue("A VALUE"), column);
 			UnitOfWork.PersistAll();
@@ -1949,7 +1949,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ReturnSinglePersonByKeyword()
 		{
-			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			target = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 
 			IPerson person1 = PersonFactory.CreatePerson("Ashley", "Aaron");
 			IPerson person2 = PersonFactory.CreatePerson("x", "y");
@@ -1965,7 +1965,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ReturnMultiplePersonsByKeywords()
 		{
-			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			target = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 
 			var people = new List<IPerson>
 			{
@@ -1987,7 +1987,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnMostOccurancesFirst()
 		{
-			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			target = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var person = PersonFactory.CreatePerson("ashley", "aaron");
 			var people = new List<IPerson>
 			{
@@ -2010,7 +2010,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldHandleManyKeywords()
 		{
-			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			target = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var person = PersonFactory.CreatePerson("ashley", "aaron");
 			var people = new List<IPerson>
 			{
@@ -2032,7 +2032,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldHandleKeywordNotMatching()
 		{
-			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
+			target = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			var person = PersonFactory.CreatePerson("ashley", "aaron");
 			var people = new List<IPerson>
 			{
@@ -2191,7 +2191,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IPerson> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PersonRepository(currentUnitOfWork, null, null);
+			return PersonRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 		}
 	}
 }

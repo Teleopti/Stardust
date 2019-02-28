@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadRules()
 		{
-			_rtaRuleRepository = new RtaRuleRepository(new ThisUnitOfWork(_uow));
+			_rtaRuleRepository = RtaRuleRepository.DONT_USE_CTOR(new ThisUnitOfWork(_uow));
 			_rules.Clear();
 			_rules.AddRange(_rtaRuleRepository.LoadAll());
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadMappings()
 		{
-			_rtaMapRepository = new RtaMapRepository(new ThisUnitOfWork(_uow));
+			_rtaMapRepository = RtaMapRepository.DONT_USE_CTOR(new ThisUnitOfWork(_uow));
 			_rtaMaps.Clear();
 			_rtaMaps.AddRange(_rtaMapRepository.LoadAll());
 		}

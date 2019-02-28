@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (Color != null)
 				ShiftCategory.DisplayColor = System.Drawing.Color.FromName(Color);
 			if (!string.IsNullOrEmpty(BusinessUnit))
-				ShiftCategory.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit));
+				ShiftCategory.SetBusinessUnit(BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit));
 
-			var shiftCategoryRepository = new ShiftCategoryRepository(currentUnitOfWork);
+			var shiftCategoryRepository = ShiftCategoryRepository.DONT_USE_CTOR(currentUnitOfWork);
 			shiftCategoryRepository.Add(ShiftCategory);
 		}
 

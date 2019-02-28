@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -18,10 +20,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class RotationRepository : Repository<IRotation>, ILoadAggregateById<IRotation>
 	{
-		public RotationRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
+		public static RotationRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new RotationRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public RotationRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

@@ -7,22 +7,27 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class AgentDayScheduleTagRepository : Repository<IAgentDayScheduleTag>, IAgentDayScheduleTagRepository
 	{
-#pragma warning disable 618
-		public AgentDayScheduleTagRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
+		public static AgentDayScheduleTagRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new AgentDayScheduleTagRepository(currentUnitOfWork, null, null);
 		}
 
-		public AgentDayScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static AgentDayScheduleTagRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
 		{
+			return new AgentDayScheduleTagRepository(new ThisUnitOfWork(unitOfWork), null, null);
 		}
 
+		public AgentDayScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
 
 		public IList<IAgentDayScheduleTag> Find(DateTimePeriod period, IScenario scenario)
 		{

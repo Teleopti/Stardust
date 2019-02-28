@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ActivityRepository rep = new ActivityRepository(unitOfWork);
+                ActivityRepository rep = ActivityRepository.DONT_USE_CTOR(unitOfWork);
                 IList<IActivity> activityList;
                 if (loadOptionDto.LoadDeleted)
                 {

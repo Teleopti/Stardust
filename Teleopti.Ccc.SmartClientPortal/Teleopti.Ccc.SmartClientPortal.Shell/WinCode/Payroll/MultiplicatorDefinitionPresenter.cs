@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
             get
             {
                 if (_multiplicatorRepository == null)
-                    _multiplicatorRepository = new MultiplicatorRepository(_explorerePresenter.Helper.UnitOfWork);
+                    _multiplicatorRepository = Infrastructure.Repositories.MultiplicatorRepository.DONT_USE_CTOR(_explorerePresenter.Helper.UnitOfWork);
                 return _multiplicatorRepository;
             }
         }

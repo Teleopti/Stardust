@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
     {
         internal static IPersonCollection CreatePersonCollectionLight(IUnitOfWork unitOfWork, string functionPath, DateOnly queryDateTime)
         {
-            var rep = new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null);
+            var rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null);
                 ICollection<IPerson> coll =
                     rep.FindAllAgentsLight(new DateOnlyPeriod(queryDateTime, queryDateTime));
                 IPersonCollection ret = new PersonCollection(functionPath, coll, queryDateTime);
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
         internal static ITeamCollection CreateTeamCollectionLight(IUnitOfWork unitOfWork, string functionPath, DateOnly queryDateTime)
         {
-            var rep = new TeamRepository(unitOfWork);
+            var rep = TeamRepository.DONT_USE_CTOR(unitOfWork);
             var coll = rep.LoadAll();
             var ret = new TeamCollection(functionPath, coll, queryDateTime);
 

@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
         {
             get {
 	            return _personRotationRepository ??
-	                   (_personRotationRepository = new PersonRotationRepository(_filteredPeopleHolder.GetUnitOfWork));
+	                   (_personRotationRepository = PersonRotationRepository.DONT_USE_CTOR(_filteredPeopleHolder.GetUnitOfWork));
             }
         }
 

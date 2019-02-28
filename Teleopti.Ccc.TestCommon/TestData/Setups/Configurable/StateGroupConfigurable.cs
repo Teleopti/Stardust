@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var stateGroup = new RtaStateGroup(Name, false, true);
 			stateGroup.AddState(PhoneState, PhoneState);
-			var stateGroupRepository = new RtaStateGroupRepository(currentUnitOfWork);
+			var stateGroupRepository = RtaStateGroupRepository.DONT_USE_CTOR(currentUnitOfWork);
 			stateGroupRepository.Add(stateGroup);
 		}
 	}

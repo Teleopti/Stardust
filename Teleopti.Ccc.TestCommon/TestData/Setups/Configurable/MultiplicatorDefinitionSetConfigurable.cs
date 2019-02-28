@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(currentUnitOfWork);
+			var multiplicatorDefinitionSetRepository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(currentUnitOfWork);
 			MultiplicatorDefinitionSet = new MultiplicatorDefinitionSet(Name, MultiplicatorType.Overtime);
 			multiplicatorDefinitionSetRepository.Add(MultiplicatorDefinitionSet);
 		}

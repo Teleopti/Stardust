@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var globalSettingRep = new GlobalSettingDataRepository(currentUnitOfWork);
+			var globalSettingRep = GlobalSettingDataRepository.DONT_USE_CTOR(currentUnitOfWork);
 
 			var alertTimeSetting = globalSettingRep.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 			alertTimeSetting.SecondsBeforeChange = AlertTime;

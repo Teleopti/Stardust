@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
         protected override Repository<IRtaMap> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RtaMapRepository(currentUnitOfWork);
+            return RtaMapRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             var rtaMap = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(rtaMap);
 
-            var result = new RtaMapRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
+            var result = RtaMapRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
             Assert.AreEqual(1, result.Count());
 			Session.Close();
 			result.Single().Activity.ToString();

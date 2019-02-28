@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			var scenario = DefaultScenario.Scenario;
 
-			var activity = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(a => a.Name == Activity);
+			var activity = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(a => a.Name == Activity);
 
 			var startTimeUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(person,
 				scenario, activity, new DateTimePeriod(startTimeUtc, endTimeUtc));
-			var repository = new PersonAssignmentRepository(unitOfWork);
+			var repository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			repository.Add(assignment);
 		}
 	}

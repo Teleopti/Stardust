@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 							persons.Add(person);
 						}
 
-                    	new ScenarioRepository(unitOfWork).LoadAll();
+                    	ScenarioRepository.DONT_USE_CTOR(unitOfWork).LoadAll();
 
                     	var loadedPeople = personRepository.FindPeople(persons);
 						var meetings = meetingRepository.Find(loadedPeople, period, _model.CurrentScenario, _model.IncludeForOrganizer);

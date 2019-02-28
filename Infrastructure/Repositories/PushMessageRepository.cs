@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
@@ -7,6 +8,8 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -42,15 +45,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class PushMessageRepository :Repository<IPushMessage>, IPushMessageRepository
 	{
-
-#pragma warning disable 618
-		public PushMessageRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
+		public static PushMessageRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new PushMessageRepository(currentUnitOfWork, null, null);
 		}
 
-		public PushMessageRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static PushMessageRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new PushMessageRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public PushMessageRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

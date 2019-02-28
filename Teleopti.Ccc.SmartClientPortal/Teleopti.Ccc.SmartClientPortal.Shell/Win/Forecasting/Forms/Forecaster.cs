@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				{
 					try
 					{
-						var skillDayRepository = new SkillDayRepository(uow);
+						var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(uow);
 						skillDayRepository.Add(skillDay);
 						
 						removeSkillDayFromDirtyList(skillDay);
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				{
 					try
 					{
-						var multisiteDayRepository = new MultisiteDayRepository(uow);
+						var multisiteDayRepository = MultisiteDayRepository.DONT_USE_CTOR(uow);
 						multisiteDayRepository.Add(multisiteDay);
 						uow.PersistAll();
 						removeMultisiteDayFromDirtyList(multisiteDay);
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_currentForecasterSettings = new PersonalSettingDataRepository(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
+				_currentForecasterSettings = PersonalSettingDataRepository.DONT_USE_CTOR(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
 				
 				unitOfWork.Reassociate(_skill);
 				if (isMultisiteSkill)
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			{
 				backgroundWorker1.ReportProgress(5, UserTexts.Resources.MultisiteSkillLoading);
 				var multisiteDays = MultisiteHelper.LoadMultisiteDays(periodToLoad, _multisiteSkill, _scenario,
-					new MultisiteDayRepository(unitOfWork), false).ToList();
+					MultisiteDayRepository.DONT_USE_CTOR(unitOfWork), false).ToList();
 				var multisiteCalculator = new MultisiteSkillDayCalculator(_multisiteSkill, skillDays, multisiteDays, _dateTimePeriod);
 				
 				foreach (var childSkill in _multisiteSkill.ChildSkills)
@@ -702,7 +702,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
+				IScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 				IList<IScenario> scenarios = scenarioRepository.FindAllSorted();
 
 				foreach (var scenario in scenarios)
@@ -841,7 +841,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ISkillDayRepository skillDayRepository = new SkillDayRepository(unitOfWork);
+				ISkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(unitOfWork);
 				foreach (Guid guid in guidList)
 				{
 					if (currentPeriodInvolved && currentSkillInvolved) break;
@@ -1001,7 +1001,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var skillRepository = new SkillRepository(uow);
+				var skillRepository = SkillRepository.DONT_USE_CTOR(uow);
 				_multisiteSkill = _skill as IMultisiteSkill;
 				if (_multisiteSkill == null)
 					_skill = skillRepository.LoadSkill(skill);
@@ -1528,7 +1528,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repository = new PersonalSettingDataRepository(uow);
+				var repository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 				repository.PersistSettingValue(_currentForecasterSettings);
 				_skillChartSetting.SaveSettings(repository);
 				_workloadChartSetting.SaveSettings(repository);
@@ -1541,7 +1541,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			setDisplaySettings();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repository = new PersonalSettingDataRepository(uow);
+				var repository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 				repository.PersistSettingValue(_currentForecasterSettings);
 				uow.PersistAll();
 			}
@@ -2234,7 +2234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					IScenario newScenario = new Scenario(scenarioName);
 					using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
-						IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
+						IScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 						scenarioRepository.Add(newScenario);
 						unitOfWork.PersistAll();
 					}

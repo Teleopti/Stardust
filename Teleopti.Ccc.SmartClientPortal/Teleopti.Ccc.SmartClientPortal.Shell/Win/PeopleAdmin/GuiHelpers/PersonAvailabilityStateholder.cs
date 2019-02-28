@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
         }
 		
         public PersonAvailabilityRepository AvailabilityRepository => _paRepository ??
-																	  (_paRepository = new PersonAvailabilityRepository(FilteredStateHolder.GetUnitOfWork));
+																	  (_paRepository = PersonAvailabilityRepository.DONT_USE_CTOR(FilteredStateHolder.GetUnitOfWork));
 
 	    /// <summary>
         /// Sets the stateholders
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
         {
             //lets load the _childPersonRotationCollection as it is to be used in some other methods
             GetChildPersonRotations(rowIndex);
-            PersonAvailabilityRepository prRepository = new PersonAvailabilityRepository(_filteredPeopleHolder.GetUnitOfWork);
+            PersonAvailabilityRepository prRepository = PersonAvailabilityRepository.DONT_USE_CTOR(_filteredPeopleHolder.GetUnitOfWork);
 
             IPersonAvailability availabilityToBeRemoved = _filteredPeopleHolder.ParentPersonAvailabilityCollection[rowIndex];
 

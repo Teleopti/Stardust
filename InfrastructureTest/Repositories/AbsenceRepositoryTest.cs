@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IAbsence> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AbsenceRepository(currentUnitOfWork);
+            return AbsenceRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             abs.Description = new Description("dummy");
             PersistAndRemoveFromUnitOfWork(abs);
             Assert.IsFalse(UnitOfWork.IsDirty());
-            new AbsenceRepository(UnitOfWork).Get(abs.Id.Value);
+            AbsenceRepository.DONT_USE_CTOR(UnitOfWork).Get(abs.Id.Value);
             Assert.IsFalse(UnitOfWork.IsDirty());
         }
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(absence2);
             PersistAndRemoveFromUnitOfWork(absence3);
 
-            AbsenceRepository rep = new AbsenceRepository(UnitOfWork);
+            AbsenceRepository rep = AbsenceRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IAbsence> lst = rep.LoadAllSortByName().ToList();
 
             Assert.AreEqual(3, lst.Count);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(absence3);
             PersistAndRemoveFromUnitOfWork(absence4);
 
-            AbsenceRepository rep = new AbsenceRepository(UnitOfWork);
+            AbsenceRepository rep = AbsenceRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IAbsence> lst = rep.LoadRequestableAbsence();
 
             Assert.AreEqual(3, lst.Count);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             absence.Tracker = Tracker.CreateDayTracker();
             PersistAndRemoveFromUnitOfWork(absence);
 
-            IAbsence loadedAbsence = new AbsenceRepository(UnitOfWork).Load(absence.Id.Value);
+            IAbsence loadedAbsence = AbsenceRepository.DONT_USE_CTOR(UnitOfWork).Load(absence.Id.Value);
             Assert.AreEqual(absence.Tracker, loadedAbsence.Tracker);
         }
         
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             absence.Tracker = Tracker.CreateTimeTracker();
             PersistAndRemoveFromUnitOfWork(absence);
 
-            IAbsence loadedAbsence = new AbsenceRepository(UnitOfWork).Load(absence.Id.Value);
+            IAbsence loadedAbsence = AbsenceRepository.DONT_USE_CTOR(UnitOfWork).Load(absence.Id.Value);
             Assert.AreEqual(Tracker.CreateTimeTracker(), loadedAbsence.Tracker);
         }
 
@@ -162,14 +162,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             absence.Tracker = Tracker.CreateCompTracker();
             PersistAndRemoveFromUnitOfWork(absence);
 
-            IAbsence loadedAbsence = new AbsenceRepository(UnitOfWork).Load(absence.Id.Value);
+            IAbsence loadedAbsence = AbsenceRepository.DONT_USE_CTOR(UnitOfWork).Load(absence.Id.Value);
             Assert.AreEqual(null /*Tracker.CreateCompTracker()*/, loadedAbsence.Tracker); //Not in use yet
         }
 
         [Test]
         public void ShouldFindAbsenceTrackerUsedByPesonAccount()
         {
-            var rep = new AbsenceRepository(UnitOfWork);
+            var rep = AbsenceRepository.DONT_USE_CTOR(UnitOfWork);
             rep.FindAbsenceTrackerUsedByPersonAccount();
         }
     }

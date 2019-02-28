@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override void SetupForRepositoryTest()
         {
-            rep = new BusinessUnitRepository(UnitOfWork);
+            rep = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")));
             PersistAndRemoveFromUnitOfWork(person);
 
-            IEnumerable<TimeZoneInfo> allTimeZones = new BusinessUnitRepository(UnitOfWork).LoadAllTimeZones();
+            IEnumerable<TimeZoneInfo> allTimeZones = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork).LoadAllTimeZones();
 
             Assert.IsTrue(allTimeZones.Any(t => t.Id == person.PermissionInformation.DefaultTimeZone().Id));
             Assert.IsTrue(allTimeZones.Any(t => t.Id == skill.TimeZone.Id));
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(BusinessUnitUsedInTests.BusinessUnit);
 
-            IBusinessUnitRepository repository = new BusinessUnitRepository(UnitOfWork);
+            IBusinessUnitRepository repository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IBusinessUnit> loadedList = rep.LoadAllBusinessUnitSortedByName();
             IBusinessUnit loadedBusinessUnit = loadedList[0];
 

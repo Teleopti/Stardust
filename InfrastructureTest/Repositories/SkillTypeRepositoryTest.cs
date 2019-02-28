@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             //todo: I am cleaning the SkillType repository here because other test classes 
             //have left the database in some un-cleaned mode. Developers seem to 
             //over use the SkipRollback();
-            SkillTypeRepository rep = new SkillTypeRepository(UnitOfWork);
+            SkillTypeRepository rep = SkillTypeRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkillType> skillsTypes = new List<ISkillType>(rep.LoadAll());
 
             foreach (ISkillType type in skillsTypes)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanCreate()
         {
-            new SkillTypeRepository(UnitOfWork);
+            SkillTypeRepository.DONT_USE_CTOR(UnitOfWork);
 
         }
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             PersistAndRemoveFromUnitOfWork(skillType);
 
-            SkillTypeRepository rep = new SkillTypeRepository(UnitOfWork);
+            SkillTypeRepository rep = SkillTypeRepository.DONT_USE_CTOR(UnitOfWork);
           
             IList<ISkillType> skillsTypes = new List<ISkillType>(rep.LoadAll());
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<ISkillType> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SkillTypeRepository(currentUnitOfWork);
+            return SkillTypeRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

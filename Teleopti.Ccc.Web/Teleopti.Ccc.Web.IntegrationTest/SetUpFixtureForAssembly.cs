@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(new ThisUnitOfWork(uow), null, null).Add(loggedOnPerson);
+				PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null).Add(loggedOnPerson);
 				uow.PersistAll();
 			}
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new BusinessUnitRepository(uow).Add(BusinessUnitUsedInTests.BusinessUnit);
+				BusinessUnitRepository.DONT_USE_CTOR(uow).Add(BusinessUnitUsedInTests.BusinessUnit);
 				uow.PersistAll();
 			}
 		}

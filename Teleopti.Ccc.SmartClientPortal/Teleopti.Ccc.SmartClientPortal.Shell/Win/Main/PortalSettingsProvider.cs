@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
                 {
                     using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                     {
-                        _portalSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Portal", new PortalSettings());
+                        _portalSettings = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("Portal", new PortalSettings());
                     }
                 }
                 return _portalSettings;

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillRepository = new SkillRepository(currentUnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var skillGroupRepository = new SkillGroupRepository(currentUnitOfWork);
 
 			if (!string.IsNullOrEmpty(Skill))

@@ -1,39 +1,8 @@
-
-
-table.overview {
-	table-layout: fixed;
-	width: auto;
-	margin-top: 25px;
-}
-
-.overview {
-	border-collapse: separate;
-	padding: 5px;
-	margin-bottom: 35px;
-	width: 100%;
-	empty-cells: show;
-
-	td {
-		width: 10px;
-	}
-	th {
-		visibility: hidden;
-		width: 10px;
-	}
-	th:nth-child(2n) {
-		visibility: visible !important;
-	}
-}
-
 .skill-name {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	padding-bottom: 0 !important;
 	padding-top: 0 !important;
-}
-
-.long {
-	letter-spacing: 1em;
 }
 
 .heatmap-head-weekend {

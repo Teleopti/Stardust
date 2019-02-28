@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
-			var publicNoteRepository = new PublicNoteRepository(unitOfWork);
+			var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(unitOfWork);
 			publicNoteRepository.Add(new PublicNote(person, new DateOnly(Date), scenario, NoteText));
 		}
 	}

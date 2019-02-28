@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
         {
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                PersonNameConverter.Setting = new GlobalSettingDataRepository(uow).FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+                PersonNameConverter.Setting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
             }
         }
 

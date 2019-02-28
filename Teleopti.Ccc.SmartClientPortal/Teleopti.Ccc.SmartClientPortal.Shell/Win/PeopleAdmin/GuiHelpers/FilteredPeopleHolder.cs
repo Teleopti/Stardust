@@ -243,9 +243,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			InParameter.NotNull("peopleId", peopleId);
 
-			var rep = new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null);
-			var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
-			var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
+			var rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(GetUnitOfWork), null, null);
+			var personRotationRep = PersonRotationRepository.DONT_USE_CTOR(GetUnitOfWork);
+			var personAvailRep = PersonAvailabilityRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 			clearCollections();
 
@@ -274,8 +274,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			if (length > 0)
 			{
-				var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
-				var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
+				var personRotationRep = PersonRotationRepository.DONT_USE_CTOR(GetUnitOfWork);
+				var personAvailRep = PersonAvailabilityRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 				clearCollections();
 
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private void LoadTeams()
 		{
 			_siteTeamBindingCollection.Clear();
-			var repository = new TeamRepository(GetUnitOfWork);
+			var repository = TeamRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var list = repository.FindAllTeamByDescription().ToList();
 
 			foreach (ITeam item in list)
@@ -817,7 +817,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadRuleSetBag()
 		{
 			_ruleSetBagBindingCollection.Clear();
-			var repository = new RuleSetBagRepository(GetUnitOfWork);
+			var repository = RuleSetBagRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var list = repository.LoadAll().Where(ptp => ptp.IsChoosable).OrderBy(n2 => n2.Description.Name);
 			foreach (IRuleSetBag bag in list)
 			{
@@ -828,7 +828,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadBudgetGroup()
 		{
 			_budgetGroupBindingCollection.Clear();
-			var repository = new BudgetGroupRepository(GetUnitOfWork);
+			var repository = BudgetGroupRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var list = repository.LoadAll().OrderBy(n2 => n2.Name);
 			
 			_budgetGroupBindingCollection.Add(PersonPeriodModel.NullBudgetGroup);
@@ -840,14 +840,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void MarkForRemove(IPerson person)
 		{
-			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null).Remove(person);
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(GetUnitOfWork), null, null).Remove(person);
 
 			toBeRemovedList.Add(person.Id.GetValueOrDefault());
 		}
 
 		public void MarkForInsert(IPerson person)
 		{
-			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null).Add(person);
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(GetUnitOfWork), null, null).Add(person);
 		}
 
 		public void DeleteAndSavePerson(IPerson person)
@@ -868,7 +868,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			_personSkillCollection.Clear();
 			_personSkillAdapterCollection.Clear();
 
-			ISkillRepository rep = new SkillRepository(GetUnitOfWork);
+			ISkillRepository rep = SkillRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 			ICollection<ISkill> skillCollection = rep.FindAllWithoutMultisiteSkills();
 			_personSkillCollection.AddRange(skillCollection.Select(skill => new PersonSkill(skill, new Percent(1)) { Active = false }));
@@ -881,7 +881,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_externalLogOnCollection.Clear();
 
-			var r = new ExternalLogOnRepository(GetUnitOfWork);
+			var r = ExternalLogOnRepository.DONT_USE_CTOR(GetUnitOfWork);
 			var externalLogOnList = r.LoadAll();
 			
 			_externalLogOnCollection.AddRange(externalLogOnList);
@@ -975,7 +975,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_optionalColumnCollection.Clear();
 
-			var rep = new OptionalColumnRepository(GetUnitOfWork);
+			var rep = OptionalColumnRepository.DONT_USE_CTOR(GetUnitOfWork);
 			_optionalColumnCollection = rep.GetOptionalColumns<Person>();
 			foreach (var optionalColumn in _optionalColumnCollection)
 			{
@@ -1003,7 +1003,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_applicationRoleCollection.Clear();
 
-			var r = new ApplicationRoleRepository(GetUnitOfWork);
+			var r = ApplicationRoleRepository.DONT_USE_CTOR(GetUnitOfWork);
 			_applicationRoleCollection.AddRange(r.LoadAllApplicationRolesSortedByName().OrderBy(x => x.DescriptionText));
 			_rolesViewAdapterCollection.AddRange(_applicationRoleCollection.ConvertAll((EntityConverter.ConvertToOther<IApplicationRole, RolesModel>)));
 		}
@@ -1076,7 +1076,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private void LoadSettings()
 		{
 			IUnitOfWork uow = UnitOfWorkFactory.CurrentUnitOfWork().Current();
-			ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+			ISettingDataRepository settingDataRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 			CommonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 		}
 
@@ -1149,7 +1149,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			if (_newPersonRotationCollection.Count > 0)
 			{
-				var personRotationRepository = new PersonRotationRepository(GetUnitOfWork);
+				var personRotationRepository = PersonRotationRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 				foreach (IPersonRotation rotation in _newPersonRotationCollection)
 				{
@@ -1159,7 +1159,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			if (_newPersonAvailabilityCollection.Count > 0)
 			{
-				var personAvailabilityRepository = new PersonAvailabilityRepository(GetUnitOfWork);
+				var personAvailabilityRepository = PersonAvailabilityRepository.DONT_USE_CTOR(GetUnitOfWork);
 
 				foreach (IPersonAvailability availability in _newPersonAvailabilityCollection)
 				{
@@ -1168,7 +1168,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			}
 
 
-			var rep = new PersonAbsenceAccountRepository(GetUnitOfWork);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(GetUnitOfWork);
 			foreach (var account in AllAccounts)
 			{
 				foreach (var accountCollection in account.Value)
@@ -1185,7 +1185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			_absenceCollection.Clear();
 
-			var absenceRepository = new AbsenceRepository(GetUnitOfWork);
+			var absenceRepository = AbsenceRepository.DONT_USE_CTOR(GetUnitOfWork);
 			_absenceCollection.AddRange(absenceRepository.LoadAllSortByName());
 		}
 

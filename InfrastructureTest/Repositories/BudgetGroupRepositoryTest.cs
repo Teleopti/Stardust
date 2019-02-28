@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IBudgetGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new BudgetGroupRepository(currentUnitOfWork);
+            return BudgetGroupRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

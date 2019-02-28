@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			week.Add(DayOfWeek.Saturday, SaturdayWorkDay);
 			week.Add(DayOfWeek.Sunday, SundayWorkDay);
 			ContractSchedule.AddContractScheduleWeek(week);
-			new ContractScheduleRepository(currentUnitOfWork).Add(ContractSchedule);
+			ContractScheduleRepository.DONT_USE_CTOR(currentUnitOfWork).Add(ContractSchedule);
 		}
 
 	}

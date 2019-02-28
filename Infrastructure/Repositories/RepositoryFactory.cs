@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null);
+			return PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null);
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IAbsenceRepository CreateAbsenceRepository(IUnitOfWork unitOfWork)
 		{
-			return new AbsenceRepository(unitOfWork);
+			return AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IScenarioRepository CreateScenarioRepository(IUnitOfWork unitOfWork)
 		{
-			return new ScenarioRepository(unitOfWork);
+			return ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IApplicationFunctionRepository CreateApplicationFunctionRepository(IUnitOfWork unitOfWork)
 		{
-			return new ApplicationFunctionRepository(unitOfWork);
+			return ApplicationFunctionRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public ISkillRepository CreateSkillRepository(IUnitOfWork unitOfWork)
 		{
-			return new SkillRepository(unitOfWork);
+			return SkillRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IWorkloadRepository CreateWorkloadRepository(IUnitOfWork unitOfWork)
 		{
-			return new WorkloadRepository(unitOfWork);
+			return WorkloadRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="unitOfWork">The uow.</param>
 		public IApplicationRoleRepository CreateApplicationRoleRepository(IUnitOfWork unitOfWork)
 		{
-			return new ApplicationRoleRepository(unitOfWork);
+			return ApplicationRoleRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="unitOfWork">The unit of work.</param>
 		public IAvailableDataRepository CreateAvailableDataRepository(IUnitOfWork unitOfWork)
 		{
-			return new AvailableDataRepository(unitOfWork);
+			return AvailableDataRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IBusinessUnitRepository CreateBusinessUnitRepository(IUnitOfWork unitOfWork)
 		{
-			return new BusinessUnitRepository(unitOfWork);
+			return BusinessUnitRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		/// <summary>
@@ -134,22 +134,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public ISkillDayRepository CreateSkillDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new SkillDayRepository(unitOfWork);
+			return SkillDayRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new MultisiteDayRepository(unitOfWork);
+			return MultisiteDayRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IContractScheduleRepository CreateContractScheduleRepository(IUnitOfWork unitOfWork)
 		{
-			return new ContractScheduleRepository(unitOfWork);
+			return ContractScheduleRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IContractRepository CreateContractRepository(IUnitOfWork unitOfWork)
 		{
-			return new ContractRepository(unitOfWork);
+			return ContractRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		public IPreferenceDayRepository CreatePreferenceDayRepository(IUnitOfWork unitOfWork)
@@ -159,32 +159,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IStudentAvailabilityDayRepository CreateStudentAvailabilityDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new StudentAvailabilityDayRepository(unitOfWork);
+			return StudentAvailabilityDayRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		public IWorkShiftRuleSetRepository CreateWorkShiftRuleSetRepository(IUnitOfWork unitOfWork)
 		{
-			return new WorkShiftRuleSetRepository(unitOfWork);
+			return WorkShiftRuleSetRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IRuleSetBagRepository CreateRuleSetBagRepository(IUnitOfWork unitOfWork)
 		{
-			return new RuleSetBagRepository(unitOfWork);
+			return RuleSetBagRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPersonRequestRepository CreatePersonRequestRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRequestRepository(unitOfWork);
+			return PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IShiftCategoryRepository CreateShiftCategoryRepository(IUnitOfWork unitOfWork)
 		{
-			return new ShiftCategoryRepository(unitOfWork);
+			return ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
 		{
-			return new DayOffTemplateRepository(unitOfWork);
+			return DayOffTemplateRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMeetingRepository CreateMeetingRepository(IUnitOfWork unitOfWork)
@@ -194,22 +194,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IActivityRepository CreateActivityRepository(IUnitOfWork unitOfWork)
 		{
-			return new ActivityRepository(unitOfWork);
+			return ActivityRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMultiplicatorDefinitionSetRepository CreateMultiplicatorDefinitionSetRepository(IUnitOfWork unitOfWork)
 		{
-			return new MultiplicatorDefinitionSetRepository(unitOfWork);
+			return MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ITeamRepository CreateTeamRepository(IUnitOfWork unitOfWork)
 		{
-			return new TeamRepository(unitOfWork);
+			return TeamRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ISiteRepository CreateSiteRepository(IUnitOfWork unitOfWork)
 		{
-			return new SiteRepository(unitOfWork);
+			return SiteRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPayrollExportRepository CreatePayrollExportRepository(IUnitOfWork unitOfWork)
@@ -219,42 +219,42 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMultiplicatorRepository CreateMultiplicatorRepository(IUnitOfWork unitOfWork)
 		{
-			return new MultiplicatorRepository(unitOfWork);
+			return MultiplicatorRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPushMessageRepository CreatePushMessageRepository(IUnitOfWork unitOfWork)
 		{
-			return new PushMessageRepository(unitOfWork);
+			return PushMessageRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPushMessageDialogueRepository CreatePushMessageDialogueRepository(IUnitOfWork unitOfWork)
 		{
-			return new PushMessageDialogueRepository(unitOfWork);
+			return PushMessageDialogueRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ISettingDataRepository CreateGlobalSettingDataRepository(IUnitOfWork unitOfWork)
 		{
-			return new GlobalSettingDataRepository(unitOfWork);
+			return GlobalSettingDataRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IGroupPageRepository CreateGroupPageRepository(IUnitOfWork unitOfWork)
 		{
-			return new GroupPageRepository(unitOfWork);
+			return GroupPageRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IPartTimePercentageRepository CreatePartTimePercentageRepository(IUnitOfWork unitOfWork)
 		{
-			return new PartTimePercentageRepository(unitOfWork);
+			return PartTimePercentageRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IOptionalColumnRepository CreateOptionalColumnRepository(IUnitOfWork unitOfWork)
 		{
-			return new OptionalColumnRepository(unitOfWork);
+			return OptionalColumnRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IWorkflowControlSetRepository CreateWorkflowControlSetRepository(IUnitOfWork unitOfWork)
 		{
-			return new WorkflowControlSetRepository(unitOfWork);
+			return WorkflowControlSetRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IExtendedPreferenceTemplateRepository CreateExtendedPreferenceTemplateRepository(IUnitOfWork unitOfWork)
@@ -264,12 +264,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IRepository<IBudgetGroup> CreateBudgetGroupRepository(IUnitOfWork unitOfWork)
 		{
-			return new BudgetGroupRepository(unitOfWork);
+			return BudgetGroupRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IMasterActivityRepository CreateMasterActivityRepository(IUnitOfWork unitOfWork)
 		{
-			return new MasterActivityRepository(unitOfWork);
+			return MasterActivityRepository.DONT_USE_CTOR(unitOfWork);
 		}
 		
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork)
 		{
-			return new LicenseRepository(unitOfWork);
+			return LicenseRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork)
@@ -294,12 +294,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonalSettingDataRepository(unitOfWork);
+			return PersonalSettingDataRepository.DONT_USE_CTOR(unitOfWork);
 		}
 
 		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)
 		{
-			return new SkillTypeRepository(unitOfWork);
+			return SkillTypeRepository.DONT_USE_CTOR(unitOfWork);
 		}
 	}
 }

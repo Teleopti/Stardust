@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var repository = new WorkflowControlSetRepository(uow);
+			var repository = WorkflowControlSetRepository.DONT_USE_CTOR(uow);
 			var workflowControlSet = repository.LoadAll().Single(w => w.Name == Name);
 
 			user.WorkflowControlSet = workflowControlSet;

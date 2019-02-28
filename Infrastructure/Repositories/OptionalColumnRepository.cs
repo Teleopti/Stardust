@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -16,18 +18,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class OptionalColumnRepository : Repository<IOptionalColumn>, IOptionalColumnRepository
     {
-        public OptionalColumnRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static OptionalColumnRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new OptionalColumnRepository(currentUnitOfWork, null, null);
+		}
 
-			public OptionalColumnRepository(ICurrentUnitOfWork currentUnitOfWork)
-				: base(currentUnitOfWork, null, null)
-	    {
-		    
-	    }
+		public static OptionalColumnRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new OptionalColumnRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public OptionalColumnRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
 
     	/// <summary>
         /// 

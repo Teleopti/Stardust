@@ -28,13 +28,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (DayOffTemplate == null)
 			{
 				DayOffTemplate = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(unitOfWork);
+				var repository = DayOffTemplateRepository.DONT_USE_CTOR2(unitOfWork);
 				repository.Add(DayOffTemplate);
 			}
 
 			var ass = new PersonAssignment(person, Scenario, new DateOnly(_date));
 			ass.SetDayOff(DayOffTemplate);
-			var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			personAssignmentRepository.Add(ass);
 		}
 	}

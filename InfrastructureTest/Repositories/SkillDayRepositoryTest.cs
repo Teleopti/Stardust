@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			SetUpdatedOnForSkillDay(skillDay, -1);
 
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			ICollection<ISkillDay> skillDays =
 				skillDayRepository.FindRange(
 					new DateOnlyPeriod(skillDay.CurrentDate.AddDays(-10), skillDay.CurrentDate.AddDays(30)),
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			SetUpdatedOnForSkillDay(skillDay2, -1);
 
 			PersistAndRemoveFromUnitOfWork(skillDay);
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 
 			ISkillDay result = skillDayRepository.FindLatestUpdated(_skill, _scenario, true);
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			SetUpdatedOnForSkillDay(skillDay, -2);
 
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var result = skillDayRepository.FindUpdatedSince(_scenario, skillDay.UpdatedOn.GetValueOrDefault().AddMinutes(-1));
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(skillDay);
 
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			ICollection<ISkillDay> skillDays =
 				skillDayRepository.FindRange(new DateOnlyPeriod(skillDay.CurrentDate, skillDay.CurrentDate.AddDays(1)),
 					_skill, _scenario);
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyGetAllSkillDaysWorkWithoutAddingToRepository()
 		{
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			var dateOnly = new DateOnly(_date);
 			ICollection<ISkillDay> skillDays =
 				skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new List<ISkillDay>(), _skill,
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldSetCorrectLocalDateForSkillDayInJordanStandardTime()
 		{
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			_skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
 
 			ICollection<ISkillDay> skillDays =
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyGetLatestSkillDayDateWorks()
 		{
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			DateOnly defaultLastSkillDayDate = skillDayRepository.FindLastSkillDayDate(_workload, _scenario);
 
 			Assert.AreEqual(new DateOnly(DateTime.Today.AddMonths(-1)), defaultLastSkillDayDate);
@@ -299,8 +299,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skillDay);
 			UnitOfWork.Clear();
 
-			var skillRepository = new SkillRepository(UnitOfWork);
-			var skillDayRepository = new SkillDayRepository(UnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			var orgSkillDays =
 				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), skillRepository.LoadAll(),
 					_scenario);
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
 
 			PersistAndRemoveFromUnitOfWork(skillDay);
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			ICollection<ISkillDay> orgSkillDays =
 				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), new List<ISkill> { _skill },
 					_scenario);
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var timer = new Stopwatch();
 			timer.Start();
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			ICollection<ISkillDay> orgSkillDays =
 				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(startDate, endDate), new List<ISkill> { _skill },
 					_scenario);
@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(skillDay);
 
-			IRepository<ISkillDay> skillDayRepository = new SkillDayRepository(UnitOfWork);
+			IRepository<ISkillDay> skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			skillDay = skillDayRepository.Get(skillDay.Id.Value);
 			skillDay.SetupSkillDay();
 
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillDay.MergeSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
 			PersistAndRemoveFromUnitOfWork(skillDay);
 
-			skillDayRepository = new SkillDayRepository(UnitOfWork);
+			skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			skillDay = skillDayRepository.Get(skillDay.Id.Value);
 			skillDay.SetupSkillDay();
 
@@ -410,9 +410,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new DateOnlyPeriod());
 
 			skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
-			new SkillDayRepository(UnitOfWork).Add(skillDay);
+			SkillDayRepository.DONT_USE_CTOR(UnitOfWork).Add(skillDay);
 
-			var skillDayRepository = new SkillDayRepository(UnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			skillDay = skillDayRepository.Get(skillDay.Id.Value);
 
 			Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldCreateSkillDayWithCurrentDateAsDateAndNoTime()
 		{
 			_skill = SkillFactory.CreateSiteSkill("bbb");
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			var startDateTime = new DateOnly(2011, 4, 1);
 			DateOnlyPeriod period = new DateOnlyPeriod(startDateTime, startDateTime.AddDays(1));
 			ICollection<ISkillDay> skilldays = skillDayRepository.GetAllSkillDays(period, new Collection<ISkillDay>(),
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldCreateWorkloadDayForNewlyAddedWorkload()
 		{
 			_skill = SkillFactory.CreateSiteSkill("bbb");
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			var startDateTime = new DateOnly(2011, 4, 1);
 			DateOnlyPeriod period = new DateOnlyPeriod(startDateTime, startDateTime);
 			ICollection<ISkillDay> skilldays = skillDayRepository.GetAllSkillDays(period, new Collection<ISkillDay>(),
@@ -482,8 +482,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnFalseIfNoSkillDays()
 		{
-			var skillDayRepository = new SkillDayRepository(UnitOfWork);
-			var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
 			var bu = businessUnitRepository.LoadAll().First();
 			skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.MinValue, DateOnly.MaxValue, bu, _scenario).Should().Be.False();
 		}
@@ -491,8 +491,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnTrueIfSkillDays()
 		{
-			var skillDayRepository = new SkillDayRepository(UnitOfWork);
-			var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
 
 			ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
 			ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
@@ -514,7 +514,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skillDay1);
 			PersistAndRemoveFromUnitOfWork(skillDay2);
 
-			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
 			ICollection<ISkillDay> skillDays =
 				skillDayRepository.LoadSkillDays(new List<Guid> { skillDay1.Id.Value, skillDay2.Id.Value });
 
@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<ISkillDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SkillDayRepository(currentUnitOfWork);
+			return SkillDayRepository.DONT_USE_CTOR_asdasd(currentUnitOfWork);
 		}
 	}
 }

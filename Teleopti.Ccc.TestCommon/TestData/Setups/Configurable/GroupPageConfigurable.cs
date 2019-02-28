@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var groups = Group.Split(',').Select(g => g.Trim());
 			groups.ForEach(g => page.AddRootPersonGroup(new RootPersonGroup(g)));
 
-			new GroupPageRepository(currentUnitOfWork.Current()).Add(page);
+			GroupPageRepository.DONT_USE_CTOR(currentUnitOfWork.Current()).Add(page);
 		}
 
 	}

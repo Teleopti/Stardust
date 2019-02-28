@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Multi;
 using NHibernate.Transform;
@@ -6,19 +7,25 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class AvailableDataRepository : Repository<IAvailableData>,IAvailableDataRepository
     {
-        public AvailableDataRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static AvailableDataRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new AvailableDataRepository(currentUnitOfWork, null, null);
+		}
 
-	    public AvailableDataRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
+		public static AvailableDataRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new AvailableDataRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+		
+		public AvailableDataRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy) 
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
 	    }
 

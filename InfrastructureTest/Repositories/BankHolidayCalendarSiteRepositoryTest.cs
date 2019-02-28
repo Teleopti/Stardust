@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IBankHolidayCalendarSite> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new BankHolidayCalendarSiteRepository(currentUnitOfWork);
+			return BankHolidayCalendarSiteRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var bankHolidayCalendaSite = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(bankHolidayCalendaSite);
 
-			var repository = new BankHolidayCalendarSiteRepository(CurrUnitOfWork);
+			var repository = BankHolidayCalendarSiteRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var result = repository.FindSitesByCalendar(bankHolidayCalendaSite.Calendar.Id.Value);
 
 			result.Count().Should().Be.EqualTo(1);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var bankHolidayCalendaSite = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(bankHolidayCalendaSite);
 
-			var repository = new BankHolidayCalendarSiteRepository(CurrUnitOfWork);
+			var repository = BankHolidayCalendarSiteRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var result = repository.FetchBankHolidayCalendars(_site.Id.GetValueOrDefault());
 
 			result.First().Name.Should().Be.EqualTo("calendar");

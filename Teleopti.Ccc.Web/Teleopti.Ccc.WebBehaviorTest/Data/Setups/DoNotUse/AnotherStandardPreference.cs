@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			IAbsence absence;
 			if (Preference != null)
 			{
-				absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Preference);
+				absence = AbsenceRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll().Single(a => a.Name == Preference);
 			}
 			else
 			{
 				absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
-				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(currentUnitOfWork);
 				absenceRepository.Add(absence);
 				Preference = absence.Description.Name;
 			}

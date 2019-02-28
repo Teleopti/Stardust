@@ -819,7 +819,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			ICollection<SiteDto> sitesOnBusinessUnit = new Collection<SiteDto>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ISiteRepository repository = new SiteRepository(unitOfWork);
+				ISiteRepository repository = SiteRepository.DONT_USE_CTOR(unitOfWork);
 				var sites = repository.LoadAll();
 
 				foreach (ISite site in sites)
@@ -839,7 +839,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			ICollection<TeamDto> teamsOnSite = new Collection<TeamDto>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ITeamRepository repository = new TeamRepository(unitOfWork);
+				ITeamRepository repository = TeamRepository.DONT_USE_CTOR(unitOfWork);
 				var teams = repository.LoadAll();
 
 				foreach (ITeam team in teams)
@@ -1047,7 +1047,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personRepository = new PersonRepository(currentUnitOfWork, null, null);
+				var personRepository = PersonRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 				var person = personRepository.Get(personDto.Id.Value);
 				var schedulePublishedToDate = person.WorkflowControlSet.SchedulePublishedToDate ?? new DateTime(1900, 01, 01);
 
@@ -1058,7 +1058,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 					return adherenceInfoDtos;
 				}
 
-				defaultScenario = new ScenarioRepository(uow).LoadDefaultScenario();
+				defaultScenario = ScenarioRepository.DONT_USE_CTOR(uow).LoadDefaultScenario();
 			}
 			
 			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
@@ -1453,7 +1453,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var person = new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
+					var person = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 					personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
 				}
 				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1709,7 +1709,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPerson person = new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
+				IPerson person = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 				DateTime localTime = GetPersonLocalTime(utcDate, person);
 				DateOnly localDate = new DateOnly(localTime);
 				ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
@@ -1847,8 +1847,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-				var accRep = new PersonAbsenceAccountRepository(currentUnitOfWork);
-				var perRep = new PersonRepository(currentUnitOfWork, null, null);
+				var accRep = PersonAbsenceAccountRepository.DONT_USE_CTOR(currentUnitOfWork);
+				var perRep = PersonRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 				var loadedPerson = perRep.Load(person.Id.GetValueOrDefault());
 				var accounts = accRep.Find(loadedPerson);
 				var dateOnly = containingDate.ToDateOnly();

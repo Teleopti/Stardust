@@ -17,7 +17,30 @@
           </ng-template>
         </div>
         <div class="con-flex x3">
-          <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
+          <button nz-button nzType="default" data-test-search-button *ngIf="improvedSearchActive === true" (click)="onSearch()">{{'Search' | translate}}</button>
+          <ng-container *ngIf="improvedSearchActive === false">
+            <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToGrant()">
+              {{'GrantRole' | translate}}
+            </button>
+            <button nz-button nzType="default" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToRevoke()">
+              {{'RevokeRole' | translate}}
+            </button>
+            <button nz-button nzType="default" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToApplicationLogon()">
+              {{'ApplicationLogon' | translate}}
+            </button>
+            <button nz-button nzType="default" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToIdentityLogon()">
+              {{'IdentityLogon' | translate}}
+            </button>
+          </ng-container>
+        </div>
+      </div>
+      <div class="con-row" *ngIf="improvedSearchActive === true">
+          <div class="con-flex">    
+            <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
             (click)="nav.navToGrant()">
             {{'GrantRole' | translate}}</button>
           <button nz-button nzType="default" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
@@ -29,51 +52,93 @@
           <button nz-button nzType="default" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()"
             (click)="nav.navToIdentityLogon()">
             {{'IdentityLogon' | translate}}</button>
+          </div>
         </div>
-      </div>
     </div>
     <div class="con-row">
       <div class="con-flex table-container" data-test-search>
+        <nz-spin [nzSpinning]="isSearching" *ngIf="improvedSearchActive === true">
+          <nz-table #basicTable (nzCurrentPageDataChange)="nzOnCurrentPageDataChange($event)" (nzPageSizeChange)="nzOnPageSizeChange($event)"
+            (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false"
+            nzShowPagination [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
+            [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize" [nzNoResult]="'noSearchResults' | translate">
+            <thead>
+              <tr>
+                <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()"
+                  (nzCheckedChange)="selectAllOnPage()"></th>
+                <th (click)="sort('FirstName')" class="first-name" data-test-sort-fn>{{'FirstName' | translate}}
+                  <ng-container *ngIf="isSortingBy('FirstName')">
+                    <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                    <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
+                  </ng-container>
+                </th>
+                <th (click)="sort('LastName')" class="last-name">{{'LastName' | translate}}
+                  <ng-container *ngIf="isSortingBy('LastName')">
+                    <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                    <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
+                  </ng-container>
+                </th>
+                <th (click)="sort('SiteTeam')">{{'SiteTeam' | translate}}
+                  <ng-container *ngIf="isSortingBy('SiteTeam')">
+                    <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                    <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
+                  </ng-container>
+                </th>
+                <th>{{'Roles' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let person of basicTable.data" data-test-person>
+                <td nzShowCheckbox [nzChecked]="workspaceService.isPersonSelected(person.Id)" (nzCheckedChange)="toggleSelectedPerson(person.Id)"
+                  (click)="$event.stopPropagation()"></td>
+                <td data-test-person-firstname>{{person.FirstName}}</td>
+                <td data-test-person-lastname>{{person.LastName}}</td>
+                <td data-test-person-site-team>{{person.SiteTeam}}</td>
+                <td data-test-person-role>{{personToRoles(person)}}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </nz-spin>
         <nz-table #basicTable (nzCurrentPageDataChange)="nzOnCurrentPageDataChange($event)" (nzPageSizeChange)="nzOnPageSizeChange($event)"
-          (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false"
-          nzShowPagination [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
-          [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize" [nzNoResult]="'noSearchResults' | translate">
-          <thead>
-            <tr>
-              <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()"
-                (nzCheckedChange)="selectAllOnPage()"></th>
-              <th (click)="sort('FirstName')" class="first-name" data-test-sort-fn>{{'FirstName' | translate}}
-                <ng-container *ngIf="isSortingBy('FirstName')">
-                  <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
-                  <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
-                </ng-container>
-              </th>
-              <th (click)="sort('LastName')" class="last-name">{{'LastName' | translate}}
-                <ng-container *ngIf="isSortingBy('LastName')">
-                  <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
-                  <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
-                </ng-container>
-              </th>
-              <th (click)="sort('SiteTeam')">{{'SiteTeam' | translate}}
-                <ng-container *ngIf="isSortingBy('SiteTeam')">
-                  <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
-                  <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
-                </ng-container>
-              </th>
-              <th>{{'Roles' | translate}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let person of basicTable.data" data-test-person>
-              <td nzShowCheckbox [nzChecked]="workspaceService.isPersonSelected(person.Id)" (nzCheckedChange)="toggleSelectedPerson(person.Id)"
-                (click)="$event.stopPropagation()"></td>
-              <td data-test-person-firstname>{{person.FirstName}}</td>
-              <td data-test-person-lastname>{{person.LastName}}</td>
-              <td data-test-person-site-team>{{person.SiteTeam}}</td>
-              <td data-test-person-role>{{personToRoles(person)}}</td>
-            </tr>
-          </tbody>
-        </nz-table>
+            (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false"
+            nzShowPagination [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
+            [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize" [nzNoResult]="'noSearchResults' | translate" *ngIf="improvedSearchActive === false">
+            <thead>
+              <tr>
+                <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()"
+                  (nzCheckedChange)="selectAllOnPage()"></th>
+                <th (click)="sort('FirstName')" class="first-name" data-test-sort-fn>{{'FirstName' | translate}}
+                  <ng-container *ngIf="isSortingBy('FirstName')">
+                    <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                    <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
+                  </ng-container>
+                </th>
+                <th (click)="sort('LastName')" class="last-name">{{'LastName' | translate}}
+                  <ng-container *ngIf="isSortingBy('LastName')">
+                    <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                    <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
+                  </ng-container>
+                </th>
+                <th (click)="sort('SiteTeam')">{{'SiteTeam' | translate}}
+                  <ng-container *ngIf="isSortingBy('SiteTeam')">
+                    <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                    <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
+                  </ng-container>
+                </th>
+                <th>{{'Roles' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let person of basicTable.data" data-test-person>
+                <td nzShowCheckbox [nzChecked]="workspaceService.isPersonSelected(person.Id)" (nzCheckedChange)="toggleSelectedPerson(person.Id)"
+                  (click)="$event.stopPropagation()"></td>
+                <td data-test-person-firstname>{{person.FirstName}}</td>
+                <td data-test-person-lastname>{{person.LastName}}</td>
+                <td data-test-person-site-team>{{person.SiteTeam}}</td>
+                <td data-test-person-role>{{personToRoles(person)}}</td>
+              </tr>
+            </tbody>
+          </nz-table>
       </div>
       <people-workspace class="con-flex"></people-workspace>
     </div>

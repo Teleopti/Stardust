@@ -61,14 +61,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				new TimePeriodWithSegment(new TimePeriod(_lunchEnd2 - _lunchStart2, 0, _lunchEnd2 - _lunchStart2, 0),
 				                          new TimeSpan(0, 15, 0));
 
-			var activityRepository = new ActivityRepository(unitOfWork, null, null);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null);
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityLunch1 = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
-			var activityLunch2 = new ActivityRepository(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
+			var activityLunch1 = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
+			var activityLunch2 = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
 			activityRepository.Add(activity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-			new ShiftCategoryRepository(unitOfWork).Add(shiftCategory);
+			ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork).Add(shiftCategory);
 
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
 			var generator1 = new WorkShiftTemplateGenerator(activity, start1, end1, shiftCategory);
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheRuleSetBag.AddRuleSet(ruleSet1);
 			TheRuleSetBag.AddRuleSet(ruleSet2);
 
-			var workShiftRuleSetRepository = new WorkShiftRuleSetRepository(unitOfWork);
+			var workShiftRuleSetRepository = WorkShiftRuleSetRepository.DONT_USE_CTOR(unitOfWork);
 			workShiftRuleSetRepository.Add(ruleSet1);
 			workShiftRuleSetRepository.Add(ruleSet2);
-			new RuleSetBagRepository(unitOfWork).Add(TheRuleSetBag);
+			RuleSetBagRepository.DONT_USE_CTOR(unitOfWork).Add(TheRuleSetBag);
 
 			unitOfWork.Current().Reassociate(person);
 			person.Period(DateOnlyForBehaviorTests.TestToday).RuleSetBag = TheRuleSetBag;

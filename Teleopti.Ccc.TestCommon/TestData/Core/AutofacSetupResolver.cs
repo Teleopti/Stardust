@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		{
 			if (typeof(T) == typeof(ActivitySpec))
 				return new ActivitySetup(
-					new BusinessUnitRepository(_unitOfWork, null, null),
-					new ActivityRepository(_unitOfWork, null, null)
+					BusinessUnitRepository.DONT_USE_CTOR(_unitOfWork, null, null),
+					ActivityRepository.DONT_USE_CTOR(_unitOfWork, null, null)
 				) as IDataSetup<T>;
 			return null;
 		}

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IAgentBadgeWithRankTransaction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new AgentBadgeWithRankTransactionRepository(currentUnitOfWork);
+			return AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		[Test]
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var badgeTransaction = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(badgeTransaction);
 
-			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			var target = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(UnitOfWork);
 			target.ResetAgentBadges();
 
 			var result = target.Find(person, badgeTransaction.BadgeType, badgeTransaction.CalculatedDate, false);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(badge3);
 			PersistAndRemoveFromUnitOfWork(badge4);
 
-			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			var target = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(UnitOfWork);
 			target.Remove(new DateOnlyPeriod(date.AddDays(-1), date.AddDays(1)));
 			Session.Flush();
 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Flush();
 			Session.Evict(agentBadgeTransaction);
 
-			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			var target = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = target.Find(new List<IPerson> { agentBadgeTransaction.Person }, new DateOnlyPeriod(2018, 1, 31, 2018, 2, 2)).FirstOrDefault();
 			result.Should().Not.Be.Null();
 			result.IsExternal.Should().Be.EqualTo(true);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			badge2.CalculatedDate = new DateOnly(2014, 9, 15);
 			PersistAndRemoveFromUnitOfWork(badge2);
 
-			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			var target = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var badges = target.Find(badge1.Person, badge1.BadgeType, new DateOnlyPeriod(2014, 9, 9, 2014, 9, 15), badge1.IsExternal);
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			badge2.CalculatedDate = new DateOnly(2014, 9, 15);
 			PersistAndRemoveFromUnitOfWork(badge2);
 
-			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			var target = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var badges = target.Find(badge1.Person, badge1.BadgeType, new DateOnlyPeriod(2014, 9, 1, 2014, 9, 8), badge1.IsExternal);
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			badge2.CalculatedDate = new DateOnly(2014, 9, 15);
 			PersistAndRemoveFromUnitOfWork(badge2);
 
-			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			var target = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var badges = target.Find(new List<IPerson>
 				{

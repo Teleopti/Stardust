@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
             IMultisiteSkill multisiteSkill = owner as IMultisiteSkill;
             if (multisiteSkill != null)
             {
-                MultisiteSkillRepository multisiteSkillRepository = new MultisiteSkillRepository(uow);
+                MultisiteSkillRepository multisiteSkillRepository = MultisiteSkillRepository.DONT_USE_CTOR(uow);
                 return multisiteSkillRepository.Get(multisiteSkill.Id.Value);
             }
 

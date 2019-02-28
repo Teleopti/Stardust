@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_logOnOff.LogOnWithoutPermissions(selectedDataSource.DataSource, selectedDataSource.User, businessUnit);
 
 			var unitOfWorkFactory = selectedDataSource.DataSource.Application;
-			var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
+			var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, LicenseRepository.DONT_USE_CTOR(new FromFactory(() => unitOfWorkFactory)));
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
@@ -45,12 +45,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 						new ClaimSetForApplicationRole(
 							new ApplicationFunctionsForRole(
 								new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-								new ApplicationFunctionRepository(new ThisUnitOfWork(uow))
+								ApplicationFunctionRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow))
 								)
 							)
 						);
 
-				roleToPrincipalCommand.Execute(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal, new PersonRepository(new ThisUnitOfWork(uow), null, null), unitOfWorkFactory.Name);
+				roleToPrincipalCommand.Execute(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal, PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null), unitOfWorkFactory.Name);
 			}
 			return true;
 		}

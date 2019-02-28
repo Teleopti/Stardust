@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IPartTimePercentage> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PartTimePercentageRepository(currentUnitOfWork);
+            return PartTimePercentageRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPartTimePercentage partTimePercentage = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(partTimePercentage);
 
-            ICollection<IPartTimePercentage> partTimePercentages = new PartTimePercentageRepository(UnitOfWork).FindAllPartTimePercentageByDescription();
+            ICollection<IPartTimePercentage> partTimePercentages = PartTimePercentageRepository.DONT_USE_CTOR(UnitOfWork).FindAllPartTimePercentageByDescription();
             Assert.AreEqual(1,partTimePercentages.Count);
         }
     }

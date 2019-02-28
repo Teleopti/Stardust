@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
         private static ICollection<AbsenceDto> GetAbsencesRequestable(IUnitOfWork uow)
         {
-            AbsenceRepository rep = new AbsenceRepository(uow);
+            AbsenceRepository rep = AbsenceRepository.DONT_USE_CTOR(uow);
             IList<IAbsence> absenceList = rep.LoadRequestableAbsence();
             AbsenceAssembler absenceAssembler = new AbsenceAssembler(rep);
             return absenceAssembler.DomainEntitiesToDtos(absenceList).ToList();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
         private static ICollection<AbsenceDto> GetAbsences(IUnitOfWork uow)
         {
-            AbsenceRepository rep = new AbsenceRepository(uow);
+            AbsenceRepository rep = AbsenceRepository.DONT_USE_CTOR(uow);
             IEnumerable<IAbsence> absenceList = rep.LoadAllSortByName();
             AbsenceAssembler absenceAssembler = new AbsenceAssembler(rep);
             return absenceAssembler.DomainEntitiesToDtos(absenceList).ToList();

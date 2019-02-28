@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var settingRepository = new PersonalSettingDataRepository(uow);
+					var settingRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 					return settingRepository.FindValueByKey("SchedulingScreen", new SchedulingScreenSettings());
 				}
 			}
@@ -983,7 +983,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
-						var settingDataRepository = new PersonalSettingDataRepository(uow);
+						var settingDataRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 						OpenScenarioForPeriodSetting openScenarioForPeriodSetting = settingDataRepository.FindValueByKey("OpenScheduler",
 							new OpenScenarioForPeriodSetting());
 						openScenarioForPeriodSetting.NoShrinkage = !toolStripButtonShrinkage.Checked;
@@ -3025,7 +3025,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadAccounts(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var rep = new PersonAbsenceAccountRepository(uow);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts =
 				_container.Resolve<IToggleManager>()
 					.IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487)
@@ -3036,7 +3036,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadDefinitionSets(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository =
-				new MultiplicatorDefinitionSetRepository(uow);
+				MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(uow);
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSetRepository.FindAllDefinitions();
 		}
 
@@ -3067,7 +3067,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSkills(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			ICollection<ISkill> skills = SkillRepository.DONT_USE_CTOR(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 		}
 
@@ -3168,8 +3168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
-				_optionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
-				var personRep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
+				_optionalColumns = OptionalColumnRepository.DONT_USE_CTOR(uow).GetOptionalColumns<Person>();
+				var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null);
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
 				{
@@ -3179,9 +3179,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				else
 				{
-					loader = new PeopleLoader(personRep, new ContractRepository(uow), 
+					loader = new PeopleLoader(personRep, ContractRepository.DONT_USE_CTOR(uow), 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
-							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new SkillRepository(uow));
+							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), SkillRepository.DONT_USE_CTOR(uow));
 				}
 
 				loader.Initialize(SchedulerState.SchedulerStateHolder);
@@ -3215,7 +3215,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSeniorityWorkingDays(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
+			var result = SeniorityWorkDayRanksRepository.DONT_USE_CTOR(uow).LoadAll();
 			var seniorityWorkDayRanks = result as ISeniorityWorkDayRanks[] ?? result.ToArray();
 			var workDayRanks = seniorityWorkDayRanks.IsEmpty() ? new SeniorityWorkDayRanks() : seniorityWorkDayRanks.First();
 			stateHolder.SchedulerStateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
@@ -3814,7 +3814,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IList<IScenario> scenarios;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScenarioRepository scenarioRepository = new ScenarioRepository(uow);
+				IScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(uow);
 				scenarios = scenarioRepository.FindAllSorted(); // Ascending or Descending ?
 			}
 			var authorization = PrincipalAuthorization.Current_DONTUSE();
@@ -3880,11 +3880,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var currentAuthorization = CurrentAuthorization.Make();
 			var currentUnitOfWork = new FromFactory(() => uowFactory);
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
-				new PersonAssignmentRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
-				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
-				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
-				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
-				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
+				new MeetingRepository(currentUnitOfWork), AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork),
+				new NoteRepository(currentUnitOfWork), PublicNoteRepository.DONT_USE_CTOR(currentUnitOfWork),
+				new PreferenceDayRepository(currentUnitOfWork), StudentAvailabilityDayRepository.DONT_USE_CTOR(currentUnitOfWork),
+				PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork), PersonRotationRepository.DONT_USE_CTOR(currentUnitOfWork),
 				new OvertimeAvailabilityRepository(currentUnitOfWork),
 				new PersistableScheduleDataPermissionChecker(currentAuthorization),
 				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
@@ -4145,9 +4145,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				var approveRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
@@ -4202,9 +4202,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse,
@@ -4720,9 +4720,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				changeRequestStatus(
 					new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules, SchedulerState.SchedulerStateHolder.RequestedScenario,
 						_requestPresenter, _handleBusinessRuleResponse,
@@ -4758,9 +4758,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				replyAndChangeStatus(new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
@@ -5699,8 +5699,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IList<IRuleSetBag> ruleSetBags;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new WorkShiftRuleSetRepository(new ThisUnitOfWork(uow)).FindAllWithLimitersAndExtenders();
-				var bags = new RuleSetBagRepository(new ThisUnitOfWork(uow)).LoadAllWithRuleSets();
+				WorkShiftRuleSetRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).FindAllWithLimitersAndExtenders();
+				var bags = RuleSetBagRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).LoadAllWithRuleSets();
 				ruleSetBags = bags.OrderBy(r => r.Description.Name).ToList();
 			}
 

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 					WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
 					using (var uow = _model.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 					{
-						var businessUnit = new BusinessUnitRepository(uow).Load(businessunitId);
+						var businessUnit = BusinessUnitRepository.DONT_USE_CTOR(uow).Load(businessunitId);
 						_model.SelectedBu = businessUnit;
 
 					}

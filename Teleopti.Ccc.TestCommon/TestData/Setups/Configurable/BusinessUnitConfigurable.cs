@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public IBusinessUnit BusinessUnit { get; set; }
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork, null, null);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 			BusinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit(Name);
 			businessUnitRepository.Add(BusinessUnit);
 		}

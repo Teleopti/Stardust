@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var license = new License { XmlString = licenseText };
-			var licenseRepository = new LicenseRepository(currentUnitOfWork);
+			var licenseRepository = LicenseRepository.DONT_USE_CTOR(currentUnitOfWork);
 			licenseRepository.Add(license);
 		}
 

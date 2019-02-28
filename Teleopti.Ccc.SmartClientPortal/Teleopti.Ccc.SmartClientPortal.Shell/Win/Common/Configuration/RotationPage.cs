@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			UnitOfWork = value;
 
 			// Creates a new repository.
-			Repository = new RotationRepository(UnitOfWork);
+			Repository = RotationRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void addDayOff(IEventMessage message)
 		{
-			var instance = new DayOffTemplateRepository(UnitOfWork)
+			var instance = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork)
 				.Get(message.DomainObjectId);
 			_dayOffList.Add(instance);
 		}
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void addShiftCategory(IEventMessage message)
 		{
-			var instance = new ShiftCategoryRepository(UnitOfWork)
+			var instance = ShiftCategoryRepository.DONT_USE_CTOR(UnitOfWork)
 				.Get(message.DomainObjectId);
 			_shiftCategoryList.Add(instance);
 		}
@@ -634,7 +634,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_shiftCategoryList.Add(RotationRestrictionView.DefaultShiftCategory);
 
 			// Loads all categories.
-			var repository = new ShiftCategoryRepository(UnitOfWork);
+			var repository = ShiftCategoryRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var list = repository.LoadAll();
 			IEnumerable<IShiftCategory> sortedList = (from s in list
@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_dayOffList.Add(RotationRestrictionView.DefaultDayOff);
 
 			// Loads all categories.
-			var repository = new DayOffTemplateRepository(UnitOfWork);
+			var repository = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var list = repository.LoadAll();
 			IEnumerable<IDayOffTemplate> sortedList = (from d in list

@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			ContractScheduleCollection.Clear();
 
-			var repository = new ContractScheduleRepository(filterPeopleHolder.GetUnitOfWork);
+			var repository = ContractScheduleRepository.DONT_USE_CTOR(filterPeopleHolder.GetUnitOfWork);
 			var list = repository.FindAllContractScheduleByDescription().Where(ptp => !((IDeleteTag)ptp).IsDeleted);
 
 			foreach (IContractSchedule item in list)
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadPartTimePercentages(FilteredPeopleHolder filterPeopleHolder)
 		{
 			PartTimePercentageCollection.Clear();
-			var partTimePercentageRepository = new PartTimePercentageRepository(filterPeopleHolder.GetUnitOfWork);
+			var partTimePercentageRepository = PartTimePercentageRepository.DONT_USE_CTOR(filterPeopleHolder.GetUnitOfWork);
 			var list = partTimePercentageRepository.FindAllPartTimePercentageByDescription().Where(ptp => ptp.IsChoosable);
 
 			IEnumerable<IPartTimePercentage> sorted = list.OrderByDescending(n2 => n2.Percentage.Value);
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadContracts(FilteredPeopleHolder filterPeopleHolder)
 		{
 			ContractCollection.Clear();
-			var repository = new ContractRepository(filterPeopleHolder.GetUnitOfWork);
+			var repository = ContractRepository.DONT_USE_CTOR(filterPeopleHolder.GetUnitOfWork);
 			var list = repository.FindAllContractByDescription().Where(ptp => ptp.IsChoosable).ToList();
 
 			foreach (IContract item in list)
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void LoadShiftCategories(IUnitOfWork unitOfWork)
 		{
-			IShiftCategoryRepository repository = new ShiftCategoryRepository(unitOfWork);
+			IShiftCategoryRepository repository = ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork);
 			ShiftCategories = repository.FindAll();
 		}
 
@@ -817,7 +817,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			AllRotations.Clear();
 
-			var rep = new RotationRepository(uow);
+			var rep = RotationRepository.DONT_USE_CTOR(uow);
 			var rotations = rep.LoadAllRotationsWithDays();
 
 			IEnumerable<IRotation> sorted = rotations.OrderBy(n2 => n2.Name);
@@ -828,7 +828,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadAllAvailabilities(IUnitOfWork uow)
 		{
 			AllAvailabilities.Clear();
-			var availabilities = new AvailabilityRepository(uow).LoadAllSortedByNameAscending();
+			var availabilities = AvailabilityRepository.DONT_USE_CTOR(uow).LoadAllSortedByNameAscending();
 			availabilities.ForEach(AllAvailabilities.Add);
 		}
 
@@ -837,7 +837,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			WorkflowControlSetCollection.Clear();
 			WorkflowControlSetCollection.Add(PersonGeneralModel.NullWorkflowControlSet);
 
-			var rep = new WorkflowControlSetRepository(uow);
+			var rep = WorkflowControlSetRepository.DONT_USE_CTOR(uow);
 			var workflowControlSets = rep.LoadAll();
 
 			IEnumerable<IWorkflowControlSet> sorted = workflowControlSets.OrderBy(n2 => n2.Name);

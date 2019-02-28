@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 			int defaultSegment;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				defaultSegment = new GlobalSettingDataRepository(uow).FindValueByKey("DefaultSegment", new DefaultSegment()).SegmentLength;
+				defaultSegment = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("DefaultSegment", new DefaultSegment()).SegmentLength;
 			}
 			_explorerPresenter.Model.SetDefaultSegment(defaultSegment);
 			_explorerPresenter.Model.SetRightToLeft(RightToLeft == RightToLeft.Yes);

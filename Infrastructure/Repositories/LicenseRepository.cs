@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -15,18 +18,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Created date: 2008-12-03
     /// </remarks>
     public class LicenseRepository : Repository<ILicense>, ILicenseRepository
-    {
-        public LicenseRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+	{
+		public static LicenseRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new LicenseRepository(currentUnitOfWork, null, null);
+		}
 
-				public LicenseRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork, null, null)
+		public static LicenseRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new LicenseRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public LicenseRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
-		    
 	    }
 
         /// <summary>

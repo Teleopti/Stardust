@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IDayOffTemplate> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new DayOffTemplateRepository(currentUnitOfWork);
+			return DayOffTemplateRepository.DONT_USE_CTOR2(currentUnitOfWork);
 		}
 		
 		[Test]
 		public void VerifyCanLoadDayOffsSortedByDescription()
 		{
 			addFewDayOffs();
-			var dayOffList = new DayOffTemplateRepository(UnitOfWork).FindAllDayOffsSortByDescription();
+			var dayOffList = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork).FindAllDayOffsSortByDescription();
 			Assert.AreEqual("AAA", dayOffList[0].Description.Name);
 		}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			((IDeleteTag)_dayOff).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(_dayOff);
 
-			var dayOffList = new DayOffTemplateRepository(UnitOfWork).FindAllDayOffsSortByDescription();
+			var dayOffList = DayOffTemplateRepository.DONT_USE_CTOR(UnitOfWork).FindAllDayOffsSortByDescription();
 			dayOffList.Count.Should().Be.EqualTo(2);
 			dayOffList[0].Description.Name.Should().Be.EqualTo("AAA");
 			dayOffList[1].Description.Name.Should().Be.EqualTo("CCC");

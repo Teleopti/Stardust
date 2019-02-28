@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IMultiplicator> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultiplicatorRepository(currentUnitOfWork);
+            return MultiplicatorRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(multiplicator1);
             PersistAndRemoveFromUnitOfWork(multiplicator2);
 
-            IMultiplicatorRepository rep = new MultiplicatorRepository(UnitOfWork);
+            IMultiplicatorRepository rep = MultiplicatorRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IMultiplicator> lst = rep.LoadAllSortByName();
 
             Assert.AreEqual(2, lst.Count);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(multiplicator1);
             PersistAndRemoveFromUnitOfWork(multiplicator2);
 
-            IMultiplicatorRepository rep = new MultiplicatorRepository(UnitOfWork);
+            IMultiplicatorRepository rep = MultiplicatorRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IMultiplicator> lst = rep.LoadAllByTypeAndSortByName(MultiplicatorType.OBTime);
 
             Assert.AreEqual(2, lst.Count);

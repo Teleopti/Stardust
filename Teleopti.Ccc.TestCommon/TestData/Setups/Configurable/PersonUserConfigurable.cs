@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			if (Delete)
 			{
-				var repository = new PersonRepository(new ThisUnitOfWork(uow), null, null);
+				var repository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null);
 				repository.Remove(user);
 				return;
 			}
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(Role))
 			{
-				var roleRepository = new ApplicationRoleRepository(uow);
+				var roleRepository = ApplicationRoleRepository.DONT_USE_CTOR(uow);
 				var role = roleRepository.LoadAll().Single(b => b.Name ==  Role);
 				user.PermissionInformation.AddApplicationRole(role);
 			}

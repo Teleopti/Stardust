@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		{
 			var absenceInContractTime = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(200, 150, 150));
 			absenceInContractTime.InContractTime = true;
-			new AbsenceRepository(unitOfWork).Add(absenceInContractTime);
+			AbsenceRepository.DONT_USE_CTOR(unitOfWork).Add(absenceInContractTime);
 
 			var date = DateTime.Parse(Date, swedishCulture);
 			var startTime = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);

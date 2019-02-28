@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var budgetDayRepository = new BudgetDayRepository(unitOfWork);
-			var budgetGroupRepository = new BudgetGroupRepository(unitOfWork);
+			var budgetGroupRepository = BudgetGroupRepository.DONT_USE_CTOR(unitOfWork);
 			IBudgetGroup budgetGroup = new BudgetGroup() { Name = BudgetGroup };
 			var existingBudgetGroups = budgetGroupRepository.LoadAll();
 			bool budgetGroupAlreadyExists = existingBudgetGroups.Any(b => b.Name == BudgetGroup);

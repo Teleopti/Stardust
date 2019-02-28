@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (DayOff == null)
 			{
 				DayOff = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(unitOfWork);
+				var repository = DayOffTemplateRepository.DONT_USE_CTOR2(unitOfWork);
 				repository.Add(DayOff);
 			}
 
-			var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			var ass = new PersonAssignment(person, Scenario, new DateOnly(DateTime.Parse(Date)));
 			ass.SetDayOff(DayOff);
 			personAssignmentRepository.Add(ass);

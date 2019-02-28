@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_portalSettings);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_portalSettings);
 				uow.PersistAll();
 			}
 		}
@@ -674,7 +674,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					return new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null)
+					return PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null)
 						.Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 				}
 			}

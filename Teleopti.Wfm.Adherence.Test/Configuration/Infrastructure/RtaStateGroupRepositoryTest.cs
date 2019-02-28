@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
         protected override Repository<IRtaStateGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RtaStateGroupRepository(currentUnitOfWork);
+            return RtaStateGroupRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             var stateGroup = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
-            var result = new RtaStateGroupRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
+            var result = RtaStateGroupRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
             Assert.AreEqual(1,result.Count());
 			Session.Close();
 			Assert.DoesNotThrow(()=>

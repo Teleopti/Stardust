@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCreateInstanceWithUnitOfWorkFactory()
         {
-            var repository = new LicenseRepository(CurrUnitOfWork);
+            var repository = LicenseRepository.DONT_USE_CTOR(CurrUnitOfWork);
             Assert.IsNotNull(repository);
         }
 

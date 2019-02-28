@@ -12,6 +12,8 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -24,21 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class GroupPageRepository : Repository<IGroupPage>, IGroupPageRepository
     {
-        /// <summary>
-        /// Initilaze a new instance of the class 
-        /// </summary>
-        /// <param name="unitOfWork"></param>
-        public GroupPageRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static GroupPageRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new GroupPageRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
 
-		public GroupPageRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public GroupPageRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
-		    
 	    }
 
 	    /// <summary>

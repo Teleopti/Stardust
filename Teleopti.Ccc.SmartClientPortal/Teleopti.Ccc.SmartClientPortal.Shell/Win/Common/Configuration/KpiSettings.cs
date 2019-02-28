@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				if (_lstTargets == null)
 				{
-					var tarRep = new KpiTargetRepository(_unitOfWork);
+					var tarRep = KpiTargetRepository.DONT_USE_CTOR(_unitOfWork);
 					_lstTargets = tarRep.LoadAll().ToList();
 				}
 				return _lstTargets;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				if (_lstTeams == null)
 				{
-					var teamRep = new TeamRepository(_unitOfWork);
+					var teamRep = TeamRepository.DONT_USE_CTOR(_unitOfWork);
 					_lstTeams = teamRep.LoadAll().ToList();
 				}
 				return _lstTeams;
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				return;
 			}
-			var kpiRep = new KpiRepository(_unitOfWork);
+			var kpiRep = KpiRepository.DONT_USE_CTOR(_unitOfWork);
 			_selectedKpi = kpiRep.Load((Guid)comboBoxKpi.SelectedValue);
 
 			loadTeam();
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			if (comboBoxKpi.Items.Count > 0) return;
 
-			var kpiRep = new KpiRepository(_unitOfWork);
+			var kpiRep = KpiRepository.DONT_USE_CTOR(_unitOfWork);
 			var lst = kpiRep.LoadAll();
 			var collection = new TypedBindingCollection<IKeyPerformanceIndicator>();
 			lst.ForEach(collection.Add);
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadSites()
 		{
-			var repSite = new SiteRepository(_unitOfWork);
+			var repSite = SiteRepository.DONT_USE_CTOR(_unitOfWork);
 			var lst = repSite.LoadAll();
 			comboBoxSite.Sorted = false;
 			comboBoxSite.DisplayMember = "Description";
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			if (SelectedKpi == null) return;
 
-			var rep = new KpiTargetRepository(_unitOfWork);
+			var rep = KpiTargetRepository.DONT_USE_CTOR(_unitOfWork);
 			foreach (var kpiTarget in KpiTargets)
 			{
 			    var item = (KpiTarget) kpiTarget;

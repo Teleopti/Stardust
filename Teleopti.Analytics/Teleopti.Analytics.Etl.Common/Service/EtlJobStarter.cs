@@ -74,8 +74,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private bool checkForEtlJob()
 		{
 			log.Debug("Checking configuration");
-			var configHandler =
-				new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)), new BaseConfigurationValidator());
+			var generalFunctions = new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository));
+			var configHandler = new ConfigurationHandler(generalFunctions, new BaseConfigurationValidator());
 			configHandler.SetConnectionString(_connectionString);
 			if (!configHandler.IsConfigurationValid)
 			{
@@ -141,6 +141,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if (!runController.CanIRunAJob(out var etlRunningInformation))
 			{
 				logConflictingEtlRun(jobToRun, etlRunningInformation);
+				return;
 			}
 
 			try
@@ -153,10 +154,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 					var etlTenantName = scheduleJob.TenantName;
 					var etlTenants = Tenants.IsAllTenants(etlTenantName)
-						? _tenants.EtlTenants().ToList()
+						? _tenants.EtlTenants(true).ToList()
 						: new List<TenantInfo>
 						{
-							_tenants.Tenant(etlTenantName)
+							_tenants.Tenant(etlTenantName, true)
 						};
 					
 					foreach (var tenant in etlTenants)

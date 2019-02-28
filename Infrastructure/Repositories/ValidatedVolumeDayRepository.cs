@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -19,11 +20,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class ValidatedVolumeDayRepository : Repository<IValidatedVolumeDay>, IValidatedVolumeDayRepository
     {
-				public ValidatedVolumeDayRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork, null, null)
-	    {
-		    
-	    }
+		public static ValidatedVolumeDayRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new ValidatedVolumeDayRepository(currentUnitOfWork, null, null);
+		}
+
+		public ValidatedVolumeDayRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
 
         /// <summary>
         /// Finds the range.

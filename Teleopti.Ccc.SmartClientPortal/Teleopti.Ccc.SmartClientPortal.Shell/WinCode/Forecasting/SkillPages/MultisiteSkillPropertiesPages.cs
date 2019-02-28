@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
         /// </remarks>
         public override IRepository<IMultisiteSkill> RepositoryObject
         {
-            get { return new MultisiteSkillRepository(UnitOfWork); }
+            get { return MultisiteSkillRepository.DONT_USE_CTOR(UnitOfWork); }
         }
 
         public MultisiteSkillPropertiesPages(ISkillType preselectedSkillType, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)

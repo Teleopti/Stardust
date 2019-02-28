@@ -25,15 +25,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var openHours = _opened24Hours ? new TimePeriod(0, 0, 23, 59) : new TimePeriod(8, 17);
 			var hours = openHours.SpanningTime().Hours;
-			var skillRepository = new SkillRepository(currentUnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == _skillName);
 			
-			var scenarioRepository = new ScenarioRepository(currentUnitOfWork);
+			var scenarioRepository = ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var defaultScenario = scenarioRepository.LoadAll().FirstOrDefault();
 			defaultScenario.EnableReporting = true;
 
 			var date = new DateOnly(_date);
-			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
+			var skillDayRepository = SkillDayRepository.DONT_USE_CTOR_asdasd(currentUnitOfWork);
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(defaultScenario, date, 5, new Tuple<TimePeriod, double>(openHours, 5));
 			skillDayRepository.Add(skillDay);
 			var workloadDay = skillDay.WorkloadDayCollection[0];

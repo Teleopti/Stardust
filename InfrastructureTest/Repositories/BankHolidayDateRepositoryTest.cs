@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IBankHolidayDate> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new BankHolidayDateRepository(currentUnitOfWork);
+			return BankHolidayDateRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			bankHolidayDate.SetDeleted();
 			PersistAndRemoveFromUnitOfWork(bankHolidayDate);
 
-			var repository = new BankHolidayDateRepository(CurrUnitOfWork);
+			var repository = BankHolidayDateRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var result = repository.Find(bankHolidayDate.Date, calendar);
 
 			result.Should().Not.Be.EqualTo(null);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var bankHolidayDate = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(bankHolidayDate);
 			
-			var repository = new BankHolidayDateRepository(CurrUnitOfWork);
+			var repository = BankHolidayDateRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var result = repository.FetchByCalendarsAndPeriod(new List<IBankHolidayCalendar> { calendar }, new DateOnlyPeriod(new DateOnly(2000, 12, 31), new DateOnly(2001, 12, 31)));
 
 			result.Count().Should().Be.EqualTo(1);

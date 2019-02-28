@@ -1,7 +1,10 @@
+using System;
 using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -10,18 +13,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class WorkloadRepository : Repository<IWorkload>, IWorkloadRepository
     {
-        public WorkloadRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static WorkloadRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new WorkloadRepository(currentUnitOfWork, null, null);
+		}
 
-				public WorkloadRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork, null, null)
-	    {
-		    
-	    }
+		public static WorkloadRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new WorkloadRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public WorkloadRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
+
 
         /// <summary>
         /// Removes the specified workload.

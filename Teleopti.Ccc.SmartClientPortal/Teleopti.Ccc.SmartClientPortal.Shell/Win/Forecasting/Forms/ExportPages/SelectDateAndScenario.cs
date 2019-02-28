@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_scenarios = new ScenarioRepository(uow).FindAllSorted();
+				_scenarios = ScenarioRepository.DONT_USE_CTOR(uow).FindAllSorted();
 			}
 
 			if (noScenarioAvailable(_scenarios))

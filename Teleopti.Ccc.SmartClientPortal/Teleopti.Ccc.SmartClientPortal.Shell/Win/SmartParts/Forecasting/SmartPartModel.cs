@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
                 {
                     using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                     {
-                        ScenarioRepository scenarioRepository = new ScenarioRepository(uow);
+                        ScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(uow);
                         _defaultScenario = scenarioRepository.LoadDefaultScenario();
                     }
                     return _defaultScenario;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
             {
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    SkillRepository skillRep = new SkillRepository(uow);
+                    SkillRepository skillRep = SkillRepository.DONT_USE_CTOR(uow);
                     _skill = skillRep.Get(_skillId);
 
                     LazyLoadingManager.Initialize(_skill.UpdatedBy);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
                 {
                     using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                     {
-                        ScenarioRepository scenarioRepository = new ScenarioRepository(uow);
+                        ScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(uow);
                         _scenarios = scenarioRepository.LoadAll().ToList();
                     }
                     return _scenarios;
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
             {
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    SkillDayRepository skillRepository = new SkillDayRepository(uow);
+                    SkillDayRepository skillRepository = SkillDayRepository.DONT_USE_CTOR(uow);
                     foreach (var scenario in Scenarios)
                     {
                         ISkillDay skillDay = skillRepository.FindLatestUpdated(_skill, scenario, longterm);
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
             {
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(new ThisUnitOfWork(uow));
+                    IValidatedVolumeDayRepository validatedVolumeDayRepository = ValidatedVolumeDayRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow));
                     IValidatedVolumeDay validatedVolumeDay = validatedVolumeDayRepository.FindLatestUpdated(_skill);
                     if (validatedVolumeDay != null)
                     {

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var page = new GroupPageRepository(unitOfWork.Current()).LoadAll().Single(p => p.Description.Name == Page);
+			var page = GroupPageRepository.DONT_USE_CTOR(unitOfWork.Current()).LoadAll().Single(p => p.Description.Name == Page);
 			var group = page.RootGroupCollection.Single(g => g.Name == Group);
 			group.AddPerson(person);
 		}

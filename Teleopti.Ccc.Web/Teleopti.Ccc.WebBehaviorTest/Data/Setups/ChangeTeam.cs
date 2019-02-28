@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var team = new TeamRepository(uow).LoadAll().Single(x => x.Description.Name == Team);
+			var team = TeamRepository.DONT_USE_CTOR(uow).LoadAll().Single(x => x.Description.Name == Team);
 			var period = user.Period(new DateOnly(CurrentTime.Value()));
 			user.ChangeTeam(team, period);
 		}

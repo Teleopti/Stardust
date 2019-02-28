@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Deadlock
 												var date = new DateOnly(2000, 1, day1);
 												using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 												{
-													var rep = new StudentAvailabilityDayRepository(uow);
+													var rep = StudentAvailabilityDayRepository.DONT_USE_CTOR(uow);
 													var readIt = rep.Find(date, SetupFixtureForAssembly.loggedOnPerson);
 													rep.Remove(readIt.First());
 													uow.PersistAll();

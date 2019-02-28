@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanCreate()
         {
-            new QueueSourceRepository(UnitOfWork);
+            QueueSourceRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(new QueueSource("Q3", "Queue3", 3));
 
 
-            _target = new QueueSourceRepository(UnitOfWork);
+            _target = QueueSourceRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IQueueSource> queueSources = _target.LoadAll().ToList();
             Assert.IsNotNull(queueSources);
             Assert.AreEqual(queueSources.Count, 3);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         
         protected override Repository<IQueueSource> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new QueueSourceRepository(currentUnitOfWork.Current());
+            return QueueSourceRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
     }
 }

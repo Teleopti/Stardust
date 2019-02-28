@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			workShiftRuleSet.AddAccessibilityDate(DateOnly.Today);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new WorkShiftRuleSetRepository(uow);
+				var rep = Infrastructure.Repositories.WorkShiftRuleSetRepository.DONT_USE_CTOR(uow);
 				rep.Add(workShiftRuleSet);
 				uow.PersistAll();
 			}

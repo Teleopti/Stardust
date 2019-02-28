@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				session.Save(PersonAssignment.ShiftCategory);
 				session.Save(PersonAssignment.MainActivities().First().Payload);
 				session.Save(PersonAbsence.Layer.Payload);
-				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Add(PersonAssignment);
+				PersonAssignmentRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).Add(PersonAssignment);
 				session.Save(PersonAbsence);
 				session.Save(DayOffTemplate);
 				session.Save(MultiplicatorDefinitionSet);
