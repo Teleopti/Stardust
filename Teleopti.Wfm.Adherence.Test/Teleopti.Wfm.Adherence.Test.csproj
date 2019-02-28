@@ -202,6 +202,7 @@
     <Compile Include="Historical\Unit\AdjustAdherence\AdjustAdherenceToNeutralCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\NeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageAdjustToNeutralTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedNeutralAdherenceTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\OutOfAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
@@ -212,7 +213,7 @@
     <Compile Include="Historical\Unit\AgentAdherenceDay\NotApplicableEventsTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PeriodTest.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedAdherenceTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedOutOfAdherenceTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ResolutionTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceBelongsToDateCommandHandlerTest.cs" />

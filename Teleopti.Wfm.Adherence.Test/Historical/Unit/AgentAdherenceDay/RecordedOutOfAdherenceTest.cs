@@ -11,7 +11,7 @@ using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
 	[DomainTest]
-	public class RecordedAdherenceTest
+	public class RecordedOutOfAdherenceTest
 	{
 		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
