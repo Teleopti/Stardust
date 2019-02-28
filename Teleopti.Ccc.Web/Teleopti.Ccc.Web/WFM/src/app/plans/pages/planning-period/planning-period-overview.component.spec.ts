@@ -12,7 +12,7 @@ import {
 } from 'ng-zorro-antd';
 import {of} from 'rxjs';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { NavigationService } from 'src/app/core/services';
+import {NavigationService, TogglesService} from 'src/app/core/services';
 import {PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { TitleBarComponent } from '../../components/title-bar';
 import { PlanningPeriodOverviewComponent } from './planning-period-overview.component';
@@ -196,7 +196,8 @@ describe('Planning Period Overview', () => {
 					provide: '$state',
 					useValue: mockStateService
 				},
-				{ provide: NavigationService, useValue: {} }
+				{ provide: NavigationService, useValue: {} },
+				TogglesService
 			]
 		}).compileComponents();
 
