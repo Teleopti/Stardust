@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -16,9 +15,19 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DatabaseTestSetup
 	{
+		private static readonly PerTestWorker<object> data = new PerTestWorker<object>();
+
 		public static T Setup<T>(Func<CreateDataContext, CreateDataResult<T>> createData)
 		{
-			var data = default(T);
+			if (data.Value != null)
+			{
+				var cachedData = (CreateDataResult<T>) data.Value;
+				DataSourceHelper.RestoreApplicationDatabase(cachedData.Hash);
+				DataSourceHelper.RestoreAnalyticsDatabase(cachedData.Hash);
+				return cachedData.Data;
+			}
+
+			var createDataResult = default(CreateDataResult<T>);
 			withContainer(container =>
 			{
 				container.Resolve<DatabaseTestHelper>()
@@ -40,27 +49,15 @@ namespace Teleopti.Ccc.TestCommon
 					});
 					if (result.Hash == 0)
 						throw new Exception("create data function needs to return a number representing the data created");
-					data = result.Data;
+					createDataResult = result;
 				}
 			});
-			return data;
+
+			data.Set(() => createDataResult);
+			DataSourceHelper.BackupApplicationDatabase(createDataResult.Hash);
+			DataSourceHelper.BackupAnalyticsDatabase(createDataResult.Hash);
+			return createDataResult.Data;
 		}
-		
-		// stuff for optimization later
-
-		//private static readonly ThreadLocal<object> createDataResult = new ThreadLocal<object>();
-
-//		if (createdDataHash != 0)
-//		{
-//			DataSourceHelper.RestoreApplicationDatabase(createdDataHash);
-//			DataSourceHelper.RestoreAnalyticsDatabase(createdDataHash);
-//			return;
-//		}
-
-
-//		DataSourceHelper.BackupApplicationDatabase(createdDataHash);
-//		DataSourceHelper.BackupAnalyticsDatabase(createdDataHash);
-
 		
 		private static void withContainer(Action<IComponentContext> action)
 		{

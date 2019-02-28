@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using NUnit.Framework;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon
 			return $"{analyticsConnectionString.Substring(0, firstIndex)}{aggName}{analyticsConnectionString.Substring(lastIndex)}";
 		}
 
-		private static readonly Dictionary<string, string> suffixPerWorkerId = new Dictionary<string, string>();
+		private static readonly PerTestWorker<string> suffixPerWorkerId = new PerTestWorker<string>();
 
 		public static string TenantName() => augmentName("TestData");
 		public static string ApplicationConnectionString() => augmentConnectionString(ConfigurationManager.AppSettings["InfraTest.ConnectionString"]);
@@ -48,13 +47,9 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			if (TestContext.CurrentContext.isParallel())
 			{
-				var workerId = TestContext.CurrentContext.WorkerId;
-				if (!suffixPerWorkerId.ContainsKey(workerId))
-					lock (suffixPerWorkerId)
-						if (!suffixPerWorkerId.ContainsKey(workerId))
-							suffixPerWorkerId[workerId] = suffixPerWorkerId.Count.ToString();
-				var suffix = suffixPerWorkerId[workerId];
-				return name + "_" + suffix;
+				if (suffixPerWorkerId.Value == null)
+					suffixPerWorkerId.Set(() => suffixPerWorkerId.WorkerCount().ToString());
+				return name + "_" + suffixPerWorkerId.Value;
 			}
 
 			return name;
