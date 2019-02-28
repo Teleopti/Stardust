@@ -86,7 +86,7 @@
                 var recordedAdherences = outs
                     .concat(neutrals)
                     .sort(function (a, b) {
-                        return a.StartTime.localeCompare(b.StartTime);
+                        return Date.parse(a.StartTime) - Date.parse(b.StartTime);
                     });
 
                 vm.recordedAdherences = buildRecordedAdherences(data.Timeline, recordedAdherences);
