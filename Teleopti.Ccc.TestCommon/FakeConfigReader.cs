@@ -78,9 +78,12 @@ namespace Teleopti.Ccc.TestCommon
 			config.FakeSetting("CertificateInverseQ", ConfigurationManager.AppSettings["CertificateInverseQ"]);
 			config.FakeSetting("CertificateD", ConfigurationManager.AppSettings["CertificateD"]);
 			config.FakeSetting("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeSetting("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
-			config.FakeSetting("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri);
-			config.FakeSetting("NumberOfNodes", "1");
+			if(TestSiteConfigurationSetup.URL != null)
+			{
+				config.FakeSetting("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
+				config.FakeSetting("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri);
+				config.FakeSetting("NumberOfNodes", "1");
+			}
 			return config;
 		}
 
