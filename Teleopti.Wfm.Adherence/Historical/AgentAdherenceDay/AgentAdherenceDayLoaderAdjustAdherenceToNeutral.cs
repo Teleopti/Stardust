@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 
 			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
 			var period = new DateTimePeriod(time, time.AddDays(1));
-			var adjustedPeriodEvents = _eventStore.LoadAllOfType<PeriodAdjustedToNeutralEvent>();
+			var adjustedPeriodEvents = _eventStore.LoadOfTypeForPeriod<PeriodAdjustedToNeutralEvent>(period);
 			var eventsForPerson = _eventStore.Load(personId, date);
 			var events = eventsForPerson.Concat(adjustedPeriodEvents);
 			var saga = new AgentAdherenceDayAdjustAdherenceToNeutral(until, period, () => shiftFromSchedule(personId, date));

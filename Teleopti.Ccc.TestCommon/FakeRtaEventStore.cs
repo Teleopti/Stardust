@@ -8,6 +8,7 @@ using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
 using DateOnly = Teleopti.Wfm.Adherence.DateOnly;
+using DateTimePeriod = Teleopti.Wfm.Adherence.DateTimePeriod;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -100,10 +101,12 @@ namespace Teleopti.Ccc.TestCommon
 				.ToArray();
 		}
 
-		public IEnumerable<IEvent> LoadAllOfType<T>()
+		public IEnumerable<IEvent> LoadOfTypeForPeriod<T>(Wfm.Adherence.DateTimePeriod period)
 		{
 			return Data
-				.Where(x => x.Event.GetType() == typeof(T))
+				.Where(x => x.Event.GetType() == typeof(T) && 
+				            ((x.StartTime <= period.EndDateTime &&
+							  x.EndTime >= period.StartDateTime)))
 				.Select(e => e.Event)
 				.ToArray();
 		}

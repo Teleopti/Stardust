@@ -91,17 +91,94 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 		[Test]
 		public void ShouldLoadOfType()
 		{
+			var period = new DateTimePeriod("2019-02-14 08:00".Utc(), "2019-02-14 18:00".Utc());
 			Publisher.Publish(new PeriodAdjustedToNeutralEvent
 			{
 				StartTime = "2019-02-14 08:00".Utc(),
 				EndTime = "2019-02-14 18:00".Utc(),
 			});
 
-			var actual = WithUnitOfWork.Get(() => Events.LoadAllOfType<PeriodAdjustedToNeutralEvent>());
+			var actual = WithUnitOfWork.Get(() => Events.LoadOfTypeForPeriod<PeriodAdjustedToNeutralEvent>(period));
 
 			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
 			@event.StartTime.Should().Be("2019-02-14 08:00".Utc());
 			@event.EndTime.Should().Be("2019-02-14 18:00".Utc());
+		}
+
+		[Test]
+		public void ShouldLoadOfTypeForPeriod()
+		{
+			var period = new DateTimePeriod("2019-02-28 08:00".Utc(), "2019-02-28 18:00".Utc());
+			Publisher.Publish(new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-27 08:00".Utc(),
+					EndTime = "2019-02-27 18:00".Utc(),
+				},
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-28 08:00".Utc(),
+					EndTime = "2019-02-28 18:00".Utc(),
+				});
+
+			var actual = WithUnitOfWork.Get(() => Events.LoadOfTypeForPeriod<PeriodAdjustedToNeutralEvent>(period));
+
+			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
+			@event.StartTime.Should().Be("2019-02-28 08:00".Utc());
+			@event.EndTime.Should().Be("2019-02-28 18:00".Utc());
+		}
+
+		[Test]
+		public void ShouldLoadOfTypeStartingBeforePeriod()
+		{
+			var period = new DateTimePeriod("2019-02-28 08:00".Utc(), "2019-02-28 18:00".Utc());
+			Publisher.Publish(
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-28 07:00".Utc(),
+					EndTime = "2019-02-28 18:00".Utc(),
+				});
+
+			var actual = WithUnitOfWork.Get(() => Events.LoadOfTypeForPeriod<PeriodAdjustedToNeutralEvent>(period));
+
+			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
+			@event.StartTime.Should().Be("2019-02-28 07:00".Utc());
+			@event.EndTime.Should().Be("2019-02-28 18:00".Utc());
+		}
+		
+		[Test]
+		public void ShouldLoadOfTypeEndingAfterPeriod()
+		{
+			var period = new DateTimePeriod("2019-02-28 08:00".Utc(), "2019-02-28 18:00".Utc());
+			Publisher.Publish(
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-28 08:00".Utc(),
+					EndTime = "2019-02-28 19:00".Utc(),
+				});
+
+			var actual = WithUnitOfWork.Get(() => Events.LoadOfTypeForPeriod<PeriodAdjustedToNeutralEvent>(period));
+
+			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
+			@event.StartTime.Should().Be("2019-02-28 08:00".Utc());
+			@event.EndTime.Should().Be("2019-02-28 19:00".Utc());
+		}
+		
+		[Test]
+		public void ShouldLoadOfTypeWithinPeriod()
+		{
+			var period = new DateTimePeriod("2019-02-28 08:00".Utc(), "2019-02-28 18:00".Utc());
+			Publisher.Publish(
+				new PeriodAdjustedToNeutralEvent
+				{
+					StartTime = "2019-02-28 09:00".Utc(),
+					EndTime = "2019-02-28 17:00".Utc(),
+				});
+
+			var actual = WithUnitOfWork.Get(() => Events.LoadOfTypeForPeriod<PeriodAdjustedToNeutralEvent>(period));
+
+			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
+			@event.StartTime.Should().Be("2019-02-28 09:00".Utc());
+			@event.EndTime.Should().Be("2019-02-28 17:00".Utc());
 		}
 
 		[Test]

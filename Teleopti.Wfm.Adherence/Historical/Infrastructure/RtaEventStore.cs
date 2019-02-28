@@ -170,7 +170,7 @@ ORDER BY [Id] ASC
 					.SetParameter("date", date.Date)
 			);
 
-		public IEnumerable<IEvent> LoadAllOfType<T>() =>
+		public IEnumerable<IEvent> LoadOfTypeForPeriod<T>(DateTimePeriod period) =>
 			loadEvents(
 				_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
@@ -180,10 +180,14 @@ SELECT
 FROM 
 	[rta].[Events] WITH (NOLOCK)
 WHERE
-	Type = :eventType
+	Type = :eventType AND
+	StartTime <= :EndTime AND 
+	EndTime >= :StartTime
 ORDER BY [Id] ASC
 ")
 					.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
+					.SetParameter("StartTime", period.StartDateTime)
+					.SetParameter("EndTime", period.EndDateTime)
 			);
 
 		public LoadedEvents LoadForSynchronization(long fromEventId)
