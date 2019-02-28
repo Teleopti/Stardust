@@ -1,9 +1,8 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using Autofac;
 using NUnit.Framework.Interfaces;
+using System;
+using System.Diagnostics;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
@@ -45,9 +44,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 #if DEBUG
 			path = "./";
 #else
-				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+				path = System.IO.Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 #endif
-			
+
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
