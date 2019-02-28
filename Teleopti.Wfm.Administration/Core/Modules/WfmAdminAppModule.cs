@@ -36,7 +36,6 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 
 			builder.RegisterModule(new CommonModule(iocConf));
 			builder.RegisterModule(new WfmAdminModule(iocConf));
-
 		}
 	}
 
@@ -51,9 +50,8 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 
 		protected override void Load(ContainerBuilder builder)
 		{
-
 			builder.RegisterModule(new StardustModule(_configuration));
-			builder.RegisterModule(new EtlToolModule());
+			builder.RegisterModule(new EtlToolModule(_configuration));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();
@@ -78,7 +76,9 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();
 			builder.RegisterType<HangfireCookie>().As<IHangfireCookie>().SingleInstance();
-			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
+			builder.Register(c =>
+					new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"]))
+				.SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
 			builder.RegisterType<HangfireStatisticsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HangfireRepository>().SingleInstance();
@@ -97,5 +97,4 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<SkillForecastSettingsReader>().SingleInstance();
 		}
 	}
-
 }

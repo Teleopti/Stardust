@@ -8,12 +8,20 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 
 namespace Teleopti.Wfm.Administration.Core.Modules
 {
 	public class EtlToolModule : Module
 	{
+		private readonly IocConfiguration _configuration;
+
+		public EtlToolModule(IocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<JobCollectionModelProvider>().SingleInstance();
@@ -32,6 +40,16 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<BaseConfigurationValidator>().SingleInstance();
 			builder.RegisterType<JobHistoryRepository>().As<IJobHistoryRepository>().SingleInstance();
 			builder.RegisterType<Tenants>().As<ITenants>().SingleInstance();
+
+			registerLicenseFactoryWrapper(builder);
+		}
+
+		private void registerLicenseFactoryWrapper(ContainerBuilder builder)
+		{
+			_configuration.Args().Cache.This<ILicenseDataFactoryWrapper>(x =>
+				x.CacheMethod(m => m.GetLicenseActivator(string.Empty)));
+
+			builder.CacheByInterfaceProxy<LicenseDataFactoryWrapper, ILicenseDataFactoryWrapper>();
 		}
 	}
 }

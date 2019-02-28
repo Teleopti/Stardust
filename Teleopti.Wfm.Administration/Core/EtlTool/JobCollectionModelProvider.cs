@@ -27,6 +27,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private readonly IConfigurationHandler _configurationHandler;
 		private readonly IConfigReader _configReader;
 		private readonly ITenants _tenants;
+		private readonly ILicenseDataFactoryWrapper _licenseFactoryWrapper;
 		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 
 		public JobCollectionModelProvider(
@@ -35,6 +36,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			IConfigurationHandler configurationHandler,
 			IConfigReader configReader,
 			ITenants tenants,
+			ILicenseDataFactoryWrapper licenseFactoryWrapper,
 			AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor)
 		{
 			_componentContext = componentContext;
@@ -42,6 +44,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_configurationHandler = configurationHandler;
 			_configReader = configReader;
 			_tenants = tenants;
+			_licenseFactoryWrapper = licenseFactoryWrapper;
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 
@@ -123,21 +126,16 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 		private bool insightsEnabled(string tenantName, IBaseConfiguration baseConfiguration)
 		{
-			if (Tenants.IsAllTenants(tenantName))
-			{
-				var allTenants = _tenants.LoadedTenants();
-				return allTenants.Any(x => insightsLicensed(x.Name));
-			}
-
-			return insightsLicensed(tenantName) && (baseConfiguration.InsightsConfig?.IsValid() ?? false);
+			return Tenants.IsAllTenants(tenantName)
+				? _tenants.LoadedTenants().Any(x => insightsLicensed(x.Name))
+				: insightsLicensed(tenantName) && (baseConfiguration.InsightsConfig?.IsValid() ?? false);
 		}
 
 		private bool insightsLicensed(string tenantName)
 		{
-			var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(tenantName);
-			var licensed = licenseActivator?.EnabledLicenseOptionPaths?
-									   .Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights) ?? false;
-			return licensed;
+			var licenseActivator = _licenseFactoryWrapper.GetLicenseActivator(tenantName);
+			var licenseOptions = licenseActivator?.EnabledLicenseOptionPaths;
+			return licenseOptions != null && licenseOptions.Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
 		}
 	}
 }

@@ -65,7 +65,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<EtlController>();
-			extend.AddModule(new EtlToolModule());
+			extend.AddModule(new EtlToolModule(configuration));
 		}
 
 		public void Isolate(IIsolate isolate)
