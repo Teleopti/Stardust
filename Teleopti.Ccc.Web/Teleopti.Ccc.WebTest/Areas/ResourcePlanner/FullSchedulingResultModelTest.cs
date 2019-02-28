@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, new List<ISkillDay> {skillDay}}};
 			var target = new FullSchedulingResultModel();
 			target.Map(skillDays, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
-			Assert.AreEqual(TimeSpan.FromHours(8), target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].IntervalDetails.First().StartTime);
+			Assert.AreEqual("8:00", target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].IntervalDetails.First().StartTime);
 		}
 
 		[Test]

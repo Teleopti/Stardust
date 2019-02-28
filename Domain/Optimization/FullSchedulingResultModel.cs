@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					{
 						detail.IntervalDetails = skillDay.SkillStaffPeriodCollection.Select(x => new IntervalDetail
 						{
-							StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, skill.TimeZone).TimeOfDay,
+							StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, skill.TimeZone).TimeOfDay.ToString(@"h\:mm"),
 							ScheduledAgents = Math.Round(x.CalculatedResource, 2),
 							ForecastAgents = Math.Round(x.ForecastedDistributedDemand, 2)
 						});
@@ -114,6 +114,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public double ForecastAgents { get; set; }
 		
 		[JsonProperty(PropertyName = "x")]
-		public TimeSpan StartTime { get; set; }
+		public string StartTime { get; set; }
 	}
 }

@@ -1,8 +1,8 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
 import * as moment from 'moment';
-import {IntradayHelper} from "../../shared";
+import { IntradayHelper } from '../../shared';
 
 @Component({
 	selector: 'plans-intraday',
@@ -17,37 +17,36 @@ export class IntradayComponent implements OnChanges {
 	chartData;
 	@Input()
 	skill: string;
-	
+
 	constructor(private translate: TranslateService) {}
 
-
 	private intervalDetailsToC3Data(day): c3.Data {
-		let intervalDetails = day.IntervalDetails;
-		if(intervalDetails && intervalDetails.length>0){
-			let timeStamps = [];
-			let forecastedAgents = [];
-			let scheduledAgents = [];
-			let overStaffing = [];
-			let staffingScaffold = [];
-			let underStaffing = [];
-			let criticalUnderStaffing = [];
+		const intervalDetails = day.IntervalDetails;
+		if (intervalDetails && intervalDetails.length > 0) {
+			const timeStamps = [];
+			const forecastedAgents = [];
+			const scheduledAgents = [];
+			const overStaffing = [];
+			const staffingScaffold = [];
+			const underStaffing = [];
+			const criticalUnderStaffing = [];
 
 			intervalDetails.forEach(interval => {
-				timeStamps.push(moment.utc(interval.x, "HH:mm"));
+				timeStamps.push(interval.x);
 				forecastedAgents.push(interval.f);
 				scheduledAgents.push(interval.s);
-				let diff = interval.s-interval.f;
-				staffingScaffold.push(diff>0?interval.f:interval.s);
-				overStaffing.push(diff>0?diff:0);
-				if(day.hasCritical && IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)){
-					criticalUnderStaffing.push(diff<0?-diff:0);
+				const diff = interval.s - interval.f;
+				staffingScaffold.push(diff > 0 ? interval.f : interval.s);
+				overStaffing.push(diff > 0 ? diff : 0);
+				if (day.hasCritical && IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)) {
+					criticalUnderStaffing.push(diff < 0 ? -diff : 0);
 					underStaffing.push(0);
-				}else{
+				} else {
 					criticalUnderStaffing.push(0);
-					underStaffing.push(diff<0?-diff:0);
+					underStaffing.push(diff < 0 ? -diff : 0);
 				}
 			});
-			
+
 			return {
 				x: 'x',
 				columns: [
@@ -57,29 +56,29 @@ export class IntradayComponent implements OnChanges {
 					['StaffingScaffold'].concat(staffingScaffold),
 					['Overstaffing'].concat(overStaffing),
 					['Understaffing'].concat(underStaffing),
-					['CriticalInterval'].concat(criticalUnderStaffing),
+					['CriticalInterval'].concat(criticalUnderStaffing)
 				],
 				order: 'null',
 				type: 'bar',
 				types: {
-					'Forecasted': "line",
-					'Scheduled': "line"
+					Forecasted: 'line',
+					Scheduled: 'line'
 				},
 				colors: {
-					'StaffingScaffold': '#FFFFFF',
-					'Overstaffing': '#0a84d6',
-					'Understaffing': '#D32F2F',
-					'CriticalInterval': '#FF0000',
+					StaffingScaffold: '#FFFFFF',
+					Overstaffing: '#0a84d6',
+					Understaffing: '#D32F2F',
+					CriticalInterval: '#FF0000'
 				},
 				names: {
-					'Forecasted': this.translate.instant('ForecastedAgents'),
-					'Scheduled': this.translate.instant('ScheduledAgents'),
-					'Overstaffing': this.translate.instant('Overstaffing'),
-					'Understaffing': this.translate.instant('Understaffing'),
-					'CriticalInterval': this.translate.instant('CriticalInterval'),
+					Forecasted: this.translate.instant('ForecastedAgents'),
+					Scheduled: this.translate.instant('ScheduledAgents'),
+					Overstaffing: this.translate.instant('Overstaffing'),
+					Understaffing: this.translate.instant('Understaffing'),
+					CriticalInterval: this.translate.instant('CriticalInterval')
 				},
 				groups: [['StaffingScaffold', 'Overstaffing', 'Understaffing', 'CriticalInterval']]
-			}
+			};
 		} else {
 			return {
 				x: 'x',
@@ -89,7 +88,7 @@ export class IntradayComponent implements OnChanges {
 			};
 		}
 	}
-	
+
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.chartData) {
 			this.date = moment(changes.chartData.currentValue.Date);
@@ -97,6 +96,66 @@ export class IntradayComponent implements OnChanges {
 		}
 	}
 
+	private tooltip_contents(data, defaultTitleFormat, defaultValueFormat, color): string {
+		const root: any = this;
+		const config = root.config;
+		const CLASS = root.CLASS;
+		const titleFormat = config.tooltip_format_title || defaultTitleFormat;
+		const nameFormat =
+			config.tooltip_format_name ||
+			function(name) {
+				return name;
+			};
+		const valueFormat = config.tooltip_format_value || defaultValueFormat;
+		let text: string = null;
+
+		const criticalInterval: number = 0;
+		for (let d of data) {
+			if (d.id === 'CriticalInterval') {
+				if (d.value !== 0) {
+					criticalInterval = d.value;
+				}
+			}
+		}
+		for (let d of data) {
+			if (
+				d.id === 'StaffingScaffold' ||
+				d.id === 'CriticalInterval' ||
+				(d.id === 'Overstaffing' && d.value === 0)
+			) {
+				continue;
+			}
+
+			if (d.id === 'Understaffing') {
+				if (d.value === 0) {
+					if (criticalInterval !== 0) {
+						d.value = criticalInterval;
+					} else {
+						continue;
+					}
+				}
+			}
+
+			if (!text) {
+				let title = titleFormat(config.axis_x_categories[d.index]);
+				text =
+					"<table class='" +
+					CLASS.tooltip +
+					"'>" +
+					(title ? "<tr><th colspan='2'>" + title + '</th></tr>' : '');
+			}
+
+			let name = nameFormat(d.name);
+			let value = valueFormat(d.value, d.ratio, d.id, d.index);
+			let bgcolor = root.levelColor ? root.levelColor(d.value) : color(d.id);
+
+			text += "<tr class='" + CLASS.tooltipName + '-' + d.id + "'>";
+			text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + '</td>';
+			text += "<td class='value'>" + value + '</td>';
+			text += '</tr>';
+		}
+		return text + '</table>';
+	}
 
 	private initChart(inData: c3.Data) {
 		if (this.chart) {
@@ -106,6 +165,9 @@ export class IntradayComponent implements OnChanges {
 			const chartObject: c3.ChartConfiguration = {
 				bindto: '#chart',
 				data: inData,
+				tooltip: {
+					contents: this.tooltip_contents
+				},
 				point: {
 					show: false
 				},
@@ -114,23 +176,21 @@ export class IntradayComponent implements OnChanges {
 				},
 				axis: {
 					x: {
-						type: 'timeseries',
-						localtime: false,
+						type: 'category',
 						tick: {
 							culling: {
 								max: 24
 							},
 							fit: true,
 							centered: true,
-							multiline: false,
-							format: '%H:%M'
+							multiline: false
 						}
 					},
 					y: {
 						tick: {
 							format: d3.format('.1f')
 						}
-					},
+					}
 				}
 			};
 			this.chart = c3.generate(chartObject);
