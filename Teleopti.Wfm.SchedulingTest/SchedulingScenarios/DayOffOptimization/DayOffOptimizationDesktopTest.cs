@@ -30,7 +30,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
-		private readonly ResourcePlannerTestParameters _resourcePlannerTestParameters;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktop Target;
 		public Func<IGridlockManager> LockManager;
@@ -571,7 +570,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 
 		public DayOffOptimizationDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
-			_resourcePlannerTestParameters = resourcePlannerTestParameters;
 		}
 	}
 }
