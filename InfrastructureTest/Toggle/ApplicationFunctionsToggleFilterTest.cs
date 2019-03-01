@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 
 		[Test]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.Gamification)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
