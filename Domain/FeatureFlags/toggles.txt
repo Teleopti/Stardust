@@ -125,7 +125,6 @@ WFM_AnalyticsForecastUpdater_80798 = true
 # Dragonfly #
 WFM_Gamification_Recalculate_Badges_Within_Period_48403 = true
 WFM_Gamification_Create_Rolling_Periods_74866 = true
-MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = true
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = true #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = true #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947

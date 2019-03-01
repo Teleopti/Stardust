@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
 	[AddDatasourceId]
-	[Toggle(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889)]
 	public class ShiftTradeRequestHandlerIoCTest: IIsolateSystem
 	{
 		public ShiftTradeRequestHandler Target;

@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				Message = personRequest.GetMessage(new NoFormatting()),
 				UseSiteOpenHoursRule = true,
-				UseMaximumWorkday = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889)
+				UseMaximumWorkday = true
 			});
 		}
 

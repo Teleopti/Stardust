@@ -62,7 +62,7 @@ Background:
 	| Name  | DayOff |
 	And I am englishspeaking swede
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889')
+
 Scenario: Should trade when not break Maximum workday rule
 	Given I have the role 'Full access to mytime'
 	And I am american

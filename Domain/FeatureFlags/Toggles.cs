@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412,
 		WFM_Setting_BankHolidayCalendar_Create_79297,
 		WFM_Setting_AssignBankHolidayCalendarsToSites_79899,
-
-		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
+		
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
 		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
