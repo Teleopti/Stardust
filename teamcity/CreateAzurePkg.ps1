@@ -24,7 +24,6 @@ properties {
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
-	
 	$ToBeArtifacted = "$WorkingDir\tobeartifact"
 	$BinDependencies = "\\a380\T-Files\RnD\MSI_Dependencies"
 	$Dependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server"
