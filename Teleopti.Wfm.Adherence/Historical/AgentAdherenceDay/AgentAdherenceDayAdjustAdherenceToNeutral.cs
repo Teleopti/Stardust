@@ -247,22 +247,22 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			IEnumerable<OpenPeriod> recordedOutOfAdherences,
 			IEnumerable<OpenPeriod> recordedNeutralAdherences,
 			IEnumerable<OpenPeriod> adjustedToNeutral,
-			IEnumerable<OpenPeriod> approved
+			IEnumerable<OpenPeriod> approvedPeriods
 		)
 		{
-			var adjusted = adjustedToNeutral.MergeIntersecting().ToArray();
-			var outs = recordedOutOfAdherences
-				.Subtract(approved)
-				.Subtract(adjusted)
+			var normalizedAdjustedPeriods = adjustedToNeutral.MergeIntersecting().ToArray();
+			var outOfAdherences = recordedOutOfAdherences
+				.Subtract(approvedPeriods)
+				.Subtract(normalizedAdjustedPeriods)
 				.ToArray();
-			var neutrals = recordedNeutralAdherences
-				.Subtract(adjusted)
-				.Concat(adjusted)
-				.Subtract(approved)
+			var neutralAdherences = recordedNeutralAdherences
+				.Subtract(normalizedAdjustedPeriods)
+				.Concat(normalizedAdjustedPeriods)
+				.Subtract(approvedPeriods)
 				.ToArray();
-			
-			var timeOut = timeInShift(shift, outs);
-			var timeNeutral = timeInShift(shift, neutrals);
+
+			var timeOut = timeInShift(shift, outOfAdherences);
+			var timeNeutral = timeInShift(shift, neutralAdherences);
 
 			var calculateUntil = new[] {now, shift.EndDateTime}.Min();
 			var shiftTime = calculateUntil - shift.StartDateTime;
@@ -271,11 +271,16 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return Convert.ToInt32(timeIn.TotalSeconds);
 		}
 
-		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<OpenPeriod> outOfAdherences, IEnumerable<OpenPeriod> neutralAdherences, IEnumerable<OpenPeriod> approvedPeriods)
+		private static int? calculateSecondsOutOfAdherence(
+			DateTimePeriod shift,
+			IEnumerable<OpenPeriod> recordedOutOfAdherences,
+			IEnumerable<OpenPeriod> adjustedToNeutral,
+			IEnumerable<OpenPeriod> approvedPeriods
+		)
 		{
-			outOfAdherences = outOfAdherences
+			var outOfAdherences = recordedOutOfAdherences
 				.Subtract(approvedPeriods)
-				.Subtract(neutralAdherences)
+				.Subtract(adjustedToNeutral)
 				.ToArray();
 			var timeOut = timeInShift(shift, outOfAdherences);
 			return Convert.ToInt32(timeOut.TotalSeconds);
