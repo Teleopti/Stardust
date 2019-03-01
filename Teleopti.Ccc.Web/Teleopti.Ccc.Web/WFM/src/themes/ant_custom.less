@@ -52,6 +52,11 @@ select {
 	}
 }
 
+//Remove border around today's date in date picker, as it's looks too selected
+.ant-calendar-today .ant-calendar-date {
+	border-color: transparent;
+}
+
 .angular-theme-dark {
 	.general-audit-trail {
 		.table-data-row {
@@ -104,7 +109,7 @@ nz-select.select-input-is-empty .ant-select-selection:hover .ant-select-selectio
 	font-weight: 500;
 }
 
-.heatmap-div table{
+.heatmap-div table {
 	width: unset;
 }
 
@@ -112,6 +117,6 @@ nz-select.select-input-is-empty .ant-select-selection:hover .ant-select-selectio
 	fill-opacity: 0 !important;
 }
 
-.plans-intraday-chart .c3-bars-StaffingScaffold > path{
+.plans-intraday-chart .c3-bars-StaffingScaffold > path {
 	opacity: 0 !important;
 }
