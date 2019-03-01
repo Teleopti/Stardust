@@ -133,14 +133,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			foreach (var batch in targetIds.Batch(251))
 			{
-				addPermittedPeopleAndLoadSchedulesIfLoadOnlyAbsences(date,
-					schedulePeriod,
-					batch,
-					permittedPeople,
-					input.IsOnlyAbsences,
-					peopleCanViewUnpublishedFor,
-					scheduleDays);
-
 				if (isResultTooMany(permittedPeople))
 				{
 					return new GroupScheduleViewModel
@@ -148,6 +140,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						Total = targetIds.Count
 					};
 				}
+
+				addPermittedPeopleAndLoadSchedulesIfLoadOnlyAbsences(date,
+					schedulePeriod,
+					batch,
+					permittedPeople,
+					input.IsOnlyAbsences,
+					peopleCanViewUnpublishedFor,
+					scheduleDays);
 			}
 
 			if (!permittedPeople.Any()) return new GroupScheduleViewModel();
@@ -300,6 +300,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			foreach (var batch in personIds.Batch(251))
 			{
+				if (isResultTooMany(permittedPeopleIds))
+				{
+					return new GroupWeekScheduleViewModel
+					{
+						Total = permittedPeopleIds.Count
+					};
+				}
+
 				var batchedPeople = _personRepository.FindPeople(batch);
 				var batchPermittedPeople = weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonList(batchedPeople, d,
 					 DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
@@ -312,14 +320,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						pg.Value.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
 					}
 				});
-
-				if (isResultTooMany(permittedPeopleIds))
-				{
-					return new GroupWeekScheduleViewModel
-					{
-						Total = permittedPeopleIds.Count
-					};
-				}
 			}
 
 			var allPermittedPeople = permittedPeopleByDate
