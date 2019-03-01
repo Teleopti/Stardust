@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
 	[RequestPerformanceTuningTest]
 	[AllTogglesOn]
+	[Ignore("Waiting for a fast lane Build")]
 	public class MultiAbsenceRequestPerformanceTuningTest
 	{
 		public AsSystem AsSystem;
