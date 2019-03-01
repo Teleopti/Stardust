@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
 			Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
 										   GridMergeCellsMode.MergeColumnsInRow;
-			var timeZone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _timeZoneGuard.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period(timeZone).WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone)))
 				.ToList();

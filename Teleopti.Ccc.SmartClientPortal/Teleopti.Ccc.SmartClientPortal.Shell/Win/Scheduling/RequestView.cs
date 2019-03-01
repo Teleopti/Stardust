@@ -30,20 +30,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool _isWindowLoaded;
 	    private readonly RequestPresenter _presenter;
 
-        public RequestView(FrameworkElement handlePersonRequestView, SchedulingScreenState schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
-        {
-	        _schedulerStateHolder = schedulerStateHolder;
-            _personRequestList = schedulerStateHolder.PersonRequests;
-            _authorization = new PersonRequestCheckAuthorization();
+		public RequestView(FrameworkElement handlePersonRequestView, SchedulingScreenState schedulerStateHolder,
+			IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,
+			IEventAggregator eventAggregator, ITimeZoneGuard timeZoneGuard)
+		{
+			_schedulerStateHolder = schedulerStateHolder;
+			_personRequestList = schedulerStateHolder.PersonRequests;
+			_authorization = new PersonRequestCheckAuthorization();
 			_presenter = new RequestPresenter(_authorization);
-			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.SchedulerStateHolder.Schedules,_authorization);
-            _model = new HandlePersonRequestViewModel(schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
-            CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
-            
-            InitObservableListEvents();
-        }
+			_shiftTradeRequestStatusChecker =
+				new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.SchedulerStateHolder.Schedules,
+					_authorization);
+			_model = new HandlePersonRequestViewModel(
+				schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(),
+				schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection,
+				eventAggregator, _authorization, timeZoneGuard.CurrentTimeZone());
+			CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
 
-        public void CreatePersonRequestViewModels(SchedulingScreenState schedulerStateHolder, FrameworkElement handlePersonRequestView)
+			InitObservableListEvents();
+		}
+
+		public void CreatePersonRequestViewModels(SchedulingScreenState schedulerStateHolder, FrameworkElement handlePersonRequestView)
         {
             _model.CreatePersonRequestViewModels(schedulerStateHolder.PersonRequests, _shiftTradeRequestStatusChecker, _authorization);
             handlePersonRequestView.DataContext = _model;

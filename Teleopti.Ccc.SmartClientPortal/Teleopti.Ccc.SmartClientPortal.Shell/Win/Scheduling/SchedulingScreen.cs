@@ -1927,7 +1927,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
 				{
 					_requestView = new RequestView(schedulerSplitters1.HandlePersonRequestView1, SchedulerState, _undoRedo,
-						SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts, _eventAggregator);
+						SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts, _eventAggregator, _timeZoneGuard);
 				}
 
 				_requestView.PropertyChanged += requestViewPropertyChanged;
@@ -4993,7 +4993,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
-			exporter.Export(shiftsPerDay);
+			exporter.Export(shiftsPerDay, _timeZoneGuard);
 		}
 
 		private void toolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)

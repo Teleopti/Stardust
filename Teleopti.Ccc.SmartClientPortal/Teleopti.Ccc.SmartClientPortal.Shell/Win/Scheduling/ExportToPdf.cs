@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_rightToLeft = rightToLeft;
 		}
 
-		public void Export(bool shiftsPerDay)
+		public void Export(bool shiftsPerDay, ITimeZoneGuard timeZoneGuard)
 		{
 			bool individualReport;
 			bool teamReport;
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			var manager = new ScheduleToPdfManager();
-			var timeZone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = timeZoneGuard.CurrentTimeZone();
 			if (teamReport)
 			{
 				manager.ExportTeam(timeZone, _culture, personDic,
