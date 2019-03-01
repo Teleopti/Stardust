@@ -6,22 +6,16 @@
 		controller: ['$element', '$scope', '$state', 'Toggle', GamificationController]
 	});
 
-	function GamificationController($element, $scope, $state, toggleService) {
+	function GamificationController($element, $scope, $state) {
 		var ctrl = this;
 
 		var element = $element[0];
-
-		ctrl.toggle = {};
 
 		ctrl.onSelectTab = function(tab) {
 			$state.go('gamification.' + tab);
 		};
 
 		ctrl.$onInit = function() {
-			toggleService.togglesLoaded.then(function() {
-				var recalBadges = 'WFM_Gamification_Recalculate_Badges_Within_Period_48403';
-				ctrl.toggle[recalBadges] = toggleService[recalBadges];
-			});
 
 			openTab($state.current.name);
 
