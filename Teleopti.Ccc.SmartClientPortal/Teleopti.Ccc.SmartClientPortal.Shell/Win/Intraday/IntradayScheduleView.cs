@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -109,7 +110,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		    RefreshRangeForAgentPeriod(schedulePart.Person, new DateTimePeriod());
 	    }
 
-	    /// <summary>
+		public ITimeZoneGuard TimeZoneGuard { get; }
+
+		/// <summary>
         /// Gets a list with selected schedules for current column
         /// </summary>
         /// <returns></returns>

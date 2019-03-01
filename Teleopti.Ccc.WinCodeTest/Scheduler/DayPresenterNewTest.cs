@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -62,7 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState, new DateOnly(2011, 1, 1))).Return(new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
-            }
+				Expect.Call(viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+			}
 
             using (mocks.Playback())
             {
@@ -105,7 +107,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
-                Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
+				Expect.Call(viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+				Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone));
                 Expect.Call(schedulerState1.FilteredCombinedAgentsDictionary).Return(persons).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.Schedules).Return(scheduleDictionary);
@@ -143,7 +146,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    public void ShouldSelectDayAndDayAfter()
 	    {
 			var scaleCalculator = new DayPresenterScaleCalculator();
-		    var presenter = new DayPresenterNew(null, schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer());
+		    var presenter = new DayPresenterNew(new FakeScheduleView(), schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer());
 			presenter.SelectDate(DateOnly.Today);
 			Assert.AreEqual(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)), presenter.SelectedPeriod.DateOnlyPeriod);
 	    }

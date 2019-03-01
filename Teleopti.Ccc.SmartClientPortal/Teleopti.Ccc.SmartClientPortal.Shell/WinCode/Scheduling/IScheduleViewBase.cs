@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
 
@@ -18,8 +19,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         void InvalidateSelectedRow(IScheduleDay schedulePart);
         void OnPasteCompleted();
         GridControl ViewGrid { get; }
-		
-        IList<IScheduleDay> CurrentColumnSelectedSchedules();
+		ITimeZoneGuard TimeZoneGuard { get; }
+
+		IList<IScheduleDay> CurrentColumnSelectedSchedules();
 		
         IList<IScheduleDay> SelectedSchedules();
 		

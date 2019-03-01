@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 					new OverriddenBusinessRulesHolder(),
 					new DoNothingScheduleDayChangeCallBack(),
 					new NullScheduleTag(),
-					new UndoRedoWithScheduleCallbackContainer(new DoNothingScheduleDayChangeCallBack()));
+					new UndoRedoWithScheduleCallbackContainer(new DoNothingScheduleDayChangeCallBack()), new FakeTimeZoneGuard(TimeZoneInfo.Utc));
 
 				view.GridClipboardPaste(pasteOptions, new UndoRedoWithScheduleCallbackContainer(new DoNothingScheduleDayChangeCallBack()));
 

@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     public abstract class ScheduleViewBase : AddScheduleLayers, IScheduleViewBase, IDisposable, IHelpContext
     {
         private readonly GridControl _grid;
-        private Font _cellFontBig;
+		private readonly ITimeZoneGuard _timeZoneGuard;
+		private Font _cellFontBig;
         private Font _cellFontSmall;
         private Font _fontTimeLine;
         private Color _colorHolidayCell;
@@ -51,12 +52,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public event EventHandler RefreshShiftEditor;
         public event EventHandler<EventArgs> ViewPasteCompleted;
 
-        protected ScheduleViewBase(GridControl grid)
+        protected ScheduleViewBase(GridControl grid, ITimeZoneGuard timeZoneGuard)
             : base(null)
         {
             setColors();
             _grid = grid;
-            grid.HideCols.ResetRange(0, 300);
+			_timeZoneGuard = timeZoneGuard;
+			grid.HideCols.ResetRange(0, 300);
         }
 
 		public void AddNewLayer(ClipboardItems addType, IEnumerable<IAbsence> commonStateHolderAbsences, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets)
@@ -1538,7 +1540,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return _grid; }
         }
 
-        public void RefreshRangeForAgentPeriod(IEntity person, DateTimePeriod period)
+		public ITimeZoneGuard TimeZoneGuard
+		{
+			get { return _timeZoneGuard; }
+		}
+
+		public void RefreshRangeForAgentPeriod(IEntity person, DateTimePeriod period)
         {
             //thread stuff
             if (_grid.InvokeRequired)
