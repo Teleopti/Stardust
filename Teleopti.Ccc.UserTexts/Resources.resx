@@ -18249,4 +18249,12 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Select period</value>
     <comment>Select period</comment>
   </data>
+	<data name="Out" xml:space="preserve">
+    <value>Out</value>
+		<comment>Adherence type</comment>
+  </data>
+	<data name="Neutral" xml:space="preserve">
+    <value>Neutral</value>
+		<comment>Adherence type</comment>
+  </data>
 </root>

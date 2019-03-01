@@ -3,9 +3,16 @@
 
     angular.module('wfm.rta').controller('RtaHistoricalController80594', RtaHistoricalController);
 
-    RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'RtaTimeline', '$scope'];
+    RtaHistoricalController.$inject = [
+        '$http', 
+        '$state', 
+        '$stateParams',
+        '$scope',
+        '$translate',
+        'rtaService',  
+        'RtaTimeline'];
 
-    function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, rtaTimeline, $scope) {
+    function RtaHistoricalController($http, $state, $stateParams, $scope, $translate, rtaService, rtaTimeline) {
         var vm = this;
 
         vm.highlighted = {};
@@ -21,6 +28,8 @@
         var calculate;
         var timelineStart;
         var timelineEnd;
+        var out = $translate.instant('Out');
+        var neutral = $translate.instant('Neutral');
 
         loadData();
 
@@ -72,14 +81,14 @@
                     return {
                         StartTime: o.StartTime,
                         EndTime: o.EndTime,
-                        Type: "Out"
+                        Type: out
                     }
                 });
                 var neutrals = data.RecordedNeutralAdherences.map(function (n) {
                     return {
                         StartTime: n.StartTime,
                         EndTime: n.EndTime,
-                        Type: "Neutral"
+                        Type: neutral
                     }
                 });
 
@@ -90,8 +99,8 @@
                     });
 
                 vm.recordedAdherences = buildRecordedAdherences(data.Timeline, recordedAdherences);
-                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === "Out"; });
-                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === "Neutral"; });
+                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === out; });
+                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === neutral; });
 
                 vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
 
