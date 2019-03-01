@@ -269,6 +269,8 @@
     <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyBug46991Test.cs" />
+    <Compile Include="Repositories\OrderIndexIssues\AuditingTest.cs" />
+    <Compile Include="Repositories\OrderIndexIssues\ShiftLayerTest.cs" />
     <Compile Include="Repositories\PersonAccessAuditRepositoryTest.cs" />
     <Compile Include="Repositories\PersonFinderBug46991Test.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryPermissionsTest.cs" />
