@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	public class GrantBotApiController : ApiController
 	{
-		private readonly IConfigReader _configReader;
 		private readonly IHttpServer _httpRequestHandler;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
@@ -25,11 +23,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly INow _now;
 		private readonly ICurrentTeleoptiPrincipal _loggedOnUser;
 
-		public GrantBotApiController(IConfigReader configReader, IHttpServer httpRequestHandler,
-			ICurrentHttpContext currentHttpContext, IServerConfigurationRepository serverConfigurationRepository,
-			SignatureCreator signatureCreator, INow now, ICurrentTeleoptiPrincipal loggedOnUser)
+		public GrantBotApiController(IHttpServer httpRequestHandler, ICurrentHttpContext currentHttpContext,
+			IServerConfigurationRepository serverConfigurationRepository, SignatureCreator signatureCreator,
+			INow now, ICurrentTeleoptiPrincipal loggedOnUser)
 		{
-			_configReader = configReader;
 			_httpRequestHandler = httpRequestHandler;
 			_currentHttpContext = currentHttpContext;
 			_serverConfigurationRepository = serverConfigurationRepository;
@@ -41,18 +38,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet, Route("api/GrantBot/Config"), TenantUnitOfWork]
 		public virtual async Task<GrantBotConfig> GetGrantBotConfig()
 		{
+			const string url4TokenGeneration = "https://directline.botframework.com/v3/directline/tokens/generate";
+
 			var secret = _serverConfigurationRepository.Get(ServerConfigurationKey.GrantBotDirectLineSecret);
 			if (string.IsNullOrEmpty(secret))
-			{
-				secret = _configReader.AppConfig(ServerConfigurationKey.GrantBotDirectLineSecret.ToString());
-			}
-			var url =  _configReader.AppConfig("GrantBotTokenGenerateUrl");
-			if (string.IsNullOrEmpty(secret) || string.IsNullOrEmpty(url))
 			{
 				return null;
 			}
 			
-			var response = await _httpRequestHandler.Post(url, new
+			var response = await _httpRequestHandler.Post(url4TokenGeneration, new
 			{
 				TrustedOrigins = new[]
 				{

@@ -9,9 +9,9 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Web;
@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					"application/json")
 			});
 
-			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext(),
-				new FakeServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(),
+			var target = new GrantBotApiController(httpRequestHandler, new FakeCurrentHttpContext(),
+				createServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(),
 				createPrincipal());
 
 			var result = await target.GetGrantBotConfig();
 			result.Token.Should().Be(expectedToken.token);
-			httpRequestHandler.Requests[0].Headers["Authorization"].Should().Be.EqualTo("Bearer Secret123");
+			httpRequestHandler.Requests[0].Headers["Authorization"].Should().Be.EqualTo("Bearer Secret1234");
 		}
 
 		[Test]
@@ -65,12 +65,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					"application/json")
 			});
 
-			var configurationRepository = new FakeServerConfigurationRepository();
-			configurationRepository.Update(ServerConfigurationKey.GrantBotApiUrl.ToString(),
-				"https://teleoptibottest.azurewebsites.net/t/api/tenant");
-			configurationRepository.Update(ServerConfigurationKey.GrantBotDirectLineSecret.ToString(), "Secret1234");
-			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext(),
-				configurationRepository, new SignatureCreator(configReader), new MutableNow(), createPrincipal());
+			var target = new GrantBotApiController(httpRequestHandler, new FakeCurrentHttpContext(),
+				createServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(), createPrincipal());
 
 			var result = await target.GetGrantBotConfig();
 			result.Token.Should().Be(expectedToken.token);
@@ -96,8 +92,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var now = new DateTime(2019, 02, 12, 01, 13, 45, DateTimeKind.Utc);
 			var fakeLoggedOnUser = createPrincipal();
-			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext(),
-				new FakeServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(now),
+			var target = new GrantBotApiController(httpRequestHandler, new FakeCurrentHttpContext(),
+				createServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(now),
 				fakeLoggedOnUser);
 
 			var result = await target.GetGrantBotConfig();
@@ -121,13 +117,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			return new FakeConfigReader(new Dictionary<string, string>
 			{
-				{
-					"GrantBotDirectLineSecret", "Secret123"
-				},
-				{
-					"GrantBotTokenGenerateUrl",
-					"https://directline.botframework.com/v3/directline/tokens/generate"
-				},
 				{
 					"CertificateModulus",
 					"tcQWMgdpQeCd8+gzB3rYQAehHXF5mBGdyFMkJMEmcQmTlkpg22xLNz/kNYXZ7j2Cuhls+PBORzZkfBsNoL1vErT+N9Es4EEWOt6ntNe7wujqQqktUT/QOWEMJ8zJQM3bn7Oj9H5StBr7DWSRzgEjOc7knDcb4KCQL3ceXqmqwSonPfP1hp+bE8rZuxDISYiZVEkm417YzUHBk3ppV30Q9zvfL9IZX0q/ebCTRnLFockl7yOVucomvo8j4ssFPCAYgASoNvzWq+s5UTzYELl1I7F3hQnFwx0bIpQFmGbZ5BbNczc6rVYtCX5KDMsVaJSUcXBAnqGd20hq/ICkBR658w=="
@@ -158,6 +147,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					"YQOGoS8pc9rSE1OUoOJlN0+bI57kOlD0uO3/NYrN3Lkyx51tMtALGTMFt7d4SNsVwgQ+EGQaM5IJcd/ylx9kgESQBvSjEhJLLiKWukQG2BH+rpOjN2Fq3qU4mqmHpQn6tbNox98Af1aDNnO+Coi652jQxbv4Kh0ot9zJHddK5wuTxIQDLAxyb50f/ReG3UekxZoEOZEtj1oEd+QB/py+hP7Xp010Wfzy82g5Ec3ELjzeNPtijxmO+WExoF5zALIUYd8ClH+ayr2Ab3rD0Dv8VM1Y08npzSs6d5OOAAnG+245koiwkgJoXvZg0EVkcdJxZsMxIGL/OWEl82VnqC6mUQ=="
 				}
 			});
+		}
+
+		private IServerConfigurationRepository createServerConfigurationRepository()
+		{
+			var serverConfigurationRepository = new FakeServerConfigurationRepository();
+			serverConfigurationRepository.Update("GrantBotDirectLineSecret", "Secret1234");
+			return serverConfigurationRepository;
 		}
 	}
 }

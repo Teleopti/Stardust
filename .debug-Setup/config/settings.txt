@@ -48,4 +48,3 @@ $(CSP_PARENT_URL)|
 _replace_|c:\InfraTest.ini
 #VERSION#|1.0.0.0
 $(InstrumentationKey)|
-$(GrantBotDirectLineSecret)|4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw

@@ -1575,7 +1575,6 @@
     <Content Include="WFM\app\gamification\html\measureConfigForm2.tpl.html" />
     <Content Include="WFM\app\gamification\html\measureConfigHeader.tpl.html" />
     <Content Include="WFM\app\gamification\_modules.js" />
-    <Content Include="WFM\app\global\shortcuts\shortcuts.tab.service.js" />
     <Content Include="WFM\app\global\shortcuts\_modules.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.spec.js" />
@@ -1609,8 +1608,6 @@
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
-    <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
-    <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.spec.js" />
@@ -1633,8 +1630,6 @@
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.single.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\_modules.js" />
-    <Content Include="WFM\app\global\skill-group\skillgroup.controller.js" />
-    <Content Include="WFM\app\global\skill-group\skillgroup.html" />
     <Content Include="WFM\app\global\skill-group\skillgroup.service.js" />
     <Content Include="WFM\app\global\skill-group\_modules.js" />
     <Content Include="WFM\app\global\utilities\colorUtils.service.js" />
@@ -2523,7 +2518,7 @@
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.ts" />
     <Content Include="WFM\src\app\system-settings\shared\bank-calendar-data.service.ts" />
     <Content Include="WFM\src\app\system-settings\shared\index.ts" />
-	<Content Include="WFM\src\app\system-settings\shared\system-settings.service.ts" />
+    <Content Include="WFM\src\app\system-settings\shared\system-settings.service.ts" />
     <Content Include="WFM\src\app\system-settings\system-settings.module.ts" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.html" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.scss" />
