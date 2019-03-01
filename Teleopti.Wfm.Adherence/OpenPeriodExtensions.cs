@@ -21,6 +21,21 @@ namespace Teleopti.Wfm.Adherence
 			var end = instance.endsAfter(period) ? period.EndTime : instance.EndTime;
 			return new OpenPeriod(start, end);
 		}
+		
+		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
+		{
+			var result = new List<OpenPeriod>();
+			periods
+				.OrderBy(x => x.StartTime)
+				.ForEach(x =>
+				{
+					if (result.Any() && result.Last().intersects(x))
+						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
+					else
+						result.Add(x);
+				});
+			return result;
+		}
 
 		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
 		{
