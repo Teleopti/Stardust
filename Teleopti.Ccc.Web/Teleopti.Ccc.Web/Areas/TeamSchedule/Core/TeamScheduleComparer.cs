@@ -21,12 +21,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public int Compare(object x, object y)
 		{
-			var personSchedule1 = (Tuple<IPerson, IScheduleDay>)x;
-			var personSchedule2 = (Tuple<IPerson, IScheduleDay>)y;
-			var person1 = personSchedule1.Item1;
-			var person2 = personSchedule2.Item1;
-			var schedule1 = new scheduleDayDetail(personSchedule1.Item2);
-			var schedule2 = new scheduleDayDetail(personSchedule2.Item2);
+			var (person1, scheduleDay1) = ((IPerson, IScheduleDay))x;
+			var (person2, scheduleDay2) = ((IPerson, IScheduleDay))y;
+			var schedule1 = new scheduleDayDetail(scheduleDay1);
+			var schedule2 = new scheduleDayDetail(scheduleDay2);
 
 			var emptyResult = compareEmpty(person1, schedule1, person2, schedule2);
 			if (emptyResult != 0) return emptyResult;
@@ -360,31 +358,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public int Compare(object x, object y)
 		{
-			var personSchedule1 = (Tuple<IPerson, IScheduleDay>)x;
-			var personSchedule2 = (Tuple<IPerson, IScheduleDay>)y;
+			var (person1, scheduleDay1) = ((IPerson, IScheduleDay))x;
+			var (person2, scheduleDay2) = ((IPerson, IScheduleDay))y;
 
-			var isPS1Empty = isEmptySchedule(personSchedule1.Item2);
-			var isPS2Empty = isEmptySchedule(personSchedule2.Item2);
-			var isPS1DayOff = isDayOff(personSchedule1.Item2);
-			var isPS2DayOff = isDayOff(personSchedule2.Item2);
+			var isPS1Empty = isEmptySchedule(scheduleDay1);
+			var isPS2Empty = isEmptySchedule(scheduleDay2);
+			var isPS1DayOff = isDayOff(scheduleDay1);
+			var isPS2DayOff = isDayOff(scheduleDay2);
 
 			if (isPS1Empty && isPS2Empty || (isPS1DayOff && isPS2DayOff))
 			{
-				return _stringComparer.Compare(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
+				return _stringComparer.Compare(person1.Name.LastName, person2.Name.LastName);
 			}
 
 			if (isPS1Empty || isPS1DayOff && !isPS2Empty) return 1;
 			if (isPS2Empty || isPS2DayOff) return -1;
 
-			var ps1 = personSchedule1.Item2.PersonAssignment();
-			var time1 = ps1 != null ? _predicate(ps1.Period) : _predicate(personSchedule1.Item2.Period);
+			var ps1 = scheduleDay1.PersonAssignment();
+			var time1 = ps1 != null ? _predicate(ps1.Period) : _predicate(scheduleDay1.Period);
 
-			var ps2 = personSchedule2.Item2?.PersonAssignment();
-			var time2 = ps2 != null ? _predicate(ps2.Period) : _predicate(personSchedule2.Item2.Period);
+			var ps2 = scheduleDay2?.PersonAssignment();
+			var time2 = ps2 != null ? _predicate(ps2.Period) : _predicate(scheduleDay2.Period);
 
 			if (time1.Equals(time2))
 			{
-				return _stringComparer.Compare(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
+				return _stringComparer.Compare(person1.Name.LastName, person2.Name.LastName);
 			}
 			return time1.IsEarlierThan(time2) ? -1 : 1;
 

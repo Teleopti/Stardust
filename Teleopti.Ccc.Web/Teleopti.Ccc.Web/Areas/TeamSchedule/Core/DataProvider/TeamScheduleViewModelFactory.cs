@@ -152,12 +152,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			if (!permittedPeople.Any()) return new GroupScheduleViewModel();
 
-			var stringComparer = StringComparer.Create(_userUiCulture.GetUiCulture(), false);
-			var (sortedPermittedPeople, isSortedByPersonInfo) = sortByPersonInfo(permittedPeople, input);
+			var (sortedPermittedPeople, isSortedByPersonInfo) = sortAndPagingByPersonInfo(permittedPeople, input);
 			var permittedPersonCount = permittedPeople.Count();
 
-			IList<Tuple<IPerson, IScheduleDay>> personScheduleDayPairsForCurrentPage = null;
-			List<IPerson> personsForCurrentPage = null;
+			IList<(IPerson, IScheduleDay)> personScheduleDayPairsForCurrentPage;
+			List<IPerson> personsForCurrentPage;
 
 			if (!input.IsOnlyAbsences)
 			{
@@ -170,11 +169,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				personsForCurrentPage = sortedPermittedPeople;
 				personScheduleDayPairsForCurrentPage = sortedPermittedPeople
-				.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDayLookup[(p, date)].FirstOrDefault())).ToList();
+				.Select(p => (p, scheduleDayLookup[(p, date)].FirstOrDefault())).ToList();
 			}
 			else
 			{
-				var personScheduleDaysToSort = sortedPermittedPeople.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDayLookup[(p, date)].FirstOrDefault())).ToArray();
+				var personScheduleDaysToSort = sortedPermittedPeople.Select(p => (p, scheduleDayLookup[(p, date)].FirstOrDefault())).ToArray();
 				sortBySchedules(personScheduleDaysToSort, input.SortOption, peopleCanViewUnpublishedFor.ToArray());
 				personScheduleDayPairsForCurrentPage = pageItems(personScheduleDaysToSort, input);
 				personsForCurrentPage = personScheduleDayPairsForCurrentPage.Select(pair => pair.Item1).ToList();
@@ -251,7 +250,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			permittedPeople.AddRange(batchPermittedPeople);
 		}
 
-		private (List<IPerson>, bool) sortByPersonInfo(List<IPerson> people, SearchDaySchedulesInput input)
+		private (List<IPerson>, bool) sortAndPagingByPersonInfo(List<IPerson> people, SearchDaySchedulesInput input)
 		{
 			var stringComparer = StringComparer.Create(_userUiCulture.GetUiCulture(), false);
 			switch (input.SortOption)
@@ -266,8 +265,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return (people, false);
 		}
 
-		private void sortBySchedules(Tuple<IPerson,
-				IScheduleDay>[] personScheduleDaysToSort,
+		private void sortBySchedules(
+				(IPerson, IScheduleDay)[] personScheduleDaysToSort,
 				TeamScheduleSortOption sortOption,
 				Guid[] peopleCanViewUnpublishedFor)
 		{
