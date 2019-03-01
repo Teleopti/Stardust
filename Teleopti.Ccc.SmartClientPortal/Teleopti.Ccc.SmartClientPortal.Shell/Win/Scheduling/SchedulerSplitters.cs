@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void InitializeSkillResultGrids(ILifetimeScope container)
 		{
-			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>());
+			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>(), container.Resolve<ITimeZoneGuard>());
 			_skillWeekGridControl = new SkillWeekGridControl();
 			_skillMonthGridControl = new SkillMonthGridControl();
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
