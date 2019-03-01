@@ -7,7 +7,6 @@ import { SharedModule } from '../shared/shared.module';
 import { SystemSettingsComponent } from './pages';
 import { GroupPageService } from '../shared/services/group-page-service';
 import { BankHolidayCalendarComponent } from './components/bank-holiday-calendar';
-import { BankHolidayCalendarAddComponent } from './components/bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from './components/bank-holiday-calendar-edit';
 import { BankCalendarDataService } from './shared/bank-calendar-data.service';
 import { BankHolidayCalendarAssignToSitesComponent } from './components/bank-holiday-calendar-assign-to-sites';
@@ -16,7 +15,6 @@ import { BankHolidayCalendarAssignToSitesComponent } from './components/bank-hol
 	declarations: [
 		SystemSettingsComponent,
 		BankHolidayCalendarComponent,
-		BankHolidayCalendarAddComponent,
 		BankHolidayCalendarEditComponent,
 		BankHolidayCalendarAssignToSitesComponent
 	],

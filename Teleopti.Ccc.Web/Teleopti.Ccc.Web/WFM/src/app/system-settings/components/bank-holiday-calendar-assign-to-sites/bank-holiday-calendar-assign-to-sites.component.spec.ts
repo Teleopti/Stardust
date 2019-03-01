@@ -411,7 +411,8 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 							}
 						]
 					}
-				]
+				],
+				ActiveYearIndex: 0
 			}
 		]);
 		fixture.detectChanges();

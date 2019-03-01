@@ -1,22 +1,20 @@
-import { DOCUMENT, registerLocaleData } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import en from '@angular/common/locales/en';
-import zh from '@angular/common/locales/zh';
 
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, async } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from '@wfm/test';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { TogglesService, UserService } from 'src/app/core/services';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
-import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
-import { BankHolidayCalendarAssignToSitesComponent } from '../bank-holiday-calendar-assign-to-sites';
 import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
+import { BankHolidayCalendarAssignToSitesComponent } from '../bank-holiday-calendar-assign-to-sites';
 import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
 import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 import { BankCalendarDataService } from '../../shared';
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
+import { getDebugNode, DebugElement } from '@angular/core';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -25,15 +23,11 @@ describe('BankHolidayCalendarComponent', () => {
 	let httpTestingController: HttpTestingController;
 
 	configureTestSuite();
-	beforeAll(() => {
-		registerLocaleData(zh);
-	});
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				BankHolidayCalendarComponent,
-				BankHolidayCalendarAddComponent,
 				BankHolidayCalendarEditComponent,
 				BankHolidayCalendarAssignToSitesComponent
 			],
@@ -66,14 +60,12 @@ describe('BankHolidayCalendarComponent', () => {
 		httpTestingController = TestBed.get(HttpTestingController);
 	});
 
-	afterAll(() => {
-		registerLocaleData(en);
-	});
-
-	it('should create component', () => {
+	it('should create component', async(() => {
 		fixture.detectChanges();
-		expect(component).toBeTruthy();
-	});
+		fixture.whenStable().then(() => {
+			expect(component).toBeTruthy();
+		});
+	}));
 
 	it('should render title', () => {
 		fixture.detectChanges();
@@ -92,7 +84,7 @@ describe('BankHolidayCalendarComponent', () => {
 		document.getElementsByClassName('add-bank-holiday-calendar-icon')[0].dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
-		const addCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+		const addCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 
 		expect(addCalendarPanel).toBeTruthy();
 	});
@@ -104,7 +96,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'Bank holiday calendar',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -157,7 +149,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'London bank holiday calendar',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -174,7 +166,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'Bank holiday calendar',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '16a8fe5e-4150-4366-8703-8a6d7f3bab45',
@@ -210,7 +202,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'Bank holiday calendar',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -240,7 +232,7 @@ describe('BankHolidayCalendarComponent', () => {
 		expect(list[0].getElementsByClassName('anticon-edit').length).toBe(1);
 	});
 
-	xit('should go to edit bank holiday calendar panel and active current view year tab after clicking edit buton', () => {
+	it('should go to edit bank holiday calendar panel and show the dates and highlight selected dates', () => {
 		fixture.detectChanges();
 		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
 			{
@@ -248,7 +240,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'Bank holiday calendar',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -265,7 +257,7 @@ describe('BankHolidayCalendarComponent', () => {
 						]
 					},
 					{
-						Year: '2014',
+						Year: 2014,
 						Dates: [
 							{
 								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
@@ -284,7 +276,6 @@ describe('BankHolidayCalendarComponent', () => {
 				]
 			}
 		]);
-
 		fixture.detectChanges();
 
 		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
@@ -292,19 +283,174 @@ describe('BankHolidayCalendarComponent', () => {
 
 		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
+
+		expect(component.isEdittingCalendar).toBe(true);
+
+		const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+		const editElement = getDebugNode(parentElement.querySelector('.edit-bank-holiday-calendar')) as DebugElement;
+		const editComponent = editElement.componentInstance;
+
+		expect(editComponent.selectedDatesTimeList.length).toBe(4);
+		expect(editComponent.selectedDatesTimeList[0]).toBe(new Date('2013-01-09').getTime());
+		expect(editComponent.selectedDatesTimeList[1]).toBe(new Date('2013-01-10').getTime());
+		expect(editComponent.selectedDatesTimeList[2]).toBe(new Date('2014-01-09').getTime());
+		expect(editComponent.selectedDatesTimeList[3]).toBe(new Date('2014-01-10').getTime());
+
 		expect(document.getElementsByClassName('edit-bank-holiday-calendar')[0]).toBeTruthy();
-		expect(document.getElementsByClassName('ant-tabs-tab-active')[0].innerHTML.indexOf('2014') > -1).toBeTruthy();
+		expect(
+			document
+				.querySelector('.bank-holiday-calendar-date-content .ant-collapse-header')
+				.getAttribute('aria-expanded')
+		).toBeTruthy();
+
+		const activePanel = document.querySelectorAll(
+			'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+		);
+		expect(activePanel.length).toBe(1);
+
+		const dateRows = activePanel[0].querySelectorAll('.bank-holiday-calendar-date-item');
+
+		expect(dateRows[0].innerHTML.indexOf('2013-01-09') > -1).toBeTruthy();
+		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+		expect(dateRows[1].innerHTML.indexOf('2013-01-10') > -1).toBeTruthy();
+		expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 	});
 
-	it('should reset current year index after saving', () => {
+	it('should empty the selected calendar when go to add new calendar page', () => {
+		fixture.detectChanges();
 		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar',
-				CurrentYearIndex: 1,
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+		fixture.detectChanges();
+
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		expect(component.isEdittingCalendar).toBe(true);
+		expect(document.getElementsByClassName('edit-bank-holiday-calendar')[0]).toBeTruthy();
+		expect(
+			document
+				.querySelector('.bank-holiday-calendar-date-content .ant-collapse-header')
+				.getAttribute('aria-expanded')
+		).toBeTruthy();
+
+		const activePanel = document.querySelectorAll(
+			'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+		);
+		expect(activePanel.length).toBe(1);
+
+		document
+			.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
+			.dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		// click add button to add new bank holiday page
+		document.querySelector('.add-bank-holiday-calendar-icon').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+		const editElement = getDebugNode(parentElement.querySelector('.edit-bank-holiday-calendar')) as DebugElement;
+		const editComponent = editElement.componentInstance;
+
+		expect(component.selectedCalendar).toBeFalsy();
+		expect(component.bankHolidayCalendarsList.length).toBe(1);
+		expect(component.bankHolidayCalendarsList[0].Id).toBeTruthy();
+
+		expect(editComponent.newCalendar).toBeTruthy();
+		expect(editComponent.newCalendar.ActiveYearIndex).toBe(0);
+		expect(editComponent.newCalendar.Years.length === 0);
+	});
+
+	it('should go to edit bank holiday calendar panel and active the datepickers year to actived year', async(() => {
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+		fixture.detectChanges();
+
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		list[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+		list[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
+
+			list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			expect(component.isEdittingCalendar).toBe(true);
+
+			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+			const editElement = getDebugNode(
+				parentElement.querySelector('.edit-bank-holiday-calendar')
+			) as DebugElement;
+			const editComponent = editElement.componentInstance;
+
+			expect(
+				moment(editComponent.selectedYearDate, editComponent.dateFormat).format(editComponent.yearFormat)
+			).toBe('2014');
+		});
+	}));
+
+	it('should go to edit bank holiday calendar panel and active current view year tab after clicking edit buton', async(() => {
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -321,7 +467,7 @@ describe('BankHolidayCalendarComponent', () => {
 						]
 					},
 					{
-						Year: '2014',
+						Year: 2014,
 						Dates: [
 							{
 								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
@@ -340,64 +486,205 @@ describe('BankHolidayCalendarComponent', () => {
 				]
 			}
 		]);
-
 		fixture.detectChanges();
 
 		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
 		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
-		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+
+		list[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+		list[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
-		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		editBankHolidayCalendarPanel
-			.getElementsByClassName('operation-buttons')[0]
-			.childNodes[1].dispatchEvent(new Event('click'));
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
 
-		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
-			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
-			Name: 'Bank holiday calendar',
-			CurrentYearIndex: 0,
-			Years: [
-				{
-					Year: '2013',
-					Dates: [
-						{
-							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
-							Date: '2013-01-09',
-							Description: 'BankHoliday',
-							IsDeleted: false
-						},
-						{
-							Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
-							Date: '2013-01-10',
-							Description: 'BankHoliday',
-							IsDeleted: false
-						}
-					]
-				},
-				{
-					Year: '2014',
-					Dates: [
-						{
-							Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
-							Date: '2014-01-09',
-							Description: 'BankHoliday',
-							IsDeleted: false
-						},
-						{
-							Id: 'bcb33f86-e9a7-4b07-a4c1-22a1418cfb5f',
-							Date: '2014-01-10',
-							Description: 'BankHoliday',
-							IsDeleted: false
-						}
-					]
-				}
-			]
+			list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			expect(component.isEdittingCalendar).toBe(true);
+			expect(document.getElementsByClassName('edit-bank-holiday-calendar')[0]).toBeTruthy();
+			expect(
+				document
+					.querySelector('.bank-holiday-calendar-date-content .ant-collapse-header')
+					.getAttribute('aria-expanded')
+			).toBeTruthy();
+
+			const activePanel = document.querySelectorAll(
+				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+			);
+			expect(activePanel.length).toBe(1);
+
+			const dateRows = activePanel[0].querySelectorAll('.bank-holiday-calendar-date-item');
+
+			expect(dateRows[0].innerHTML.indexOf('2014-01-09') > -1).toBeTruthy();
+			expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+			expect(dateRows[1].innerHTML.indexOf('2014-01-10') > -1).toBeTruthy();
+			expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 		});
+	}));
+
+	it('should reset the active year after saving', async(() => {
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2013-01-10',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: 'bcb33f86-e9a7-4b07-a4c1-22a1418cfb5f',
+								Date: '2014-01-10',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
 		fixture.detectChanges();
 
-		expect(component.bankHolidayCalendarsList.length).toBe(1);
-	});
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		// 1. Open the calendar
+		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		// 2. Active the year 2014 in the calendar
+		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
+
+			// 3. Go to edit page for this calendar
+			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+			const editElement = getDebugNode(
+				parentElement.querySelector('.edit-bank-holiday-calendar')
+			) as DebugElement;
+			const editComponent = editElement.componentInstance;
+
+			expect(editComponent.newCalendar).toBeTruthy();
+			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
+
+			// 4. Add a new date for year 2013
+			editComponent.dateChangeCallback(new Date('2013-01-11'));
+			fixture.detectChanges();
+
+			httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2013-01-10',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: '4dfd442a-0b90-46ed-bdd9-f495a478c962',
+								Date: '2013-01-11',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: 'bcb33f86-e9a7-4b07-a4c1-22a1418cfb5f',
+								Date: '2014-01-10',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			});
+			fixture.detectChanges();
+
+			// 5. Go back to calendar list after the calendar is saved
+			document
+				.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
+				.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const activeYears = document.querySelectorAll('.ant-collapse-content .ant-tabs-tab.ant-tabs-tab-active');
+			expect(activeYears.length).toBe(1);
+			expect(activeYears[0].innerHTML.indexOf('2013') > -1).toBeTruthy();
+
+			// 6. Go to edit page again
+			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const activePanels = document.querySelectorAll(
+				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+			);
+			expect(activePanels.length).toBe(1);
+			expect(activePanels[0].querySelector('.ant-collapse-header').innerHTML.indexOf('2013')).toBeTruthy();
+
+			// There should be one year active: 2013
+			const activeYearContent = activePanels[0].querySelector(
+				'.ant-collapse-content.ant-collapse-content-active'
+			);
+			expect(activeYearContent.querySelectorAll('nz-list-item').length).toBe(3);
+			expect(
+				activeYearContent.querySelectorAll('nz-list-item')[0].innerHTML.indexOf('2013-01-09') > -1
+			).toBeTruthy();
+			expect(
+				activeYearContent.querySelectorAll('nz-list-item')[1].innerHTML.indexOf('2013-01-10') > -1
+			).toBeTruthy();
+			expect(
+				activeYearContent.querySelectorAll('nz-list-item')[2].innerHTML.indexOf('2013-01-11') > -1
+			).toBeTruthy();
+		});
+	}));
 
 	it('should popup a modal and let user confirm when deleting a caldendar', fakeAsync(() => {
 		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
@@ -406,7 +693,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'Bank holiday calendar 2013',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -449,7 +736,7 @@ describe('BankHolidayCalendarComponent', () => {
 				Name: 'Bank holiday calendar 2013',
 				Years: [
 					{
-						Year: '2013',
+						Year: 2013,
 						Dates: [
 							{
 								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
@@ -509,4 +796,289 @@ describe('BankHolidayCalendarComponent', () => {
 				.innerText
 		).toBe('AssignCalendarsToSites');
 	});
+
+	it('should keep actived years active when making changes to other years', async(() => {
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2015,
+						Dates: [
+							{
+								Id: '943eacf7-d712-4e58-89fd-c5f6686e6d99',
+								Date: '2015-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+		fixture.detectChanges();
+
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		// 1. Open the calendar
+		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		// 2. Active the year 2014 in the calendar
+		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
+
+			// 3. Go to edit page for this calendar
+			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+			const editElement = getDebugNode(
+				parentElement.querySelector('.edit-bank-holiday-calendar')
+			) as DebugElement;
+			const editComponent = editElement.componentInstance;
+
+			expect(editComponent.newCalendar).toBeTruthy();
+			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
+			let activePanels = document.querySelectorAll(
+				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+			);
+			expect(activePanels.length).toBe(1);
+			expect(activePanels[0].querySelector('.ant-collapse-header').innerHTML.indexOf('2014')).toBeTruthy();
+
+			// 4. Add a new date for year 2013
+			editComponent.dateChangeCallback(new Date('2013-01-10'));
+			fixture.detectChanges();
+
+			httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2013-01-10',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			});
+			fixture.detectChanges();
+
+			activePanels = document.querySelectorAll(
+				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+			);
+			expect(activePanels.length).toBe(2);
+			expect(activePanels[0].querySelector('.ant-collapse-header').innerHTML.indexOf('2013')).toBeTruthy();
+			expect(activePanels[1].querySelector('.ant-collapse-header').innerHTML.indexOf('2014')).toBeTruthy();
+
+			// There should be two years actived: 2013 and 2014
+			const activeYearContent2013 = activePanels[0].querySelector(
+				'.ant-collapse-content.ant-collapse-content-active'
+			);
+			expect(activeYearContent2013.querySelectorAll('nz-list-item').length).toBe(2);
+			expect(
+				activeYearContent2013.querySelectorAll('nz-list-item')[0].innerHTML.indexOf('2013-01-09') > -1
+			).toBeTruthy();
+			expect(
+				activeYearContent2013.querySelectorAll('nz-list-item')[1].innerHTML.indexOf('2013-01-10') > -1
+			).toBeTruthy();
+
+			const activeYearContent2014 = activePanels[1].querySelector(
+				'.ant-collapse-content.ant-collapse-content-active'
+			);
+			expect(activeYearContent2014.querySelectorAll('nz-list-item').length).toBe(1);
+			expect(
+				activeYearContent2014.querySelectorAll('nz-list-item')[0].innerHTML.indexOf('2014-01-09') > -1
+			).toBeTruthy();
+		});
+	}));
+
+	it('should keep last actived year on edit page active when go back to calendar list', async(() => {
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2015,
+						Dates: [
+							{
+								Id: '943eacf7-d712-4e58-89fd-c5f6686e6d99',
+								Date: '2015-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+		fixture.detectChanges();
+
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		// 1. Open the calendar
+		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		// 2. Active the year 2014 in the calendar
+		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
+
+			// 3. Go to edit page for this calendar
+			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+			const editElement = getDebugNode(
+				parentElement.querySelector('.edit-bank-holiday-calendar')
+			) as DebugElement;
+			const editComponent = editElement.componentInstance;
+
+			expect(editComponent.newCalendar).toBeTruthy();
+			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
+			let activePanels = document.querySelectorAll(
+				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
+			);
+			expect(activePanels.length).toBe(1);
+			expect(activePanels[0].querySelector('.ant-collapse-header').innerHTML.indexOf('2014')).toBeTruthy();
+
+			// 4. Add a new date for year 2013
+			editComponent.dateChangeCallback(new Date('2015-01-10'));
+			fixture.detectChanges();
+
+			httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2015,
+						Dates: [
+							{
+								Id: '943eacf7-d712-4e58-89fd-c5f6686e6d99',
+								Date: '2015-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2015-01-10',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			});
+			fixture.detectChanges();
+
+			document
+				.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
+				.dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const activeYears = document.querySelectorAll('.ant-collapse-content .ant-tabs-tab.ant-tabs-tab-active');
+			expect(activeYears.length).toBe(1);
+			expect(activeYears[0].innerHTML.indexOf('2015') > -1).toBeTruthy();
+		});
+	}));
 });

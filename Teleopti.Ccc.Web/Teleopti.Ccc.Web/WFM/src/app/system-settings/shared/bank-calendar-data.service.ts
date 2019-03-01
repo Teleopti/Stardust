@@ -1,40 +1,48 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { BankHolidayCalendar, SiteBankHolidayCalendars, SiteBankHolidayCalendarsFormData } from '../interface';
+import {
+	BankHolidayCalendar,
+	SiteBankHolidayCalendars,
+	SiteBankHolidayCalendarsFormData,
+	BankHolidayCalendarItem
+} from '../interface';
 
 @Injectable()
 export class BankCalendarDataService {
 	public yearFormat = 'YYYY';
 	public dateFormat = 'YYYY-MM-DD';
 
-	public bankHolidayCalendarsList$: BehaviorSubject<BankHolidayCalendar[]> = new BehaviorSubject<
-		BankHolidayCalendar[]
+	public bankHolidayCalendarsList$: BehaviorSubject<BankHolidayCalendarItem[]> = new BehaviorSubject<
+		BankHolidayCalendarItem[]
 	>([]);
 
 	constructor(private http: HttpClient) {
-		this.getBankHolidayCalendars().subscribe(calendars => {
-			const cals = calendars as BankHolidayCalendar[];
-			const curYear = moment().year();
-			cals.forEach(c => {
-				// c.CurrentYearIndex = 0;
-
-				c.Years.forEach((y, i) => {
-					y.Dates.forEach(d => {
-						d.Date = moment(d.Date).format(this.dateFormat);
-					});
-
-					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
-						// c.CurrentYearIndex = i;
-					}
-				});
+		this.getBankHolidayCalendars().subscribe(cals => {
+			const calendars = cals as BankHolidayCalendarItem[];
+			calendars.forEach(calendar => {
+				this.resetActiveYearIndexOfCalendar(calendar);
 			});
 
 			this.bankHolidayCalendarsList$.next(
-				cals.sort((c, n) => {
+				calendars.sort((c, n) => {
 					return c.Name.localeCompare(n.Name);
 				})
 			);
+		});
+	}
+
+	resetActiveYearIndexOfCalendar(calendar: BankHolidayCalendarItem) {
+		const curYear = moment().year();
+		calendar.ActiveYearIndex = 0;
+		calendar.Years.forEach((y, i) => {
+			y.Dates.forEach(d => {
+				d.Date = moment(d.Date).format(this.dateFormat);
+			});
+
+			if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
+				calendar.ActiveYearIndex = i;
+			}
 		});
 	}
 

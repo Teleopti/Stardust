@@ -9,9 +9,8 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { PasswordService } from 'src/app/authentication/services/password.service';
 import { UserService, TogglesService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
-import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
-import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
+import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 import { SystemSettingsComponent } from './system-settings.component';
 import { BankCalendarDataService } from '../../shared';
 
@@ -37,7 +36,6 @@ describe('SystemSettings page', () => {
 			declarations: [
 				SystemSettingsComponent,
 				BankHolidayCalendarComponent,
-				BankHolidayCalendarAddComponent,
 				BankHolidayCalendarEditComponent,
 				BankHolidayCalendarAssignToSitesComponent
 			],
