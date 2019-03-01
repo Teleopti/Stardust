@@ -62,14 +62,19 @@ describe('SystemSettings page', () => {
 		fixture.autoDetectChanges(true);
 	}));
 
-	it('should create component', () => {
-		expect(component).toBeTruthy();
-	});
+	it('should create component', async(() => {
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
+			expect(component).toBeTruthy();
+		});
+	}));
 
-	it('should show header title', () => {
-		const titleEle = document.getElementsByTagName('h1')[0];
-		expect(titleEle).toBeTruthy();
-		expect(titleEle.getElementsByTagName('i').length).toBe(1);
-		expect(titleEle.getElementsByTagName('i')[0].className).toBe('anticon anticon-setting');
-	});
+	it('should show header title', async(() => {
+		fixture.whenStable().then(() => {
+			const titleEle = document.getElementsByTagName('h1')[0];
+			expect(titleEle).toBeTruthy();
+			expect(titleEle.getElementsByTagName('i').length).toBe(1);
+			expect(titleEle.getElementsByTagName('i')[0].className).toBe('anticon anticon-setting');
+		});
+	}));
 });
