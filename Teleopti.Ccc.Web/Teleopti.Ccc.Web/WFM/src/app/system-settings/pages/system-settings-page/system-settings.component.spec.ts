@@ -6,8 +6,7 @@ import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translat
 import { configureTestSuite } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { PasswordService } from 'src/app/authentication/services/password.service';
-import { UserService, TogglesService } from 'src/app/core/services';
+import { TogglesService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
 import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
 import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
@@ -51,8 +50,6 @@ describe('SystemSettings page', () => {
 					provide: '$state',
 					useClass: MockStateService
 				},
-				UserService,
-				PasswordService,
 				MockTranslateService,
 				TogglesService,
 				BankCalendarDataService
