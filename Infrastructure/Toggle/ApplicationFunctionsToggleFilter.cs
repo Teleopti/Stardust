@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			hideRealTimeReports(functions);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_ChatBot_77547,
 				DefinedRaptorApplicationFunctionForeignIds.ChatBot);
-			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Gamification_Permission_76546,
-				DefinedRaptorApplicationFunctionForeignIds.Gamification);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
 				DefinedRaptorApplicationFunctionForeignIds.WebApproveOrDenyRequest);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,

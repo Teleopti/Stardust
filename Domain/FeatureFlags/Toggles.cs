@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 
 		WfmGlobalLayout_personalOptions_37114,
 
-		WFM_Gamification_Permission_76546,
-
 		SchedulePeriod_HideChineseMonth_78424,
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_HideExportSchedule_81161,

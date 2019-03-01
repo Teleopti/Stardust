@@ -33,10 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				Toggles.Wfm_PeopleWeb_PrepareForRelease_74903
 			},
 			{
-				DefinedRaptorApplicationFunctionPaths.Gamification,
-				Toggles.WFM_Gamification_Permission_76546
-			},
-			{
 				DefinedRaptorApplicationFunctionPaths.Insights,
 				Toggles.WFM_Insights_80704
 			}
