@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 
-		WFM_Gamification_Create_Rolling_Periods_74866,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,

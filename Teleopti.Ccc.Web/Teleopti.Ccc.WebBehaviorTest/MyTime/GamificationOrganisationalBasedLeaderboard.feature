@@ -107,7 +107,6 @@ Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the
 		| 1    | Ashley Andeen |
 		| 3    | Pierre Baldi  |
 
-@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
 Scenario: Show my badge on leader board report
 Given I have a role with
 		| Field                 | Value |
@@ -118,7 +117,6 @@ Given I have a role with
 		| Rank | Agent | Gold | Silver | Bronze |
 		| 1    | I     | 6    | 2      | 9      |
 	
-@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
 Scenario: Show my badge on leader board report for next period
 Given I have a role with
 		| Field                 | Value |
@@ -129,7 +127,6 @@ Given I have a role with
  Then I should see the ranks with badges are
 	| Rank | Agent | Gold | Silver | Bronze |
 	
-@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
 Scenario: Show my badge on leader board report for previous period
 Given I have a role with
 		| Field                 | Value |

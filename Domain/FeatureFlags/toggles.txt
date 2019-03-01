@@ -123,7 +123,6 @@ ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = true
 WFM_AnalyticsForecastUpdater_80798 = true
 
 # Dragonfly #
-WFM_Gamification_Create_Rolling_Periods_74866 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = true
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = true #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = true #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947

@@ -46,7 +46,6 @@ Given I have badges based on the specific setting with
  When I am viewing week schedule
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge
 
-@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
 Scenario: Show my badge within period
 Given I have today badges with
   | Badge type          | Bronze | Silver | Gold |
@@ -60,7 +59,6 @@ Given I have today badges with
   And I should see I have 2 bronze badges, 1 silver badge and 1 gold badge for AverageHandlingTime
   And I should see I have 3 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
-@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
 Scenario: Show my badge in next period
 Given I have today badges with
   | Badge type          | Bronze | Silver | Gold |
@@ -75,7 +73,6 @@ Then I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for An
 And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AverageHandlingTime
 And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
-@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
 Scenario: Show my badge in previous period
 Given I have today badges with
   | Badge type          | Bronze | Silver | Gold |

@@ -10,7 +10,7 @@
 			controller: ['gamificationSettingService', '$log', '$scope', '$translate', 'Toggle', gSettingFormCtrl]
 		});
 
-	function gSettingFormCtrl(dataService, $log, $scope, $translate, toggleService) {
+	function gSettingFormCtrl(dataService, $log, $scope, $translate) {
 		var ctrl = this;
 		var enabled = [];
 		var numOfEnabledMeasures = 0;
@@ -18,11 +18,6 @@
 
 		ctrl.$onInit = function () {
 			ctrl.errors = {};
-			ctrl.toggle = {};
-			toggleService.togglesLoaded.then(function () {
-				var rollingPeriod = 'WFM_Gamification_Create_Rolling_Periods_74866';
-				ctrl.toggle[rollingPeriod] = toggleService[rollingPeriod];
-			});
 		};
 
 		ctrl.$onChanges = function (changesObj) {
