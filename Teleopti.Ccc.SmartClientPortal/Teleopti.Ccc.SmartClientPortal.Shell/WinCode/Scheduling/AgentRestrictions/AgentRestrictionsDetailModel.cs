@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 {
 	public interface IAgentRestrictionsDetailModel
 	{
-		void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, RestrictionSchedulingOptions schedulingOptions,  IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker);
+		void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, RestrictionSchedulingOptions schedulingOptions,  IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker, ITimeZoneGuard timeZoneGuard);
 		Dictionary<int, IPreferenceCellData> DetailData();
 	}
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			_loadedPeriod = loadedPeriod;
 		}
 
-		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, RestrictionSchedulingOptions schedulingOptions, IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker)
+		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, RestrictionSchedulingOptions schedulingOptions, IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker, ITimeZoneGuard timeZoneGuard)
 		{
 			lock (_lock)
 			{
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 				foreach (var dateOnly in scheduleMatrixPro.OuterWeeksPeriodDictionary.Keys)
 				{
 					var data = new PreferenceCellData();
-					effectiveRestrictionExtractor.Extract(scheduleMatrixPro, data, dateOnly, _loadedPeriod, periodTarget);
+					effectiveRestrictionExtractor.Extract(scheduleMatrixPro, data, dateOnly, _loadedPeriod, periodTarget, timeZoneGuard);
 					_detailData.Add(counter, data);
 
 					counter++;

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
 		private IMeetingRestrictionCombiner _meetingRestrictionCombiner;
 		private IExtractedRestrictionResult _extractedRestrictionResult;
+		private ITimeZoneGuard _timeZoneGuard = new FakeTimeZoneGuard();
 
 		[SetUp]
 		public void Setup()
@@ -81,13 +83,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test]
 		public void ShouldThrowExceptionOnNoMatrixPro()
 		{
-			Assert.Throws<ArgumentNullException>(() => _effectiveRestrictionExtractor.Extract(null, _preferenceCellData, DateOnly.MinValue, _dateTimePeriod, _periodTarget));	
+			Assert.Throws<ArgumentNullException>(() => _effectiveRestrictionExtractor.Extract(null, _preferenceCellData, DateOnly.MinValue, _dateTimePeriod, _periodTarget, _timeZoneGuard));	
 		}
 
 		[Test]
 		public void ShouldThrowExceptionOnNoPreferenceCellData()
 		{
-			Assert.Throws<ArgumentNullException>(() => _effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, DateOnly.MinValue, _dateTimePeriod, _periodTarget));
+			Assert.Throws<ArgumentNullException>(() => _effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, DateOnly.MinValue, _dateTimePeriod, _periodTarget, _timeZoneGuard));
 		}
 
 		[Test]
@@ -126,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);	
+				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget, _timeZoneGuard);	
 			}	
 		}
 
@@ -161,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);
+				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget, _timeZoneGuard);
 			}
 
 			var absencePayload = part.PersonAbsenceCollection()[0].Layer.Payload;
@@ -205,7 +207,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);
+				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget, _timeZoneGuard);
 			}
 
 			Assert.AreEqual(part.PersonAssignment().DayOff().Description.Name, _preferenceCellData.DisplayName);
@@ -241,7 +243,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using(_mocks.Playback())
 			{
-				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);	
+				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget, _timeZoneGuard);	
 			}
 
 			Assert.IsTrue(_preferenceCellData.HasShift);

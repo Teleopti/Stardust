@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(restrictionCombiner);
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
-			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker, TimeZoneGuard);
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 					schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 
-			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.Zero, preferenceNightRestChecker);
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.Zero, preferenceNightRestChecker, TimeZoneGuard);
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 

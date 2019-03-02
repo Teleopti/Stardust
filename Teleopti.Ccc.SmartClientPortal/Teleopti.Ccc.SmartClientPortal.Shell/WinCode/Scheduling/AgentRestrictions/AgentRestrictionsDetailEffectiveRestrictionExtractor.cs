@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 {
 	public interface IAgentRestrictionsDetailEffectiveRestrictionExtractor
 	{
-		void Extract(IScheduleMatrixPro scheduleMatrixPro, PreferenceCellData preferenceCellData,DateOnly dateOnly, DateTimePeriod loadedPeriod, TimeSpan periodTarget);
+		void Extract(IScheduleMatrixPro scheduleMatrixPro, PreferenceCellData preferenceCellData,DateOnly dateOnly, DateTimePeriod loadedPeriod, TimeSpan periodTarget, ITimeZoneGuard timeZoneGuard);
 	}
 
 	public class AgentRestrictionsDetailEffectiveRestrictionExtractor : IAgentRestrictionsDetailEffectiveRestrictionExtractor
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Extract(IScheduleMatrixPro scheduleMatrixPro, PreferenceCellData preferenceCellData, DateOnly dateOnly, DateTimePeriod loadedPeriod, TimeSpan periodTarget)
+		public void Extract(IScheduleMatrixPro scheduleMatrixPro, PreferenceCellData preferenceCellData, DateOnly dateOnly, DateTimePeriod loadedPeriod, TimeSpan periodTarget, ITimeZoneGuard timeZoneGuard)
 		{
 			if(scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
 			if(preferenceCellData == null) throw new ArgumentNullException("preferenceCellData");
@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 
 			if (_schedulingOptions.UseScheduling)
 			{
-				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) totalRestriction = ExtractOnMainShift(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) totalRestriction = ExtractOnMainShift(scheduleDay, preferenceCellData, timeZoneGuard);
 				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.DayOff)) totalRestriction = ExtractOnDayOff(scheduleDay, preferenceCellData);
-				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.FullDayAbsence)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
-				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.ContractDayOff)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.FullDayAbsence)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData, timeZoneGuard);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.ContractDayOff)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData, timeZoneGuard);
 			}
 
 			SetTotalRestriction(scheduleDay, totalRestriction, preferenceCellData);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private IEffectiveRestriction ExtractFullDayAbsence(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
+		private IEffectiveRestriction ExtractFullDayAbsence(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData, ITimeZoneGuard timeZoneGuard)
 		{
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 			var period = projection.Period();
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person);
 			preferenceCellData.HasFullDayAbsence = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
-			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(timeZoneGuard.CurrentTimeZone()).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
 
             return totalRestriction;
 		}
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			return totalRestriction;
 		}
 
-		private IEffectiveRestriction ExtractOnMainShift(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
+		private IEffectiveRestriction ExtractOnMainShift(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData, ITimeZoneGuard timeZoneGuard)
 		{
 			IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			var projection = scheduleDay.ProjectionService().CreateProjection();
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			preferenceCellData.DisplayColor = assignment.ShiftCategory.DisplayColor;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(contractTime, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
 			var period = projection.Period();
-			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(timeZoneGuard.CurrentTimeZone()).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
 
 			return totalRestriction;
 		}
