@@ -5,6 +5,7 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		private readonly ChartSettings _defaultChartSettings = new ChartSettings();
 		private GridRow _currentSelectedGridRow;
 		private IList<IGridRow> _gridRows;
+		private ITimeZoneGuard _timeZoneGuard;
 		public AbstractDetailView Owner { get; set; }
 
 		protected SkillResultGridControlBase()
@@ -31,8 +33,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 			TeleoptiStyling = true;
 		}
 
-		public void InitializeBase(string settingName)
+		public void InitializeBase(string settingName, ITimeZoneGuard timeZoneGuard)
 		{
+			_timeZoneGuard = timeZoneGuard;
 			setupChartDefault();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -147,6 +150,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		{
 			get { return _gridRows; }
 			set { _gridRows = value; }
+		}
+
+		public ITimeZoneGuard TimeZoneGuard
+		{
+			get { return _timeZoneGuard; }
 		}
 
 		public IList<GridRow> EnabledChartGridRowsMicke65()

@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			_timeZoneGuard = container.Resolve<ITimeZoneGuard>();
 			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
-			_skillWeekGridControl = new SkillWeekGridControl();
-			_skillMonthGridControl = new SkillMonthGridControl();
-			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
+			_skillWeekGridControl = new SkillWeekGridControl(_timeZoneGuard);
+			_skillMonthGridControl = new SkillMonthGridControl(_timeZoneGuard);
+			_skillFullPeriodGridControl = new SkillFullPeriodGridControl(_timeZoneGuard);
 			_skillIntraDayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart",
 				container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
 

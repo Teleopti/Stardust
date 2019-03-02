@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -17,21 +16,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 
 	public class SkillFullPeriodGridControlPresenter
 	{
-		private readonly ISkillFullPeriodGridControl _view;
+		private readonly SkillFullPeriodGridControl _view;
 		private IList<DateOnlyPeriod> _fullPeriods;
 		private IList<DateOnly> _dates;
 
 		public SkillFullPeriodGridControlPresenter(ISkillFullPeriodGridControl view)
 		{
-			_view = view;
+			_view = view as SkillFullPeriodGridControl;
 		}
 
 		public void DrawFullPeriodGrid(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
 			if (stateHolder == null || skill == null) return;
 
-            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
+            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(_view.TimeZoneGuard.CurrentTimeZone());
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, _view.TimeZoneGuard.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
 			var startDate = _dates.FirstOrDefault();
 			var endDate = _dates.LastOrDefault();
 			_fullPeriods = new List<DateOnlyPeriod> {new DateOnlyPeriod(startDate, endDate)};
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-			var timeZone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _view.TimeZoneGuard.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).OrderBy(s => s.Date).ToList();
 		}
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillFullPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-			var timeZone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _view.TimeZoneGuard.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _fullPeriods)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 			_timeZoneGuard = timeZoneGuard;
 			initializeComponent();
             initializeGrid();
-            InitializeBase(settingName);
+            InitializeBase(settingName, timeZoneGuard);
         }
 
         //initialize component

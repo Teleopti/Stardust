@@ -2,6 +2,7 @@
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
@@ -19,12 +20,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		private RowManagerScheduler<SkillMonthGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
 		private readonly SkillMonthGridControlPresenter _presenter;
 
-        public SkillMonthGridControl()
+        public SkillMonthGridControl(ITimeZoneGuard timeZoneGuard)
         {
             initializeComponent();
             initializeGrid();
 
-	        InitializeBase(settingName);
+	        InitializeBase(settingName, timeZoneGuard);
 
 			_presenter = new SkillMonthGridControlPresenter(this);
         }
