@@ -4985,7 +4985,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
-			exporter.Export();
+			exporter.Export(_timeZoneGuard);
 		}
 
 		private void exportToPdf(bool shiftsPerDay)

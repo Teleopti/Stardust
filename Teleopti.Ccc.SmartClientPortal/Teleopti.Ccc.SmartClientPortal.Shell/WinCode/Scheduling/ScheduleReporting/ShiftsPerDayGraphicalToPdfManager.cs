@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 			return doc;
 		}
 
-		public PdfDocument ExportAgentView()
+		public PdfDocument ExportAgentView(ITimeZoneGuard timeZoneGuard)
 		{
 			var doc = new PdfDocument { PageSettings = { Orientation = PdfPageOrientation.Landscape } };
 			var sortedList = SortOnCommonAgentName(_persons);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				{
 					if (top > page.GetClientSize().Height - 30)
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
-					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()))
+					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, timeZoneGuard.CurrentTimeZone()))
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
 
 					var dic = _stateHolder.Schedules;

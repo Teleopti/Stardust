@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			var timePeriod = projection.Period();
 			if (timePeriod == null) return null;
 			var dateTimePeriod = timePeriod.Value;
-			var zone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+			var zone = timeZoneGuard.CurrentTimeZone();
 			var viewLocalTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, zone);
 			var viewLocalEndTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.EndDateTime, zone);
 			var startTimeLimitation = new StartTimeLimitation(viewLocalTime.TimeOfDay, viewLocalTime.TimeOfDay);

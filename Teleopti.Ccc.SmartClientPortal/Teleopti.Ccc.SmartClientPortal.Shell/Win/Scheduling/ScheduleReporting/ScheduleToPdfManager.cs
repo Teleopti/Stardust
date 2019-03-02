@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.UserTexts;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 			openDocument(doc ,owner , path);
 		}
 
-		public static void ExportShiftPerDayAgentViewGraphical(CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, Control owner, string path, ScheduleReportDialogGraphicalModel model)
+		public static void ExportShiftPerDayAgentViewGraphical(CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, Control owner, string path, ScheduleReportDialogGraphicalModel model, ITimeZoneGuard timeZoneGuard)
 		{
 			if(persons == null)
 				throw new ArgumentNullException("persons");
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 			if (model.OneFileForSelected)
 			{
 				var shiftsPerDayGraphicalToPdfManager = new ShiftsPerDayGraphicalToPdfManager(culture, persons, period, stateHolder, rightToLeft, model);
-				var doc = shiftsPerDayGraphicalToPdfManager.ExportAgentView();
+				var doc = shiftsPerDayGraphicalToPdfManager.ExportAgentView(timeZoneGuard);
 				openDocument(doc, owner, path);
 			}
 			else
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 					person.Add(keyValuePair);
 
 					var shiftsPerDayGraphicalToPdfManager = new ShiftsPerDayGraphicalToPdfManager(culture, person, period, stateHolder, rightToLeft, model);
-					var doc = shiftsPerDayGraphicalToPdfManager.ExportAgentView();
+					var doc = shiftsPerDayGraphicalToPdfManager.ExportAgentView(timeZoneGuard);
 					var fullPath = path + "\\" + keyValuePair.Value + Path.GetRandomFileName() + ".PDF";
 					openDocument(doc, owner, fullPath);
 				}
