@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
@@ -20,9 +21,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         private const int headerHeight12HourClock = 26;
         private readonly SkillIntradayGridPresenter _presenter;
 
-        public SkillIntraDayGridControl(ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider)
+        public SkillIntraDayGridControl(ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
         {
-            _presenter = new SkillIntradayGridPresenter(this, chartSettings, skillPriorityProvider);
+            _presenter = new SkillIntradayGridPresenter(this, chartSettings, skillPriorityProvider, timeZoneGuard);
             QueryCellInfo += gridSkillDataQueryCellInfo;
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
@@ -30,9 +31,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 	        TeleoptiStyling = true;
         }
 
-        public SkillIntraDayGridControl(string settingName, ISkillPriorityProvider skillPriorityProvider)
+        public SkillIntraDayGridControl(string settingName, ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
         {
-            _presenter = new SkillIntradayGridPresenter(this, settingName, skillPriorityProvider);
+            _presenter = new SkillIntradayGridPresenter(this, settingName, skillPriorityProvider, timeZoneGuard);
             QueryCellInfo += gridSkillDataQueryCellInfo;
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;

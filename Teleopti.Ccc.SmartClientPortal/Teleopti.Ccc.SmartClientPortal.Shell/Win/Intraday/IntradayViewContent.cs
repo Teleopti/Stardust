@@ -34,7 +34,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.UserTexts;
-
+using Teleopti.Ccc.WinCode.Scheduling;
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_backgroundWorkerResources.RunWorkerCompleted += backgroundWorkerResourcesRunWorkerCompleted;
 			_backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-			_skillIntradayGridControl = new SkillIntraDayGridControl(_settingManager.ChartSetting, _skillPriorityProvider);
+			_skillIntradayGridControl = new SkillIntraDayGridControl(_settingManager.ChartSetting, _skillPriorityProvider, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE);
 			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
 			InitializeIntradayViewContent();
 		}

@@ -22,6 +22,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			: this()
 		{
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
-			_skillIntradayGridControl = new SkillIntraDayGridControl("MeetingSkillIntradayGridAndChart", _skillPriorityProvider);
+			_skillIntradayGridControl = new SkillIntraDayGridControl("MeetingSkillIntradayGridAndChart", _skillPriorityProvider, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE);
 
 			_meetingComposerView = meetingComposerView;
 			_skillPriorityProvider = skillPriorityProvider;
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			if (_skillIntradayGridControl != null)
 				_skillIntradayGridControl.LeftColChanged -= skillIntradayGridControlLeftColChanged;
 
-			_skillIntradayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart", _skillPriorityProvider) { DefaultColWidth = 45 };
+			_skillIntradayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart", _skillPriorityProvider, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE) { DefaultColWidth = 45 };
 			_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, schedulerStateHolder);
 			_skillIntradayGridControl.TurnoffHelp();
 			_skillIntradayGridControl.SetRowsAndCols();

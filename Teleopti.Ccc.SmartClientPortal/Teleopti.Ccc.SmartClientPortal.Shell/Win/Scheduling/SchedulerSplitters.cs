@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillMonthGridControl = new SkillMonthGridControl();
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
 			_skillIntraDayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart",
-				container.Resolve<ISkillPriorityProvider>());
+				container.Resolve<ISkillPriorityProvider>(), container.Resolve<ITimeZoneGuard>());
 
 			DayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
 			IntraDayGridControl.ContextMenuStrip = ContextMenuSkillGrid;

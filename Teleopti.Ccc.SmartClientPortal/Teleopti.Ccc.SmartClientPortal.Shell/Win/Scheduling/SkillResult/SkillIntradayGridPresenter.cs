@@ -17,7 +17,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Chart;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
@@ -35,24 +34,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
         private  ChartSettings _chartSettings = new ChartSettings();
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
-	    private readonly ChartSettings _defaultChartSettings = new ChartSettings();
+		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly ChartSettings _defaultChartSettings = new ChartSettings();
 
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
         {
             _gridControl = gridControl;
             _chartSettings = chartSettings;
 	        _skillPriorityProvider = skillPriorityProvider;
-        }
+			_timeZoneGuard = timeZoneGuard;
+		}
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName, ISkillPriorityProvider skillPriorityProvider)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName, ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
         {
             _gridControl = gridControl;
 	        _skillPriorityProvider = skillPriorityProvider;
 	        setupChartDefault();
+			_timeZoneGuard = timeZoneGuard;
 
-            //temp
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			//temp
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 _chartSettings = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(settingName, _defaultChartSettings);
             }
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 				Skill = skill;
 
 				var period = createDateTimePeriod(skillStaffPeriods);
-				createIntervalList(period, stateHolder);
+				createIntervalList(period);
 
 				if (_gridRows.Count == 0 || !Skill.SkillType.Equals(_lastSkillType) || !Skill.IsVirtual.Equals(_isLastVirtual))
 				{
@@ -133,8 +135,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 					_rowManager.IntervalLength = Skill.DefaultResolution;
 				}
 
-				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()).Date,
-					TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone()).Date,
+					_timeZoneGuard.CurrentTimeZone());
 				_rowManager.SetDataSource(skillStaffPeriods);
 			}
         }
@@ -461,10 +463,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             }
         }
 
-        private void createIntervalList(DateTimePeriod period, ISchedulerStateHolder stateHolder)
+        private void createIntervalList(DateTimePeriod period)
         {
             _intervals.Clear();
-            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, _timeZoneGuard.CurrentTimeZone());
         }
 
         private static DateTimePeriod createDateTimePeriod(ICollection<ISkillStaffPeriod> list)
