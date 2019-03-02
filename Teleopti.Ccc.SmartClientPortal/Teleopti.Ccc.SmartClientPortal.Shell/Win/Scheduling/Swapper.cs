@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void SwapRaw()
+		public void SwapRaw(ITimeZoneGuard timeZoneGuard)
 		{
 			var selectedSchedules = _scheduleView.SelectedSchedulesPerEqualTwoRanges();
 
 			if (selectedSchedules.IsEmpty())
 				return;
 
-			ISwapRawService swapRawService = new SwapRawService(new ThisAuthorization(PrincipalAuthorization.Current_DONTUSE()), TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE);
+			ISwapRawService swapRawService = new SwapRawService(new ThisAuthorization(PrincipalAuthorization.Current_DONTUSE()), timeZoneGuard);
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 														 _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
 

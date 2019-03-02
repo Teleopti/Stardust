@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private HandlePersonRequestView _handlePersonRequestView1;
 		private ElementHost _elementHost1;
 		private MultipleHostControl _multipleHostControl3;
+		private ITimeZoneGuard _timeZoneGuard;
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs>
 			RestrictionsNotAbleToBeScheduledProgress;
@@ -91,12 +92,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void InitializeSkillResultGrids(ILifetimeScope container)
 		{
-			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>(), container.Resolve<ITimeZoneGuard>());
+			_timeZoneGuard = container.Resolve<ITimeZoneGuard>();
+			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
 			_skillWeekGridControl = new SkillWeekGridControl();
 			_skillMonthGridControl = new SkillMonthGridControl();
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
 			_skillIntraDayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart",
-				container.Resolve<ISkillPriorityProvider>(), container.Resolve<ITimeZoneGuard>());
+				container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
 
 			DayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
 			IntraDayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
@@ -187,7 +189,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 						aggregateSkillSkill,
 						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-							_currentIntraDayDate.AddDays(1).Date, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()));
+							_currentIntraDayDate.AddDays(1).Date, _timeZoneGuard.CurrentTimeZone()));
 				control.Presenter.RowManager?.SetDataSource(skillStaffPeriods);
 			}
 			else
@@ -665,7 +667,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_chartDescription = string.Empty;
 			IList<ISkillStaffPeriod> skillStaffPeriods;
 			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-				_currentIntraDayDate.AddDays(1).Date, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+				_currentIntraDayDate.AddDays(1).Date, _timeZoneGuard.CurrentTimeZone());
 			if (aggregateSkillSkill.IsVirtual)
 			{
 				_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(

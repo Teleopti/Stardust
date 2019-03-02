@@ -1114,7 +1114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void swapRaw()
 		{
 			var swapper = new Swapper(_scheduleView, _undoRedo, SchedulerState.SchedulerStateHolder, LockManager, this, _defaultScheduleTag, _container.Resolve<IScheduleDayChangeCallback>());
-			swapper.SwapRaw();
+			swapper.SwapRaw(_timeZoneGuard);
 		}
 
 		private void swapSelectedSchedules()
