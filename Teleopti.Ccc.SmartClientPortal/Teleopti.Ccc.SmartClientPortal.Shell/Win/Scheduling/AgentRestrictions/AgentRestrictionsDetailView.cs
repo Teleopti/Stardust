@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
 
 			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
-			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer);
+			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard);
 
 			_workShiftWorkTime = workShiftWorkTime;
 

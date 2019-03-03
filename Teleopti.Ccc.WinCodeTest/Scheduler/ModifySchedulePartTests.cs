@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var target = new SchedulePresenterBase(view, StateHolder, new GridlockManager(), new ClipHandler<IScheduleDay>(),
 				SchedulePartFilter.None, overriddenBusinessRulesHolder, new DoNothingScheduleDayChangeCallBack(),
-				NullScheduleTag.Instance, new UndoRedoContainer());
+				NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard());
 
 			var dayToChange = StateHolder.Schedules[person].ScheduledDay(new DateOnly(2014, 3, 25));
 			dayToChange.PersonAssignment().AddActivity(activity, new DateTimePeriod(2014, 3, 25, 13, 2014, 3, 25, 14));

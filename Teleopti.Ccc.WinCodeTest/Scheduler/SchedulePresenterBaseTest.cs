@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             createMockObjects();
 
-            _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
+            _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard());
 			_grid = new GridControl();
             _person = PersonFactory.CreatePerson("person");
 
@@ -349,6 +349,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
             Expect.Call(person1.IsAgent(new DateOnly(2008, 11, 04))).Return(true).Repeat.Times(2);
+			Expect.Call(schedulePart.IsFullyPublished).Return(true).Repeat.Any();
 			_mocks.ReplayAll();
 
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
@@ -361,7 +362,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(GridMergeCellDirection.None, eventArgs.Style.MergeCell);
 
             _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.Meetings, _overriddenBusinessRulesHolder,
-                _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
+                _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard());
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
             eventArgs = new GridQueryCellInfoEventArgs(2, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());

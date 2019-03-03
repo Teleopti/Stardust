@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -566,7 +567,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 			_intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder,
 				_settingManager, _overriddenBusinessRulesHolder, _resourceOptimizationHelperExtended,
-				_resourceCalculationContextFactory, _scheduleDayChangeCallback, _skillPriorityProvider);
+				_resourceCalculationContextFactory, _scheduleDayChangeCallback, _skillPriorityProvider, _container.Resolve<ITimeZoneGuard>());
 			_intradayViewContent.RightToLeft = RightToLeft; //To solve error with wrong dock labels running RTL
 			_timeNavigationControl.SetSelectedDate(Presenter.IntradayDate);
 			Presenter.ExternalAgentStateReceived += presenterExternalAgentStateReceived;

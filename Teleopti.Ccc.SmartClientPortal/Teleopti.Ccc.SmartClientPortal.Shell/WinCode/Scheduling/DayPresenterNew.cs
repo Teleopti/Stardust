@@ -4,6 +4,7 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -28,8 +29,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public DayPresenterNew(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, 
             ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IDayPresenterScaleCalculator scaleCalculator, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer)
-            : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IDayPresenterScaleCalculator scaleCalculator, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
+            : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard)
         {
             _schedulerState = schedulerState;
             _lockManager = lockManager;
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     e.Style.Tag = _selectedDate;
                     //set tip text
                     if (daySchedule.FullAccess)
-                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
+                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule, TimeZoneGuard);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, _selectedDate, true, false, daySchedule);
                 }

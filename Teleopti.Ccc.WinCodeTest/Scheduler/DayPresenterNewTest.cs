@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             _scaleCalculator = mocks.StrictMock<IDayPresenterScaleCalculator>();
             target = new DayPresenterNew(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
-                                      SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, _scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer());
+                                      SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, _scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard());
         }
 
         [Test]
@@ -58,12 +58,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             target = new DayPresenterNewTestClass(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
                                       SchedulePartFilter.None, _scaleCalculator);
-            using (mocks.Record())
+			var fakeTimeZoneGuard = new FakeTimeZoneGuard();
+
+			using (mocks.Record())
             {
-                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState, new DateOnly(2011, 1, 1), new FakeTimeZoneGuard())).Return(new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
+                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState, new DateOnly(2011, 1, 1), fakeTimeZoneGuard)).Return(new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
-				Expect.Call(viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+				Expect.Call(viewBase.TimeZoneGuard).Return(fakeTimeZoneGuard).Repeat.Any();
 			}
 
             using (mocks.Playback())
@@ -100,16 +102,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, assPeriod2);
 	        IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
 			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer>(), null);
+			var fakeTimeZoneGuard = new FakeTimeZoneGuard();
 
             using (mocks.Record())
             {
-                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState1, new DateOnly(2011, 1, 1), new FakeTimeZoneGuard())).Return(
+                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState1, new DateOnly(2011, 1, 1), fakeTimeZoneGuard)).IgnoreArguments().Return(
                     new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
-				Expect.Call(viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+				Expect.Call(viewBase.TimeZoneGuard).Return(fakeTimeZoneGuard).Repeat.Any();
 				Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
-                Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone));
+                Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), fakeTimeZoneGuard.CurrentTimeZone()));
                 Expect.Call(schedulerState1.FilteredCombinedAgentsDictionary).Return(persons).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);
@@ -123,7 +126,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(scheduleDay1.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 	            Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService);
 	            Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
-            }
+				//Expect.Call(viewBase.TimeZoneGuard).Return(fakeTimeZoneGuard).Repeat.Any();
+			}
 
             using (mocks.Playback())
             {
@@ -146,7 +150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    public void ShouldSelectDayAndDayAfter()
 	    {
 			var scaleCalculator = new DayPresenterScaleCalculator();
-		    var presenter = new DayPresenterNew(new FakeScheduleView(), schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer());
+		    var presenter = new DayPresenterNew(new FakeScheduleView(), schedulerState, null,null, SchedulePartFilter.None, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard());
 			presenter.SelectDate(DateOnly.Today);
 			Assert.AreEqual(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)), presenter.SelectedPeriod.DateOnlyPeriod);
 	    }
@@ -155,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             internal DayPresenterNewTestClass(IScheduleViewBase view, ISchedulerStateHolder schedulerState, GridlockManager lockManager,
                 ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IDayPresenterScaleCalculator scaleCalculator)
-                : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer())
+                : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), scaleCalculator, NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard())
             {
             }
 

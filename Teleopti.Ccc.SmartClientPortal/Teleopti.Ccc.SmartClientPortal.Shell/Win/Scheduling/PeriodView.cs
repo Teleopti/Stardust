@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
             : base(grid, timeZoneGuard)
         {
-            Presenter = new PeriodPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer)
+            Presenter = new PeriodPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard)
                             {VisibleWeeks = 8};
             grid.Name = "PeriodView";
         }

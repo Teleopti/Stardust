@@ -20,16 +20,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public static class ViewBaseHelper
 	{
-		public static string GetToolTip(IScheduleDay cell)
+		public static string GetToolTip(IScheduleDay cell, ITimeZoneGuard timeZoneGuard)
 		{
 			var sb = new StringBuilder();
 
-			string assignments = GetToolTipAssignments(cell);
-			string absences = GetToolTipAbsences(cell);
+			string assignments = GetToolTipAssignments(cell, timeZoneGuard);
+			string absences = GetToolTipAbsences(cell, timeZoneGuard);
 			string dayOff = GetToolTipDayOff(cell);
 			string businessRuleConflicts = GetToolTipBusinessRuleConflicts(cell);
-			string meetings = GetToolTipMeetings(cell);
-			string overtime = GetToolTipOvertime(cell);
+			string meetings = GetToolTipMeetings(cell, timeZoneGuard);
+			string overtime = GetToolTipOvertime(cell, timeZoneGuard);
 
 			if (assignments.Length > 0)
 			{
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "0")]
-		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
+		public static string GetToolTipAssignments(IScheduleDay scheduleDay, ITimeZoneGuard timeZoneGuard)
 		{
 			var sb = new StringBuilder();
 			var pa = scheduleDay.PersonAssignment();
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				if (projectionPeriod.HasValue)
 				{
-					sb.Append(ToLocalStartEndTimeString(projectionPeriod.Value, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone())); //time
+					sb.Append(ToLocalStartEndTimeString(projectionPeriod.Value, timeZoneGuard.CurrentTimeZone())); //time
 				}
 
 				foreach (var layer in pa.PersonalActivities())
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					sb.Append(layer.Payload.ConfidentialDescription_DONTUSE(pa.Person).Name);
 					//name
 					sb.Append(": ");
-					sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone())); //time
+					sb.Append(ToLocalStartEndTimeString(layer.Period, timeZoneGuard.CurrentTimeZone())); //time
 				}
 			}
 			return sb.ToString();
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		/// </summary>
 		/// <param name="cell"></param>
 		/// <returns></returns>
-		public static string GetToolTipAbsences(IScheduleDay cell)
+		public static string GetToolTipAbsences(IScheduleDay cell, ITimeZoneGuard timeZoneGuard)
 		{
 			var sb = new StringBuilder();
 
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 					sb.Append(pa.Layer.Payload.ConfidentialDescription_DONTUSE(pa.Person).Name); //name
 					sb.Append(": ");
-					sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()));
+					sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, timeZoneGuard.CurrentTimeZone()));
 				}
 			}
 
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		/// </summary>
 		/// <param name="cell"></param>
 		/// <returns></returns>
-		public static string GetToolTipMeetings(IScheduleDay cell)
+		public static string GetToolTipMeetings(IScheduleDay cell, ITimeZoneGuard timeZoneGuard)
 		{
 			var sb = new StringBuilder();
 
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
 				sb.Append(": ");
-				sb.Append(ToLocalStartEndTimeString(personMeeting.Period, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()));
+				sb.Append(ToLocalStartEndTimeString(personMeeting.Period, timeZoneGuard.CurrentTimeZone()));
 
 				if (personMeeting.Optional)
 					sb.AppendFormat(" ({0})", Resources.Optional);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		/// </summary>
 		/// <param name="cell"></param>
 		/// <returns></returns>
-		public static string GetToolTipOvertime(IScheduleDay cell)
+		public static string GetToolTipOvertime(IScheduleDay cell, ITimeZoneGuard timeZoneGuard)
 		{
 			if (!dayHasOvertime(cell)) return string.Empty;
 
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				sb.Append(": ");
 				sb.Append(layer.Payload.ConfidentialDescription_DONTUSE(cell.Person).Name);
 				sb.Append(": ");
-				sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()));
+				sb.Append(ToLocalStartEndTimeString(layer.Period, timeZoneGuard.CurrentTimeZone()));
 			}
 			return sb.ToString();
 		}
@@ -563,7 +563,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		}
 
 		//Gets text to show in week view
-		public static IList<string> GetInfoTextWeekView(IScheduleDay schedulePart, SchedulePartView significantPart)
+		public static IList<string> GetInfoTextWeekView(IScheduleDay schedulePart, SchedulePartView significantPart, ITimeZoneGuard timeZoneGuard)
 		{
 			IList<string> returnList = new List<string>();
 			string infoText = string.Empty;
@@ -602,7 +602,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				infoText = pa.ShiftCategory.Description.Name;
 				if (period.HasValue)
 				{
-					periodText = ToLocalStartEndTimeString(period.Value, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+					periodText = ToLocalStartEndTimeString(period.Value, timeZoneGuard.CurrentTimeZone());
 				}
 			}
 

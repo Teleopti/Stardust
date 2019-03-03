@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
             : base(grid, timeZoneGuard)
         {
-            Presenter = new WeekPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer)
+            Presenter = new WeekPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard)
                             {VisibleWeeks = 1};
             grid.Name = "WeekView";
         }
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         private void drawInfoTextInCell(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
         {
-            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(scheduleRange, significantPart);
+            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(scheduleRange, significantPart, TimeZoneGuard);
             string infoText = infoList[0];
             string periodText = infoList[1];
             string timeText = infoList[2];

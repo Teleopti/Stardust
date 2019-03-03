@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -38,12 +37,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IUndoRedoContainer _undoRedoContainer;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SchedulePresenterBase(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, 
             ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
         {
             VisibleWeeks = 4;
             IsAscendingSort = true;
@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_undoRedoContainer = undoRedoContainer;
+			_timeZoneGuard = timeZoneGuard;
 			DefaultScheduleTag = defaultScheduleTag;
             Now = DateTime.UtcNow;
             SelectedPeriod = SchedulerState.RequestedPeriod;
@@ -181,7 +182,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         public IScheduleSortCommand SortCommand { get; set; }
 
-        public void ApplyGridSort()
+		public ITimeZoneGuard TimeZoneGuard
+		{
+			get { return _timeZoneGuard; }
+		}
+
+		public void ApplyGridSort()
 		{
 			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
 		
@@ -344,7 +350,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     e.Style.Tag = localDate;
                     //set tip text
                     if (daySchedule.FullAccess)
-                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
+                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule, _timeZoneGuard);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, localDate, true, false, daySchedule);
                 }
@@ -404,7 +410,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         public virtual void MergeHeaders()
         {
             const int col = (int)ColumnType.StartScheduleColumns;
-            DateTime startDate = SelectedPeriod.Period().StartDateTimeLocal(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()).Date;
+            DateTime startDate = SelectedPeriod.Period().StartDateTimeLocal(_view.TimeZoneGuard.CurrentTimeZone()).Date;
             for (int i = 0; i < Days; i++)
             {
                 ColWeekMap.Add(col + i, DateHelper.WeekNumber(startDate.AddDays(i), CultureInfo.CurrentCulture));
@@ -477,7 +483,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					if (ColWeekMap.TryGetValue(e.ColIndex, out var week))
                     {
                         e.Style.WrapText = false;
-						var tagDate = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()).Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns).Date);
+						var tagDate = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(_view.TimeZoneGuard.CurrentTimeZone()).Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns).Date);
                         var period = ViewBaseHelper.WeekHeaderDates(week, tagDate.ToDateOnlyPeriod().Inflate(7));
 						e.Style.Tag = tagDate;
 	                    e.Style.Text = string.Format(CultureInfo.CurrentCulture, Resources.WeekAbbreviationDot, week, period.StartDate.ToShortDateString());

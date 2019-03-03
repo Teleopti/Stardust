@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
 
-            StringAssert.Contains("Morgon", ViewBaseHelper.GetToolTipAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001,1,1))));
+            StringAssert.Contains("Morgon", ViewBaseHelper.GetToolTipAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001,1,1)), new FakeTimeZoneGuard()));
         }
 
 		[Test]
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_underlyingDictionary.Clear();
 			_underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
 
-			var result =  ViewBaseHelper.GetToolTipAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)));
+			var result =  ViewBaseHelper.GetToolTipAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)), new FakeTimeZoneGuard());
 			var expectedStart = "SC  " + dateTimePeriod.StartDateTime.ToShortTimeString() + " - " + dateTimePeriod.EndDateTime.ToShortTimeString();
 			Assert.IsTrue(result.StartsWith(expectedStart));
 		}
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
 
 
-			var infoText = ViewBaseHelper.GetInfoTextWeekView(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)), SchedulePartView.MainShift);
+			var infoText = ViewBaseHelper.GetInfoTextWeekView(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)), SchedulePartView.MainShift, new FakeTimeZoneGuard());
 			var periodText = infoText[1];
 			var expectedStart = dateTimePeriod.StartDateTime.ToShortTimeString() + " - " + dateTimePeriod.EndDateTime.ToShortTimeString();
 
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
 
-            Assert.AreEqual(expected, ViewBaseHelper.GetToolTipAbsences(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 1))));
+            Assert.AreEqual(expected, ViewBaseHelper.GetToolTipAbsences(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 1)), new FakeTimeZoneGuard()));
             
         }
 
@@ -284,9 +284,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mockRep.Playback())
             {
-                Assert.AreEqual(expectedStart, ViewBaseHelper.GetToolTipAbsences(part));  
-                Assert.AreEqual(expectedMiddle, ViewBaseHelper.GetToolTipAbsences(part));
-                Assert.AreEqual(expectedEnd, ViewBaseHelper.GetToolTipAbsences(part));
+                Assert.AreEqual(expectedStart, ViewBaseHelper.GetToolTipAbsences(part, new FakeTimeZoneGuard()));  
+                Assert.AreEqual(expectedMiddle, ViewBaseHelper.GetToolTipAbsences(part, new FakeTimeZoneGuard()));
+                Assert.AreEqual(expectedEnd, ViewBaseHelper.GetToolTipAbsences(part, new FakeTimeZoneGuard()));
             }
         }
 
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					string expected = ConfidentialPayloadValues.Description.Name + ": " + absencePeriod;
 
 					Assert.AreEqual(expected,
-						ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 2))));
+						ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 2)), new FakeTimeZoneGuard()));
 				}
 			}
 		}
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
 
-            var res = ViewBaseHelper.GetToolTipMeetings(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 1)));
+            var res = ViewBaseHelper.GetToolTipMeetings(_scheduleRange.ScheduledDay(new DateOnly(2006, 1, 1)), new FakeTimeZoneGuard());
             
             StringAssert.Contains("meeting1", res);
             StringAssert.Contains("meeting2", res);
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             //rk ändrat här. ska det visas agentens tid eller betraktarens tid?
             string expected = string.Concat(multiplicatorDefinitionSet.Name, ": ", activity.Name, ": ", "17:00 - 18:00");
 
-            Assert.AreEqual(expected, ViewBaseHelper.GetToolTipOvertime(part));
+            Assert.AreEqual(expected, ViewBaseHelper.GetToolTipOvertime(part, new FakeTimeZoneGuard()));
         }
 
         [Test]
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_scheduleRange.Person,_scheduleRange);
 
-            StringAssert.Contains("Morgon", ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1))));
+            StringAssert.Contains("Morgon", ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)), new FakeTimeZoneGuard()));
         }
 
         [Test]
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             string expected = string.Empty;
 
-            Assert.AreEqual(expected, ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2000, 1, 1))));
+            Assert.AreEqual(expected, ViewBaseHelper.GetToolTip(_scheduleRange.ScheduledDay(new DateOnly(2000, 1, 1)), new FakeTimeZoneGuard()));
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 				var parts = _scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1));
 
-				string tt = ViewBaseHelper.GetToolTip(parts);
+				string tt = ViewBaseHelper.GetToolTip(parts, new FakeTimeZoneGuard());
 				int pos = tt.IndexOf("There must be a nightly rest of at least", StringComparison.OrdinalIgnoreCase);
 				Assert.AreNotEqual(-1, pos);
 		}
@@ -724,30 +724,30 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _underlyingDictionary.Clear();
             _underlyingDictionary.Add(_agent, range);
 
-            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence);
+            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence, new FakeTimeZoneGuard());
             string infoText = infoList[0];
             string periodText = infoList[1];
             string timeText = infoList[2];
-            ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence);
+            ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence, new FakeTimeZoneGuard());
             Assert.AreEqual("description", infoText);
             Assert.AreEqual("-", periodText);
             Assert.AreEqual("00:00", timeText);
 
-            infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence);
+            infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence, new FakeTimeZoneGuard());
             infoText = infoList[0];
             periodText = infoList[1];
             timeText = infoList[2];
             _visualLayers.Add(_visualLayer);
-            ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence);
+            ViewBaseHelper.GetInfoTextWeekView(_schedulePart1, SchedulePartView.FullDayAbsence, new FakeTimeZoneGuard());
             Assert.AreEqual("description", infoText);
             Assert.AreEqual("-", periodText);
             Assert.AreEqual("00:00", timeText);
 
-            infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart2, SchedulePartView.DayOff);
+            infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart2, SchedulePartView.DayOff, new FakeTimeZoneGuard());
             infoText = infoList[0];
             periodText = infoList[1];
             timeText = infoList[2];
-            ViewBaseHelper.GetInfoTextWeekView(_schedulePart2, SchedulePartView.DayOff);
+            ViewBaseHelper.GetInfoTextWeekView(_schedulePart2, SchedulePartView.DayOff, new FakeTimeZoneGuard());
             Assert.AreEqual("Tjillevippen", infoText);
             Assert.AreEqual("-", periodText);
             Assert.AreEqual("00:00", timeText);
