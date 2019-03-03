@@ -247,6 +247,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var endDate= new DateOnly(2018,3,31);
 			Expect.Call(_viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
 			Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
 			_mocks.ReplayAll();
 
@@ -275,8 +276,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.DayHeaderTooltipText(null, DateOnly.MinValue)).IgnoreArguments().Return("test").Repeat.Once();
             Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), _timeZoneInfo);
@@ -1465,7 +1467,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void MergeHeaders()
         {
-            _target.MergeHeaders();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+
+			_mocks.ReplayAll();
+			_target.MergeHeaders();
+			_mocks.VerifyAll();
             Assert.AreEqual(28, _target.ColWeekMap.Count);
         }
 
