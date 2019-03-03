@@ -6,14 +6,12 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
-
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {
@@ -71,13 +69,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
 			_scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
 			_periodTarget = TimeSpan.FromHours(40);
-			TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.Set(null);
 		}
 
 		[Test]
