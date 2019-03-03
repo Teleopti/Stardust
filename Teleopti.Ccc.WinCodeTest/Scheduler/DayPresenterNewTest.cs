@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                       SchedulePartFilter.None, _scaleCalculator);
             using (mocks.Record())
             {
-                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState, new DateOnly(2011, 1, 1))).Return(new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
+                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState, new DateOnly(2011, 1, 1), new FakeTimeZoneGuard())).Return(new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
 				Expect.Call(viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (mocks.Record())
             {
-                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState1, new DateOnly(2011, 1, 1))).Return(
+                Expect.Call(_scaleCalculator.CalculateScalePeriod(schedulerState1, new DateOnly(2011, 1, 1), new FakeTimeZoneGuard())).Return(
                     new DateTimePeriod(2011, 1, 1, 2011, 1, 2));
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();

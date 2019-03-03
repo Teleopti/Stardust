@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
+                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02), new FakeTimeZoneGuard());
             }
 
             var expected =
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
+                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02), new FakeTimeZoneGuard());
             }
 
             var expected =
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
+                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02), new FakeTimeZoneGuard());
             }
 
             var expected =
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
+                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02), new FakeTimeZoneGuard());
             }
 
             var expected =
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
+                result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02), new FakeTimeZoneGuard());
             }
 
             var expected =
