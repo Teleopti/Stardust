@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -13,17 +13,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder);
 		void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill);
 		void SetupGrid(int colCount);
+		ITimeZoneGuard TimeZoneGuard { get; }
 	}
 
 	public class SkillWeekGridControlPresenter
 	{
-		private readonly SkillWeekGridControl _view;
+		private readonly ISkillWeekGridControl _view;
 		private IList<DateOnlyPeriod> _weeks;
 		private IList<DateOnly> _dates;
 
 		public SkillWeekGridControlPresenter(ISkillWeekGridControl view)
 		{
-			_view = view as SkillWeekGridControl;
+			_view = view;
 		}
 
 		public void DrawWeekGrid(ISchedulerStateHolder stateHolder, ISkill skill)

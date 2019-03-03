@@ -193,7 +193,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 			ColWidths[0] = rowHeaderWidth;
 		}
 
-        public override void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
+		//public ITimeZoneGuard TimeZoneGuard
+		//{
+		//	get { return base.TimeZoneGuard; }
+		//}
+
+		public override void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
         {
            _presenter.DrawMonthGrid(stateHolder, skill);	
         }

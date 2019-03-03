@@ -349,8 +349,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
             Expect.Call(person1.IsAgent(new DateOnly(2008, 11, 04))).Return(true).Repeat.Times(2);
-
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
 
             _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
             if (person1.Id != null) _schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
@@ -744,8 +743,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(_day1);
 			Expect.Call(_day1.HasDayOff()).Return(false).Repeat.AtLeastOnce();
 			Expect.Call(_day2.HasDayOff()).Return(false).Repeat.AtLeastOnce();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddAbsence();
             _mocks.VerifyAll();
@@ -799,9 +799,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(_day1);
 			Expect.Call(_day2.HasDayOff()).Return(false);
 			Expect.Call(_day1.HasDayOff()).Return(false);
-        
-        
-            _mocks.ReplayAll();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+
+			_mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddAbsence(_selectedSchedules, null);
             _mocks.VerifyAll();
@@ -907,7 +907,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog).Repeat.Once();
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.ViewGrid).Return(_grid);
-        }
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+		}
 
         private void ExpectCallsDialogOnShouldNotAddAbsenceOnLockedDay(DateTimePeriod period)
         {
@@ -968,7 +969,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                   .Repeat.Once();
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
             Expect.Call(_viewBase.ViewGrid).Return(_grid);
-        }
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+		}
 
         private void ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(DateTimePeriod period)
         {
@@ -1016,7 +1018,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					.Repeat.Once();
 			Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
 			Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
-            _mocks.ReplayAll();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+			_mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddAbsence();
             _mocks.VerifyAll();
@@ -1044,9 +1047,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-           
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
             _target.AddAbsence();
             _mocks.VerifyAll();
         }
@@ -1078,8 +1081,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.SelectedPeriod).Return(new DateTimePeriod());
             Expect.Call(() => pa.CheckRestrictions()).Throw(new ValidationException());
             Expect.Call(() => _viewBase.ShowErrorMessage(string.Empty, string.Empty)).IgnoreArguments();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
             _target.AddActivity(list, null, null);
             _mocks.VerifyAll();
         }
@@ -1128,8 +1132,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.PersonAssignment()).Return(pa).Repeat.AtLeastOnce();
             Expect.Call(pa.Period).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
             _target.AddActivity();
             _mocks.VerifyAll();
         }
@@ -1212,8 +1217,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_ass.CheckRestrictions);
 	        Expect.Call(_ass.MainActivities()).Return(new List<MainShiftLayer>());
 	        Expect.Call(_ass.OvertimeActivities()).Return(new List<OvertimeShiftLayer>());
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
+			var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
 
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -1303,8 +1309,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
             Expect.Call(person.IsAgent(new DateOnly(2001,1,1))).Return(true);
 			Expect.Call(ass.OvertimeActivities()).Return(new List<OvertimeShiftLayer>());
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
             _target.AddOvertime(multiplicatorDefinitionSets);
             _mocks.VerifyAll();
         }
@@ -1332,37 +1339,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.VerifyAll();
         }
 
-        [Test]
-        public void VerifyAddPersonalShift()
-        {
-            var schedulePart = _mocks.StrictMock<IScheduleDay>();
-            var selectedItem = _mocks.StrictMock<IActivity>();
-            var dialog = _mocks.StrictMock<IAddLayerViewModel<IActivity>>();
-            var person = _mocks.StrictMock<IPerson>();
-        	var period = _schedulerState.RequestedPeriod.Period();
-            Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
-            Expect.Call(schedulePart.PersonAssignment()).Return(null);
-            Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-            Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), (TimeZoneInfo.Local))).IgnoreArguments().Return(dialog);
-            Expect.Call(dialog.Result).Return(true);
-            Expect.Call(dialog.SelectedItem).Return(selectedItem);
-            Expect.Call(dialog.SelectedPeriod).Return(period);
-            Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
-            Expect.Call(_viewBase.ViewGrid).Return(_grid);
-            var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-
-            IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
-            Expect.Call(schedulePart.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
-            Expect.Call(personAssignment.CheckRestrictions);
-
-            Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, period));
-            Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-            _mocks.ReplayAll();
-            _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            _target.AddPersonalShift();
-            _mocks.VerifyAll();
-        }
-
+       
         [Test]
         public void ShouldAddActivityToOneSchedulePartPerAgent()
         {
@@ -1386,7 +1363,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(() => schedulePartDayOne.CreateAndAddActivity(null, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(schedulePartDayOne.PersonAssignment()).Return(personAssignment).Repeat.Twice();
                 Expect.Call(personAssignment.CheckRestrictions).Repeat.Twice();
-                AddActivityViewBaseExpectations(schedulePartDayOne, schedulePartDayTwo, defaultPeriod, dialog, person);
+				Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+				AddActivityViewBaseExpectations(schedulePartDayOne, schedulePartDayTwo, defaultPeriod, dialog, person);
             }
 
             using (_mocks.Playback())
@@ -1445,7 +1423,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 	        Expect.Call(ass.ShiftLayers).Return(new List<ShiftLayer> {shiftLayer});
-            _mocks.ReplayAll();
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+			_mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddPersonalShift();
             _mocks.VerifyAll();
@@ -1475,8 +1454,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), (TimeZoneInfo.Local))).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(false);
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			Expect.Call(_viewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
-            _mocks.ReplayAll();
+			_mocks.ReplayAll();
             _target.AddPersonalShift();
             _mocks.VerifyAll();
         }

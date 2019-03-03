@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             }
             //var temp = getDefaultDateTimePeriod(selectedSchedules);
 
-			IAddLayerViewModel<IAbsence> addAbsenceDialog = ScheduleViewBase.CreateAddAbsenceViewModel(n.ToList(), periodSetup, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+			IAddLayerViewModel<IAbsence> addAbsenceDialog = ScheduleViewBase.CreateAddAbsenceViewModel(n.ToList(), periodSetup, ScheduleViewBase.TimeZoneGuard.CurrentTimeZone());
 			bool dialogResult = addAbsenceDialog.Result;
 			if (!dialogResult) return;
 

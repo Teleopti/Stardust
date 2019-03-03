@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             e.Handled = true;
         }
 
-        public void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder)
+		public void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder)
         {
 			if (skill == null || dates == null) return;
 

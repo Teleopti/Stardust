@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -14,17 +14,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder);
 		void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill);
 		void SetupGrid(int colCount);
+		ITimeZoneGuard TimeZoneGuard { get; }
 	}
 
 	public class SkillMonthGridControlPresenter
 	{
-		private readonly SkillMonthGridControl _view;
+		private readonly ISkillMonthGridControl _view;
 		private IList<DateOnlyPeriod> _months;
 		private IList<DateOnly> _dates;
 
 		public SkillMonthGridControlPresenter(ISkillMonthGridControl view)
 		{
-			_view = view as SkillMonthGridControl;
+			_view = view;
 		}
 
 		public void DrawMonthGrid(ISchedulerStateHolder stateHolder, ISkill skill)
