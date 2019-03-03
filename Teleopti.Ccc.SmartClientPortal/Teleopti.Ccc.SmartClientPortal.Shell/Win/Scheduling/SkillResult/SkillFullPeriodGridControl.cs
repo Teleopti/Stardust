@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		        new RowManagerScheduler<SkillFullPeriodGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>>(this,
 		                                                                                                               new List<IntervalDefinition>(),
 		                                                                                                               15,
-		                                                                                                               schedulerStateHolder)
+		                                                                                                               schedulerStateHolder, TimeZoneGuard)
 			        {BaseDate = baseDate.Date};
 
 	        SkillFullPeriodGridRow gridRow;

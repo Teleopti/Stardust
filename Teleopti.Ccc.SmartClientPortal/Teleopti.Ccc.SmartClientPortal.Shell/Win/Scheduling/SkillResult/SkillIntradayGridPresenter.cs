@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
             _gridRows.Clear();
             _gridRows.Add(new IntervalHeaderGridRow(_intervals));
-            _rowManager = new RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod>(_gridControl, _intervals, Skill.DefaultResolution, stateHolder);
+            _rowManager = new RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod>(_gridControl, _intervals, Skill.DefaultResolution, stateHolder, _timeZoneGuard);
             _gridControl.CoveredRanges.Clear();
         	SkillStaffPeriodGridRowScheduler gridRow;
 

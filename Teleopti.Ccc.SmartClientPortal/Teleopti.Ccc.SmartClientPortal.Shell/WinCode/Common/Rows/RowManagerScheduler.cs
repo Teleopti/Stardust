@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
     {
 
         private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
-        /// <summary>
+		/// <summary>
         /// Initializes a new instance of the <see cref="RowManagerScheduler&lt;TRow, TSource&gt;"/> class.
         /// </summary>
         /// <param name="grid">The grid.</param>
@@ -29,10 +30,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         /// Created by: micke
         /// Created date: 2009-03-22
         /// </remarks>
-        public RowManagerScheduler(ITeleoptiGridControl grid, IList<IntervalDefinition> intervals, int intervalLength, ISchedulerStateHolder schedulerStateHolder) : base(grid, intervals, intervalLength)
-        {
-            _schedulerStateHolder = schedulerStateHolder;
-        }
+        public RowManagerScheduler(ITeleoptiGridControl grid, IList<IntervalDefinition> intervals, int intervalLength, ISchedulerStateHolder schedulerStateHolder, ITimeZoneGuard timeZoneGuard) : base(grid, intervals, intervalLength)
+		{
+			_schedulerStateHolder = schedulerStateHolder;
+			_timeZoneGuard = timeZoneGuard;
+		}
 
         /// <summary>
         /// Gets the time zone info.
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         {
             get
             {
-                return TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+                return _timeZoneGuard.CurrentTimeZone();
             }
         }
 

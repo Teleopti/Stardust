@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 	        GridRows = new List<IGridRow> { new DateHeaderGridRow(DateHeaderType.WeekDates, dates) };
         	DateOnly baseDate = dates.Count > 0 ? dates.First() : DateOnly.MinValue;
 
-            _rowManager = new RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>>(this, new List<IntervalDefinition>(), 15, schedulerStateHolder)
+            _rowManager = new RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>>(this, new List<IntervalDefinition>(), 15, schedulerStateHolder, TimeZoneGuard)
 	            {BaseDate = baseDate.Date};
 
 	        SkillWeekGridRow gridRow;

@@ -15,7 +15,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 	public class SkillDayGridControl : SkillResultGridControlBase
     {
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 		private const int rowHeaderWidth = 200;
         private const int cellWidth = 55;
         private const string settingName = "SchedulerSkillDayGridAndChart";
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         public SkillDayGridControl(ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
         {
 	        _skillPriorityProvider = skillPriorityProvider;
-			_timeZoneGuard = timeZoneGuard;
 			initializeComponent();
             initializeGrid();
             InitializeBase(settingName, timeZoneGuard);
@@ -134,7 +131,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         	DateOnly baseDate = dates.Count > 0 ? dates.First() : DateOnly.MinValue;
 
         	_rowManager = new RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>>(
-        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder) {BaseDate = baseDate.Date};
+        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder, TimeZoneGuard) {BaseDate = baseDate.Date};
 
         	SkillDayGridRow gridRow;
 			if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
@@ -234,7 +231,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public override void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
 		{
-		    var stateHolderTimeZone = _timeZoneGuard.CurrentTimeZone();
+		    var stateHolderTimeZone = TimeZoneGuard.CurrentTimeZone();
             var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolderTimeZone).WholeDayCollection(stateHolderTimeZone);
             _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolderTimeZone))).ToList();
 			var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
@@ -248,7 +245,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
 			Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
 										   GridMergeCellsMode.MergeColumnsInRow;
-			var timeZone = _timeZoneGuard.CurrentTimeZone();
+			var timeZone = TimeZoneGuard.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period(timeZone).WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone)))
 				.ToList();
