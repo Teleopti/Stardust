@@ -69,7 +69,7 @@ Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 Wfm_AutomaticNotificationEnrollment_79679 = DEV
 Wfm_AutomaticNotificationEnrollmentStartup_79679 = false
-Wfm_PeopleWeb_Improve_Search_81681 = DEV
+Wfm_PeopleWeb_Improve_Search_81681 = RC
 
 # China, can any of these be removed? #
 MyTimeWeb_NewTeamScheduleView_75989 = true
