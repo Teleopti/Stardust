@@ -1,4 +1,5 @@
-﻿using Microsoft.ReportingServices.RdlExpressions.ExpressionHostObjectModel;
+﻿using DotNetOpenAuth.Messaging;
+using Microsoft.ReportingServices.RdlExpressions.ExpressionHostObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -304,28 +305,25 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					return new GroupWeekScheduleViewModel
 					{
-						Total = permittedPeopleIds.Count
+						Total = personIds.Count
 					};
 				}
 
 				var batchedPeople = _personRepository.FindPeople(batch);
-				var batchPermittedPeople = weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonList(batchedPeople, d,
-					 DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
-
-				batchPermittedPeople.ForEach(pg =>
+				weekDays.ForEach(d =>
 				{
-					if (pg.Value.Any())
+					var batchPermittedPeople = _searchProvider.GetPermittedPersonList(batchedPeople, d, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+					if (batchPermittedPeople.Any())
 					{
-						permittedPeopleByDate[pg.Key].AddRange(pg.Value);
-						pg.Value.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
+						permittedPeopleByDate[d].AddRange(batchPermittedPeople);
+						batchPermittedPeople.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
 					}
 				});
 			}
 
 			var allPermittedPeople = permittedPeopleByDate
 					.SelectMany(pg => pg.Value)
-					.ToLookup(p => p.Id)
-					.Select(p => p.First())
+					.Distinct()
 					.ToList();
 
 			var pagedPeople = input.PageSize > 0
@@ -335,9 +333,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					.Take(input.PageSize).ToList()
 				: allPermittedPeople;
 
+			var pagedPeopleIds = pagedPeople.Select(p => p.Id).ToList();
+
 			var scheduleDic = _scheduleDayProvider.GetScheduleDictionary(week, pagedPeople);
 
-			var peopleCanSeeSchedulesFor = permittedPeopleByDate.ToDictionary(pg => pg.Key, pg => pagedPeople.Where(p => pg.Value.Any(pp => pp.Id == p.Id)).Select(p => p.Id.GetValueOrDefault()).ToHashSet());
+			var peopleCanSeeSchedulesFor = permittedPeopleByDate.ToDictionary(pg => pg.Key,
+				pg => pg.Value.Select(pp => pp.Id.GetValueOrDefault()).Where(pid => pagedPeopleIds.Contains(pid)).ToHashSet());
 
 			var peopleCanSeeUnpublishedSchedulesFor =
 				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, d,
