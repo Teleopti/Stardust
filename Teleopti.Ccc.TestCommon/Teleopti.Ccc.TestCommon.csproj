@@ -520,6 +520,7 @@
     <Compile Include="TestData\Analytics\NotDefinedSkill.cs" />
     <Compile Include="TestData\Analytics\NotDefinedWorkload.cs" />
     <Compile Include="TestData\Analytics\QueueStatisticsForSkill.cs" />
+    <Compile Include="TestData\Analytics\ScheduledChangesForDeviation.cs" />
     <Compile Include="TestData\Analytics\ScheduledShift.cs" />
     <Compile Include="TestData\Analytics\ShiftCategory.cs" />
     <Compile Include="TestData\Analytics\Activity.cs" />
@@ -529,6 +530,7 @@
     <Compile Include="TestData\Analytics\ShiftLength.cs" />
     <Compile Include="TestData\Analytics\SpecificTimeZone.cs" />
     <Compile Include="TestData\Analytics\SysConfiguration.cs" />
+    <Compile Include="TestData\Analytics\Tables\stg_schedule_changed_servicebus.cs" />
     <Compile Include="TestData\Analytics\Tables\log_object.cs" />
     <Compile Include="TestData\Analytics\Tables\acd_type.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_acd_login.cs" />
