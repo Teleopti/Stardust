@@ -6,13 +6,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
 			if ((vm || '') == '') {
-				var toggleOn = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
-					'MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947'
-				);
+				
 				var ajax = new Teleopti.MyTimeWeb.Ajax();
-				vm = toggleOn
-					? new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax)
-					: new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+				vm = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 				ko.cleanNode(elementToBind);
 				ko.applyBindings(vm, elementToBind);
 			}

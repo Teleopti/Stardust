@@ -32,8 +32,7 @@ Background:
 	| Day   |
 	| Night |
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947')
-Scenario: See the new view
+Scenario: See the shift trade view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
