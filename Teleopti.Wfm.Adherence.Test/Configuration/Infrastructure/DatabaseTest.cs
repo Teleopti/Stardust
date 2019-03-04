@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -18,36 +16,35 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {
 	public abstract class DatabaseTest : INotCompatibleWithIoCTest
 	{
-		private ISession _session;
-		private IUnitOfWork _unitOfWork;
-		private IContainer _container;
-		
-		protected IBusinessUnit _businessUnit;
-		protected ISession Session => _session;
-		protected IUnitOfWork UnitOfWork => _unitOfWork;
+		protected IContainer Container;
+		protected IBusinessUnit BusinessUnit;
+		protected ISession Session => CurrentUnitOfWork.Current().FetchSession();
+		protected IUnitOfWork UnitOfWork => CurrentUnitOfWork.Current();
 		protected ICurrentUnitOfWork CurrentUnitOfWork;
 		protected ICurrentBusinessUnit CurrentBusinessUnit;
-		
+		protected IDataSource DataSource;
+
 		[SetUp]
 		public void Setup()
 		{
 			var (person, businessUnit) = InfrastructureTestSetup.Setup();
-			_businessUnit = businessUnit;
-			
+			BusinessUnit = businessUnit;
+
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
 			builder.RegisterType<FakeLicenseRepository>().AsSelf().As<ILicenseRepository>().SingleInstance();
 			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
-			_container = builder.Build();
+			Container = builder.Build();
 
-			CurrentUnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
-			CurrentBusinessUnit = _container.Resolve<ICurrentBusinessUnit>();
-			var dataSource = _container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
-			Login(person, businessUnit, dataSource);
-			_unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork();
-			_session = _unitOfWork.FetchSession();
+			CurrentUnitOfWork = Container.Resolve<ICurrentUnitOfWork>();
+			CurrentBusinessUnit = Container.Resolve<ICurrentBusinessUnit>();
+			DataSource = Container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
+
+			Login(person, businessUnit);
+			OpenUnitOfWork();
 			SetupForRepositoryTest();
 		}
+
 
 		protected virtual void SetupForRepositoryTest()
 		{
@@ -56,9 +53,8 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		[TearDown]
 		public void BaseTeardown()
 		{
-			_unitOfWork.Dispose();
-			_unitOfWork = null;
-			_container.Dispose();
+			EndUnitOfWork();
+			Container.Dispose();
 		}
 
 		protected void PersistAndRemoveFromUnitOfWork(IEntity obj)
@@ -68,17 +64,26 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Session.Evict(obj);
 		}
 
-		private void Login(IPerson person, IBusinessUnit businessUnit, IDataSource dataSource)
+		protected void OpenUnitOfWork()
 		{
-			var principalContext = SelectivePrincipalContext.Make();
-			var principal = TeleoptiPrincipalFactory.Make().MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), dataSource, null);
-			principalContext.SetCurrentPrincipal(principal);
+			DataSource.Application.CreateAndOpenUnitOfWork();
 		}
-		
+
+		protected void EndUnitOfWork()
+		{
+			if (CurrentUnitOfWork.HasCurrent())
+				CurrentUnitOfWork.Current()?.Dispose();
+		}
+
+		private void Login(IPerson person, IBusinessUnit businessUnit)
+		{
+			var principal = Container.Resolve<IPrincipalFactory>().MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSource, null);
+			Container.Resolve<ICurrentPrincipalContext>().SetCurrentPrincipal(principal);
+		}
+
 		protected void Logout()
 		{
-			var principalContext = SelectivePrincipalContext.Make();
-			principalContext.SetCurrentPrincipal(null);
+			Container.Resolve<ICurrentPrincipalContext>().SetCurrentPrincipal(null);
 		}
 	}
 }
