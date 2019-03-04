@@ -156,14 +156,14 @@ export class IntradayComponent implements OnChanges {
 
 			text += "<tr class='" + CLASS.tooltipName + '-' + d.id + "'>";
 			text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + '</td>';
-			if(d.id === 'Understaffing'){
-				text += "<td class='value'>" + value + ' ('+((-relativeDifferenceInterval)*100).toFixed(1)+'%) '+'</td>';
-			}else if(d.id === 'Overstaffing'){
-				text += "<td class='value'>" + value + ' ('+(relativeDifferenceInterval*100).toFixed(1)+'%) '+'</td>';
-			}else{
-				text += "<td class='value'>" + value + '</td>';
-			}
+			text += "<td class='value'>" + value + '</td>';
 			text += '</tr>';
+			if (d.id === 'Understaffing' || d.id === 'Overstaffing') {
+				text += "<tr>";
+				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:" + bgcolor + "'></span>" + 'Relative Understaffing' + '</td>';
+				text += "<td class='value'"+(criticalInterval!==0?"style='color:#FF0000'":'')+">" + ' '+(Math.abs(relativeDifferenceInterval)*100).toFixed(1)+'% '+'</td>';
+				text += '</tr>';
+			}
 		}
 		return text + '</table>';
 	}
