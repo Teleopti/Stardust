@@ -4173,6 +4173,10 @@ Accounts</value>
     <value>Understaffing</value>
     <comment>Understaffing</comment>
   </data>
+  <data name="HasCriticalIntervals" xml:space="preserve">
+    <value>Has critical intervals</value>
+    <comment>Used in plans heatmap tooltip</comment>
+  </data>
   <data name="StaffingLevels" xml:space="preserve">
     <value>Staffing levels</value>
     <comment>Label for skill create</comment>

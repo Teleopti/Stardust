@@ -112,7 +112,15 @@
 										'heatmap-sunday': node.sunday
 										 }"
 									>
-										<div nz-tooltip nzTitle="{{node.tooltip}}"
+										<ng-template #titleTemplate>
+											<div>
+												<div>{{subnode.SkillName}} | {{amDateFormat.transform(node.Date, 'YYYY-MM-DD')}}</div>
+												<div *ngIf="node.ColorId !== 4">{{'RelativeDifference' | translate}} : {{node.RelativeDifferencePercent + '%'}}</div>
+												<div *ngIf="node.ColorId === 4">{{'Closed' | translate}}</div>
+												<div *ngIf="node.hasCritical">{{'HasCriticalIntervals' | translate}}</div>
+											</div>
+										</ng-template>
+										<div nz-tooltip [nzTitle]="titleTemplate"
 											class="heatmap-box"
 											[ngClass]="{ 'heatmap-closed': node.ColorId===4, 'selected':node.selected, 'critical': node.hasCritical}"
 											[style.background-color]="node.bgcolor" (click)="updateIntradayDetails(node, subnode.SkillName)"

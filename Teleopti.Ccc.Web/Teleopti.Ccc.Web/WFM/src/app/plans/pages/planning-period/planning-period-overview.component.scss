@@ -94,8 +94,8 @@
 }
 
 .heatmap-box.critical::after {
-	border-left-color: rgba(255, 0, 0, 1);
-	border-top-color: rgba(255, 0, 0, 1);
+	border-left-color: #ff0000;
+	border-top-color: #ff0000;
 }
 
 .heatmap-day{

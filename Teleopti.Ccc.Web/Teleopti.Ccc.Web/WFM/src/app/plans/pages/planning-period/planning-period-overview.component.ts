@@ -509,9 +509,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 								day.IntervalDetails.forEach(interval =>{
 									sum+=interval.f;
 								});
-								day.average = sum/day.IntervalDetails.length;
 								day.IntervalDetails.some(interval=>{
-									if(IntradayHelper.isCritical(interval, day.average, day.RelativeDifference)){
+									if(IntradayHelper.isCritical(interval, day.RelativeDifference)){
 										day.hasCritical = true;
 										return true;
 									}
@@ -528,7 +527,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 							}else {
 								day.DisplayedPercent = relativeDifferencePercent.toFixed(0);
 							}
-							day.tooltip = (day.ColorId === 4? this.translate.instant('Closed') : this.translate.instant('RelativeDifference') + ' ' + day.RelativeDifferencePercent + '%') + ' | ' + skill.SkillName + ' | ' + this.amDateFormat.transform(day.Date, 'L');
 						});
 					});
 
