@@ -199,20 +199,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(TimeZoneInfo timeZone, IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)
 		{
 			var pa = scheduleDay.PersonAssignment();
-			var hasPartTimeAbsence = !scheduleDay.IsFullDayAbsence() && (scheduleDay.PersonAbsenceCollection()?.Any() ?? false);
-			var hasPersonalActivities = pa?.PersonalActivities()?.Any() ?? false;
-			var hasPersonMeetings = scheduleDay.PersonMeetingCollection()?.Any() ?? false;
+			var absenceCollection = scheduleDay.PersonAbsenceCollection();
+			var personalActivities = pa?.PersonalActivities();
+			var personMeetings = scheduleDay.PersonMeetingCollection();
+
+			var hasPartTimeAbsence = !scheduleDay.IsFullDayAbsence() && (absenceCollection?.Any() ?? false);
+			var hasPersonalActivities = personalActivities?.Any() ?? false;
+			var hasPersonMeetings = personMeetings?.Any() ?? false;
 
 			var underlyingSummary = new UnderlyingScheduleSummary();
+			var previousDayPersonAssignment = previousScheduleDay?.PersonAssignment();
 
 			if (hasPartTimeAbsence)
 			{
-				var parttimeAbsences = scheduleDay.PersonAbsenceCollection()
+				var parttimeAbsences = absenceCollection
 					.Where(personAbsence =>
 					{
-						var intersectPeriodForYesterday = previousScheduleDay?.PersonAssignment()?.Period.Intersection(personAbsence.Period);
+						var intersectPeriodForYesterday = previousDayPersonAssignment?.Period.Intersection(personAbsence.Period);
 						var intersectPeriod = pa?.Period.Intersection(personAbsence.Period);
-						var isBelongsToYesterday = intersectPeriodForYesterday != null && scheduleDay.Period.Intersect(personAbsence.Period) && intersectPeriod == null;
+						var isBelongsToYesterday = intersectPeriodForYesterday != null
+													&& scheduleDay.Period.Intersect(personAbsence.Period)
+													&& intersectPeriod == null;
 						return !isBelongsToYesterday;
 					});
 				hasPartTimeAbsence = parttimeAbsences.Any();
@@ -229,7 +236,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					.ToArray() : null;
 			}
 
-			underlyingSummary.PersonalActivities = hasPersonalActivities ? pa.PersonalActivities()
+			underlyingSummary.PersonalActivities = hasPersonalActivities ? personalActivities
 				.Select(personalActivity => new Summary
 				{
 					Description = personalActivity.Payload.Description.Name,
@@ -240,7 +247,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				})
 				.ToArray() : null;
 
-			underlyingSummary.PersonMeetings = hasPersonMeetings ? scheduleDay.PersonMeetingCollection()
+			underlyingSummary.PersonMeetings = hasPersonMeetings ? personMeetings
 				.Select(personMeeting => new Summary
 				{
 					Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
