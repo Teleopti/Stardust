@@ -1,3 +1,4 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[mart].[v_fact_schedule_partday_absence_tabular]'))
 DROP VIEW [mart].[v_fact_schedule_partday_absence_tabular]
 GO
 
