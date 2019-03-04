@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			gridControlSchedules.EndUpdate();
 		}
 
-		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, SchedulingScreenState schedulingScreenState, INotifyComposerMeetingChanged composer)
+		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, SchedulingScreenState schedulingScreenState, INotifyComposerMeetingChanged composer, ITimeZoneGuard timeZoneGuard)
 			: this()
 		{
 			if (schedulingScreenState == null) throw new ArgumentNullException(nameof(schedulingScreenState));
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			var stateHolderLoader = new SchedulerStateLoader(schedulingScreenState, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())));
 			var meetingMover = new MeetingMover(this, meetingViewModel, schedulingScreenState.DefaultSegmentLength, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
-			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulingScreenState.SchedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider);
+			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulingScreenState.SchedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider, timeZoneGuard);
 
 			SetTexts();
 			setTimes();

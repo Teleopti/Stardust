@@ -2128,7 +2128,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 							_permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
 						bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission,
-							_container.Resolve<IToggleManager>());
+							_timeZoneGuard);
 					}
 				}
 			}
@@ -4574,14 +4574,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_temporarySelectedEntitiesFromTreeView, _scenario);
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission,
-				viewSchedulesPermission, _container.Resolve<IToggleManager>());
+				viewSchedulesPermission, _timeZoneGuard);
 		}
 
 		private void wpfShiftEditor1CreateMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
 		{
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission,
-				_container.Resolve<IToggleManager>());
+				_timeZoneGuard);
 		}
 
 		private void notesEditorNotesChanged(object sender, System.Windows.RoutedEventArgs e)
@@ -5313,7 +5313,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (e.Button != MouseButtons.Left) return;
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission,
-				_container.Resolve<IToggleManager>());
+				_timeZoneGuard);
 
 		}
 

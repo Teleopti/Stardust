@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -38,14 +37,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 		  public bool IsInitialized { get; private set; }
 		  private readonly IMeetingMover _meetingMover;
 		  private readonly IMeetingMousePositionDecider _meetingMousePositionDecider;
+		 private readonly ITimeZoneGuard _timeZoneGuard;
 
-		  public MeetingSchedulesPresenter(IMeetingSchedulesView view, 
+		 public MeetingSchedulesPresenter(IMeetingSchedulesView view, 
 				IMeetingViewModel meetingViewModel, 
 				ISchedulerStateHolder schedulerStateHolder, 
 				ISchedulerStateLoader schedulerStateLoader,
 				IMeetingSlotFinderService meetingSlotFinderService,
 				IMeetingMover meetingMover,
-				IMeetingMousePositionDecider meetingMousePositionDecider)
+				IMeetingMousePositionDecider meetingMousePositionDecider,
+				ITimeZoneGuard timeZoneGuard)
 		  {
 				_view = view;
 				_meetingViewModel = meetingViewModel;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 				_meetingSlotFinderService = meetingSlotFinderService;
 				_meetingMover = meetingMover;
 				_meetingMousePositionDecider = meetingMousePositionDecider;
+			  _timeZoneGuard = timeZoneGuard;
 		  }
 
 		  public void GridControlSchedulesMouseDown()
@@ -270,7 +272,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 					if(start != DateTime.MaxValue) return new DateTimePeriod(start,end);
 				}
 
-				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), _timeZoneGuard.CurrentTimeZone());
 		  }
 
 		  public static IPerson GetPerson(EntityContainer<IPerson> personViewModel)
