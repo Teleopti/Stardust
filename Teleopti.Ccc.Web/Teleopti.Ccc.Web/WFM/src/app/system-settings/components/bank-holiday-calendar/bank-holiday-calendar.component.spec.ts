@@ -286,9 +286,7 @@ describe('BankHolidayCalendarComponent', () => {
 
 		expect(component.isEdittingCalendar).toBe(true);
 
-		const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
-		const editElement = getDebugNode(parentElement.querySelector('.edit-bank-holiday-calendar')) as DebugElement;
-		const editComponent = editElement.componentInstance;
+		const editComponent = getEditBankHolidayCalendarComponent();
 
 		expect(editComponent.selectedDatesTimeList.length).toBe(4);
 		expect(editComponent.selectedDatesTimeList[0]).toBe(new Date('2013-01-09').getTime());
@@ -358,18 +356,13 @@ describe('BankHolidayCalendarComponent', () => {
 		);
 		expect(activePanel.length).toBe(1);
 
-		document
-			.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
-			.dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		backToBankHolidayList();
 
 		// click add button to add new bank holiday page
 		document.querySelector('.add-bank-holiday-calendar-icon').dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
-		const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
-		const editElement = getDebugNode(parentElement.querySelector('.edit-bank-holiday-calendar')) as DebugElement;
-		const editComponent = editElement.componentInstance;
+		const editComponent = getEditBankHolidayCalendarComponent();
 
 		expect(component.selectedCalendar).toBeFalsy();
 		expect(component.bankHolidayCalendarsList.length).toBe(1);
@@ -417,10 +410,8 @@ describe('BankHolidayCalendarComponent', () => {
 		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
 		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
-		list[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
-		fixture.detectChanges();
-		list[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		openCalendar(list);
+		activeYear(list);
 
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
@@ -430,11 +421,7 @@ describe('BankHolidayCalendarComponent', () => {
 
 			expect(component.isEdittingCalendar).toBe(true);
 
-			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
-			const editElement = getDebugNode(
-				parentElement.querySelector('.edit-bank-holiday-calendar')
-			) as DebugElement;
-			const editComponent = editElement.componentInstance;
+			const editComponent = getEditBankHolidayCalendarComponent();
 
 			expect(
 				moment(editComponent.selectedYearDate, editComponent.dateFormat).format(editComponent.yearFormat)
@@ -491,10 +478,8 @@ describe('BankHolidayCalendarComponent', () => {
 		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
 		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
-		list[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
-		fixture.detectChanges();
-		list[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		openCalendar(list);
+		activeYear(list);
 
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
@@ -574,25 +559,18 @@ describe('BankHolidayCalendarComponent', () => {
 		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		// 1. Open the calendar
-		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		openCalendar(calendarList);
 
 		// 2. Active the year 2014 in the calendar
-		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		activeYear(calendarList);
 
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
 
 			// 3. Go to edit page for this calendar
-			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
-			fixture.detectChanges();
+			clickEditButton(calendarList);
 
-			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
-			const editElement = getDebugNode(
-				parentElement.querySelector('.edit-bank-holiday-calendar')
-			) as DebugElement;
-			const editComponent = editElement.componentInstance;
+			const editComponent = getEditBankHolidayCalendarComponent();
 
 			expect(editComponent.newCalendar).toBeTruthy();
 			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
@@ -650,18 +628,14 @@ describe('BankHolidayCalendarComponent', () => {
 			fixture.detectChanges();
 
 			// 5. Go back to calendar list after the calendar is saved
-			document
-				.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
-				.dispatchEvent(new Event('click'));
-			fixture.detectChanges();
+			backToBankHolidayList();
 
 			const activeYears = document.querySelectorAll('.ant-collapse-content .ant-tabs-tab.ant-tabs-tab-active');
 			expect(activeYears.length).toBe(1);
 			expect(activeYears[0].innerHTML.indexOf('2013') > -1).toBeTruthy();
 
 			// 6. Go to edit page again
-			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
-			fixture.detectChanges();
+			clickEditButton(calendarList);
 
 			const activePanels = document.querySelectorAll(
 				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
@@ -846,25 +820,18 @@ describe('BankHolidayCalendarComponent', () => {
 		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		// 1. Open the calendar
-		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		openCalendar(calendarList);
 
 		// 2. Active the year 2014 in the calendar
-		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		activeYear(calendarList);
 
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
 
 			// 3. Go to edit page for this calendar
-			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
-			fixture.detectChanges();
+			clickEditButton(calendarList);
 
-			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
-			const editElement = getDebugNode(
-				parentElement.querySelector('.edit-bank-holiday-calendar')
-			) as DebugElement;
-			const editComponent = editElement.componentInstance;
+			const editComponent = getEditBankHolidayCalendarComponent();
 
 			expect(editComponent.newCalendar).toBeTruthy();
 			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
@@ -992,29 +959,22 @@ describe('BankHolidayCalendarComponent', () => {
 		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		// 1. Open the calendar
-		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		openCalendar(calendarList);
 
 		// 2. Active the year 2014 in the calendar
-		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
-		fixture.detectChanges();
+		activeYear(calendarList);
 
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
 
 			// 3. Go to edit page for this calendar
-			calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
-			fixture.detectChanges();
+			clickEditButton(calendarList);
 
-			const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
-			const editElement = getDebugNode(
-				parentElement.querySelector('.edit-bank-holiday-calendar')
-			) as DebugElement;
-			const editComponent = editElement.componentInstance;
+			const editComponent = getEditBankHolidayCalendarComponent();
 
 			expect(editComponent.newCalendar).toBeTruthy();
 			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
-			let activePanels = document.querySelectorAll(
+			const activePanels = document.querySelectorAll(
 				'.bank-holiday-calendar-date-content nz-collapse-panel[ng-reflect-nz-active=true]'
 			);
 			expect(activePanels.length).toBe(1);
@@ -1071,14 +1031,39 @@ describe('BankHolidayCalendarComponent', () => {
 			});
 			fixture.detectChanges();
 
-			document
-				.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
-				.dispatchEvent(new Event('click'));
-			fixture.detectChanges();
+			backToBankHolidayList();
 
 			const activeYears = document.querySelectorAll('.ant-collapse-content .ant-tabs-tab.ant-tabs-tab-active');
 			expect(activeYears.length).toBe(1);
 			expect(activeYears[0].innerHTML.indexOf('2015') > -1).toBeTruthy();
 		});
 	}));
+
+	function getEditBankHolidayCalendarComponent() {
+		const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
+		const editElement = getDebugNode(parentElement.querySelector('.edit-bank-holiday-calendar')) as DebugElement;
+		return editElement.componentInstance;
+	}
+
+	function clickEditButton(calendarList) {
+		calendarList[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+	}
+
+	function backToBankHolidayList() {
+		document
+			.querySelector('.edit-bank-holiday-calendar > .operation-buttons button')
+			.dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+	}
+
+	function openCalendar(calendarList) {
+		calendarList[0].querySelector('.ant-collapse-header').dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+	}
+
+	function activeYear(calendarList) {
+		calendarList[0].querySelectorAll('.ant-collapse-content .ant-tabs-tab')[1].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+	}
 });

@@ -201,9 +201,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
-		const dateRows = dateContent
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		const dateRows = getDateRows(dateContent);
 
 		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
 		expect(dateRows.length).toBe(2);
@@ -242,9 +240,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
-		let dateRows = dateContent
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		let dateRows = getDateRows(dateContent);
 
 		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
 		expect(dateRows.length).toBe(1);
@@ -274,9 +270,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
-		dateRows = dateContent
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		dateRows = getDateRows(dateContent);
 
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
 		expect(dateRows[0].innerHTML.indexOf('BankHoliday New Description') > -1).toBeTruthy();
@@ -334,9 +328,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
-		const dateRows = dateContent
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		const dateRows = getDateRows(dateContent);
 
 		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
 		expect(dateRows.length).toBe(2);
@@ -452,10 +444,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
-		const addNewBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		const dateRows = addNewBankHolidayCalendarPanel
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		const dateRows = getDateRows();
 
 		expect(dateRows.length).toBe(2);
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
@@ -525,10 +514,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
-		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
-		let dateRows = dateContent
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		let dateRows = getDateRows();
 
 		expect(dateRows.length).toBe(1);
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
@@ -571,9 +557,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
-		dateRows = dateContent
-			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
-			.getElementsByTagName('nz-list-item');
+		dateRows = getDateRows();
 
 		expect(dateRows.length).toBe(1);
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
@@ -1013,4 +997,12 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(activePanels.length).toBe(1);
 		expect(activePanels[0].querySelector('.ant-collapse-header').innerHTML.indexOf('2016')).toBeTruthy();
 	});
+
+	function getDateRows(optionalDateContent?) {
+		const dateContent =
+			optionalDateContent || document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
+		return dateContent
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+	}
 });
