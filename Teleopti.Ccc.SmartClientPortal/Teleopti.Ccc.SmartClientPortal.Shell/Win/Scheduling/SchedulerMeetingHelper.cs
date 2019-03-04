@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						MeetingComposerPresenter.CreateDefaultMeeting(
 							_repositoryFactory.CreatePersonRepository(unitOfWork).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId),
 							_schedulingScreenState.SchedulerStateHolder, meetingStartOrToday,
-							selectedActivePersons, new Now());
+							selectedActivePersons, new Now(), timeZoneGuard);
 				}
 			}
 			else

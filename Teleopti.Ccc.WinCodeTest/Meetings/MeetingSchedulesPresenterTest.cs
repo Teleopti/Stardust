@@ -15,12 +15,11 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
 {
-    public class MeetingSchedulesPresenterTest
+	public class MeetingSchedulesPresenterTest
     {
         private MockRepository _mocks;
         private IPerson _person;
@@ -57,8 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			    _schedulerStateHolder,
 			    _startDate,
 			    new List<IPerson>(),
-			    new ThisIsNow(_startDate.Date.AddHours(15))
-			    );
+			    new ThisIsNow(_startDate.Date.AddHours(15)), new FakeTimeZoneGuard());
             _model.StartTime = TimeSpan.FromHours(8);
             _model.EndTime = TimeSpan.FromHours(10);
 

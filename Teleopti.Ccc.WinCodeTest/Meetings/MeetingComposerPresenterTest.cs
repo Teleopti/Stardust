@@ -20,6 +20,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
@@ -519,7 +520,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                                   {
                                                                                                       _requiredPerson,
                                                                                                       _optionalPerson
-                                                                                                  }, _now);
+                                                                                                  }, _now, new FakeTimeZoneGuard());
             Assert.AreEqual(2, meetingViewModel.RequiredParticipants.Count);
             _mocks.VerifyAll();
         }

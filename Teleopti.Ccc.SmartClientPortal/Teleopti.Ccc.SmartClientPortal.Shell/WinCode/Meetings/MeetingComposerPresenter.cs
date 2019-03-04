@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             }
         }
 
-        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder, DateOnly startDate, IEnumerable<IPerson> participants, INow now)
+        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder, DateOnly startDate, IEnumerable<IPerson> participants, INow now, ITimeZoneGuard timeZoneGuard)
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
 										schedulerStateHolder.CommonStateHolder.Activities.NonDeleted().FirstOrDefault(), startDate, participants,
-                                        schedulerStateHolder.CommonNameDescription, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone(), now);
+                                        schedulerStateHolder.CommonNameDescription, timeZoneGuard.CurrentTimeZone(), now);
         }
 
         public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, TimeZoneInfo timeZoneInfo, INow now)
