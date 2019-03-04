@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
@@ -25,7 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
         {
             var created = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(created.Name, loaded.Name);
-            Assert.AreEqual(saved.BusinessUnit, _businessUnit.Id);
+            Assert.AreEqual(saved.BusinessUnit, BusinessUnit.Id);
             Assert.AreEqual(saved.BusinessUnit, CurrentBusinessUnit.CurrentId());
             Assert.AreEqual(saved.BusinessUnit, loaded.BusinessUnit);
             Assert.AreEqual(created.Available, loaded.Available);
@@ -34,9 +32,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			//Assert.AreEqual(org.StateCollection[0].BusinessUnit, loadedAggregateFromDatabase.StateCollection[0].BusinessUnit);
         }
 
-        protected override Repository<IRtaStateGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+        protected override Repository<IRtaStateGroup> ResolveRepository()
         {
-            return RtaStateGroupRepository.DONT_USE_CTOR(currentUnitOfWork);
+			return Container.Resolve<IRepository<IRtaStateGroup>>() as Repository<IRtaStateGroup> ;
         }
 
         [Test]
@@ -63,7 +61,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             var stateGroup = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
-            var result = RtaStateGroupRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
+            var result = (ResolveRepository() as RtaStateGroupRepository).LoadAllCompleteGraph();
             Assert.AreEqual(1,result.Count());
 			Session.Close();
 			Assert.DoesNotThrow(()=>
