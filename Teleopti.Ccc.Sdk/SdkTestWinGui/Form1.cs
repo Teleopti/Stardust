@@ -769,5 +769,72 @@ namespace SdkTestWinGui
 			toolStripStatusLabel1.Text = $@"Removed {result.AffectedItems.ToString()} person periods";
 			DrawPersonPeriods(treeView1.SelectedNode);
 		}
+
+		private void button7_Click(object sender, EventArgs e)
+		{
+			foreach (var agentDay in _schedules)
+			{
+				if (agentDay.MainShift?.PersonAssignmentDto?.PersonalShiftCollection == null) continue;
+				
+				var shifts = agentDay.MainShift.PersonAssignmentDto.PersonalShiftCollection.ToList();
+				foreach (var shiftDto in shifts)
+				{
+					foreach (var layer in shiftDto.LayerCollection)
+					{
+						if (layer.Activity.Description != "Meeting") continue;
+						
+						var period = layer.Period;
+						period.UtcStartTime = period.UtcStartTime.AddDays(-1);
+						period.UtcEndTime = period.UtcEndTime.AddDays(1);
+
+						var command = new CancelPersonalActivityCommandDto()
+						{
+							ActivityId = layer.Activity.Id,
+							PersonId = agentDay.Agent.Dto.Id,
+							Period = period,
+							Date = new DateOnlyDto { DateTime = monthCalendar1.SelectionRange.Start, DateTimeSpecified = true }
+						};
+
+						_service.InternalService.ExecuteCommand(command);
+
+						break;
+					}
+				}
+			}
+
+			loadSchedules(treeView1.SelectedNode);
+		}
+
+		private void button8_Click(object sender, EventArgs e)
+		{
+			foreach (var agentDay in _schedules)
+			{
+				if (agentDay.MainShift?.PersonAssignmentDto?.PersonalShiftCollection == null) continue;
+
+				var shifts = agentDay.MainShift.PersonAssignmentDto.PersonalShiftCollection.ToList();
+				foreach (var shiftDto in shifts)
+				{
+					foreach (var layer in shiftDto.LayerCollection)
+					{
+						var period = layer.Period;
+						period.UtcStartTime = period.UtcStartTime.AddDays(-1);
+						period.UtcEndTime = period.UtcEndTime.AddDays(1);
+
+						var command = new CancelPersonalActivityCommandDto()
+						{
+							PersonId = agentDay.Agent.Dto.Id,
+							Period = period,
+							Date = new DateOnlyDto { DateTime = monthCalendar1.SelectionRange.Start, DateTimeSpecified = true }
+						};
+
+						_service.InternalService.ExecuteCommand(command);
+
+						break;
+					}
+				}
+			}
+
+			loadSchedules(treeView1.SelectedNode);
+		}
 	}
 }

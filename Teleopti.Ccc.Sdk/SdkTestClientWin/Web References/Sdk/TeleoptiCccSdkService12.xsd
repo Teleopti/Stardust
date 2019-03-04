@@ -106,6 +106,7 @@
           <xs:element xmlns:q21="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q21:DateTimePeriodDto" />
           <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
           <xs:element minOccurs="0" name="ScenarioId" nillable="true" type="ser:guid" />
+          <xs:element minOccurs="0" name="ActivityId" nillable="true" type="ser:guid" />
           <xs:element minOccurs="0" name="ScheduleTagId" nillable="true" type="ser:guid" />
         </xs:sequence>
       </xs:extension>

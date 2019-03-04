@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -105,6 +106,49 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_target.Handle(_cancelPersonalActivityCommandDto);
 				scheduleDay.PersonAssignment().PersonalActivities().Should().Be.Empty();
+			}
+		}
+
+		[Test]
+		public void ShouldCancelMeetingPersonalActivitySuccessfully()
+		{
+			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
+			scheduleDay.PersonAssignment().AddPersonalActivity(_activity, _period);
+
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting");
+			meetingActivity.SetId(Guid.NewGuid());
+
+			scheduleDay.PersonAssignment().AddPersonalActivity(meetingActivity, _period);
+
+			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
+			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
+
+			using (_mock.Record())
+			{
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
+				Expect.Call(_personRepository.Load(_cancelPersonalActivityCommandDto.PersonId)).Return(_person);
+				Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
+				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelPersonalActivityCommandDto.Period)).Return(_period);
+				Expect.Call(_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
+					IgnoreArguments().Return(dictionary);
+				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
+				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
+				Expect.Call(() => _scheduleSaveHandler.ProcessSave(scheduleDay, rules, null));
+			}
+			using (_mock.Playback())
+			{
+				scheduleDay.PersonAssignment().PersonalActivities().Should().Have.Count.EqualTo(2);
+
+				_cancelPersonalActivityCommandDto.ActivityId = meetingActivity.Id;
+				
+				_target.Handle(_cancelPersonalActivityCommandDto);
+				var alala = scheduleDay.PersonAssignment().PersonalActivities().ToList();
+
+				scheduleDay.PersonAssignment().PersonalActivities().Should().Have.Count.EqualTo(1);
 			}
 		}
 
