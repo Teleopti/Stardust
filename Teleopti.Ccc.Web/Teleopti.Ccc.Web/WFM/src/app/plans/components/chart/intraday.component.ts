@@ -17,8 +17,9 @@ export class IntradayComponent implements OnChanges {
 	chartData;
 	@Input()
 	skill: string;
-
-	constructor(private translate: TranslateService) {}
+	
+	constructor(private translate: TranslateService) {
+	}
 
 	private intervalDetailsToC3Data(day): c3.Data {
 		const intervalDetails = day.IntervalDetails;
@@ -56,7 +57,7 @@ export class IntradayComponent implements OnChanges {
 					['StaffingScaffold'].concat(staffingScaffold),
 					['Overstaffing'].concat(overStaffing),
 					['Understaffing'].concat(underStaffing),
-					['CriticalInterval'].concat(criticalUnderStaffing)
+					['CriticalInterval'].concat(criticalUnderStaffing),
 				],
 				order: 'null',
 				type: 'bar',
@@ -68,14 +69,14 @@ export class IntradayComponent implements OnChanges {
 					StaffingScaffold: '#FFFFFF',
 					Overstaffing: '#0a84d6',
 					Understaffing: '#D32F2F',
-					CriticalInterval: '#FF0000'
+					CriticalInterval: '#FF0000',
 				},
 				names: {
 					Forecasted: this.translate.instant('ForecastedAgents'),
 					Scheduled: this.translate.instant('ScheduledAgents'),
 					Overstaffing: this.translate.instant('Overstaffing'),
 					Understaffing: this.translate.instant('Understaffing'),
-					CriticalInterval: this.translate.instant('CriticalInterval')
+					CriticalInterval: this.translate.instant('CriticalInterval'),
 				},
 				groups: [['StaffingScaffold', 'Overstaffing', 'Understaffing', 'CriticalInterval']]
 			};
@@ -117,6 +118,10 @@ export class IntradayComponent implements OnChanges {
 				}
 			}
 		}
+
+		const scheduled = data.filter(d => d.id === 'Scheduled')[0];
+		const forecasted = data.filter(d => d.id === 'Forecasted')[0];
+		const relativeDifferenceInterval =(scheduled.value-forecasted.value)/forecasted.value;
 		for (let d of data) {
 			if (
 				d.id === 'StaffingScaffold' ||
@@ -151,7 +156,13 @@ export class IntradayComponent implements OnChanges {
 
 			text += "<tr class='" + CLASS.tooltipName + '-' + d.id + "'>";
 			text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + '</td>';
-			text += "<td class='value'>" + value + '</td>';
+			if(d.id === 'Understaffing'){
+				text += "<td class='value'>" + value + ' ('+((-relativeDifferenceInterval)*100).toFixed(1)+'%) '+'</td>';
+			}else if(d.id === 'Overstaffing'){
+				text += "<td class='value'>" + value + ' ('+(relativeDifferenceInterval*100).toFixed(1)+'%) '+'</td>';
+			}else{
+				text += "<td class='value'>" + value + '</td>';
+			}
 			text += '</tr>';
 		}
 		return text + '</table>';
@@ -172,7 +183,7 @@ export class IntradayComponent implements OnChanges {
 					show: false
 				},
 				legend: {
-					hide: ['StaffingScaffold']
+					hide: ['StaffingScaffold', 'RelativeDifferenceInterval']
 				},
 				axis: {
 					x: {
