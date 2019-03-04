@@ -61,24 +61,12 @@ describe('BankHolidayCalendarEditComponent', () => {
 		registerLocaleData(en);
 	});
 
-	it('should create component', () => {
-		expect(component).toBeTruthy();
-	});
-
-	it('should render name input box', () => {
+	it('should create component', async(() => {
 		fixture.detectChanges();
-
-		const addBankHolidayCalendarHeader = document.getElementsByClassName('edit-bank-holiday-calendar-header')[0];
-
-		expect(addBankHolidayCalendarHeader).toBeTruthy();
-		expect(addBankHolidayCalendarHeader.getElementsByClassName('ant-input').length).toBe(1);
-		expect(addBankHolidayCalendarHeader.getElementsByClassName('ant-input')[0].getAttribute('placeholder')).toBe(
-			'NewCalendarName'
-		);
-		expect(
-			addBankHolidayCalendarHeader.getElementsByClassName('ant-input')[0].getAttribute('ng-reflect-model')
-		).toBe('BankHolidayCalendar' + moment().format(component.dateFormat));
-	});
+		fixture.whenStable().then(() => {
+			expect(component).toBeTruthy();
+		});
+	}));
 
 	it('should save calendar name after it is changed', () => {
 		component.newCalendar.Name = 'I am a new calendar';

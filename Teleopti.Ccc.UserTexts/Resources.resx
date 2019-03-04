@@ -14184,7 +14184,7 @@ Check your internet connection or contact your administrator.</value>
   <data name="CriticalInterval" xml:space="preserve">
     <value>Critical interval</value>
 	<comment>Used in the plans' interday graph legends</comment>
-  </data>
+  </data>	
   <data name="InvalidInput" xml:space="preserve">
     <value>Invalid input</value>
     <comment>Input is not valid</comment>
@@ -18259,11 +18259,11 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   </data>
   <data name="Out" xml:space="preserve">
     <value>Out</value>
-		<comment>Adherence type</comment>
+    <comment>Adherence type</comment>
   </data>
   <data name="Neutral" xml:space="preserve">
     <value>Neutral</value>
-		<comment>Adherence type</comment>
+    <comment>Adherence type</comment>
   </data>
   <data name="MostUnderstaffedDay" xml:space="preserve">
     <value>Most understaffed day</value>
@@ -18288,5 +18288,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="SelectWeek" xml:space="preserve">
     <value>Select week</value>
     <comment>Select week</comment>
+  </data>
+  <data name="PleaseInputCalendarNameFirst" xml:space="preserve">
+    <value>Please input calendar name first</value>
+    <comment>this is for calendar name hint when user adds a new bank holiday calendar</comment>
   </data>
 </root>

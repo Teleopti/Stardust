@@ -55,7 +55,6 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 	) {}
 
 	ngOnInit(): void {
-		this.newCalendar.Name = this.translate.instant('BankHolidayCalendar') + moment().format(this.dateFormat);
 
 		if (this.edittingCalendar) {
 			this.newCalendar = this.edittingCalendar;
@@ -90,7 +89,7 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 
 	ngAfterViewInit(): void {
 		setTimeout(() => {
-			this.calendarNameInputElment.nativeElement.select();
+			this.calendarNameInputElment.nativeElement.focus();
 		}, 0);
 	}
 
