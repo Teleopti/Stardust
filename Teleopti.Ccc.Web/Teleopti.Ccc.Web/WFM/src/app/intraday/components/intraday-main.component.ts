@@ -84,7 +84,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 			// Warn if the browser doesn't support addEventListener or the Page Visibility API
 			if (typeof document.addEventListener === 'undefined' || hidden === undefined) {
-				console.log(
+				console.warn(
 					'This requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API.'
 				);
 			} else {
@@ -527,7 +527,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				? [
 						{
 							Heading: this.translate.instant('Average'),
-							ServiceLevel: input.ServiceLevel <= 1 ? input.ServiceLevel * 100 : input.ServiceLevel,
+							ServiceLevel: input.ServiceLevel,
 							EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
 						}
@@ -535,7 +535,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				: [
 						{
 							Heading: this.translate.instant('Average'),
-							ServiceLevel: input.ServiceLevel <= 1 ? input.ServiceLevel * 100 : input.ServiceLevel,
+							ServiceLevel: input.ServiceLevel,
 							EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer,
 							AbandonRate: input.AbandonRate * 100
