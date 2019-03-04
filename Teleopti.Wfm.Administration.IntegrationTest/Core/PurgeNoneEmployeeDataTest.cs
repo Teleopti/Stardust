@@ -96,7 +96,79 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			}
 		}
 
-				private IList<string> loadPersonFromTenant(ISession currentTenantSession)
+		[Test]
+		public void ShouldPurgeWithIncorrectSetting()
+		{
+			Now.Is(new DateTime(2018, 04, 1));
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
+			var builder = TestPollutionCleaner.TestTenantConnection();
+			builder.IntegratedSecurity = false;
+			builder.UserID = "dbcreatorperson";
+			builder.Password = "passwordPassword7";
+
+			var sqlVersion = new SqlVersion(12);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "passwordPassword7");
+			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "passwordPassword7", sqlVersion,
+				"NewFineTenant", 1);
+
+			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
+			builderAnal.IntegratedSecurity = false;
+			builderAnal.UserID = "dbcreatorperson";
+			builderAnal.Password = "passwordPassword7";
+
+			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "appuser", "passwordPassword7", sqlVersion, "NewFineTenant", 1);
+
+			var tempModel = new CreateTenantModelForTest();
+			var connStringBuilder =
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
+
+			var importModel = new ImportDatabaseModel
+			{
+				Server = connStringBuilder.DataSource,
+				AdminUser = tempModel.CreateDbUser,
+				AdminPassword = tempModel.CreateDbPassword,
+				UserName = "appuser",
+				Password = "passwordPassword7",
+				AppDatabase = TestPollutionCleaner.TestTenantConnection().InitialCatalog,
+				AnalyticsDatabase = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog,
+				Tenant = "NewFineTenant"
+			};
+
+			ImportController.ImportExisting(importModel);
+
+			var uow = TenantUnitOfWork as TenantUnitOfWorkManager;
+			using (uow.EnsureUnitOfWorkIsStarted())
+			{
+				var allTenants = LoadAllTenants.Tenants();
+				allTenants.ForEach(createPersons);
+
+				//no settings
+				using (var connection = new SqlConnection(allTenants.First().DataSourceConfiguration.ApplicationConnectionString))
+				{
+					connection.Open();
+					using (var updateCommand = new SqlCommand(
+						@"delete from PurgeSetting where [key] = 'MonthsToKeepPersonalData'", connection))
+					{
+						updateCommand.ExecuteNonQuery();
+					}
+				}
+
+				updateSetting(allTenants.Last().DataSourceConfiguration.ApplicationConnectionString, 2);
+			}
+
+			Target.Purge();
+
+			using (uow.EnsureUnitOfWorkIsStarted())
+			{
+				var personInfos = loadPersonFromTenant(uow.CurrentSession());
+				personInfos.Count.Should().Be.EqualTo(11);
+			}
+
+
+		}
+
+
+		private IList<string> loadPersonFromTenant(ISession currentTenantSession)
 		{
 			return currentTenantSession.CreateSQLQuery(
 					"select ApplicationLogonName from [Tenant].[PersonInfo]")

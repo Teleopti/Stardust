@@ -51,6 +51,12 @@ namespace Teleopti.Wfm.Administration.Core
 			using (var connection = new SqlConnection(applicationConnectionString))
 			{
 				connection.Open();
+				int monthToKeepSetting;
+				using (var selectCommand = new SqlCommand(
+					@"select [value] from PurgeSetting where [key] = 'MonthsToKeepPersonalData'", connection))
+				{
+					monthToKeepSetting =(int)( selectCommand.ExecuteScalar( ) ?? 3);
+				}
 				
 				using (var selectCommand = new SqlCommand(
 					@"select Id from Person with (NOLOCK) where TerminalDate < @date and isdeleted = 0 ", connection))
