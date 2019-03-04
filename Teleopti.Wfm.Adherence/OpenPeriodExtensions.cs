@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence
 {
@@ -36,6 +37,12 @@ namespace Teleopti.Wfm.Adherence
 				});
 			return result;
 		}
+		
+		public static IEnumerable<AdherencePeriod> ToAdherencePeriods(this IEnumerable<OpenPeriod> periods) =>
+			periods
+				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
+				.ToArray();
+
 
 		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
 		{
@@ -83,6 +90,6 @@ namespace Teleopti.Wfm.Adherence
 			if (instance.EndTime == null && period.EndTime != null)
 				return true;
 			return instance.EndTime > period.EndTime;
-		}
+		}		
 	}
 }
