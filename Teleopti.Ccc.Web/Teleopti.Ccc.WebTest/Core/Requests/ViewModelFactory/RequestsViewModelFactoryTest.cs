@@ -45,8 +45,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public FakePermissionProvider FakePermissionProvider;
 		public FakePersonRequestRepository FakePersonRequestRepository;
 		public ICurrentDataSource CurrentDataSource;
+		private IAbsence _absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
 
-		public void Isolate(IIsolate isolate)
+	public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
 			isolate.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
@@ -72,14 +73,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			setUpWorkFlowControlSet();
 
-			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
-			FakeAbsenceRepository.Add(absence);
-
 			var result = RequestsViewModelFactory.CreatePageViewModel();
 
 			var absenceType = result.AbsenceTypes.FirstOrDefault();
-			absenceType.Name.Should().Be.EqualTo(absence.Description.Name);
-			absenceType.Id.Should().Be.EqualTo(absence.Id);
+			absenceType.Name.Should().Be.EqualTo(_absence.Description.Name);
+			absenceType.Id.Should().Be.EqualTo(_absence.Id);
 			result.Should().Not.Be.Null();
 		}
 
@@ -345,6 +343,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		private void setUpWorkFlowControlSet()
 		{
 			var workflowControlSet = new WorkflowControlSet { AnonymousTrading = true, ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 3) };
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = _absence,
+				OpenForRequestsPeriod = new DateOnlyPeriod(2014, 2, 1, 2099, 2, 28),
+				Period = new DateOnlyPeriod(2014, 2, 1, 2099, 2, 28),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
 			currentUser().WorkflowControlSet = workflowControlSet;
 			currentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 		}
