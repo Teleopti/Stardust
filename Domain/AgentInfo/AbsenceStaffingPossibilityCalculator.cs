@@ -122,17 +122,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			if (isPersonAssignmentNullOrEmpty(personAssignment))
 				return false;
+			var visualLayers = personAssignment.ProjectionService().CreateProjection().FilterLayers(period).ToList();
+			if (visualLayers.Any() && visualLayers[0].Payload.Id == skill.Activity.Id)
+				return true;
 
-			var mainActivities = personAssignment.MainActivities();
-			var overtimeActivities = personAssignment.OvertimeActivities();
-
-			var isSkillScheduled =
-				mainActivities
-					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period))
-				|| overtimeActivities
-					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period));
-
-			return isSkillScheduled;
+			return false;
 		}
 
 		private static IPersonAssignment getPersonAssignment(IScheduleDictionary scheduleDictionary, DateOnly date)
