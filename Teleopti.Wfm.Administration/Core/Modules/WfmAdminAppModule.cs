@@ -4,6 +4,7 @@ using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -88,9 +89,11 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();
 			builder.RegisterType<PurgeOldSignInAttempts>().As<IPurgeOldSignInAttempts>().SingleInstance();
 			builder.RegisterType<WfmInstallationEnvironment>().As<IInstallationEnvironment>();
-
-			builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
-
+			if(_configuration.IsToggleEnabled(Toggles.WFM_PurgeUsersWithinDays_77460))
+				builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
+			else
+				builder.RegisterType<PurgeNoneEmployeeDataOld>().As<IPurgeNoneEmployeeData>().SingleInstance();
+			
 			builder.RegisterType<RestorePersonInfoOnDetach>().SingleInstance();
 
 			builder.RegisterType<SkillForecastJobStartTimeRepository>().As<ISkillForecastJobStartTimeRepository>().SingleInstance();

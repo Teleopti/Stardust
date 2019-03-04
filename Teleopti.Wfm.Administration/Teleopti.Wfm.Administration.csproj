@@ -420,6 +420,7 @@
     <Compile Include="Core\InitializeApplicationInsight.cs" />
     <Compile Include="Core\LicenseDataFactoryWrapper.cs" />
     <Compile Include="Core\PurgeNoneEmployeeData.cs" />
+    <Compile Include="Core\PurgeNoneEmployeeDataOld.cs" />
     <Compile Include="Core\PurgeOldSignInAttempts.cs" />
     <Compile Include="Core\RecurrentEventTimer.cs" />
     <Compile Include="Core\PreloadAdminPage.cs" />

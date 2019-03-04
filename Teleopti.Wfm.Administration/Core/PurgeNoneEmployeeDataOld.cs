@@ -8,13 +8,13 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class PurgeNoneEmployeeData : IPurgeNoneEmployeeData
+	public class PurgeNoneEmployeeDataOld : IPurgeNoneEmployeeData
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly INow _now;
 		private readonly ILoadAllTenants loadAllTenants;
 
-		public PurgeNoneEmployeeData(ICurrentTenantSession currentTenantSession, INow now, ILoadAllTenants loadAllTenants)
+		public PurgeNoneEmployeeDataOld(ICurrentTenantSession currentTenantSession, INow now, ILoadAllTenants loadAllTenants)
 		{
 			_currentTenantSession = currentTenantSession;
 			_now = now;
@@ -51,17 +51,17 @@ namespace Teleopti.Wfm.Administration.Core
 			using (var connection = new SqlConnection(applicationConnectionString))
 			{
 				connection.Open();
-				int daysToKeepLogins;
+				int monthToKeepSetting;
 				using (var selectCommand = new SqlCommand(
-					@"select [value] from PurgeSetting where [key] = 'DaysToKeepLoginsAfterTerminalDate'", connection))
+					@"select [value] from PurgeSetting where [key] = 'MonthsToKeepPersonalData'", connection))
 				{
-					daysToKeepLogins =(int)( selectCommand.ExecuteScalar( ) ?? 7);
+					monthToKeepSetting =(int)( selectCommand.ExecuteScalar( ) ?? 3);
 				}
 				
 				using (var selectCommand = new SqlCommand(
 					@"select Id from Person with (NOLOCK) where TerminalDate < @date and isdeleted = 0 ", connection))
 				{
-					selectCommand.Parameters.AddWithValue("date", _now.UtcDateTime().AddDays(-daysToKeepLogins));
+					selectCommand.Parameters.AddWithValue("date", _now.UtcDateTime().AddMonths(-monthToKeepSetting));
 
 					using (var reader = selectCommand.ExecuteReader())
 					{
@@ -76,10 +76,5 @@ namespace Teleopti.Wfm.Administration.Core
 
 			return personIds;
 		}
-	}
-
-	public interface IPurgeNoneEmployeeData
-	{
-		void Purge();
 	}
 }
