@@ -528,10 +528,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 						{
 							Heading: this.translate.instant('Average'),
 							ServiceLevel: input.ServiceLevel <= 1 ? input.ServiceLevel * 100 : input.ServiceLevel,
-							EstimatedServiceLevel:
-								input.EstimatedServiceLevel <= 1
-									? input.EstimatedServiceLevel * 100
-									: input.EstimatedServiceLevel,
+							EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
 						}
 				  ]
@@ -539,12 +536,9 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 						{
 							Heading: this.translate.instant('Average'),
 							ServiceLevel: input.ServiceLevel <= 1 ? input.ServiceLevel * 100 : input.ServiceLevel,
-							EstimatedServiceLevel:
-								input.EstimatedServiceLevel <= 1
-									? input.EstimatedServiceLevel * 100
-									: input.EstimatedServiceLevel,
+							EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer,
-							AbandonRate: input.AbandonRate
+							AbandonRate: input.AbandonRate * 100
 						}
 				  ];
 		} else {
