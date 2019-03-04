@@ -109,14 +109,6 @@
 
 	self.showCartPanel = ko.observable(self.isiPad || self.isDesktop);
 
-	self.showCart = function() {
-		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
-	};
-
-	self.showCartToggle = function() {
-		return self.isMobile && self.showCart();
-	};
-
 	self.resetStatus = function() {
 		self.listCartToggle(true);
 		self.selectedSchedulePairs([]);

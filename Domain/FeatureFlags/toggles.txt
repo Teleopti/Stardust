@@ -125,7 +125,6 @@ WFM_AnalyticsForecastUpdater_80798 = true
 # Dragonfly #
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = true
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = true #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
-MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = true #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = true
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 WFM_Request_View_Permissions_77731 = true
