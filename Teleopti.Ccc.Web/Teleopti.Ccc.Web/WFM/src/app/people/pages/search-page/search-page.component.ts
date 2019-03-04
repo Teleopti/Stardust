@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { TogglesService } from '../../../core/services';
 import { Person, Role } from '../../../shared/types';
 import {
 	COLUMNS,
@@ -13,7 +14,6 @@ import {
 	WorkspaceService
 } from '../../shared';
 import { SearchPageService } from './search-page.service';
-import { TogglesService } from '../../../core/services';
 
 @Component({
 	selector: 'people-search-page',
@@ -56,7 +56,7 @@ export class SearchPageComponent implements OnInit {
 				this.peopleDataSet = people;
 			}
 		});
-		console.log(this.improvedSearchActive);
+
 		if (this.improvedSearchActive === false) {
 			this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe({ next: () => this.onSearch() });
 		}
