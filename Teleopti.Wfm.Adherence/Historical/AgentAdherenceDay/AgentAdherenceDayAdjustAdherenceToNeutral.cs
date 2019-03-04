@@ -80,6 +80,19 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_collectedAdjustedToNeutralPeriods.Add(new OpenPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
 
+		public void ApplyDone()
+		{
+			var shift = determineShift(_collectedShift, _shiftFromSchedule);
+			_displayPeriod = determineDisplayPeriod(_fullDay, shift);
+			_changesWithinDisplayPeriod = changesWithinDisplayPeriod(_collectedChanges, _displayPeriod.Value);
+
+			var (recordedOutOfAdherences, recordedNeutralAdherences) = recordedAdherences();
+			var (projectedOutOfAdherences, projectedNeutralAdherences) = projectedAdherences(recordedOutOfAdherences, recordedNeutralAdherences);
+
+			buildOutputPeriods(recordedOutOfAdherences, recordedNeutralAdherences, projectedOutOfAdherences, projectedNeutralAdherences);
+			calculateAdherence(shift, recordedOutOfAdherences, recordedNeutralAdherences);
+		}
+
 		private void applyShift(dynamic @event) =>
 			_collectedShift = new DateTimePeriod(@event.ShiftStartTime, @event.ShiftEndTime);
 
@@ -126,19 +139,6 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			model.Adherence == convertAdherence(@event.Adherence);
 
 
-		public void ApplyDone()
-		{
-			var shift = determineShift(_collectedShift, _shiftFromSchedule);
-			_displayPeriod = determineDisplayPeriod(_fullDay, shift);
-			_changesWithinDisplayPeriod = changesWithinDisplayPeriod(_collectedChanges, _displayPeriod.Value);
-
-			var (recordedOutOfAdherences, recordedNeutralAdherences) = recordedAdherences();
-			var (projectedOutOfAdherences, projectedNeutralAdherences) = projectedAdherences(recordedOutOfAdherences, recordedNeutralAdherences);
-
-			buildOutputPeriods(recordedOutOfAdherences, recordedNeutralAdherences, projectedOutOfAdherences, projectedNeutralAdherences);
-			calculateAdherence(shift, recordedOutOfAdherences, recordedNeutralAdherences);
-		}
-
 		private void buildOutputPeriods(
 			IEnumerable<OpenPeriod> recordedOutOfAdherences,
 			IEnumerable<OpenPeriod> recordedNeutralAdherences,
@@ -164,6 +164,13 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_adherencePercentage = AdherencePercentageCalculation.Calculate(_secondsInAdherence, _secondsOutOfAdherence);
 		}
 
+		private (IEnumerable<OpenPeriod>, IEnumerable<OpenPeriod>) recordedAdherences()
+		{
+			var recordedOutOfAdherences = buildAdherences(_displayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Out).ToArray();
+			var recordedNeutralAdherences = buildAdherences(_displayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral).ToArray();
+			return (recordedOutOfAdherences, recordedNeutralAdherences);
+		}
+
 		private (IEnumerable<OpenPeriod>, IEnumerable<OpenPeriod>) projectedAdherences(
 			IEnumerable<OpenPeriod> recordedOutOfAdherences,
 			IEnumerable<OpenPeriod> recordedNeutralAdherences
@@ -181,13 +188,6 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return (projectedOutOfAdherences, projectedNeutralAdherences);
 		}
 
-		private (IEnumerable<OpenPeriod>, IEnumerable<OpenPeriod>) recordedAdherences()
-		{
-			var recordedOutOfAdherences = calculateAdherences(_displayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Out).ToArray();
-			var recordedNeutralAdherences = calculateAdherences(_displayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral).ToArray();
-			return (recordedOutOfAdherences, recordedNeutralAdherences);
-		}
-
 		private static DateTimePeriod? determineShift(DateTimePeriod? shift, Func<DateTimePeriod?> shiftFromSchedule) =>
 			shift ?? shiftFromSchedule.Invoke();
 
@@ -199,7 +199,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				.Where(x => x.Timestamp >= displayPeriod.StartDateTime && x.Timestamp <= displayPeriod.EndDateTime)
 				.ToArray();
 
-		private static IEnumerable<OpenPeriod> calculateAdherences(DateTimePeriod displayPeriod, DateTime now, IEnumerable<HistoricalChangeModel> changes, HistoricalChangeAdherence adherence)
+		private static IEnumerable<OpenPeriod> buildAdherences(DateTimePeriod displayPeriod, DateTime now, IEnumerable<HistoricalChangeModel> changes, HistoricalChangeAdherence adherence)
 		{
 			var adherences = buildPeriods(adherence, changes, displayPeriod);
 			closeOpenPeriod(displayPeriod, now, adherences);
