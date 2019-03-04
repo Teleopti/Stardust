@@ -1723,7 +1723,7 @@
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.html" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.spec.js" />
-    <Content Include="WFM\app\rta\rta\adjust-adherence\timepicker.template.html" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\aa.timepicker.template.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.ReviewHistoricalAdherence_74770.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
