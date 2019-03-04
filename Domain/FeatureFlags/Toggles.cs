@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
-		MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409,
 		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
 		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,

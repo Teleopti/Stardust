@@ -1915,9 +1915,6 @@
 
 		$('body').append('<div id="Requests-body-inner"></div>');
 		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
-		Teleopti.MyTimeWeb.Common.FakeToggles({
-			MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409: false
-		});
 
 		Teleopti.MyTimeWeb.Request.RequestPartialInit(function() {}, function() {}, ajax);
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
@@ -2014,9 +2011,6 @@
 
 		$('body').append('<div id="Requests-body-inner"></div>');
 		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
-		Teleopti.MyTimeWeb.Common.FakeToggles({
-			MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409: true
-		});
 
 		Teleopti.MyTimeWeb.Request.RequestPartialInit(function() {}, function() {}, ajax);
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
@@ -2117,9 +2111,6 @@
 
 		$('body').append('<div id="Requests-body-inner"></div>');
 		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
-		Teleopti.MyTimeWeb.Common.FakeToggles({
-			MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409: true
-		});
 
 		Teleopti.MyTimeWeb.Request.RequestPartialInit(function() {}, function() {}, ajax);
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
