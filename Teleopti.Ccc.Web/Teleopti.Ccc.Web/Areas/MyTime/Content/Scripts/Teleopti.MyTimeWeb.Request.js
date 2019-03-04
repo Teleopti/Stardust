@@ -8,9 +8,7 @@ Teleopti.MyTimeWeb.Request = (function($) {
 		var self = this;
 
 		self.showFabButton =
-			Teleopti.MyTimeWeb.Common.IsHostAMobile() ||
-			(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409') &&
-				Teleopti.MyTimeWeb.Common.IsHostAMobile());
+			Teleopti.MyTimeWeb.Common.IsHostAMobile();
 
 		self.showRequestListButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
 			'MyTimeWeb_Request_CleanUpRequestHisotry_77776'

@@ -242,7 +242,7 @@
 </div>
 
 <div class="shift-trade-request-container" data-bind="visible: isDetailVisible, css: {'shift-trade-request-container-mobile': isMobile || isiPad}">
-	<div class="navbar teleopti-toolbar subnavbar" data-bind="visible: isMobile && showToolbar() && isReadyLoaded() && isDetailVisible()">
+	<div class="navbar teleopti-toolbar subnavbar" data-bind="visible: isMobile && isReadyLoaded() && isDetailVisible()">
 		<div class="container multi-shift-trade-toolbar-icon">
 			<a class="pull-left" data-bind="click: previousPage">
 				<i class="glyphicon glyphicon-chevron-left"></i>
@@ -567,13 +567,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- /ko -->
-
-		<!--ko if: isMobile && !showToolbar()-->
-		<button data-bind="click: cartMenuClick" class="cart-menu">
-			<span data-bind="text:selectedCount, visible: !showCartPanel()"></span>
-			<i data-bind="visible: showCartPanel" class="glyphicon glyphicon-arrow-left"></i>
-		</button>
 		<!-- /ko -->
 	</div>
 </div>

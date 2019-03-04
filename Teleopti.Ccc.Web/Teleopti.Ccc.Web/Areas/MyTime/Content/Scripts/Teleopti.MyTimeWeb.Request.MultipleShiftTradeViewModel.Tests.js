@@ -1166,7 +1166,6 @@
 	});
 
 	test('should show period when validate period tolerance', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1234,8 +1233,6 @@
 	});
 
 	test('should reset showCartPanel after send request', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		var ajax = {
 			Ajax: function(options) {
 				if (options.url === 'Requests/ShiftTradeRequest') {
@@ -1261,8 +1258,6 @@
 	});
 
 	test('should show correct tolerance exceed', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1330,8 +1325,6 @@
 	});
 
 	test('should calculate tolerance when real gap have exceed tolerance', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1399,8 +1392,6 @@
 	});
 
 	test('should calculate tolerance for both side at one time', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1468,8 +1459,6 @@
 	});
 
 	test("should not calculate tolerance when there is not diff between two agent' contract time", function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1536,8 +1525,6 @@
 	});
 
 	test('should not show tolerance error when there is no gap between schedules', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1604,8 +1591,6 @@
 	});
 
 	test('should not show error message when there is no schedules', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		var agentId = '123';
 		var toleranceInfo = {
 			IsNeedToCheck: true,
@@ -1673,8 +1658,6 @@
 	});
 
 	test('should enable send button when not break tolerance', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		var agentId = '123';
 		var toleranceInfo = {
 			IsNeedToCheck: true,
@@ -1742,8 +1725,6 @@
 	});
 
 	test('should not enable send button when has tolerance error message', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1912,10 +1893,7 @@
 		var ajax = {
 			Ajax: function(options) {
 				if (
-					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776' ||
-					options.url ===
-						'../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408' ||
-					options.url == '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
+					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
 				) {
 					options.success({ IsEnabled: true });
 				}
@@ -2014,10 +1992,7 @@
 		var ajax = {
 			Ajax: function(options) {
 				if (
-					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776' ||
-					options.url ===
-						'../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408' ||
-					options.url == '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
+					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
 				) {
 					options.success({ IsEnabled: true });
 				}
@@ -2120,10 +2095,7 @@
 		var ajax = {
 			Ajax: function(options) {
 				if (
-					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776' ||
-					options.url ===
-						'../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408' ||
-					options.url == '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
+					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
 				) {
 					options.success({ IsEnabled: true });
 				}
