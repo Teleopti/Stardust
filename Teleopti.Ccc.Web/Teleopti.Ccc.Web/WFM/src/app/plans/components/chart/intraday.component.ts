@@ -183,7 +183,7 @@ export class IntradayComponent implements OnChanges {
 					show: false
 				},
 				legend: {
-					hide: ['StaffingScaffold', 'RelativeDifferenceInterval']
+					hide: ['StaffingScaffold']
 				},
 				axis: {
 					x: {

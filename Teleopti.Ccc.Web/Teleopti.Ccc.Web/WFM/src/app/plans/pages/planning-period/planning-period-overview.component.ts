@@ -95,7 +95,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private navService: NavigationService,
 		private fb: FormBuilder,
 		private heatMapColorHelper:HeatMapColorHelper,
-		private amDateFormat: DateFormatPipe,
+		public amDateFormat: DateFormatPipe,
 		private togglesService: TogglesService
 	) {
 		this.ppId = $state.params.ppId.trim();
@@ -305,7 +305,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;	
 	}
 	
-	public updateIntradayDetails(selectedDay, skillName){
+	public updateIntradayChart(selectedDay, skillName, chartElement: HTMLElement){
 		if(this.selectedDay) {
 			this.selectedDay.selected = false;
 		}
@@ -317,6 +317,10 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			this.selectedDay.selected = true;
 			this.selectedSkill = skillName;
 		}
+		setTimeout(()=>{
+			chartElement.scrollIntoView();
+		} , 1);
+		
 	}
 
 	private checkProgress = () => {
