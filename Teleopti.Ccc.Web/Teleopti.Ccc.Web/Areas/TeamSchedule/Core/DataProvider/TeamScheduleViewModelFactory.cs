@@ -1,6 +1,4 @@
-﻿using DotNetOpenAuth.Messaging;
-using Microsoft.ReportingServices.RdlExpressions.ExpressionHostObjectModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
