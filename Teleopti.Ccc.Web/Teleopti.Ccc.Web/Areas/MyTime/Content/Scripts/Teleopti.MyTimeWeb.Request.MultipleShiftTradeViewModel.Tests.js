@@ -1892,12 +1892,6 @@
 
 		var ajax = {
 			Ajax: function(options) {
-				if (
-					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
-				) {
-					options.success({ IsEnabled: true });
-				}
-
 				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}
@@ -1988,12 +1982,6 @@
 
 		var ajax = {
 			Ajax: function(options) {
-				if (
-					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
-				) {
-					options.success({ IsEnabled: true });
-				}
-
 				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}
@@ -2088,12 +2076,6 @@
 
 		var ajax = {
 			Ajax: function(options) {
-				if (
-					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
-				) {
-					options.success({ IsEnabled: true });
-				}
-
 				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}

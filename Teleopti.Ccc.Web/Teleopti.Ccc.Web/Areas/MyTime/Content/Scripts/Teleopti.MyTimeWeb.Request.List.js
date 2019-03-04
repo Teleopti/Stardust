@@ -506,11 +506,7 @@
 			_unbind();
 		},
 		HideRequests: function(show) {
-			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')) {
-				if (pageViewModel != null) pageViewModel.hideRequestsOnPhone(show);
-			} else if (pageViewModel != null && Teleopti.MyTimeWeb.Common.IsHostAMobile()) {
-				pageViewModel.hideRequestsOnPhone(show);
-			}
+			if (pageViewModel != null) pageViewModel.hideRequestsOnPhone(show);
 		}
 	};
 })(jQuery);

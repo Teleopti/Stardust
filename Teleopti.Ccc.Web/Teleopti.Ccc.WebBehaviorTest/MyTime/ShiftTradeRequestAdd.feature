@@ -566,7 +566,6 @@ Scenario: Show possible shift trades with name filter
 	Then I should see a possible schedule trade with 'OtherAgent2'
 	And I should not see a possible schedule trade with 'OtherAgent1' 
 
-@OnlyRunIfEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')
 @NotKeyExample
 Scenario: Should not see request list in shift trade view
 	Given I have the role 'Full access to mytime'

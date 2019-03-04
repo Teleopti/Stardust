@@ -10,10 +10,6 @@ Teleopti.MyTimeWeb.Request = (function($) {
 		self.showFabButton =
 			Teleopti.MyTimeWeb.Common.IsHostAMobile();
 
-		self.showRequestListButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
-			'MyTimeWeb_Request_CleanUpRequestHisotry_77776'
-		);
-
 		self.hideFab = ko.observable(false);
 
 		self.requestListActive = ko.observable(true);

@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Setting_BankHolidayCalendar_Create_79297,
 		WFM_Setting_AssignBankHolidayCalendarsToSites_79899,
 		
-		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
 		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,
 		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,

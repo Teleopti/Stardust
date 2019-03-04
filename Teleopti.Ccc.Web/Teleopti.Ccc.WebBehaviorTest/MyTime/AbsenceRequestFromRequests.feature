@@ -28,7 +28,6 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '22 Days'
 And I should see the used days is '3 Days'
 
-@OnlyRunIfEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')
 @suppressHangfireQueue
 Scenario: Should show request list when cancel add absence request
 	Given I am an agent
