@@ -1231,16 +1231,29 @@ select.time-input {
 .tooltip {
 	margin: 0;
 	width: 140px;
+	min-width: 140px;
+	max-width: 140px;
 }
 .tooltip.left,
 .tooltip.right {
+	margin: 0;
 	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
 }
-
+.tooltip.top {
+	margin: 0;
+	padding: 0;
+}
+.tooltip.top .tooltip-arrow {
+	bottom: -5px;
+}
 .tooltip-inner {
 	white-space: normal;
 	word-wrap: break-word;
 	width: 140px;
+	min-width: 140px;
+	max-width: 140px;
 }
 /*
  * CSS alterations in order to get RTL-direction to work properly

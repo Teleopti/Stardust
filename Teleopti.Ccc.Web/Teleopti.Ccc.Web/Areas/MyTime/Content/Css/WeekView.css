@@ -48,6 +48,11 @@
 	max-height: 26px;
 }
 
+.weekview-day-date .day-header-day {
+	height: 22px;
+	width: 22px;
+}
+
 .weekview-day-month {
 	margin-top: 2px;
 	margin-bottom: -2px;
@@ -203,10 +208,10 @@
 	background: transparent;
 	position: relative;
 	padding: 0;
-	margin-top: calc(136px);/*19px + 26px + 66px + 25px*/
+	margin-top: calc(136px); /*19px + 26px + 66px + 25px*/
 }
 
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) { 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.weekview-timeline {
 		margin-top: calc(130px);
 	}

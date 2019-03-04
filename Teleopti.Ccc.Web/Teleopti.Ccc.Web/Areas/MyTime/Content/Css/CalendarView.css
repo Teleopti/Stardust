@@ -43,9 +43,9 @@
 } /* IE7 inline-block fix */
 .day-header-month,
 .day-header-day {
-	font-size: 13px;
-	height: 22px;
-	width: 22px;
+	font-size: 14px;
+	height: 24px;
+	width: 24px;
 	text-align: center;
 	line-height: 1;
 	margin: 2px;

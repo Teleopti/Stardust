@@ -73,7 +73,7 @@ Layout = null;
 						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}" class="day-header-day"></span>
 						<!-- /ko -->
 						<!--ko if: bankHoliday -->
-						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}, tooltip:{title: bankHoliday.dateDescription, html: true, trigger: 'click'}, adjustTooltipPositionOnMobile: true" class="day-header-day bank-holiday-day-shape"></span>
+						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}, tooltip:{title: bankHoliday.dateDescription, html: true, trigger: 'click'}" class="day-header-day bank-holiday-day-shape"></span>
 						<!-- /ko -->
 						<!-- ko if: !hasShift && !isFullDayAbsence && !isDayOff-->
 						<div class="shift"></div>
