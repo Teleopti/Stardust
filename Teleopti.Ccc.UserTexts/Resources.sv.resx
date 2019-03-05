@@ -16193,4 +16193,16 @@ Applikationen kommer nu att stängas. </value>
   <data name="SelectTime" xml:space="preserve">
     <value>Välj tid</value>
   </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Föregående månad</value>
+  </data>
+  <data name="NextMonth" xml:space="preserve">
+    <value>Nästa månad</value>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>Välj månad</value>
+  </data>
+  <data name="SelectWeek" xml:space="preserve">
+    <value>Välj vecka</value>
+  </data>
 </root>
