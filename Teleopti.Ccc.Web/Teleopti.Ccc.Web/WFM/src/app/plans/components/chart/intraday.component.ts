@@ -69,7 +69,7 @@ export class IntradayComponent implements OnChanges {
 					StaffingScaffold: '#FFFFFF',
 					Overstaffing: '#0a84d6',
 					Understaffing: '#D32F2F',
-					CriticalInterval: '#FF0000',
+					CriticalInterval: '#5f5f5f',
 				},
 				names: {
 					Forecasted: this.translate.instant('ForecastedAgents'),
@@ -160,7 +160,7 @@ export class IntradayComponent implements OnChanges {
 			text += '</tr>';
 			if (d.id === 'Understaffing' || d.id === 'Overstaffing') {
 				text += "<tr>";
-				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:" + bgcolor + "'></span>" + 'Relative understaffing' + '</td>';
+				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:#5f5f5f'></span>" + 'Relative understaffing' + '</td>';
 				text += "<td class='value'"+(criticalInterval!==0?"style='color:#FF0000'":'')+">" + ' '+(Math.abs(relativeDifferenceInterval)*100).toFixed(1)+'% '+'</td>';
 				text += '</tr>';
 			}
