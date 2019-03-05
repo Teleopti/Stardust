@@ -23,6 +23,5 @@
 	function requestsScheduleTableController(toggleService) {
 		var vm = this;
 		vm.enableStory79412 = toggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412;
-		vm.hideMeetingDetails = toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008;
 	}
 })();
