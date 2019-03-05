@@ -12,6 +12,7 @@ import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-
 import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 import { SystemSettingsComponent } from './system-settings.component';
 import { BankCalendarDataService } from '../../shared';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockStateService implements Partial<IStateService> {
 	public current: {
@@ -43,7 +44,8 @@ describe('SystemSettings page', () => {
 				NgZorroAntdModule,
 				FormsModule,
 				ReactiveFormsModule,
-				HttpClientTestingModule
+				HttpClientTestingModule,
+				NoopAnimationsModule
 			],
 			providers: [
 				{
