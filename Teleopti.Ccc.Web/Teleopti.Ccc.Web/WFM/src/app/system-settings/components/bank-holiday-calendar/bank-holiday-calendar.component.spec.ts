@@ -1039,6 +1039,86 @@ describe('BankHolidayCalendarComponent', () => {
 		});
 	}));
 
+	it('should bank holiday calendar name not be changed if edit component bank holiday calendar name is empty', async(() => {
+		fixture.detectChanges();
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				Years: [
+					{
+						Year: 2013,
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					},
+					{
+						Year: 2014,
+						Dates: [
+							{
+								Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+								Date: '2014-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+		fixture.detectChanges();
+
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const calendarList = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		// 1. Open the calendar
+		openCalendar(calendarList);
+
+		// 2. Active the year 2014 in the calendar
+		activeYear(calendarList);
+
+		fixture.whenStable().then(() => {
+			fixture.detectChanges();
+
+			// 3. Go to edit page for this calendar
+			clickEditButton(calendarList);
+
+			const editComponent = getEditBankHolidayCalendarComponent();
+
+			expect(editComponent.newCalendar).toBeTruthy();
+			expect(editComponent.newCalendar.ActiveYearIndex).toBe(1);
+
+			// 4. empty calendar name
+			const editComponentElement = document.querySelector('.edit-bank-holiday-calendar');
+			editComponent.calendarName = '';
+			editComponentElement
+				.querySelector('.edit-bank-holiday-calendar-header > input')
+				.dispatchEvent(new Event('change'));
+			fixture.detectChanges();
+
+			// 5. click delete button
+			const panels = editComponentElement.querySelectorAll('nz-collapse-panel');
+			panels[1].querySelector('nz-list-item .remove-date-icon').dispatchEvent(new Event('click'));
+			fixture.detectChanges();
+
+			const nzAlert = editComponentElement.querySelectorAll('nz-alert');
+			expect(nzAlert[0].getAttribute('nzType')).toBe('error');
+			expect(httpTestingController.match('../api/BankHolidayCalendars/Save').length).toBe(0);
+			expect(panels[1].querySelectorAll('nz-list-item').length).toBe(1);
+
+			// 6. Go back to calendar list after the calendar is saved
+			backToBankHolidayList();
+
+			const panelHeader = document.querySelector('nz-collapse-panel .ant-collapse-header');
+			expect(panelHeader.innerHTML.indexOf('Bank holiday calendar') > -1).toBeTruthy();
+		});
+	}));
+
 	function getEditBankHolidayCalendarComponent() {
 		const parentElement: DocumentFragment = fixture.debugElement.nativeElement;
 		const editElement = getDebugNode(parentElement.querySelector('.edit-bank-holiday-calendar')) as DebugElement;

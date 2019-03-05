@@ -69,7 +69,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	}));
 
 	it('should save calendar name after it is changed', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		document.querySelector('.edit-bank-holiday-calendar-header input').dispatchEvent(new Event('change'));
 		fixture.detectChanges();
 
@@ -84,6 +84,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 			Years: []
 		});
 		fixture.detectChanges();
+		expectSuccessAlertMessage();
 		expect(component.newCalendar.Name).toBe(
 			'I am a new calendar - name from backend which should match the cal name from frontend'
 		);
@@ -99,6 +100,23 @@ describe('BankHolidayCalendarEditComponent', () => {
 				.getElementsByTagName('span')[0]
 				.innerText.trim()
 		).toBe('Back');
+	});
+
+	it('should show calendar name hint', () => {
+		const addBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+
+		expectSuccessAlertMessage();
+		component.calendarName = 'Bank Holiday';
+		const input = addBankHolidayCalendarPanel.querySelector('.edit-bank-holiday-calendar-header input');
+		input.dispatchEvent(new Event('blur'));
+		fixture.detectChanges();
+
+		expect(addBankHolidayCalendarPanel.querySelectorAll('nz-alert[nztype="success"]').length).toBe(0);
+
+		component.calendarName = '';
+		input.dispatchEvent(new Event('change'));
+		fixture.detectChanges();
+		expect(addBankHolidayCalendarPanel.querySelectorAll('nz-alert[nztype="error"]').length).toBe(1);
 	});
 
 	it('should trim space before and after when checking the existing name', () => {
@@ -129,7 +147,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 			}
 		];
 
-		component.newCalendar.Name = 'Bank holiday calendar ';
+		component.calendarName = 'Bank holiday calendar ';
 		component.saveNewCalendarName();
 		fixture.detectChanges();
 
@@ -137,7 +155,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should be able to add dates', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -159,6 +177,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 			]
 		});
 		fixture.detectChanges();
+
+		expectSuccessAlertMessage();
 
 		component.dateChangeCallback(new Date('2015-01-11'));
 		fixture.detectChanges();
@@ -204,7 +224,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it("should be able to change bank holiday's description", () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -262,10 +282,11 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
 		expect(dateRows[0].innerHTML.indexOf('BankHoliday New Description') > -1).toBeTruthy();
+		expectSuccessAlertMessage();
 	});
 
 	it('should set is last added after adding dates', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
@@ -325,7 +346,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should not add duplicated dates', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
@@ -354,7 +375,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should highlight datepicker after post succeed', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -383,7 +404,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should be able remove a date', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10 10:00:00'));
 		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
@@ -463,6 +484,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
+		expectSuccessAlertMessage();
+
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
 
 		expect(dateContent.getElementsByTagName('nz-collapse-panel').length).toBe(1);
@@ -479,7 +502,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should be able to add a date back after removing it', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -560,7 +583,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should categorize dates by year', () => {
-		component.newCalendar.Name = 'New Bank Holiday Calendar';
+		component.calendarName = 'New Bank Holiday Calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
@@ -637,7 +660,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should save after user input calendar name and select a date', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -672,7 +695,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should calendar name not be empty before saving', () => {
-		component.newCalendar.Name = '';
+		component.calendarName = '';
 		document.querySelector('.edit-bank-holiday-calendar-header input').dispatchEvent(new Event('blur'));
 
 		component.dateChangeCallback(new Date('2015-01-10'));
@@ -690,7 +713,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should store calendar id after adding first date', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		document.querySelector('.edit-bank-holiday-calendar-header input').dispatchEvent(new Event('blur'));
 
 		component.dateChangeCallback(new Date('2015-01-10'));
@@ -755,7 +778,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should update the bank holiday calendar list after saving', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -791,7 +814,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should not update the bank holiday calendar list when error happens', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -804,7 +827,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should not update the newCalendarYearsForDisplay list when error happens', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 		fixture.detectChanges();
 
@@ -839,7 +862,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	});
 
 	it('should only send modifed date to backend', () => {
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		component.dateChangeCallback(new Date('2015-01-10'));
 
 		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
@@ -940,7 +963,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 			}
 		]);
 
-		component.newCalendar.Name = 'I am a new calendar';
+		component.calendarName = 'I am a new calendar';
 		component.dateChangeCallback(new Date('2016-01-11'));
 
 		httpTestingController.match('../api/BankHolidayCalendars/Save')[0].flush({
@@ -992,5 +1015,12 @@ describe('BankHolidayCalendarEditComponent', () => {
 		return dateContent
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
+	}
+
+	function expectSuccessAlertMessage() {
+		const addBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const nzAlert = addBankHolidayCalendarPanel.querySelectorAll('nz-alert');
+
+		expect(nzAlert[0].getAttribute('nzType')).toBe('success');
 	}
 });
