@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 
 		WFM_Clear_Data_After_Leaving_Date_47768,
-		WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412,
 		WFM_Setting_BankHolidayCalendar_Create_79297,
 		WFM_Setting_AssignBankHolidayCalendarsToSites_79899,
 		

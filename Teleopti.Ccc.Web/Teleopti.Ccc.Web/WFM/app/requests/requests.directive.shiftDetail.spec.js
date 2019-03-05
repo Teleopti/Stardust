@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function() {
 	describe('<requests-shift-detail>', function() {
-		var $rootScope, $compile, fakeTeamSchedule, fakeCurrentUserInfo, fakeShiftTradeScheduleService, fakeToggleService;
+		var $rootScope, $compile, fakeTeamSchedule, fakeCurrentUserInfo, fakeShiftTradeScheduleService;
 		beforeEach(function() {
 			module('wfm.templates');
 			module('wfm.requests');
@@ -10,12 +10,8 @@
 		beforeEach(function() {
 			fakeTeamSchedule = new FakeTeamSchedule();
 			fakeCurrentUserInfo = new FakeCurrentUserInfo();
-			fakeToggleService = new FakeToggleService();
 			fakeShiftTradeScheduleService = new FakeShiftTradeScheduleService();
-			module(function($provide) {
-				$provide.service('Toggle', function () {
-					return fakeToggleService;
-				});
+			module(function ($provide) {
 				$provide.service('TeamSchedule', function() {
 					return fakeTeamSchedule;
 				});
@@ -32,121 +28,8 @@
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
 		}));
-		
-		it('should show the time of shift detail in current time zone', function () {
-			fakeTeamSchedule.setSchedules([
-				{
-					PersonId: 'agent1',
-					Name: 'agent1',
-					Date: '2018-10-24',
-					ShiftCategory: {
-						ShortName: 'AM',
-						Name: 'Early',
-						DisplayColor: '#000000'
-					},
-					Projection: [
-						{
-							ShiftLayerIds: ['31ffe214-3384-4a80-a14c-a83800e23276'],
-							Color: '#795548',
-							Description: 'Phone',
-							StartInUtc: '2018-10-24 08:00',
-							EndInUtc: '2018-10-24 10:00',
-							IsOvertime: false
-						}
-					],
-					DayOff: null
-				},
-				{
-					PersonId: 'agent2',
-					Name: 'agent1',
-					Date: '2018-10-24',
-					ShiftCategory: {
-						ShortName: 'AM',
-						Name: 'Early',
-						DisplayColor: '#000000'
-					},
-					Projection: [
-						{
-							ShiftLayerIds: ['31ffe214-3384-4a80-a14c-a83800e23276'],
-							Color: '#fff000',
-							Description: 'Email',
-							StartInUtc: '2018-10-24 08:00',
-							EndInUtc: '2018-10-24 10:00',
-							IsOvertime: false
-						}
-					],
-					DayOff: null
-				}
-			]);
 
-			var element = setUp(['agent1', 'agent2'], '2018-10-24', 'Etc/UTC', function(params) {
-				var schedules = params.schedules.Schedules;
-				expect(schedules[0].Shifts[0].Projections[0].TimeSpan).toEqual('8:00 AM - 10:00 AM');
-				expect(schedules[1].Shifts[0].Projections[0].TimeSpan).toEqual('8:00 AM - 10:00 AM');
-			});
-
-			element[0].click();
-		});
-
-		it('should show the time of shift detail in target time zone if target time zone is different from current timezone', function() {
-			fakeTeamSchedule.setSchedules([
-				{
-					PersonId: 'agent1',
-					Name: 'agent1',
-					Date: '2018-10-24',
-					ShiftCategory: {
-						ShortName: 'AM',
-						Name: 'Early',
-						DisplayColor: '#000000'
-					},
-					Projection: [
-						{
-							ShiftLayerIds: ['31ffe214-3384-4a80-a14c-a83800e23276'],
-							Color: '#795548',
-							Description: 'Phone',
-							StartInUtc: '2018-10-24 08:00',
-							EndInUtc: '2018-10-24 10:00',
-							IsOvertime: false
-						}
-					],
-					DayOff: null
-				},
-				{
-					PersonId: 'agent2',
-					Name: 'agent1',
-					Date: '2018-10-24',
-					ShiftCategory: {
-						ShortName: 'AM',
-						Name: 'Early',
-						DisplayColor: '#000000'
-					},
-					Projection: [
-						{
-							ShiftLayerIds: ['31ffe214-3384-4a80-a14c-a83800e23276'],
-							Color: '#fff000',
-							Description: 'Email',
-							StartInUtc: '2018-10-24 08:00',
-							EndInUtc: '2018-10-24 10:00',
-							IsOvertime: false
-						}
-					],
-					DayOff: null
-				}
-			]);
-
-			var element = setUp(['agent1', 'agent2'], '2018-10-24', 'Europe/Berlin', function(params) {
-				var schedules = params.schedules.Schedules;
-				expect(schedules[0].Shifts[0].Projections[0].TimeSpan).toEqual('10:00 AM - 12:00 PM');
-				expect(schedules[1].Shifts[0].Projections[0].TimeSpan).toEqual('10:00 AM - 12:00 PM');
-			});
-
-			element[0].click();
-		});
-
-		it('should call ShiftTradeScheduleService when Toggle WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 is ON', function () {
-
-			fakeToggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = true;
-
+		it('should call ShiftTradeScheduleService', function () {
 			fakeShiftTradeScheduleService.setSchedules(
 				{
 					Name: 'agent3',
@@ -189,10 +72,6 @@
 			scope.$apply();
 
 			return element;
-		}
-
-		function FakeToggleService() {
-			this.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = false;
 		}
 
 		function FakeTeamSchedule() {
