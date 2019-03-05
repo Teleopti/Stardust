@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -104,6 +105,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public WaitlistDataHolder PreloadData()
 		{
+			var stopWatch = new Stopwatch();
+			stopWatch.Start();
+			_stardustJobFeedback.SendProgress("Starting preloading data");
 			var dataHolder = new WaitlistDataHolder();
 			_contractRepository.LoadAll();
 			_skillTypeRepository.LoadAll();
@@ -111,9 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_contractScheduleRepository.LoadAllAggregate();
 			_activityRepository.LoadAll();
 			dataHolder.Skills = _skillRepository.LoadAllSkills().ToList();
-			_stardustJobFeedback.SendProgress("Done preloading the data");
-
-
+			
 			var validPeriod = new DateTimePeriod(_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 			dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts = validPeriod;
 			var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts).ToList();
@@ -184,6 +186,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				dataHolder.BusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 			dataHolder.InitSuccess = true;
 
+			_stardustJobFeedback.SendProgress($"Done preloading data. {stopWatch.Elapsed.TotalSeconds:F} s elapsed.");
+			
 			return dataHolder;
 		}
 
