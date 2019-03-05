@@ -538,7 +538,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 							ServiceLevel: input.ServiceLevel,
 							EstimatedServiceLevel: input.EstimatedServiceLevel,
 							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer,
-							AbandonRate: input.AbandonRate
+							AbandonRate: input.AbandonRate * 100
 						}
 				  ];
 		} else {
