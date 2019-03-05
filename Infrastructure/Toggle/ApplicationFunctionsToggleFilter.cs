@@ -25,12 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			hideRealTimeReports(functions);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_ChatBot_77547,
 				DefinedRaptorApplicationFunctionForeignIds.ChatBot);
-			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
-				DefinedRaptorApplicationFunctionForeignIds.WebApproveOrDenyRequest);
-			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
-				DefinedRaptorApplicationFunctionForeignIds.WebReplyRequest);
-			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
-				DefinedRaptorApplicationFunctionForeignIds.WebEditSiteOpenHours);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Connect_NewLandingPage_WEB_78578,
 				DefinedRaptorApplicationFunctionForeignIds.ViewCustomerCenter);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Setting_BankHolidayCalendar_Create_79297,
