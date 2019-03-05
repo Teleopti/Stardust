@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					return new GroupWeekScheduleViewModel
 					{
-						Total = personIds.Count
+						Total = permittedPeopleIds.Count
 					};
 				}
 
