@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private DateTimePeriod _lastPeriod;
         private readonly IUnitOfWorkFactory _uowFactory;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly BackgroundWorker _reloadBackgroundWorker = new BackgroundWorker();
         private bool _disposed;
 
@@ -59,7 +60,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                                 ISchedulerStateHolder schedulerStateHolder,
                                                 ISchedulerStateLoader schedulerStateLoader,
                                                 IUnitOfWorkFactory uowFactory,
-												IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+												IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
+												ITimeZoneGuard timeZoneGuard)
         {
             _peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 	        _schedulerStateHolder = schedulerStateHolder;
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             _schedulerStateLoader = schedulerStateLoader;
             _uowFactory = uowFactory;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+			_timeZoneGuard = timeZoneGuard;
 			_reloadBackgroundWorker.WorkerSupportsCancellation = true;
             _reloadBackgroundWorker.DoWork += ReloadBackgroundWorkerDoWork;
             _reloadBackgroundWorker.RunWorkerCompleted += ReloadBackgroundWorkerRunWorkerCompleted;
@@ -88,7 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 			{
 				deciderResult = _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
 			}
-			_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone()));     
+			_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(_timeZoneGuard.CurrentTimeZone()));     
 			var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
 			deciderResult.FilterSkills(tempSkills.ToArray(),s => tempSkills.Remove(s),s => tempSkills.Add(s));
 			if (_schedulingResultStateHolder.SkillDays != null && tempSkills.SetEquals(_filteredSkills) && _lastPeriod.Contains(args.Period))
