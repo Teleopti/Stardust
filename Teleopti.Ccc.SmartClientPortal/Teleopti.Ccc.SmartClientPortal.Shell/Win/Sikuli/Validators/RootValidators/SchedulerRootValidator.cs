@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			return _timer; 
 		}
 
-		public override SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard)
 		{
 			var scheduleTestData = data as SchedulerTestData;
 			if (scheduleTestData == null)
@@ -27,9 +28,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 				testDataFail.Details.AppendLine("Sikuli scheduler testdata failure.");
 				return testDataFail;
 			}
-			return Validate(scheduleTestData);
+			return Validate(scheduleTestData, timeZoneGuard);
 		}
 
-		protected abstract SikuliValidationResult Validate(SchedulerTestData data);
+		protected abstract SikuliValidationResult Validate(SchedulerTestData data, ITimeZoneGuard timeZoneGuard);
 	}
 }

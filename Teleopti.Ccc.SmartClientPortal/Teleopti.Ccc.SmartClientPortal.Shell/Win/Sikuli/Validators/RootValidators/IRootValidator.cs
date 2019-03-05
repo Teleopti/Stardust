@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
-		SikuliValidationResult Validate(object data);
+		SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard);
 		/// <summary>
 		/// User dfriendly description of validator task
 		/// </summary>

@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemCheck;
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.EnterValidator(this, _container.Resolve<ITimeZoneGuard>());
 			}
 			base.OnKeyDown(e);
 		}

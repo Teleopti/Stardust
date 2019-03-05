@@ -668,7 +668,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.EnterValidator(this, _container.Resolve<ITimeZoneGuard>());
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -1654,7 +1654,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var currentValidator = SikuliHelper.CurrentValidator;
 
 				if (currentValidator != null)
-					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(SchedulerState.SchedulerStateHolder, totalSkill));
+					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(SchedulerState.SchedulerStateHolder, totalSkill), _timeZoneGuard);
 				else
 					SikuliHelper.ShowTaskDoneView(this);
 			}

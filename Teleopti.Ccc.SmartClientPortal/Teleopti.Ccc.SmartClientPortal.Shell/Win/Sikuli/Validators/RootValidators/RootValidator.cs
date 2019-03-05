@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValidators;
 
@@ -36,19 +37,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 
 		public virtual bool InstantValidation { get { return false; } }
 
-		public abstract SikuliValidationResult Validate(object data);
+		public abstract SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard);
 
 		protected IList<IAtomicValidator> AtomicValidators
 		{
 			get { return _atomicValidators ?? (_atomicValidators = new List<IAtomicValidator>()); }
 		}
 
-		protected SikuliValidationResult ValidateAtomicValidators(IEnumerable<IAtomicValidator> validators)
+		protected SikuliValidationResult ValidateAtomicValidators(IEnumerable<IAtomicValidator> validators, ITimeZoneGuard timeZoneGuard)
 		{
 			var result = new SikuliValidationResult();
 			foreach (var validator in validators)
 			{
-				var validatorResult = validator.Validate();
+				var validatorResult = validator.Validate(timeZoneGuard);
 				result.Result = result.CombineResultValue(validatorResult);
 				result.CombineDetails(validatorResult);
 			}
