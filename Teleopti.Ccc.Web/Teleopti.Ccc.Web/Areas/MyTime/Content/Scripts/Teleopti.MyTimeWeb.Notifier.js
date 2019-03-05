@@ -64,7 +64,7 @@
 		}
 		if (window.Notification && Notification.permission === 'granted') {
 			if (webNotification() && !isShowing(notifyText)) {
-				var iconUrl = baseUrl + 'content/favicon.ico?v=2';
+				var iconUrl = baseUrl + 'WFM/dist/ng2/assets/favicon/favicon.ico?v=2';
 				var decodedText = htmlDecode(notifyText);
 				var options = {
 					body: decodedText,
