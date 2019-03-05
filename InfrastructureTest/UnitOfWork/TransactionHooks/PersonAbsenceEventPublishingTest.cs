@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
-	[DatabaseTest]
+	[PrincipalAndStateTest]
 	public class PersonAbsenceEventPublishingTest : IIsolateSystem
 	{
 		public WithUnitOfWork UnitOfWork;

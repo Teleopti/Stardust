@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly AnalyticsDatabase _analytics;
 		private readonly ICurrentEventPublisher _eventPublisher;
-		private readonly IBusinessUnitRepository _businessUnits;
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IPersonRepository _persons;
 		private readonly ISiteRepository _sites;
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.TestCommon
 		public Database(
 			AnalyticsDatabase analytics,
 			ICurrentEventPublisher eventPublisher,
-			IBusinessUnitRepository businessUnits,
 			IPersonAssignmentRepository assignments,
 			IPersonRepository persons,
 			ISiteRepository sites,
@@ -76,7 +74,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_analytics = analytics;
 			_eventPublisher = eventPublisher;
-			_businessUnits = businessUnits;
 			_assignments = assignments;
 			_persons = persons;
 			_sites = sites;
@@ -148,7 +145,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _persons.LoadAll().Single(x => x.Name == new Name(name, name)).Id.Value;
 		}
-		
+
+
 		public Database WithDefaultScenario(string name) => WithScenario(name, true);
 
 		[UnitOfWork]

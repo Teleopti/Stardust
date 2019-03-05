@@ -10,15 +10,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
-	[DatabaseTest]
+	[PrincipalAndStateTest]
 	[Setting("ScheduleChangedMessagePackagingSendOnIntervalSeconds", 1)]
 	[Setting("ScheduleChangedMessagePackagingSendOnIdleTimeSeconds", 1)]
 	public class ScheduleChangedMessagePackagingTest
@@ -30,9 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public ICurrentDataSource DataSource;
 		public IInitiatorIdentifierScope Initiator;
 		public IBusinessUnitScope BusinessUnit;
-		public ILogOnOffContext Context;
-		public IBusinessUnitRepository BusinessUnits;
-		public WithUnitOfWork WithUnitOfWork;
+		public IPrincipalAndStateContext Context;
 
 		[Test]
 		public void ShouldSendMessage()
@@ -158,29 +154,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		[Test]
 		public void ShouldPackageMessagesForEachBusinessUnit()
 		{
-			var businessUnit1 = new BusinessUnit("_");
-			var businessUnit2 = new BusinessUnit("_");
-			WithUnitOfWork.Do(() =>
-			{
-				BusinessUnits.Add(businessUnit1);
-				BusinessUnits.Add(businessUnit2);
-			});
 			Database
 				.WithPerson()
 				.WithActivity("Phone")
-				;
+				.WithDefaultScenario("_");
+			var businessUnit1 = new BusinessUnit("_");
+			businessUnit1.SetId(Guid.NewGuid());
 			using (BusinessUnit.OnThisThreadUse(businessUnit1))
-			{
-				Database
-					.WithDefaultScenario("_")
-					.WithAssignment("2018-11-29");
-			}
+				Database.WithAssignment("2018-11-29");
+			var businessUnit2 = new BusinessUnit("_");
+			businessUnit2.SetId(Guid.NewGuid());
 			using (BusinessUnit.OnThisThreadUse(businessUnit2))
-			{
-				Database
-					.WithDefaultScenario("_")
-					.WithAssignment("2018-11-30");
-			}
+				Database.WithAssignment("2018-11-30");
 			Time.Passes("1".Seconds());
 
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Select(x => x.BusinessUnitId)

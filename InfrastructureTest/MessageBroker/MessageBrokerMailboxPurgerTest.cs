@@ -9,11 +9,11 @@ using Teleopti.Ccc.Domain.MessageBroker.Server;
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture]
-	[DatabaseTest]
+	[PrincipalAndStateTest]
 	public class MessageBrokerServerMailboxPurgerTest
 	{
 		public MessageBrokerMailboxPurger Target;
-		public ILogOnOffContext Context;
+		public IPrincipalAndStateContext Context;
 
 		[Test]
 		public void ShouldWork()
