@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			if (DesignMode) return;
 
 			monthCalendarAdvDateSelection.Culture = CultureInfo.CurrentCulture;
-			var stateHolderLoader = new SchedulerStateLoader(schedulingScreenState, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())));
+			var stateHolderLoader = new SchedulerStateLoader(schedulingScreenState, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())), timeZoneGuard);
 			var meetingMover = new MeetingMover(this, meetingViewModel, schedulingScreenState.DefaultSegmentLength, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
 			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulingScreenState.SchedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider, timeZoneGuard);

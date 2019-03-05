@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_timeZoneGuard = timeZoneGuard;
-			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulingScreenState, scheduleStorageFactory);
+			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulingScreenState, scheduleStorageFactory, timeZoneGuard);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
 			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;

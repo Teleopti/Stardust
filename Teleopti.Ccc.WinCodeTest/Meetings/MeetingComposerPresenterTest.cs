@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -22,7 +21,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
@@ -189,7 +187,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
                                                                                       }, disableDeleteFilter, new SchedulingResultStateHolder());
-            _target = new MeetingComposerPresenter(_view, _model, disableDeleteFilter, new SchedulingScreenState(null, schedulerStateHolder), null);
+            _target = new MeetingComposerPresenter(_view, _model, disableDeleteFilter, new SchedulingScreenState(null, schedulerStateHolder), null, new FakeTimeZoneGuard());
             _view.SetRecurrentMeetingActive(true);
 
             _mocks.ReplayAll();
@@ -618,7 +616,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
     internal class MeetingComposerPresenterForTest : MeetingComposerPresenter
     {
         public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, SchedulingScreenState schedulingScreenState, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IScheduleStorageFactory scheduleStorageFactory)
-            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingScreenState, scheduleStorageFactory)
+            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingScreenState, scheduleStorageFactory, new FakeTimeZoneGuard())
         {
             RepositoryFactory = repositoryFactory;
             UnitOfWorkFactory = unitOfWorkFactory;

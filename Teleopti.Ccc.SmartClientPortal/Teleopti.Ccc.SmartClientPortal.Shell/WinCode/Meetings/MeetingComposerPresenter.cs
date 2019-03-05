@@ -19,7 +19,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -31,7 +30,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private readonly IMeetingViewModel _model;
 	    private readonly IDisableDeletedFilter _disableDeletedFilter;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
-	    private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
+		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
         private readonly DateOnly _maxDate = new DateOnly(DateHelper.MaxSmallDateTime);
         private Guid _instanceId = Guid.NewGuid();
         protected static CommonNameDescriptionSetting CommonNameDescription;
@@ -46,17 +46,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             _model = model;
     		_disableDeletedFilter = disableDeletedFilter;
 	        _scheduleStorageFactory = scheduleStorageFactory;
+			
 
-	        RepositoryFactory = new RepositoryFactory();
+			RepositoryFactory = new RepositoryFactory();
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, SchedulingScreenState schedulingScreenState, IScheduleStorageFactory scheduleStorageFactory)
+		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, SchedulingScreenState schedulingScreenState, IScheduleStorageFactory scheduleStorageFactory, ITimeZoneGuard timeZoneGuard)
 			: this(view, model,disableDeletedFilter, scheduleStorageFactory)
         {
             _schedulingScreenState = schedulingScreenState;
+			_timeZoneGuard = timeZoneGuard;
 
-            if (_schedulingScreenState != null && model != null)
+			if (_schedulingScreenState != null && model != null)
             {
                 DateOnlyPeriod validPeriod = _schedulingScreenState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
                 _minDate = validPeriod.StartDate;
@@ -161,12 +163,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                 new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
 			_schedulingScreenState = new SchedulingScreenState(_disableDeletedFilter, new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
 															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder()));
-                                        
-            var stateLoader = new SchedulerStateLoader(_schedulingScreenState,
-                                                    RepositoryFactory,
-                                                    UnitOfWorkFactory,
-					                                new LazyLoadingManagerWrapper(),
-																					_scheduleStorageFactory);
+
+			var stateLoader = new SchedulerStateLoader(_schedulingScreenState,
+				RepositoryFactory,
+				UnitOfWorkFactory,
+				new LazyLoadingManagerWrapper(),
+				_scheduleStorageFactory, _timeZoneGuard);
+
             stateLoader.LoadOrganization();
         }
 

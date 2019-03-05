@@ -23,7 +23,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			office2007OutlookTimePickerStartSlotPeriod.CreateAndBindList();
 			office2007OutlookTimePickerEndSlotPeriod.CreateAndBindList();
 
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())));
+			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())), _timeZoneGuard);
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var decider = new PeopleAndSkillLoaderDecider(PersonRepository.DONT_USE_CTOR(new FromFactory(() =>UnitOfWorkFactory.Current), null, null), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
@@ -173,7 +172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			if (_skillIntradayGridControl != null)
 				_skillIntradayGridControl.LeftColChanged -= skillIntradayGridControlLeftColChanged;
 
-			_skillIntradayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart", _skillPriorityProvider, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE) { DefaultColWidth = 45 };
+			_skillIntradayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart", _skillPriorityProvider, _timeZoneGuard) { DefaultColWidth = 45 };
 			_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, schedulerStateHolder);
 			_skillIntradayGridControl.TurnoffHelp();
 			_skillIntradayGridControl.SetRowsAndCols();
