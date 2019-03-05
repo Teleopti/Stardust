@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(CancelPersonEmploymentChangeCommandDto command)
         {
 			var affectedItems = 0;
-			var dateToRemoveAfter = new DateOnly(command.Date.DateTime);
+			var dateToRemove = new DateOnly(command.Date.DateTime);
 
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -37,19 +37,19 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				person.VerifyCanBeModifiedByCurrentUser(_currentAuthorization);
 
-				if (dateToRemoveAfter > person.TerminalDate)
+				if (dateToRemove > person.TerminalDate)
 					throw new FaultException("You cannot change person employment after the persons leaving date.");
 
 				var existingPersonPeriods =
 					person.PersonPeriodCollection?
-						.Where(pp => pp.StartDate > dateToRemoveAfter.AddDays(-1)).ToList().Count ?? 0;
+						.Where(pp => pp.StartDate == dateToRemove).ToList().Count ?? 0;
 
 				if (existingPersonPeriods > 0)
 				{
-					person.RemoveAllPeriodsAfter(dateToRemoveAfter.AddDays(-1));
+					person.RemovePersonPeriodWithStartDate(dateToRemove);
 					affectedItems = existingPersonPeriods - 
 									person.PersonPeriodCollection?
-										.Where(pp => pp.StartDate > dateToRemoveAfter.AddDays(-1)).ToList().Count ?? 0;
+										.Where(pp => pp.StartDate == dateToRemove).ToList().Count ?? 0;
 				}
 
 				uow.PersistAll();

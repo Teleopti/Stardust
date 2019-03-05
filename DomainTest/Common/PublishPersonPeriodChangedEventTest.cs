@@ -70,6 +70,36 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
+		public void ShouldNotPublishWhenRemoveWithStartDateIsNotExact()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-25".Date());
+			person.AddPersonPeriod(personPeriod);
+			((Person)person).PopAllEvents(null);
+
+			person.RemovePersonPeriodWithStartDate("2017-01-01".Date());
+
+			((Person)person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldPublishWhenRemoveWithStartDate()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-25".Date());
+			person.AddPersonPeriod(personPeriod);
+
+			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod("2017-01-26".Date());
+			person.AddPersonPeriod(personPeriod2);
+
+			((Person)person).PopAllEvents(null);
+
+			person.RemovePersonPeriodWithStartDate("2017-01-25".Date());
+
+			((Person)person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldPublishWhenRemoveAllPersonPeriods()
 		{
 			var person = PersonFactory.CreatePersonWithId();
