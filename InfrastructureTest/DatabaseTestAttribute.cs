@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 	{
 		private IPerson person;
 		private IDisposable _login;
-		public IDataSourceForTenant DataSourceForTenant;
 		
 		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
