@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WinCodeTest
 		[OneTimeSetUp]
         public void OneTimeSetUp()
         {
-			TimeZoneGuardForDesktop_DONOTUSE.Set(new TimeZoneGuard());
             var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 

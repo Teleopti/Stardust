@@ -92,7 +92,6 @@
     <Compile Include="Reporting\ReportSettingsScheduledTimeVersusTarget.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SchedulerSortCommandSetting.cs" />
-    <Compile Include="Scheduling\TimeZoneGuardForDesktop_DONOTUSE.cs" />
     <Compile Include="ViewType.cs" />
   </ItemGroup>
   <ItemGroup>
