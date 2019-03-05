@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 
 			var pa = scheduleDay.PersonAssignment();
-			vm.IsProtected = pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
+			vm.IsProtected = pa?.Person.PersonWriteProtection?.IsWriteProtected(date) ?? false;
 			return vm;
 		}
 
