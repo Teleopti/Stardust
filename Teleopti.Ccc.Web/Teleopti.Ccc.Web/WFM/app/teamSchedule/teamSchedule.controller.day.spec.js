@@ -169,6 +169,7 @@
 			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 			expect(personSchedule1.IsSelected).toEqual(true);
 
+			controller.searchOptions.searchKeywordChanged = true;
 			controller.onKeyWordInSearchInputChanged();
 
 			expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
