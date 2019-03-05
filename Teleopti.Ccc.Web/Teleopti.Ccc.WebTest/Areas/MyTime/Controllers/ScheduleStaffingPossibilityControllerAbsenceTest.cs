@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -51,6 +52,38 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+		}
+
+		[Test]
+		public void ShouldReturnPossibilitiesBaseOnTopLayerSkill()
+		{
+			var today = Now.UtcDateTime().ToDateOnly();
+
+			setupSiteOpenHour();
+			setupWorkFlowControlSet();
+
+			var person = User.CurrentUser();
+			var baseActivity = createActivity("base activity");
+			var underlyingActivitySkill = createSkill("underlyingActivitySkill", new TimePeriod(0, 24));
+			var personSkill1 = createPersonSkill(baseActivity, underlyingActivitySkill);
+			setupIntradayStaffingSkillFor24Hours(underlyingActivitySkill, 2.353d, 3.00d);
+			var period1 = new DateTimePeriod(today.Date.AddHours(8).Utc(), today.Date.AddHours(17).Utc());
+			var assignment = createAssignment(person, period1, baseActivity);
+
+			var onTopActivity = createActivity("on top activity");
+			var onTopActivitySkill = createSkill("onTopActivitySkill", new TimePeriod(0, 24));
+			var personSkill2 = createPersonSkill(onTopActivity, onTopActivitySkill);
+			setupIntradayStaffingSkillFor24Hours(onTopActivitySkill, 2.353d, 5.00d);
+			var period2 = new DateTimePeriod(today.Date.AddHours(10).Utc(), today.Date.AddHours(11).Utc());
+			assignment.AddActivity(onTopActivity, period2.StartDateTime, period2.EndDateTime);
+
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+
+			var possibilities = Target.GetPossibilityViewModels(today, StaffingPossiblityType.Absence, false).ToList();
+
+			possibilities.Count.Should().Be(96);
+			possibilities.Where(x => x.StartTime.Hour==10 && x.Possibility == 1)
+				.ToList().Count.Should().Be(4);
 		}
 
 		[Test]
@@ -661,12 +694,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonAssignmentRepository.Has(assignment);
 		}
 
-		private void createAssignment(IPerson person, DateTimePeriod period, params IActivity[] activities)
+		private IPersonAssignment createAssignment(IPerson person, DateTimePeriod period, params IActivity[] activities)
 		{
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				Scenario.Current(), period,
 				ShiftCategoryFactory.CreateShiftCategory(), activities);
 			PersonAssignmentRepository.Has(assignment);
+			return assignment;
 		}
 
 		private DateOnlyPeriod getAvailablePeriod()
@@ -733,6 +767,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
 					staffingDataList, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 			});
+		}
+
+		private static IActivity createActivity(string name = "activity")
+		{
+			var activity = ActivityFactory.CreateActivity(name);
+			activity.RequiresSkill = true;
+			return activity;
 		}
 	}
 }

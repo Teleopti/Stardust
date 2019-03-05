@@ -38,9 +38,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public CalculatedPossibilityModelResult CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
 		{
-			var periodWithYesterdayAndToday = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate);
-			var scheduleDictionary = loadScheduleDictionary(person, periodWithYesterdayAndToday);
-
+			var dayWithYesterday = period.StartDate.AddDays(-1);
+			var enlargedPeriod = new DateOnlyPeriod(dayWithYesterday, period.EndDate);
+			var scheduleDictionary = loadScheduleDictionary(person, enlargedPeriod);
+			var filteredVisualLayersDictionary = loadMergedVisualLayers(person, scheduleDictionary, enlargedPeriod.DayCollection());
 			var skills = getSupportedPersonSkills(person, period).Select(s => s.Skill).ToArray();
 			var useShrinkageDic = getShrinkageStatusAccordingToPeriods(person, period);
 			var workflowControlSet = person.WorkflowControlSet;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date => workflowControlSetHasOpenAbsenceRequestPeriods &&
 																										   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(currentLocalDate, date));
 
-			return new CalculatedPossibilityModelResult(scheduleDictionary, calculatePossibilities(person, skillStaffingData, scheduleDictionary));
+			return new CalculatedPossibilityModelResult(scheduleDictionary, calculatePossibilities(person, skillStaffingData, filteredVisualLayersDictionary));
 		}
 
 		private Dictionary<DateOnly, bool> getShrinkageStatusAccordingToPeriods(IPerson person, DateOnlyPeriod period)
@@ -74,8 +75,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return scheduleDictionary;
 		}
 
+		private IDictionary<DateOnly, IFilteredVisualLayerCollection> loadMergedVisualLayers(IPerson person,IScheduleDictionary scheduleDictionary, IList<DateOnly> dayCollection)
+		{
+			var filteredVisualLayersDictionary = new Dictionary<DateOnly, IFilteredVisualLayerCollection>();
+
+			foreach (var day in dayCollection)
+			{
+				var personAssignment = getPersonAssignment(scheduleDictionary, day);
+				if (!isPersonAssignmentNullOrEmpty(personAssignment))
+				{
+					var timezone = person.PermissionInformation.DefaultTimeZone();
+					var filteredVisualLayers = personAssignment.ProjectionService().CreateProjection()
+						.FilterLayers(day.ToDateTimePeriod(timezone));
+					filteredVisualLayersDictionary.Add(day, filteredVisualLayers);
+				}
+				else
+				{
+					filteredVisualLayersDictionary.Add(day, null);
+				}
+			}
+
+			return filteredVisualLayersDictionary;
+		}
+
 		private IList<CalculatedPossibilityModel> calculatePossibilities(IPerson person,
-			IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)
+			IList<SkillStaffingData> skillStaffingData, IDictionary<DateOnly, IFilteredVisualLayerCollection> filteredVisualLayersDictionary)
 		{
 			var resolution = skillStaffingData.FirstOrDefault()?.Resolution ?? 15;
 			var skillStaffingDataGroups = skillStaffingData.GroupBy(s => s.Date);
@@ -83,12 +107,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			{
 				Date = skillStaffingDataGroup.Key,
 				IntervalPossibilies =
-					calculateIntervalPossibilities(person, skillStaffingDataGroup.ToList(), scheduleDictionary),
+					calculateIntervalPossibilities(person, skillStaffingDataGroup.ToList(), filteredVisualLayersDictionary),
 				Resolution = resolution
 			}).ToList();
 		}
 
-		private Dictionary<DateTime, int> calculateIntervalPossibilities(IPerson person, IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)
+		private Dictionary<DateTime, int> calculateIntervalPossibilities(IPerson person, IList<SkillStaffingData> skillStaffingData, IDictionary<DateOnly, IFilteredVisualLayerCollection> filteredVisualLayersDictionary)
 		{
 			var intervalPossibilities = new Dictionary<DateTime, int>();
 
@@ -100,7 +124,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffing.Time))
 					continue;
 
-				if (isSkillScheduledInThisInterval(person, skillStaffing, scheduleDictionary))
+				if (isSkillScheduledInThisInterval(person, skillStaffing, filteredVisualLayersDictionary))
 				{
 					subtractUsersSchedule(skillStaffing);
 				}
@@ -118,21 +142,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
 		}
 
-		private static bool isSkillScheduled(IPersonAssignment personAssignment, DateTimePeriod period, ISkill skill)
+		private static bool isSkillScheduled(IFilteredVisualLayerCollection filteredVisualLayers, DateTimePeriod period, ISkill skill)
 		{
-			if (isPersonAssignmentNullOrEmpty(personAssignment))
+			if (filteredVisualLayers == null)
 				return false;
 
-			var mainActivities = personAssignment.MainActivities();
-			var overtimeActivities = personAssignment.OvertimeActivities();
+			var visualLayers = filteredVisualLayers.Where(x => x.Period.Contains(period)).ToList();
+			if (visualLayers.Any() && visualLayers[0].Payload.Id == skill.Activity.Id)
+				return true;
 
-			var isSkillScheduled =
-				mainActivities
-					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period))
-				|| overtimeActivities
-					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period));
-
-			return isSkillScheduled;
+			return false;
 		}
 
 		private static IPersonAssignment getPersonAssignment(IScheduleDictionary scheduleDictionary, DateOnly date)
@@ -148,23 +167,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return personAssignment == null || personAssignment.ShiftLayers.IsEmpty();
 		}
 
-		private bool isSkillScheduledInThisInterval(IPerson person, SkillStaffingData skillStaffingData, IScheduleDictionary scheduleDictionary)
+		private bool isSkillScheduledInThisInterval(IPerson person, SkillStaffingData skillStaffingData, IDictionary<DateOnly, IFilteredVisualLayerCollection> filteredVisualLayersDictionary)
 		{
 			var scheduleDate = skillStaffingData.Date;
-			var personAssignmentDictionary = new Dictionary<DateOnly, IPersonAssignment>
-			{
-				{scheduleDate.AddDays(-1), getPersonAssignment(scheduleDictionary, scheduleDate.AddDays(-1))},
-				{scheduleDate, getPersonAssignment(scheduleDictionary, scheduleDate)}
-			};
-			var personAssignmentToday = personAssignmentDictionary[scheduleDate];
-			var personAssignmentYesterday = personAssignmentDictionary[scheduleDate.AddDays(-1)];
-
+			
 			var skill = skillStaffingData.Skill;
 			var timezone = person.PermissionInformation.DefaultTimeZone();
 			var startTime = TimeZoneHelper.ConvertToUtc(skillStaffingData.Time, timezone);
-			var skillScheduled = isSkillScheduled(personAssignmentToday, new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),skill)
-								 || isSkillScheduled(personAssignmentYesterday, new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),skill);
-			return skillScheduled;
+			var period = new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution));
+
+			var filteredVisualLayers = filteredVisualLayersDictionary[scheduleDate];
+
+			return isSkillScheduled(filteredVisualLayers, period, skill);
 		}
 
 		private void subtractUsersSchedule(SkillStaffingData skillStaffingData)
