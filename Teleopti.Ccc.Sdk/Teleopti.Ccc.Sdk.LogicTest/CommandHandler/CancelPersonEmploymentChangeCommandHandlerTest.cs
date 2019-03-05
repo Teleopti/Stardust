@@ -22,34 +22,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public CancelPersonEmploymentChangeCommandHandler Target;
 		public FakePersonRepository PersonRepository;
 		
-		[Test]
-		public void ShouldRemoveFuturePersonPeriod()
-		{
-			var person = PersonFactory.CreatePerson().WithId();
-
-			person.AddPersonPeriod(new PersonPeriod(
-				new DateOnly(new DateTime(2019, 02, 20)),
-				new PersonContract(new Contract("Previous Person Period"), new PartTimePercentage("110%"), new ContractScheduleWorkingMondayToFriday()),
-				new Team()));
-			
-			person.AddPersonPeriod(new PersonPeriod(
-				new DateOnly(new DateTime(2019, 02, 27)),  
-				new PersonContract(new Contract("Future Person Period"), new PartTimePercentage("110%"), new ContractScheduleWorkingMondayToFriday()), 
-				new Team()));
-
-			PersonRepository.Has(person);
-			
-			Target.Handle(new CancelPersonEmploymentChangeCommandDto
-			{
-				Date = new DateOnlyDto
-				{
-					DateTime = new DateTime(2019, 02, 25)
-				},
-				PersonId = person.Id.Value
-			});
-			
-			Assert.AreEqual(1, person.PersonPeriodCollection.Count);
-		}
 
 		[Test]
 		public void ShouldRemovePersonPeriodWithStartDateSameAsInputDate()
