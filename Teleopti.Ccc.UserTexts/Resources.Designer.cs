@@ -20039,6 +20039,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most overstaffed day.
+        /// </summary>
+        public static string MostOverstaffedDay {
+            get {
+                return ResourceManager.GetString("MostOverstaffedDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most understaffed day.
+        /// </summary>
+        public static string MostUnderstaffedDay {
+            get {
+                return ResourceManager.GetString("MostUnderstaffedDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move.
         /// </summary>
         public static string Move {

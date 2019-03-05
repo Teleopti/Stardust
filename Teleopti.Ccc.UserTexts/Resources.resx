@@ -18261,4 +18261,12 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Neutral</value>
 		<comment>Adherence type</comment>
   </data>
+  <data name="MostUnderstaffedDay" xml:space="preserve">
+    <value>Most understaffed day</value>
+		<comment>Displays the Most undertaffed day in heatmap in Plans</comment>
+  </data>
+  <data name="MostOverstaffedDay" xml:space="preserve">
+    <value>Most overstaffed day</value>
+		<comment>Displays the Most overaffed day in heatmap in Plans</comment>
+  </data>
 </root>

@@ -160,7 +160,7 @@ export class IntradayComponent implements OnChanges {
 			text += '</tr>';
 			if (d.id === 'Understaffing' || d.id === 'Overstaffing') {
 				text += "<tr>";
-				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:" + bgcolor + "'></span>" + 'Relative Understaffing' + '</td>';
+				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:" + bgcolor + "'></span>" + 'Relative understaffing' + '</td>';
 				text += "<td class='value'"+(criticalInterval!==0?"style='color:#FF0000'":'')+">" + ' '+(Math.abs(relativeDifferenceInterval)*100).toFixed(1)+'% '+'</td>';
 				text += '</tr>';
 			}
