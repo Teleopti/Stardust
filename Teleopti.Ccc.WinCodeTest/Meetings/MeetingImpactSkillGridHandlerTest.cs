@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(() => _meetingImpactView.PositionControl()).Repeat.Once();
 
             _mocks.ReplayAll();
-            _target.DrawSkillGrid();
+            _target.DrawSkillGrid(_timeZone);
             _mocks.VerifyAll();
         }
     }

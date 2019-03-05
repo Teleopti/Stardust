@@ -15,11 +15,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Logon
 {
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class ImpersonateSystemTest : IExtendSystem
 	{
 		public Service TheService;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public IBusinessUnitRepository BusinessUnits;
 		public IScenarioRepository Scenarios;
 		public WithUnitOfWork UnitOfWork;

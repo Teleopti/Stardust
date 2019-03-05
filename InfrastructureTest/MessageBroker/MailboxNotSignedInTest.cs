@@ -7,10 +7,10 @@ using Teleopti.Ccc.Domain.MessageBroker.Server;
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class MailboxNotSignedInTest
 	{
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public IMessageBrokerServer Server;
 
 		[Test]

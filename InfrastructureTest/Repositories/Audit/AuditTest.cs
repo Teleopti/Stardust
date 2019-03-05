@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 {
 	[TestFixture]
 	[Category("BucketB")]
-	[DatabaseTest]
+	[DatabaseTestDONTUSE]
 	public abstract class AuditTest
 	{
 		protected IPersonAssignment PersonAssignment { get; private set; }

@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             
            _meetingImpactSkillGridHandler.SetupSkillTabs();
 
-           _meetingImpactSkillGridHandler.DrawSkillGrid();
+           _meetingImpactSkillGridHandler.DrawSkillGrid(_timeZone.Value);
             _meetingImpactCalculator.RecalculateResources(_meetingImpactView.StartDate);
             UpdateMeetingControl();
 
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if(_meetingImpactView.SelectedSkill() == null)
                 return;
 			//UpdateMeetingDatesTimesInViewFromModel();
-            _meetingImpactSkillGridHandler.DrawSkillGrid();
+            _meetingImpactSkillGridHandler.DrawSkillGrid(_timeZone.Value);
 		    _meetingImpactCalculator.RecalculateResources(_meetingImpactView.StartDate);
 			UpdateMeetingControl();
 
