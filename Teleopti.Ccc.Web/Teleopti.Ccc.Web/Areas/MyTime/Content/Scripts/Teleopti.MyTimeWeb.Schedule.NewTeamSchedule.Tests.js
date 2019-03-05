@@ -50,7 +50,7 @@
 		var today = moment().format(dateFormat);
 
 		equal(vm.selectedDate().format(dateFormat), today);
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), today);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), today);
 	});
 
 	test('should format displayDate', function () {
@@ -66,7 +66,7 @@
 		initVm();
 
 		equal(
-			$('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(),
+			$('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(),
 			Teleopti.MyTimeWeb.Common.FormatDate(moment())
 		);
 	});
@@ -81,7 +81,7 @@
 		var expectDateStr = today.add(-1, 'days').format(dateFormat);
 
 		equal(vm.selectedDate().format(dateFormat), expectDateStr);
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), expectDateStr);
 	});
 
 	test('should change selected date after clicking on "next day" icon', function () {
@@ -95,7 +95,7 @@
 		var expectDateStr = today.add(1, 'days').format(dateFormat);
 
 		equal(vm.selectedDate().format(dateFormat), expectDateStr);
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), expectDateStr);
 	});
 
 	test('should change display date after changing selected date', function () {
@@ -108,7 +108,7 @@
 
 		var expectDateStr = vm.selectedDate().format(dateFormat);
 
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), expectDateStr);
 	});
 
 	test('should reset loaded agent index after changing selected date', function () {
@@ -1225,7 +1225,7 @@
 		}
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-day-off-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-default').click();
 
@@ -1242,7 +1242,7 @@
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-primary').click();
 
@@ -1271,11 +1271,11 @@
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-primary').click();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-default').click();
 
@@ -1298,9 +1298,9 @@
 		}
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-day-off-toggle input').click();
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 
 		equal(completeLoadedCount, 1);
 		equal(vm.showOnlyDayOff(), false);
@@ -1315,9 +1315,9 @@
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 
 		equal(completeLoadedCount, 1);
 		equal(vm.showOnlyNightShift(), false);
@@ -2004,13 +2004,13 @@
 			'			<li class="mobile-datepicker">',
 			'				<div class="input-group">',
 			'					<span class="input-group-btn">',
-			'						<button class="btn btn-default previous-day" data-bind="click: previousDay">',
+			'						<button class="btn btn-default previous-day" aria-label="@Resources.PreviousDay" data-bind="click: previousDay">',
 			'							<i class="glyphicon glyphicon-chevron-left"></i>',
 			'						</button>',
 			'					</span>',
-			'					<a class="text-center formatted-date-text moment-datepicker"></a>',
+			'					<button class="btn btn-default formatted-date-text moment-datepicker" aria-haspopup="true"></button>',
 			'					<span class="input-group-btn">',
-			'						<button class="btn btn-default next-day" data-bind="click: nextDay">',
+			'						<button class="btn btn-default next-day" " aria-label="@Resources.NextDay" data-bind="click: nextDay">',
 			'							<i class="glyphicon glyphicon-chevron-right"></i>',
 			'						</button>',
 			'					</span>',
@@ -2018,32 +2018,32 @@
 			'			</li>',
 			'			<!-- ko if: isHostAMobile || isHostAniPad -->',
 			'			<li class="mobile-today" data-bind="click: today">',
-			'				<a>',
+			'				<button class="btn btn-default" aria-label="@Resources.Today">',
 			'					<i class="glyphicon glyphicon-home"></i>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko if: isHostADesktop -->',
 			"			<li class=\"mobile-today\" data-bind=\"click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'				<a>',
+			'				<button class="btn btn-default" aria-label="@Resources.Today">',
 			'					<i class="glyphicon glyphicon-home"></i>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko if: isHostAMobile -->',
 			'			<li class="new-teamschedule-team-filter" data-bind="css: {\'new-teamschedule-has-time-filter\': hasFilteredOnMobile}">',
-			'				<a class="relative">',
+			'				<button class="btn btn-default" aria-label="@Resources.Filter" aria-haspopup="true">',
 			'					<i class="glyphicon glyphicon-filter"></i>',
 			'					<span></span>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko if: isHostADesktop || isHostAniPad -->',
 			"			<li class=\"new-teamschedule-time-filter\" data-bind=\"css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'				<a>',
+			'				<button class="btn btn-default" aria-label="@Resources.Filter" aria-haspopup="true">',
 			'					<i class="glyphicon glyphicon-filter"></i>',
 			'					<span></span>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<li class="new-teamschedule-filter-component relative">',
 			'				<div data-bind="click: openTeamSelectorPanel"></div>',
