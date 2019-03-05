@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class CurrentTransactionHooks : ICurrentTransactionHooks, ITransactionHooksScope
 	{
-		private static IEnumerable<ITransactionHook> _globalHooks;
 		[ThreadStatic]
 		private static IEnumerable<ITransactionHook> _threadHooks;
 		private readonly IEnumerable<ITransactionHook> _hooks;
@@ -19,19 +18,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IEnumerable<ITransactionHook> Current()
 		{
-			return _threadHooks ?? _globalHooks ?? _hooks;
+			return _threadHooks ?? _hooks;
 		}
 
-		public IDisposable GloballyUse(IEnumerable<ITransactionHook> messageSenders)
-		{
-			_globalHooks = messageSenders;
-			return new GenericDisposable(() =>
-			{
-				_globalHooks = null;
-			});
-		}
-
-		public IDisposable OnThisThreadUse(IEnumerable<ITransactionHook> messageSenders)
+		private static IDisposable onThisThreadUse(IEnumerable<ITransactionHook> messageSenders)
 		{
 			_threadHooks = messageSenders;
 			return new GenericDisposable(() =>
@@ -42,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IDisposable OnThisThreadExclude<T>()
 		{
-			return OnThisThreadUse(Current().Where(x => x.GetType() != typeof(T)).ToArray());
+			return onThisThreadUse(Current().Where(x => x.GetType() != typeof(T)).ToArray());
 		}
 	}
 }

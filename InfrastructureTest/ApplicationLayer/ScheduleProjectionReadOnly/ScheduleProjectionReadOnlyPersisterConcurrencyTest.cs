@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
 {
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	[Ignore("Sometimes out of memory")]
 	public class ScheduleProjectionReadOnlyPersisterConcurrencyTest : IExtendSystem
 	{		
