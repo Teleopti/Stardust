@@ -27,7 +27,6 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
-
 using Teleopti.Messaging.Client;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			XmlConfigurator.Configure();
 			var builder = new ContainerBuilder();
 			var toggles = new FakeToggleManager();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, toggles)));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"}, toggles)));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
-				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
+				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeFromContainer(container));
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 				uow.PersistAll();
 			}
 		}
-		
+
 		private static void deleteAllAggregates()
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
@@ -121,12 +120,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 					if (!(aggregateRoot is IPersonWriteProtectionInfo) && !(aggregateRoot is PlanningGroupSettings))
 					{
 						var deleteTag = aggregateRoot as IDeleteTag;
-						if(deleteTag==null)
+						if (deleteTag == null)
 							uow.FetchSession().Delete(aggregateRoot);
 						else
 							deleteTag.SetDeleted();
 					}
 				}
+
 				uow.PersistAll();
 			}
 		}
@@ -142,12 +142,12 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public static void CheckThatDbIsEmtpy()
 		{
 			const string assertMess =
-				 @"
+				@"
 After running this test there's still data in db.
 If the test executes code that calls PersistAll(),
 you have to manually clean up or call CleanUpAfterTest() to restore the database state.
 ";
-			
+
 			var stateMock = new FakeState();
 			BusinessUnitUsedInTests.BusinessUnit.SetId(Guid.NewGuid());
 			StateHolderProxyHelper.ClearAndSetStateHolder(
@@ -164,7 +164,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 					ISession s = uowTemp.FetchSession();
 					s.CreateSQLQuery(@"delete from PersonWriteProtectionInfo").ExecuteUpdate();
 					IList<IAggregateRoot> leftInDb = s.CreateCriteria(typeof(IAggregateRoot))
-											  .List<IAggregateRoot>();
+						.List<IAggregateRoot>();
 					if (leftInDb.Count > 0)
 					{
 						StringBuilder builder = new StringBuilder(assertMess);
@@ -183,13 +183,10 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 		}
 
 
-
-
-
-
 		public static TestScope CreatePersonAndLoginWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
 		{
-			createBusinessUnitAndPerson(out person);
+			BusinessUnitUsedInTests.Reset();
+			person = PersonFactory.CreatePerson(RandomName.Make());
 			Login(person);
 			unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork();
 			saveBusinessUnitAndPerson(person, unitOfWork);
@@ -222,15 +219,17 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			}
 		}
 
-		public static IDisposable CreatePersonAndLogin(out IPerson person)
+		public static IDisposable CreatePersonAndLogin(IDataSource dataSource, out IPerson person)
 		{
-			createBusinessUnitAndPerson(out person);
-			Login(person);
-			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
+			BusinessUnitUsedInTests.Reset();
+			person = PersonFactory.CreatePerson(RandomName.Make());
+			Login(dataSource, person);
+			using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				saveBusinessUnitAndPerson(person, unitOfWork);
 				unitOfWork.PersistAll();
 			}
+
 			return new GenericDisposable(() =>
 			{
 				RestoreCcc7Database();
@@ -239,31 +238,23 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			});
 		}
 
-		private static void createBusinessUnitAndPerson(out IPerson person)
-		{
-			BusinessUnitUsedInTests.Reset();
+		public static void Login(IPerson person) => Login(DataSource, person);
 
-			person = PersonFactory.CreatePerson(RandomName.Make());
-		}
-
-		public static void Login(IPerson person)
+		public static void Login(IDataSource dataSource, IPerson person)
 		{
 			StateHolderProxyHelper.SetupFakeState(
-				DataSource, 
-				person, 
+				dataSource,
+				person,
 				BusinessUnitUsedInTests.BusinessUnit);
 		}
 
-		public static void Logout()
-		{
-			StateHolderProxyHelper.Logout();
-		}
+		public static void Logout() => SelectivePrincipalContext.Make().SetCurrentPrincipal(null);
 
 		private static void saveBusinessUnitAndPerson(IPerson person, IUnitOfWork uow)
 		{
 			var session = uow.FetchSession();
 
-			((IDeleteTag)person).SetDeleted();
+			((IDeleteTag) person).SetDeleted();
 			session.Save(person);
 
 			//force a insert
@@ -272,7 +263,5 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			session.Save(BusinessUnitUsedInTests.BusinessUnit, businessUntId);
 			session.Flush();
 		}
-
 	}
-
 }
