@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
@@ -22,10 +23,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValid
 			get{ return "The scheduled hours must follow the pattern: 210 hours M-F, 0 hours Sa-Su.";} 
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITimeZoneGuard timeZoneGuard)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var scheduledHours = ValidatorHelperMethods.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
+			var scheduledHours = ValidatorHelperMethods.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill, timeZoneGuard);
 			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
 			if (!checkResult)
 				result.Result = SikuliValidationResult.ResultValue.Fail;

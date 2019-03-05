@@ -9,11 +9,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -32,15 +32,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ILazyLoadingManager _lazyManager;
 		private readonly IScheduleStorageFactory _scheduleStorageFactory;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
 		private BackgroundWorker _backgroundWorker;
 		
-		public SchedulerStateLoader(SchedulingScreenState stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager, IScheduleStorageFactory scheduleStorageFactory)
+		public SchedulerStateLoader(SchedulingScreenState stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager, IScheduleStorageFactory scheduleStorageFactory, ITimeZoneGuard timeZoneGuard)
 		{
 			_unitOfWorkFactory = uowFactory;
 			_lazyManager = lazyManager;
 			_scheduleStorageFactory = scheduleStorageFactory;
+			_timeZoneGuard = timeZoneGuard;
 			_repositoryFactory = repositoryFactory;
 			_schedulerState = stateHolder;
 		}
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			if (_schedulerState.SchedulerStateHolder.Schedules != null && _schedulerState.SchedulerStateHolder.RequestedPeriod.Period().Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
 				return;
-			var timeZone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _timeZoneGuard.CurrentTimeZone();
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (_schedulerState.SchedulerStateHolder.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					_schedulerState.SchedulerStateHolder.RequestedPeriod.Period() !=
 					scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
 				{
-					var timeZone = TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone();
+					var timeZone = _timeZoneGuard.CurrentTimeZone();
 					((SchedulerStateHolder) _schedulerState.SchedulerStateHolder).RequestedPeriod =
 						new DateOnlyPeriodAsDateTimePeriod(
 							scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(timeZone),
@@ -234,7 +236,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
 				_schedulerState.SchedulerStateHolder.LoadSchedules(scheduleStorage, _schedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
 
-				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(_timeZoneGuard.CurrentTimeZone());
 				foreach (var scheduleRange in _schedulerState.SchedulerStateHolder.Schedules.Values)
 				{
 					scheduleRange.ScheduledDayCollection(period).ForEach(x => _lazyManager.Initialize(x.PersonAssignment(true).DayOffTemplate));

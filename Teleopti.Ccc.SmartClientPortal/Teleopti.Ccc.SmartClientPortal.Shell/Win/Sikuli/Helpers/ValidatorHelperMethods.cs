@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
 	internal static class ValidatorHelperMethods
 	{
-		internal static IEnumerable<double?> GetDailyLowestIntraIntervalBalanceForPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill)
+		internal static IEnumerable<double?> GetDailyLowestIntraIntervalBalanceForPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill, ITimeZoneGuard timeZoneGuard)
 		{
 			try
 			{
 				var result = new List<double?>();
-				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, singleSkill);
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, singleSkill, timeZoneGuard);
 				foreach (var dailySkillStaffPeriodList in skillStaffPeriodsOfFullPeriod)
 				{
 					result.Add(dailySkillStaffPeriodList.Min(c => c.IntraIntervalValue));
@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 			}
 		}
 
-		public static IEnumerable<double?> GetDailyScheduledHoursForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
+		public static IEnumerable<double?> GetDailyScheduledHoursForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill, ITimeZoneGuard timeZoneGuard)
 		{
 			try
 			{
-				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill);
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill, timeZoneGuard);
 				var dailyScheduledHours =
 					skillStaffPeriodsOfFullPeriod.Select(SkillStaffPeriodHelper.ScheduledHours).ToList();
 				return dailyScheduledHours;
@@ -45,11 +45,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 			}
 		}
 
-		public static double? GetStandardDeviationForPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
+		public static double? GetStandardDeviationForPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill, ITimeZoneGuard timeZoneGuard)
 		{
 			try
 			{
-				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill);
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill, timeZoneGuard);
 				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
 				if (result.HasValue)
 					return Math.Round(result.Value, 3);
@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 			}
 		}
 
-		public static double GetDailySumOfStandardDeviationsFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
+		public static double GetDailySumOfStandardDeviationsFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill, ITimeZoneGuard timeZoneGuard)
 		{
 			double result = 0d;
-				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill);
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill, timeZoneGuard);
 				foreach (var dailySkillStaffPeriodList in skillStaffPeriodsOfFullPeriod)
 				{
 					var dailyValue = SkillStaffPeriodHelper.SkillDayGridSmoothness(dailySkillStaffPeriodList);
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 			return Math.Round(result, 3);
 		}
 
-		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
+		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill, ITimeZoneGuard timeZoneGuard)
 		{
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(timeZoneGuard.CurrentTimeZone());
 			var skillStaffPeriodsTotal = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					totalSkill, period);
 
@@ -84,23 +84,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 
 			foreach (var day in stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
-				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(timeZoneGuard.CurrentTimeZone());
 				var skillStaffPeriods = skillStaffPeriodsTotal.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
 				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriods);
 			}
 			return dailySkillStaffPeriodsForFullPeriod;
 		}
 
-		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill)
+		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill, ITimeZoneGuard timeZoneGuard)
 		{
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(timeZoneGuard.CurrentTimeZone());
 			var skillStaffPeriods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>{ singleSkill }, period);
 
 			var dailySkillStaffPeriodsForFullPeriod = new List<IList<ISkillStaffPeriod>>();
 
 			foreach (var day in stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
-				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE.CurrentTimeZone());
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(timeZoneGuard.CurrentTimeZone());
 				var skillStaffPeriodsOnDay = skillStaffPeriods.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
 				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriodsOnDay);
 			}

@@ -4,10 +4,10 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -25,10 +25,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private readonly INewBusinessRuleCollection _newBusinessRules;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ApprovePersonRequestCommand(IViewBase view, IScheduleDictionary schedules, IScenario scenario, IRequestPresenterCallback callback, IHandleBusinessRuleResponse handleBusinessRuleResponse,
 			IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository,
-			IPersonRequestRepository personRequestRepository)
+			IPersonRequestRepository personRequestRepository, ITimeZoneGuard timeZoneGuard)
 		{
 			_view = view;
 			_schedules = schedules;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			_globalSettingDataRepository = globalSettingDataRepository;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_personRequestRepository = personRequestRepository;
+			_timeZoneGuard = timeZoneGuard;
 			_scenario = scenario;
 			_callback = callback;
 			_handleBusinessRuleResponse = handleBusinessRuleResponse;
@@ -102,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					break;
 				case RequestType.ShiftTradeRequest:
 					service = new ShiftTradeRequestApprovalService(_schedules,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE), newBusinessRules, _authorization, _personRequestRepository);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, _timeZoneGuard), newBusinessRules, _authorization, _personRequestRepository);
 					break;
 			}
 			return Model.PersonRequest.Approve(service, _authorization);

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			get { return "At least one 'lowest intra interval balance' value must be between 0 and 0.8 to have a good start point for optimization."; } 
 		}
 
-		public override SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard)
 		{
 			var scheduleTestData = data as SchedulerTestData;
 			if (scheduleTestData == null)
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			}
 
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var lowestIntervalBalances = ValidatorHelperMethods.GetDailyLowestIntraIntervalBalanceForPeriod(scheduleTestData.SchedulerState, scheduleTestData.TotalSkill.AggregateSkills[1]);
+			var lowestIntervalBalances = ValidatorHelperMethods.GetDailyLowestIntraIntervalBalanceForPeriod(scheduleTestData.SchedulerState, scheduleTestData.TotalSkill.AggregateSkills[1], timeZoneGuard);
 			if (lowestIntervalBalances == null)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;

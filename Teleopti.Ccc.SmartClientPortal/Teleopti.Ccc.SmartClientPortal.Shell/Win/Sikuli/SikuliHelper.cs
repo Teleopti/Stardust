@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Views;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli
 		//	get { return _activeValidators; }
 		//}
 
-		public static void EnterValidator(IWin32Window owner)
+		public static void EnterValidator(IWin32Window owner, ITimeZoneGuard timeZoneGuard)
 		{
 			if (!InteractiveMode)
 				return;
@@ -55,19 +56,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli
 				}
 			}
 			if (CurrentValidator.InstantValidation)
-				Validate(CurrentValidator, owner);
+				Validate(CurrentValidator, owner, timeZoneGuard);
 		}
 
-		public static void Validate(IRootValidator validator, IWin32Window owner)
+		public static void Validate(IRootValidator validator, IWin32Window owner, ITimeZoneGuard timeZoneGuard)
 		{
-			Validate(validator, owner, null);
+			Validate(validator, owner, null, timeZoneGuard);
 		}
 
-		public static void Validate(IRootValidator validator, IWin32Window owner, object testData)
+		public static void Validate(IRootValidator validator, IWin32Window owner, object testData, ITimeZoneGuard timeZoneGuard)
 		{
 			if (!InteractiveMode)
 				return;
-			var validationResult = validator.Validate(testData);
+			var validationResult = validator.Validate(testData, timeZoneGuard);
 			handleValidationResult(validator, owner, validationResult);
 		}
 

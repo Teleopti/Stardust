@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidators;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.SelftestValidators
@@ -13,12 +14,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.SelftestVal
 			}
 		}
 
-		public override SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard)
 		{
 			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Fail));
 			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Pass));
 			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Warn));
-			return ValidateAtomicValidators(AtomicValidators);
+			return ValidateAtomicValidators(AtomicValidators, timeZoneGuard);
 		}
 	}
 }

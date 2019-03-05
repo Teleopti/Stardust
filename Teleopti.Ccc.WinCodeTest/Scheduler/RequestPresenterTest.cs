@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -20,6 +19,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person3;
 		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+		private ITimeZoneGuard _timeZoneGuard;
 		private IDictionary<Guid, IPerson> filteredPersons;
 		private IGlobalSettingDataRepository _globalSettingRepo;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[SetUp]
 		public void Setup()
 		{
+			_timeZoneGuard = new FakeTimeZoneGuard();
 			_requestViewAdapters = new List<PersonRequestViewModel>();
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			_permission = new FullPermission();
@@ -246,7 +248,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 																			_handleBusinessRuleResponse,
 																			new PersonRequestAuthorizationCheckerForTest
 																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack()
-																				, _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+																				, _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 
 			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
 			{
@@ -331,7 +333,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 																			_requestPresenter,
 																			_handleBusinessRuleResponse,
 																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository,new FakePersonRequestRepository()), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository,new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 
 			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
 			{
@@ -365,7 +367,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 																			_requestPresenter,
 																			_handleBusinessRuleResponse,
 																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 
 			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
 			{
@@ -403,7 +405,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 						new PersonRequestAuthorizationCheckerForTest
 							(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(),
 						new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository,
-						new FakePersonRequestRepository()), string.Empty);
+						new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 
 				foreach (PersonRequestViewModel adapter in _requestViewAdapters)
 				{
@@ -435,7 +437,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 																			_requestPresenter,
 																			_handleBusinessRuleResponse,
 																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 
 			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
 			{
@@ -475,7 +477,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 											new ApprovePersonRequestCommand(_view, sched, _scenario, _requestPresenter,
 																			_handleBusinessRuleResponse,
 																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 			Assert.IsTrue(req.IsApproved);
 			Assert.AreEqual(1, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Length);
 
@@ -512,7 +514,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 											new ApprovePersonRequestCommand(_view, sched, _scenario, _requestPresenter,
 																			_handleBusinessRuleResponse,
 																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository(), _timeZoneGuard), string.Empty);
 
 			Assert.IsTrue(req.IsPending);
 			Assert.AreEqual(0, sched[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Length);

@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -22,7 +23,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private readonly MeetingComposerView _meetingComposerView;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 		private SkillIntraDayGridControl _skillIntradayGridControl;
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
@@ -47,22 +48,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 								IResourceCalculation resourceOptimizationHelper,
 								ISkillPriorityProvider skillPriorityProvider,
 								IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
-								CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+								CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
+								ITimeZoneGuard timeZoneGuard)
 			: this()
 		{
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
-			_skillIntradayGridControl = new SkillIntraDayGridControl("MeetingSkillIntradayGridAndChart", _skillPriorityProvider, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE);
+			_skillIntradayGridControl = new SkillIntraDayGridControl("MeetingSkillIntradayGridAndChart", _skillPriorityProvider, _timeZoneGuard);
 
 			_meetingComposerView = meetingComposerView;
 			_skillPriorityProvider = skillPriorityProvider;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+			_timeZoneGuard = timeZoneGuard;
 			outlookTimePickerStartTime.CreateAndBindList();
 			outlookTimePickerEndTime.CreateAndBindList();
 
 			office2007OutlookTimePickerStartSlotPeriod.CreateAndBindList();
 			office2007OutlookTimePickerEndSlotPeriod.CreateAndBindList();
 
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())));
+			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(PersonAssignmentRepository.DONT_USE_CTOR(CurrentUnitOfWork.Make())), _timeZoneGuard);
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var decider = new PeopleAndSkillLoaderDecider(PersonRepository.DONT_USE_CTOR(new FromFactory(() =>UnitOfWorkFactory.Current), null, null), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
@@ -70,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 																UnitOfWorkFactory.Current, decider);
 			var transparentWindowHandler = new MeetingImpactTransparentWindowHandler(this, meetingViewModel,
 																					 schedulerStateHolder.SchedulerStateHolder.SchedulingResultState);
-			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder.SchedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade);
+			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder.SchedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade, _timeZoneGuard);
 			_presenter = new MeetingImpactPresenter(schedulerStateHolder.SchedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
 				slotFinder, new MeetingImpactCalculator(schedulerStateHolder.SchedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting, resourceCalculationContextFactory),
 				gridHandler, transparentWindowHandler, UnitOfWorkFactory.Current);
@@ -169,7 +172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			if (_skillIntradayGridControl != null)
 				_skillIntradayGridControl.LeftColChanged -= skillIntradayGridControlLeftColChanged;
 
-			_skillIntradayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart", _skillPriorityProvider, TimeZoneGuardForDesktop_DONOTUSE.Instance_DONTUSE) { DefaultColWidth = 45 };
+			_skillIntradayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart", _skillPriorityProvider, _timeZoneGuard) { DefaultColWidth = 45 };
 			_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, schedulerStateHolder);
 			_skillIntradayGridControl.TurnoffHelp();
 			_skillIntradayGridControl.SetRowsAndCols();

@@ -668,7 +668,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.EnterValidator(this, _container.Resolve<ITimeZoneGuard>());
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -1654,7 +1654,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var currentValidator = SikuliHelper.CurrentValidator;
 
 				if (currentValidator != null)
-					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(SchedulerState.SchedulerStateHolder, totalSkill));
+					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(SchedulerState.SchedulerStateHolder, totalSkill), _timeZoneGuard);
 				else
 					SikuliHelper.ShowTaskDoneView(this);
 			}
@@ -4153,7 +4153,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository);
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard);
 
 				IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() { obj.Value.Request };
 				using (
@@ -4210,7 +4210,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_handleBusinessRuleResponse,
 					_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository);
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard);
 
 				var selectedAdapters = new List<PersonRequestViewModel>() { eventParameters.Value.Request };
 
@@ -4728,7 +4728,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_requestPresenter, _handleBusinessRuleResponse,
 						_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-						globalSettingRepository, personAbsenceAccountRepository, personRequestRepository), _requestView.SelectedAdapters());
+						globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard), _requestView.SelectedAdapters());
 			}
 
 			if (_requestView != null)
@@ -4766,7 +4766,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository));
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard));
 			}
 			if (_requestView != null)
 				_requestView.NeedUpdate = true;

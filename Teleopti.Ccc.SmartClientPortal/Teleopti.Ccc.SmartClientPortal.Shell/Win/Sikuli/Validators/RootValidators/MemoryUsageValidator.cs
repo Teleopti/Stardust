@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 
 		public override bool InstantValidation { get { return true; } }
 
-		public override SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard)
 		{
 			var memoryCounter = MemoryCounter.DefaultInstance();
 			const double memoryConsumptionLimit = 100d;
