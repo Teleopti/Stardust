@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 			{
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
 				{
-					if (!(scheduleData is IExportToAnotherScenario) || scheduleData is PersonAbsence) continue;
+					if (!(scheduleData is IExportToAnotherScenario) || scheduleData is PersonAbsence || scheduleData is PersonAssignment) continue;
 					_scheduleStorage.Remove(_scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.GetValueOrDefault()));
 					changes = true;
 				}
@@ -89,17 +89,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 			var added = new HashSet<Guid>();
 			foreach (var scheduleDay in scheduleDays)
 			{
+				var targetPersonAss = targetScheduleDictionary[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly).PersonAssignment();
+
+				if (scheduleDay.PersistableScheduleDataCollection().IsEmpty())
+				{
+					if (targetPersonAss != null)
+					{
+						targetPersonAss.Clear(true);
+						_currentUnitOfWork.Current().Merge(targetPersonAss);
+					}
+				}
+
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
 				{
 					var exportableType = scheduleData as IExportToAnotherScenario;
-					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
-							importPeriod));
+					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person, importPeriod));
+
+					if (changedScheduleData is PersonAssignment sourcePersonAssignment && targetPersonAss != null)
+					{
+						targetPersonAss.FillWithDataFrom(sourcePersonAssignment);
+						_currentUnitOfWork.Current().Merge(targetPersonAss);
+						added.Add(scheduleData.Id.GetValueOrDefault());	
+					}
+
 					if (changedScheduleData is PersonAbsence absence)
 					{
 						if (HandleAbsenceSplits(importPeriod, absence)) continue;
 
-						foreach (var targetAbsence in GetTargetSchedulesForDay(targetScheduleDictionary, period, person, scheduleDay.DateOnlyAsPeriod.DateOnly)
-									.OfType<PersonAbsence>())
+						foreach (var targetAbsence in GetTargetSchedulesForDay(targetScheduleDictionary, period, person, scheduleDay.DateOnlyAsPeriod.DateOnly).OfType<PersonAbsence>())
 						{
 							if (absence.Period == targetAbsence.Period && absence.Layer.Payload.Id == targetAbsence.Layer.Payload.Id)
 							{
