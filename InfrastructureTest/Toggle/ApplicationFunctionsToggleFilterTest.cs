@@ -74,9 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.WebReplyRequest)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.SystemSetting)]
 		public void ShouldHideApplicationFunctionWithToggleOff(string applicationFunctionPath)
 		{
