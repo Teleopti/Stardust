@@ -33,6 +33,10 @@ update Skill set SeriousUnderstaffing = -0.5, Understaffing = -0.5
 update Skill set SeriousUnderstaffing = -0.4, Understaffing = -0.4
 WHERE Id = '54ABB467-09C6-480F-B705-A3B701042B80' 
 
+ update [AbsenceRequestOpenPeriod]
+ set StaffingThresholdValidator = 1
+  where PArent = 'E97BC114-8939-4A70-AE37-A338010FFF19'
+
 declare @PersonRequestId uniqueidentifier 
 declare @RequestId uniqueidentifier 
 declare @person_id uniqueidentifier
@@ -68,7 +72,7 @@ BEGIN
 	BEGIN  
 		select @PersonRequestId = newid()
 	insert into PersonRequest select @PersonRequestId, 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67', '3F0886AB-7B25-4E95-856A-0D726EDC2A67', 
-	'2016-12-25', '2016-12-25',@person_id, 5, 'Performance test waitlist', 'of absence request', 0,  '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B', '', GETUTCDATE(),null
+	'2016-12-25', '2016-12-25',@person_id, 5, 'Performance test waitlist asad', 'of absence request', 0,  '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B', '', GETUTCDATE(),null
 
 	select @RequestId = newid()
 	INSERT INTO Request SELECT @RequestId, @PersonRequestId, DATEADD(d, @cnt, @startRequest), DATEADD(d, @cnt, @endRequest)
@@ -116,3 +120,4 @@ select Id From PersonRequest where CreatedOn = '2016-12-24' AND
 
 personRequest.Id.Value == new Guid( "F4B2B180-A729-43B1-A945-0CEE4D551A28") || personRequest.Id.Value == new Guid( "4E3F21FB-BC80-4B19-921D-42CD58568F8C") || personRequest.Id.Value == new Guid( "012CA641-F4ED-47D3-8EED-710148BB9D51") || personRequest.Id.Value == new Guid( "9AA91A10-4A32-4F03-A554-8CDA880FD147") || personRequest.Id.Value == new Guid( "DF4E7327-6C5A-4649-B55B-94CB40F443BF") || personRequest.Id.Value == new Guid( "D553E477-5A1E-4D50-8CA7-AD5F248970C9") || personRequest.Id.Value == new Guid( "79D18C88-A47F-44F8-8DB3-BE3087C24DA5") || personRequest.Id.Value == new Guid( "629CACDE-51FB-4A12-9917-C7D46EDBA1FD") 
 */
+
