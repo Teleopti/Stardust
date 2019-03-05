@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 				var archivePeriod = new DateTimePeriod(timeZone.SafeConvertTimeToUtc(period.StartDate.Date), timeZone.SafeConvertTimeToUtc(period.EndDate.Date).AddHours(23).AddMinutes(59));
 
 				clearCurrentSchedules(targetScheduleDictionary, person, period, archivePeriod);
-				copySchedules(sourceScheduleDictionary, toScenario, person, period, archivePeriod);
+				copySchedules(sourceScheduleDictionary, targetScheduleDictionary, toScenario, person, period, archivePeriod);
 			});
 
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 			{
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
 				{
-					if (!(scheduleData is IExportToAnotherScenario)) continue;
+					if (!(scheduleData is IExportToAnotherScenario) || scheduleData is PersonAssignment) continue;
 					var entity = _scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.GetValueOrDefault());
 					if (entity is PersonAbsence absence)
 					{
@@ -105,18 +105,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 				_currentUnitOfWork.Current().PersistAll();
 		}
 
-		private void copySchedules(IScheduleDictionary scheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod archivePeriod)
+		private void copySchedules(IScheduleDictionary scheduleDictionary, IScheduleDictionary targetScheduleDictionary, IScenario toScenario, IPerson person, DateOnlyPeriod period, DateTimePeriod archivePeriod)
 		{
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, person);
 			var added = new HashSet<Guid>();
 
 			foreach (var scheduleDay in scheduleDays)
 			{
+				var targetPersonAss = targetScheduleDictionary[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly).PersonAssignment();
+
+				if (scheduleDay.PersistableScheduleDataCollection().IsEmpty() && targetPersonAss != null)
+				{
+					targetPersonAss.Clear(true);
+					_currentUnitOfWork.Current().Merge(targetPersonAss);		
+				}
+
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
 				{
 					var exportableType = scheduleData as IExportToAnotherScenario;
-					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
-							archivePeriod));
+					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person, archivePeriod));
+
+					if (changedScheduleData is PersonAssignment sourcePersonAssignment && targetPersonAss != null)
+					{
+						targetPersonAss.FillWithDataFrom(sourcePersonAssignment);
+						_currentUnitOfWork.Current().Merge(targetPersonAss);
+						added.Add(scheduleData.Id.GetValueOrDefault());
+					}
+
 					if (changedScheduleData is PersonAbsence absence)
 					{
 						if (HandleAbsenceSplits(archivePeriod, absence)) continue;

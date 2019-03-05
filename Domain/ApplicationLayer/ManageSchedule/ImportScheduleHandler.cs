@@ -91,13 +91,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 			{
 				var targetPersonAss = targetScheduleDictionary[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly).PersonAssignment();
 
-				if (scheduleDay.PersistableScheduleDataCollection().IsEmpty())
+				if (scheduleDay.PersistableScheduleDataCollection().IsEmpty() && targetPersonAss !=null)
 				{
-					if (targetPersonAss != null)
-					{
-						targetPersonAss.Clear(true);
-						_currentUnitOfWork.Current().Merge(targetPersonAss);
-					}
+					targetPersonAss.Clear(true);
+					_currentUnitOfWork.Current().Merge(targetPersonAss);	
 				}
 
 				foreach (var scheduleData in scheduleDay.PersistableScheduleDataCollection())
