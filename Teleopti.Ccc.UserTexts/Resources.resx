@@ -18193,6 +18193,10 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Adjust Adherence (to neutral because of technical issues) </value>
     <comment>Permission to adjust adherence to neutral because of technical issues</comment>
   </data>
+  <data name="AdjustToNeutral" xml:space="preserve">
+    <value>Adjust To Neutral</value>
+    <comment>Permission to adjust adherence to neutral because of technical issues</comment>
+  </data>
   <data name="NoSkillGroupCreated" xml:space="preserve">
     <value>No skill group created</value>
     <comment>Placeholder in skill group picker if no skill group is created</comment>
