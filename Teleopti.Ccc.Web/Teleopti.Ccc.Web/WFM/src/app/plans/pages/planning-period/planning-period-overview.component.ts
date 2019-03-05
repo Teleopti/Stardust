@@ -360,6 +360,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					this.scheduledAgents = 0;
 					this.skills = undefined;
 					this.status = '';
+					this.selectedDay = null;
+					this.selectedSkill = null;
 					return;
 				}
 				if (clearScheduleStatus.Failed) {
