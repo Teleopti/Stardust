@@ -110,7 +110,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.Schedules.First().Name.Should().Be.EqualTo("A@Detective");
 		}
 
-
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
@@ -1072,6 +1071,77 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 						IsOnlyAbsences = true
 					});
 			});
+		}
+
+		[Test]
+		public void ShouldNotReturnSchedulesIfTodayDontHavePersonAbsenceWhenShowOnlyAbsence() {
+			var scenario = CurrentScenario.Has("Default");
+			var contract = ContractFactory.CreateContract("Contract").WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+			var person = PersonFactory.CreatePersonWithGuid("person", "1");
+			PeopleSearchProvider.Add(person);
+			PersonRepository.Has(person);
+
+			var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2019, 3, 6));
+			personAssignment.AddActivity(new Activity("activity"), new DateTimePeriod(2019, 3, 6, 7, 2019,3, 6, 15));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var personAssignment2 = new PersonAssignment(person, scenario, new DateOnly(2019, 3, 7));
+			personAssignment2.AddActivity(new Activity("activity"), new DateTimePeriod(2019, 3, 7, 7, 2019, 3, 7, 15));
+			PersonAssignmentRepository.Add(personAssignment2);
+
+			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2019, 3, 7, 2, 2019, 3, 7, 8));
+			PersonAbsenceRepository.Add(personAbs);
+
+			var result = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				GroupIds = new[] { team.Id.Value },
+				DateInUserTimeZone = new DateOnly(2019, 3, 6),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = true
+			});
+			result.Schedules.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnSchedulesIfTodayHasPersonAbsenceWhenShowOnlyAbsence()
+		{
+			var scenario = CurrentScenario.Has("Default");
+			var contract = ContractFactory.CreateContract("Contract").WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+			var person = PersonFactory.CreatePersonWithGuid("person", "1");
+			PeopleSearchProvider.Add(person);
+			PersonRepository.Has(person);
+
+			var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2019, 3, 6));
+			personAssignment.AddActivity(new Activity("activity"), new DateTimePeriod(2019, 3, 6, 7, 2019, 3, 6, 15));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var personAssignment2 = new PersonAssignment(person, scenario, new DateOnly(2019, 3, 7));
+			personAssignment2.AddActivity(new Activity("activity"), new DateTimePeriod(2019, 3, 7, 7, 2019, 3, 7, 15));
+			PersonAssignmentRepository.Add(personAssignment2);
+
+			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2019, 3, 6, 7, 2019, 3, 6, 8));
+			PersonAbsenceRepository.Add(personAbs);
+			var personAbs2 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2019, 3, 7, 2, 2019, 3, 7, 8));
+			PersonAbsenceRepository.Add(personAbs2);
+
+			var result = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				GroupIds = new[] { team.Id.Value },
+				DateInUserTimeZone = new DateOnly(2019, 3, 6),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = true
+			});
+			result.Schedules.Count().Should().Be.EqualTo(3);
 		}
 
 		[Test]
