@@ -151,7 +151,13 @@ BEGIN
 		NOT EXISTS (SELECT queue_original_id FROM mart.dim_queue_excluded exl
 						WHERE	exl.queue_original_id	= agg.orig_queue_id COLLATE DATABASE_DEFAULT
 						AND		exl.datasource_id		= sys.datasource_id
-					)'
+					)
+	AND  --exclude queues with null values in agg for orig_queue_id and orig_desc
+		(
+			agg.orig_queue_id IS NOT NULL
+			AND
+			agg.orig_desc IS NOT NULL
+		)'
 
 	---Exec
 	EXEC sp_executesql @sqlstring

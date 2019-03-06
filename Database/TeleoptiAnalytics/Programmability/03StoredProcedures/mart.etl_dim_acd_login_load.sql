@@ -192,7 +192,12 @@ BEGIN
 		NOT EXISTS (SELECT acd_login_id FROM mart.dim_acd_login d 
 						WHERE	d.acd_login_agg_id= agg.agent_id 	AND
 								d.datasource_id =sys.datasource_id
-					)'
+					)
+		AND (
+				agg.orig_agent_id IS NOT NULL
+				AND
+				agg.agent_name IS NOT NULL
+			)'
 
 	--Exec
 	EXEC sp_executesql @sqlstring
