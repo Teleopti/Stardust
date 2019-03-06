@@ -65,11 +65,11 @@ describe('SystemSettings page', () => {
 	}));
 
 	it('should create component', async(() => {
-		fixture.whenStable().then(() => {
-			fixture.detectChanges();
-			expect(component).toBeTruthy();
-		});
-	}));
+        fixture.whenStable().then(() => {
+            fixture.detectChanges();
+            expect(component).toBeTruthy();
+        });
+    }));
 
 	it('should show header title', async(() => {
 		fixture.whenStable().then(() => {

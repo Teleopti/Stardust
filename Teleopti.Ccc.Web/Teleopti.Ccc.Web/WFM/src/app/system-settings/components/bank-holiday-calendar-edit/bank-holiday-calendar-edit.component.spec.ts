@@ -61,12 +61,10 @@ describe('BankHolidayCalendarEditComponent', () => {
 		registerLocaleData(en);
 	});
 
-	it('should create component', async(() => {
-		fixture.detectChanges();
-		fixture.whenStable().then(() => {
-			expect(component).toBeTruthy();
-		});
-	}));
+	it('should create component', doneFn => {
+		expect(component).toBeTruthy();
+		doneFn();
+	});
 
 	it('should save calendar name after it is changed', () => {
 		component.calendarName = 'I am a new calendar';
