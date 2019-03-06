@@ -1,87 +1,67 @@
-﻿Teleopti.MyTimeWeb.Schedule.ProbabilityModels = (function($) {
+Teleopti.MyTimeWeb.Schedule.ProbabilityModels = (function($) {
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
+	var momentUtc = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone;
 
-	var getContinousPeriods = function(baseDate, periods) {
+	function getMergedPeriods(baseDate, periods) {
 		if (!periods || periods.length === 0) return [];
 
-		var continousPeriods = [];
-		var previousEndMinutes = 0;
-		var continousPeriodStart = 0;
-		baseDate = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(baseDate.format('YYYY-MM-DDTHH:mm:ss'));
+		var mergedPeriods = [];
+		baseDate = momentUtc(baseDate.format('YYYY-MM-DDTHH:mm:ss'));
 
-		for (var i = 0; i < periods.length; i++) {
-			var currentPeriodStartMinutes =
-				Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(periods[i].StartTime).diff(baseDate) /
-				(60 * 1000);
-			var currentPeriodEndMinutes =
-				Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(periods[i].EndTime).diff(baseDate) / (60 * 1000);
+		periods.forEach(function(period) {
+			var start = momentUtc(period.StartTime).diff(baseDate) / (60 * 1000);
+			var end = momentUtc(period.EndTime).diff(baseDate) / (60 * 1000);
 
-			if (currentPeriodStartMinutes < 0) {
-				currentPeriodStartMinutes = 0;
-			}
+			if (start === end) return;
 
-			if (currentPeriodEndMinutes > constants.totalMinutesOfOneDay) {
-				currentPeriodEndMinutes = constants.totalMinutesOfOneDay;
-			}
+			if (start < 0) start = 0;
 
-			if (currentPeriodStartMinutes === currentPeriodEndMinutes) continue;
-
-			if (i === 0) {
-				continousPeriodStart = currentPeriodStartMinutes;
-			}
-
-			if (previousEndMinutes !== 0 && currentPeriodStartMinutes !== previousEndMinutes) {
-				continousPeriods.push({
-					startTimeInMin: continousPeriodStart,
-					endTimeInMin: previousEndMinutes
-				});
-				continousPeriodStart = currentPeriodStartMinutes;
-			}
-
-			if (i === periods.length - 1) {
-				continousPeriods.push({
-					startTimeInMin: continousPeriodStart,
-					endTimeInMin: currentPeriodEndMinutes
+			if (
+				mergedPeriods[mergedPeriods.length - 1] &&
+				start === mergedPeriods[mergedPeriods.length - 1].endTimeInMin
+			) {
+				mergedPeriods[mergedPeriods.length - 1].endTimeInMin = end;
+			} else {
+				mergedPeriods.push({
+					startTimeInMin: start,
+					endTimeInMin: end
 				});
 			}
-			previousEndMinutes = currentPeriodEndMinutes;
-		}
+		});
 
-		return continousPeriods;
-	};
+		return mergedPeriods;
+	}
 
 	function getIntervalStartMinutes(startTime) {
-		var startMoment = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(startTime);
-		var startMinutes = startMoment.diff(
-			Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(startTime).startOf('day')
-		);
+		var startMoment = momentUtc(startTime);
+		var startMinutes = startMoment.diff(momentUtc(startTime).startOf('day'));
 
 		return (startMinutes > 0 ? startMinutes : 0) / (60 * 1000);
 	}
 
 	function getIntervalEndMinutes(startTime, endTime) {
-		var startMoment = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(startTime);
-		var endMoment = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(endTime);
+		var startMoment = momentUtc(startTime);
+		var endMoment = momentUtc(endTime);
 
 		return endMoment.isSame(startMoment, 'day')
 			? endMoment.diff(startMoment.startOf('day')) / (60 * 1000)
 			: constants.totalMinutesOfOneDay - 1;
 	}
 
-	var createProbabilityCellData = function(rawProbability) {
+	function createProbabilityCellData(rawProbability) {
 		var intervalStartMinutes = getIntervalStartMinutes(rawProbability.StartTime);
 		var intervalEndMinutes = getIntervalEndMinutes(rawProbability.StartTime, rawProbability.EndTime);
 
 		return {
-			startTimeMoment: Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(rawProbability.StartTime),
-			endTimeMoment: Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(rawProbability.EndTime),
+			startTimeMoment: momentUtc(rawProbability.StartTime),
+			endTimeMoment: momentUtc(rawProbability.EndTime),
 			startTimeInMinutes: intervalStartMinutes,
 			endTimeInMinutes: intervalEndMinutes,
 			possibility: rawProbability.Possibility
 		};
-	};
+	}
 
-	var createProbabilityModels = function(rawProbabilities, dayViewModel, options) {
+	function createProbabilityModels(rawProbabilities, dayViewModel, options) {
 		if (rawProbabilities == undefined || rawProbabilities.length === 0) {
 			return [];
 		}
@@ -93,17 +73,14 @@
 			if (dayViewModel.isDayOff && !existsScheduleFromYesterday(dayViewModel)) return [];
 		}
 
-		var continousPeriods = [];
+		var mergedPeriods = [];
 		var date = moment(dayViewModel.fixedDate);
 
 		if (options.probabilityType === constants.probabilityType.absence) {
-			continousPeriods = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(
-				date,
-				dayViewModel.periods
-			);
+			mergedPeriods = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetMergedPeriods(date, dayViewModel.periods);
 		}
 
-		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(
+		var boundaries = Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(
 			dayViewModel,
 			options.timelines,
 			options.probabilityType,
@@ -116,10 +93,10 @@
 			cellDataList = [];
 
 		if (options.probabilityType === constants.probabilityType.absence) {
-			filteredRawProbabilities = filterRawProbabilities(rawProbabilities, continousPeriods);
+			filteredRawProbabilities = filterRawProbabilities(rawProbabilities, mergedPeriods);
 			filteredRawProbabilities.forEach(function(filteredRawPro) {
 				var cellData = createProbabilityCellData(filteredRawPro);
-				var trimedCellData = trimIntervalAccordingContinuousSchedulePeriod(cellData, continousPeriods);
+				var trimedCellData = trimIntervalAccordingMergedSchedulePeriod(cellData, mergedPeriods);
 
 				if (trimedCellData.startTimeInMinutes < trimedCellData.endTimeInMinutes)
 					cellDataList.push(trimedCellData);
@@ -163,7 +140,7 @@
 				}
 			}
 
-			probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(
+			probabilityModel = Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(
 				cellDataList[i],
 				dayViewModel,
 				boundaries,
@@ -176,7 +153,7 @@
 		}
 
 		return probabilityModels;
-	};
+	}
 
 	function existsScheduleFromYesterday(dayViewModel) {
 		if (dayViewModel.periods == undefined || dayViewModel.periods.length === 0) return false;
@@ -186,27 +163,27 @@
 		return moment(startDate).isBefore(endDate);
 	}
 
-	function trimIntervalAccordingContinuousSchedulePeriod(probabilityCellData, continousPeriods) {
-		for (var i = 0; i < continousPeriods.length; i++) {
-			var continousPeriod = continousPeriods[i];
+	function trimIntervalAccordingMergedSchedulePeriod(probabilityCellData, mergedPeriods) {
+		for (var i = 0; i < mergedPeriods.length; i++) {
+			var mergedPeriod = mergedPeriods[i];
 			if (
-				probabilityCellData.startTimeInMinutes <= continousPeriod.startTimeInMin &&
-				probabilityCellData.endTimeInMinutes >= continousPeriod.startTimeInMin
+				probabilityCellData.startTimeInMinutes <= mergedPeriod.startTimeInMin &&
+				probabilityCellData.endTimeInMinutes >= mergedPeriod.startTimeInMin
 			) {
-				probabilityCellData.startTimeInMinutes = continousPeriod.startTimeInMin;
+				probabilityCellData.startTimeInMinutes = mergedPeriod.startTimeInMin;
 				probabilityCellData.startTimeMoment
-					.hours(Math.floor(continousPeriod.startTimeInMin / 60))
-					.minutes(continousPeriod.startTimeInMin % 60);
+					.hours(Math.floor(mergedPeriod.startTimeInMin / 60))
+					.minutes(mergedPeriod.startTimeInMin % 60);
 			}
 
 			if (
-				probabilityCellData.startTimeInMinutes <= continousPeriod.endTimeInMin &&
-				probabilityCellData.endTimeInMinutes >= continousPeriod.endTimeInMin
+				probabilityCellData.startTimeInMinutes <= mergedPeriod.endTimeInMin &&
+				probabilityCellData.endTimeInMinutes >= mergedPeriod.endTimeInMin
 			) {
-				probabilityCellData.endTimeInMinutes = continousPeriod.endTimeInMin;
+				probabilityCellData.endTimeInMinutes = mergedPeriod.endTimeInMin;
 				probabilityCellData.endTimeMoment
-					.hours(Math.floor(continousPeriod.endTimeInMin / 60))
-					.minutes(continousPeriod.endTimeInMin % 60);
+					.hours(Math.floor(mergedPeriod.endTimeInMin / 60))
+					.minutes(mergedPeriod.endTimeInMin % 60);
 			}
 		}
 
@@ -256,7 +233,7 @@
 	}
 
 	return {
-		GetContinousPeriods: getContinousPeriods,
+		GetMergedPeriods: getMergedPeriods,
 		CreateProbabilityModels: createProbabilityModels
 	};
 })(jQuery);

@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, parent, boundaries, options) {
+Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, parent, boundaries, options) {
 	var startPositionVal,
 		intervalLengthVal,
 		constants = Teleopti.MyTimeWeb.Common.Constants;

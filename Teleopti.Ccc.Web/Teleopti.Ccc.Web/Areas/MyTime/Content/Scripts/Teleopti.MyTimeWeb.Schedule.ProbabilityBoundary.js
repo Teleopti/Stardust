@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function(
+Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function(
 	dayViewModel,
 	timelines,
 	probabilityType,

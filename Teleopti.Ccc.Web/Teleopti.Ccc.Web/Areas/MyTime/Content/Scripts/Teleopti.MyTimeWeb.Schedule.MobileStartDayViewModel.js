@@ -437,11 +437,13 @@
 
 		self.fixedDate = moment(self.selectedDate());
 
+		var targetProbabilities = oneWeekRawProbabilities.filter(function(r) {
+			return r.Date === self.selectedDate().format('YYYY-MM-DD');
+		});
+
 		self.probabilities(
 			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
-				oneWeekRawProbabilities.filter(function(r) {
-					return r.Date === self.selectedDate().format('YYYY-MM-DD');
-				}),
+				targetProbabilities,
 				self,
 				buildProbabilityOptions()
 			)
