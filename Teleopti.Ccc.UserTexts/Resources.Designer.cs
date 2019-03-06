@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -5655,6 +5655,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calendar is automatically saved.
+        /// </summary>
+        public static string CalendarAutomaticallySaved {
+            get {
+                return ResourceManager.GetString("CalendarAutomaticallySaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Call List Length.
         /// </summary>
         public static string CallListLength {
@@ -8875,7 +8884,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///Last name: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
         ///Language: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
         ///Company: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
-        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get access to [rest of string was truncated]&quot;;.
+        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get acc [rest of string was truncated]&quot;;.
         /// </summary>
         public static string DataProtectionQuestion {
             get {
@@ -26706,6 +26715,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please input calendar name first.
+        /// </summary>
+        public static string PleaseInputCalendarNameFirst {
+            get {
+                return ResourceManager.GetString("PleaseInputCalendarNameFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please input end time.
         /// </summary>
         public static string PleaseInputEndTime {
@@ -38443,8 +38461,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///In order to give us valuable information about this error, we ask you to kindly report it by clicking on the &quot;Send e-mail report&quot; button below. This will open your default e-mail program. Please also include the following:
         ///
         ///1.  Step by step on how to reproduce the error
-        ///2.  Information about what data you were working with
-        /// [rest of string was truncated]&quot;;.
+        ///2.  Information about what data you were working  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string UnhandledExceptionMessage {
             get {

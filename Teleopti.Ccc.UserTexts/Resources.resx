@@ -18293,4 +18293,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Please input calendar name first</value>
     <comment>this is for calendar name hint when user adds a new bank holiday calendar</comment>
   </data>
+  <data name="CalendarAutomaticallySaved" xml:space="preserve">
+    <value>Calendar is automatically saved</value>
+    <comment>when bank holiday calendar is changed will be automatically save, it is a message hint</comment>
+  </data>
 </root>
