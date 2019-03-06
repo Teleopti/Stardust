@@ -451,7 +451,7 @@
 			'					<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate"',
 			'					 type="text" readonly="readonly" />',
 			'					<span class="input-group-btn">',
-			'						<button class="btn btn-default moment-datepicker" type="button" aria-label="@Resources.SelectPeriod">',
+			'						<button class="btn btn-default moment-datepicker" type="button" aria-label="@Resources.SelectWeek">',
 			'							<i class="glyphicon glyphicon-calendar"></i>',
 			'						</button>',
 			'						<button class="btn btn-default" data-bind="click: nextWeek, css: \'done\'" type="button" id="btnNextWeek" aria-label="@Resources.NextWeek">',
