@@ -14183,8 +14183,8 @@ Check your internet connection or contact your administrator.</value>
   </data>
   <data name="CriticalInterval" xml:space="preserve">
     <value>Critical interval</value>
-	<comment>Used in the plans' interday graph legends</comment>
-  </data>	
+    <comment>Used in the plans' interday graph legends</comment>
+  </data>
   <data name="InvalidInput" xml:space="preserve">
     <value>Invalid input</value>
     <comment>Input is not valid</comment>
@@ -18194,8 +18194,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Permission to adjust adherence to neutral because of technical issues</comment>
   </data>
   <data name="AdjustToNeutral" xml:space="preserve">
-    <value>Adjust To Neutral</value>
-    <comment>Permission to adjust adherence to neutral because of technical issues</comment>
+    <value>Adjust to Neutral</value>
+    <comment>Button text for adjusting adherence to neutral</comment>
   </data>
   <data name="NoSkillGroupCreated" xml:space="preserve">
     <value>No skill group created</value>
@@ -18208,10 +18208,6 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="AdjustAdherenceLink" xml:space="preserve">
     <value>Adjust Adherence</value>
     <comment>Link to the adjust adherence page</comment>
-  </data>
-  <data name="AdjustToNeutral" xml:space="preserve">
-    <value>Adjust to Neutral</value>
-    <comment>Button text for adjusting adherence to neutral</comment>
   </data>
   <data name="AddPeriod" xml:space="preserve">
     <value>Add Period</value>
@@ -18267,27 +18263,11 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   </data>
   <data name="MostUnderstaffedDay" xml:space="preserve">
     <value>Most understaffed day</value>
-		<comment>Displays the Most undertaffed day in heatmap in Plans</comment>
+    <comment>Displays the Most undertaffed day in heatmap in Plans</comment>
   </data>
   <data name="MostOverstaffedDay" xml:space="preserve">
     <value>Most overstaffed day</value>
-		<comment>Displays the Most overaffed day in heatmap in Plans</comment>
-  </data>
-  <data name="PreviousMonth" xml:space="preserve">
-    <value>Previous month</value>
-    <comment>Previous month</comment>
-  </data>
-  <data name="NextMonth" xml:space="preserve">
-    <value>Next month</value>
-    <comment>Next month</comment>
-  </data>
-  <data name="SelectMonth" xml:space="preserve">
-    <value>Select month</value>
-    <comment>Select month</comment>
-  </data>
-  <data name="SelectWeek" xml:space="preserve">
-    <value>Select week</value>
-    <comment>Select week</comment>
+    <comment>Displays the Most overaffed day in heatmap in Plans</comment>
   </data>
   <data name="PleaseInputCalendarNameFirst" xml:space="preserve">
     <value>Please input calendar name first</value>
@@ -18296,5 +18276,21 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="CalendarAutomaticallySaved" xml:space="preserve">
     <value>Calendar is automatically saved</value>
     <comment>when bank holiday calendar is changed will be automatically save, it is a message hint</comment>
+  </data>
+  <data name="NextMonth" xml:space="preserve">
+    <value>Next month</value>
+    <comment>Next month</comment>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Previous month</value>
+    <comment>Previous month</comment>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>Select month</value>
+    <comment>Select month</comment>
+  </data>
+  <data name="SelectWeek" xml:space="preserve">
+    <value>Select week</value>
+    <comment>Select week</comment>
   </data>
 </root>

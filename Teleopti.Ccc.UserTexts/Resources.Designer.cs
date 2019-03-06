@@ -21733,6 +21733,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next month.
+        /// </summary>
+        public static string NextMonth {
+            get {
+                return ResourceManager.GetString("NextMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next
         ///Period.
         /// </summary>
@@ -27085,6 +27094,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous month.
+        /// </summary>
+        public static string PreviousMonth {
+            get {
+                return ResourceManager.GetString("PreviousMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous
         ///Period.
         /// </summary>
@@ -32363,6 +32381,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select month.
+        /// </summary>
+        public static string SelectMonth {
+            get {
+                return ResourceManager.GetString("SelectMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select multiple dates.
         /// </summary>
         public static string SelectMultipleDates {
@@ -32710,6 +32737,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectToModify {
             get {
                 return ResourceManager.GetString("SelectToModify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select week.
+        /// </summary>
+        public static string SelectWeek {
+            get {
+                return ResourceManager.GetString("SelectWeek", resourceCulture);
             }
         }
         
