@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, SchedulingScreenState schedulingScreenState, 
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator,
 			IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, 
-			IScheduleStorageFactory scheduleStorageFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
+			IScheduleStorageFactory scheduleStorageFactory, 
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, ITimeZoneGuard timeZoneGuard)
 			: this()
 		{
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_skillPriorityProvider = skillPriorityProvider;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_timeZoneGuard = timeZoneGuard;
 			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulingScreenState, scheduleStorageFactory, timeZoneGuard);
@@ -327,7 +325,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private IMeetingImpactView getImpactView()
 		{
 			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulingScreenState, this, 
-				_resourceOptimizationHelper, _skillPriorityProvider, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory, _timeZoneGuard);
+				_resourceOptimizationHelper, _skillPriorityProvider, _resourceCalculationContextFactory, _timeZoneGuard);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

@@ -32,14 +32,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         private IPersonRepository _personRepository;
 	    private IIntraIntervalFinderService _intraIntervalFinderService;
 	    private ISkillPriorityProvider _skillPriorityProvider;
-		private IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
 		[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IMeetingOverviewView>();
-			_staffingCalculatorServiceFacade = new StaffingCalculatorServiceFacade();
 			_settingDataRepository = _mocks.StrictMock<ISettingDataRepository>();
             _activityRepository = _mocks.StrictMock<IActivityRepository>();
             _personRepository = _mocks.StrictMock<IPersonRepository>();
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 			_skillPriorityProvider = new SkillPriorityProvider();
 	        _intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
             _target = new AddMeetingCommand(_view, _settingDataRepository, _activityRepository, _personRepository,
-                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _intraIntervalFinderService, _skillPriorityProvider, _staffingCalculatorServiceFacade);
+                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _intraIntervalFinderService, _skillPriorityProvider);
         
         }
 
@@ -79,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
                                                                   new CommonNameDescriptionSetting()).IgnoreArguments();
             Expect.Call(_view.SelectedPeriod()).Return(new DateTimePeriod(2011,3,25,2011,3,25)).Repeat.Twice();
             Expect.Call(_canModifyMeeting.CanExecute).Return(true);
-            Expect.Call(() => _view.EditMeeting(meetingViewModel, _intraIntervalFinderService, null, null)).IgnoreArguments();
+            Expect.Call(() => _view.EditMeeting(meetingViewModel, _intraIntervalFinderService, null)).IgnoreArguments();
             _mocks.ReplayAll();
             _target.Execute();
             _mocks.VerifyAll();

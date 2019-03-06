@@ -16,9 +16,9 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; }
 		IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone { get; }
         IScheduleDictionary GetSchedules(DateTimePeriod period, IScenario scenario);
-        ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
-		ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
-        IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
+        ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
+		ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck);
+        IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
         IList<IPerson> UserCollection { get; }
         IList<IActivity> ActivityCollection { get; }
         IList<IAbsence> AbsenceCollection { get; }

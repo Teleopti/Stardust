@@ -126,7 +126,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 															   new EventAggregator(), _container.Resolve<IResourceCalculation>(),
 															   _container.Resolve<ISkillPriorityProvider>(),
 															   _container.Resolve<IScheduleStorageFactory>(),
-															   _container.Resolve<IStaffingCalculatorServiceFacade>(),
 															   _container.Resolve<CascadingResourceCalculationContextFactory>(),
 																_container.Resolve<ITimeZoneGuard>());
                 meetingComposerView.Show((Control)parent);

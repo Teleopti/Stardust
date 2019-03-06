@@ -98,8 +98,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int PersistWorkload(DataTable dataTable);
 		int PersistQueueWorkload(DataTable dataTable);
 		int FillWorkloadDataMart(IBusinessUnit businessUnit);
-		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
-		IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
+		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
+		IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck);
 		int PersistForecastWorkload(DataTable dataTable);
 		int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
 		int FillSkillDataMart(IBusinessUnit businessUnit);

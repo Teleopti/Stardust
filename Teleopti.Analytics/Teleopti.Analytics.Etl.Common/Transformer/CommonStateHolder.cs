@@ -193,16 +193,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return _jobParameters.Helper.Repository.LoadSchedulePartsPerPersonAndDate(period, GetSchedules(period, scenario));
 		}
 
-		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck)
 		{
-			return _jobParameters.Helper.Repository.LoadSkillDays(scenario, lastCheck, staffingCalculatorServiceFacade).ToArray();
+			return _jobParameters.Helper.Repository.LoadSkillDays(scenario, lastCheck).ToArray();
 		}
 
-		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			// Load skill days in collection from dictionary
 			_skillDaysCollection = new List<ISkillDay>();
-			foreach (IList<ISkillDay> skillDay in GetSkillDaysDictionary(period, skills, scenario, staffingCalculatorServiceFacade).Values)
+			foreach (IList<ISkillDay> skillDay in GetSkillDaysDictionary(period, skills, scenario).Values)
 			{
 				_skillDaysCollection.AddRange(skillDay);
 			}
@@ -210,9 +210,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return _skillDaysCollection;
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
-			return _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario, staffingCalculatorServiceFacade);
+			return _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario);
 		}
 
 		public IList<IPerson> UserCollection

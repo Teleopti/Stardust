@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		void LoadOrganization();
 		void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod);
-		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
+		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills);
 		void EnsureSkillsLoaded(DateOnlyPeriod period);
 	}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills)
 		{
 			_backgroundWorker = backgroundWorker;
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				initializeSkills(uow);
 				if (_backgroundWorker.CancellationPending)
 					return;
-				initializeSkillDays(uow, skills, staffingCalculatorServiceFacade);
+				initializeSkillDays(uow, skills);
 				if (_backgroundWorker.CancellationPending)
 					return;
 				initializeScheduleData();
@@ -211,13 +211,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 		}
 
-		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills)
 		{
 			using (PerformanceOutput.ForOperation("Loading skill days (intraday data)"))
 			{
 				_schedulerState.SchedulerStateHolder.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
 					_repositoryFactory.CreateSkillDayRepository(uow),
-					_repositoryFactory.CreateMultisiteDayRepository(uow), staffingCalculatorServiceFacade).LoadSchedulerSkillDays(
+					_repositoryFactory.CreateMultisiteDayRepository(uow)).LoadSchedulerSkillDays(
 					_schedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
 					skills,
 					_schedulerState.SchedulerStateHolder.RequestedScenario);

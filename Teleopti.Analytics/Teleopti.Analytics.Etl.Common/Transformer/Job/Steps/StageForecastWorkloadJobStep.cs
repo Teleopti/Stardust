@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -30,9 +28,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			{
 				//Get data from Raptor
 				IList<ISkill> skills = _jobParameters.StateHolder.SkillCollection;
-				var staffingCalculatorServiceFacade =
-					_jobParameters.ContainerHolder.IocContainer.Resolve<IStaffingCalculatorServiceFacade>();
-				ICollection<ISkillDay> rootList = _jobParameters.StateHolder.GetSkillDaysCollection(period, skills, scenario, staffingCalculatorServiceFacade);
+				ICollection<ISkillDay> rootList = _jobParameters.StateHolder.GetSkillDaysCollection(period, skills, scenario);
 
 				var raptorTransformer = new ForecastWorkloadTransformer(_jobParameters.IntervalsPerDay, DateTime.Now);
 				raptorTransformer.Transform(rootList, BulkInsertDataTable1);

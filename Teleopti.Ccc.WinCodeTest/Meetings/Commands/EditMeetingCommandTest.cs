@@ -25,19 +25,17 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 		private ISettingDataRepository _settingDataRepository;
 		private ICanModifyMeeting _canModifyMeeting;
 		private IIntraIntervalFinderService _intraIntervalFinderService;
-		private IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_view = _mocks.StrictMock<IMeetingOverviewView>();
-			_staffingCalculatorServiceFacade = new StaffingCalculatorServiceFacade();
 			_settingDataRepository = _mocks.StrictMock<ISettingDataRepository>();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 			_canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
-            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _intraIntervalFinderService, new SkillPriorityProvider(), _staffingCalculatorServiceFacade);
+            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _intraIntervalFinderService, new SkillPriorityProvider());
 
 		}
 
@@ -79,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 				Expect.Call(meeting.EntityClone()).Return(meeting);
 				Expect.Call(meeting.MeetingRecurrenceOption).Return(null);
 				Expect.Call(meeting.Snapshot);
-				Expect.Call(() => _view.EditMeeting(meetingViewModel, _intraIntervalFinderService, null, null)).IgnoreArguments();
+				Expect.Call(() => _view.EditMeeting(meetingViewModel, _intraIntervalFinderService, null)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{

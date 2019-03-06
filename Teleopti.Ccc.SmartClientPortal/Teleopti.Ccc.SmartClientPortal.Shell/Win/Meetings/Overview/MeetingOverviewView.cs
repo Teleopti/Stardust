@@ -429,13 +429,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
 															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider,
 															  _scheduleStorageFactory,
-															  staffingCalculatorServiceFacade,
 															  _resourceCalculationContextFactory,
 																_timeZoneGuard);
 			meetingComposerView.ShowDialog(this);

@@ -36,12 +36,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					_jobParameters.Helper.Repository.LoadSkillWithSkillDays(
 						period.ToDateOnlyPeriod(TimeZoneInfo.Utc)));
 			IList<IPerson> persons = _jobParameters.StateHolder.PersonCollection.ToList();
-			var staffingCalculatorServiceFacade =
-				_jobParameters.ContainerHolder.IocContainer.Resolve<IStaffingCalculatorServiceFacade>();
 			foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
 			{
 				var skillDaysDictionary =
-					_jobParameters.StateHolder.GetSkillDaysDictionary(period, skills, scenario, staffingCalculatorServiceFacade);
+					_jobParameters.StateHolder.GetSkillDaysDictionary(period, skills, scenario);
 				IScheduleDictionary scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
 
 				var provider = _jobParameters.ContainerHolder.IocContainer.Resolve<ExternalStaffProvider>();

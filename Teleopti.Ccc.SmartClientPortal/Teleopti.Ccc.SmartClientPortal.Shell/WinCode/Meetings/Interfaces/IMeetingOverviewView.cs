@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
         TimeZoneInfo UserTimeZone { get; set; }
         bool ConfirmDeletion(IMeeting theMeeting);
         void ReloadMeetings();
-        void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade);
+        void EditMeeting(IMeetingViewModel meetingViewModel, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider);
         bool EditEnabled { get; set; }
         bool DeleteEnabled { get; set; }
         bool CopyEnabled { get; set; }

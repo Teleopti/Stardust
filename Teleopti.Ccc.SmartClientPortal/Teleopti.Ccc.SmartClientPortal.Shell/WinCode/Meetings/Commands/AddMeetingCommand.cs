@@ -23,14 +23,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
         private readonly ICanModifyMeeting _canModifyMeeting;
 	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 	    private readonly ISkillPriorityProvider _skillPriorityProvider;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly ISettingDataRepository _settingDataRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IPersonRepository _personRepository;
 
         public AddMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
             IActivityRepository activityRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
-            ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+            ICanModifyMeeting canModifyMeeting, IIntraIntervalFinderService intraIntervalFinderService, ISkillPriorityProvider skillPriorityProvider)
         {
             _meetingOverviewView = meetingOverviewView;
             _activityRepository = activityRepository;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
             _canModifyMeeting = canModifyMeeting;
 	        _intraIntervalFinderService = intraIntervalFinderService;
 	        _skillPriorityProvider = skillPriorityProvider;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
         public void Execute()
@@ -73,7 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
                 }
 
                 if (meetingViewModel != null)
-                    _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider, _staffingCalculatorServiceFacade);
+                    _meetingOverviewView.EditMeeting(meetingViewModel, _intraIntervalFinderService, _skillPriorityProvider);
             }
         }
 

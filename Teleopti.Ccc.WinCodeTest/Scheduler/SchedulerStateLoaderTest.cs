@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _targetStateHolder.SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			
 
-			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, new StaffingCalculatorServiceFacade());
+			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, new BackgroundWorker(), new List<ISkill> { _selectedSkill });
 
             Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
             Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));

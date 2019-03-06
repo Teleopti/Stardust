@@ -348,20 +348,17 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			throw new NotImplementedException();
 		}
 
-		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			throw new NotImplementedException();
 		}
 
-		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			throw new NotImplementedException();
 		}

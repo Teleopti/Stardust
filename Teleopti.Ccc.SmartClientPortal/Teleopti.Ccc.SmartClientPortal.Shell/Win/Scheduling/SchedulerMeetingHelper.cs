@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly SchedulingScreenState _schedulingScreenState;
 	    private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 		private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
@@ -41,8 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IResourceCalculation resourceOptimizationHelper,
 			ISkillPriorityProvider skillPriorityProvider,
 			IScheduleStorageFactory scheduleStorageFactory,
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 
 			_initiatorIdentifier = initiatorIdentifier;
@@ -51,7 +49,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillPriorityProvider = skillPriorityProvider;
 			_scheduleStorageFactory = scheduleStorageFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		internal event EventHandler<ModifyMeetingEventArgs> ModificationOccured;
@@ -197,7 +194,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 
-			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulingScreenState, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory, timeZoneGuard))
+			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulingScreenState, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _resourceCalculationContextFactory, timeZoneGuard))
 			{
 				showMeetingComposer(meetingComposerView);
 			}

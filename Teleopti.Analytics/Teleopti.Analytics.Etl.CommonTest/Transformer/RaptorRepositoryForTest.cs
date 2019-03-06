@@ -332,14 +332,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			return _skillDays;
 		}
 
-		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)
 		{
 			throw new NotImplementedException();
 		}

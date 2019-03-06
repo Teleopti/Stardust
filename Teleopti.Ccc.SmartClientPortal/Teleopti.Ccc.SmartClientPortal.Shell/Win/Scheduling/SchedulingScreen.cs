@@ -349,8 +349,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 																_container.Resolve<IResourceCalculation>(),
 																_container.Resolve<ISkillPriorityProvider>(),
 																_container.Resolve<IScheduleStorageFactory>(),
-																_container.Resolve<CascadingResourceCalculationContextFactory>(),
-																_container.Resolve<IStaffingCalculatorServiceFacade>());
+																_container.Resolve<CascadingResourceCalculationContextFactory>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
 			ClipsHandlerSchedule = new ClipHandler<IScheduleDay>();

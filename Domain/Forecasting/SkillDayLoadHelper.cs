@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IMultisiteDayRepository _multisiteDayRepository;
 
-		public SkillDayLoadHelper(ISkillDayRepository skillDayRepository, IMultisiteDayRepository multisiteDayRepository, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public SkillDayLoadHelper(ISkillDayRepository skillDayRepository, IMultisiteDayRepository multisiteDayRepository)
 		{
 			InParameter.NotNull(nameof(multisiteDayRepository), multisiteDayRepository);
 			InParameter.NotNull(nameof(skillDayRepository), skillDayRepository);
