@@ -234,19 +234,30 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				peopleCanViewUnpublishedFor.AddRange(batchCanViewUnpublishedFor);
 
-				var absenceScheduleDaysForPerson = _scheduleProvider.GetScheduleForPersonsInPeriod(schedulePeriod, batchPermittedPeople)
-					.Where(sd => (sd.IsFullyPublished || batchCanViewUnpublishedFor.Contains(sd.Person.Id.GetValueOrDefault()))
-					&& sd.HasAbsenceProjection())
-					.ToList();
+				var scheduleDaysForPerson = _scheduleProvider.GetScheduleForPersonsInPeriod(schedulePeriod, batchPermittedPeople);
+				var peopleForCurrentScheduleDayWithAbsence = scheduleDaysForPerson
+					.Where(sd => (sd.DateOnlyAsPeriod.DateOnly == date) && hasAbsenceProjection(sd, batchCanViewUnpublishedFor))
+					.Select(sd=>sd.Person.Id)
+					.ToArray();
+				if (peopleForCurrentScheduleDayWithAbsence.Any())
+				{
+					var absenceScheduleDaysForPerson = scheduleDaysForPerson
+						.Where(sd=> peopleForCurrentScheduleDayWithAbsence.Contains(sd.Person.Id))
+						.ToList();
 
-				scheduleDays.AddRange(absenceScheduleDaysForPerson);
+					scheduleDays.AddRange(absenceScheduleDaysForPerson);
 
-				batchPermittedPeople = absenceScheduleDaysForPerson
-					.Select(sd => sd.Person)
-					.Distinct()
-					.ToList();
+					batchPermittedPeople = absenceScheduleDaysForPerson
+						.Select(sd => sd.Person)
+						.Distinct()
+						.ToList();
+				}
 			}
 			permittedPeople.AddRange(batchPermittedPeople);
+		}
+
+		private bool hasAbsenceProjection(IScheduleDay sd, HashSet<Guid> batchCanViewUnpublishedFor) {
+			return (sd.IsFullyPublished || batchCanViewUnpublishedFor.Contains(sd.Person.Id.GetValueOrDefault())) && sd.HasAbsenceProjection();
 		}
 
 		private (List<IPerson>, bool) sortAndPagingByPersonInfo(List<IPerson> people, SearchDaySchedulesInput input)
