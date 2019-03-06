@@ -31,8 +31,13 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 		Years: [],
 		ActiveYearIndex: 0
 	};
+	calendarName = '';
 	nameAlreadyExisting = false;
 	isNewCalendarNameEmpty = false;
+	isShowCalendarNameHint = true;
+	showCalendarAutoSaveMsg = false;
+	autoSaveTimer = null;
+	autoSaveTimeoutMilliseconds = 2000;
 
 	showDatePicker = true;
 	selectedYearDate: Date;
@@ -45,6 +50,7 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 	bankHolidayListSubscription: Subscription;
 	timestampListSubscription: Subscription;
 	isSavingCalendar = false;
+	originalActiveYearIndex = 0;
 
 	constructor(
 		public bankCalendarDataService: BankCalendarDataService,
@@ -55,10 +61,11 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 	) {}
 
 	ngOnInit(): void {
-		this.newCalendar.Name = this.translate.instant('BankHolidayCalendar') + moment().format(this.dateFormat);
-
 		if (this.edittingCalendar) {
 			this.newCalendar = this.edittingCalendar;
+			this.isShowCalendarNameHint = !this.newCalendar.Name;
+			this.calendarName = this.edittingCalendar.Name;
+			this.originalActiveYearIndex = this.edittingCalendar.ActiveYearIndex;
 			this.newCalendar.Years.forEach((y, i) => {
 				y.Active = i === this.newCalendar.ActiveYearIndex;
 
@@ -90,7 +97,7 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 
 	ngAfterViewInit(): void {
 		setTimeout(() => {
-			this.calendarNameInputElment.nativeElement.select();
+			this.calendarNameInputElment.nativeElement.focus();
 		}, 0);
 	}
 
@@ -109,14 +116,14 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 
 	checkNameAlreadyExisting(): boolean {
 		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(c => {
-			return c.Id !== this.newCalendar.Id && c.Name.trim() === this.newCalendar.Name.trim();
+			return c.Id !== this.newCalendar.Id && c.Name.trim() === this.calendarName.trim();
 		});
-
+		this.isShowCalendarNameHint = !this.calendarName;
 		return this.nameAlreadyExisting;
 	}
 
 	checkNameIsEmpty(): boolean {
-		this.isNewCalendarNameEmpty = !this.newCalendar.Name;
+		this.isNewCalendarNameEmpty = !this.calendarName;
 		return this.isNewCalendarNameEmpty;
 	}
 
@@ -202,13 +209,21 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 		year.Active = status;
 
 		const index = this.activedYears.indexOf(year.Year);
-		if (index > -1) this.activedYears.splice(index, 1);
+		if (index > -1) {
+			this.activedYears.splice(index, 1);
+		} else if (index === -1 && status) {
+			this.activedYears.push(year.Year);
+			this.activedYears.sort((c, n) => {
+				return this.sortDateOrYearAscending(c, n);
+			});
+		}
 	}
 
 	removeDate(date: BankHolidayCalendarDateItem) {
-		date.IsDeleted = true;
-
-		this.saveNewBankCalendar(date);
+		if (!this.checkNameIsEmpty()) {
+			date.IsDeleted = true;
+			this.saveNewBankCalendar(date);
+		}
 	}
 
 	sortDateOrYearAscending(currentDate: any, nextDate: any) {
@@ -226,41 +241,24 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 
 		const bankHolidayCalendar: BankHolidayCalendar = {
 			Id: this.newCalendar.Id,
-			Name: this.newCalendar.Name,
+			Name: this.calendarName,
 			Years: newDate ? this.buildYearsForPost(this.newCalendar.Years, newDate) : []
 		};
 
 		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
 			if (result.Id.length > 0) {
 				const resultCalendar = result as BankHolidayCalendarItem;
+				this.formattingDataOfReturnCalendar(resultCalendar, newDate);
 
 				this.newCalendar.Id = resultCalendar.Id;
 				this.newCalendar.Name = resultCalendar.Name;
-				bankHolidayCalendar.Id = resultCalendar.Id;
-
-				resultCalendar.Years.forEach((year, yearIndex) => {
-					year.Year = year.Year.toString();
-					year.Dates.forEach(d => {
-						d.Date = moment(d.Date, this.dateFormat).format(this.dateFormat);
-						d.IsLastAdded = false;
-
-						if (newDate && newDate.Date === d.Date) {
-							d.IsLastAdded = true;
-						}
-					});
-					if (this.activedYears.indexOf(year.Year) > -1) year.Active = true;
-
-					if (year.Year === moment(newDate.Date, this.dateFormat).format(this.yearFormat)) {
-						resultCalendar.ActiveYearIndex = yearIndex;
-					}
-				});
-				this.newCalendarYearsForDisplay = this.copyService.copy(resultCalendar.Years);
 				this.newCalendar.Years = resultCalendar.Years;
+				this.newCalendarYearsForDisplay = this.copyService.copy(resultCalendar.Years);
 
 				this.updateBankHolidayCalendarList(resultCalendar);
-				if (newDate) {
-					this.updateTimeStampList(newDate);
-				}
+				this.updateTimeStampList(newDate);
+				this.showAutoSaveMessage();
+
 				this.isSavingCalendar = false;
 			} else {
 				this.networkError();
@@ -291,6 +289,22 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 			});
 	}
 
+	formattingDataOfReturnCalendar(resultCalendar: BankHolidayCalendarItem, newDate?: BankHolidayCalendarDateItem) {
+		resultCalendar.ActiveYearIndex = this.originalActiveYearIndex;
+		resultCalendar.Years.forEach((year, yearIndex) => {
+			year.Year = year.Year.toString();
+			year.Dates.forEach(d => {
+				d.Date = moment(d.Date, this.dateFormat).format(this.dateFormat);
+				d.IsLastAdded = newDate && newDate.Date === d.Date;
+			});
+
+			if (newDate && moment(newDate.Date, this.dateFormat).format(this.yearFormat) === year.Year) {
+				resultCalendar.ActiveYearIndex = yearIndex;
+			}
+			year.Active = this.activedYears.indexOf(year.Year) > -1;
+		});
+	}
+
 	updateBankHolidayCalendarList(bankHolidayCalendar: BankHolidayCalendarItem) {
 		const filteredCalendars = this.bankHolidayCalendarsList.filter(
 			calendar => calendar.Id === bankHolidayCalendar.Id
@@ -308,7 +322,18 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 		}
 	}
 
-	updateTimeStampList(newDate: BankHolidayCalendarDateItem) {
+	showAutoSaveMessage() {
+		this.showCalendarAutoSaveMsg = true;
+		if (this.autoSaveTimer) clearTimeout(this.autoSaveTimer);
+		this.autoSaveTimer = setTimeout(_ => {
+			this.showCalendarAutoSaveMsg = false;
+			this.autoSaveTimer = null;
+		}, this.autoSaveTimeoutMilliseconds);
+	}
+
+	updateTimeStampList(newDate?: BankHolidayCalendarDateItem) {
+		if (!newDate) return;
+
 		const timeStamp = new Date(newDate.Date).getTime();
 		if (newDate.IsDeleted) {
 			const timeStampIdx = this.selectedDatesTimeList.indexOf(timeStamp);
@@ -320,6 +345,7 @@ export class BankHolidayCalendarEditComponent implements OnInit, OnDestroy, Afte
 
 	networkError = (error?: any) => {
 		this.isSavingCalendar = false;
+		this.calendarName = this.newCalendar.Name;
 		this.noticeService.error(
 			this.translate.instant('Error'),
 			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')

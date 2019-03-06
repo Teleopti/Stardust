@@ -21,7 +21,7 @@ export class BankCalendarDataService {
 		this.getBankHolidayCalendars().subscribe(cals => {
 			const calendars = cals as BankHolidayCalendarItem[];
 			calendars.forEach(calendar => {
-				this.resetActiveYearIndexOfCalendar(calendar);
+				this.resetActiveYearIndexAndYearFormatOfCalendar(calendar);
 			});
 
 			this.bankHolidayCalendarsList$.next(
@@ -32,15 +32,16 @@ export class BankCalendarDataService {
 		});
 	}
 
-	resetActiveYearIndexOfCalendar(calendar: BankHolidayCalendarItem) {
+	resetActiveYearIndexAndYearFormatOfCalendar(calendar: BankHolidayCalendarItem) {
 		const curYear = moment().year();
 		calendar.ActiveYearIndex = 0;
 		calendar.Years.forEach((y, i) => {
+			y.Year = y.Year.toString();
 			y.Dates.forEach(d => {
 				d.Date = moment(d.Date).format(this.dateFormat);
 			});
 
-			if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
+			if (moment(y.Year, this.yearFormat).year() === curYear) {
 				calendar.ActiveYearIndex = i;
 			}
 		});

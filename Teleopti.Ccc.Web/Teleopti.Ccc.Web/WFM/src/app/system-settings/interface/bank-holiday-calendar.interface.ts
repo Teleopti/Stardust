@@ -14,14 +14,6 @@ export interface BankHolidayCalendarYear {
 	Active?: boolean;
 }
 
-export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
-	ModifiedDates?: BankHolidayCalendarDateItem[];
-	YearDate: Date;
-	DisabledDate?: Function;
-	SelectedDates: number[];
-	// Active: boolean;
-}
-
 export interface BankHolidayCalendarDate {
 	Id?: string;
 	Date: string;

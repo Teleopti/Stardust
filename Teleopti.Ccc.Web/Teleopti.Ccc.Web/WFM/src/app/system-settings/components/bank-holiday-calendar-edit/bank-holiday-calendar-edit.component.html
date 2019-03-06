@@ -5,16 +5,26 @@
 			#calendarNameInput
 			nz-input
 			[placeholder]="'NewCalendarName' | translate"
-			[(ngModel)]="newCalendar.Name"
+			[(ngModel)]="calendarName"
 			(change)="saveNewCalendarName()"
 			(blur)="checkNameAlreadyExisting()"
 		/>
+		<nz-alert
+			*ngIf="isShowCalendarNameHint && !isNewCalendarNameEmpty"
+			nzType="success"
+			[nzMessage]="'PleaseInputCalendarNameFirst' | translate"
+		></nz-alert>
 		<nz-alert
 			*ngIf="isNewCalendarNameEmpty"
 			nzType="error"
 			[nzMessage]="'PleaseInputCalendarNameFirst' | translate"
 		></nz-alert>
 		<nz-alert *ngIf="nameAlreadyExisting" nzType="error" [nzMessage]="'NameAlreadyExisting' | translate"></nz-alert>
+		<nz-alert
+			*ngIf="showCalendarAutoSaveMsg"
+			nzType="success"
+			[nzMessage]="'CalendarAutomaticallySaved' | translate"
+		></nz-alert>
 	</div>
 
 	<div class="edit-bank-holiday-calendar-body">

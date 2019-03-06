@@ -44,9 +44,12 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		httpTestingController = TestBed.get(HttpTestingController);
 	}));
 
-	it('should create component', () => {
-		expect(component).toBeTruthy();
-	});
+	it('should create component', async(() => {
+		fixture.detectChanges();
+		fixture.whenStable().then(() => {
+			expect(component).toBeTruthy();
+		});
+	}));
 
 	it('should render sites list', () => {
 		httpTestingController
