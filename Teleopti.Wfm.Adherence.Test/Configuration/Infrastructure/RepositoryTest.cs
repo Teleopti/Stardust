@@ -42,7 +42,10 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 				var retList = ResolveRepository().LoadAll();
 				if (buRef != null)
+				{
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
 					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).GetOrFillWithBusinessUnit_DONTUSE().Equals(buRef.GetOrFillWithBusinessUnit_DONTUSE())));
+				}
 				if (buRefId != null)
 					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
 			}
