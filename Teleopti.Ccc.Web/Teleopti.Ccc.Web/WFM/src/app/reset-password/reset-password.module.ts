@@ -10,6 +10,7 @@ import { InvalidLinkMessageComponent } from './components/invalid-link-message.c
 import { ResetPasswordFormComponent } from './components/reset-password-form/reset-password-form.component';
 import { SuccessMessageComponent } from './components/success-message.component';
 import { ResetPasswordPageComponent } from './pages/reset-password.component';
+import { isResetPasswordPage } from 'src/main';
 
 @NgModule({
 	declarations: [
@@ -37,7 +38,9 @@ import { ResetPasswordPageComponent } from './pages/reset-password.component';
 })
 export class ResetPasswordModule {
 	constructor(private translate: TranslateService, private interceptorOverrideService: InterceptorOverrideService) {
-		this.interceptorOverrideService.shouldIntercept = false;
+		if (window.location.pathname.includes('reset_password.html')) {
+			this.interceptorOverrideService.shouldIntercept = false;
+		}
 		this.translate.setDefaultLang(navigator.language);
 	}
 }
