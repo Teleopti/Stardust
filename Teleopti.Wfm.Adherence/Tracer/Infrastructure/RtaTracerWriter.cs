@@ -37,8 +37,8 @@ namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 			_now = now;
 			_keepLogs = TimeSpan.FromMinutes(_config.ReadValue("RtaTracerPurgeKeepMinutes", 60));
 			_connectionString = _config.ConnectionString("RtaTracer");
-			// connection string uniqueness because connection string differs in parallel tests
-			_loggerName = "Teleopti.RtaTracer." + _connectionString.GetHashCode();
+			var uniquenessForParallelTests = _connectionString?.GetHashCode();
+			_loggerName = "Teleopti.RtaTracer." + uniquenessForParallelTests;
 		}
 
 		private ILog makeAppender()
