@@ -16,7 +16,7 @@
 		<span class="input-group">
 			<input class="input-sm request-edit-datefrom form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable() && IsDateInputEditable" type="text" />
 			<span class="input-group-btn">
-				<button class="btn btn-sm" id="dateFromButton" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
+				<button class="btn btn-sm" aria-label="@Resources.SelectDate" aria-haspopup="true" id="dateFromButton" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
 					<i class="glyphicon glyphicon-calendar"></i>
 				</button>
 			</span>
@@ -26,7 +26,7 @@
 		<div class="request-edit-timefrom input-group">
 			<input type="text" class="input-sm request-edit time-from form-control" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible,  enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 			<span class="input-group-btn">
-				<button class="btn btn-sm" id="timeFromButton" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable">
+				<button class="btn btn-sm" aria-label="@Resources.SelectTime" aria-haspopup="true" id="timeFromButton" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable">
 					<i class="glyphicon glyphicon-time"></i>
 				</button>
 			</span>
@@ -38,7 +38,7 @@
 		<span class="request-edit-dateto input-group">
 			<input class="request-edit-date-to input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart(), format: DateFormat() }, enable: IsEditable() && IsDateInputEditable" type="text"  />
 			<span class="input-group-btn">
-				<button class="btn btn-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
+				<button class="btn btn-sm" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
 					<i class="glyphicon glyphicon-calendar"></i>
 				</button>
 			</span>
@@ -48,7 +48,7 @@
 		<div class="request-edit-timeto input-group">
 			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 			<span class="input-group-btn">
-				<button class="btn btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable">
+				<button class="btn btn-sm" aria-label="@Resources.SelectTime" aria-haspopup="true" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable">
 					<i class="glyphicon glyphicon-time"></i>
 				</button>
 			</span>

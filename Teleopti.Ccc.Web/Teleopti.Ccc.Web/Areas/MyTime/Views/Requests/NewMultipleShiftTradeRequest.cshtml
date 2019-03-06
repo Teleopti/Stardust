@@ -5,7 +5,7 @@
 		<div>
 			<div class="input-group schedule-filter-component">
 				<span class="input-group-btn">
-					<button class="previous-date btn" data-bind="click: previousDate, enable: previousDateEnable">
+					<button class="previous-date btn" aria-label="@Resources.PreviousDay" data-bind="click: previousDate, enable: previousDateEnable">
 						<i class="glyphicon glyphicon-chevron-left"></i>
 					</button>
 				</span>
@@ -13,10 +13,10 @@
 				<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker text-center date-input-style" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
 
 				<span class="input-group-btn">
-					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+					<button class="btn" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</button>
-					<button class="next-date btn" data-bind="click: nextDate, enable: nextDateEnable">
+					<button class="next-date btn" aria-label="@Resources.NextDay" data-bind="click: nextDate, enable: nextDateEnable">
 						<i class="glyphicon glyphicon-chevron-right"></i>
 					</button>
 				</span>

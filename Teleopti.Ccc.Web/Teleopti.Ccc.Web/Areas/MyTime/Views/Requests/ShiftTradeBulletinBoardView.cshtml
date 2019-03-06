@@ -14,17 +14,17 @@
 		<div class="col-sm-6 col-lg-4 fix-margin">
 			<div class="input-group">
 				<span class="input-group-btn">
-					<button class="bulletin-previous-date btn" data-bind="click: previousDate, enable: previousDateValid() && !IsLoading()">
+					<button class="bulletin-previous-date btn" aria-label="@Resources.PreviousDay" data-bind="click: previousDate, enable: previousDateValid() && !IsLoading()">
 						<i class="glyphicon glyphicon-chevron-left"></i>
 					</button>
 				</span>
 				<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
 
 				<span class="input-group-btn">
-					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+					<button class="btn" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</button>
-					<button class="next-date btn" data-bind="click: nextDate, enable: nextDateValid() && !IsLoading()">
+					<button class="next-date btn" aria-label="@Resources.NextDay" data-bind="click: nextDate, enable: nextDateValid() && !IsLoading()">
 						<i class="glyphicon glyphicon-chevron-right"></i>
 					</button>
 				</span>
