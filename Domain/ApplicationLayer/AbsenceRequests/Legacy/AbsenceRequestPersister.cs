@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly INow _now;
 		private readonly IAbsenceRequestSetting _absenceRequestSetting;
-		private readonly IPermissionProvider _permissionProvider;
 		private readonly IAbsenceRepository _absenceRepository;
 
 		public AbsenceRequestPersister(
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 			IActivityRepository activityRepository,
 			ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, INow now,
-			IAbsenceRequestSetting absenceRequestSetting, IPermissionProvider permissionProvider,
+			IAbsenceRequestSetting absenceRequestSetting,
 			IAbsenceRepository absenceRepository)
 		{
 			_newAbsenceRequestHandler = newAbsenceRequestHandler;
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_now = now;
 			_absenceRequestSetting = absenceRequestSetting;
-			_permissionProvider = permissionProvider;
 			_absenceRepository = absenceRepository;
 		}
 
@@ -76,11 +73,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 		private IPersonRequest addRequest(AbsenceRequestModel model)
 		{
 			var personRequest = _mapper.MapNewAbsenceRequest(model);
-			//if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
-			//	new DateOnly(_now.UtcDateTime()), personRequest.Person))
-			//{
-			//	throw new UnauthorizedAccessException();
-			//}
 			using (_disableDeletedFilter.Disable())
 			{
 				_skillTypeRepository.LoadAll();
@@ -95,11 +87,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 
 		private void updateRequest(AbsenceRequestModel model, IPersonRequest personRequest)
 		{
-			//if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
-			//	new DateOnly(_now.UtcDateTime()), personRequest.Person))
-			//{
-			//	throw new UnauthorizedAccessException();
-			//}
 			var existingPeriod = personRequest.Request.Period;
 			_mapper.MapExistingAbsenceRequest(model, personRequest);
 
