@@ -15302,4 +15302,88 @@ Teleopti R&amp;D</value>
   <data name="AssignCalendarsToSites" xml:space="preserve">
     <value>分配日历到站点</value>
   </data>
+  <data name="HasCriticalIntervals" xml:space="preserve">
+    <value>有关键时段</value>
+  </data>
+  <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+    <value>班表审核跟踪未运行。我们建议您开启它，请联系Teleopti。</value>
+  </data>
+  <data name="TeamSchedulingColon" xml:space="preserve">
+    <value>组排班：</value>
+  </data>
+  <data name="CriticalInterval" xml:space="preserve">
+    <value>关键时段</value>
+  </data>
+  <data name="NoPlanningGroupFound" xml:space="preserve">
+    <value>未找到规划组</value>
+  </data>
+  <data name="ShowNumbers" xml:space="preserve">
+    <value>显示数值</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>您确定要删除此假期日历吗？</value>
+  </data>
+  <data name="SelectACalendarForSite" xml:space="preserve">
+    <value>为站点选择一个日历</value>
+  </data>
+  <data name="NoCalendarsAvailable" xml:space="preserve">
+    <value>无可用日历</value>
+  </data>
+  <data name="XSitesUseThisCalendar" xml:space="preserve">
+    <value>{0} 个站点使用该日历：</value>
+  </data>
+  <data name="AdjustAdherence" xml:space="preserve">
+    <value>调整遵时 (由于技术问题而转为中立) </value>
+  </data>
+  <data name="NoSkillGroupCreated" xml:space="preserve">
+    <value>未创建技能组</value>
+  </data>
+  <data name="SelectPeriod" xml:space="preserve">
+    <value>选择周期</value>
+  </data>
+  <data name="AdjustedPeriods" xml:space="preserve">
+    <value>已调整的周期</value>
+  </data>
+  <data name="AdjustAdherenceLink" xml:space="preserve">
+    <value>调整遵时</value>
+  </data>
+  <data name="AdjustToNeutral" xml:space="preserve">
+    <value>调整至中立</value>
+  </data>
+  <data name="AddPeriod" xml:space="preserve">
+    <value>添加周期</value>
+  </data>
+  <data name="ViewPlanningPeriods" xml:space="preserve">
+    <value>查看规划周期</value>
+  </data>
+  <data name="ReadOnlyDistribution" xml:space="preserve">
+    <value>不允许分布变更</value>
+  </data>
+  <data name="HideMenu" xml:space="preserve">
+    <value>隐藏菜单</value>
+  </data>
+  <data name="ShowMenu" xml:space="preserve">
+    <value>显示菜单</value>
+  </data>
+  <data name="PreviousDay" xml:space="preserve">
+    <value>前一天</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>前一周</value>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>下一周</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>选择日期</value>
+  </data>
+  <data name="SelectTime" xml:space="preserve">
+    <value>选择时间</value>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>未遵时</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>中立</value>
+  </data>
 </root>
