@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISite site)
         {
-            if (site == null || site.BusinessUnit == null)
+            if (site == null || site.GetOrFillWithBusinessUnit_DONTUSE() == null)
             {
                 return false;
             }
 
-            return queryingPerson.BelongsToBusinessUnit(site.BusinessUnit,dateOnly);
+            return queryingPerson.BelongsToBusinessUnit(site.GetOrFillWithBusinessUnit_DONTUSE(),dateOnly);
         }
 
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, Guid businessUnitId)

@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 	    {
-			var budgetGroupRepository = new BudgetGroupRepository(uow);
+			var budgetGroupRepository = BudgetGroupRepository.DONT_USE_CTOR(uow);
 			var budgetGroup = new BudgetGroup() { Name = Name, TimeZone = user.PermissionInformation.DefaultTimeZone()};
 			
 			if (!string.IsNullOrEmpty(Absence))
 			{
-				var absenceRepository = new AbsenceRepository(uow);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(uow);
 				var absence = absenceRepository.LoadAll().First(a => a.Name == Absence);
 				var shrinkage = new CustomShrinkage("shrinkage");
 				shrinkage.AddAbsence(absence);

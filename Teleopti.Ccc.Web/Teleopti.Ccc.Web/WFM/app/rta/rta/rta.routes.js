@@ -101,12 +101,16 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 		.state('rta-historical', {
 			url: '/rta/agent-historical/:personId/:date?open',
 			templateUrl: function () {
-				if (toggles.RTA_InputValidationForApprovingAdherencePeriods_77045)
+				if (toggles.RTA_AdjustAdherenceToNeutral_80594)
+					return 'app/rta/rta/historical/rta-historical.adjustAdherenceToNeutral_80594.html';
+				else if (toggles.RTA_InputValidationForApprovingAdherencePeriods_77045)
 					return 'app/rta/rta/historical/rta-historical.inputValidationForApprovingAdherencePeriods_77045.html';
 				return 'app/rta/rta/historical/rta-historical.durationOfHistoricalEvents_76470.html';
 			},
 			controllerProvider: function () {
-				if (toggles.RTA_InputValidationForApprovingAdherencePeriods_77045)
+				if (toggles.RTA_AdjustAdherenceToNeutral_80594)
+					return 'RtaHistoricalController80594 as vm';
+				else if (toggles.RTA_InputValidationForApprovingAdherencePeriods_77045)
 					return 'RtaHistoricalController77045 as vm';
 				return 'RtaHistoricalController76470 as vm';
 			}

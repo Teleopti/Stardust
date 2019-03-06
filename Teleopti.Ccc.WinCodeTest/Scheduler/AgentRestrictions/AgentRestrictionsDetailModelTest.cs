@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.OuterWeeksPeriodDictionary).Return(dic);
-				Expect.Call(() =>_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, new DateOnly(), loadedPeriod,TimeSpan.FromHours(40))).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(() =>_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, new DateOnly(), loadedPeriod,TimeSpan.FromHours(40), null)).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(null)).IgnoreArguments();
 			}
 
 			using(_mocks.Playback())
 			{
-				_model.LoadDetails(_scheduleMatrixPro, _schedulingOptions, _effectiveRestrictionExtractor, TimeSpan.FromHours(40), _preferenceNightRestChecker);
+				_model.LoadDetails(_scheduleMatrixPro, _schedulingOptions, _effectiveRestrictionExtractor, TimeSpan.FromHours(40), _preferenceNightRestChecker, null);
 			}
 
 			Assert.AreEqual(2, _model.DetailData().Count);

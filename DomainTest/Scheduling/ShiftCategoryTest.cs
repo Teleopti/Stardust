@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreNotSame(target, cloneWithoutId);
 
             Assert.AreEqual(target.Description, cloneWithoutId.Description);
-            Assert.AreEqual(target.BusinessUnit, cloneWithoutId.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), cloneWithoutId.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.DisplayColor, cloneWithoutId.DisplayColor);
 
             Assert.AreEqual(target.UpdatedBy, cloneWithoutId.UpdatedBy);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreNotSame(target, cloneWithId);
 
             Assert.AreEqual(target.Description, cloneWithId.Description);
-            Assert.AreEqual(target.BusinessUnit, cloneWithId.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), cloneWithId.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.DisplayColor, cloneWithId.DisplayColor);
 
             Assert.AreEqual(target.UpdatedBy, cloneWithId.UpdatedBy);

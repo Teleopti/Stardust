@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
@@ -24,11 +25,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly IInstallationEnvironment _installationEnvironment;
+		private readonly IConfigReader _config;
 		private readonly RestorePersonInfoOnDetach _restorePersonInfo;
 
 		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists,
 			DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions,
-			IDatabaseHelperWrapper databaseHelperWrapper, RestorePersonInfoOnDetach restorePersonInfo, IInstallationEnvironment installationEnvironment)
+			IDatabaseHelperWrapper databaseHelperWrapper, RestorePersonInfoOnDetach restorePersonInfo, IInstallationEnvironment installationEnvironment,
+			IConfigReader config)
 		{
 			_loadAllTenants = loadAllTenants;
 			_saveTenant = saveTenant;
@@ -38,6 +41,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_restorePersonInfo = restorePersonInfo;
 			_installationEnvironment = installationEnvironment;
+			_config = config;
 		}
 
 
@@ -150,7 +154,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog;
 
 			var localAppDb =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString).InitialCatalog;
+				new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy")).InitialCatalog;
 
 			if (appDatabase.Equals(localAppDb))
 				return new TenantResultModel { Success = false };

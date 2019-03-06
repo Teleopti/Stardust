@@ -15,11 +15,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Logon
 {
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class ImpersonateSystemTest : IExtendSystem
 	{
 		public Service TheService;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public IBusinessUnitRepository BusinessUnits;
 		public IScenarioRepository Scenarios;
 		public WithUnitOfWork UnitOfWork;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Logon
 				{
 					var scenario = new Domain.Common.Scenario("s");
 					Scenarios.Add(scenario);
-					entityGotBusinessUnit = scenario.BusinessUnit;
+					entityGotBusinessUnit = scenario.GetOrFillWithBusinessUnit_DONTUSE();
 				});
 
 			entityGotBusinessUnit.Id.Should().Be(businessUnit.Id);

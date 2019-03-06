@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 _chartSettings =
-                    new PersonalSettingDataRepository(uow).FindValueByKey(
+                    PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(
                         string.Format(CultureInfo.InvariantCulture, SettingName, _templateTarget, WorkingInterval.Custom),
                         _defaultChartSettings);
             }

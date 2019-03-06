@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
 			var sites = _siteRepository.LoadAll()
-				.Where(site => site.BusinessUnit.Id.GetValueOrDefault() == _currentBusinessUnit.Current().Id.GetValueOrDefault())
+				.Where(site => site.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault() == _currentBusinessUnit.Current().Id.GetValueOrDefault())
 				.OrderBy(site => site.Description.Name, compare);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Web.Core
 			var currentUser = _loggedOnUser.CurrentUser();
 			var myTeam = currentUser.MyTeam(date);
 			if (myTeam?.Id != null
-				&& myTeam.Site.BusinessUnit.Id == _currentBusinessUnit.Current()?.Id
+				&& myTeam.Site.GetOrFillWithBusinessUnit_DONTUSE().Id == _currentBusinessUnit.Current()?.Id
 				&& _permissionProvider.HasPersonPermission(functionPath, date, currentUser))
 			{
 				return myTeam.Id.Value;

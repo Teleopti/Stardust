@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IAvailabilityRotation> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AvailabilityRepository(currentUnitOfWork.Current());
+            return AvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(availability);
 
-            IList<IAvailabilityRotation> res = new List<IAvailabilityRotation>(new AvailabilityRepository(UnitOfWork).LoadAllAvailabilitiesWithHierarchyData());
+            IList<IAvailabilityRotation> res = new List<IAvailabilityRotation>(AvailabilityRepository.DONT_USE_CTOR(UnitOfWork).LoadAllAvailabilitiesWithHierarchyData());
 
             Assert.AreEqual(1, res.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(res[0].AvailabilityDays[0].Restriction));
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			avail.AvailabilityDays[0].Restriction.EndTimeLimitation = new EndTimeLimitation(null, null);
 			PersistAndRemoveFromUnitOfWork(avail);
 
-			var loaded = new AvailabilityRepository(UnitOfWork).Get(avail.Id.Value);
+			var loaded = AvailabilityRepository.DONT_USE_CTOR(UnitOfWork).Get(avail.Id.Value);
 			loaded.AvailabilityDays[0].Restriction.StartTimeLimitation.StartTime.HasValue
 				.Should().Be.False();
 				
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var aggregate = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(aggregate);
 
-            var loaded = new AvailabilityRepository(UnitOfWork).LoadAggregate(aggregate.Id.Value);
+            var loaded = AvailabilityRepository.DONT_USE_CTOR(UnitOfWork).LoadAggregate(aggregate.Id.Value);
             Assert.IsNotNull(loaded);
         }
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(avail2);
             PersistAndRemoveFromUnitOfWork(avail3);
 
-            var availabilityRotations = new AvailabilityRepository(UnitOfWork).LoadAllSortedByNameAscending().ToList();
+            var availabilityRotations = AvailabilityRepository.DONT_USE_CTOR(UnitOfWork).LoadAllSortedByNameAscending().ToList();
             availabilityRotations[0].Name.Should().Be.EqualTo("atest");
             availabilityRotations[1].Name.Should().Be.EqualTo("test");
             availabilityRotations[2].Name.Should().Be.EqualTo("ytest");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValidators;
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			}
 		}
 
-		public override SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data, ITimeZoneGuard timeZoneGuard)
 		{
 			var scheduleTestData = data as SchedulerTestData;
 			if (scheduleTestData == null)
@@ -38,9 +39,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 				return testDataFail;
 			}
 
-			var intradayValidationResult = intradayBalanceValidationResult(scheduleTestData);
+			var intradayValidationResult = intradayBalanceValidationResult(scheduleTestData, timeZoneGuard);
 
-			var durationValidatorResult = _durationValidator.Validate();
+			var durationValidatorResult = _durationValidator.Validate(timeZoneGuard);
 
 			intradayValidationResult.CombineResultValue(durationValidatorResult);
 			intradayValidationResult.CombineDetails(durationValidatorResult);
@@ -48,11 +49,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			return intradayValidationResult;
 		}
 
-		private SikuliValidationResult intradayBalanceValidationResult(SchedulerTestData schedulerData)
+		private SikuliValidationResult intradayBalanceValidationResult(SchedulerTestData schedulerData, ITimeZoneGuard timeZoneGuard)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var lowestIntervalBalances = ValidatorHelperMethods.GetDailyLowestIntraIntervalBalanceForPeriod(schedulerData.SchedulerState,
-				schedulerData.TotalSkill.AggregateSkills[1]);
+				schedulerData.TotalSkill.AggregateSkills[1], timeZoneGuard);
 			if (lowestIntervalBalances == null)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;

@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			row["starttime"] = absenceLayer.Period.StartDateTime;
 			row["absence_code"] = absenceLayer.Payload.Id.Value;
 			row["day_count"] = 1;
-			row["business_unit_code"] = absenceLayer.Payload.BusinessUnit.Id;
+			row["business_unit_code"] = absenceLayer.Payload.GetOrFillWithBusinessUnit_DONTUSE().Id;
 			row["datasource_id"] = 1;
 			row["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(personAbsence);
 

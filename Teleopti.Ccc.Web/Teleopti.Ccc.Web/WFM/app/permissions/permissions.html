@@ -147,7 +147,7 @@
 								<div class="con-flex line-right">
 
 									<div ng-click="toggleDangerModal = true" class="inline-flex" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
-										<md-checkbox ng-model="vm.isAllFunctionSelected" aria-label="Checkbox" class="non-pointer" >
+										<md-checkbox ng-model="vm.isAllFunctionSelected" class="non-pointer" >
 											{{'ToggleAll'|translate}}
 										</md-checkbox>
 									</div>
@@ -160,9 +160,9 @@
 
 										<md-radio-group class="inline-flex" ng-model="vm.functionGroup" tabindex="-1">
 											<label>{{'Show'|translate}}:</label>
-											<md-radio-button value="All" aria-label="radio" ng-click="vm.allFunctionsFilter()">{{'All' | translate}}</md-radio-button>
-											<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedFunctionsFilter()">{{'SelectedItems' | translate}}</md-radio-button>
-											<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unSelectedFunctionsFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
+											<md-radio-button value="All" ng-click="vm.allFunctionsFilter()">{{'All' | translate}}</md-radio-button>
+											<md-radio-button value="Selected" ng-click="vm.selectedFunctionsFilter()">{{'SelectedItems' | translate}}</md-radio-button>
+											<md-radio-button value="Unselected" ng-click="vm.unSelectedFunctionsFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
 										</md-radio-group>
 
 									</form>
@@ -200,9 +200,9 @@
 
 										<md-radio-group class="inline-flex" ng-model="vm.orgGroup" tabindex="-1">
 											<label>{{'Show'|translate}}:</label>
-											<md-radio-button value="All" aria-label="radio" ng-click="vm.allDataFilter()">{{'All' | translate}}</md-radio-button>
-											<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedDataFilter()">{{'SelectedItems' | translate}}</md-radio-button>
-											<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unselectedDataFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
+											<md-radio-button value="All" ng-click="vm.allDataFilter()">{{'All' | translate}}</md-radio-button>
+											<md-radio-button value="Selected" ng-click="vm.selectedDataFilter()">{{'SelectedItems' | translate}}</md-radio-button>
+											<md-radio-button value="Unselected" ng-click="vm.unselectedDataFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
 										</md-radio-group>
 
 									</form>

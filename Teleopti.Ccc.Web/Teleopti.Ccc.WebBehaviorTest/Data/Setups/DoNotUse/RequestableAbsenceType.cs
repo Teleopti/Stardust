@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				}
 			}
 
-			new AbsenceRepository(unitOfWork).Add(new Absence
+			AbsenceRepository.DONT_USE_CTOR(unitOfWork).Add(new Absence
 			                               	{
 			                               		Description = new Description(_name),
 			                               		Requestable = true,

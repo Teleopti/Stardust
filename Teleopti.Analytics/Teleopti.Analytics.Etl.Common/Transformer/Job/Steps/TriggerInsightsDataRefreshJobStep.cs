@@ -72,7 +72,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			}
 			catch (Exception ex)
 			{
-				logger.Error("Exception sending Refresh message.", ex);
+				logger.Error("Failed to send refresh message.", ex);
 				throw;
 			}
 			finally

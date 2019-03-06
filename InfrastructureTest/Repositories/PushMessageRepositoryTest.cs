@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override Repository<IPushMessage> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PushMessageRepository(currentUnitOfWork);
+            return PushMessageRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
         
         [Test]
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
            
             IPushMessageDialogueRepository dialogueRepository = Mocks.StrictMock<IPushMessageDialogueRepository>();
-			var rep = new PushMessagePersister(new PushMessageRepository(UnitOfWork), dialogueRepository, null);
+			var rep = new PushMessagePersister(PushMessageRepository.DONT_USE_CTOR(UnitOfWork), dialogueRepository, null);
             _pushMessage = new PushMessage();
             PersistAndRemoveFromUnitOfWork(_pushMessage);
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IList<IPerson> receivers = new List<IPerson>();
             ISendPushMessageReceipt receipt = _mocks.StrictMock<ISendPushMessageReceipt>();
             ICreatePushMessageDialoguesService service = _mocks.StrictMock<ICreatePushMessageDialoguesService>();
-			var rep = new PushMessagePersister(new PushMessageRepository(UnitOfWork), dialogueRepository, service);
+			var rep = new PushMessagePersister(PushMessageRepository.DONT_USE_CTOR(UnitOfWork), dialogueRepository, service);
             
             IPushMessageDialogue createdDialogue = new PushMessageDialogue(_pushMessage,PersonFactory.CreatePerson("Receiver"));
 

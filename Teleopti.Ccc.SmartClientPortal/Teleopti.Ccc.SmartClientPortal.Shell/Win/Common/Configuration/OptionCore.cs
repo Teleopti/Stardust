@@ -196,17 +196,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				new SeniorityControl()
 			};
 
-			if (_toggleManager.IsEnabled(Toggles.WFM_Gamification_Setting_With_External_Quality_Values_45003))
+			if (_configReader != null)
 			{
-				if (_configReader != null)
-				{
-					allSupportedPages.Add(new GamificationSettingRedirectWebControl(_configReader));
-				}
-			}
-			else
-			{
-				allSupportedPages.Add(new GamificationSettingControl());
-				allSupportedPages.Add(new SetGamificationSettingTargetsControl());
+				allSupportedPages.Add(new GamificationSettingRedirectWebControl(_configReader));
 			}
 
 			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))

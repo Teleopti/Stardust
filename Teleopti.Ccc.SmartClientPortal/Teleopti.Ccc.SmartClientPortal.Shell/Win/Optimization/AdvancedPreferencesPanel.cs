@@ -10,12 +10,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         public AdvancedPreferencesPanel()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
         }
 
-        public void Initialize(IAdvancedPreferences preferences)
+        public void Initialize(IAdvancedPreferences preferences, bool useRightToLeft)
         {
-            Preferences = preferences;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+			Preferences = preferences;
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
         }

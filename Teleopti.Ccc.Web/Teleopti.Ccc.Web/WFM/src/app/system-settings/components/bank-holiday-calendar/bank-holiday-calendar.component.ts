@@ -13,9 +13,7 @@ import { BankCalendarDataService } from '../../shared/bank-calendar-data.service
 export class BankHolidayCalendarComponent implements OnInit {
 	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
 	isAssignBankHolidayCalendarsToSitesEnabled = false;
-	isAddingNewCalendar = false;
 	isEdittingCalendar = false;
-	edittingCalendar: BankHolidayCalendarItem;
 	selectedCalendar: BankHolidayCalendarItem;
 
 	constructor(
@@ -38,7 +36,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 	}
 
 	selectedTabChange(event, calendar: BankHolidayCalendarItem) {
-		calendar.CurrentYearIndex = event.index;
+		calendar.ActiveYearIndex = event.index;
 	}
 
 	confirmDeleteHolidayCanlendar(event: Event, calendar: BankHolidayCalendarItem) {
@@ -109,22 +107,22 @@ export class BankHolidayCalendarComponent implements OnInit {
 	}
 
 	startAddNewBankCalender() {
-		this.isAddingNewCalendar = true;
+		this.isEdittingCalendar = true;
+		this.selectedCalendar = null;
 	}
 
 	exitAddNewBankCalendar = () => {
-		this.isAddingNewCalendar = false;
+		this.isEdittingCalendar = false;
 	};
 
 	startEditBankCalendar(event: Event, calendar: BankHolidayCalendarItem) {
 		event.stopPropagation();
 
-		this.edittingCalendar = calendar;
+		this.selectedCalendar = calendar;
 		this.isEdittingCalendar = true;
 	}
 
 	backToBankCalendarsList = () => {
-		this.isAddingNewCalendar = false;
 		this.isEdittingCalendar = false;
 	};
 

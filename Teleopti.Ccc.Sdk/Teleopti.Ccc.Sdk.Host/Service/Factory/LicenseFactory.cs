@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
             if (_licenseVerificationResultDto == null)
             {
                 _licenseVerificationResultDto = new LicenseVerificationResultDto(false);
-								var verifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(new FromFactory(() => unitOfWorkFactory)));
+								var verifier = new LicenseVerifier(this, unitOfWorkFactory, LicenseRepository.DONT_USE_CTOR(new FromFactory(() => unitOfWorkFactory)));
 
 	            ILicenseService licenseService;
 				using (unitOfWorkFactory.CreateAndOpenUnitOfWork())

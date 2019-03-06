@@ -8,12 +8,12 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class ScenarioRepositoryNoCurrentBusinessUnitTest
 	{
 		public IScenarioRepository repository;
 		public WithUnitOfWork UnitOfWork;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public IDataSourceScope DataSourceScope;
 		public ICurrentDataSource DataSource;
 

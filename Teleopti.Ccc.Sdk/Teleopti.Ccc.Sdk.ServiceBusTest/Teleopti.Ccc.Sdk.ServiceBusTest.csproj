@@ -113,9 +113,8 @@
     <Reference Include="SharpTestsEx">
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Node, Version=1.0.0.840, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Stardust.Node.1.0.0.840\lib\net451\Stardust.Node.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Stardust.Node, Version=1.0.0.845, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Node.1.0.0.845\lib\net451\Stardust.Node.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />
@@ -196,6 +195,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="..\..\Domain\FeatureFlags\toggles.txt">
+      <Link>FeatureFlags\toggles.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Payroll.DeployNew\TestBrokenExtension\Teleopti.Ccc.Payroll.dll.dllj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

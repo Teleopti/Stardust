@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_currentUnitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
 			_uow = _mocks.DynamicMock<IUnitOfWork>();
-			_target = new SetSchedulePeriodWorktimeOverrideCommandHandler(_personRep, _currentUnitOfWorkFactory);
+			_target = new SetSchedulePeriodWorktimeOverrideCommandHandler(_personRep, _currentUnitOfWorkFactory, new FullPermission());
 		}
 
 		[Test]

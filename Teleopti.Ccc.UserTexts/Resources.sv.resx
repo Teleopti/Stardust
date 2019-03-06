@@ -16169,4 +16169,76 @@ Applikationen kommer nu att stängas. </value>
   <data name="TeamSchedulingColon" xml:space="preserve">
     <value>Teamschemaläggning</value>
   </data>
+  <data name="HideMenu" xml:space="preserve">
+    <value>Dölj meny</value>
+  </data>
+  <data name="ShowMenu" xml:space="preserve">
+    <value>Visa meny</value>
+  </data>
+  <data name="PreviousDay" xml:space="preserve">
+    <value>Föregående dag</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Föregående vecka</value>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>Nästa vecka</value>
+  </data>
+  <data name="SelectPeriod" xml:space="preserve">
+    <value>Välj period</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>Välj datum</value>
+  </data>
+  <data name="SelectTime" xml:space="preserve">
+    <value>Välj tid</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Föregående månad</value>
+  </data>
+  <data name="NextMonth" xml:space="preserve">
+    <value>Nästa månad</value>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>Välj månad</value>
+  </data>
+  <data name="SelectWeek" xml:space="preserve">
+    <value>Välj vecka</value>
+  </data>
+  <data name="MostUnderstaffedDay" xml:space="preserve">
+    <value>Mest underbemannade dag</value>
+  </data>
+  <data name="MostOverstaffedDay" xml:space="preserve">
+    <value>Mest överbemannade dag</value>
+  </data>
+  <data name="PleaseInputCalendarNameFirst" xml:space="preserve">
+    <value>Ange namn på kalendern först</value>
+  </data>
+  <data name="CalendarAutomaticallySaved" xml:space="preserve">
+    <value>Kalendern sparas automatiskt</value>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>Out of adherence</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="ReadOnlyDistribution" xml:space="preserve">
+    <value>Ändring av fördelningen är inte tillåtet</value>
+  </data>
+  <data name="ShowNumbers" xml:space="preserve">
+    <value>Visa värden</value>
+  </data>
+  <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+    <value>Ändringsloggen är inte aktiverad. Vi rekommenderar att aktivera den. Kontakta Teleopti för hjälp. </value>
+  </data>
+  <data name="NoPlanningGroupFound" xml:space="preserve">
+    <value>Ingen planeringsgrupp hittades.</value>
+  </data>
+  <data name="HasCriticalIntervals" xml:space="preserve">
+    <value>Har kritiska intervaller</value>
+  </data>
+  <data name="CriticalInterval" xml:space="preserve">
+    <value>Kritiskt intervall</value>
+  </data>
 </root>

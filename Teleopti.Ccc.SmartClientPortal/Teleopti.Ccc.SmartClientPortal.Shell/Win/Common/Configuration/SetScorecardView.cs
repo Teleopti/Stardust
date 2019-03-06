@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void LoadControl()
 		{
 			_presenter = new SetScorecardPresenter(this, _unitOfWork, MessageBrokerInStateHolder.Instance,
-												   new ScorecardProvider(new ScorecardRepository(_unitOfWork), true),
-												   new SiteProvider(new SiteRepository(_unitOfWork)),
-												   new TeamProvider(new TeamRepository(_unitOfWork)));
+												   new ScorecardProvider(ScorecardRepository.DONT_USE_CTOR(_unitOfWork), true),
+												   new SiteProvider(SiteRepository.DONT_USE_CTOR(_unitOfWork)),
+												   new TeamProvider(TeamRepository.DONT_USE_CTOR(_unitOfWork)));
 
 			_presenter.Initialize();
 		}

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             get {
 	            return _personAvailabilityRepository ??
 	                   (_personAvailabilityRepository =
-		                   new PersonAvailabilityRepository(_filteredPeopleHolder.GetUnitOfWork));
+		                   PersonAvailabilityRepository.DONT_USE_CTOR(_filteredPeopleHolder.GetUnitOfWork));
             }
         }
 

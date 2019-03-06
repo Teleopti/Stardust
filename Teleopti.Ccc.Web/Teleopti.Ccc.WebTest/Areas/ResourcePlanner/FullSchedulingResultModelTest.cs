@@ -4,9 +4,13 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection2;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
@@ -57,19 +61,64 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldMapRelativeDifference()
+		public void ShouldMapRelativeDifferenceWithShrinkage()
 		{
-			var skillDay = MockRepository.GenerateMock<ISkillDay>();
-			var skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill1, new DateTime(2015,9,4,12,0,0,DateTimeKind.Utc), 0, 0);
-			skillStaffPeriod.SetCalculatedResource65(5);
-			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
-			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
-			
-			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
-			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
-
-			_target.Map(_skillDays, _period);
-			Assert.AreEqual(-0.5, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].RelativeDifference);
+			var skill = new Skill("Skill1").For(new Activity("_")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				RequiresSkill = true
+			});
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var startDate = new DateOnly(2015, 9, 4);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(new Scenario(), startDate, 10);
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			skillDay.SkillStaffPeriodCollection.ForEach(x => x.SetCalculatedResource65(5));
+			var skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, new List<ISkillDay> {skillDay}}};
+			var target = new FullSchedulingResultModel();
+			target.Map(skillDays, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
+			Assert.AreEqual(-0.75, target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].RelativeDifference);
+		}
+		
+		[Test]
+		public void ShouldMapRelativeDifferenceWithShrinkageForIntraday()
+		{
+			var skill = new Skill("Skill1").For(new Activity("_")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				RequiresSkill = true
+			});
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var startDate = new DateOnly(2015, 9, 4);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(new Scenario(), startDate, 10);
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			skillDay.SkillStaffPeriodCollection.ForEach(x => x.SetCalculatedResource65(5));
+			var skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, new List<ISkillDay> {skillDay}}};
+			var target = new FullSchedulingResultModel();
+			target.Map(skillDays, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
+			Assert.AreEqual(20, target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].IntervalDetails.First().ForecastAgents);
+		}
+		
+		[Test]
+		public void ShouldMapDisplayIntradayInSkillTimeZone()
+		{
+			var skill = new Skill("Skill1").For(new Activity("_")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				RequiresSkill = true
+			});
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(8, 16));
+			var startDate = new DateOnly(2015, 9, 4);
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(new Scenario(), startDate, 10);
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.5));
+			skillDay.SkillStaffPeriodCollection.ForEach(x => x.SetCalculatedResource65(5));
+			var skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, new List<ISkillDay> {skillDay}}};
+			var target = new FullSchedulingResultModel();
+			target.Map(skillDays, new DateOnlyPeriod(startDate, startDate.AddDays(1)));
+			Assert.AreEqual("8:00", target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].IntervalDetails.First().StartTime);
 		}
 
 		[Test]

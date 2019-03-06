@@ -109,9 +109,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				rollingPeriodSet = teamSetting.GamificationSetting.RollingPeriodSet;
 			}
 
-			var showBadgePeriodNavigator =
-				_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
-
 			return new PortalViewModel
 			{
 				ReportNavigationItems = reportsList,
@@ -132,10 +129,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				BadgeRollingPeriodSet = rollingPeriodSet,
 				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
 				ShowBadge = showBadge,
-				ShowBadgePeriodNavigator = showBadgePeriodNavigator,
 				DateFormatLocale = getLocale(),
 				GrantEnabled = isGrantBotAvailable()
-
 			};
 		}
 
@@ -151,7 +146,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		{
 			var today = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
 			var onGoingPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), today);
-			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866)) return onGoingPeriod;
 
 			var firstDayOfWeek = person.FirstDayOfWeek;
 

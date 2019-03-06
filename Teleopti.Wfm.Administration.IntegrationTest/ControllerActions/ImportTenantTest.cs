@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotExists()
 		{
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString())
 				{
 					UserID = "appuser",
 					Password = "passwordPassword7",
@@ -53,7 +53,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldReturnSuccessFalseIfAppDatabaseNotExists()
 		{
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString())
 				{
 					InitialCatalog = Guid.NewGuid().ToString(),
 					UserID = "appuser",
@@ -97,7 +97,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
 			var importModel = new ImportDatabaseModel
 			{
@@ -136,7 +136,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
 			var importModel = new ImportDatabaseModel
 			{

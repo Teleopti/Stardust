@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
-				var teamRepository = new TeamRepository(currentUnitOfWork);
+				var teamRepository = TeamRepository.DONT_USE_CTOR(currentUnitOfWork);
 				AccessToTeam.Split(',')
 					.Select(t => teamRepository.FindTeamByDescriptionName(t.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableTeam);
@@ -175,23 +175,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AccessToSite))
 			{
-				var siteRepository = new SiteRepository(currentUnitOfWork);
+				var siteRepository = SiteRepository.DONT_USE_CTOR(currentUnitOfWork);
 				AccessToSite.Split(',')
 					.Select(s => siteRepository.FindSiteByDescriptionName(s.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableSite);
 			}
 
-			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork, null, null);
+			var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 			var businessUnit = businessUnitRepository.LoadAllBusinessUnitSortedByName().Single(b => b.Name == BusinessUnit);
 			role.SetBusinessUnit(businessUnit);
 
-			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
+			var applicationFunctionRepository = ApplicationFunctionRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var allApplicationFunctions = applicationFunctionRepository.LoadAll();
 			var filteredApplicationFunctions = filterApplicationFunctions(allApplicationFunctions);
 			filteredApplicationFunctions.ToList().ForEach(role.AddApplicationFunction);
 
-			var applicationRoleRepository = new ApplicationRoleRepository(currentUnitOfWork);
-			var availableDataRepository = new AvailableDataRepository(currentUnitOfWork);
+			var applicationRoleRepository = ApplicationRoleRepository.DONT_USE_CTOR(currentUnitOfWork);
+			var availableDataRepository = AvailableDataRepository.DONT_USE_CTOR(currentUnitOfWork);
 
 			applicationRoleRepository.Add(role);
 			availableDataRepository.Add(availableData);

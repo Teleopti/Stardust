@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -5,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
     public interface IMeetingImpactSkillGridHandler
     {
         void SetupSkillTabs();
-        void DrawSkillGrid();
+        void DrawSkillGrid(TimeZoneInfo timeZoneInfo);
     }
 
     public class MeetingImpactSkillGridHandler : IMeetingImpactSkillGridHandler
@@ -83,14 +83,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             }
         }
 
-        public void DrawSkillGrid()
+        public void DrawSkillGrid(TimeZoneInfo timeZoneInfo)
         {
             var skill = _meetingImpactView.SelectedSkill();
 
             if (skill != null)
             {
                 var currentIntradayDate = _meetingImpactView.StartDate;
-				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, timeZoneInfo);
                     
                 if (skill.IsVirtual)
                 {

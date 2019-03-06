@@ -11,6 +11,8 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 {
 	public class HangfireCookie : IHangfireCookie
 	{
+		public const string AntiForgeryCookieName = "__RequestVerificationToken_Administration";
+
 		// This cookie is used only for getting authenticated in Hangfire
 		public void SetHangfireAdminCookie(string userName, string email)
 		{
@@ -31,16 +33,19 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				ExpiresUtc = DateTime.UtcNow.AddDays(1)
 			}, identity);
 			AntiForgery.GetTokens("", out var token, out _);
-			owinContext.Response.Cookies.Append(AntiForgeryConfig.CookieName, token);
+			owinContext.Response.Cookies.Append(AntiForgeryCookieName, token);
 		}
 
 		public void RemoveAdminCookie()
 		{
-			var identity = HttpContext.Current.GetOwinContext().Authentication.User.Identity;
+			var owinContext = HttpContext.Current.GetOwinContext();
+			var identity = owinContext.Authentication.User.Identity;
 			if (!identity.IsAuthenticated)
 				return;
 
-			HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			owinContext.Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			owinContext.Response.Cookies.Delete(AntiForgeryCookieName);
+			owinContext.Response.Cookies.Delete(AntiForgeryConfig.CookieName);
 		}
 	}
 

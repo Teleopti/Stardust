@@ -1693,7 +1693,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var defaultScenario = new DefaultScenarioLoader().Load(new ScenarioRepository(unitOfWork));
+				var defaultScenario = new DefaultScenarioLoader().Load(ScenarioRepository.DONT_USE_CTOR(unitOfWork));
 				double progressCounter = 1;
 
 				foreach (var selectedPerson in selectedPersons)

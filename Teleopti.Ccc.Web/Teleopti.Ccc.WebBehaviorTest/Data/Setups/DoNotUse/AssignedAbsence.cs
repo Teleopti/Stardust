@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var period = new DateTimePeriod(startTime, endTime);
 
 			Absence = new Absence { Description = new Description("Absence") };
-			new AbsenceRepository(unitOfWork).Add(Absence);
+			AbsenceRepository.DONT_USE_CTOR(unitOfWork).Add(Absence);
 			Absence.DisplayColor = AbsenceColor != null ? Color.FromName(AbsenceColor) : Color.FromArgb(210, 150, 150);
 
 			var absence = new PersonAbsence(person, Scenario, new AbsenceLayer(Absence, period));

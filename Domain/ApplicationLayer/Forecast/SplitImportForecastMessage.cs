@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                     new OpenAndSplitTargetSkillMessage
                         {
                             ImportMode = ImportForecastsMode.ImportWorkloadAndStaffing,
-                            LogOnBusinessUnitId = targetSkill.BusinessUnit.Id.GetValueOrDefault(),
+                            LogOnBusinessUnitId = targetSkill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
                             LogOnDatasource = identity.DataSource.DataSourceName,
                             Timestamp = DateTime.UtcNow,
                             TargetSkillId = targetSkill.Id.GetValueOrDefault(),

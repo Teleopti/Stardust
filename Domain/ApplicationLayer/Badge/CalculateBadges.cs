@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return setting?.Value ?? 30;
 		}
 
-		[EnabledBy(Toggles.WFM_Gamification_Calculate_Badges_47250)]
 		public void CalculateExternalBadge(CalculateBadgeMessage message)
 		{
 			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().Where(t => t.GamificationSetting != null).ToLookup(t => t.GamificationSetting);

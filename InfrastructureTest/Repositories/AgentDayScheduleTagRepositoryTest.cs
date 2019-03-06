@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IAgentDayScheduleTag> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AgentDayScheduleTagRepository(currentUnitOfWork);
+            return AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(tag);
-            _repository = new AgentDayScheduleTagRepository(UnitOfWork);
+            _repository = AgentDayScheduleTagRepository.DONT_USE_CTOR(UnitOfWork);
             Assert.AreEqual(1, _repository.Find(new DateTimePeriod(2010, 4, 1, 2010, 4, 2), tag.Scenario).Count);
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(tag);
-            _repository = new AgentDayScheduleTagRepository(UnitOfWork);
+            _repository = AgentDayScheduleTagRepository.DONT_USE_CTOR(UnitOfWork);
             Assert.AreEqual(0, _repository.Find(new DateTimePeriod(2010, 4, 14, 2010, 4, 21), tag.Scenario).Count);
         }
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(tag);
-            _repository = new AgentDayScheduleTagRepository(UnitOfWork);
+            _repository = AgentDayScheduleTagRepository.DONT_USE_CTOR(UnitOfWork);
             ICollection<IPerson> persons = new List<IPerson> { tag.Person };
             Assert.AreEqual(1, _repository.Find(new DateOnlyPeriod(2010, 4, 1, 2010, 4, 2), persons, tag.Scenario).Count);
         }
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(tag);
-            _repository = new AgentDayScheduleTagRepository(UnitOfWork);
+            _repository = AgentDayScheduleTagRepository.DONT_USE_CTOR(UnitOfWork);
             Assert.IsNotNull(tag.Id);
             Assert.AreEqual(tag, _repository.LoadAggregate(tag.Id.Value));
         }

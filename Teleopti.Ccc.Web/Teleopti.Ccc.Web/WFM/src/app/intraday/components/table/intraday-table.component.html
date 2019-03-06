@@ -1,0 +1,44 @@
+<div *ngIf="chartType === 'traffic'">
+	<nz-table #basicTable [nzShowPagination]="false" [nzBordered]="true" [nzData]="tableData">
+		<thead>
+			<tr>
+				<th></th>
+				<th style="word-break: keep-all">{{ 'Forecasted' | translate }}</th>
+				<th style="word-break: keep-all">{{ 'Actual' | translate }}</th>
+				<th style="word-break: keep-all">{{ 'Difference' | translate }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let data of basicTable.data">
+				<td style="word-break: keep-all">{{ data.Heading | translate }}</td>
+				<td style="white-space: nowrap">{{ data.Forecasted | number: '1.1-1' }}</td>
+				<td style="white-space: nowrap">{{ data.Actual | number: '1.1-1' }}</td>
+				<td style="white-space: nowrap">{{ data.Difference | number: '1.1-1' }} %</td>
+			</tr>
+		</tbody>
+	</nz-table>
+</div>
+<div *ngIf="chartType === 'performance'">
+	<nz-table #basicTable [nzShowPagination]="false" [nzBordered]="true" [nzData]="tableData">
+		<thead>
+			<tr>
+				<th></th>
+				<th style="word-break: keep-all">{{ 'ServiceLevel' | translate }}</th>
+				<th style="word-break: keep-all">{{ 'ESL' | translate }}</th>
+				<th style="word-break: keep-all">{{ 'AverageSpeedOfAnswer' | translate }}</th>
+				<th [hidden]="hideAbandonRate" style="word-break: keep-all">{{ 'AbandonedRate' | translate }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let data of basicTable.data">
+				<td style="word-break: keep-all">{{ data.Heading | translate }}</td>
+				<td style="white-space: nowrap">{{ data.ServiceLevel * 100 | number: '1.1-1' }}%</td>
+				<td style="white-space: nowrap">{{ data.EstimatedServiceLevel | number: '1.1-1' }}%</td>
+				<td style="white-space: nowrap">{{ data.AverageSpeedOfAnswer | number: '1.1-1' }}s</td>
+				<td [hidden]="hideAbandonRate" style="white-space: nowrap">
+					{{ data.AbandonRate | number: '1.1-1' }}%
+				</td>
+			</tr>
+		</tbody>
+	</nz-table>
+</div>

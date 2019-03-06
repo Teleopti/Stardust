@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var dayOffTemplate = new DayOffTemplate(new Description(Name, ShortName));
 			dayOffTemplate.SetTargetAndFlexibility(new TimeSpan(24, 0, 0), new TimeSpan(6, 0, 0));
 
-			var dayOffRepository = new DayOffTemplateRepository(currentUnitOfWork);
+			var dayOffRepository = DayOffTemplateRepository.DONT_USE_CTOR2(currentUnitOfWork);
 			dayOffRepository.Add(dayOffTemplate);
 		}
 	}

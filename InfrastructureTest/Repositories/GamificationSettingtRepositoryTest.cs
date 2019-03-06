@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			PersistAndRemoveFromUnitOfWork(_gamificationSetting);
-			IList<IGamificationSetting> loadedGamificationSettings = new GamificationSettingRepository(UnitOfWork).LoadAll().ToList();
+			IList<IGamificationSetting> loadedGamificationSettings = GamificationSettingRepository.DONT_USE_CTOR(UnitOfWork).LoadAll().ToList();
 			Assert.AreEqual(1, loadedGamificationSettings.Count);
 			Assert.AreEqual(TimeSpan.FromMinutes(10), loadedGamificationSettings[0].AHTBronzeThreshold);
 			Assert.AreEqual(2, loadedGamificationSettings[0].GoldToSilverBadgeRate);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			_gamificationSetting = new GamificationSetting("MyGamificationSetting");
 			PersistAndRemoveFromUnitOfWork(_gamificationSetting);
-			IEnumerable<IGamificationSetting> loadedGamificationSettings = new GamificationSettingRepository(UnitOfWork).FindAllGamificationSettingsSortedByDescription();
+			IEnumerable<IGamificationSetting> loadedGamificationSettings = GamificationSettingRepository.DONT_USE_CTOR(UnitOfWork).FindAllGamificationSettingsSortedByDescription();
 			Assert.AreEqual(1, loadedGamificationSettings.Count());
 		}
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			const string settingName = "MyGamificationSetting";
 			_gamificationSetting = new GamificationSetting(settingName);
 			PersistAndRemoveFromUnitOfWork(_gamificationSetting);
-			IList<IGamificationSetting> loadedGamificationSettings = new GamificationSettingRepository(UnitOfWork).FindSettingByDescriptionName(settingName).ToList();
+			IList<IGamificationSetting> loadedGamificationSettings = GamificationSettingRepository.DONT_USE_CTOR(UnitOfWork).FindSettingByDescriptionName(settingName).ToList();
 			Assert.AreEqual(settingName, loadedGamificationSettings.First().Description.Name);
 		}
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IGamificationSetting> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new GamificationSettingRepository(currentUnitOfWork);
+			return GamificationSettingRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 	}
 }

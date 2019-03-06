@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request4
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period3, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(new DateTimePeriod(_baseTime, _baseTime.AddDays(1).AddSeconds(-1)), budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request1
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period3, budgetGroup1.Id.Value,
 						WaitlistProcessOrder.BySeniority).ToArray();
 
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period2, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period3, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period3, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request1
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period2, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(0);
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				wcs.SetDeleted();
 				PersistAndRemoveFromUnitOfWork(wcs);
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period1, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(0);
@@ -542,7 +542,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				((Person)person1).SetDeleted();
 				PersistAndRemoveFromUnitOfWork(person1);
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period1, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
@@ -597,7 +597,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				((PersonRequest)request1).SetDeleted();
 				PersistAndRemoveFromUnitOfWork(request1);
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period2, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period3, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period1, budgetGroup1.Id.Value).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
@@ -787,7 +787,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				});
 
-				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+				var pendingAndWaitlistedRequests = PersonRequestRepository.DONT_USE_CTOR(UnitOfWork)
 					.GetPendingAndWaitlistedAbsenceRequests(period2, null).ToArray();
 
 				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
@@ -873,7 +873,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IPersonRequest> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PersonRequestRepository(currentUnitOfWork);
+			return PersonRequestRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 	}
 }

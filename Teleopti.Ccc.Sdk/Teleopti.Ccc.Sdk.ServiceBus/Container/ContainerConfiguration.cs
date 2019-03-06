@@ -32,12 +32,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			Configure(null);
 		}
 
-		public void Configure(IContainer sharedContainer)
+		public void Configure(IContainer sharedContainer, IConfigReader configReader = null)
 		{
+			if(configReader == null)
+				configReader = new ConfigReader();
+			
 			const string configKey = "FCM";
 			const string configValue = "key=AAAANvMkWNA:APA91bG1pR8ZVsp-S98uWsFUE5lnQiC8UnsQL3DgN6Vyw5HyaKuqVt86kdeurfLfQkWt_7kZTgXcTuAaxvcVUkjtE8jFo72loTy6UYrLrVbYnqCXVI4mWCYhvLQnU3Sv0sIfW1k-eZCu";
 			var build = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigOverrider(new ConfigReader(),
+			var configuration = new IocConfiguration(new IocArgs(new ConfigOverrider(configReader,
 				new Dictionary<string, string> {{configKey, configValue}}))
 			{
 				SharedContainer = sharedContainer,
@@ -60,7 +63,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 
 			build.Register(c =>
 			{
-				var configReader = c.Resolve<IConfigReader>();
 				var connstringAsString = configReader.ConnectionString("Tenancy");
 				return TenantUnitOfWorkManager.Create(connstringAsString);
 			}).As<ITenantUnitOfWork>().As<ICurrentTenantSession>().SingleInstance();

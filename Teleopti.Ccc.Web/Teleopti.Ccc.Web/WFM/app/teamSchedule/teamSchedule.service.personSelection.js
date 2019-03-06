@@ -47,7 +47,7 @@
 
 				svc.personInfo[personSchedule.PersonId] = createDefaultPersonInfo(personSchedule, absences, activities);
 			} else if (!personSchedule.IsSelected && svc.personInfo[personSchedule.PersonId]) {
-				delete svc.personInfo[personSchedule.PersonId];
+				clearProjectSelection(personSchedule.PersonId);
 			}
 		};
 
@@ -165,7 +165,7 @@
 			svc.updatePersonInfo([personSchedule]);
 
 			if (personInfo.SelectedActivities.length === 0 && personInfo.SelectedAbsences.length === 0) {
-				delete svc.personInfo[personId];
+				clearProjectSelection(personId);
 			}
 		};
 
@@ -181,7 +181,7 @@
 				personSchedule.IsSelected = false;
 				svc.toggleAllPersonProjections(personSchedule, personSchedule.Date);
 				if (!personSchedule.IsSelected && svc.personInfo[personSchedule.PersonId]) {
-					delete svc.personInfo[personSchedule.PersonId];
+					clearProjectSelection(personSchedule.PersonId);
 				}
 			});
 			if (Object.keys(svc.personInfo).length > 0) {
@@ -214,7 +214,14 @@
 		};
 
 		svc.getSelectedPersonIdList = function () {
-			return Object.keys(svc.personInfo);
+			return Object.keys(svc.personInfo).filter(function (personId) {
+				var info = svc.personInfo[personId];
+				return info
+					&& (info.Checked
+						|| info.SelectedActivities && !!info.SelectedActivities.length
+						|| info.SelectedAbsences && !!info.SelectedAbsences.length
+						|| info.SelectedDayOffs && !!info.SelectedDayOffs.length);
+			});
 		};
 
 		svc.isAnyAgentSelected = function () {
@@ -359,10 +366,16 @@
 			}
 		}
 
-		function syncProjectionSelection(personSchedules) {
-			var personInfo = this.personInfo
+		function syncProjectionSelection(personSchedules, date, hasSelectedAllPeopleInEveryPage) {
+			var personInfo = this.personInfo;
 			personSchedules.forEach(function (sched) {
-				if (!sched.Shifts) {
+				if (!personInfo[sched.PersonId] && hasSelectedAllPeopleInEveryPage) {
+					sched.IsSelected = true;
+					svc.updatePersonSelection(sched);
+					svc.toggleAllPersonProjections(sched, date);
+					return;
+				}
+				else if (!sched.Shifts || !personInfo[sched.PersonId]) {
 					return;
 				}
 				sched.Shifts.forEach(function (shift) {
@@ -371,23 +384,27 @@
 							return;
 						}
 						proj.ShiftLayerIds.forEach(function (id) {
-							if (!personInfo[sched.PersonId]) {
-								return;
-							}
-							var selected = false;
 							for (var i = 0; i < personInfo[sched.PersonId].SelectedActivities.length; i++) {
 								if (personInfo[sched.PersonId].SelectedActivities[i].shiftLayerId === id) {
-									selected = true;
+									proj.Selected = true;
 									break;
 								}
-							}
-							if (selected) {
-								proj.Selected = true;
 							}
 						});
 					});
 				});
+				sched.IsSelected = personInfo[sched.PersonId].Checked; 
 			}, this);
+		}
+
+		function clearProjectSelection(personId) {
+			var info = svc.personInfo[personId];
+			if (info) {
+				info.SelectedActivities = [];
+				info.SelectedAbsences = [];
+				info.SelectedDayOffs = [];
+				info.Checked = false;
+			}
 		}
 	}
 })(angular);

@@ -230,6 +230,9 @@
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
     <Compile Include="ApplicationLayer\Forecast\ISkillForecastJobStartTimeRepository.cs" />
     <Compile Include="Common\Time\IUserNowExtensions.cs" />
+    <Compile Include="ETL\EtlTickFrequency.cs" />
+    <Compile Include="ETL\IMarkEtlPing.cs" />
+    <Compile Include="ETL\ITimeSinceLastEtlPing.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
     <Compile Include="Forecasting\SkillForecastReadModelPeriodBuilder.cs" />
     <Compile Include="Forecasting\SkillsExtensions.cs" />
@@ -246,9 +249,11 @@
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="Status\CallLegacySystemStatus.cs" />
     <Compile Include="Status\CheckLegacySystemStatus.cs" />
+    <Compile Include="Status\EtlChecker.cs" />
     <Compile Include="Status\ICallLegacySystemStatus.cs" />
     <Compile Include="Status\IStatusStep.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
+    <Compile Include="Status\StardustChecker.cs" />
     <Compile Include="Status\StatusStepInfo.cs" />
     <Compile Include="Status\StatusStepResult.cs" />
     <Compile Include="Status\ExecuteStatusStep.cs" />
@@ -274,7 +279,6 @@
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
     <Compile Include="Stardust\IGetAllWorkerNodes.cs" />
-    <Compile Include="Stardust\StardustChecker.cs" />
     <Compile Include="Stardust\WorkerNode.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
@@ -1565,7 +1569,6 @@
     <Compile Include="ApplicationLayer\Badge\IAgentBadgeWithRankCalculator.cs" />
     <Compile Include="ApplicationLayer\Badge\IPerformBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\IsTeamGamificationSettingsAvailable.cs" />
-    <Compile Include="ApplicationLayer\Badge\PerformBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\ICancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\IWriteProtectedScheduleCommandValidator.cs" />

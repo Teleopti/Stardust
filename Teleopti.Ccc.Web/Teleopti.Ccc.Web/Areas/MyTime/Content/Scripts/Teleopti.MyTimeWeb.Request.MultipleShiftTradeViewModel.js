@@ -109,18 +109,6 @@
 
 	self.showCartPanel = ko.observable(self.isiPad || self.isDesktop);
 
-	self.showCart = function() {
-		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
-	};
-
-	self.showToolbar = function() {
-		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409');
-	};
-
-	self.showCartToggle = function() {
-		return self.isMobile && self.showCart();
-	};
-
 	self.resetStatus = function() {
 		self.listCartToggle(true);
 		self.selectedSchedulePairs([]);
@@ -149,9 +137,7 @@
 					return 1;
 				}
 			});
-			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
-				validateTolorance();
-			}
+			validateTolorance();
 		}
 
 		return true;
@@ -175,9 +161,7 @@
 				return d.date.isSame(data.date, 'day');
 			});
 
-			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
-				validateTolorance();
-			}
+			validateTolorance();
 		}
 	};
 
@@ -378,17 +362,12 @@
 				return pair.date.isSame(self.requestedDateInternal(), 'day');
 			})[0];
 
-			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
-				loadToleranceInfo(agentId, function() {
-					if (item && item.isEnable) {
-						item.isSelected(true);
-						self.select(item);
-					}
-				});
-			} else if (item && item.isEnable) {
-				item.isSelected(true);
-				self.select(item);
-			}
+			loadToleranceInfo(agentId, function() {
+				if (item && item.isEnable) {
+					item.isSelected(true);
+					self.select(item);
+				}
+			});
 		});
 
 		self.isLoadingSchedulesOnBottom(true);

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
@@ -41,7 +42,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             new LanguageResourceHelper().SetTexts(this);
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112)]
+		public void SetTextsNoRightToLeft()
+		{
+			new LanguageResourceHelper().SetTexts(this, false);
+		}
+
+
+		protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F1)
             {

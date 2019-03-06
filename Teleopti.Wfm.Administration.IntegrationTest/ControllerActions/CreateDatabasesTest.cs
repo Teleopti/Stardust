@@ -90,7 +90,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
             DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "passwordPassword7");
 

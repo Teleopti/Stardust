@@ -67,14 +67,19 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
         public virtual void SetBusinessUnit(IBusinessUnit businessUnit)
         {
-            BusinessUnit = businessUnit;
+			_businessUnit = businessUnit;
         }
 
-        public virtual IBusinessUnit BusinessUnit
-        {
-            get { return _businessUnit; }
-            protected set { _businessUnit = value; }
-        }
+		public virtual IBusinessUnit BusinessUnit
+		{
+			get { return _businessUnit; }
+			set { _businessUnit = value; }
+		}
+        
+		public virtual IBusinessUnit GetOrFillWithBusinessUnit_DONTUSE()
+		{
+			return _businessUnit;
+		}
 
         public virtual ApplicationRole NoneEntityClone()
         {

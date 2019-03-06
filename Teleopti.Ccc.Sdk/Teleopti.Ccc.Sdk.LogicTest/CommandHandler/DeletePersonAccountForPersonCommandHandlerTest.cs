@@ -1,17 +1,15 @@
-﻿using System;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -23,7 +21,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private IAbsenceRepository _absenceRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private DeletePersonAccountForPersonCommandHandler _target;
         private IPerson _person;
         private IAbsence _absence;
         private static readonly DateOnly _startDate = new DateOnly(2012, 1, 1);
@@ -42,12 +39,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_traceableRefreshService = _mock.DynamicMock<ITraceableRefreshService>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _target = new DeletePersonAccountForPersonCommandHandler(_traceableRefreshService, _personRepository,_personAbsenceAccountRepository,_absenceRepository, _currentUnitOfWorkFactory);
-
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _absence = AbsenceFactory.CreateAbsence("Sick");
-            _absence.SetId(Guid.NewGuid());
+            
+			_person = PersonFactory.CreatePerson().WithId();
+            _absence = AbsenceFactory.CreateAbsence("Sick").WithId();
 
             _deletePersonAccountForPersonCommandDto = new DeletePersonAccountForPersonCommandDto
             {
@@ -77,10 +71,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using(_mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					_target.Handle(_deletePersonAccountForPersonCommandDto);
-				}
+				var target = new DeletePersonAccountForPersonCommandHandler(_traceableRefreshService, _personRepository, _personAbsenceAccountRepository, _absenceRepository, _currentUnitOfWorkFactory, new FullPermission());
+				target.Handle(_deletePersonAccountForPersonCommandDto);
 			}
         }
 
@@ -97,10 +89,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
-				}
+				var target = new DeletePersonAccountForPersonCommandHandler(_traceableRefreshService, _personRepository, _personAbsenceAccountRepository, _absenceRepository, _currentUnitOfWorkFactory, new FullPermission());
+				Assert.Throws<FaultException>(() => target.Handle(_deletePersonAccountForPersonCommandDto));
 			}
         }
 
@@ -118,10 +108,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
-				}
+				var target = new DeletePersonAccountForPersonCommandHandler(_traceableRefreshService, _personRepository, _personAbsenceAccountRepository, _absenceRepository, _currentUnitOfWorkFactory, new FullPermission());
+				Assert.Throws<FaultException>(() => target.Handle(_deletePersonAccountForPersonCommandDto));
 			}
         }
 
@@ -138,12 +126,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_absenceRepository.Get(_deletePersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
             }
             using (_mock.Playback())
-            {
-                using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
-                {
-                    Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
-                }
-            }
+			{
+				var target = new DeletePersonAccountForPersonCommandHandler(_traceableRefreshService, _personRepository, _personAbsenceAccountRepository, _absenceRepository, _currentUnitOfWorkFactory, new NoPermission());
+				Assert.Throws<FaultException>(() => target.Handle(_deletePersonAccountForPersonCommandDto));
+			}
         }
     }
 }

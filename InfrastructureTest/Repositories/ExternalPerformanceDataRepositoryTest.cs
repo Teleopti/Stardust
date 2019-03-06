@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70, _externalPerformance.BusinessUnit.Id.Value);
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70, _externalPerformance.GetOrFillWithBusinessUnit_DONTUSE().Id.Value);
 				return data;
 			});
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, personList, 1, 70, _externalPerformance.BusinessUnit.Id.Value);
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, personList, 1, 70, _externalPerformance.GetOrFillWithBusinessUnit_DONTUSE().Id.Value);
 				return data;
 			});
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value}, 1, 70, _externalPerformance.BusinessUnit.Id.Value);
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value}, 1, 70, _externalPerformance.GetOrFillWithBusinessUnit_DONTUSE().Id.Value);
 				return data;
 			});
 

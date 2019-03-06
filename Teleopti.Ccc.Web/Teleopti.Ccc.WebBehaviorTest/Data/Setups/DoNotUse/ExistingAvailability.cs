@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			availabilityRotation.AvailabilityDays[0].Restriction = availabilityRestriction;
 
-			var availabilityRotationRepository = new AvailabilityRepository(unitOfWork.Current());
+			var availabilityRotationRepository = AvailabilityRepository.DONT_USE_CTOR(unitOfWork.Current());
 			availabilityRotationRepository.Add(availabilityRotation);
 
-			var personAvailabilityRepository = new PersonAvailabilityRepository(unitOfWork.Current());
+			var personAvailabilityRepository = PersonAvailabilityRepository.DONT_USE_CTOR(unitOfWork.Current());
 			var personAvailability = new PersonAvailability(person, availabilityRotation, new DateOnly(2001,01,01));
 			personAvailabilityRepository.Add(personAvailability);
 		}

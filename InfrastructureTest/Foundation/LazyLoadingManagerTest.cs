@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IPersonAssignment pAss =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(per, scen, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCat);
 
-            new PersonAssignmentRepository(CurrUnitOfWork).Add(pAss);
+            PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(pAss);
 			Session.Flush();
 			Session.Clear();
 

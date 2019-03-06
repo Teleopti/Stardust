@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -24,6 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldLoad()
@@ -36,7 +38,11 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = personId});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = personId
+				});
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(
@@ -62,8 +68,16 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {agent1, agent2});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = agent1});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = agent2});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = agent1
+				});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = agent2
+				});
 			});
 
 
@@ -84,7 +98,11 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {agent1});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = agent1});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = agent1
+				});
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}))
@@ -105,8 +123,16 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {agent1, agent2});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = agent1});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = agent2});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = agent1
+				});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = agent2
+				});
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = currentSkillId.AsArray()}))
@@ -129,7 +155,11 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = personId});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = personId
+				});
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = email.AsArray()}))
@@ -152,7 +182,11 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Upsert(new AgentStateReadModelForTest {PersonId = personId});
+				StatePersister.Upsert(new AgentStateReadModelForTest
+				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+					PersonId = personId
+				});
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = phoneId.AsArray()}))
@@ -173,6 +207,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {personId});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
@@ -203,6 +238,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {person});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = person,
 					AlarmStartTime = "2016-09-23 07:50".Utc(),
 					IsRuleAlarm = true,
@@ -236,12 +272,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {personId1, personId2});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
 				});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId2,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
@@ -274,6 +312,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {personId1});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
@@ -306,12 +345,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {personId1, personId2});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
 				});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId2
 				});
 			});
@@ -341,12 +382,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {personId1, personId2});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId1,
 					AlarmStartTime = "2016-06-20 12:00".Utc(),
 					IsRuleAlarm = true
 				});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId2,
 					AlarmStartTime = "2016-06-20 12:01".Utc(),
 					IsRuleAlarm = true
@@ -376,6 +419,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				Groupings.UpdateGroupingReadModel(new[] {personId});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					PersonId = personId,
 					OutOfAdherences = new[]
 					{

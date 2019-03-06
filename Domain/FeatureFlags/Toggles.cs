@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WfmTeamSchedule_ShiftEditorInDayView_78295,
 		WfmTeamSchedule_DisableAutoRefreshSchedule_79826,
 		WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242,
+		WfmTeamSchedule_VirtualRepeatInScheduleTable_80404,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
@@ -55,10 +56,9 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Wfm_ReadNotificationConfigurationFromDb_78242,
 		Wfm_AutomaticNotificationEnrollment_79679,
 		Wfm_AutomaticNotificationEnrollmentStartup_79679,
+		Wfm_PeopleWeb_Improve_Search_81681,
 
 		WfmGlobalLayout_personalOptions_37114,
-
-		WFM_Gamification_Permission_76546,
 
 		SchedulePeriod_HideChineseMonth_78424,
 		ResourcePlanner_HideSkillPrioSliders_41312,
@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_DelayShiftCreations_81680,
 		ResourcePlanner_PrepareToRemoveRightToLeft_81112,
 		WFM_Plans_Redesign_81198,
-		WFM_Plans_HeatMap_79112,
+		WFM_Plans_HeatMap_79112_80785,
+		WFM_Plans_IntradayIssuesInHeatMap_79113,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -84,32 +85,18 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 
-		WFM_Gamification_Setting_With_External_Quality_Values_45003,
-		WFM_Gamification_Calculate_Badges_47250,
-		WFM_Gamification_Recalculate_Badges_Within_Period_48403,
-		WFM_Gamification_Create_Rolling_Periods_74866,
 		WFM_Clear_Data_After_Leaving_Date_47768,
-		WFM_Request_View_Permissions_77731,
-		WFM_Request_Show_Feedback_Link_77733,
-		WFM_Request_Show_Shift_for_Absence_Requests_79008,
-		WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412,
 		WFM_Setting_BankHolidayCalendar_Create_79297,
 		WFM_Setting_AssignBankHolidayCalendarsToSites_79899,
-
-		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
-		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
-		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
-		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
-		MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408,
-		MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409,
-		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
-		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
+		
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,
 		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,
 		MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154,
 		MyTimeWeb_Schedule_MonthView_Indicate_BankHoliday_81158,
+		MyTimeWeb_Availability_Indicate_BankHoliday_81656,
 
 		WFM_Intraday_Redesign_77214,
+		WFM_Intraday_Browser_Tab_81482,
 
 		WFM_ChatBot_77547,
 		WFM_Insights_80704,
@@ -126,7 +113,8 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646,
 		WFM_AbsenceRequest_Robust_Processing_79988,
 		WFM_AnalyticsForecastUpdater_80798,
-		WFM_Forecast_Readmodel_80790
+		WFM_Forecast_Readmodel_80790,
+		WFM_PurgeUsersWithinDays_77460
 		// ReSharper restore InconsistentNaming
 	}
 }

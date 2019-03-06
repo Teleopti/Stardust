@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -14,6 +13,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder);
 		void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill);
 		void SetupGrid(int colCount);
+		ITimeZoneGuard TimeZoneGuard { get; }
 	}
 
 	public class SkillWeekGridControlPresenter
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void DrawWeekGrid(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
 			if (stateHolder == null || skill == null) return;
-			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _view.TimeZoneGuard.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _view.TimeZoneGuard.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();	
 		}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillWeekPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+			var timeZone = _view.TimeZoneGuard.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _weeks)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();

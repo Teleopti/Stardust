@@ -127,9 +127,9 @@ namespace Teleopti.Ccc.Domain.Common
 				{
 					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
 					info.SiteName = period.Team.Site.Description.Name;
-					if (period.Team.Site.BusinessUnit != null)
+					if (period.Team.Site.GetOrFillWithBusinessUnit_DONTUSE() != null)
 					{
-						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
+						info.BusinessUnitId = period.Team.Site.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault();
 					}
 				}
 			}
@@ -435,6 +435,27 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
+
+		public virtual void RemovePersonPeriodWithStartDate(DateOnly date)
+		{
+			var personPeriods = _personPeriodCollection.Keys.Where(d => date == d).ToArray();
+			foreach (var personPeriod in personPeriods)
+			{
+				_personPeriodCollection.Remove(personPeriod);
+			}
+
+			var schedulePeriods = _personSchedulePeriodCollection.Keys.Where(d => date == d).ToArray();
+			foreach (var schedulePeriod in schedulePeriods)
+			{
+				_personSchedulePeriodCollection.Remove(schedulePeriod);
+			}
+
+			if (personPeriods.Any() || schedulePeriods.Any())
+			{
+				addPersonPeriodChangedEvent();
+			}
+		}
+		
 		public virtual bool IsExternalAgent => false;
 
 		public virtual void RemoveAllPersonPeriods()

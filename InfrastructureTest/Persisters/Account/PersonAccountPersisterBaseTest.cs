@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		{
 			using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAbsenceAccountRepository(uow);
+				var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 				var accounts = rep.Find(personAbsenceAccount.Person).ToList();
 				//needed because deep inside account stuff references are DI:ed instead of services
 				foreach (var absenceAccount in accounts)
@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		{
 			var uowFactory = CurrentUnitOfWorkFactory.Make();
 			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
-			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
-			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(currUnitOfWork);
+			var personAssignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(currUnitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
-			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = AgentDayScheduleTagRepository.DONT_USE_CTOR(currUnitOfWork);
 			var noteRepository = new NoteRepository(currUnitOfWork);
-			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
+			var publicNoteRepository = PublicNoteRepository.DONT_USE_CTOR(currUnitOfWork);
 			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);
-			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currUnitOfWork);
+			var studentAvailabilityDayRepository = StudentAvailabilityDayRepository.DONT_USE_CTOR(currUnitOfWork);
 			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currUnitOfWork);
 			Target = new PersonAccountPersister(
 				uowFactory,
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 				new PersonAccountConflictResolver(
 					uowFactory,
 					new TraceableRefreshService(
-						new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)),
+						new DefaultScenarioFromRepository(ScenarioRepository.DONT_USE_CTOR(currUnitOfWork)),
 						new ScheduleStorage(
 							currUnitOfWork,
 							personAssignmentRepository, personAbsenceRepository,
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 							noteRepository, publicNoteRepository,
 							preferenceDayRepository,
 							studentAvailabilityDayRepository,
-							new PersonAvailabilityRepository(currUnitOfWork),
-							new PersonRotationRepository(currUnitOfWork),
+							PersonAvailabilityRepository.DONT_USE_CTOR(currUnitOfWork),
+							PersonRotationRepository.DONT_USE_CTOR(currUnitOfWork),
 							overtimeAvailabilityRepository,
 							new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 							new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,

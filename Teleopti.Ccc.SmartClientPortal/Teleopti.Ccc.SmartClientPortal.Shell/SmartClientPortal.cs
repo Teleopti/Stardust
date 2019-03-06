@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemCheck;
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.EnterValidator(this, _container.Resolve<ITimeZoneGuard>());
 			}
 			base.OnKeyDown(e);
 		}
@@ -290,7 +291,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_portalSettings);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_portalSettings);
 				uow.PersistAll();
 			}
 		}
@@ -674,7 +675,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					return new PersonRepository(new ThisUnitOfWork(unitOfWork), null, null)
+					return PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork), null, null)
 						.Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 				}
 			}

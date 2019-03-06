@@ -18,28 +18,32 @@ export class BankCalendarDataService {
 	>([]);
 
 	constructor(private http: HttpClient) {
-		this.getBankHolidayCalendars().subscribe(calendars => {
-			const cals = calendars as BankHolidayCalendarItem[];
-			const curYear = moment().year();
-			cals.forEach(c => {
-				c.CurrentYearIndex = 0;
-
-				c.Years.forEach((y, i) => {
-					y.Dates.forEach(d => {
-						d.Date = moment(d.Date).format(this.dateFormat);
-					});
-
-					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
-						c.CurrentYearIndex = i;
-					}
-				});
+		this.getBankHolidayCalendars().subscribe(cals => {
+			const calendars = cals as BankHolidayCalendarItem[];
+			calendars.forEach(calendar => {
+				this.resetActiveYearIndexAndYearFormatOfCalendar(calendar);
 			});
 
 			this.bankHolidayCalendarsList$.next(
-				cals.sort((c, n) => {
+				calendars.sort((c, n) => {
 					return c.Name.localeCompare(n.Name);
 				})
 			);
+		});
+	}
+
+	resetActiveYearIndexAndYearFormatOfCalendar(calendar: BankHolidayCalendarItem) {
+		const curYear = moment().year();
+		calendar.ActiveYearIndex = 0;
+		calendar.Years.forEach((y, i) => {
+			y.Year = y.Year.toString();
+			y.Dates.forEach(d => {
+				d.Date = moment(d.Date).format(this.dateFormat);
+			});
+
+			if (moment(y.Year, this.yearFormat).year() === curYear) {
+				calendar.ActiveYearIndex = i;
+			}
 		});
 	}
 

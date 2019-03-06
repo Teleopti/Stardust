@@ -4,11 +4,10 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
@@ -128,7 +127,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 															   _container.Resolve<ISkillPriorityProvider>(),
 															   _container.Resolve<IScheduleStorageFactory>(),
 															   _container.Resolve<IStaffingCalculatorServiceFacade>(),
-															   _container.Resolve<CascadingResourceCalculationContextFactory>());
+															   _container.Resolve<CascadingResourceCalculationContextFactory>(),
+																_container.Resolve<ITimeZoneGuard>());
                 meetingComposerView.Show((Control)parent);
             }
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
@@ -15,6 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 	{
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldExludeAgentsNotActivated()
@@ -22,8 +24,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId = Guid.NewGuid();
 			Persister.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
-				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value
 			});
 			Persister.UpsertNoAssociation(personId);
 			
@@ -38,8 +40,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			var personId = Guid.NewGuid();
 			Persister.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
-				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				FirstName = "roger",
 				LastName = "kjatz"
 			});

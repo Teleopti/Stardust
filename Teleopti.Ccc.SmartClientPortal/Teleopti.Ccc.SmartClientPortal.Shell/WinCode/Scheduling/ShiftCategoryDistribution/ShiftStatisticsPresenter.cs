@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			if (colIndex == 3)
 			{
 				style.CellType = "NumericReadOnlyCell";
-				style.CellValue = _model.GetAverageForShiftCategory(category);
+				style.CellValue = _model.GetAverageForShiftCategory(category, _model.GetSortedPersons(false));
 				//style.CellValue = colIndex == 3
 				//					  ? _model.GetAverageForShiftCategory(category)
 				//					  : _model.GetStandardDeviationForShiftCategory(category);

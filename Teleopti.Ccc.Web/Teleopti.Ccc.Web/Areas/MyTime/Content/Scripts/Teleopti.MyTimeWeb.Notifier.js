@@ -64,7 +64,7 @@
 		}
 		if (window.Notification && Notification.permission === 'granted') {
 			if (webNotification() && !isShowing(notifyText)) {
-				var iconUrl = baseUrl + 'content/favicon.ico?v=2';
+				var iconUrl = baseUrl + 'Areas/MyTime/Content/favicon/safari-pinned-tab.svg?v=1';
 				var decodedText = htmlDecode(notifyText);
 				var options = {
 					body: decodedText,

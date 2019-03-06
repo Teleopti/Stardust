@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (Disposing) return;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_smsSettingsSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SmsSettings", new SmsSettings());
+				_smsSettingsSetting = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("SmsSettings", new SmsSettings());
 			}
 			if (_optionalColumnList == null)
 			{
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				_smsSettingsSetting.IsMobileNotificationEnabled = checkBoxEnableMobileNotification.Checked;
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					new GlobalSettingDataRepository(uow).PersistSettingValue(_smsSettingsSetting);
+					GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_smsSettingsSetting);
 					uow.PersistAll();
 				}
 			}
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			UnitOfWork = value;
-			Repository = new OptionalColumnRepository(UnitOfWork);
+			Repository = OptionalColumnRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					new GlobalSettingDataRepository(uow).PersistSettingValue(_smsSettingsSetting);
+					GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_smsSettingsSetting);
 				}
 			}
 		}

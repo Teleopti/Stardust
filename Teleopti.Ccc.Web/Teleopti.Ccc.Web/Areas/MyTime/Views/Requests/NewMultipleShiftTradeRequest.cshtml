@@ -5,7 +5,7 @@
 		<div>
 			<div class="input-group schedule-filter-component">
 				<span class="input-group-btn">
-					<button class="previous-date btn" data-bind="click: previousDate, enable: previousDateEnable">
+					<button class="previous-date btn" aria-label="@Resources.PreviousDay" data-bind="click: previousDate, enable: previousDateEnable">
 						<i class="glyphicon glyphicon-chevron-left"></i>
 					</button>
 				</span>
@@ -13,10 +13,10 @@
 				<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker text-center date-input-style" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
 
 				<span class="input-group-btn">
-					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+					<button class="btn" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</button>
-					<button class="next-date btn" data-bind="click: nextDate, enable: nextDateEnable">
+					<button class="next-date btn" aria-label="@Resources.NextDay" data-bind="click: nextDate, enable: nextDateEnable">
 						<i class="glyphicon glyphicon-chevron-right"></i>
 					</button>
 				</span>
@@ -242,7 +242,7 @@
 </div>
 
 <div class="shift-trade-request-container" data-bind="visible: isDetailVisible, css: {'shift-trade-request-container-mobile': isMobile || isiPad}">
-	<div class="navbar teleopti-toolbar subnavbar" data-bind="visible: isMobile && showToolbar() && isReadyLoaded() && isDetailVisible()">
+	<div class="navbar teleopti-toolbar subnavbar" data-bind="visible: isMobile && isReadyLoaded() && isDetailVisible()">
 		<div class="container multi-shift-trade-toolbar-icon">
 			<a class="pull-left" data-bind="click: previousPage">
 				<i class="glyphicon glyphicon-chevron-left"></i>
@@ -498,7 +498,7 @@
 
 		<!-- ko if: showCartPanel -->
 		<div class="multi-shift-trade-cart" data-bind="css: {'multi-shift-trade-cart-mobile': isMobile}">
-			<div class="multi-shift-trade-cart-wrapper" data-bind="visible:$root.showCart()">
+			<div class="multi-shift-trade-cart-wrapper">
 				<div class="multi-shift-trade-cart-container">
 					<!--ko foreach: selectedSchedulePairs-->
 					<div class="multi-shift-trade-cart-row">
@@ -567,13 +567,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- /ko -->
-
-		<!--ko if: isMobile && !showToolbar()-->
-		<button data-bind="click: cartMenuClick" class="cart-menu">
-			<span data-bind="text:selectedCount, visible: !showCartPanel()"></span>
-			<i data-bind="visible: showCartPanel" class="glyphicon glyphicon-arrow-left"></i>
-		</button>
 		<!-- /ko -->
 	</div>
 </div>

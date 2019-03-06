@@ -132,6 +132,7 @@
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.Tests.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.SelectionViewModel.Tests.js?bust=<%=version%>"></script>
+	<script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.Tests.js"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.Tests.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.Tests.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js?bust=<%=version %>"></script>

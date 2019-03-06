@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { TogglesService } from '../../../core/services';
 import { Person, Role } from '../../../shared/types';
 import {
 	COLUMNS,
@@ -26,12 +27,21 @@ export class SearchPageComponent implements OnInit {
 		public workspaceService: WorkspaceService,
 		public rolesService: RolesService,
 		public searchPageService: SearchPageService,
-		public searchService: SearchService
-	) {}
+		public searchService: SearchService,
+		public togglesService: TogglesService
+	) {
+		this.togglesService.toggles$.subscribe({
+			next: toggles => {
+				this.improvedSearchActive = toggles.Wfm_PeopleWeb_Improve_Search_81681;
+			}
+		});
+	}
 
+	improvedSearchActive = false;
 	displayedColumns = ['select', 'FirstName', 'LastName', 'SiteTeam', 'Roles'];
 	searchControl = new FormControl('');
 	peopleDataSet: Person[];
+	isSearching = false;
 
 	pagination = {
 		length: 0, // Get from API
@@ -46,7 +56,10 @@ export class SearchPageComponent implements OnInit {
 				this.peopleDataSet = people;
 			}
 		});
-		this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe({ next: () => this.onSearch() });
+
+		if (this.improvedSearchActive === false) {
+			this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe({ next: () => this.onSearch() });
+		}
 	}
 
 	nzOnCurrentPageDataChange($event) {}
@@ -112,6 +125,13 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	searchPeople() {
+		if (this.improvedSearchActive === true) {
+			if (this.isSearching) {
+				return;
+			}
+			this.isSearching = true;
+		}
+
 		const query: PeopleSearchQuery = {
 			keyword: this.searchService.keyword,
 			pageSize: this.searchService.pageSize,
@@ -121,6 +141,9 @@ export class SearchPageComponent implements OnInit {
 		};
 		this.searchPageService.searchPeople(query).subscribe({
 			next: searchResult => {
+				if (this.improvedSearchActive === true) {
+					this.isSearching = false;
+				}
 				this.pagination.length = searchResult.TotalRows;
 			}
 		});

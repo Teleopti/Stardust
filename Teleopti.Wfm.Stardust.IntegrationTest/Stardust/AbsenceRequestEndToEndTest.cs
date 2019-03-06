@@ -23,7 +23,7 @@ using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Flaky test again")]
+	[StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public TestLog TestLog;
 
 
-		[Test, Ignore("Flaky test again")]
+		[Test]
 		public void ShouldRunEndToEndAbsenceRequest()//[Range(1, 50, 1)] int rangeCount
 		{
 			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);
@@ -99,7 +99,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private void performLevel1Assert(IPersonRequest personRequest)
 		{
 			//check in job queue
-			var connectionString = InfraTestConfigReader.ConnectionString;
+			var connectionString = InfraTestConfigReader.ApplicationConnectionString();
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -133,7 +133,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private void performLevel2Assert()
 		{
 			//check in job 
-			var connectionString = InfraTestConfigReader.ConnectionString;
+			var connectionString = InfraTestConfigReader.ApplicationConnectionString();
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -170,7 +170,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		{
 			//check in job detail
 			var comandText = $@"select jobid from Stardust.JobDetail where detail like '%{ personRequest.Id.GetValueOrDefault() }%'";
-			var connectionString = InfraTestConfigReader.ConnectionString;
+			var connectionString = InfraTestConfigReader.ApplicationConnectionString();
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();

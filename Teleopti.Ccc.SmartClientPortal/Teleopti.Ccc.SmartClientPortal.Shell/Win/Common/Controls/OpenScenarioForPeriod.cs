@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_setting);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_setting);
 				uow.PersistAll();
 			}
 		}
@@ -293,8 +293,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					_setting = new PersonalSettingDataRepository(uow).FindValueByKey(_openMode.SettingName, new OpenScenarioForPeriodSetting());
-					_scenarios = new ScenarioRepository(uow).FindAllSorted();
+					_setting = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(_openMode.SettingName, new OpenScenarioForPeriodSetting());
+					_scenarios = ScenarioRepository.DONT_USE_CTOR(uow).FindAllSorted();
 				}
 			}
 			catch (DataSourceException dataSourceException)

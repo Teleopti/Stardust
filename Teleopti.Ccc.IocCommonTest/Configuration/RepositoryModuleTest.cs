@@ -1,10 +1,15 @@
+using System;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection2;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -31,6 +36,38 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				Assert.IsAssignableFrom<PersonRepository>(personRep);
 				Assert.IsAssignableFrom<SkillRepository>(skillRep);
 				Assert.IsAssignableFrom<SkillTypeRepository>(skillTypeRep);
+			}
+		}
+		
+		[Test]
+		public void AllRepositoriesCanResolve()
+		{
+			var resolveAs = typeof(PersonRepository).Assembly
+				.GetExportedTypes()
+				.Where(RepositoryDetector.RegisteredAsRepository)
+				.Where(x => !cantResolveProperly(x))
+				.SelectMany(x => x.GetInterfaces());
+
+			using (var container = builder.Build())
+			{
+				resolveAs.ForEach(x =>
+				{
+					container.Resolve(x)
+						.Should().Not.Be.Null();
+				});
+			}
+
+			bool cantResolveProperly(Type type)
+			{
+				if (type == typeof(SkillForecastJobStartTimeRepository))
+					return true;
+				if (type == typeof(SkillForecastReadModelRepository))
+					return true;
+				if (type.GetConstructors().Length == 1 && type.GetConstructor(new[] {typeof(IUnitOfWork)}) != null)
+					return true;
+				if (type.GetConstructors().Length == 1 && type.GetConstructor(new[] {typeof(IStatelessUnitOfWork)}) != null)
+					return true;
+				return false;
 			}
 		}
 

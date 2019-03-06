@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -22,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		public WithReadModelUnitOfWork ReadModel;
 		public WithUnitOfWork UnitOfWork;
 		public IRtaStateGroupRepository StateGroups;
+		public ICurrentBusinessUnit BusinessUnit;
 
 		[Test]
 		public void ShouldContainNoDuplicates()
@@ -71,7 +73,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 
 			Target.Handle(new UnknownStateCodeReceviedEvent
 			{
-				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId().Value,
+				BusinessUnitId = BusinessUnit.CurrentId().Value,
 				StateCode = "Телефон",
 				StateDescription = "Телефон"
 			});

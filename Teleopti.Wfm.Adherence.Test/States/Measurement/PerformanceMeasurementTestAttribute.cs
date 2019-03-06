@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
-using Description = Teleopti.Wfm.Adherence.Configuration.Description;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 {
@@ -53,22 +49,15 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestSetup.Before();
-
+			var (person, businessUnit) = InfrastructureTestSetup.Setup();
 			base.BeforeTest();
+			base.Login(person, businessUnit);
 
 			FakePublisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			FakePublisher.AddHandler<AgentStateMaintainer>();
 			FakePublisher.AddHandler<MappingReadModelUpdater>();
 			FakePublisher.AddHandler<ExternalLogonReadModelUpdater>();
 			FakePublisher.AddHandler<ScheduleChangeProcessor>();
-		}
-
-		protected override void AfterTest()
-		{
-			base.AfterTest();
-
-			InfrastructureTestSetup.After();
 		}
 
 		public IEnumerable<int> ParallelTransactions() => new[] {5, 6, 7, 8, 9};

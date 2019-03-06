@@ -1,16 +1,27 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -149,6 +160,84 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as StudentAvailabilityDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
+		}
+	}
+
+	[TestFixture]
+	[DomainTest]
+	[WebTest]
+	public class AvailabilityControllerTest : IIsolateSystem
+	{
+		public AvailabilityController Target;
+		public FakeLoggedOnUser User;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
+		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
+		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		private ISite _site;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+
+		[Test]
+		public void ShouldGetBankHolidayCalendar()
+		{
+			var date = DateOnly.Today;
+			setupLoggedOnUser(date);
+			var calendarId = Guid.NewGuid();
+			var calendarName = "ChinaBankHoliday";
+			var description = "New Year";
+			createBankHolidayCalendarData(date, calendarId, calendarName, description);
+
+			var availabilityDays = Target.StudentAvailabilitiesAndSchedules(date, date).Data as IEnumerable<StudentAvailabilityDayViewModel>;
+
+			var result = availabilityDays.First(m => m.Date == date.ToFixedClientDateOnlyFormat());
+			result.BankHolidayCalendar.CalendarId.Should().Be.EqualTo(calendarId);
+			result.BankHolidayCalendar.CalendarName.Should().Be.EqualTo(calendarName);
+			result.BankHolidayCalendar.DateDescription.Should().Be.EqualTo(description);
+		}
+
+		[Test]
+		public void ShouldGetNullForBankHolidayCalendar()
+		{
+			var date = DateOnly.Today;
+			setupLoggedOnUser(date);
+
+			var availabilityDays = Target.StudentAvailabilitiesAndSchedules(date, date).Data as IEnumerable<StudentAvailabilityDayViewModel>;
+
+			var result = availabilityDays.First(m => m.Date == date.ToFixedClientDateOnlyFormat());
+			result.BankHolidayCalendar.Should().Be.Null();
+		}
+
+		private void setupLoggedOnUser(DateOnly date)
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			User.SetFakeLoggedOnUser(logonUser);
+			PersonRepository.Add(logonUser);
+			_site = new Site("site").WithId();
+			SiteRepository.Add(_site);
+			var team = new Team { Site = _site }.WithDescription(new Description("team")).WithId();
+			TeamRepository.Add(team);
+			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+		}
+
+		private void createBankHolidayCalendarData(DateOnly date, Guid calendarId, string calendarName, string description)
+		{
+			var calendar = new BankHolidayCalendar { Name = calendarName };
+			calendar.SetId(calendarId);
+			BankHolidayCalendarRepository.Add(calendar);
+			var calendarDate = new BankHolidayDate { Calendar = calendar, Date = date, Description = description };
+			BankHolidayDateRepository.Add(calendarDate);
+			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite { Site = _site, Calendar = calendar });
 		}
 	}
 }

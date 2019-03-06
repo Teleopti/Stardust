@@ -23,10 +23,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
         private readonly Action _checkPastePermissionsAction;
         private readonly Action<PasteOptions> _pasteFromClipboardAction;
         private readonly Action _enablePasteOperationAction;
-        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
+		private readonly bool _useRightToLeft;
+		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 		private readonly WorkShiftContainsMasterActivitySpecification _workShiftContainsMasterActivity = new WorkShiftContainsMasterActivitySpecification();
 
-        public ScheduleGridCutPasteHandler(SchedulingScreen owner, Func<ScheduleViewBase> scheduleViewFunction, Action<DeleteOption> startDeleteAction, Action checkPastePermissionsAction, Action<PasteOptions> pasteFromClipboardAction, Action enablePasteOperationAction)
+        public ScheduleGridCutPasteHandler(SchedulingScreen owner, Func<ScheduleViewBase> scheduleViewFunction, Action<DeleteOption> startDeleteAction, Action checkPastePermissionsAction, Action<PasteOptions> pasteFromClipboardAction, Action enablePasteOperationAction, bool useRightToLeft)
         {
             _owner = new WeakReference(owner);
             _scheduleView = scheduleViewFunction;
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
             _checkPastePermissionsAction = checkPastePermissionsAction;
             _pasteFromClipboardAction = pasteFromClipboardAction;
             _enablePasteOperationAction = enablePasteOperationAction;
-        }
+			_useRightToLeft = useRightToLeft;
+		}
 
         private void guardAction(Action<SchedulingScreen> action, Action<SchedulingScreen> actionIfNoScheduleView = null)
         {
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
                 clipboardSpecialOptions.ShowShiftAsOvertime = false;
 
                 var cutSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions,
-                    owner.MultiplicatorDefinitionSet) {Text = Resources.CutSpecial};
+                    owner.MultiplicatorDefinitionSet, _useRightToLeft) {Text = Resources.CutSpecial};
                 cutSpecial.ShowDialog();
 
 	            if (!cutSpecial.Cancel())
@@ -142,7 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
             {
                 using (
                     var deleteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions,
-                        owner.MultiplicatorDefinitionSet))
+                        owner.MultiplicatorDefinitionSet, _useRightToLeft))
                 {
                     deleteSpecial.Text = Resources.DeleteSpecial;
                     deleteSpecial.ShowDialog();
@@ -280,7 +282,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		            new MultiplicatorsetForPasteSpecialFilter()
 						.FilterAvailableMultiplicatorSet(_scheduleView().SelectedSchedules());
 
-                var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, multiplicatorDefinitionSets) {Text = Resources.PasteSpecial};
+                var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, multiplicatorDefinitionSets, _useRightToLeft) {Text = Resources.PasteSpecial};
                 pasteSpecial.ShowDialog();
 
                 if (_scheduleView() != null)

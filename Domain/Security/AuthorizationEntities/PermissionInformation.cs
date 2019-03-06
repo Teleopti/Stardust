@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
                     var businessUnitId = identity?.BusinessUnitId;
                     if (!StateHolderReader.IsInitialized
                         && businessUnitId != null
-                        && (applicationRole.BusinessUnit != null && !applicationRole.BusinessUnit.Id.Equals(businessUnitId)))
+                        && (applicationRole.GetOrFillWithBusinessUnit_DONTUSE() != null && !applicationRole.GetOrFillWithBusinessUnit_DONTUSE().Id.Equals(businessUnitId)))
 						continue;
 					newPersonInApplicationRole.Add(applicationRole);
 				}
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			ICollection<IBusinessUnit> retColl = new HashSet<IBusinessUnit>();
 			foreach (IApplicationRole role in personInApplicationRole)
 			{
-				if (!((IDeleteTag)role.BusinessUnit).IsDeleted)
-					retColl.Add(role.BusinessUnit);
+				if (!((IDeleteTag)role.GetOrFillWithBusinessUnit_DONTUSE()).IsDeleted)
+					retColl.Add(role.GetOrFillWithBusinessUnit_DONTUSE());
 			}
 			return new List<IBusinessUnit>(retColl);
 		}

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -14,13 +15,11 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
-
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public class SkillDayGridControl : SkillResultGridControlBase
     {
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
@@ -28,16 +27,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         private const int cellWidth = 55;
         private const string settingName = "SchedulerSkillDayGridAndChart";
         private RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime,IList<ISkillStaffPeriod>>> _rowManager;
-        private static readonly Color ColorCells = Color.AntiqueWhite;
+        private static readonly Color colorCells = Color.AntiqueWhite;
         private IList<DateOnly> _dates;
 
         //constructor
-        public SkillDayGridControl(ISkillPriorityProvider skillPriorityProvider)
+        public SkillDayGridControl(ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
         {
 	        _skillPriorityProvider = skillPriorityProvider;
-	        initializeComponent();
+			initializeComponent();
             initializeGrid();
-            InitializeBase(settingName);
+            InitializeBase(settingName, timeZoneGuard);
         }
 
         //initialize component
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             QueryCellInfo += gridSkillDataQueryCellInfo;
             Model.ClipboardCanCopy +=Model_ClipboardCanCopy;
 
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+            ((ISupportInitialize)(this)).EndInit();
             ResumeLayout(false);
         }
 
@@ -132,65 +131,65 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         	DateOnly baseDate = dates.Count > 0 ? dates.First() : DateOnly.MinValue;
 
         	_rowManager = new RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>>(
-        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder) {BaseDate = baseDate.Date};
+        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder, TimeZoneGuard) {BaseDate = baseDate.Date};
 
         	SkillDayGridRow gridRow;
 			if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 			{
-				gridRow = new SkillDayGridRowMaxSeatsIssues(_rowManager, "NumericReadOnlyCell", "MaxUsedSeats", UserTexts.Resources.MaxUsedSeats);
+				gridRow = new SkillDayGridRowMaxSeatsIssues(_rowManager, "NumericReadOnlyCell", "MaxUsedSeats", Resources.MaxUsedSeats);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 			}
 
 			if (skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 			{
-				gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ForecastedHours", UserTexts.Resources.ForecastedHours);
+				gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ForecastedHours", Resources.ForecastedHours);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
                 if(!skill.IsVirtual)
                 {
-                    gridRow = new SkillDayGridRowMinMaxIssues(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
+                    gridRow = new SkillDayGridRowMinMaxIssues(_rowManager, "TimeCell", "ScheduledHours", Resources.ScheduledHours);
 					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					GridRows.Add(_rowManager.AddRow(gridRow));
                 }
                 else
                 {
 					gridRow = new SkillDayGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours",
-					UserTexts.Resources.ScheduledHours);
+					Resources.ScheduledHours);
 
 					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					GridRows.Add(_rowManager.AddRow(gridRow));
                 }
 
-				gridRow = new SkillDayGridRow(_rowManager, "TimeSpanCell", "AbsoluteDifference", UserTexts.Resources.AbsoluteDifference);
+				gridRow = new SkillDayGridRow(_rowManager, "TimeSpanCell", "AbsoluteDifference", Resources.AbsoluteDifference);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
                 if (!skill.IsVirtual)
                 {
                     gridRow = new SkillDayGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",
-                                                                UserTexts.Resources.RelativeDifference, skill);
+                                                                Resources.RelativeDifference, skill);
 					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					GridRows.Add(_rowManager.AddRow(gridRow));
                 }
                 else
                 {
                     gridRow = new SkillDayGridRowStaffingIssuesSummary(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",
-                                                                UserTexts.Resources.RelativeDifference);
+                                                                Resources.RelativeDifference);
 					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					GridRows.Add(_rowManager.AddRow(gridRow));
                 }
 
-			    gridRow = new SkillDayGridRowBoostedRelativeDifference(_rowManager, "NumericReadOnlyCell", "RelativeBoostedDifference", UserTexts.Resources.AdjustedDifference, skill, _skillPriorityProvider);
+			    gridRow = new SkillDayGridRowBoostedRelativeDifference(_rowManager, "NumericReadOnlyCell", "RelativeBoostedDifference", Resources.AdjustedDifference, skill, _skillPriorityProvider);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "RootMeanSquare", UserTexts.Resources.RMS);
+				gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "RootMeanSquare", Resources.RMS);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "DailySmoothness", UserTexts.Resources.StandardDeviation);
+				gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "DailySmoothness", Resources.StandardDeviation);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
@@ -202,7 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 					GridRows.Add(_rowManager.AddRow(gridRow));
 				}
 
-				gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevelShrinkage", UserTexts.Resources.ESL);
+				gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevelShrinkage", Resources.ESL);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 			}
@@ -210,29 +209,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
             if (skill.SkillType.ForecastSource == ForecastSource.Email || skill.SkillType.ForecastSource == ForecastSource.Backoffice || skill.SkillType.ForecastSource == ForecastSource.Time)
             {
-                gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ForecastedHoursIncoming", UserTexts.Resources.ForecastedHoursIncoming);
+                gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ForecastedHoursIncoming", Resources.ForecastedHoursIncoming);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-                gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ScheduledHoursIncoming", UserTexts.Resources.ScheduledHoursIncoming);
+                gridRow = new SkillDayGridRow(_rowManager, "TimeCell", "ScheduledHoursIncoming", Resources.ScheduledHoursIncoming);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-                gridRow = new SkillDayGridRow(_rowManager, "TimeSpanCell", "AbsoluteIncomingDifference", UserTexts.Resources.AbsoluteDifferenceIncoming);
+                gridRow = new SkillDayGridRow(_rowManager, "TimeSpanCell", "AbsoluteIncomingDifference", Resources.AbsoluteDifferenceIncoming);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-                gridRow = new SkillDayGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeIncomingDifference", UserTexts.Resources.RelativeDifferenceIncoming, skill);
+                gridRow = new SkillDayGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeIncomingDifference", Resources.RelativeDifferenceIncoming, skill);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
             }
 
             Rows.HeaderCount = 1;
         }
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public override void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
 		{
-		    var stateHolderTimeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+		    var stateHolderTimeZone = TimeZoneGuard.CurrentTimeZone();
             var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolderTimeZone).WholeDayCollection(stateHolderTimeZone);
             _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolderTimeZone))).ToList();
 			var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
@@ -240,29 +239,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 			_rowManager.SetDataSource(new List<IDictionary<DateTime, IList<ISkillStaffPeriod>>> { dataSource });
 		}
 
-        public override void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
-        {
-           
-            if (stateHolder == null || skill==null) return;
+		public override void DrawDayGrid(ISchedulerStateHolder stateHolder, ISkill skill)
+		{
+			if (stateHolder == null || skill == null) return;
 
-            using (PerformanceOutput.ForOperation("DrawSkillDayGrid"))
-            {
-                Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
-                                               GridMergeCellsMode.MergeColumnsInRow;
-				var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
-                var dateTimePeriods = stateHolder.RequestedPeriod.Period(timeZone).WholeDayCollection(timeZone);
-                _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();
-                createGridRows(skill, _dates, stateHolder);
-            	SetDataSource(stateHolder, skill);
-                ColCount = _dates.Count;
-				RowCount = GridRows.Count - 1;
-                ColWidths[0] = rowHeaderWidth;
+			Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
+										   GridMergeCellsMode.MergeColumnsInRow;
+			var timeZone = TimeZoneGuard.CurrentTimeZone();
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period(timeZone).WholeDayCollection(timeZone);
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone)))
+				.ToList();
+			createGridRows(skill, _dates, stateHolder);
+			SetDataSource(stateHolder, skill);
+			ColCount = _dates.Count;
+			RowCount = GridRows.Count - 1;
+			ColWidths[0] = rowHeaderWidth;
 
-                Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
-            }
-        }
+			Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
+		}
 
-        private static IDictionary<DateTime, IList<ISkillStaffPeriod>> createDataSourceDictionary(IList<DateTimePeriod> dateTimePeriods, ISchedulerStateHolder stateHolder, ISkill skill)
+		private static IDictionary<DateTime, IList<ISkillStaffPeriod>> createDataSourceDictionary(IList<DateTimePeriod> dateTimePeriods, ISchedulerStateHolder stateHolder, ISkill skill)
         {
             ISkillStaffPeriodDictionary skillStaffPeriods;
             IAggregateSkill aggregateSkillSkill = skill;
@@ -320,7 +316,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             else
             {
                 if(backColor)
-                    e.Style.BackColor = ColorCells;
+                    e.Style.BackColor = colorCells;
                    
                 e.Style.TextColor = ForeColor;
             }

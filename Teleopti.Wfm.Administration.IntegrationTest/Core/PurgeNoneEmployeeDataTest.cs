@@ -41,67 +41,88 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		[Test]
 		public void ShouldPurge()
 		{
-			Now.Is(new DateTime(2018,04,1));
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
-			//Only done once
-			TestPollutionCleaner.Clean("tenant", "appuser");
-			var builder = TestPollutionCleaner.TestTenantConnection();
-			builder.IntegratedSecurity = false;
-			builder.UserID = "dbcreatorperson";
-			builder.Password = "passwordPassword7";
-			
-			var sqlVersion = new SqlVersion(12);
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "passwordPassword7");
-			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "passwordPassword7", sqlVersion,
-				"NewFineTenant", 1);
-
-			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
-			builderAnal.IntegratedSecurity = false;
-			builderAnal.UserID = "dbcreatorperson";
-			builderAnal.Password = "passwordPassword7";
-			
-			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "appuser", "passwordPassword7", sqlVersion, "NewFineTenant", 1);
-
-			var tempModel = new CreateTenantModelForTest();
-			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-
-			var importModel = new ImportDatabaseModel
-			{
-				Server = connStringBuilder.DataSource,
-				AdminUser = tempModel.CreateDbUser,
-				AdminPassword = tempModel.CreateDbPassword,
-				UserName = "appuser",
-				Password = "passwordPassword7",
-				AppDatabase = TestPollutionCleaner.TestTenantConnection().InitialCatalog,
-				AnalyticsDatabase = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog,
-				Tenant = "NewFineTenant"
-			};
-
-			ImportController.ImportExisting(importModel);
-
 			var uow = TenantUnitOfWork as TenantUnitOfWorkManager;
-			using (uow.EnsureUnitOfWorkIsStarted())
+			try
 			{
-				var allTenants = LoadAllTenants.Tenants();
-				allTenants.ForEach(createPersons);
+				// Setup
+				Now.Is(new DateTime(2018, 04, 1));
+				DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
+				//Only done once
+				TestPollutionCleaner.Clean("tenant", "appuser");
+				var builder = TestPollutionCleaner.TestTenantConnection();
+				builder.IntegratedSecurity = false;
+				builder.UserID = "dbcreatorperson";
+				builder.Password = "passwordPassword7";
+
+				var sqlVersion = new SqlVersion(12);
+				DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "passwordPassword7");
+				DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser",
+					"passwordPassword7", sqlVersion,
+					"NewFineTenant", 1);
+
+				var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
+				builderAnal.IntegratedSecurity = false;
+				builderAnal.UserID = "dbcreatorperson";
+				builderAnal.Password = "passwordPassword7";
+
+				DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics,
+					"appuser", "passwordPassword7", sqlVersion, "NewFineTenant", 1);
+
+				var tempModel = new CreateTenantModelForTest();
+				var connStringBuilder =
+					new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
+
+				var importModel = new ImportDatabaseModel
+				{
+					Server = connStringBuilder.DataSource,
+					AdminUser = tempModel.CreateDbUser,
+					AdminPassword = tempModel.CreateDbPassword,
+					UserName = "appuser",
+					Password = "passwordPassword7",
+					AppDatabase = TestPollutionCleaner.TestTenantConnection().InitialCatalog,
+					AnalyticsDatabase = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog,
+					Tenant = "NewFineTenant"
+				};
+
+				ImportController.ImportExisting(importModel);
+
 				
-				updateSetting(allTenants.First().DataSourceConfiguration.ApplicationConnectionString, 1);
-				updateSetting(allTenants.Last().DataSourceConfiguration.ApplicationConnectionString, 2);
+				using (uow.EnsureUnitOfWorkIsStarted())
+				{
+					var allTenants = LoadAllTenants.Tenants();
+					allTenants.ForEach(createPersons);
+
+					updateSetting(allTenants.First().DataSourceConfiguration.ApplicationConnectionString, 5);
+					updateSetting(allTenants.Last().DataSourceConfiguration.ApplicationConnectionString, 6);
+				}
+
+				// Execute
+				Target.Purge();
+
+				// Assert
+				using (uow.EnsureUnitOfWorkIsStarted())
+				{
+					var personInfos = loadPersonFromTenant(uow.CurrentSession());
+					personInfos.Count.Should().Be.EqualTo(17);
+				}
 			}
-
-			Target.Purge();
-
-			using (uow.EnsureUnitOfWorkIsStarted())
+			finally
 			{
-				var personInfos = loadPersonFromTenant(uow.CurrentSession());
-				personInfos.Count.Should().Be.EqualTo(9);
-			}
+				// Clean-up
+				using (uow.EnsureUnitOfWorkIsStarted())
+				{
+					var allTenants = LoadAllTenants.Tenants();
+				
+					updateSetting(allTenants.First().DataSourceConfiguration.ApplicationConnectionString, 7);
+					updateSetting(allTenants.Last().DataSourceConfiguration.ApplicationConnectionString, 7);
+				}
+			}		
 		}
 
 		[Test]
-		public void ShouldPurgeWithIncorrectSetting()
+		public void ShouldPurgeWithMissingSetting()
 		{
+			// Setup
 			Now.Is(new DateTime(2018, 04, 1));
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var builder = TestPollutionCleaner.TestTenantConnection();
@@ -123,7 +144,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
 			var importModel = new ImportDatabaseModel
 			{
@@ -150,24 +171,25 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				{
 					connection.Open();
 					using (var updateCommand = new SqlCommand(
-						@"delete from PurgeSetting where [key] = 'MonthsToKeepPersonalData'", connection))
+						@"delete from PurgeSetting where [key] = 'DaysToKeepLoginsAfterTerminalDate'", connection))
 					{
 						updateCommand.ExecuteNonQuery();
 					}
 				}
-
-				updateSetting(allTenants.Last().DataSourceConfiguration.ApplicationConnectionString, 2);
 			}
 
+			// Execute
 			Target.Purge();
 
+			// Assert
 			using (uow.EnsureUnitOfWorkIsStarted())
 			{
 				var personInfos = loadPersonFromTenant(uow.CurrentSession());
-				personInfos.Count.Should().Be.EqualTo(11);
+				personInfos.Count.Should().Be.EqualTo(20);
 			}
-
-
+			
+			//Clean-up
+			
 		}
 
 
@@ -179,15 +201,15 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			
 		}
 
-		private void updateSetting(string connString, int monthsToKeepPersonalData)
+		private void updateSetting(string connString, int daysToKeepLogins)
 		{
 			using (var connection = new SqlConnection(connString))
 			{
 				connection.Open();
 				using (var updateCommand = new SqlCommand(
-					@"update PurgeSetting set [value] = @month where [key] = 'MonthsToKeepPersonalData'",connection))
+					@"update PurgeSetting set [value] = @days where [key] = 'DaysToKeepLoginsAfterTerminalDate'",connection))
 				{
-					updateCommand.Parameters.AddWithValue("@month", monthsToKeepPersonalData);
+					updateCommand.Parameters.AddWithValue("@days", daysToKeepLogins);
 					updateCommand.ExecuteNonQuery();
 				}
 			}
@@ -206,14 +228,17 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				personId = Guid.NewGuid();
 				createPersonInTenant(connection, personId, Now.UtcDateTime().AddMonths(1));
 				persistPersonInfo(tenant, personId, 85);
+				
+				personId = Guid.NewGuid();
+				createPersonInTenant(connection, personId, Now.UtcDateTime().AddMonths(-3));
+				persistPersonInfo(tenant, personId, 86);
 
-				foreach (var i in Enumerable.Range(0,5))
+				foreach (var i in Enumerable.Range(0,10))
 				{
 					personId = Guid.NewGuid();
 
-					createPersonInTenant(connection, personId, Now.UtcDateTime().AddMonths(-i));
+					createPersonInTenant(connection, personId, Now.UtcDateTime().AddDays(-i));
 					persistPersonInfo(tenant,personId,i);
-
 				}
 			}
 		}

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var repository = new GamificationSettingRepository(currentUnitOfWork);
+			var repository = GamificationSettingRepository.DONT_USE_CTOR(currentUnitOfWork);
 			GamificationSetting setting=new GamificationSetting(Name);
 			repository.Add(setting);
 		}

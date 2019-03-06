@@ -5,8 +5,6 @@
 	function BadgeLeaderBoardReportViewModel(weekStart) {
 		var self = this;
 
-		self.rollingPeriodToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("WFM_Gamification_Create_Rolling_Periods_74866");
-		
 		self.currentDate = ko.observable(getDate());
 		self.agentBadges = ko.observableArray();
 		self.availableOptions = ko.observableArray();
@@ -17,79 +15,77 @@
 		self.isLoading = ko.observable(false);
 		self.showCalendar = false;
 		
-		if (self.rollingPeriodToggleEnabled) {
-			self.dateFormat = $('.format-field')[0].value;
-			self.rollingPeriod = $('.rolling-type-field')[0].value
-			self.showCalendar = self.rollingPeriod && self.rollingPeriod !== '0';
-			self.selectedDate = ko.observable(moment().startOf("day"));
+		self.dateFormat = $('.format-field')[0].value;
+		self.rollingPeriod = $('.rolling-type-field')[0].value
+		self.showCalendar = self.rollingPeriod && self.rollingPeriod !== '0';
+		self.selectedDate = ko.observable(moment().startOf("day"));
 
-			self.displayDate = ko.computed(function () {
-				if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
+		self.displayDate = ko.computed(function () {
+			if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
 
-				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(
-					getStartDate(),
-					getEndDate());
-			}, self);
+			return Teleopti.MyTimeWeb.Common.FormatDatePeriod(
+				getStartDate(),
+				getEndDate());
+		}, self);
 
-			self.previous = function () {
-				increasePeriod(-1);
-			}
+		self.previous = function () {
+			increasePeriod(-1);
+		}
 
-			self.next = function () {
-				increasePeriod(1);
-			}
+		self.next = function () {
+			increasePeriod(1);
+		}
 
-			self.selectedDate.subscribe(function (value) {
-				if (!self.oldValue) {
-					if (value) {
-						self.loadData();
-						self.oldValue = value;
-					}
-				} else if (self.oldValue.format('YYMMDD') != value.format('YYMMDD')) {
+		self.selectedDate.subscribe(function (value) {
+			if (!self.oldValue) {
+				if (value) {
 					self.loadData();
 					self.oldValue = value;
 				}
-			});
+			} else if (self.oldValue.format('YYMMDD') != value.format('YYMMDD')) {
+				self.loadData();
+				self.oldValue = value;
+			}
+		});
 
-			function increasePeriod(num) {
-				if (self.rollingPeriod === '1') {
-					self.selectedDate(self.selectedDate().clone().add(num, 'week'));
-				} else if (self.rollingPeriod === '2') {
-					self.selectedDate(self.selectedDate().clone().add(num, 'month'));
-				}
+		function increasePeriod(num) {
+			if (self.rollingPeriod === '1') {
+				self.selectedDate(self.selectedDate().clone().add(num, 'week'));
+			} else if (self.rollingPeriod === '2') {
+				self.selectedDate(self.selectedDate().clone().add(num, 'month'));
+			}
+		}
+
+		function getWeekStartDate(current) {
+			var currentDayOfWeek = current.day();
+			var differenceAsDays = currentDayOfWeek - parseInt(weekStart);
+			if (differenceAsDays < 0) {
+				differenceAsDays += 7;
 			}
 
-			function getWeekStartDate(current) {
-				var currentDayOfWeek = current.day();
-				var differenceAsDays = currentDayOfWeek - parseInt(weekStart);
-				if (differenceAsDays < 0) {
-					differenceAsDays += 7;
-				}
+			return current.add('days', -differenceAsDays);
+		}
 
-				return current.add('days', -differenceAsDays);
+		function getStartDate() {
+
+			if (self.rollingPeriod === '1') {
+				var currentDate = self.selectedDate().clone();
+				return getWeekStartDate(currentDate);
 			}
 
-			function getStartDate() {
+			if (self.rollingPeriod === '2') {
+				return self.selectedDate().clone().startOf('month');
+			}
+		}
 
-				if (self.rollingPeriod === '1') {
-					var currentDate = self.selectedDate().clone();
-					return getWeekStartDate(currentDate);
-				}
-
-				if (self.rollingPeriod === '2') {
-					return self.selectedDate().clone().startOf('month');
-				}
+		function getEndDate() {
+			
+			if (self.rollingPeriod === '1') {
+				return getStartDate(self.selectedDate().clone()).add('days', 6);
 			}
 
-			function getEndDate() {
-				
-				if (self.rollingPeriod === '1') {
-					return getStartDate(self.selectedDate().clone()).add('days', 6);
-				}
-
-				if (self.rollingPeriod === '2') {
-					return self.selectedDate().clone().endOf('month');
-				}
+			if (self.rollingPeriod === '2') {
+				return self.selectedDate().clone().endOf('month');
 			}
 		}
 
@@ -102,7 +98,7 @@
 				SelectedId: self.selectedOptionId()
 			};
 
-			if (self.rollingPeriodToggleEnabled && self.rollingPeriod !== '0') {
+			if (self.rollingPeriod !== '0') {
 				data.StartDate = getStartDate().utc().toDate().toJSON();
 				data.EndDate = getEndDate().utc().toDate().toJSON();
 			}
@@ -186,9 +182,7 @@
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			vm = new BadgeLeaderBoardReportViewModel(data.WeekStart);
 			var elementToBind = $('.BadgeLeaderBoardReport')[0];
-			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("WFM_Gamification_Create_Rolling_Periods_74866")) {
-				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart:" + data.WeekStart + "}");
-			}
+			$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart:" + data.WeekStart + "}");
 
 			ko.applyBindings(vm, elementToBind);
 		});

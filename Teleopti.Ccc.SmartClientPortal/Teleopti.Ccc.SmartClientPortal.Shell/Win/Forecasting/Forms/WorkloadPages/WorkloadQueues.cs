@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPag
             IOrderedEnumerable<IQueueSource> queues;
             using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var queueSourceRepository = new QueueSourceRepository(unitOfWork);
+                var queueSourceRepository = QueueSourceRepository.DONT_USE_CTOR(unitOfWork);
                 if (sortOrder == SortOrder.Descending)
                 {
                     queues = from queueSource in queueSourceRepository.LoadAll()

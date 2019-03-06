@@ -15,13 +15,13 @@
 }
 .bank-holiday-calendar-list {
 	min-height: 80px;
-	max-height: calc(100vh - 255px);
+	max-height: calc(100vh - 260px);
 	overflow: auto;
 }
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.bank-holiday-calendar-list {
 		min-height: 80px;
-		max-height: calc(100vh - 255px);
+		max-height: calc(100vh - 260px);
 		overflow: auto;
 		padding: 22px 0;
 	}
@@ -30,7 +30,7 @@
 @supports (-ms-ime-align: auto) {
 	.bank-holiday-calendar-list {
 		min-height: 80px;
-		max-height: calc(100vh - 255px);
+		max-height: calc(100vh - 260px);
 		overflow: auto;
 		padding: 22px 0;
 	}

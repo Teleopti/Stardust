@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.Security.Principal

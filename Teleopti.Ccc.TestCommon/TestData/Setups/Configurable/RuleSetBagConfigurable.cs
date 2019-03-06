@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var allRuleSets = new WorkShiftRuleSetRepository(currentUnitOfWork).LoadAll();
+			var allRuleSets = WorkShiftRuleSetRepository.DONT_USE_CTOR(currentUnitOfWork).LoadAll();
 			var ruleSetNames = RuleSet.Split(',').Select(s => s.Trim());
 			var ruleSets = from s in ruleSetNames select allRuleSets.Single(x => x.Description.Name == s);
 
 			var ruleSetBag = new RuleSetBag {Description = new Description(Name)};
 			ruleSets.ForEach(ruleSetBag.AddRuleSet);
 
-			new RuleSetBagRepository(currentUnitOfWork).Add(ruleSetBag);
+			RuleSetBagRepository.DONT_USE_CTOR(currentUnitOfWork).Add(ruleSetBag);
 		}
 	}
 }

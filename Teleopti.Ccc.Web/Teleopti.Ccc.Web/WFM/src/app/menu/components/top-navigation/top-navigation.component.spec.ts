@@ -13,6 +13,7 @@ import { ToggleMenuService } from '../../shared/toggle-menu.service';
 import { FeedbackComponent } from '../feedback';
 import { TopNavigationComponent } from './top-navigation.component';
 import { MockTranslationModule } from '@wfm/mocks/translation';
+import { SystemSettingsService } from '../../../system-settings/shared/system-settings.service';
 
 class MockStateService implements Partial<IStateService> {
 	public current: {
@@ -62,7 +63,8 @@ describe('TopNavigation', () => {
 				BusinessUnitService,
 				ThemeService,
 				UserService,
-				PasswordService
+				PasswordService,
+				SystemSettingsService
 			]
 		}).compileComponents();
 	}));
@@ -78,9 +80,10 @@ describe('TopNavigation', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is on', () => {
+	it('should show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is on and having related permission', () => {
 		const toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: true });
+		httpMock.match('../api/SystemSetting/HasPermission')[0].flush({ HasPermission: true });
 		fixture.detectChanges();
 
 		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
@@ -91,6 +94,14 @@ describe('TopNavigation', () => {
 	it('should not show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is off', () => {
 		const toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: false });
+		fixture.detectChanges();
+
+		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
+		expect(systemSettingsIconElement).toBeFalsy();
+	});
+
+	it('should not show system settings icon when having no related permission', () => {
+		httpMock.match('../api/SystemSetting/HasPermission')[0].flush({ HasPermission: false });
 		fixture.detectChanges();
 
 		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];

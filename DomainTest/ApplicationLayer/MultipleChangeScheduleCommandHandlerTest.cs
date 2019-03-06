@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var date = new DateTime(2018, 6, 27);
 			var person = PersonFactory.CreatePerson("sherklock", "holms").WithId();
 			var scenario = ScenarioRepository.Has("default");
-			scenario.BusinessUnit.WithId();
+			scenario.GetOrFillWithBusinessUnit_DONTUSE().WithId();
 			CurrentDatasource.FakeName("datasource");
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 27, 16, 0, 0));
 			@event.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
 			@event.CommandId.Should().Be.EqualTo(trackId);
-			@event.LogOnBusinessUnitId.Should().Be.EqualTo(scenario.BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be.EqualTo(scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 			@event.InitiatorId.Should().Be.EqualTo(operatedPersonId);
 			@event.LogOnDatasource.Should().Be.EqualTo(CurrentDatasource.CurrentName());
 

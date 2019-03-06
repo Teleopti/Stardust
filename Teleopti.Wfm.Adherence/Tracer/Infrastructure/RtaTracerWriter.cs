@@ -23,6 +23,8 @@ namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 		private readonly ICurrentDataSource _dataSource;
 		private readonly INow _now;
 		private readonly TimeSpan _keepLogs;
+		private string _loggerName;
+		private string _connectionString;
 
 		public RtaTracerWriter(IConfigReader config, IJsonDeserializer deserializer, IJsonSerializer serializer, RtaTracerSessionFactory sessionFactory, ICurrentDataSource dataSource, INow now)
 		{
@@ -34,6 +36,9 @@ namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 			_dataSource = dataSource;
 			_now = now;
 			_keepLogs = TimeSpan.FromMinutes(_config.ReadValue("RtaTracerPurgeKeepMinutes", 60));
+			_connectionString = _config.ConnectionString("RtaTracer");
+			var uniquenessForParallelTests = _connectionString?.GetHashCode();
+			_loggerName = "Teleopti.RtaTracer." + uniquenessForParallelTests;
 		}
 
 		private ILog makeAppender()
@@ -43,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 				Name = "RtaTracer",
 				BufferSize = _config.ReadValue("RtaTracerBufferSize", 20),
 				ConnectionType = typeof(System.Data.SqlClient.SqlConnection).AssemblyQualifiedName,
-				ConnectionString = _config.ConnectionString("RtaTracer"),
+				ConnectionString = _connectionString,
 				CommandText = "INSERT INTO RtaTracer.[Logs] ([Time], [Tenant], [MessageType], [Message]) VALUES (@log_date, @tenant, @messageType, @message)",
 				ReconnectOnError = true
 			};
@@ -78,12 +83,12 @@ namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 			logger().AddAppender(appender);
 			logger().Hierarchy.Configured = true;
 
-			return LogManager.GetLogger("Teleopti.RtaTracer");
+			return LogManager.GetLogger(_loggerName);
 		}
 
 		public void Dispose() => logger().RemoveAllAppenders();
 
-		private static Logger logger() => LogManager.GetLogger("Teleopti.RtaTracer").Logger as Logger;
+		private Logger logger() => LogManager.GetLogger(_loggerName).Logger as Logger;
 
 		public void Write<T>(RtaTracerLog<T> log) => _log.Value.Debug(_serializer.SerializeObject(new {Log = log, log.Tenant, Type = typeof(T).Name}));
 

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.QuickForeca
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_scenarios = new ScenarioRepository(uow).FindAllSorted();
+				_scenarios = ScenarioRepository.DONT_USE_CTOR(uow).FindAllSorted();
 			}
 
 			if (noScenarioAvailable(_scenarios))

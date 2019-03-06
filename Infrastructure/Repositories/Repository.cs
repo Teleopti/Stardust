@@ -22,12 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly Lazy<IUpdatedBy> _updatedBy;
 
-		[Obsolete("Should be removed. Don't impl this ctor if you create a new repository!")]
-		protected Repository(IUnitOfWork unitOfWork)
-		{
-			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-		}
-
 		protected Repository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
@@ -67,11 +61,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </summary>
 		public virtual void Add(T root)
 		{
-			if (root is IFilterOnBusinessUnit)
+			if (root is IFilterOnBusinessUnit withBusinessUnit)
 			{
 				var currentBusinessUnit = _currentBusinessUnit ?? ServiceLocator_DONTUSE.CurrentBusinessUnit;
-				if (currentBusinessUnit.Current() == null)
+				var businessUnit = currentBusinessUnit.Current();
+				if (businessUnit == null)
 					throw new PermissionException("Business unit is required");
+				if (withBusinessUnit.BusinessUnit == null)
+					withBusinessUnit.BusinessUnit = businessUnit;
 			}
 
 			if (root is IChangeInfo)

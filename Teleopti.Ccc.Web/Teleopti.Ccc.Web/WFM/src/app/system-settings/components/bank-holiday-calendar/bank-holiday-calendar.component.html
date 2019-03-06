@@ -4,7 +4,7 @@
 		<button
 			nz-button
 			nz-tooltip
-			*ngIf="!isAddingNewCalendar && !isEdittingCalendar"
+			*ngIf="!isEdittingCalendar"
 			nzType="primary"
 			nzShape="circle"
 			nzSize="large"
@@ -18,16 +18,13 @@
 
 	<nz-divider></nz-divider>
 
-	<bank-holiday-calendar-add *ngIf="isAddingNewCalendar" [exit]="backToBankCalendarsList"></bank-holiday-calendar-add>
-
 	<bank-holiday-calendar-edit
 		*ngIf="isEdittingCalendar"
-		[edittingCalendar]="edittingCalendar"
+		[edittingCalendar]="selectedCalendar"
 		[exit]="backToBankCalendarsList"
-	>
-	</bank-holiday-calendar-edit>
+	></bank-holiday-calendar-edit>
 
-	<div [hidden]="isAddingNewCalendar || isEdittingCalendar">
+	<div [hidden]="isEdittingCalendar">
 		<nz-tabset nzType="card">
 			<nz-tab [nzTitle]="bankHolidayTabTitleTemplate">
 				<ng-template #bankHolidayTabTitleTemplate>
@@ -78,7 +75,7 @@
 							<nz-tabset
 								*ngIf="calendar.Years.length > 0"
 								nzSize="small"
-								[nzSelectedIndex]="calendar.CurrentYearIndex"
+								[nzSelectedIndex]="calendar.ActiveYearIndex"
 								(nzSelectChange)="selectedTabChange($event, calendar)"
 							>
 								<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">

@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		public EditMultisiteDayTemplate(IMultisiteDayTemplate multisiteDayTemplate) : this()
 		{
-			var skillRepository = new MultisiteSkillRepository(UnitOfWork);
+			var skillRepository = MultisiteSkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_multisiteSkill = skillRepository.Get(multisiteDayTemplate.Parent.Id.GetValueOrDefault());
 			_multisiteDayTemplate = (IMultisiteDayTemplate) _multisiteSkill.TryFindTemplateByName(TemplateTarget.Multisite, multisiteDayTemplate.Name);
 		}
 
 		public EditMultisiteDayTemplate(IMultisiteSkill skill) : this()
 		{
-			var skillRepository = new MultisiteSkillRepository(UnitOfWork);
+			var skillRepository = MultisiteSkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_multisiteSkill = skillRepository.Get(skill.Id.GetValueOrDefault());
 
 			var distribution = initializeDistribution();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		public EditMultisiteDayTemplate(IMultisiteDay multisiteDay) : this()
 		{
 			if (multisiteDay == null) throw new ArgumentNullException("multisiteDay");
-			var skillRepository = new MultisiteSkillRepository(UnitOfWork);
+			var skillRepository = MultisiteSkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_multisiteSkill = skillRepository.Get(multisiteDay.Skill.Id.GetValueOrDefault());
 
 			var distribution = initializeDistribution();

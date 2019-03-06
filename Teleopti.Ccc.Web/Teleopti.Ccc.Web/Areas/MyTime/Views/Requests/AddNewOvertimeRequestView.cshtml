@@ -53,7 +53,7 @@ Layout = null;
 					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart, startDate: PeriodStartDate(), endDate: PeriodEndDate() }, enable: IsEditable() && !IsMobile"
 					 type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart,startDate: PeriodStartDate(), endDate: PeriodEndDate() }, click: CloseDropdownTimeList, enable: IsEditable">
+						<button class="btn btn-sm" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart,startDate: PeriodStartDate(), endDate: PeriodEndDate() }, click: CloseDropdownTimeList, enable: IsEditable">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
@@ -67,7 +67,7 @@ Layout = null;
 					<div class="input-group">
 						<input type="text" id="request-start-time" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, minuteStep: 1, showInputs: false}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 						<span class="input-group-btn">
-							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, modalBackdrop: true, showInputs: false}, enable: IsEditable">
+							<button class="btn btn-sm right-align" aria-label="@Resources.SelectTime" aria-haspopup="true" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, modalBackdrop: true, showInputs: false}, enable: IsEditable">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>

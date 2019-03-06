@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library.Folders;
 using Teleopti.Wfm.Administration.Models;
@@ -15,6 +16,13 @@ namespace Teleopti.Wfm.Administration.Core
 
 	public class CheckDatabaseVersions : ICheckDatabaseVersions
 	{
+		private readonly IConfigReader _config;
+
+		public CheckDatabaseVersions(IConfigReader config)
+		{
+			_config = config;
+		}
+		
 		public VersionResultModel GetVersions(string appConnectionString)
 		{
 			var result = new VersionResultModel { AppVersionOk = false };
@@ -24,7 +32,7 @@ namespace Teleopti.Wfm.Administration.Core
 				{
 					var conn =
 						new SqlConnection(
-							new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+							new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 								.ConnectionString);
 					conn.Open();
 					return conn;

@@ -16,46 +16,46 @@ namespace Teleopti.Ccc.Sdk.Logic
 			}
 		}
 
-		public static void VerifyCanModifyPeople()
+		public static void VerifyCanModifyPeople(ICurrentAuthorization currentAuthorization)
 		{
-			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
+			if (!currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
 			{
 				throw new FaultException("You're not allowed to modify person details.");
 			}
 		}
 
-		public static void VerifyCanBeModifiedByCurrentUser(this IPerson person)
+		public static void VerifyCanBeModifiedByCurrentUser(this IPerson person, ICurrentAuthorization currentAuthorization)
 		{
-			person.VerifyCanBeModifiedByCurrentUser(DateOnly.Today);
+			person.VerifyCanBeModifiedByCurrentUser(DateOnly.Today, currentAuthorization);
 		}
 
-		public static void VerifyCanBeModifiedByCurrentUser(this IPerson person, DateOnly dateOnly)
+		public static void VerifyCanBeModifiedByCurrentUser(this IPerson person, DateOnly dateOnly, ICurrentAuthorization currentAuthorization)
 		{
-			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
+			if (!currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
 			{
 				throw new FaultException("You're not allowed to modify person details.");
 			}
 		}
 
-		public static void VerifyCanBeModifiedByCurrentUser(this IEnumerable<IPerson> people, DateOnly dateOnly)
+		public static void VerifyCanBeModifiedByCurrentUser(this IEnumerable<IPerson> people, DateOnly dateOnly, ICurrentAuthorization currentAuthorization)
 		{
-			var authorizationInstance = PrincipalAuthorization.Current_DONTUSE();
+			var authorization = currentAuthorization.Current();
 			foreach (var person in people)
 			{
-				if (!authorizationInstance.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
+				if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
 				{
 					throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "You're not allowed to work with this person ({0}).", person.Name));
 				}
 			}
 		}
 
-		public static void ValidateBusinessUnitConsistency(this IFilterOnBusinessUnit belongsToBusinessUnit)
+		public static void ValidateBusinessUnitConsistency(this IFilterOnBusinessUnit belongsToBusinessUnit, ICurrentBusinessUnit currentBusinessUnit)
 		{
-			var currentBusinessUnit = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnitId.GetValueOrDefault();
-			if (belongsToBusinessUnit.BusinessUnit != null && currentBusinessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())
+			var businessUnit = currentBusinessUnit.CurrentId().GetValueOrDefault();
+			if (belongsToBusinessUnit.GetOrFillWithBusinessUnit_DONTUSE() != null && businessUnit != belongsToBusinessUnit.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault())
 			{
 				throw new FaultException(
-					$"Adding references to items from a different business unit than the currently specified in the header is not allowed. (Type: {belongsToBusinessUnit.GetType()}, Current business unit id: {currentBusinessUnit}, Attempted business unit id: {belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault()})");
+					$"Adding references to items from a different business unit than the currently specified in the header is not allowed. (Type: {belongsToBusinessUnit.GetType()}, Current business unit id: {currentBusinessUnit}, Attempted business unit id: {belongsToBusinessUnit.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()})");
 			}
 		}
 	}

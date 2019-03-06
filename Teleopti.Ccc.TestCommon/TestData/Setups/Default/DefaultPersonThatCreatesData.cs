@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var personRepository = new PersonRepository(currentUnitOfWork, null, null);
+			var personRepository = PersonRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 			personRepository.Add(PersonThatCreatesDbData);
 		}
 

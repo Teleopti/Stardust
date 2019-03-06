@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillTypeRepository = new SkillTypeRepository(currentUnitOfWork);
+			var skillTypeRepository = SkillTypeRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var skillType = skillTypeRepository.LoadAll().FirstOrDefault(x => x.Description.Name == SkillType);
 			if (skillType == null)
 			{
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Skill.SetCascadingIndex(CascadingIndex.Value);
 			if (SeriousUnderstaffingThreshold.HasValue)
 				Skill.StaffingThresholds = new StaffingThresholds(new Percent(SeriousUnderstaffingThreshold.Value), Skill.StaffingThresholds.Understaffing, Skill.StaffingThresholds.Overstaffing);
-			var activityRepository = new ActivityRepository(currentUnitOfWork);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 			Skill.Activity = activityRepository.LoadAll().Single(b => b.Description.Name == Activity);
 
-			var skillRepository = new SkillRepository(currentUnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
 			skillRepository.Add(Skill);
 		}
 	}

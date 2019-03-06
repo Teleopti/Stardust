@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Support.Library;
@@ -14,19 +15,22 @@ namespace Teleopti.Wfm.Administration.Core
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly IInstallationEnvironment _installationEnvironment;
+		private readonly IConfigReader _config;
 
 		public TenantUpgrader(
 			DatabaseUpgrader databaseUpgrader, 
 			UpgradeRunner upgradeRunner, 
 			ITenantUnitOfWork tenantUnitOfWork, 
 			ICurrentTenantSession currentTenantSession,
-			IInstallationEnvironment installationEnvironment)
+			IInstallationEnvironment installationEnvironment,
+			IConfigReader config)
 		{
 			_databaseUpgrader = databaseUpgrader;
 			_upgradeRunner = upgradeRunner;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_currentTenantSession = currentTenantSession;
 			_installationEnvironment = installationEnvironment;
+			_config = config;
 		}
 
 		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode, bool useIntegratedSecurity)
@@ -73,7 +77,7 @@ namespace Teleopti.Wfm.Administration.Core
 				AnalyticsConnectionStringToStore = analConnstring,
 				AggDatabase = aggDB
 			};
-			_upgradeRunner.SetLogger(new TenantLogger(tenant.Name, tenant.Id));
+			_upgradeRunner.SetLogger(new TenantLogger(tenant.Name, tenant.Id, _config));
 
 			_upgradeRunner.Upgrade(upgradeCommand, _tenantUnitOfWork, _currentTenantSession);
 		}

@@ -22,142 +22,6 @@
 		margin: 0;
 	}
 
-	.start-ellipsis,
-	.end-ellipsis {
-		position: absolute;
-		top: 2px;
-		color: $gray054;
-		width: 0;
-		height: 0;
-
-		.mdi:before {
-			font-size: 14px !important;
-		}
-	}
-
-	.start-ellipsis {
-		left: 5px;
-	}
-
-	.end-ellipsis {
-		right: 19px;
-	}
-
-	.time-line {
-		min-width: 300px;
-		height: 100%;
-
-		.ruler {
-			height: 100%;
-			width: 1px;
-			background-color: $gray012;
-		}
-
-		.label {
-			font-size: x-small;
-			height: 1.32em;
-			z-index: 11;
-			transform: translateX(-50%);
-			padding-left: 0.3em;
-			padding-right: 0.3em;
-		}
-
-		& > .relative {
-			height: 100%;
-
-			> span {
-				padding: 10px;
-			}
-		}
-
-		.notcurrentday {
-			background-color: $gray026;
-		}
-	}
-
-	.person-name-column {
-		label {
-			position: relative;
-		}
-
-		md-checkbox {
-			display: inline-block;
-			padding: 0;
-			width: auto;
-			border-collapse: separate;
-		}
-
-		.validate-warning,
-		.schedule-note {
-			float: right;
-		}
-
-		.schedule-note .mdi-comment-outline:before {
-			font-size: 13px !important;
-		}
-
-		.validate-warning md-progress-circular {
-			display: inline-block;
-		}
-	}
-
-	.shift {
-		position: relative;
-		top: 4px;
-
-		.layer {
-			height: 22px;
-			text-align: center;
-		}
-
-		.layer.sameTypeAsLast {
-			border-left-style: solid;
-			border-left-width: 1px;
-		}
-
-		.layer.hasSelected {
-			opacity: 0.4;
-		}
-
-		.layer.noneSelected {
-			opacity: 1;
-		}
-
-		.layer.selected {
-			opacity: 1;
-			border: 1px dashed #795548;
-		}
-
-		.layer.lighterBorder {
-			border-color: #00ffff;
-		}
-
-		.layer:first-of-type {
-			-webkit-border-radius: 4px 0px 0px 4px;
-			-moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
-		}
-
-		.layer:last-of-type {
-			-webkit-border-radius: 0px 4px 4px 0px;
-			-moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
-		}
-
-		.layer:only-child {
-			-webkit-border-radius: 4px 4px 4px 4px;
-			-moz-border-radius: 4px 4px 4px 4px;
-			border-radius: 4px 4px 4px 4px;
-		}
-
-		.layer.unselectable {
-			cursor: not-allowed;
-		}
-	}
-
-	.dayoff {
-		top: 4px;
-	}
 
 	.uib-timepicker {
 		height: 48px;
@@ -191,45 +55,31 @@
 
 	.teamschedule-footer {
 		border-top: 1px solid rgba(0, 0, 0, 0.06);
-		min-height: 60px;
+		height: 60px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 0 auto;
-		position: relative;
 
 		.select-all {
 			padding: 0 0.5em;
 		}
 
 		.pagination-navigator {
-			position: absolute;
-			right: 0;
-		}
-	}
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
-	.teamschedule-footer.flex-end {
-		justify-content: flex-end;
-	}
-	// For fixing align-items:center not working in IE10/11
-	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator: true) {
-		.teamschedule-footer {
-			.select-all,
-			.pagination-navigator {
-				margin-top: 15px;
+			.page-size-selector {
+				text-align: left;
 			}
 		}
+
+		&.flex-end {
+			justify-content: flex-end;
+		}
 	}
 
-	.pagination-navigator {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
 
-	.page-size-selector {
-		text-align: left;
-	}
 
 	.modal-box .wfm-simple-list {
 		max-height: 430px;
@@ -237,10 +87,6 @@
 
 	.hidden-for-test {
 		display: none;
-	}
-
-	.selectable {
-		cursor: pointer;
 	}
 
 	note-editor {
@@ -581,25 +427,160 @@ team-schedule-datepicker {
 	display: block !important;
 	overflow: hidden;
 }
+.week-view {
+	.big-table-wrapper {
+		min-height: 500px;
+	}
+	
+}
 
 .teamschedule-body .big-table-wrapper {
 	overflow-x: auto;
 	overflow-y: hidden;
 	width: 100%;
-	height: 100%;
-	min-height: 500px;
 
 	table {
-		margin-bottom: 0;
+
+		.start-ellipsis,
+		.end-ellipsis {
+			position: absolute;
+			top: 2px;
+			color: $gray054;
+			width: 0;
+			height: 0;
+
+			.mdi:before {
+				font-size: 14px !important;
+			}
+		}
+
+		.start-ellipsis {
+			left: 5px;
+		}
+
+		.end-ellipsis {
+			right: 19px;
+		}
+
+		.time-line {
+			min-width: 300px;
+			height: 100%;
+			padding-top: 5px;
+
+			.ruler {
+				height: 100%;
+				width: 1px;
+				background-color: $gray012;
+			}
+
+			.label {
+				font-size: x-small;
+				height: 1.32em;
+				z-index: 11;
+				transform: translateX(-50%);
+				padding-left: 0.3em;
+				padding-right: 0.3em;
+			}
+
+			& > .relative {
+				height: 100%;
+
+				> span {
+					padding: 10px;
+				}
+			}
+
+			.not-current-day {
+				background-color: $gray026;
+			}
+		}
+
+		.person-name-column {
+			label {
+				position: relative;
+			}
+
+			md-checkbox {
+				display: inline-block;
+				padding: 0;
+				width: auto;
+				border-collapse: separate;
+			}
+
+			.validate-warning,
+			.schedule-note {
+				float: right;
+			}
+
+			.schedule-note .mdi-comment-outline:before {
+				font-size: 13px !important;
+			}
+
+			.validate-warning md-progress-circular {
+				display: inline-block;
+			}
+		}
+
+		.schedule-column {
+			padding: 0px;
+		}
+
+		.has-selected .schedule-column .shift .layer:not(.selected) {
+			opacity: 0.4;
+		}
+
+		.shift {
+			position: relative;
+			top: 4px;
+
+			.layer {
+				height: 22px;
+				text-align: center;
+				cursor: pointer;
+			}
+
+			.layer.same-type-as-last {
+				border-left-style: solid;
+				border-left-width: 1px;
+			}
+
+			.layer.selected {
+				opacity: 1;
+				border: 1px dashed #795548;
+			}
+
+			.layer.lighter-border {
+				border-color: #00ffff;
+			}
+
+			.layer:first-of-type {
+				border-radius: 4px 0px 0px 4px;
+			}
+
+			.layer:last-of-type {
+				border-radius: 0px 4px 4px 0px;
+			}
+
+			.layer.unselectable {
+				cursor: not-allowed;
+			}
+		}
+
+		.dayoff {
+			top: 4px;
+		}
+
+		table {
+			margin-bottom: 0;
+		}
 
 		tbody {
 			height: 100%;
 			display: block;
 			overflow-y: scroll;
-			max-height: 62vh;
-			min-height: 500px;
 			min-width: 680px;
 			border-top: 1px solid $gray012;
+			max-height: 62vh;
 		}
 
 		thead,
@@ -658,22 +639,16 @@ team-schedule-datepicker {
 			}
 		}
 
-		th.schedule-tool-column,
-		td.schedule-tool-column {
+		.schedule-tool-column {
 			width: 2%;
 			text-align: center;
 
 			i.mdi:before {
 				font-size: 14px !important;
 			}
-
-			span {
-				cursor: pointer;
-			}
 		}
 
-		th.contract-time-header,
-		td.contract-time-column {
+		.contract-time-column {
 			width: 10%;
 			padding: 5px;
 			min-width: 150px;
@@ -686,14 +661,11 @@ team-schedule-datepicker {
 			border-left: 1px solid $gray012;
 		}
 
-		td.schedule-tool-column.schedule-note-column {
-			.noComment {
-				color: $gray-500;
-			}
+		td.schedule-tool-column.schedule-note-column > span:not(.has-note) {
+			color: $gray-500;
 		}
 
-		th.shift-category-cell-header,
-		td.shift-category-cell {
+		.shift-category-cell {
 			width: 30px;
 		}
 
@@ -704,7 +676,7 @@ team-schedule-datepicker {
 			position: relative;
 			padding: 10px 0 0 0;
 
-			.info {
+			& > .info {
 				position: absolute;
 				top: -7px;
 				right: -2px;
@@ -714,70 +686,69 @@ team-schedule-datepicker {
 			& > span {
 				width: 20px;
 				display: inline-block;
+				cursor: pointer;
+				border-radius: 4px;
 			}
 		}
-
-		td.schedule-column {
-			padding: 0px;
-		}
-		//Week view table
-		thead tr.weekview-thead {
-			th {
-				font-weight: bold;
-				padding: 0 10px;
-				word-break: normal;
-				white-space: normal;
-				border-left: 1px solid $gray012;
-				border-right: 1px solid $gray012;
-			}
-
-			th .date {
-				float: right;
-			}
-		}
-
-		@media (max-width: 768px) {
-			thead tr.weekview-thead th {
-				padding: 0;
-				text-align: center;
-			}
-
-			thead tr.weekview-thead th .date {
-				float: none;
-			}
-		}
-
-		tr.weekview-tr {
-			height: 60px;
-			border-bottom: 1px solid #dddddd;
-		}
-
-		td.weekview-td {
-			padding: 0;
+	}
+	//Week view table
+	thead tr.weekview-thead {
+		th {
+			font-weight: bold;
+			padding: 0 10px;
+			word-break: normal;
+			white-space: normal;
 			border-left: 1px solid $gray012;
 			border-right: 1px solid $gray012;
+		}
+
+		th .date {
+			float: right;
+		}
+	}
+
+
+	@media (max-width: 768px) {
+		thead tr.weekview-thead th {
+			padding: 0;
 			text-align: center;
-			cursor: default;
-
-			.summary {
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
 		}
 
-		td.weekview-td.terminated {
-			opacity: 0.3;
-			text-decoration: line-through;
+		thead tr.weekview-thead th .date {
+			float: none;
 		}
+	}
 
-		td.weekview-td:hover {
-			border-bottom: 1px solid $blue-500;
-		}
+	tr.weekview-tr {
+		height: 60px;
+		border-bottom: 1px solid #dddddd;
+	}
 
-		td.weekview-person-name {
-			word-break: break-word;
-			padding: 0 5px;
+	td.weekview-td {
+		padding: 0;
+		border-left: 1px solid $gray012;
+		border-right: 1px solid $gray012;
+		text-align: center;
+		cursor: default;
+
+		.summary {
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
+	}
+
+	td.weekview-td.terminated {
+		opacity: 0.3;
+		text-decoration: line-through;
+	}
+
+	td.weekview-td:hover {
+		border-bottom: 1px solid $blue-500;
+	}
+
+	td.weekview-person-name {
+		word-break: break-word;
+		padding: 0 5px;
 	}
 }
 //TeamSchedule Command Panels
@@ -1143,7 +1114,7 @@ teams-time-picker.ng-invalid-dst {
 shift-editor {
 	position: relative;
 	display: block;
-	background: #ffffff;
+	background: $white;
 	box-shadow: 2px 2px 2px $gray-300, -2px 0 2px $gray-300;
 
 	.progress-linear-container {
@@ -1250,12 +1221,12 @@ shift-editor {
 
 				.left-scroll {
 					position: absolute;
-					left: 0;
+					left: -10px;
 				}
 
 				.right-scroll {
 					position: absolute;
-					right: -8px;
+					right: 0;
 				}
 
 				.left-scroll,
@@ -1292,6 +1263,7 @@ shift-editor {
 						transform: translateX(-50%);
 						padding: 0.1em 0.3em;
 						display: inline-block;
+						vertical-align: middle;
 
 						&:not(.highlight) {
 							background-color: $gray-500;

@@ -1,16 +1,14 @@
 using System;
-using System.Configuration;
-using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Stardust;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Authentication;
@@ -24,8 +22,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	internal class RepositoryModule : Module
 	{
 		private readonly IocConfiguration _configuration;
-		private readonly Type[] constructorFallback1 = {typeof(ICurrentUnitOfWork), typeof(ICurrentBusinessUnit), typeof(Lazy<IUpdatedBy>)};
-		private readonly Type[] constructorFallback2 = typeof(ICurrentUnitOfWork).AsArray();
 
 		public RepositoryModule(IocConfiguration configuration)
 		{
@@ -42,33 +38,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var repositories = typeof(PersonRepository).Assembly.GetExportedTypes()
-				.Where(isRepository)
-				.Where(hasRepositoryConstructor);
-			
-			foreach (var type in repositories)
-			{
-				if (type.GetConstructors().Length == 1)
-				{
-					builder.RegisterType(type)
-						.AsImplementedInterfaces()
-						.SingleInstance();
-				}
-				else if (type.GetConstructor(constructorFallback1) != null)
-				{
-					builder.RegisterType(type)
-						.UsingConstructor(constructorFallback1)
-						.AsImplementedInterfaces()
-						.SingleInstance();
-				}
-				else if (type.GetConstructor(constructorFallback2) != null)
-				{
-					builder.RegisterType(type)
-						.UsingConstructor(constructorFallback2)
-						.AsImplementedInterfaces()
-						.SingleInstance();
-				}
-			}
+			builder.RegisterAssemblyTypes(typeof(PersonRepository).Assembly)
+				.Where(RepositoryDetector.RegisteredAsRepository)
+				.AsImplementedInterfaces()
+				.SingleInstance();
 
 			specialPersonAssignmentRegistration(builder);
 
@@ -126,23 +99,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PurgeSettingRepository>().As<IPurgeSettingRepository>().SingleInstance();
 
-			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().As<IGetAllWorkerNodes>().SingleInstance();
+			builder.Register(c =>
+			{
+				var configReader = c.Resolve<IConfigReader>();
+				var connectionString = configReader.ConnectionString("Tenancy");
+				return new StardustRepository(connectionString);
+			}).As<IStardustRepository>().As<IGetAllWorkerNodes>().SingleInstance();
 		}
+	}
 
-		private bool hasRepositoryConstructor(Type type)
+	public static class RepositoryDetector
+	{
+		public static bool RegisteredAsRepository(Type type)
 		{
-			if (type.GetConstructors().Length == 1)
-				return true;
-			if (type.GetConstructor(constructorFallback1) != null)
-				return true;
-			if (type.GetConstructor(constructorFallback2) != null)
-				return true;
-			return false;
-		}
-
-		private static bool isRepository(Type infrastructureType)
-		{
-			return infrastructureType.Name.EndsWith("Repository", StringComparison.Ordinal);
+			return type.Name.EndsWith("Repository", StringComparison.Ordinal) &&
+				   type.GetConstructors().Length == 1;
 		}
 	}
 }

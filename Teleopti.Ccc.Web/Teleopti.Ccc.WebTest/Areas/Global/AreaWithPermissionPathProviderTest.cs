@@ -341,7 +341,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			ApplicationFunctionsToggleFilter
 				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.Gamification }
 					, o => true);
-			ToggleManager.Enable(Toggles.WFM_Gamification_Permission_76546);
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Gamification);
 

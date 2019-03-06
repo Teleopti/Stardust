@@ -4,6 +4,7 @@ using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -36,7 +37,6 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 
 			builder.RegisterModule(new CommonModule(iocConf));
 			builder.RegisterModule(new WfmAdminModule(iocConf));
-
 		}
 	}
 
@@ -51,9 +51,8 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 
 		protected override void Load(ContainerBuilder builder)
 		{
-
 			builder.RegisterModule(new StardustModule(_configuration));
-			builder.RegisterModule(new EtlToolModule());
+			builder.RegisterModule(new EtlToolModule(_configuration));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();
@@ -78,7 +77,9 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();
 			builder.RegisterType<HangfireCookie>().As<IHangfireCookie>().SingleInstance();
-			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
+			builder.Register(c =>
+					new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"]))
+				.SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
 			builder.RegisterType<HangfireStatisticsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HangfireRepository>().SingleInstance();
@@ -88,14 +89,15 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();
 			builder.RegisterType<PurgeOldSignInAttempts>().As<IPurgeOldSignInAttempts>().SingleInstance();
 			builder.RegisterType<WfmInstallationEnvironment>().As<IInstallationEnvironment>();
-
-			builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
-
+			if(_configuration.IsToggleEnabled(Toggles.WFM_PurgeUsersWithinDays_77460))
+				builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
+			else
+				builder.RegisterType<PurgeNoneEmployeeDataOld>().As<IPurgeNoneEmployeeData>().SingleInstance();
+			
 			builder.RegisterType<RestorePersonInfoOnDetach>().SingleInstance();
 
 			builder.RegisterType<SkillForecastJobStartTimeRepository>().As<ISkillForecastJobStartTimeRepository>().SingleInstance();
 			builder.RegisterType<SkillForecastSettingsReader>().SingleInstance();
 		}
 	}
-
 }

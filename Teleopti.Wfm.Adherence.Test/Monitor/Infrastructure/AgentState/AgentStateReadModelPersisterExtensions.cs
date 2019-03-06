@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
@@ -10,7 +9,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			instance.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = model.PersonId,
-				BusinessUnitId = model.BusinessUnitId ?? ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = model.BusinessUnitId,
 				SiteId = model.SiteId,
 				SiteName = model.SiteName,
 				TeamId = model.TeamId.GetValueOrDefault(),
@@ -25,7 +24,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			instance.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = model.PersonId,
-				BusinessUnitId = model.BusinessUnitId ?? ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = model.BusinessUnitId,
 				SiteId = model.SiteId,
 				SiteName = model.SiteName,
 				TeamId = model.TeamId.GetValueOrDefault(),

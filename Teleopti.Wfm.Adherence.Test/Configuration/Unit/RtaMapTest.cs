@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.Configuration;
@@ -11,45 +10,51 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 	[TestFixture]
 	public class RtaMapTest
 	{
-		private RtaMap target;
-		private IActivity activity;
-		private IRtaStateGroup rtaStateGroup;
-		private IRtaRule _rtaRule;
-
-		[SetUp]
-		public void Setup()
+		[Test]
+		public void VerifyHasEmptyConstructor()
 		{
-			activity = new Activity();
+			var activity = new Activity();
 			activity.SetId(Guid.NewGuid());
-			rtaStateGroup = new RtaStateGroup(" ");
-			_rtaRule = new RtaRule();
-			target = new RtaMap
+			var rtaStateGroup = new RtaStateGroup(" ");
+			var target = new RtaMap
 			{
 				StateGroup = rtaStateGroup,
 				Activity = activity.Id.Value
 			};
-		}
-
-		[Test]
-		public void VerifyHasEmptyConstructor()
-		{
 			Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType(), true));
 		}
 
 		[Test]
 		public void VerifyProperties()
 		{
+			var activity = new Activity();
+			activity.SetId(Guid.NewGuid());
+			var rtaStateGroup = new RtaStateGroup(" ");
+			var rtaRule = new RtaRule();
+			var target = new RtaMap
+			{
+				StateGroup = rtaStateGroup,
+				Activity = activity.Id.Value
+			};
 			Assert.AreEqual(activity.Id.Value, target.Activity);
 			Assert.AreEqual(rtaStateGroup, target.StateGroup);
 
-			target.RtaRule = _rtaRule;
+			target.RtaRule = rtaRule;
 
-			Assert.AreEqual(_rtaRule, target.RtaRule);
+			Assert.AreEqual(rtaRule, target.RtaRule);
 		}
 
 		[Test]
 		public void ShouldClone()
 		{
+			var activity = new Activity();
+			activity.SetId(Guid.NewGuid());
+			var rtaStateGroup = new RtaStateGroup(" ");
+			var target = new RtaMap
+			{
+				StateGroup = rtaStateGroup,
+				Activity = activity.Id.Value
+			};
 			target.SetId(Guid.NewGuid());
 
 			var clone = target.EntityClone();

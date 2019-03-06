@@ -536,7 +536,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(target, target.TemplateMultisiteWeekCollection[0].Parent);
             Assert.AreSame(skillClone, skillClone.TemplateMultisiteWeekCollection[0].Parent);
             Assert.AreEqual(target.Description, skillClone.Description);
-            Assert.AreEqual(target.BusinessUnit, skillClone.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), skillClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.Name, skillClone.Name);
             Assert.AreEqual(target.WorkloadCollection.Count(), skillClone.WorkloadCollection.Count());
             Assert.AreEqual(target.ChildSkills.Count, skillClone.ChildSkills.Count);
@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(target, target.TemplateMultisiteWeekCollection[0].Parent);
             Assert.AreSame(skillClone, skillClone.TemplateMultisiteWeekCollection[0].Parent);
             Assert.AreEqual(target.Description, skillClone.Description);
-            Assert.AreEqual(target.BusinessUnit, skillClone.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), skillClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.Name, skillClone.Name);
             Assert.AreEqual(target.WorkloadCollection.Count(), skillClone.WorkloadCollection.Count());
             Assert.AreEqual(target.ChildSkills.Count, skillClone.ChildSkills.Count);
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(target, target.TemplateMultisiteWeekCollection[0].Parent);
             Assert.AreSame(skillClone, skillClone.TemplateMultisiteWeekCollection[0].Parent);
             Assert.AreEqual(target.Description, skillClone.Description);
-            Assert.AreEqual(target.BusinessUnit, skillClone.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), skillClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.Name, skillClone.Name);
             Assert.AreEqual(target.WorkloadCollection.Count(), skillClone.WorkloadCollection.Count());
             Assert.AreEqual(target.ChildSkills.Count, skillClone.ChildSkills.Count);

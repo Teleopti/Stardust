@@ -187,8 +187,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
                 templateTaskPeriod.Period.EndDateTime.Subtract(templateTaskPeriod.Period.StartDateTime).TotalMinutes,
                 dataRow["period_length_min"]);
 
-            Assert.AreEqual(workloadDay.Workload.Skill.BusinessUnit.Id, dataRow["business_unit_code"]);
-            Assert.AreEqual(workloadDay.Workload.Skill.BusinessUnit.Name, dataRow["business_unit_name"]);
+            Assert.AreEqual(workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Id, dataRow["business_unit_code"]);
+            Assert.AreEqual(workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Name, dataRow["business_unit_name"]);
             Assert.AreEqual(1, dataRow["datasource_id"]);
             Assert.AreEqual(_insertDateTime, dataRow["insert_date"]);
             Assert.AreEqual(_insertDateTime, dataRow["update_date"]);
@@ -258,8 +258,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
                 templateTaskPeriod.Period.EndDateTime.Subtract(templateTaskPeriod.Period.StartDateTime).TotalMinutes,
                 dataRow["period_length_min"]);
 
-            Assert.AreEqual(workloadDay.Workload.Skill.BusinessUnit.Id, dataRow["business_unit_code"]);
-            Assert.AreEqual(workloadDay.Workload.Skill.BusinessUnit.Name, dataRow["business_unit_name"]);
+            Assert.AreEqual(workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Id, dataRow["business_unit_code"]);
+            Assert.AreEqual(workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Name, dataRow["business_unit_name"]);
             Assert.AreEqual(1, dataRow["datasource_id"]);
             Assert.AreEqual(_insertDateTime, dataRow["insert_date"]);
             Assert.AreEqual(_insertDateTime, dataRow["update_date"]);
@@ -329,8 +329,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
                 templateTaskPeriod.Period.EndDateTime.Subtract(templateTaskPeriod.Period.StartDateTime).TotalMinutes,
                 dataRow["period_length_min"]);
 
-            Assert.AreEqual(workloadDay.Workload.Skill.BusinessUnit.Id, dataRow["business_unit_code"]);
-            Assert.AreEqual(workloadDay.Workload.Skill.BusinessUnit.Name, dataRow["business_unit_name"]);
+            Assert.AreEqual(workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Id, dataRow["business_unit_code"]);
+            Assert.AreEqual(workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Name, dataRow["business_unit_name"]);
             Assert.AreEqual(1, dataRow["datasource_id"]);
             Assert.AreEqual(_insertDateTime, dataRow["insert_date"]);
             Assert.AreEqual(_insertDateTime, dataRow["update_date"]);

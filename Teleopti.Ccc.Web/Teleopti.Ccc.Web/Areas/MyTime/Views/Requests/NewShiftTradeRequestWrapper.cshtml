@@ -7,10 +7,6 @@
 	@Html.Partial("NewMultipleShiftTradeRequest")
 </script>
 
-<script type="text/html" id="new-shift-trade-request-panel">
-	@Html.Partial("NewShiftTradeRequest")
-</script>
-
 <div id="Request-add-shift-trade" class="displaynone" data-bind="css: {'request-add-shift-trade-mobile': isMobile}">
 	<span class="ready-loading-flag displaynone" data-bind="css: { 'is-ready-loaded': isReadyLoaded }"></span>
 	<div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">

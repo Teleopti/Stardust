@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 				logger.Warn($"Skill {skillId} does not exists in application.");
 				return;
 			}
-			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.BusinessUnit.Id.GetValueOrDefault());
+			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 			var timezone = _analyticsTimeZoneRepository.Get(skill.TimeZone.Id);
 			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			if (timezone == null) throw new TimeZoneMissingInAnalyticsException();
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 			{
 				_eventPublisher.Publish(new PossibleTimeZoneChangeEvent
 				{
-					LogOnBusinessUnitId = skill.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 				});
 			});
 		}

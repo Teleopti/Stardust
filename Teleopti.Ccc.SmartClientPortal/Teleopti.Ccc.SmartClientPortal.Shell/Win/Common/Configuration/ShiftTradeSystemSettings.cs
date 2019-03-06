@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_shiftTradeSettings = new GlobalSettingDataRepository(uow).FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings());
+				_shiftTradeSettings = GlobalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings());
 			}
 
 			chkEnableMaxSeats.Checked = _shiftTradeSettings.MaxSeatsValidationEnabled;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_shiftTradeSettings = new GlobalSettingDataRepository(uow).PersistSettingValue(_shiftTradeSettings).GetValue(new ShiftTradeSettings());
+				_shiftTradeSettings = GlobalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_shiftTradeSettings).GetValue(new ShiftTradeSettings());
 
 				uow.PersistAll();
 			}

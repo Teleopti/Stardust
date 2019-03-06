@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IScheduleStorageFactory _scheduleStorageFactory;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		private IScheduleAppointment _selectedItem;
 		private readonly Control _nextButton;
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 
 		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter,
 									IResourceCalculation resourceOptimizationHelper, IScheduleStorageFactory scheduleStorageFactory, 
-									CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+									CascadingResourceCalculationContextFactory resourceCalculationContextFactory, ITimeZoneGuard timeZoneGuard)
 		{
 			_eventAggregator = eventAggregator;
 			_dataProvider = dataProvider;
@@ -54,6 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleStorageFactory = scheduleStorageFactory;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_timeZoneGuard = timeZoneGuard;
 
 			InitializeComponent();
 			SetTexts();
@@ -433,7 +436,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 															  _eventAggregator, _resourceOptimizationHelper, skillPriorityProvider,
 															  _scheduleStorageFactory,
 															  staffingCalculatorServiceFacade,
-															  _resourceCalculationContextFactory);
+															  _resourceCalculationContextFactory,
+																_timeZoneGuard);
 			meetingComposerView.ShowDialog(this);
 		}
 

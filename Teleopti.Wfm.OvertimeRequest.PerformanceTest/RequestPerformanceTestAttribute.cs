@@ -21,8 +21,7 @@ namespace Teleopti.Wfm.OvertimeRequest.PerformanceTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeInfraTestConfig();
 			return config;
 		}
 

@@ -9,16 +9,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
     public interface IDayPresenterScaleCalculator
     {
-        DateTimePeriod CalculateScalePeriod(ISchedulerStateHolder schedulerState, DateOnly selectedDate);
+        DateTimePeriod CalculateScalePeriod(ISchedulerStateHolder schedulerState, DateOnly selectedDate, ITimeZoneGuard timeZoneGuard);
     }
     public class DayPresenterScaleCalculator : IDayPresenterScaleCalculator
     {
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public DateTimePeriod CalculateScalePeriod(ISchedulerStateHolder schedulerState, DateOnly selectedDate)
+        public DateTimePeriod CalculateScalePeriod(ISchedulerStateHolder schedulerState, DateOnly selectedDate, ITimeZoneGuard timeZoneGuard)
         {
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
-            var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+            var timeZone = timeZoneGuard.CurrentTimeZone();
             foreach (var person in schedulerState.FilteredCombinedAgentsDictionary.Values)
             {
                 var range = schedulerState.Schedules[person];

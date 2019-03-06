@@ -1,39 +1,8 @@
-
-
-table.overview {
-	table-layout: fixed;
-	width: auto;
-	margin-top: 25px;
-}
-
-.overview {
-	border-collapse: separate;
-	padding: 5px;
-	margin-bottom: 35px;
-	width: 100%;
-	empty-cells: show;
-
-	td {
-		width: 10px;
-	}
-	th {
-		visibility: hidden;
-		width: 10px;
-	}
-	th:nth-child(2n) {
-		visibility: visible !important;
-	}
-}
-
 .skill-name {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	padding-bottom: 0 !important;
 	padding-top: 0 !important;
-}
-
-.long {
-	letter-spacing: 1em;
 }
 
 .heatmap-head-weekend {
@@ -67,11 +36,11 @@ table.overview {
 	width: fit-content;
 
 	.worst-under-staff-day {
-		background-color: rgba(255, 0, 0, 0.5);
+		background-color: rgba(255, 0, 0, 1);
 	}
 	
 	.worst-over-staff-day {
-		background-color: rgba(0, 0, 255, 0.5);
+		background-color: rgba(0, 0, 255, 1);
 	}
 }
 
@@ -103,10 +72,30 @@ table.overview {
 	text-align: center;
 	margin: 2px;
 	cursor: pointer;
+	position: relative;
 }
 
 .heatmap-box:hover {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
+}
+
+.heatmap-box.selected {
+	outline: 3px rgba(0, 0, 0, 0.54) solid;
+}
+.heatmap-box.critical::before,
+.heatmap-box.critical::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 4px;
+}
+
+.heatmap-box.critical::after {
+	border-left-color: #FF0000;
+	border-top-color: #FF0000;
 }
 
 .heatmap-day{
@@ -116,4 +105,10 @@ table.overview {
 
 [nz-button] {
 	margin-right: 8px;
+}
+
+
+nz-spin {
+	display: inline-block !important;
+	vertical-align: middle;
 }

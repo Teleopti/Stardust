@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(logOnDatasource))
 			{
-				using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+				using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
 				{
 					connection.Open();
 					var script = "SELECT TOP(1) BusinessUnitId FROM ReadModel.GroupingReadOnly GROUP BY BusinessUnitId ORDER BY COUNT(BusinessUnitId) DESC"; // for getting the BusinessUnitId with most AvailableGroups

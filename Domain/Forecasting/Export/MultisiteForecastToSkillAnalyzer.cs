@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 					string.Format(CultureInfo.InvariantCulture, "Starting export of {0}.", multisiteSkillForExport.MultisiteSkill.Name));
                 var skillDictionary = _skillDayLoadHelper.LoadSchedulerSkillDays(skillSelection.Period,
                                                                                  new[] { multisiteSkillForExport.MultisiteSkill },
-                                                                                 _scenarioRepository.LoadDefaultScenario(multisiteSkillForExport.MultisiteSkill.BusinessUnit));
+                                                                                 _scenarioRepository.LoadDefaultScenario(multisiteSkillForExport.MultisiteSkill.GetOrFillWithBusinessUnit_DONTUSE()));
                 var skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDictionary);
 
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Number of subskill mappings: {0}.", multisiteSkillForExport.SubSkillMapping.Count()));

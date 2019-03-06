@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				Version = 1
 			};
 
-			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
+			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				new[] { model }, false);
 
 			var persons = Target.Persons(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20), _multi.Id.GetValueOrDefault(), 1000);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				Version = 1
 			};
 
-			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
+			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				new[] { model }, false);
 
 			var persons = Target.Persons(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(17), date.Date.AddHours(20), Guid.NewGuid(), 1000);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				Version = 1
 			};
 
-			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
+			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				new[] { model }, false);
 
 			var persons = Target.Persons(new List<Guid>() { skillMissing.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20), Guid.NewGuid(), 1000);
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				Version = 1
 			};
 
-			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
+			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				new[] { model }, false);
 
 			var persons = Target.Persons(new List<Guid>() { skill2.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20),_multi.Id.GetValueOrDefault(), 1000);
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				Version = 1
 			};
 
-			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.BusinessUnit.Id.GetValueOrDefault(),
+			PersonScheduleDayReadModelPersister.UpdateReadModels(new DateOnlyPeriod(date, date), person.Id.GetValueOrDefault(), skill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				new[] { model }, false);
 
 			var persons = Target.Persons(new List<Guid>() { skill.Id.GetValueOrDefault() }, date.Date.AddHours(15), date.Date.AddHours(20), Guid.NewGuid(), 1000);

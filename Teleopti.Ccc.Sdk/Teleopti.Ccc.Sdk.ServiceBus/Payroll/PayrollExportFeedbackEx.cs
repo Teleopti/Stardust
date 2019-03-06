@@ -152,6 +152,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 		private void addPayrollResultDetailToList(DetailLevel detailLevel, string message, Exception exception)
 		{
+			if(exception != null)
+			{
+				var exceptionMessage = $"Exception Type: {exception.GetType()} Message: {exception.Message} {exception.StackTrace}";
+				if (exception.InnerException != null)
+				{
+					exceptionMessage += $" InnerException Type: {exception.InnerException.GetType()} Message: {exception.InnerException.Message}";
+				}
+				exception = new Exception(exceptionMessage);
+			}
 			PayrollResultDetails.Add(new PayrollResultDetailData(detailLevel, message, exception, DateTime.UtcNow));
 		}
 

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return IsPermitted(functionPath, dateOnly, new TeamAuthorization
 			{
-				BusinessUnitId = (team.Site?.BusinessUnit?.Id).GetValueOrDefault(),
+				BusinessUnitId = (team.Site.GetOrFillWithBusinessUnit_DONTUSE()?.Id).GetValueOrDefault(),
 				SiteId = (team.Site?.Id).GetValueOrDefault(),
 				TeamId = team.Id.Value
 			});
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return IsPermitted(functionPath, dateOnly, new SiteAuthorization
 			{
-				BusinessUnitId = (site.BusinessUnit?.Id).GetValueOrDefault(),
+				BusinessUnitId = (site.GetOrFillWithBusinessUnit_DONTUSE()?.Id).GetValueOrDefault(),
 				SiteId = site.Id.Value
 			});
 		}

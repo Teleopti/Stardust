@@ -13,7 +13,7 @@
 				timezone: '=',
 				actionCallback: '&?',
 				onReady: '&',
-				isSelectAll: '=?',
+				isSelectAll: '=?', // has selected all in every page
 				getLoadAllParams: '&?'
 			},
 			controllerAs: 'vm',
@@ -66,32 +66,36 @@
 		});
 
 		vm.initCmd = function (cmd) {
+			vm.setActiveCmd(cmd);
+
 			if (!vm.date) {
 				vm.setReady(true);
-			} else {
-
-				if (vm.isSelectAll) {
-					teamScheduleSvc.searchSchedules(vm.getLoadAllParams()).then(function (result) {
-						vm.scheduleManagementSvc.resetSchedules(result.data.Schedules, vm.getDate(), vm.timezone);
-						personSelectionSvc.selectAllPerson(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
-						personSelectionSvc.updatePersonInfo(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
-						vm.setReady(true);
-					});
-				} else {
-					var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-					if (selectedPersonIds.length === 0) {
-						vm.setReady(true);
-					} else {
-						teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function (data) {
-							vm.scheduleManagementSvc.resetSchedules(data.Schedules, vm.getDate(), vm.timezone);
-							personSelectionSvc.syncProjectionSelection(vm.scheduleManagementSvc.schedules());
-							vm.setReady(true);
-						});
-					}
-				}
+				return;
 			}
-			vm.setActiveCmd(cmd);
+			if (!vm.isSelectAll) {
+				var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
+				if (selectedPersonIds.length === 0) {
+					vm.setReady(true);
+					return;
+				}
+				teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function (data) {
+					afterLoadSchedules(data.Schedules);
+				});
+				return;
+			}
+
+			teamScheduleSvc.searchSchedules(vm.getLoadAllParams()).then(function (result) {
+				afterLoadSchedules(result.data.Schedules);
+			});
+		
 		};
+
+		function afterLoadSchedules(schedules) {
+			var date = vm.getDate();
+			vm.scheduleManagementSvc.resetSchedules(schedules, date, vm.timezone);
+			personSelectionSvc.syncProjectionSelection(vm.scheduleManagementSvc.groupScheduleVm.Schedules, date, vm.isSelectAll);
+			vm.setReady(true);
+		}
 
 		vm.setReady = function (value) {
 			vm.ready = value;

@@ -175,9 +175,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#region Constructors
 
-		protected SchedulingScreen()
+		protected SchedulingScreen(IComponentContext componentContext)
 		{
 			InitializeComponent();
+			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
 			_dateNavigateControl = new DateNavigateControl();
 
 			var hostDatePicker = new ToolStripControlHost(_dateNavigateControl);
@@ -195,8 +196,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemWorkTime.Tag = ScheduleTimeType.WorkTime;
 			toolStripMenuItemPaidTime.Tag = ScheduleTimeType.PaidTime;
 			toolStripMenuItemOverTime.Tag = ScheduleTimeType.OverTime;
-			if (!DesignMode) SetTexts();
-
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112))
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
 			// this timer is just for fixing bug 17948 regarding dateNavigationControl && show agent info when RTL and coming back from File
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
@@ -307,12 +314,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario,
 			bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, bool loadRequests, IList<IEntity> allSelectedEntities,
 			Form ownerWindow)
-			: this()
+			: this(componentContext)
 		{
 			Application.DoEvents();
 			_mainWindow = ownerWindow;
-
-			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
 			_undoRedo = new UndoRedoWithScheduleCallbackContainer(_container.Resolve<IScheduleDayChangeCallback>());
 			_timeZoneGuard = _container.Resolve<ITimeZoneGuard>();
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
@@ -437,8 +442,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
 
 			_permissionHelper = new SchedulingScreenPermissionHelper();
+			var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 			_cutPasteHandlerFactory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart,
-				checkPastePermissions, pasteFromClipboard, enablePasteOperation);
+				checkPastePermissions, pasteFromClipboard, enablePasteOperation, useRightToLeft);
 
 			checkSmsLinkLicense();
 		}
@@ -449,7 +455,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var settingRepository = new PersonalSettingDataRepository(uow);
+					var settingRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 					return settingRepository.FindValueByKey("SchedulingScreen", new SchedulingScreenSettings());
 				}
 			}
@@ -662,7 +668,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.EnterValidator(this, _container.Resolve<ITimeZoneGuard>());
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -977,7 +983,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
-						var settingDataRepository = new PersonalSettingDataRepository(uow);
+						var settingDataRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 						OpenScenarioForPeriodSetting openScenarioForPeriodSetting = settingDataRepository.FindValueByKey("OpenScheduler",
 							new OpenScenarioForPeriodSetting());
 						openScenarioForPeriodSetting.NoShrinkage = !toolStripButtonShrinkage.Checked;
@@ -1019,12 +1025,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!selectedSchedules.Any())
 					return;
 
+				var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 				using (var optimizationPreferencesDialog =
 					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
 						SchedulerState.ScheduleTags.NonDeleted(),
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 						SchedulerState.DefaultSegmentLength, SchedulerState.SchedulerStateHolder.Schedules,
-						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
+						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences, useRightToLeft))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
@@ -1107,7 +1114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void swapRaw()
 		{
 			var swapper = new Swapper(_scheduleView, _undoRedo, SchedulerState.SchedulerStateHolder, LockManager, this, _defaultScheduleTag, _container.Resolve<IScheduleDayChangeCallback>());
-			swapper.SwapRaw();
+			swapper.SwapRaw(_timeZoneGuard);
 		}
 
 		private void swapSelectedSchedules()
@@ -1647,7 +1654,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var currentValidator = SikuliHelper.CurrentValidator;
 
 				if (currentValidator != null)
-					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(SchedulerState.SchedulerStateHolder, totalSkill));
+					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(SchedulerState.SchedulerStateHolder, totalSkill), _timeZoneGuard);
 				else
 					SikuliHelper.ShowTaskDoneView(this);
 			}
@@ -1920,7 +1927,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
 				{
 					_requestView = new RequestView(schedulerSplitters1.HandlePersonRequestView1, SchedulerState, _undoRedo,
-						SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts, _eventAggregator);
+						SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts, _eventAggregator, _timeZoneGuard);
 				}
 
 				_requestView.PropertyChanged += requestViewPropertyChanged;
@@ -2121,7 +2128,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 							_permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
 						bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission,
-							_container.Resolve<IToggleManager>());
+							_timeZoneGuard);
 					}
 				}
 			}
@@ -2373,10 +2380,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						return;
 					}
 
+					var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 							SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted(),
 							_groupPagesProvider, SchedulerState.ScheduleTags.NonDeleted(),
-							"SchedulingOptions", SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted()))
+							"SchedulingOptions", SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(), useRightToLeft))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -2411,11 +2419,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				_schedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
 				_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
+				var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted(),
 						_groupPagesProvider, SchedulerState.ScheduleTags.NonDeleted(), "SchedulingOptionsActivities",
-						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted()))
+						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(), useRightToLeft))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
@@ -3016,7 +3025,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadAccounts(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var rep = new PersonAbsenceAccountRepository(uow);
+			var rep = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts =
 				_container.Resolve<IToggleManager>()
 					.IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487)
@@ -3027,7 +3036,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadDefinitionSets(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository =
-				new MultiplicatorDefinitionSetRepository(uow);
+				MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(uow);
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSetRepository.FindAllDefinitions();
 		}
 
@@ -3058,7 +3067,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSkills(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			ICollection<ISkill> skills = SkillRepository.DONT_USE_CTOR(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 		}
 
@@ -3159,8 +3168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
-				_optionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
-				var personRep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
+				_optionalColumns = OptionalColumnRepository.DONT_USE_CTOR(uow).GetOptionalColumns<Person>();
+				var personRep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null);
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
 				{
@@ -3170,9 +3179,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				else
 				{
-					loader = new PeopleLoader(personRep, new ContractRepository(uow), 
+					loader = new PeopleLoader(personRep, ContractRepository.DONT_USE_CTOR(uow), 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
-							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new SkillRepository(uow));
+							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), SkillRepository.DONT_USE_CTOR(uow));
 				}
 
 				loader.Initialize(SchedulerState.SchedulerStateHolder);
@@ -3206,7 +3215,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSeniorityWorkingDays(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
+			var result = SeniorityWorkDayRanksRepository.DONT_USE_CTOR(uow).LoadAll();
 			var seniorityWorkDayRanks = result as ISeniorityWorkDayRanks[] ?? result.ToArray();
 			var workDayRanks = seniorityWorkDayRanks.IsEmpty() ? new SeniorityWorkDayRanks() : seniorityWorkDayRanks.First();
 			stateHolder.SchedulerStateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
@@ -3609,7 +3618,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void showFilterDialog()
 		{
 			var scheduleFilterView = getCachedPersonsFilterView();
-
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
 
 			//TODO: Please come up with a better solution!
@@ -3677,25 +3685,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				case ZoomLevel.DayView:
 					_scheduleView = new DayViewNew(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo, _timeZoneGuard);
 					_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 					break;
 				case ZoomLevel.WeekView:
 					_scheduleView = new WeekView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo, _timeZoneGuard);
 					break;
 				case ZoomLevel.PeriodView:
 					_scheduleView = new PeriodView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo, _timeZoneGuard);
 					break;
 				case ZoomLevel.Overview:
 					_scheduleView = new OverviewView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo, _timeZoneGuard);
 					break;
 				case ZoomLevel.RequestView:
 					restrictionViewMode(false);
 					_scheduleView = new PeriodView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo, _timeZoneGuard);
 					schedulerSplitters1.ElementHostRequests.BringToFront();
 					schedulerSplitters1.ElementHostRequests.ContextMenuStrip = contextMenuStripRequests;
 					enableRibbonForRequests(true);
@@ -3707,7 +3715,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					schedulerSplitters1.Grid.BringToFront();
 					_scheduleView = new AgentRestrictionsDetailView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder,
 						LockManager, SchedulePartFilter, ClipsHandlerSchedule, _overriddenBusinessRulesHolder, callback,
-						_defaultScheduleTag, _container.Resolve<IWorkShiftWorkTime>(), _undoRedo);
+						_defaultScheduleTag, _container.Resolve<IWorkShiftWorkTime>(), _undoRedo, _timeZoneGuard);
 					_scheduleView.ViewGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
 
@@ -3806,7 +3814,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IList<IScenario> scenarios;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScenarioRepository scenarioRepository = new ScenarioRepository(uow);
+				IScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(uow);
 				scenarios = scenarioRepository.FindAllSorted(); // Ascending or Descending ?
 			}
 			var authorization = PrincipalAuthorization.Current_DONTUSE();
@@ -3872,11 +3880,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var currentAuthorization = CurrentAuthorization.Make();
 			var currentUnitOfWork = new FromFactory(() => uowFactory);
 			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
-				new PersonAssignmentRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
-				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
-				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
-				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
-				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				PersonAssignmentRepository.DONT_USE_CTOR(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
+				new MeetingRepository(currentUnitOfWork), AgentDayScheduleTagRepository.DONT_USE_CTOR(currentUnitOfWork),
+				new NoteRepository(currentUnitOfWork), PublicNoteRepository.DONT_USE_CTOR(currentUnitOfWork),
+				new PreferenceDayRepository(currentUnitOfWork), StudentAvailabilityDayRepository.DONT_USE_CTOR(currentUnitOfWork),
+				PersonAvailabilityRepository.DONT_USE_CTOR(currentUnitOfWork), PersonRotationRepository.DONT_USE_CTOR(currentUnitOfWork),
 				new OvertimeAvailabilityRepository(currentUnitOfWork),
 				new PersistableScheduleDataPermissionChecker(currentAuthorization),
 				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
@@ -4137,15 +4145,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				var approveRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository);
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard);
 
 				IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() { obj.Value.Request };
 				using (
@@ -4194,15 +4202,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse,
 					_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository);
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard);
 
 				var selectedAdapters = new List<PersonRequestViewModel>() { eventParameters.Value.Request };
 
@@ -4566,14 +4574,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_temporarySelectedEntitiesFromTreeView, _scenario);
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission,
-				viewSchedulesPermission, _container.Resolve<IToggleManager>());
+				viewSchedulesPermission, _timeZoneGuard);
 		}
 
 		private void wpfShiftEditor1CreateMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
 		{
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission,
-				_container.Resolve<IToggleManager>());
+				_timeZoneGuard);
 		}
 
 		private void notesEditorNotesChanged(object sender, System.Windows.RoutedEventArgs e)
@@ -4712,15 +4720,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				changeRequestStatus(
 					new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules, SchedulerState.SchedulerStateHolder.RequestedScenario,
 						_requestPresenter, _handleBusinessRuleResponse,
 						_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-						globalSettingRepository, personAbsenceAccountRepository, personRequestRepository), _requestView.SelectedAdapters());
+						globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard), _requestView.SelectedAdapters());
 			}
 
 			if (_requestView != null)
@@ -4750,15 +4758,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var globalSettingRepository = new GlobalSettingDataRepository(uow);
-				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
-				var personRequestRepository = new PersonRequestRepository(uow);
+				var globalSettingRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
+				var personAbsenceAccountRepository = PersonAbsenceAccountRepository.DONT_USE_CTOR(uow);
+				var personRequestRepository = PersonRequestRepository.DONT_USE_CTOR(uow);
 				replyAndChangeStatus(new ApprovePersonRequestCommand(this, SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.SchedulerStateHolder.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository));
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository, _timeZoneGuard));
 			}
 			if (_requestView != null)
 				_requestView.NeedUpdate = true;
@@ -4977,7 +4985,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
-			exporter.Export();
+			exporter.Export(_timeZoneGuard);
 		}
 
 		private void exportToPdf(bool shiftsPerDay)
@@ -4985,7 +4993,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
-			exporter.Export(shiftsPerDay);
+			exporter.Export(shiftsPerDay, _timeZoneGuard);
 		}
 
 		private void toolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
@@ -5305,7 +5313,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (e.Button != MouseButtons.Left) return;
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission,
-				_container.Resolve<IToggleManager>());
+				_timeZoneGuard);
 
 		}
 
@@ -5691,8 +5699,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IList<IRuleSetBag> ruleSetBags;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new WorkShiftRuleSetRepository(new ThisUnitOfWork(uow)).FindAllWithLimitersAndExtenders();
-				var bags = new RuleSetBagRepository(new ThisUnitOfWork(uow)).LoadAllWithRuleSets();
+				WorkShiftRuleSetRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).FindAllWithLimitersAndExtenders();
+				var bags = RuleSetBagRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow)).LoadAllWithRuleSets();
 				ruleSetBags = bags.OrderBy(r => r.Description.Name).ToList();
 			}
 
@@ -5717,13 +5725,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var showUseSkills = SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills.Any(x => x.IsCascading());
 
+				var useRightToLeft = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112);
 				using (var options = new OvertimePreferencesDialog(SchedulerState.ScheduleTags.NonDeleted(),
 																"OvertimePreferences",
 																SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 																resolution,
 																definitionSets,
 																ruleSetBags,
-																showUseSkills))
+																showUseSkills,
+																useRightToLeft))
 				{
 					if (options.ShowDialog(this) != DialogResult.OK) return;
 					options.Refresh();

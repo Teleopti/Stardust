@@ -12,7 +12,7 @@
 				<div class="input-group" title="@Resources.StartTime">
 					<input type="text" class="overtime-availability-start-time form-control right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false, showInputs: false}, scrollIntoViewWhenClick:'#Request-add-section'" />
 					<span class="input-group-btn">
-						<button class="btn right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false, showInputs: false}">
+						<button class="btn right-align" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false, showInputs: false}">
 							<i class="glyphicon glyphicon-time"></i>
 						</button>
 					</span>
@@ -33,7 +33,7 @@
 				<div class="input-group" title="@Resources.EndTime">
 					<input type="text" class="overtime-availability-end-time form-control right-align" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false, showInputs: false}, scrollIntoViewWhenClick:'#Request-add-section'" />
 					<span class="input-group-btn">
-						<button class="btn right-align" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false, showInputs: false}">
+						<button class="btn right-align" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false, showInputs: false}">
 							<i class="glyphicon glyphicon-time"></i>
 						</button>
 					</span>

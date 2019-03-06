@@ -29,8 +29,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["scenario_code"] = scenario.Id;
 				row["scenario_name"] = scenario.Description.Name;
 				row["default_scenario"] = scenario.DefaultScenario;
-				row["business_unit_code"] = scenario.BusinessUnit.Id;
-				row["business_unit_name"] = scenario.BusinessUnit.Name;
+				row["business_unit_code"] = scenario.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				row["business_unit_name"] = scenario.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				//row["business_unit_code"] = RaptorTransformerHelper.CurrentBusinessUnit.Id;
 				//row["business_unit_name"] = RaptorTransformerHelper.CurrentBusinessUnit.Description.Name;
 				row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.

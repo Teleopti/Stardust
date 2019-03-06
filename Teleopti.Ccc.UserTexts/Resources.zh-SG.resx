@@ -10650,13 +10650,13 @@ Teleopti R&amp;D</value>
     <value>您没有访问任何小组的权限</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>您得到了新的青铜徽章！您在{1:yyyy-MM-dd}的应答数已经了超过{0}</value>
+    <value>您得到了新的青铜徽章！您在{1:yyyy-MM-dd}的应答数已经了超过 {0}</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
     <value>您得到了新的青铜徽章！您在{1:yyyy-MM-dd}的遵时率超过 {0}</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>您得到了新的青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于{0}秒</value>
+    <value>您得到了新的青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于 {0}秒</value>
   </data>
   <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
     <value>您得到了新的金色徽章！您在不同日期中已经应答了{0}或更多的电话在每天{1}</value>
@@ -11223,19 +11223,19 @@ Teleopti R&amp;D</value>
     <value>数据筛选器...</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的应答量超过了 {0}。继续加油哦～</value>
   </data>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>外呼活动</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于 {0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的遵循度高于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的遵循度高于 {0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的应答量超过了 {0}。继续加油哦～</value>
   </data>
   <data name="DeleteCampaign" xml:space="preserve">
     <value>删除活动</value>
@@ -11250,22 +11250,22 @@ Teleopti R&amp;D</value>
     <value>活动</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于 {0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的遵循度高于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的遵循度高于 {0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的应答量超过了 {0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于 {0}。继续加油哦～</value>
   </data>
   <data name="Duplicate" xml:space="preserve">
     <value>重复</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的遵循度高于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的遵循度高于 {0}。继续加油哦～</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>禁用项目</value>
@@ -15295,5 +15295,95 @@ Teleopti R&amp;D</value>
   </data>
   <data name="MonthLowerCase" xml:space="preserve">
     <value>月</value>
+  </data>
+  <data name="HasCriticalIntervals" xml:space="preserve">
+    <value>有关键时段</value>
+  </data>
+  <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+    <value>班表审核跟踪未运行。我们建议您开启它，请联系Teleopti。</value>
+  </data>
+  <data name="TeamSchedulingColon" xml:space="preserve">
+    <value>组排班：</value>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>发布班表</value>
+  </data>
+  <data name="CriticalInterval" xml:space="preserve">
+    <value>关键时段</value>
+  </data>
+  <data name="NoPlanningGroupFound" xml:space="preserve">
+    <value>未找到规划组</value>
+  </data>
+  <data name="ShowNumbers" xml:space="preserve">
+    <value>显示数值</value>
+  </data>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>删除报表</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>您确定要删除此假期日历吗？</value>
+  </data>
+  <data name="SelectACalendarForSite" xml:space="preserve">
+    <value>为站点选择一个日历</value>
+  </data>
+  <data name="NoCalendarsAvailable" xml:space="preserve">
+    <value>无可用日历</value>
+  </data>
+  <data name="XSitesUseThisCalendar" xml:space="preserve">
+    <value>{0} 个站点使用该日历：</value>
+  </data>
+  <data name="AdjustAdherence" xml:space="preserve">
+    <value>调整遵时 (由于技术问题而转为中立) </value>
+  </data>
+  <data name="NoSkillGroupCreated" xml:space="preserve">
+    <value>未创建技能组</value>
+  </data>
+  <data name="AdjustedPeriods" xml:space="preserve">
+    <value>已调整的周期</value>
+  </data>
+  <data name="AdjustAdherenceLink" xml:space="preserve">
+    <value>调整遵时</value>
+  </data>
+  <data name="AdjustToNeutral" xml:space="preserve">
+    <value>调整至中立</value>
+  </data>
+  <data name="AddPeriod" xml:space="preserve">
+    <value>添加周期</value>
+  </data>
+  <data name="ViewPlanningPeriods" xml:space="preserve">
+    <value>查看规划周期</value>
+  </data>
+  <data name="ReadOnlyDistribution" xml:space="preserve">
+    <value>不允许分布变更</value>
+  </data>
+  <data name="HideMenu" xml:space="preserve">
+    <value>隐藏菜单</value>
+  </data>
+  <data name="ShowMenu" xml:space="preserve">
+    <value>显示菜单</value>
+  </data>
+  <data name="PreviousDay" xml:space="preserve">
+    <value>前一天</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>前一周</value>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>下一周</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>选择日期</value>
+  </data>
+  <data name="SelectTime" xml:space="preserve">
+    <value>选择时间</value>
+  </data>
+  <data name="SelectPeriod" xml:space="preserve">
+    <value>选择周期</value>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>未遵时</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>中立</value>
   </data>
 </root>

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				SeatBookings = s.SeatBookingInformation,
 				IsDayOff = isDayOff(s),
 				Shift = shift(s, mobileMonth),
-				BankHolidayCalendarInfo = _bankHolidayCalendarViewModelMapper.Map(s.BankHolidayDate)
+				BankHolidayCalendar = _bankHolidayCalendarViewModelMapper.Map(s.BankHolidayDate)
 			};
 		}
 

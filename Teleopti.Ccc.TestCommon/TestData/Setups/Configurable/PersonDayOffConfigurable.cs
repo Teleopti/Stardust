@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var dayOff = new DayOffTemplateRepository(unitOfWork).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
+			var scenario = ScenarioRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
+			var dayOff = DayOffTemplateRepository.DONT_USE_CTOR2(unitOfWork).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
 
 			var personDayOff = new PersonAssignment(person, scenario, new DateOnly(Date));
 			personDayOff.SetDayOff(dayOff);
 
-			var repository = new PersonAssignmentRepository(unitOfWork);
+			var repository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 			
 			repository.Add(personDayOff);
 		}

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
                 if (personId == Guid.Empty) return true;
 
                 var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
-                var personRepository = new PersonRepository(new FromFactory(() => unitOfWorkFactory), null, null);
+                var personRepository = PersonRepository.DONT_USE_CTOR(new FromFactory(() => unitOfWorkFactory), null, null);
 
                 using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
                         var claimSet = _claimCache.Get(applicationRoleId);
                         if (claimSet == null)
                         {
-                            var roleRepository = new ApplicationRoleRepository(unitOfWork);
+                            var roleRepository = ApplicationRoleRepository.DONT_USE_CTOR(unitOfWork);
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
 	                        var licensedFunctionsProvider = new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 		                        new ClaimSetForApplicationRole(
 			                        new ApplicationFunctionsForRole(
 				                        licensedFunctionsProvider,
-					                        new ApplicationFunctionRepository(new ThisUnitOfWork(unitOfWork))
+					                        ApplicationFunctionRepository.DONT_USE_CTOR(new ThisUnitOfWork(unitOfWork))
 				                        )
 			                        );
 

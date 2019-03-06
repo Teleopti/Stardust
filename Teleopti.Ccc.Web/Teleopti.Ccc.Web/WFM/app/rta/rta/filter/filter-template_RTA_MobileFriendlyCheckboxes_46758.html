@@ -34,14 +34,14 @@
 						<i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 					</span>
 					<label>
-						<md-checkbox ng-checked="site.isChecked" aria-label="Checkbox"
+						<md-checkbox ng-checked="site.isChecked"
 									 ng-class="site.isMarked ? 'rta-marked-checkbox' : ''" ng-click="site.toggle()"/>
 						<span class="wfm-checkbox-label">{{site.Name}}</span>
 					</label>
 				</div>
 		<div style="margin-left: 50px" ng-show="site.isExpanded" ng-repeat="team in site.Teams">
 			<label>
-				<md-checkbox ng-checked="team.isChecked" aria-label="Checkbox" ng-click="team.toggle()"/>
+				<md-checkbox ng-checked="team.isChecked" ng-click="team.toggle()"/>
 						<span class="wfm-checkbox-label">{{team.Name}}</span>
 			</label>
 		</div>

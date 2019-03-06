@@ -107,13 +107,13 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
         public void VerifyBusinessUnit()
         {
             var s = new exposingBu();
-            Assert.IsNotNull(s.BusinessUnit);
+            Assert.IsNotNull(s.GetOrFillWithBusinessUnit_DONTUSE());
 
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity);
-            Assert.AreEqual(identity.BusinessUnitId, s.BusinessUnit.Id);
+            Assert.AreEqual(identity.BusinessUnitId, s.GetOrFillWithBusinessUnit_DONTUSE().Id);
             IBusinessUnit bu = new BusinessUnit("df");
             s.SetBu(bu);
-            Assert.AreSame(bu, s.BusinessUnit);
+            Assert.AreSame(bu, s.GetOrFillWithBusinessUnit_DONTUSE());
 
         }
         

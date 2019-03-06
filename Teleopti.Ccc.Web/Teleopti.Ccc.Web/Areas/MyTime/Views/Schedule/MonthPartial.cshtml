@@ -9,16 +9,16 @@
 			<li class="col-xs-12 col-sm-4">
 				<span class="input-group " style="max-width: 329px;">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" data-bind="click: previousMonth">
+						<button class="btn btn-default" type="button" data-bind="click: previousMonth" aria-label="@Resources.PreviousMonth">
 							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
 					<input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
 					<div class="input-group-btn">
-						<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
+						<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }" aria-label="@Resources.SelectMonth" aria-haspopup="true">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
-						<button class="btn btn-default" type="button" data-bind="click: nextMonth">
+						<button class="btn btn-default" type="button" data-bind="click: nextMonth" aria-label="@Resources.NextMonth">
 							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 					</div>
@@ -118,7 +118,7 @@
 						</div>
 						<!-- /ko -->
 
-						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="day-header-day label label-default"></span>
+						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date },css: {'bank-holiday-day-shape':bankHoliday!=null},tooltip:{title: bankHoliday!=null?bankHoliday.dateDescription:null, html: true}" class="day-header-day label label-default" ></span>
 					</div>
 				</div>
 			</div>

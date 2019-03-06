@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { WINDOW } from '@wfm/common';
 import { IStateService } from 'angular-ui-router';
 import { AuthenticatedInterceptor, BusinessUnitInterceptor, ClientOutdatedInterceptor } from './interceptors';
@@ -40,4 +40,10 @@ import { InterceptorOverrideService } from './services/interceptor-override.serv
 	],
 	entryComponents: []
 })
-export class CoreModule {}
+export class CoreModule {
+	constructor(@Optional() @SkipSelf() core: CoreModule) {
+		if (core) {
+			throw new Error('Do not import this, except in app-module');
+		}
+	}
+}

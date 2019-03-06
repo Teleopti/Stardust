@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		public MultisiteDayTemplates(IMultisiteSkill multisiteSkill)
 			: this()
 		{
-			var skillRepository = new MultisiteSkillRepository(UnitOfWork);
+			var skillRepository = MultisiteSkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_multisiteSkill = skillRepository.Load(multisiteSkill.Id.Value);
 			initializeTabs();
 			handleTabSelectionChanged();

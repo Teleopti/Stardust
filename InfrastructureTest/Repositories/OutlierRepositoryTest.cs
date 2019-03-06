@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IOutlier> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new OutlierRepository(currentUnitOfWork);
+            return OutlierRepository.DONT_USE_CTOR2(currentUnitOfWork);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(newOutlier1);
             PersistAndRemoveFromUnitOfWork(newOutlier2);
 
-            OutlierRepository rep = new OutlierRepository(UnitOfWork);
+            OutlierRepository rep = OutlierRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IOutlier> outliers = rep.FindByWorkload(_workload);
 
             Assert.AreEqual(2, outliers.Count);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var newOutlier1 = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(newOutlier1);
 
-            var rep = new OutlierRepository(UnitOfWork);
+            var rep = OutlierRepository.DONT_USE_CTOR(UnitOfWork);
             var outliers = rep.FindByWorkload(_workload);
 
             LazyLoadingManager.IsInitialized(outliers[0].Dates)
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(newOutlier1);
             PersistAndRemoveFromUnitOfWork(newOutlier2);
 
-            var rep = new OutlierRepository(UnitOfWork);
+            var rep = OutlierRepository.DONT_USE_CTOR(UnitOfWork);
             var outliers = rep.FindByWorkload(_workload);
 
             Assert.AreEqual(2, outliers.Count);

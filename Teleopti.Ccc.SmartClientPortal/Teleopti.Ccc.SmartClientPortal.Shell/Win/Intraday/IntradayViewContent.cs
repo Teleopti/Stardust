@@ -11,6 +11,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -34,7 +35,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.UserTexts;
-
+using Teleopti.Ccc.WinCode.Scheduling;
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 
@@ -66,10 +67,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
 			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,
-			 CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider)
+			 CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider, ITimeZoneGuard timeZoneGuard)
 		{
 			if (presenter == null) throw new ArgumentNullException("presenter");
 			if (owner == null) throw new ArgumentNullException("owner");
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_skillPriorityProvider = skillPriorityProvider;
+			_timeZoneGuard = timeZoneGuard;
 			_presenter = presenter;
 			_schedulerStateHolder = schedulerStateHolder;
 			_owner = owner;
@@ -175,25 +178,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_backgroundWorkerResources.RunWorkerCompleted += backgroundWorkerResourcesRunWorkerCompleted;
 			_backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-			_skillIntradayGridControl = new SkillIntraDayGridControl(_settingManager.ChartSetting, _skillPriorityProvider);
+			_skillIntradayGridControl = new SkillIntraDayGridControl(_settingManager.ChartSetting, _skillPriorityProvider, _timeZoneGuard);
 			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
-			InitializeIntradayViewContent();
+			InitializeIntradayViewContent(_timeZoneGuard);
 		}
 
-		public void InitializeIntradayViewContent()
+		public void InitializeIntradayViewContent(ITimeZoneGuard timeZoneGuard)
 		{
-			setupDayView();
+			setupDayView(timeZoneGuard);
 			setupChart();
 			SetupSkillTabs();
 			SelectSkillTab(SelectedSkill);
 			DrawSkillGrid(false);
 
 			Visible = true;
-
-			//_defaultSetting = SaveDockingState();
 		}
 
-		private void setupDayView()
+		private void setupDayView(ITimeZoneGuard timeZoneGuard)
 		{
 			_eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.InitializingDayViewThreeDots);
 
@@ -208,7 +209,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_owner.AddControlHelpContext(tabSkillData);
 
 			_scheduleView = new IntradayScheduleView(_skillIntradayGridControl, _owner, _presenter.SchedulerStateHolder, _gridLockManager, SchedulePartFilter.None, _clipHandlerSchedule,
-				 _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
+				 _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer(), timeZoneGuard);
 
 			wpfShiftEditor1.LoadFromStateHolder(_presenter.SchedulerStateHolder.CommonStateHolder);
 			wpfShiftEditor1.CommitChanges += shiftEditorCommitChanges;

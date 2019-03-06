@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	[Setting("ScheduleChangedMessagePackagingSendOnIdleTimeSeconds", 1)]
 	[Setting("ScheduleChangedMessagePackagingSendOnIntervalSeconds", 1)]
 	public class ScheduleChangedMessageTest

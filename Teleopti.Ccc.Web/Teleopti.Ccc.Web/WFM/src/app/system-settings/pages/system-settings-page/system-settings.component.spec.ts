@@ -6,14 +6,13 @@ import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translat
 import { configureTestSuite } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { PasswordService } from 'src/app/authentication/services/password.service';
-import { UserService, TogglesService } from 'src/app/core/services';
+import { TogglesService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
-import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
-import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
+import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 import { SystemSettingsComponent } from './system-settings.component';
 import { BankCalendarDataService } from '../../shared';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockStateService implements Partial<IStateService> {
 	public current: {
@@ -37,7 +36,6 @@ describe('SystemSettings page', () => {
 			declarations: [
 				SystemSettingsComponent,
 				BankHolidayCalendarComponent,
-				BankHolidayCalendarAddComponent,
 				BankHolidayCalendarEditComponent,
 				BankHolidayCalendarAssignToSitesComponent
 			],
@@ -46,15 +44,14 @@ describe('SystemSettings page', () => {
 				NgZorroAntdModule,
 				FormsModule,
 				ReactiveFormsModule,
-				HttpClientTestingModule
+				HttpClientTestingModule,
+				NoopAnimationsModule
 			],
 			providers: [
 				{
 					provide: '$state',
 					useClass: MockStateService
 				},
-				UserService,
-				PasswordService,
 				MockTranslateService,
 				TogglesService,
 				BankCalendarDataService
@@ -67,14 +64,19 @@ describe('SystemSettings page', () => {
 		fixture.autoDetectChanges(true);
 	}));
 
-	it('should create component', () => {
-		expect(component).toBeTruthy();
-	});
+	it('should create component', async(() => {
+        fixture.whenStable().then(() => {
+            fixture.detectChanges();
+            expect(component).toBeTruthy();
+        });
+    }));
 
-	it('should show header title', () => {
-		const titleEle = document.getElementsByTagName('h1')[0];
-		expect(titleEle).toBeTruthy();
-		expect(titleEle.getElementsByTagName('i').length).toBe(1);
-		expect(titleEle.getElementsByTagName('i')[0].className).toBe('anticon anticon-setting');
-	});
+	it('should show header title', async(() => {
+		fixture.whenStable().then(() => {
+			const titleEle = document.getElementsByTagName('h1')[0];
+			expect(titleEle).toBeTruthy();
+			expect(titleEle.getElementsByTagName('i').length).toBe(1);
+			expect(titleEle.getElementsByTagName('i')[0].className).toBe('anticon anticon-setting');
+		});
+	}));
 });

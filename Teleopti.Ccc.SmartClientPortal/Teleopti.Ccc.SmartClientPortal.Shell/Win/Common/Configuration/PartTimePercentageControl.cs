@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
         public void SetUnitOfWork(IUnitOfWork value)
         {
             UnitOfWork = value;
-            Repository = new PartTimePercentageRepository(UnitOfWork);
+            Repository = PartTimePercentageRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
         public void Persist()

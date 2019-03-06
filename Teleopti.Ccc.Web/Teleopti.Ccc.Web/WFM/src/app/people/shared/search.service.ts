@@ -43,9 +43,7 @@ export class SearchService {
 		return this.http.post('../api/Search/FindPeople', query) as Observable<PeopleSearchResult>;
 	}
 
-	async getPersons({ Date = '2017-02-08', PersonIdList }): Promise<Array<Person>> {
-		return this.http.post('../api/PeopleData/fetchPersons', { Date, PersonIdList }).toPromise() as Promise<
-			Array<Person>
-		>;
+	async getPersons({ PersonIdList }): Promise<Array<Person>> {
+		return this.http.post('../api/PeopleData/fetchPersons', { PersonIdList }).toPromise() as Promise<Array<Person>>;
 	}
 }

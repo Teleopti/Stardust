@@ -12,4 +12,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public int Resolution { get; set; } = 15;
 	}
+
+	public class CalculatedPossibilityModelResult
+	{
+		public IScheduleDictionary ScheduleDictionary { get; }
+		public IList<CalculatedPossibilityModel> Models { get; }
+
+		public CalculatedPossibilityModelResult(IScheduleDictionary scheduleDictionary, IList<CalculatedPossibilityModel> models)
+		{
+			ScheduleDictionary = scheduleDictionary;
+			Models = models;
+		}
+	}
 }

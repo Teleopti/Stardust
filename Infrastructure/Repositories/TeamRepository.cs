@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -17,14 +19,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class TeamRepository : Repository<ITeam>, ITeamRepository
 	{
-#pragma warning disable 618
-		public TeamRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
+		public static TeamRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
 		{
+			return new TeamRepository(currentUnitOfWork, null, null);
 		}
 
-		public TeamRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public static TeamRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new TeamRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+		
+		public TeamRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 
 		}

@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class HistoricalAdherenceController : ApiController
 	{
-		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
+		private readonly IHistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 		private readonly ApprovePeriodAsInAdherenceCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
 		private readonly RemoveApprovedPeriodCommandHandler _removePeriodCommandHandler;
 
 		public HistoricalAdherenceController(
-			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
+			IHistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			ApprovePeriodAsInAdherenceCommandHandler approvePeriodCommandHandler,
 			RemoveApprovedPeriodCommandHandler removePeriodCommandHandler,
 			HistoricalAdherenceDate historicalAdherenceDate)

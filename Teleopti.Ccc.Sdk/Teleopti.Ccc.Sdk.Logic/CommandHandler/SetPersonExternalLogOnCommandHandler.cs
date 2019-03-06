@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 
@@ -17,12 +18,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public SetPersonExternalLogOnCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IExternalLogOnRepository externalLogOnRepository)
+		public SetPersonExternalLogOnCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IExternalLogOnRepository externalLogOnRepository, ICurrentAuthorization currentAuthorization)
 		{
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_externalLogOnRepository = externalLogOnRepository;
+			_currentAuthorization = currentAuthorization;
 		}
 
 		public void Handle(SetPersonExternalLogOnCommandDto command)
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Get(command.PersonId);
-				person.VerifyCanBeModifiedByCurrentUser();
+				person.VerifyCanBeModifiedByCurrentUser(_currentAuthorization);
 
 				var existingPersonPeriod =
 					person.PersonPeriodCollection.FirstOrDefault(pp => pp.StartDate == command.PeriodStartDate.ToDateOnly());

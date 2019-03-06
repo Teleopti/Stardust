@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     public abstract class ScheduleViewBase : AddScheduleLayers, IScheduleViewBase, IDisposable, IHelpContext
     {
         private readonly GridControl _grid;
-        private Font _cellFontBig;
+		private readonly ITimeZoneGuard _timeZoneGuard;
+		private Font _cellFontBig;
         private Font _cellFontSmall;
         private Font _fontTimeLine;
         private Color _colorHolidayCell;
@@ -51,12 +52,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public event EventHandler RefreshShiftEditor;
         public event EventHandler<EventArgs> ViewPasteCompleted;
 
-        protected ScheduleViewBase(GridControl grid)
+        protected ScheduleViewBase(GridControl grid, ITimeZoneGuard timeZoneGuard)
             : base(null)
         {
             setColors();
             _grid = grid;
-            grid.HideCols.ResetRange(0, 300);
+			_timeZoneGuard = timeZoneGuard;
+			grid.HideCols.ResetRange(0, 300);
         }
 
 		public void AddNewLayer(ClipboardItems addType, IEnumerable<IAbsence> commonStateHolderAbsences, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets)
@@ -898,7 +900,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             if (Presenter.ClipHandlerSchedule.ClipList.Count > 0)
             {
-				var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuardForDesktop.Instance_DONTUSE);
+				var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuard);
 
 				undoRedo.CreateBatch(Resources.UndoRedoPaste);
 				splitAbsences(SelectedSchedules());
@@ -1538,7 +1540,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return _grid; }
         }
 
-        public void RefreshRangeForAgentPeriod(IEntity person, DateTimePeriod period)
+		public ITimeZoneGuard TimeZoneGuard
+		{
+			get { return _timeZoneGuard; }
+		}
+
+		public void RefreshRangeForAgentPeriod(IEntity person, DateTimePeriod period)
         {
             //thread stuff
             if (_grid.InvokeRequired)
@@ -1551,7 +1558,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 int row = GetRowForAgent(person);
                 _grid.RefreshRange(GridRangeInfo.Cell(row, (int)ColumnType.RowHeaderColumn + 1), true);
                 //loop for all days in period
-	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuard.CurrentTimeZone());
 	            foreach (var date in datePeriod.DayCollection())
 	            {
                     int column = GetColumnForDate(date);

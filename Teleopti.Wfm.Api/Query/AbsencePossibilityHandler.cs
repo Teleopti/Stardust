@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -19,21 +18,15 @@ namespace Teleopti.Wfm.Api.Query
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 		private readonly IAbsenceStaffingPossibilityCalculator _absenceStaffingPossibilityCalculator;
 		private readonly IPersonRepository _personRepository;
-		private readonly IScheduleStorage _scheduleStorage;
-		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ICurrentAuthorization _currentAuthorization;
 
 		public AbsencePossibilityHandler(IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
 			IAbsenceStaffingPossibilityCalculator absenceStaffingPossibilityCalculator,
-			IPersonRepository personRepository, ICurrentAuthorization currentAuthorization,
-			IScheduleStorage scheduleStorage,
-			IScenarioRepository scenarioRepository)
+			IPersonRepository personRepository, ICurrentAuthorization currentAuthorization)
 		{
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 			_absenceStaffingPossibilityCalculator = absenceStaffingPossibilityCalculator;
 			_personRepository = personRepository;
-			_scheduleStorage = scheduleStorage;
-			_scenarioRepository = scenarioRepository;
 			_currentAuthorization = currentAuthorization;
 		}
 
@@ -71,18 +64,15 @@ namespace Teleopti.Wfm.Api.Query
 					Message = $"There is no staffing data available period for given date {query.StartDate:yyyy-MM-dd}"
 				};
 			}
-
-			var loadOption = new ScheduleDictionaryLoadOptions(false, false) {LoadDaysAfterLeft = false};
+			
 			var period = new DateOnlyPeriod(query.StartDate.ToDateOnly(), query.EndDate.ToDateOnly());
-			var scenario = _scenarioRepository.LoadDefaultScenario();
-			var schedule =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, loadOption, period, scenario);
-			var scheduledTimePeriods = schedule[person].ScheduledDayCollection(period)
-				.SelectMany(x => x.ProjectionService().CreateProjection().FilterLayers<IActivity>()).ToArray();
-
+			
 			var possibilityModels = _absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person,
 				periodForAbsence.Value);
-			var possibilities = createPeriodStaffingPossibilityViewModels(possibilityModels, scheduledTimePeriods,
+			var scheduledTimePeriods = possibilityModels.ScheduleDictionary[person].ScheduledDayCollection(period)
+				.SelectMany(x => x.ProjectionService().CreateProjection().FilterLayers<IActivity>()).ToArray();
+
+			var possibilities = createPeriodStaffingPossibilityViewModels(possibilityModels.Models, scheduledTimePeriods,
 				person.PermissionInformation.DefaultTimeZone());
 
 			return new QueryResultDto<AbsencePossibilityDto>

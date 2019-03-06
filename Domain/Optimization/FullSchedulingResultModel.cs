@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -31,14 +32,35 @@ namespace Teleopti.Ccc.Domain.Optimization
 				foreach (var dateOnly in period.DayCollection())
 				{
 					var found = skillDaysDic.TryGetValue(dateOnly, out var skillDay);
-					double relativeDifference = !found
-						? 0
-						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
+					double relativeDifference;
+					if (!found){
+						relativeDifference = 0;
+					}
+					else
+					{
+						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+						{
+							skillStaffPeriod.Payload.UseShrinkage = true;
+						}
+						relativeDifference = SkillStaffPeriodHelper
+							.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
+					}
+
 					var detail = new FullSchedulingResultSkillDetail
 					{
 						Date = dateOnly,
-						RelativeDifference = relativeDifference
+						RelativeDifference = Math.Round(relativeDifference, 4)
 					};
+
+					if (found)
+					{
+						detail.IntervalDetails = skillDay.SkillStaffPeriodCollection.Select(x => new IntervalDetail
+						{
+							StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, skill.TimeZone).TimeOfDay.ToString(@"h\:mm"),
+							ScheduledAgents = Math.Round(x.CalculatedResource, 2),
+							ForecastAgents = Math.Round(x.ForecastedDistributedDemand, 2)
+						});
+					}
 
 					detail.ColorId = skillDay != null && skillDay.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
 					item.AddDetail(detail);
@@ -78,7 +100,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 			public DateOnly Date { get; set; }
 			public double RelativeDifference { get; set; }
 			public int ColorId { get; set; }
+			public IEnumerable<IntervalDetail> IntervalDetails { get; set; }
 		}
 
+	}
+
+	public class IntervalDetail
+	{
+		[JsonProperty(PropertyName = "s")]
+		public double ScheduledAgents { get; set; }
+		
+		[JsonProperty(PropertyName = "f")]
+		public double ForecastAgents { get; set; }
+		
+		[JsonProperty(PropertyName = "x")]
+		public string StartTime { get; set; }
 	}
 }

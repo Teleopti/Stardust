@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -49,6 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private DateTimePeriod _lastPeriod;
         private readonly IUnitOfWorkFactory _uowFactory;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly BackgroundWorker _reloadBackgroundWorker = new BackgroundWorker();
         private bool _disposed;
 
@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                                 ISchedulerStateHolder schedulerStateHolder,
                                                 ISchedulerStateLoader schedulerStateLoader,
                                                 IUnitOfWorkFactory uowFactory,
-												IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+												IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
+												ITimeZoneGuard timeZoneGuard)
         {
             _peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 	        _schedulerStateHolder = schedulerStateHolder;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             _schedulerStateLoader = schedulerStateLoader;
             _uowFactory = uowFactory;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+			_timeZoneGuard = timeZoneGuard;
 			_reloadBackgroundWorker.WorkerSupportsCancellation = true;
             _reloadBackgroundWorker.DoWork += ReloadBackgroundWorkerDoWork;
             _reloadBackgroundWorker.RunWorkerCompleted += ReloadBackgroundWorkerRunWorkerCompleted;
@@ -82,34 +84,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
        }
 
         void ReloadBackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var args = (ReloadEventArgs) e.Argument;
-            using (var unitOfWork = _uowFactory.CreateAndOpenUnitOfWork())
-            {
-                var deciderResult = _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
-				_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()));
-                
-               var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
-
-                deciderResult.FilterSkills(tempSkills.ToArray(),s => tempSkills.Remove(s),s => tempSkills.Add(s));
-                if (_schedulingResultStateHolder.SkillDays != null && tempSkills.SetEquals(_filteredSkills) && _lastPeriod.Contains(args.Period))
-                {
-                    e.Cancel = true;
-                    e.Result = args;
-                    return;
-                }
-
-                args.TempSkills = tempSkills;
-                
-                var tempPersons = new List<IPerson>(_schedulingResultStateHolder.LoadedAgents);
-                deciderResult.FilterPeople(tempPersons);
-                var scheduleDateTimePeriod = new ScheduleDateTimePeriod(args.Period, tempPersons,
-                                                                        new MeetingScheduleRangeToLoadCalculator(
-                                                                            args.Period));
-                e.Result = args;
-                _schedulerStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, unitOfWork, _reloadBackgroundWorker, tempSkills, _staffingCalculatorServiceFacade);
-            }
-        }
+		{
+			var args = (ReloadEventArgs) e.Argument;
+			ILoaderDeciderResult deciderResult;
+			using (_uowFactory.CreateAndOpenUnitOfWork())
+			{
+				deciderResult = _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
+			}
+			_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(_timeZoneGuard.CurrentTimeZone()));     
+			var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
+			deciderResult.FilterSkills(tempSkills.ToArray(),s => tempSkills.Remove(s),s => tempSkills.Add(s));
+			if (_schedulingResultStateHolder.SkillDays != null && tempSkills.SetEquals(_filteredSkills) && _lastPeriod.Contains(args.Period))
+			{
+				e.Cancel = true;
+				e.Result = args;
+				return;
+			}
+			args.TempSkills = tempSkills;
+			e.Result = args;
+			var tempPersons = new List<IPerson>(_schedulingResultStateHolder.LoadedAgents);
+			deciderResult.FilterPeople(tempPersons);
+			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(args.Period, tempPersons, new MeetingScheduleRangeToLoadCalculator(args.Period));
+			_schedulerStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, _reloadBackgroundWorker, tempSkills, _staffingCalculatorServiceFacade);
+		}
         
         void ReloadBackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
 		public void Execute(DateOnly dateOnly, ISkill targetSkill, ICollection<ForecastsRow> forecasts, ImportForecastsMode importMode)
 		{
-			var defaultScenario = _scenarioRepository.LoadDefaultScenario(targetSkill.BusinessUnit);
+			var defaultScenario = _scenarioRepository.LoadDefaultScenario(targetSkill.GetOrFillWithBusinessUnit_DONTUSE());
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 
 			var skilldays = _skillDayRepository.FindRange(dateOnlyPeriod, targetSkill, defaultScenario);

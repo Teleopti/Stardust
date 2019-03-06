@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _intradaySettingsPresenter = new PersonalSettingDataRepository(uow).FindValueByKey("IntradaySettings", defaultIntradaySettingsPresenter);
+                _intradaySettingsPresenter = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("IntradaySettings", defaultIntradaySettingsPresenter);
             }
         }
         public IEnumerable IntradaySettings
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                new PersonalSettingDataRepository(uow).PersistSettingValue(_intradaySettingsPresenter);
+                PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_intradaySettingsPresenter);
                 uow.PersistAll();
             }
         }

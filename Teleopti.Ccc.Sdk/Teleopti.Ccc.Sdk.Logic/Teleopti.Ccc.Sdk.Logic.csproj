@@ -152,6 +152,7 @@
     <Compile Include="CommandHandler\AddScheduleChangesListenerCommandHandler.cs" />
     <Compile Include="CommandHandler\ApproveRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandler.cs" />
+    <Compile Include="CommandHandler\CancelPersonEmploymentChangeCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelOvertimeCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\ChangePersonBasicDataCommandHandler.cs" />

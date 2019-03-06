@@ -121,7 +121,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the extended preference on '(.*)'")]
 		public void ThenIShouldSeeTheExtendedPreferenceOn(DateTime date)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(ExtendedTooltip(date));
+			Browser.Interactions.AssertExistsUsingJQuery($"li[data-mytime-date={date:yyyy-MM-dd}] .extended-indication");
+			Browser.Interactions.AssertExistsUsingJQuery(".tooltip.top.in");
 		}
 
 		[Then(@"I should see the preference (.*) on '(.*)'")]
@@ -306,15 +307,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 
-			var tooltip = ExtendedTooltip(fields.Date);
-			Console.WriteLine(@"tooltip: {0}", tooltip);
+			var tooltip = ".tooltip.top.in";
 			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
 
 			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMaximum);
 
 			// sometimes the tooltip will hide, and will lose the tooltip content
-			var resultHtml = Browser.Interactions.Javascript_IsFlaky("return $(\"" + tooltip + "\").html()") as string;
-			Console.WriteLine(@"resultHtml: {0}", resultHtml);
+			var resultHtml = Browser.Interactions.Javascript_IsFlaky("return $(\"" + tooltip + "\").html()");
 
 			if (fields.Preference != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));
 			if (fields.StartTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMinimum));

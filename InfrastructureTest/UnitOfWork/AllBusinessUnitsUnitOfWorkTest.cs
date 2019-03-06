@@ -18,7 +18,7 @@ using Teleopti.Wfm.Adherence.Configuration;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class AllBusinessUnitsUnitOfWorkTest : IExtendSystem
 	{		
 		public void Extend(IExtend extend, IocConfiguration configuration)
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public IRtaStateGroupRepository RepositoryNotValidatingUserLogon;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ISiteRepository SiteRepository;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public IDataSourceScope DataSource;
 		public IDataSourceForTenant DataSourceForTenant;
 		public ICurrentUnitOfWork CurrentUnitOfWork;

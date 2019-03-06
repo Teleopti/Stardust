@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 
 namespace Teleopti.Ccc.WinCodeTest
@@ -94,6 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(_schedulePresenterBase.ModifySchedulePart(_scheduleDays)).Return(true);
 				Expect.Call(()=>_scheduleViewBase.RefreshRangeForAgentPeriod(_person, dateTimePeriod));
 				Expect.Call(_person.IsAgent(_dateOnly)).Return(true);
+				Expect.Call(_scheduleViewBase.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 			}
 
 			using (_mock.Playback())

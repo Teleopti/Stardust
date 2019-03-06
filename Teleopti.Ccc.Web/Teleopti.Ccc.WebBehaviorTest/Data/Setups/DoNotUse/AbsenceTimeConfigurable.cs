@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var scenario = DefaultScenario.Scenario;
 			var scenarioId = scenario.Id.GetValueOrDefault();
 
-			var absenceRepository = new AbsenceRepository(unitOfWork);
+			var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 			var absence = absenceRepository.LoadAll().Single(a=>a.Name==Absence);
 
 			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyPersister(unitOfWork);

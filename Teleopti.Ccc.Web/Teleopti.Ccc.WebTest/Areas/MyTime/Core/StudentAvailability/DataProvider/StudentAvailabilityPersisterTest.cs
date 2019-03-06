@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		{
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 			var form = new StudentAvailabilityDayInput();
 			
 			target.Persist(form);
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		public void ShouldReturnFormResultModelOnAdd()
 		{
 			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new StudentAvailabilityPersister(new FakeStudentAvailabilityDayRepository(), loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(new FakeStudentAvailabilityDayRepository(), loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 			var form = new StudentAvailabilityDayInput();
 			
 			target.Persist(form).Should().Not.Be.Null();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var form = new StudentAvailabilityDayInput {Date = DateOnly.Today};
 			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 
 			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 			
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var form = new StudentAvailabilityDayInput { Date = DateOnly.Today };
 			var loggedOnUser = new FakeLoggedOnUser();
 			var studentAvailabilityDay = new StudentAvailabilityDay(loggedOnUser.CurrentUser(),DateOnly.Today, new List<IStudentAvailabilityRestriction> {new StudentAvailabilityRestriction()});
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 			
 			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 			
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 
 			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 
 			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 		{
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var loggedOnUser = new FakeLoggedOnUser();
-			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider())));
+			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, loggedOnUser, new StudentAvailabilityDayFormMapper(loggedOnUser), new StudentAvailabilityDayViewModelMapper(new DefaultScenarioForStudentAvailabilityScheduleProvider(new FakeScheduleProvider()), new BankHolidayCalendarViewModelMapper()));
 
 			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, loggedOnUser.CurrentUser())).Return(new List<IStudentAvailabilityDay>());
 

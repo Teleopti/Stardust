@@ -51,17 +51,17 @@ namespace Teleopti.Wfm.Administration.Core
 			using (var connection = new SqlConnection(applicationConnectionString))
 			{
 				connection.Open();
-				int monthToKeepSetting;
+				int daysToKeepLogins;
 				using (var selectCommand = new SqlCommand(
-					@"select [value] from PurgeSetting where [key] = 'MonthsToKeepPersonalData'", connection))
+					@"select [value] from PurgeSetting where [key] = 'DaysToKeepLoginsAfterTerminalDate'", connection))
 				{
-					monthToKeepSetting =(int)( selectCommand.ExecuteScalar( ) ?? 3);
+					daysToKeepLogins =(int)( selectCommand.ExecuteScalar( ) ?? 7);
 				}
 				
 				using (var selectCommand = new SqlCommand(
 					@"select Id from Person with (NOLOCK) where TerminalDate < @date and isdeleted = 0 ", connection))
 				{
-					selectCommand.Parameters.AddWithValue("date", _now.UtcDateTime().AddMonths(-monthToKeepSetting));
+					selectCommand.Parameters.AddWithValue("date", _now.UtcDateTime().AddDays(-daysToKeepLogins));
 
 					using (var reader = selectCommand.ExecuteReader())
 					{

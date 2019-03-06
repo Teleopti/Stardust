@@ -81,6 +81,7 @@ namespace SdkTestClientWin.Domain
 
 		public void LoadAllPersonPeriods(ServiceApplication sdkService)
 		{
+			_personPeriod.Clear();
 
 			var startDateOnlyDto = new DateOnlyDto();
 			var endDateOnlyDto = new DateOnlyDto();

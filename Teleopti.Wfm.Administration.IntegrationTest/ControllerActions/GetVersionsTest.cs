@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldReportOkIfSameVersion()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
-			var appBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			var appBuilder = new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 			var helper = new DatabaseHelper(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7, new WfmInstallationEnvironment());
 
 			TestPollutionCleaner.Clean("tenant", "appuser");

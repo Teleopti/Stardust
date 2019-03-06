@@ -21,8 +21,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["scorecard_name"] = scorecard.Name;
 				row["period"] = scorecard.Period.Id;
 				row["period_name"] = scorecard.Period.Name;
-				row["business_unit_code"] = scorecard.BusinessUnit.Id;
-				row["business_unit_name"] = scorecard.BusinessUnit.Name;
+				row["business_unit_code"] = scorecard.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				row["business_unit_name"] = scorecard.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				//row["business_unit_code"] = RaptorTransformerHelper.CurrentBusinessUnit.Id;
 				//row["business_unit_name"] = RaptorTransformerHelper.CurrentBusinessUnit.Description.Name;
 				row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.

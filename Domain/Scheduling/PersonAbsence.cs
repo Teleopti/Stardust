@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = _layer.Period.StartDateTime,
 				EndDateTime = _layer.Period.EndDateTime,
 				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = _layer.Period.StartDateTime,
 				EndDateTime = _layer.Period.EndDateTime,
 				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 
 			};
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
 				EndDateTime = Period.EndDateTime,
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 			};
 
 			AddEvent(requestPersonAbsenceRemovedEvent);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = newAbsencePeriod.StartDateTime,
 				EndDateTime = existingEndDateTime, // use existingEndDateTime so the entire existing period schedule is updated.
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{

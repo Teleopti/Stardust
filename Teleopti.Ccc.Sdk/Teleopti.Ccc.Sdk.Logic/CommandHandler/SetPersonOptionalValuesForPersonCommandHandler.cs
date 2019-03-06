@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
@@ -13,13 +14,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IOptionalColumnRepository _optionalColumnRepository;
         private readonly IPersonRepository _personRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-        public SetPersonOptionalValuesForPersonCommandHandler(IOptionalColumnRepository optionalColumnRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public SetPersonOptionalValuesForPersonCommandHandler(IOptionalColumnRepository optionalColumnRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentAuthorization currentAuthorization)
         {
             _optionalColumnRepository = optionalColumnRepository;
             _personRepository = personRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
-        }
+			_currentAuthorization = currentAuthorization;
+		}
 
         public void Handle(SetPersonOptionalValuesForPersonCommandDto command)
         {
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 var person = _personRepository.Get(command.PersonId);
                 if (person == null) throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "No person was found with the given Id ({0}).", command.PersonId));
-				person.VerifyCanBeModifiedByCurrentUser();
+				person.VerifyCanBeModifiedByCurrentUser(_currentAuthorization);
                 var columns = _optionalColumnRepository.GetOptionalColumns<Person>();
 
                 foreach (var optionalValueDto in command.OptionalValueCollection)

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 
 
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			_studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			_person = new Person();
-			target = new StudentAvailabilityDayViewModelMapper(_studentAvailabilityProvider);
+			target = new StudentAvailabilityDayViewModelMapper(_studentAvailabilityProvider, new BankHolidayCalendarViewModelMapper());
 		}
 
 		[Test]
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			var studentAvailabilityDay = new StudentAvailabilityDay(_person, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
 
-			var result = target.Map(studentAvailabilityDay);
+			var result = target.Map(studentAvailabilityDay, null);
 
 			result.Date.Should().Be(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			_studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(studentAvailabilityRestriction);
 
-			var result = target.Map(studentAvailabilityDay);
+			var result = target.Map(studentAvailabilityDay, null);
 
 			result.AvailableTimeSpan.Should().Be(studentAvailabilityRestriction.StartTimeLimitation.StartTimeString + " - " + studentAvailabilityRestriction.EndTimeLimitation.EndTimeString);
 		}
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			_studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(null);
 
-			var result = target.Map(studentAvailabilityDay);
+			var result = target.Map(studentAvailabilityDay, null);
 
 			result.AvailableTimeSpan.Should().Be.Empty();
 		}

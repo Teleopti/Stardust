@@ -38,21 +38,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			if (ShiftCategory != null)
 			{
-				var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
+				var shiftCategoryRepository = ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork);
 				var shiftCategory = shiftCategoryRepository.LoadAll().Single(b => b.Description.Name == ShiftCategory);
 				restriction.ShiftCategory = shiftCategory;
 			}
 
 			if (Dayoff != null)
 			{
-				var dayOffRepository = new DayOffTemplateRepository(unitOfWork);
+				var dayOffRepository = DayOffTemplateRepository.DONT_USE_CTOR2(unitOfWork);
 				var dayOffTemplate = dayOffRepository.LoadAll().Single(b => b.Description.Name == Dayoff);
 				restriction.DayOffTemplate = dayOffTemplate;
 			}
 
 			if (Absence != null)
 			{
-				var absenceRepository = new AbsenceRepository(unitOfWork);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 				var absence = absenceRepository.LoadAll().Single(b => b.Description.Name == Absence);
 				restriction.Absence = absence;
 			}

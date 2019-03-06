@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void loadSourceList(IUnitOfWork uow)
 		{
 			_sourceList.Clear();
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(uow);
 			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy().Where(a => a.IsOutboundActivity == false && !(a is IMasterActivity)).ToList());
 		}
 
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var activityRepository = new ActivityRepository(uow);
+				var activityRepository = ActivityRepository.DONT_USE_CTOR(uow);
 
 				foreach (var activity in (IList<IActivity>)_sourceList[GridType.Activity])
 				{
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_gridColumnHelper.AddFromClipboard(new ActivityRepository(uow));
+				_gridColumnHelper.AddFromClipboard(ActivityRepository.DONT_USE_CTOR(uow));
 			}
 			gridControlActivities.Invalidate();
 		}

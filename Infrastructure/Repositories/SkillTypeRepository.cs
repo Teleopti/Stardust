@@ -1,21 +1,26 @@
+using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class SkillTypeRepository : Repository<ISkillType>, ISkillTypeRepository
     {
+		public static SkillTypeRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new SkillTypeRepository(currentUnitOfWork, null, null);
+		}
 
-        public SkillTypeRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static SkillTypeRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new SkillTypeRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
 
-		public SkillTypeRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork, null, null)
+		public SkillTypeRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
     }

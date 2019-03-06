@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 										int resolution, 
 										IList<IMultiplicatorDefinitionSet> definitionSets,
 										IList<IRuleSetBag> shiftBags,
-										bool showUseSkills)
-			: this()
+										bool showUseSkills,
+										bool useRightToLeft)
+			: this(useRightToLeft)
 		{
 			_scheduleTags = scheduleTags;
 			_settingValue = settingValue;
@@ -219,11 +220,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			
 		}
 
-		public OvertimePreferencesDialog()
+		public OvertimePreferencesDialog(bool useRightToLeft)
 		{
 			InitializeComponent();
-			if (!DesignMode)
-				SetTexts();
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
 		}
 
 		public void SavePersonalSettings()
@@ -235,7 +242,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "GeneralSettings", _defaultOvertimeGeneralSettings);
+					PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_settingValue + "GeneralSettings", _defaultOvertimeGeneralSettings);
 					uow.PersistAll();
 
 				}
@@ -251,7 +258,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var settingRepository = new PersonalSettingDataRepository(uow);
+					var settingRepository = PersonalSettingDataRepository.DONT_USE_CTOR(uow);
 					_defaultOvertimeGeneralSettings = settingRepository.FindValueByKey(_settingValue + "GeneralSettings", new OvertimePreferencesGeneralPersonalSetting());
 				}
 			}

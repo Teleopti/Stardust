@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
@@ -15,15 +16,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IAbsenceRepository _absenceRepository;
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-        public DeletePersonAccountForPersonCommandHandler(ITraceableRefreshService traceableRefreshService, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public DeletePersonAccountForPersonCommandHandler(ITraceableRefreshService traceableRefreshService, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentAuthorization currentAuthorization)
         {
 	        _traceableRefreshService = traceableRefreshService;
 	        _personRepository = personRepository;
             _personAbsenceAccountRepository = personAbsenceAccountRepository;
             _absenceRepository = absenceRepository;
 	        _unitOfWorkFactory = unitOfWorkFactory;
-        }
+			_currentAuthorization = currentAuthorization;
+		}
 
 		public void Handle(DeletePersonAccountForPersonCommandDto command)
 		{
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 if (foundAbsence == null) throw new FaultException("Absence does not exist.");
                 var dateFrom = command.DateFrom.ToDateOnly();
 
-				foundPerson.VerifyCanBeModifiedByCurrentUser(dateFrom);
+				foundPerson.VerifyCanBeModifiedByCurrentUser(dateFrom,_currentAuthorization);
 
 	            var accounts = _personAbsenceAccountRepository.Find(foundPerson, foundAbsence);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);

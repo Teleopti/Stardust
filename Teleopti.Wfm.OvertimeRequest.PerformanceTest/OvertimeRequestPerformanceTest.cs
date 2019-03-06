@@ -82,7 +82,6 @@ namespace Teleopti.Wfm.OvertimeRequest.PerformanceTest
 			});
 		}
 
-		//[Test,Ignore("Waiting for a fast lane Build")]
 		[Test]
 		public void Run100Requests()
 		{
@@ -107,7 +106,6 @@ namespace Teleopti.Wfm.OvertimeRequest.PerformanceTest
 			});
 		}
 
-		//[Test,Ignore("Waiting for a fast lane Build")]
 		[Test]
 		public void Run100RequestsWithRequestPeriodSetting()
 		{

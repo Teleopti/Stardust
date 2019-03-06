@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
@@ -14,13 +15,17 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldPersistModel()
 		{
-			var state = new AgentStateReadModelForTest();
+			var state = new AgentStateReadModelForTest
+			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+			};
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
 				BusinessUnitId = state.BusinessUnitId,
 			});
@@ -48,7 +53,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 				AlarmColor = Color.Red.ToArgb(),
 			};
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = state.PersonId,
 				BusinessUnitId = state.BusinessUnitId,
@@ -72,12 +77,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var personId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				OutOfAdherenceStartTime = "2017-11-07 08:00".Utc(),
 			};
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = state.PersonId,
 			});
 			Target.UpdateState(state);
@@ -91,12 +98,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				Shift = new[]
 				{
@@ -122,18 +131,21 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				TeamId = teamId,
 			});
 
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				TeamId = teamId,
 				Shift = new[]
@@ -154,19 +166,22 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				TeamId = teamId,
 			});
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				TeamId = teamId,
 			});
 
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				TeamId = teamId,
 				Shift = Enumerable.Range(0, 100)
@@ -185,12 +200,15 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
+				
 				PersonId = personId,
 				SiteId = null,
 				SiteName = null,
@@ -225,6 +243,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var state = new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				OutOfAdherences = new[]
 				{
 					new AgentStateOutOfAdherenceReadModel
@@ -234,8 +253,9 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 					}
 				}
 			};
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = state.PersonId,
 			});
 
@@ -251,12 +271,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldUpdateOutOfAdherences()
 		{
 			var personId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				OutOfAdherences = new[]
 				{
@@ -297,13 +319,15 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldUpdateAlotOfOutOfAdherences()
 		{
 			var personId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				OutOfAdherences = Enumerable.Range(0, 59)
 					.Select(m => new AgentStateOutOfAdherenceReadModel
@@ -321,13 +345,15 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				StateGroupId = stateGroupId
 			});
@@ -340,18 +366,21 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				StateGroupId = null
 			});
 
 			Target.UpdateState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				StateGroupId = stateGroupId
 			});
@@ -366,8 +395,9 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 			});
 
@@ -397,7 +427,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 
-			Target.UpsertAssociation(new AssociationInfo()
+			Target.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = personId,
 				BusinessUnitId = businessUnitId,
@@ -419,13 +449,15 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId
 			});
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				EmploymentNumber = "abc"
 			});
@@ -438,8 +470,9 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				EmploymentNumber = "123"
 			});
@@ -452,8 +485,9 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				FirstName = "bill",
 				LastName = "gates"
@@ -468,15 +502,17 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldUpdateFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				FirstName = "ashley",
 				LastName = "andeen"
 			});
 
-			Target.UpsertAssociation(new AssociationInfoForTest
+			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				FirstName = "bill",
 				LastName = "gates"
@@ -492,7 +528,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.UpsertAssociation(new AssociationInfo
+			Target.UpsertAssociation(new Adherence.States.AssociationInfo
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -511,6 +547,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var siteId = Guid.NewGuid();
 			Target.UpsertAssociation(new AssociationInfo
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = personId,
 				SiteId = siteId,
 				SiteName = "london"

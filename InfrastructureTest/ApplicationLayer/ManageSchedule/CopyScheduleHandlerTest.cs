@@ -138,6 +138,79 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 		}
 
 		[Test]
+		public void ShouldMergeWhenTargetHasPersonAssignment()
+		{
+			AddDefaultTypesToRepositories();
+			Guid? existingId = Guid.Empty;
+			var targetCategory = new ShiftCategory("targetCategory");
+			var targetActivity = new Activity("targetActivity");
+			var targetAssignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
+			targetAssignment.SetShiftCategory(targetCategory);
+			targetAssignment.AddActivity(targetActivity, new TimePeriod(8, 15));
+
+			var sourceCategory = new ShiftCategory("sourceCategory");
+			var sourceActivity = new Activity("sourceActivity");
+			var sourceAssignment = new PersonAssignment(Person, SourceScenario, Period.StartDate);
+			sourceAssignment.SetShiftCategory(sourceCategory);
+			sourceAssignment.AddActivity(sourceActivity, new TimePeriod(8, 15));
+
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(targetCategory);
+				ActivityRepository.Add(targetActivity);
+				ScheduleStorage.Add(targetAssignment);
+
+				ShiftCategoryRepository.Add(sourceCategory);
+				ActivityRepository.Add(sourceActivity);
+				ScheduleStorage.Add(sourceAssignment);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				existingId = PersonAssignmentRepository.LoadAll().Single(x => x.BelongsToScenario(TargetScenario)).Id;
+			});
+
+			Target.Handle(createCopyEvent());
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = PersonAssignmentRepository.LoadAll().Single(x => x.BelongsToScenario(TargetScenario));
+				result.Id.Should().Be.EqualTo(existingId);
+				result.ShiftCategory.Description.Should().Be.EqualTo(sourceCategory.Description);
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldOverwriteAShiftInTargetScenarioWhenSourceIsEmpty()
+		{
+			AddDefaultTypesToRepositories();
+
+			var category = new ShiftCategory("Existing");
+			var activity = new Activity("Existing");
+			var assignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
+			assignment.SetShiftCategory(category);
+			assignment.AddActivity(activity, new TimePeriod(8, 15));
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(category);
+				ActivityRepository.Add(activity);
+				ScheduleStorage.Add(assignment);
+			});
+
+			Target.Handle(createCopyEvent());
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
+				result.ShiftLayers.Should().Be.Empty();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
 		public void ShouldMoveOneOfType([ValueSource(nameof(moveTypeTestCases))] MoveTestCase<CopyScheduleHandlerTest> testCase)
 		{
 			AddDefaultTypesToRepositories();
@@ -323,7 +396,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 				JobResultId = JobResultId,
 				LogOnBusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
 				TotalMessages = 1,
-				LogOnDatasource = DataSourceHelper.TenantName
+				LogOnDatasource = InfraTestConfigReader.TenantName()
 			};
 		}
 

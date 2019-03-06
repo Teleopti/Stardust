@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.First().TeamId.Should().Be.EqualTo(team.Id.Value);
 			result.First().SiteId.Should().Be.EqualTo(team.Site.Id.Value);
-			result.First().BusinessUnitId.Should().Be.EqualTo(team.Site.BusinessUnit.Id.Value);
+			result.First().BusinessUnitId.Should().Be.EqualTo(team.Site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value);
 		}
 
 		private IPerson persistPerson(DateOnly startDate, ITeam team)
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("pageId", Guid.NewGuid())
 				.ExecuteUpdate();
 
-			return new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null).Get(person1.Id.GetValueOrDefault());
+			return PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null).Get(person1.Id.GetValueOrDefault());
 		}
 	}
 }

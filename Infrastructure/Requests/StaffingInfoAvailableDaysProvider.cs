@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
+﻿using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Infrastructure.Requests
 {

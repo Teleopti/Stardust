@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (Team != null)
 			{
-				team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
+				team = TeamRepository.DONT_USE_CTOR(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
 			}
 
 			PlanningGroup = new PlanningGroup {Name = PlanningGroupName};

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
             target = new OverviewPresenter(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
-                                      SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
+                                      SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer(), new FakeTimeZoneGuard());
         }
 
         [Test]

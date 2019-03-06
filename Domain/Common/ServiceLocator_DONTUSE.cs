@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Common
 		public INow Now;
 		public ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		public ICurrentAuthorization CurrentAuthorization;
-		public ITimeZoneGuard TimeZoneGuard;
 	}
 
 	public class ServiceLocator_DONTUSE
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
 				LoggedOnUserIsPerson = new LoggedOnUserIsPerson(Security.Principal.CurrentTeleoptiPrincipal.Make()),
 				Now = new Now(),
 				CurrentTeleoptiPrincipal = Security.Principal.CurrentTeleoptiPrincipal.Make(),
-				CurrentAuthorization = Security.Principal.CurrentAuthorization.Make(),
-				TimeZoneGuard = new TimeZoneGuard(),
+				CurrentAuthorization = Security.Principal.CurrentAuthorization.Make()
 			});
 		}
 
@@ -65,8 +63,6 @@ namespace Teleopti.Ccc.Domain.Common
 		public static INow Now => Instance.current().Now;
 		public static ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal => Instance.current()?.CurrentTeleoptiPrincipal;
 		public static ICurrentAuthorization CurrentAuthorization => Instance.current().CurrentAuthorization;
-		[Obsolete("DONT USE!")]
-		public static ITimeZoneGuard TimeZoneGuard_DONOTCALLTHIS_JUSTHERETEMP_FOR_DESKTOP => Instance.current().TimeZoneGuard;
 	}
 
 	public class ServiceLocatorNotAllowedException : Exception

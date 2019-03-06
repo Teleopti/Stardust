@@ -127,8 +127,6 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
-			Console.WriteLine(JsonConvert.SerializeObject(result.OutOfAdherences()));
-
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-08 08:15".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-08 08:45".Utc());
 		}

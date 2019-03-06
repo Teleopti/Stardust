@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (!gamificationSettingRuleWithDifferentThresholdControl.Value.isValidValue) return;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repo = new GamificationSettingRepository(uow);
+				var repo = GamificationSettingRepository.DONT_USE_CTOR(uow);
 
 				foreach (var settingView in _gamificationSettingListToBeDeleted)
 				{
@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (Disposing) return;
 			using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var gamificationSettingRepo = new GamificationSettingRepository(myUow);
+				var gamificationSettingRepo = GamificationSettingRepository.DONT_USE_CTOR(myUow);
 				var gamificationSettings = gamificationSettingRepo.FindAllGamificationSettingsSortedByDescription().ToList();
 
 				foreach (var setting in gamificationSettings)
@@ -530,8 +530,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(myUow);
-					var agentBadgeWithRankTransactionRepository = new AgentBadgeWithRankTransactionRepository(myUow);
+					var agentBadgeTransactionRepository = AgentBadgeTransactionRepository.DONT_USE_CTOR(myUow);
+					var agentBadgeWithRankTransactionRepository = AgentBadgeWithRankTransactionRepository.DONT_USE_CTOR(myUow);
 					agentBadgeTransactionRepository.ResetAgentBadges();
 					agentBadgeWithRankTransactionRepository.ResetAgentBadges();
 					myUow.PersistAll();

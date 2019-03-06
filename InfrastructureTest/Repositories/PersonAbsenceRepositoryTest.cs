@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personAbsence = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(personAbsence);
-			new PersonRepository(CurrUnitOfWork, null, null).Remove(personAbsence.Person);
+			PersonRepository.DONT_USE_CTOR(CurrUnitOfWork, null, null).Remove(personAbsence.Person);
 			PersistAndRemoveFromUnitOfWork(personAbsence.Person);
 
 			Assert.AreEqual(0, new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2111, 1, 1), defaultScenario).Count);
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod);
 			PersistAndRemoveFromUnitOfWork(agent);
 
-			var buWithAgentScheduled = team.Site.BusinessUnit;
+			var buWithAgentScheduled = team.Site.GetOrFillWithBusinessUnit_DONTUSE();
 
 			var scenario = new Scenario("scenario");
 			scenario.SetBusinessUnit(buWithAgentScheduled);

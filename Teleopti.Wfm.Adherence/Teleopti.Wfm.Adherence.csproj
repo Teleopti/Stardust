@@ -160,6 +160,7 @@
     <Compile Include="Historical\HistoricalAdherenceDate.cs" />
     <Compile Include="Historical\HistoricalAdherenceViewModel.cs" />
     <Compile Include="Historical\HistoricalAdherenceViewModelBuilder.cs" />
+    <Compile Include="Historical\HistoricalAdherenceViewModelBuilderAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\HistoricalOverviewReadModelMaintainer.cs" />
     <Compile Include="Historical\HistoricalOverviewViewModelBuilder.cs" />
     <Compile Include="Historical\Infrastructure\HistoricalOverviewReadModelPersister.cs" />

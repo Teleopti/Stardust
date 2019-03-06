@@ -21,7 +21,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
@@ -35,13 +34,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime, IUndoRedoContainer undoRedoContainer)
-			: base(grid)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
+			: base(grid, timeZoneGuard)
 		{
 			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
 
 			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
-			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer);
+			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard);
 
 			_workShiftWorkTime = workShiftWorkTime;
 
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(restrictionCombiner);
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
-			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker, TimeZoneGuard);
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 
@@ -136,7 +135,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 					schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 
-			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.Zero, preferenceNightRestChecker);
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.Zero, preferenceNightRestChecker, TimeZoneGuard);
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 
@@ -288,7 +287,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				return;
 
 			var options = new PasteOptions { Preference = true, StudentAvailability = true };
-			var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuardForDesktop.Instance_DONTUSE);
+			var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuard);
 			undoRedo.CreateBatch(Resources.UndoRedoPaste);
 			IList<IScheduleDay> pasteList =
 							   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);

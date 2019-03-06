@@ -152,9 +152,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 				HasEditSiteOpenHoursPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours)
 			};
 
-			return _toggleManager.IsEnabled(Toggles.WFM_Request_View_Permissions_77731)
-				? Json(permissions)
-				: Json(new RequestsPermissonsViewModel());
+			return Json(permissions);
 		}
 	}
 }

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(activity2);
             PersistAndRemoveFromUnitOfWork(activity3);
 
-            ActivityRepository rep = new ActivityRepository(UnitOfWork);
+            ActivityRepository rep = ActivityRepository.DONT_USE_CTOR(UnitOfWork);
             IList<IActivity> lst = rep.LoadAllSortByName();
 
             Assert.AreEqual("aa",lst[0].Description.Name);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             activity.AllowOverwrite = true;
 
             PersistAndRemoveFromUnitOfWork(activity);
-            IActivity loadedAbctivity = new ActivityRepository(UnitOfWork).Load(activity.Id.Value);
+            IActivity loadedAbctivity = ActivityRepository.DONT_USE_CTOR(UnitOfWork).Load(activity.Id.Value);
             Assert.AreEqual(true, loadedAbctivity.InPaidTime);
             Assert.AreEqual(true, loadedAbctivity.InWorkTime);
 			Assert.AreEqual("payrollcode007", loadedAbctivity.PayrollCode);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IActivity> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ActivityRepository(currentUnitOfWork);
+            return ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
         }
     }
 }

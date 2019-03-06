@@ -44,12 +44,12 @@
 						  timezone="vm.currentTimezone"></view-changer>
 
 			<timezone-picker class="timezone-picker"
-							 ng-if="!vm.isLoading"
+							 is-disabled="vm.isLoading"
 							 avaliable-timezones="vm.avaliableTimezones"
 							 ng-model="vm.currentTimezone"
 							 ng-change="vm.changeTimezone()"></timezone-picker>
 
-			<md-switch  ng-model="vm.staffingEnabled"
+			<md-switch ng-model="vm.staffingEnabled"
 					   ng-change="vm.showStaffing()">
 				<span translate>ShowStaffing</span>
 			</md-switch>
@@ -92,14 +92,23 @@
 				</div>
 
 				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-				<schedule-table ng-show="vm.scheduleFullyLoaded"
-								select-mode="vm.scheduleTableSelectMode"
+				<schedule-table ng-if="!vm.useScheuleList"
+								ng-show="vm.scheduleFullyLoaded"
 								selected-date="vm.scheduleDate"
 								show-warnings="vm.currentSettings.validateWarningEnabled"
 								selected-timezone="vm.currentTimezone"
 								pagination-options="vm.paginationOptions"
 								selected-sort-option="vm.sortOption"
-								table-style="vm.scheduleTableBodyStyle" />
+								table-style="vm.scheduleTableBodyStyle"></schedule-table>
+
+				<schedule-list ng-if="vm.useScheuleList"
+							   ng-show="vm.scheduleFullyLoaded"
+							   selected-date="vm.scheduleDate"
+							   show-warnings="vm.currentSettings.validateWarningEnabled"
+							   selected-timezone="vm.currentTimezone"
+							   pagination-options="vm.paginationOptions"
+							   selected-sort-option="vm.sortOption"
+							   schedule-body-height="vm.scheduleBodyHeight"></schedule-list>
 			</div>
 
 			<teamschedule-command-container date="vm.scheduleDate"
@@ -116,12 +125,12 @@
 		</div>
 
 		<div class="teamschedule-footer">
-			<div ng-if="vm.commandPanelClosed()">
-				<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
-					<a ng-href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
-				</div>
-				<div class="select-all" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
-					<a ng-href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+			<div>
+				<div class="select-all">
+					<button class="wfm-btn wfm-btn-invis-default"
+					   ng-show="vm.commandPanelClosed() && vm.selectAllVisible()"
+					   ng-click="vm.toggleSelectAll()"
+					   ng-bind="(vm.hasSelectedAllPeopleInEveryPage ? 'UnselectAllPeopleInEveryPage' : 'SelectAllPeopleInEveryPage') | translate"></button>
 				</div>
 			</div>
 

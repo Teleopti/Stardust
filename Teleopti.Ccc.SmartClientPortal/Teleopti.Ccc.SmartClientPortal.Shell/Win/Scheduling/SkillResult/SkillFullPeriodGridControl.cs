@@ -2,6 +2,7 @@
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
@@ -21,11 +22,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         
 		private readonly SkillFullPeriodGridControlPresenter _presenter;
 
-        public SkillFullPeriodGridControl()
+        public SkillFullPeriodGridControl(ITimeZoneGuard timeZoneGuard)
         {
             initializeComponent();
             initializeGrid();
-            InitializeBase(settingName);
+            InitializeBase(settingName, timeZoneGuard);
            
 			_presenter = new SkillFullPeriodGridControlPresenter(this);
         }
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             e.Handled = true;
         }
 
-        public void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder)
+		public void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder)
         {
 			if (skill == null || dates == null) return;
 
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		        new RowManagerScheduler<SkillFullPeriodGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>>(this,
 		                                                                                                               new List<IntervalDefinition>(),
 		                                                                                                               15,
-		                                                                                                               schedulerStateHolder)
+		                                                                                                               schedulerStateHolder, TimeZoneGuard)
 			        {BaseDate = baseDate.Date};
 
 	        SkillFullPeriodGridRow gridRow;

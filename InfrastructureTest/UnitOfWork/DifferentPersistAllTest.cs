@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 PersistAndRemoveFromUnitOfWork(ass.Scenario);
                 PersistAndRemoveFromUnitOfWork(ass.ShiftCategory);
                 PersistAndRemoveFromUnitOfWork(ass.MainActivities().First().Payload);
-                new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
+                PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(ass);
                 UnitOfWork.PersistAll();
                 ass.ClearMainActivities();
                 IEnumerable<IRootChangeInfo> changes = UnitOfWork.PersistAll();

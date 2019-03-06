@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			addOvertimeEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.GetValueOrDefault());
 			addOvertimeEvent.InitiatorId.Should().Be.EqualTo(command.TrackedCommandInfo.OperatedPersonId);
 			addOvertimeEvent.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
-			addOvertimeEvent.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
+			addOvertimeEvent.LogOnBusinessUnitId.Should().Be(scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 		}
 
 		[Test]

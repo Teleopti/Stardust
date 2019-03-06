@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
@@ -317,6 +318,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 
 			isolate.UseTestDouble<FakeGetAllWorkerNodes>().For<IGetAllWorkerNodes>();
+			isolate.UseTestDouble<FakeTimeSinceLastEtlPing>().For<ITimeSinceLastEtlPing>();
 			
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
 

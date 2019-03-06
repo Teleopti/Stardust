@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			var user1 = PersonFactory.CreatePerson();
 			user1.SetName(new Name("new", "name"));
-			new PersonRepository(new ThisUnitOfWork(uow1), null, null).Add(user1);
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1), null, null).Add(user1);
 			uow1.PersistAll();
 			id = user1.Id.Value;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				//client 2
 				var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-				var user2 = new PersonRepository(new ThisUnitOfWork(uow2), null, null).Load(id);
+				var user2 = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow2), null, null).Load(id);
 				user2.SetName(new Name("change", "name"));
 				uow2.PersistAll();
 				uow2.Dispose();
@@ -59,20 +59,20 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			//setup
 			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			var site = SiteFactory.CreateSimpleSite();
-			new SiteRepository(new ThisUnitOfWork(uow1)).Add(site);
+			SiteRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(site);
 			uow1.PersistAll();
 			var team = TeamFactory.CreateSimpleTeam(".");
 			team.Site = site;
-			new TeamRepository(new ThisUnitOfWork(uow1)).Add(team);
+			TeamRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(team);
 			uow1.PersistAll();
 			var partTimePercentage = new PartTimePercentage(".");
-			new PartTimePercentageRepository(new ThisUnitOfWork(uow1)).Add(partTimePercentage);
+			PartTimePercentageRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(partTimePercentage);
 			uow1.PersistAll();
 			var contract = new Contract(".");
-			new ContractRepository(new ThisUnitOfWork(uow1)).Add(contract);
+			ContractRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1), null, null).Add(contract);
 			uow1.PersistAll();
 			var contratSchedule = new ContractSchedule(".");
-			new ContractScheduleRepository(new ThisUnitOfWork(uow1)).Add(contratSchedule);
+			ContractScheduleRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1)).Add(contratSchedule);
 			uow1.PersistAll();
 
 			//client 1
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			period.PersonContract = new PersonContract(contract, partTimePercentage, contratSchedule);
 			period.Team = team;
 			user1.AddPersonPeriod(period);
-			new PersonRepository(new ThisUnitOfWork(uow1), null, null).Add(user1);
+			PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow1), null, null).Add(user1);
 			uow1.PersistAll();
 			id = user1.Id.Value;
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				//client 2
 				var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-				var user2 = new PersonRepository(new ThisUnitOfWork(uow2), null, null).Load(id);
+				var user2 = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow2), null, null).Load(id);
 				user2.Period("2016-04-13".Date()).Note = "a note";
 				uow2.PersistAll();
 				uow2.Dispose();

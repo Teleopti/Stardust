@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             masterActivity.DisplayColor = Color.DeepPink;
             masterActivity.Description = new Description("NYMASTER", "NM");
             PersistAndRemoveFromUnitOfWork(masterActivity);
-            IMasterActivity loadedAbctivity = new MasterActivityRepository(UnitOfWork).Load(masterActivity.Id.Value);
+            IMasterActivity loadedAbctivity = MasterActivityRepository.DONT_USE_CTOR(UnitOfWork).Load(masterActivity.Id.Value);
             Assert.That(loadedAbctivity.DisplayColor.ToArgb(), Is.EqualTo(Color.DeepPink.ToArgb()));
             Assert.That(loadedAbctivity.Description.Name, Is.EqualTo("NYMASTER"));
             Assert.That(loadedAbctivity.Description.ShortName, Is.EqualTo("NM"));
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IMasterActivity> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MasterActivityRepository(currentUnitOfWork.Current());
+            return MasterActivityRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
     }
 }

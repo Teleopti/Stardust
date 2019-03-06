@@ -4,6 +4,8 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -12,14 +14,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
 	public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository, IWriteSideRepository<IAbsence>, IProxyForId<IAbsence>
     {
-        public AbsenceRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
+		public static AbsenceRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new AbsenceRepository(currentUnitOfWork, null, null);
+		}
 
-	    public AbsenceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
+		public static AbsenceRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new AbsenceRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public AbsenceRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy) 
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
 	    }
 

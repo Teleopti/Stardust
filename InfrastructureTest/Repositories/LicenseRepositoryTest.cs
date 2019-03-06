@@ -53,12 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<ILicense> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new FakeRepositoryThatAllowsOldAddRange(currentUnitOfWork);
-        }
-
-        private class FakeRepositoryThatAllowsOldAddRange : LicenseRepository
-        {
-            public FakeRepositoryThatAllowsOldAddRange(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork) {}
+            return LicenseRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
         #endregion
@@ -67,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyMultipleLicensesNotAllowed()
         {
-            ILicenseRepository licenseRepository = new LicenseRepository(UnitOfWork);
+            ILicenseRepository licenseRepository = LicenseRepository.DONT_USE_CTOR(UnitOfWork);
             ILicense license = new License { XmlString = "<foo></foo>" };
             licenseRepository.Add(license);
             Session.Flush();
@@ -81,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyMultipleLicensesNotAllowedWithAddRange()
         {
-            ILicenseRepository licenseRepository = new LicenseRepository(UnitOfWork);
+            ILicenseRepository licenseRepository = LicenseRepository.DONT_USE_CTOR(UnitOfWork);
             ILicense license = new License { XmlString = "<foo></foo>" };
             licenseRepository.Add(license);
             Session.Flush();
@@ -95,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCreateInstanceWithUnitOfWorkFactory()
         {
-            var repository = new LicenseRepository(CurrUnitOfWork);
+            var repository = LicenseRepository.DONT_USE_CTOR(CurrUnitOfWork);
             Assert.IsNotNull(repository);
         }
         #endregion
@@ -104,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[TestCase(true, ExpectedResult = 0)]
 		public int ShouldGetActiveAgents(bool deletedBusinessUnit)
 		{
-			var licenseRepository = new LicenseRepository(UnitOfWork);
+			var licenseRepository = LicenseRepository.DONT_USE_CTOR(UnitOfWork);
 			var person = PersonFactory.CreatePerson();
 			var team = TeamFactory.CreateSimpleTeam("_");
 			var site = SiteFactory.CreateSimpleSite();
@@ -117,9 +112,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			if (deletedBusinessUnit)
 			{
-				((IDeleteTag)site.BusinessUnit).SetDeleted();
+				((IDeleteTag)site.GetOrFillWithBusinessUnit_DONTUSE()).SetDeleted();
 			}
-			PersistAndRemoveFromUnitOfWork(site.BusinessUnit);
+			PersistAndRemoveFromUnitOfWork(site.GetOrFillWithBusinessUnit_DONTUSE());
 			PersistAndRemoveFromUnitOfWork(personContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
 			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);

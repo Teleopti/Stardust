@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			using (_disableDeletedFilter.Disable())
 			{
-				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
+				var scheduleTags = ScheduleTagRepository.DONT_USE_CTOR(uow).LoadAll().OrderBy(t => t.Description).ToList();
 				scheduleTags.Insert(0, NullScheduleTag.Instance);
 				ScheduleTags = scheduleTags;
 
-				var globalSettingDataRepository = new GlobalSettingDataRepository(uow);
+				var globalSettingDataRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 				CommonNameDescriptionScheduleExport = globalSettingDataRepository.FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
 				DefaultSegmentLength = globalSettingDataRepository.FindValueByKey("DefaultSegment", new DefaultSegment()).SegmentLength;
-				WorkflowControlSets = new WorkflowControlSetRepository(uow).LoadAll();
+				WorkflowControlSets = WorkflowControlSetRepository.DONT_USE_CTOR(uow).LoadAll();
 			}
 
 			ModifiedWorkflowControlSets = new List<IWorkflowControlSet>();

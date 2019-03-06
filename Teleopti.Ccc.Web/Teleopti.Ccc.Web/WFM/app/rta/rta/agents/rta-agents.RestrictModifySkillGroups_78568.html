@@ -86,7 +86,6 @@
 								<md-checkbox
 									style="display: inline-block"
 									ng-checked="site.isChecked"
-									aria-label="Checkbox"
 									ng-class="site.isMarked ? 'marked' : ''"
 									ng-click="site.toggle()"
 								>
@@ -94,7 +93,7 @@
 								</md-checkbox>
 							</div>
 							<div style="margin-left: 50px" ng-show="site.isExpanded" ng-repeat="team in site.Teams">
-								<md-checkbox ng-checked="team.isChecked" aria-label="Checkbox" ng-click="team.toggle()">
+								<md-checkbox ng-checked="team.isChecked" ng-click="team.toggle()">
 									<span>{{ team.Name }}</span>
 								</md-checkbox>
 							</div>
@@ -223,7 +222,7 @@
 						ng-if="vm.open"
 						outside-click="vm.open = false"
 					>
-						<md-checkbox ng-repeat="state in vm.states" aria-label="Checkbox" ng-model="state.Selected">
+						<md-checkbox ng-repeat="state in vm.states" ng-model="state.Selected">
 							{{ state.Name }}
 						</md-checkbox>
 					</div>

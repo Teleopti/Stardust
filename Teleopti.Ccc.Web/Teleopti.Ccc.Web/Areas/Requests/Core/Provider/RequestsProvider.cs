@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var checkDate = new DateOnly(request.Request.Period.StartDateTimeLocal(requestPerson.PermissionInformation.DefaultTimeZone()));
 			ITeam team = requestPerson.MyTeam(checkDate);
 			ISite site = team?.Site;
-			IBusinessUnit bu = site?.BusinessUnit;
+			IBusinessUnit bu = site.GetOrFillWithBusinessUnit_DONTUSE();
 			
 			var authorizeOrganisationDetail = new PersonAuthorization
 			{

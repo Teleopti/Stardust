@@ -152,6 +152,7 @@
     <Compile Include="CommandHandler\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\BusinessRulesForPersonalAccountUpdateTest.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\CancelPersonEmploymentChangeCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\CancelOvertimeCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ChangePersonBasicDataCommandHandlerTest.cs" />

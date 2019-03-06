@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
@@ -81,7 +82,8 @@ namespace Teleopti.Ccc.WinCodeTest
 			_dialog.Stub(x => x.SelectedPeriod).Return(period);
 			_schedulePresenterBase.Stub(x => x.LockManager).Return(_gridlockManager);
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
-			
+			_viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+
 			_target.Execute();
 
 			_schedulePart.AssertWasCalled(x => x.CreateAndAddAbsence(null), o => o.IgnoreArguments().Repeat.Once());
@@ -98,6 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			_schedulePresenterBase.Stub(x => x.LockManager).Return(_gridlockManager);
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
 			_schedulePresenterBase.Stub(x =>x.ModifySchedulePart(_selectedSchedules)).Return(false);
+			_viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
 			_target.Execute();
 
@@ -118,6 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			schedulePart2.Stub(x => x.Person).Return(_person);
 			schedulePart2.Stub(x => x.Period).Return(new DateTimePeriod(_date.AddDays(1), _date.AddDays(2)));
 			schedulePart2.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnlyPeriod.StartDate.AddDays(1), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			_viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
 			_target.Execute();
 		}
@@ -134,6 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			_dialog.Stub(x => x.SelectedPeriod).Return(period);
 			_schedulePresenterBase.Stub(x => x.LockManager).Return(gridLockManager);
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
+			_viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
 			_target.Execute();
 
@@ -153,6 +158,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			_authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(false);
 			_schedulePresenterBase.Stub(x => x.LockManager).Return(gridLockManager);
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
+			_viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard());
 
 			_target.Execute();
 
@@ -178,7 +184,8 @@ namespace Teleopti.Ccc.WinCodeTest
 			schedulePart2.Stub(x => x.Person).Return(_person);
 			schedulePart2.Stub(x => x.Period).Return(new DateTimePeriod(_date.AddDays(1), _date.AddDays(2)));
 			schedulePart2.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnlyPeriod.StartDate.AddDays(1), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			
+			_viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard());
+
 			_target.Execute();
 
 			_schedulePart.AssertWasCalled(x => x.CreateAndAddAbsence(null),
@@ -205,6 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest
 						.Constraints(Rhino.Mocks.Constraints.Is.Anything(),
 						new Rhino.Mocks.Constraints.PredicateConstraint<ISetupDateTimePeriod>(period => period.Period == defaultPeriod),
 						Rhino.Mocks.Constraints.Is.Anything()).Return(dialog);
+			viewBase.Stub(x => x.TimeZoneGuard).Return(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 
 			dialog.Stub(x => x.Result).Return(false);
 

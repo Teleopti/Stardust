@@ -4,7 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
 import { configureTestSuite, MockComponent, PageObject } from '@wfm/test';
-import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
+import {
+	NzButtonModule,
+	NzFormModule,
+	NzInputModule,
+	NzTableModule,
+	NzToolTipModule,
+	NzSpinModule
+} from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import {
@@ -19,6 +26,7 @@ import {
 	WorkspaceService
 } from '../../shared';
 import { SearchPageComponent } from './search-page.component';
+import { TogglesService } from '../../../core/services';
 
 describe('SearchPageComponent', () => {
 	let component: SearchPageComponent;
@@ -43,7 +51,8 @@ describe('SearchPageComponent', () => {
 				NzButtonModule,
 				NzTableModule,
 				NzInputModule,
-				NzToolTipModule
+				NzToolTipModule,
+				NzSpinModule
 			],
 			providers: [
 				fakeBackendProvider,
@@ -51,7 +60,8 @@ describe('SearchPageComponent', () => {
 				SearchService,
 				SearchOverridesService,
 				{ provide: NavigationService, useValue: {} },
-				RolesService
+				RolesService,
+				TogglesService
 			]
 		}).compileComponents();
 	}));

@@ -48,12 +48,12 @@
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\packages\MbCache.2.15.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.18.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\packages\MbCache.2.15.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.18.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -200,9 +200,12 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
     <Compile Include="Historical\Unit\AdjustAdherence\AdjustAdherenceToNeutralCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\AdjustedToNeutralAdherencesTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\NeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageAdjustToNeutralTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedNeutralAdherenceTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\AdherencesTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\OutOfAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ChangesTest.cs" />
@@ -211,7 +214,7 @@
     <Compile Include="Historical\Unit\AgentAdherenceDay\NotApplicableEventsTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PeriodTest.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedAdherenceTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedOutOfAdherenceTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ResolutionTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceBelongsToDateCommandHandlerTest.cs" />
@@ -220,8 +223,10 @@
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\Parallelize.cs" />
     <Compile Include="Historical\Unit\RtaEventStoreUpgradeTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\AdjustedPeriodsViewModelBuilder\AdjustedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceDate\DateTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdjustedToNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ApprovedPeriodsTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
@@ -231,7 +236,8 @@
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />
-    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedAdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedOutOfAdherencesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />

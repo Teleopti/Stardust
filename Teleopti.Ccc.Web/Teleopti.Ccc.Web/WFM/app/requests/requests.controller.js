@@ -50,7 +50,6 @@
 		vm.overtimeRequestsLicenseAvailable = false;
 		vm.shiftTradeRequestsLicenseAvailable = false;
 		vm.teamNameMap = {};
-		vm.showFeedbackLink = toggleService.WFM_Request_Show_Feedback_Link_77733;
 
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',

@@ -19,116 +19,136 @@
 
 	<nz-tabset>
 		<nz-tab nzTitle="{{ 'Overview' | translate }}">
-			<div nz-row style="margin-bottom: 15px">
-				<div class="wfm-chip-wrap">
-					<span class="wfm-chip" style="cursor: default">
-						<span class="scheduled-agents chip-handle"> {{ scheduledAgents }}/{{ totalAgents }} </span>
-						<span class="chip-text">{{ 'ScheduledAgents' | translate }}</span>
-					</span>
+			<nz-spin nzSize="large" [nzSpinning]="loadingLastResult">
+				<div nz-row style="margin-bottom: 15px">
+					<div class="wfm-chip-wrap">
+						<span class="wfm-chip" style="cursor: default">
+							<span class="scheduled-agents chip-handle"> {{ scheduledAgents }}/{{ totalAgents }} </span>
+							<span class="chip-text">{{ 'ScheduledAgents' | translate }}</span>
+						</span>
+					</div>
 				</div>
-			</div>
-
-			<div *ngIf="skills&&skills.length>0" style="overflow: auto">
-				<h2>Scheduled skills heatmap</h2>
-	
-				<div nz-row>
-					<span style="margin-left: 20px" nz-col [nzSpan]="8">
-						<nz-input-group
-								[nzSuffix]="suffixSkillMapTemplate"
-								[nzPrefix]="prefixSkillMapTemplate"
-						>
-							<input
-									type="text"
-									nz-input
-									placeholder="Filter skill"
-									[formControl]="skillFilterControl"
-							/>
-						</nz-input-group>
+			</nz-spin>
+			<div style="overflow: auto" *ngIf="skills&&skills.length>0">
+					<h2>Scheduled skills heatmap</h2>
+					<div>Updated: {{lastUpdated}}</div>
 		
-						<ng-template #prefixSkillMapTemplate><i nz-icon type="filter"></i></ng-template>
-						<ng-template #suffixSkillMapTemplate><i
-								nz-icon
-								type="close-circle"
-								(click)="clearSkillMapFilter()"
-								*ngIf="skillFilterControl.value"
-						></i
-						></ng-template>
-					</span>
-				</div>
-				
-				<div class="legend" style="margin-bottom: 5px">
-					<table>
-						<tbody>
-						<tr>
-							<td colspan="43" style="text-align: center">{{ 'RelativeDifference' | translate }}</td>
-						</tr>
-						<tr >
-							<td>-100%</td>
-							<td *ngFor="let legend of legends">
-								<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
-							</td>
-							<td>100%</td>
-							<td style="padding-left:20px"><div class="legend-box heatmap-closed"></div></td>
-							<td style="padding-left: 5px">
-								{{'Closed' | translate}}
-							</td>
-							<td style="padding-left:100px" colspan="20">
-									{{ 'ShowNumbers' | translate}}
-												<nz-switch [(ngModel)]="showNumbers"></nz-switch>
-							</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-				
-				<div class="heatmap-div" *ngIf="filteredSkills&&filteredSkills.length>0">
-					<nz-table nzSize="small"
-							  [nzPageSize]="20" [nzHideOnSinglePage]="true" #nzTable [nzData]="filteredSkills">
-						<thead>
+					<div nz-row style="margin-top: 10px">
+						<span nz-col [nzSpan]="8">
+							<nz-input-group
+									[nzSuffix]="suffixSkillMapTemplate"
+									[nzPrefix]="prefixSkillMapTemplate"
+							>
+								<input
+										type="text"
+										nz-input
+										placeholder="Filter skill"
+										[formControl]="skillFilterControl"
+								/>
+							</nz-input-group>
+			
+							<ng-template #prefixSkillMapTemplate><i nz-icon type="filter"></i></ng-template>
+							<ng-template #suffixSkillMapTemplate><i
+									nz-icon
+									type="close-circle"
+									(click)="clearSkillMapFilter()"
+									*ngIf="skillFilterControl.value"
+							></i
+							></ng-template>
+						</span>
+					</div>
+					
+					<div class="legend" style="margin-bottom: 5px">
+						<table>
+							<tbody>
 							<tr>
-								<th></th>
-								<th *ngFor ="let month of months" [attr.colspan]="month.Count">
-									<p class="heatmap-month">{{ month.Name }}</p>
-								</th>
+								<td colspan="43" style="text-align: center">{{ 'RelativeDifference' | translate }}</td>
 							</tr>
-							<tr>
-								<th nzShowSort [(nzSort)]="sortMap.SkillName" (nzSortChange)="sort('SkillName',$event)">{{ 'Skill' | translate }}</th>
-								<th class="heatmap-date-header" *ngFor ="let datenode of nzTable.data[0].SkillDetails">
-									<p class="heatmap-date" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngFor="let subnode of nzTable.data">
-								<td class="skill-name">{{ subnode.SkillName }}</td>
-								<td class="heatmap-day"
-									*ngFor="let node of subnode.SkillDetails"
-									[ngClass]="{ 
-									'worst-under-staff-day': worstUnderStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent, 
-									'worst-over-staff-day': worstOverStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent,
-									'heatmap-saturday': node.saturday, 
-									'heatmap-sunday': node.sunday
-									 }"
-								>
-									<div nz-tooltip nzTitle="{{node.tooltip}}"
-										class="heatmap-box"
-										[ngClass]="{ 'heatmap-closed': node.ColorId===4}"
-										[style.background-color]="node.bgcolor"
-									>
-										<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">
-											{{node.DisplayedPercent}}
-										</span>
-									</div>
+							<tr >
+								<td>-100%</td>
+								<td *ngFor="let legend of legends">
+									<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
+								</td>
+								<td>100%</td>
+								<td style="padding-left:20px"><div class="legend-box heatmap-closed"></div></td>
+								<td style="padding-left: 5px">
+									{{'Closed' | translate}}
+								</td>
+								<td style="padding-left:100px" colspan="20">
+										{{ 'ShowNumbers' | translate}}
+													<nz-switch [(ngModel)]="showNumbers"></nz-switch>
 								</td>
 							</tr>
-						</tbody>
-					</nz-table>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="heatmap-div" *ngIf="filteredSkills&&filteredSkills.length>0">
+						<nz-table nzSize="small"
+								  [nzPageSize]="20" [nzHideOnSinglePage]="true" #nzTable [nzData]="filteredSkills">
+							<thead>
+								<tr>
+									<th></th>
+									<th *ngFor ="let month of months" [attr.colspan]="month.Count">
+										<p class="heatmap-month">{{ month.Name }}</p>
+									</th>
+								</tr>
+								<tr>
+									<th nzShowSort [(nzSort)]="sortMap.SkillName" (nzSortChange)="sort('SkillName',$event)">{{ 'Skill' | translate }}</th>
+									<th class="heatmap-date-header" *ngFor ="let datenode of nzTable.data[0].SkillDetails">
+										<p class="heatmap-date" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let subnode of nzTable.data">
+									<td class="skill-name">{{ subnode.SkillName }}</td>
+									<td class="heatmap-day"
+										*ngFor="let node of subnode.SkillDetails"
+										[ngClass]="{ 
+										'worst-under-staff-day': worstUnderStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent, 
+										'worst-over-staff-day': worstOverStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent,
+										'heatmap-saturday': node.saturday, 
+										'heatmap-sunday': node.sunday
+										 }"
+									>
+										<ng-template #titleTemplate>
+											<div>
+												<div>{{subnode.SkillName}} | {{amDateFormat.transform(node.Date, 'YYYY-MM-DD')}}</div>
+												<div *ngIf="node.ColorId !== 4">{{'RelativeDifference' | translate}} : {{node.RelativeDifferencePercent + '%'}}</div>
+												<div *ngIf="node.ColorId === 4">{{'Closed' | translate}}</div>
+												<div *ngIf="node.hasCritical">{{'HasCriticalIntervals' | translate}}</div>
+												<div *ngIf="worstUnderStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent">{{'MostUnderstaffedDay' | translate}}</div>
+												<div *ngIf="worstOverStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent">{{'MostOverstaffedDay' | translate}}</div>
+											</div>
+										</ng-template>
+										<div nz-tooltip [nzTitle]="titleTemplate"
+											class="heatmap-box"
+											[ngClass]="{ 'heatmap-closed': node.ColorId===4, 'selected':node.selected, 'critical': node.hasCritical}"
+											[style.background-color]="node.bgcolor" (click)="updateIntradayChart(node, subnode.SkillName, intradayChart)"
+										>
+											<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">
+												{{node.DisplayedPercent}}
+											</span>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</nz-table>
+					</div>
+				</div>
+			<div #intradayChart>
+				<div *ngIf="selectedDay" style="margin-top: 10px;">
+					<plans-intraday [chartData]="selectedDay" [skill]="selectedSkill"></plans-intraday>
 				</div>
 			</div>
 		</nz-tab>
 		<nz-tab [nzTitle]="titleTemplate">
 			<ng-template #titleTemplate>
-				{{ 'Validations' | translate }}<nz-badge [nzCount]="valData.totalValNum"></nz-badge>
+				{{ 'Validations' | translate }}
+				<nz-spin nzSize="small" [nzSpinning]="loadingValidations">
+					<nz-badge [nzCount]="valData.totalValNum" *ngIf="!loadingValidations"></nz-badge>
+				</nz-spin>
 			</ng-template>
 			<div *ngIf="valData.totalValNum !== 0">
 				<nz-collapse>
@@ -137,16 +157,13 @@
 							<div nz-row>
 								<span nz-col [nzSpan]="12">{{ 'PreSchedulingValidationIssues' | translate }}</span>
 								<span nz-col [nzSpan]="4">
-									<ng-template #indicatorTemplate
-										><i nz-icon type="loading" style="font-size: 24px;"></i
-									></ng-template>
-									<nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="valLoading">
+									<nz-spin [nzSpinning]="loadingValidations">
 										{{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
 										<button
-											nz-button
-											nzType="default"
-											nzShape="circle"
-											(click)="loadValidations(); $event.stopPropagation()"
+												nz-button
+												nzType="default"
+												nzShape="circle"
+												(click)="loadValidations(); $event.stopPropagation()"
 										>
 											<i nz-icon type="reload"></i>
 										</button>
@@ -155,64 +172,65 @@
 								<span nz-col [nzSpan]="8"> </span>
 							</div>
 						</ng-template>
-						<div nz-row style="padding-bottom: 5px">
-							<div nz-col [nzSpan]="8">
-								<nz-input-group
-									[nzSuffix]="suffixPreValidationTemplate"
-									[nzPrefix]="prefixPreValidationTemplate"
-								>
-									<input
-										type="text"
-										nz-input
-										placeholder="Filter"
-										[formControl]="preValidationFilterControl"
-									/>
-								</nz-input-group>
+						<div *ngIf="filteredPreValidations && filteredPreValidations.length>0">
+							<div nz-row style="padding-bottom: 5px">
+								<div nz-col [nzSpan]="8">
+									<nz-input-group
+											[nzSuffix]="suffixPreValidationTemplate"
+											[nzPrefix]="prefixPreValidationTemplate"
+									>
+										<input
+												type="text"
+												nz-input
+												placeholder="Filter"
+												[formControl]="preValidationFilterControl"
+										/>
+									</nz-input-group>
 
-								<ng-template #prefixPreValidationTemplate><i nz-icon type="filter"></i></ng-template>
-								<ng-template #suffixPreValidationTemplate
+									<ng-template #prefixPreValidationTemplate><i nz-icon type="filter"></i></ng-template>
+									<ng-template #suffixPreValidationTemplate
 									><i
-										nz-icon
-										type="close-circle"
-										(click)="clearPreValidationFilter()"
-										*ngIf="preValidationFilterControl.value"
+											nz-icon
+											type="close-circle"
+											(click)="clearPreValidationFilter()"
+											*ngIf="preValidationFilterControl.value"
 									></i
-								></ng-template>
+									></ng-template>
+								</div>
 							</div>
-						</div>
-						<div nz-row>
-							<table class="wfm-table">
+							<nz-table #preValidationTable nzSize="small" nzFrontPagination="false" nzShowPagination="false" [nzData]="filteredPreValidations">
 								<thead>
-									<tr>
-										<th>{{ 'Resource' | translate }}</th>
-										<th>{{ 'Area' | translate }}</th>
-										<th>{{ 'Description' | translate }}</th>
-									</tr>
+								<tr>
+									<th nzShowSort [(nzSort)]="preValidationsSortMap.Resource" (nzSortChange)="sortPreValidations('Resource',$event)">{{ 'Resource' | translate }}</th>
+									<th nzShowSort [(nzSort)]="preValidationsSortMap.Area" (nzSortChange)="sortPreValidations('Area',$event)">{{ 'Area' | translate }}</th>
+									<th nzShowSort [(nzSort)]="preValidationsSortMap.Description" (nzSortChange)="sortPreValidations('Description',$event)">{{ 'Description' | translate }}</th>
+								</tr>
 								</thead>
 								<tbody>
-									<tr *ngFor="let msg of filteredPreValidations">
-										<td class="data-test-pre-validation">{{ msg.ResourceName }}</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ResourceType | translate }}
-											</div>
-										</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ErrorMessageLocalized }}
-											</div>
-										</td>
-									</tr>
+								<tr *ngFor="let msg of preValidationTable.data">
+									<td class="data-test-pre-validation">{{ msg.ResourceName }}</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ResourceType | translate }}
+										</div>
+									</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ErrorMessageLocalized }}
+										</div>
+									</td>
+								</tr>
 								</tbody>
-							</table>
+							</nz-table>
 						</div>
+						
 					</nz-collapse-panel>
-					<nz-collapse-panel [nzHeader]="scheduleIssuesTitle">
+					<nz-collapse-panel [nzHeader]="scheduleIssuesTitle" *ngIf="filteredScheduleIssues && filteredScheduleIssues.length>0">
 						<ng-template #scheduleIssuesTitle>
 							<div nz-row>
 								<span nz-col [nzSpan]="12">{{ 'ScheduledIssues' | translate }}</span>
 								<span nz-col [nzSpan]="12"
-									>{{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}</span
+								>{{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}</span
 								>
 							</div>
 						</ng-template>
@@ -241,32 +259,30 @@
 								></ng-template>
 							</div>
 						</div>
-						<div nz-row>
-							<table class="wfm-table">
-								<thead>
-									<tr>
-										<th>{{ 'Resource' | translate }}</th>
-										<th>{{ 'Area' | translate }}</th>
-										<th>{{ 'Description' | translate }}</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let msg of filteredScheduleIssues">
-										<td class="data-test-schedule-issue">{{ msg.ResourceName }}</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ResourceType | translate }}
-											</div>
-										</td>
-										<td>
-											<div *ngFor="let item of msg.ValidationErrors">
-												{{ item.ErrorMessageLocalized }}
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+						<nz-table  #scheduleIssuesTable nzSize="small" nzFrontPagination="false" nzShowPagination="false" [nzData]="filteredScheduleIssues">
+							<thead>
+								<tr>
+									<th nzShowSort [(nzSort)]="scheduleIssuesSortMap.Resource" (nzSortChange)="sortScheduleIssues('Resource',$event)">{{ 'Resource' | translate }}</th>
+									<th nzShowSort [(nzSort)]="scheduleIssuesSortMap.Area" (nzSortChange)="sortScheduleIssues('Area',$event)">{{ 'Area' | translate }}</th>
+									<th nzShowSort [(nzSort)]="scheduleIssuesSortMap.Description" (nzSortChange)="sortScheduleIssues('Description',$event)">{{ 'Description' | translate }}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let msg of scheduleIssuesTable.data">
+									<td class="data-test-schedule-issue">{{ msg.ResourceName }}</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ResourceType | translate }}
+										</div>
+									</td>
+									<td>
+										<div *ngFor="let item of msg.ValidationErrors">
+											{{ item.ErrorMessageLocalized }}
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</nz-table>
 					</nz-collapse-panel>
 				</nz-collapse>
 			</div>
@@ -274,10 +290,10 @@
 				<div>
 					<div nz-row class="panel">
 						<div class="con-flex">
-							<span *ngIf="!valLoading">
+							<span *ngIf="!loadingValidations">
 								<i class="mdi mdi-information-outline"></i> {{ 'NoValidIssuesForPp' | translate }}</span
 							>
-							<span *ngIf="valLoading" class="text-warning">
+							<span *ngIf="loadingValidations" class="text-warning">
 								<i class="mdi mdi-alert"></i> Loading validation issues...
 							</span>
 						</div>

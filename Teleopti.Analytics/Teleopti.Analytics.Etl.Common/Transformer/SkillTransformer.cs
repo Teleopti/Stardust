@@ -34,8 +34,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow["time_zone_code"] = skill.TimeZone.Id;
 				dataRow["forecast_method_code"] = skill.SkillType.Id;
 				dataRow["forecast_method_name"] = skill.SkillType.ForecastSource.ToString();
-				dataRow["business_unit_code"] = skill.BusinessUnit.Id;
-				dataRow["business_unit_name"] = skill.BusinessUnit.Name;
+				dataRow["business_unit_code"] = skill.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				dataRow["business_unit_name"] = skill.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				dataRow["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 				dataRow["insert_date"] = _insertDateTime;
 				dataRow["update_date"] = _insertDateTime;

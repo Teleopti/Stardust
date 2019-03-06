@@ -26,11 +26,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		public SchedulingSessionPreferencesTabPanel()
 		{
 			InitializeComponent();
-			if (!DesignMode) SetTexts();
+			//if (!DesignMode) SetTexts();
 		}
 
-		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
+		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, SchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity, bool useRightToLeft)
 		{
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;
 

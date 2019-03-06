@@ -51,7 +51,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="simple" />
       <Task commandLine="TLSHardening.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="CustomStartup.cmd" executionContext="elevated" taskType="simple" />
-
+	  <Task commandLine="IncreaseWorkerThreadPoolForWCFScalability.cmd" executionContext="elevated" taskType="simple" />
 	</Startup>
 	<Runtime executionContext="elevated">
 	  <Environment>

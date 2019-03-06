@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
-			var setting = new GamificationSettingRepository(currentUnitOfWork).FindSettingByDescriptionName(GamificationSetting).First();
+			var team = TeamRepository.DONT_USE_CTOR(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
+			var setting = GamificationSettingRepository.DONT_USE_CTOR(currentUnitOfWork).FindSettingByDescriptionName(GamificationSetting).First();
 
 			var teamSetting = new TeamGamificationSetting {Team = team, GamificationSetting = setting};
 

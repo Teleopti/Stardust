@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(item1);
             PersistAndRemoveFromUnitOfWork(item2);
 
-            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
             var result = repository.LoadAllSortByName();
 
             Assert.AreEqual(2, result.Count);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             org.AllowedPreferenceActivity = activity;
             PersistAndRemoveFromUnitOfWork(org);
 
-            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
             var result = repository.LoadAllSortByName();
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0].AllowedPreferenceActivity, Is.EqualTo(activity));
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             org.AbsenceProbabilityEnabled = true;
             PersistAndRemoveFromUnitOfWork(org);
 
-            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
             var result = repository.LoadAllSortByName();
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0].AbsenceProbabilityEnabled, Is.EqualTo(true));
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 new OvertimeRequestOpenDatePeriod() { Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes });
             PersistAndRemoveFromUnitOfWork(org);
 
-            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
             var result = repository.LoadAllSortByName();
 
             Assert.That(result.Count, Is.EqualTo(1));
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 new OvertimeRequestOpenRollingPeriod() { BetweenDays = new MinMax<int>(1, 4), AutoGrantType = OvertimeRequestAutoGrantType.Yes });
             PersistAndRemoveFromUnitOfWork(org);
 
-            IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+            IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
             var result = repository.LoadAllSortByName();
 
             Assert.That(result.Count, Is.EqualTo(1));
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new OvertimeRequestOpenDatePeriod { Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes,EnableWorkRuleValidation = true, WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny });
 			PersistAndRemoveFromUnitOfWork(org);
 
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = repository.LoadAllSortByName();
 
 			Assert.That(result.Count, Is.EqualTo(1));
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			org.OvertimeRequestMaximumTimeEnabled = true;
 			PersistAndRemoveFromUnitOfWork(org);
 
-			var repository = new WorkflowControlSetRepository(UnitOfWork);
+			var repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = repository.LoadAllSortByName();
 
 			Assert.That(result.Count, Is.EqualTo(1));
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			org.AddOpenOvertimeRequestPeriod(openPeriod);
 			PersistAndRemoveFromUnitOfWork(org);
 
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = repository.LoadAllSortByName();
 
 			var skillTypes = result[0].OvertimeRequestOpenPeriods[0].PeriodSkillTypes.Select(x => x.SkillType).ToArray();
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			org.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30);
 			PersistAndRemoveFromUnitOfWork(org);
 
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = repository.LoadAllSortByName();
 
 			Assert.That(result.Count, Is.EqualTo(1));
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			org.OvertimeRequestStaffingCheckMethod = OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 			PersistAndRemoveFromUnitOfWork(org);
 
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = repository.LoadAllSortByName();
 
 			var staffingCheckMethod = result[0].OvertimeRequestStaffingCheckMethod;
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			org.OvertimeRequestUsePrimarySkill = true;
 			PersistAndRemoveFromUnitOfWork(org);
 
-			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			IWorkflowControlSetRepository repository = WorkflowControlSetRepository.DONT_USE_CTOR(UnitOfWork);
 			var result = repository.LoadAllSortByName();
 
 			var usePrimarySkill = result[0].OvertimeRequestUsePrimarySkill;
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new WorkflowControlSetRepository(currentUnitOfWork);
+            return WorkflowControlSetRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValid
 			}
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITimeZoneGuard timeZoneGuard)
 		{
 			bool contractTimeResult = true;
 			bool daysOffResult = true;

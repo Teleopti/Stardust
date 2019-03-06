@@ -677,9 +677,9 @@ md-autocomplete[disabled]:not([md-floating-label]),
 //<h3>Simple (<span ng-bind="data1"></span>)</h3>
 //<form>
 //  <md-radio-group ng-model="data1">
-//    <md-radio-button value="Option 1" aria-label="radio">Option 1</md-radio-button>
-//    <md-radio-button value="Option 2" aria-label="radio">Option 2</md-radio-button>
-//    <md-radio-button value="Option 3" aria-label="radio">Option 3</md-radio-button>
+//    <md-radio-button value="Option 1">Option 1</md-radio-button>
+//    <md-radio-button value="Option 2">Option 2</md-radio-button>
+//    <md-radio-button value="Option 3">Option 3</md-radio-button>
 //  </md-radio-group>
 // <h3>Repeated (<span ng-bind="data2"></span>)</h3>
 //  <md-radio-group ng-model="data2">
@@ -760,11 +760,11 @@ md-radio-button.md-checked .md-off {
 //
 //Markup:
 //  <h3>Simple</h3>
-//  <md-checkbox ng-model="checkData1" aria-label="Checkbox">Option 1</md-checkbox>
-//  <md-checkbox ng-model="checkData2" aria-label="Checkbox">Option 2</md-checkbox>
-//  <md-checkbox ng-model="checkData3" aria-label="Checkbox">Option 3</md-checkbox>
+//  <md-checkbox ng-model="checkData1">Option 1</md-checkbox>
+//  <md-checkbox ng-model="checkData2">Option 2</md-checkbox>
+//  <md-checkbox ng-model="checkData3">Option 3</md-checkbox>
 //  <h3>Repeated</h3>
-//  <md-checkbox ng-repeat="item in demos" ng-model="item.checked" aria-label="Checkbox">Option <span ng-bind="item.id"></span></md-checkbox>
+//  <md-checkbox ng-repeat="item in demos" ng-model="item.checked">Option <span ng-bind="item.id"></span></md-checkbox>
 //
 //Styleguide 1.9
 //

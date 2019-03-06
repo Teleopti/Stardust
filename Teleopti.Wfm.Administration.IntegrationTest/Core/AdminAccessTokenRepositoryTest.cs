@@ -42,9 +42,9 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				result.Success.Should().Be.True();
 				result.AccessToken.Should().Not.Be.NullOrEmpty();
 				
-				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now).Should().Be.True();
+				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.True();
 				Now.Is(currentTime.AddMinutes(41));
-				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now).Should().Be.False();
+				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.False();
 			}
 		}
 		
@@ -68,9 +68,9 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				result.AccessToken.Should().Not.Be.NullOrEmpty();
 				
 				Now.Is(currentTime.AddMinutes(25));
-				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now).Should().Be.True();
+				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.True();
 				Now.Is(currentTime.AddMinutes(50));
-				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now).Should().Be.True();
+				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.True();
 			}
 		}
 		
@@ -93,14 +93,14 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				result.Success.Should().Be.True();
 				result.AccessToken.Should().Not.Be.NullOrEmpty();
 				Now.Is(currentTime.AddMinutes(25));
-				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now).Should().Be.True();
+				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.True();
 				var result2 = AccountController.Login(model).Content;
 				result2.Success.Should().Be.True();
 				result2.AccessToken.Should().Not.Be.NullOrEmpty();
 				result2.AccessToken.Should().Not.Be.EqualTo(result.AccessToken);
 				Now.Is(currentTime.AddMinutes(50));
-				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now).Should().Be.True();
-				AdminAccessTokenRepository.TokenIsValid(result2.AccessToken, Now).Should().Be.True();
+				AdminAccessTokenRepository.TokenIsValid(result.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.True();
+				AdminAccessTokenRepository.TokenIsValid(result2.AccessToken, Now, new FakeConfigReader().FakeInfraTestConfig()).Should().Be.True();
 			}
 		}
 

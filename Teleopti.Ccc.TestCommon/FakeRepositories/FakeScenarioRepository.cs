@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)
 		{
-			return _scenario.SingleOrDefault(s => s.DefaultScenario && s.BusinessUnit == businessUnit);
+			return _scenario.SingleOrDefault(s => s.DefaultScenario && s.GetOrFillWithBusinessUnit_DONTUSE() == businessUnit);
 		}
 	}
 }

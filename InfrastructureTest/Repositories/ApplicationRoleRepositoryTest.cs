@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IApplicationRole> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new ApplicationRoleRepository(currentUnitOfWork);
+			return ApplicationRoleRepository.DONT_USE_CTOR(currentUnitOfWork);
 		}
 
 		/// <summary>
@@ -81,10 +81,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(availableData);
 			}
 
-			var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllApplicationRolesSortedByName();
+			var rolesList = ApplicationRoleRepository.DONT_USE_CTOR(UnitOfWork).LoadAllApplicationRolesSortedByName();
 			Assert.AreEqual(roleCount, rolesList.Count);
 
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].BusinessUnit));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].GetOrFillWithBusinessUnit_DONTUSE()));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].ApplicationFunctionCollection));
 		}
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(availableData);
 			}
 
-			var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllApplicationRolesSortedByName();
+			var rolesList = ApplicationRoleRepository.DONT_USE_CTOR(UnitOfWork).LoadAllApplicationRolesSortedByName();
 			Assert.AreEqual(4, rolesList.Count);
 		}
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork( ApplicationRoleFactory.CreateRole("Admin Name" , "Role Description " ));
 			PersistAndRemoveFromUnitOfWork(  ApplicationRoleFactory.CreateRole("Normal Name" , "Role Description " ));
 			
-			var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllRolesByDescription("Role");
+			var rolesList = ApplicationRoleRepository.DONT_USE_CTOR(UnitOfWork).LoadAllRolesByDescription("Role");
 			rolesList.Count.Should().Be.EqualTo(2);
 		}
 	}

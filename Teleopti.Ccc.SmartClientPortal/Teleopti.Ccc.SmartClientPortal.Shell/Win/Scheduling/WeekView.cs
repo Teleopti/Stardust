@@ -2,6 +2,7 @@
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -17,10 +18,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public WeekView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
             SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer)
-            : base(grid)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
+            : base(grid, timeZoneGuard)
         {
-            Presenter = new WeekPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer)
+            Presenter = new WeekPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard)
                             {VisibleWeeks = 1};
             grid.Name = "WeekView";
         }
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         private void drawInfoTextInCell(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
         {
-            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(scheduleRange, significantPart);
+            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(scheduleRange, significantPart, TimeZoneGuard);
             string infoText = infoList[0];
             string periodText = infoList[1];
             string timeText = infoList[2];

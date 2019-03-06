@@ -1,0 +1,286 @@
+.schedule-list {
+	min-width: 700px;
+
+	md-checkbox {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		display: inline;
+		width: 100%;
+		height: 100%;
+	}
+
+	.sort-agent {
+		margin: 5px 0;
+	}
+
+	.list-header {
+		display: grid;
+		display: -ms-grid;
+		grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) minmax(30px, 2%) minmax(30px, 2%) minmax(100px, 10%);
+		-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) minmax(30px, 2%) minmax(30px, 2%) minmax(100px, 10%);
+		grid-template-rows: 40px;
+		-ms-grid-row: 40px;
+		position: relative;
+		z-index: 1;
+
+		.time-line {
+			min-width: 300px;
+			height: 100%;
+			z-index: 1;
+
+			.ruler {
+				height: 100%;
+				width: 1px;
+				background-color: $gray-300;
+			}
+
+			.label {
+				font-size: x-small;
+				height: 1.32em;
+				z-index: 11;
+				transform: translateX(-50%);
+				padding-left: 0.3em;
+				padding-right: 0.3em;
+			}
+
+			& > .relative {
+				height: 100%;
+
+				> span {
+					padding: 10px;
+				}
+			}
+
+			.not-current-day {
+				background-color: $gray-500;
+			}
+		}
+	}
+
+	.list-sort-agent {
+		position: relative;
+		z-index: 3;
+
+		sort-agent {
+			top: -37px;
+			left: 22%;
+			position: absolute;
+		}
+	}
+
+	.list-header, .list-group .list-item {
+		width: calc(100% - 17px);
+
+		& > div {
+			vertical-align: middle;
+			line-height: 1.5;
+			border-bottom: 1px solid $gray-300;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+
+		& > div.person-name-column {
+			padding-left: 5px;
+			padding-right: 5px;
+			min-width: 150px;
+			font-weight: normal;
+			grid-column: 1;
+			-ms-grid-column: 1;
+
+			.md-label {
+				white-space: nowrap;
+			}
+		}
+
+		& > div.shift-category-cell {
+			grid-column: 2;
+			-ms-grid-column: 2;
+		}
+
+		& > div.schedule-column {
+			grid-column: 3;
+			-ms-grid-column: 3;
+		}
+
+		& > div.schedule-editor-column {
+			grid-column: 4;
+			-ms-grid-column: 4;
+		}
+
+		& > div.schedule-note-column {
+			grid-column: 5;
+			-ms-grid-column: 5;
+		}
+
+		& > div.contract-time-column {
+			grid-column: 6;
+			-ms-grid-column: 6;
+			padding: 5px;
+			font-weight: 400;
+			text-align: center;
+			white-space: nowrap;
+		}
+
+		& > div.schedule-tool-column {
+			text-align: center;
+
+			i.mdi:before {
+				font-size: 14px !important;
+			}
+		}
+	}
+
+	.list-group {
+		width: 100%;
+		overflow: hidden;
+		position: relative;
+		z-index: 2;
+
+		.list-item {
+			width: 100%;
+			display: grid;
+			display: -ms-grid;
+			grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) minmax(30px, 2%) minmax(30px, 2%) minmax(100px, 10%);
+			-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) minmax(30px, 2%) minmax(30px, 2%) minmax(100px, 10%);
+
+			&:not(.shift-editor-row):hover,
+			&.in-editing {
+				background: rgba(220, 220, 220, 0.4);
+			}
+
+			& > div.person-name-column {
+				display: flex;
+				justify-content: space-between;
+				align-content: center;
+				padding: 0;
+
+				> label {
+					width: 100%;
+					padding: 0 5px;
+				}
+
+				md-checkbox {
+					display: inline-block;
+					width: 100%;
+					padding: 5px 0 0 5px;
+
+					.md-container {
+						.md-ripple-container, &:after {
+							top: -5px;
+							bottom: -5px;
+						}
+					}
+				}
+
+				.validate-warning {
+					line-height: 1;
+					padding: 5px 5px 0 0;
+				}
+			}
+
+			& > div.schedule-column {
+
+				.shift {
+					position: relative;
+					top: 0;
+
+					.layer {
+						height: 22px;
+						text-align: center;
+						cursor: pointer;
+					}
+
+					.layer.same-type-as-last {
+						border-left-style: solid;
+						border-left-width: 1px;
+					}
+
+					.layer.selected {
+						opacity: 1;
+						border: 1px dashed #795548;
+					}
+
+					.layer.lighter-border {
+						border-color: #00ffff;
+					}
+
+					.layer:first-of-type {
+						border-radius: 4px 0px 0px 4px;
+					}
+
+					.layer:last-of-type {
+						border-radius: 0px 4px 4px 0px;
+					}
+
+					.layer.unselectable {
+						cursor: not-allowed;
+					}
+				}
+
+				.dayoff {
+					top: 0;
+				}
+
+				.start-ellipsis {
+					left: 5px;
+				}
+
+				.end-ellipsis {
+					right: 19px;
+				}
+
+				.start-ellipsis,
+				.end-ellipsis {
+					position: absolute;
+					top: 2px;
+					color: $gray054;
+					width: 0;
+					height: 0;
+
+					.mdi:before {
+						font-size: 14px !important;
+					}
+				}
+			}
+
+			& > div.contract-time-column {
+				border-left: 1px solid $gray-300;
+			}
+
+			& > div.schedule-tool-column.schedule-note-column > span:not(.has-note) {
+				color: $gray-500;
+			}
+
+			& > div.shift-category-cell {
+				text-align: center;
+				font-size: 12px;
+				border-left: 1px solid $gray-300;
+
+				& > span {
+					width: 20px;
+					height: 20px;
+					display: inline-block;
+					cursor: pointer;
+					position: relative;
+					border-radius: 4px;
+
+					& > .info {
+						position: absolute;
+						top: -13px;
+						right: -11px;
+						transform: scale(0.6);
+					}
+				}
+			}
+		}
+
+		&.has-selected .schedule-column .shift .layer:not(.selected) {
+			opacity: 0.4;
+		}
+	}
+
+	.md-virtual-repeat-scroller {
+		overflow-y: scroll;
+		background: transparent;
+	}
+}

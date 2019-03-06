@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		/// Indicate if badge should be shown
 		/// </summary>
 		public bool ShowBadge { get; set; }
-		public bool ShowBadgePeriodNavigator { get; set; }
 		public GamificationRollingPeriodSet BadgeRollingPeriodSet { get; set; }
 
 		public string AMDesignator { get; set; }

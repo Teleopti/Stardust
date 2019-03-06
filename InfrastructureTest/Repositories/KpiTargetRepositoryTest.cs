@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IKpiTarget> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new KpiTargetRepository(currentUnitOfWork.Current());
+            return KpiTargetRepository.DONT_USE_CTOR(currentUnitOfWork.Current());
         }
     }
 }

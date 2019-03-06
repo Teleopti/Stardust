@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,9 +38,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Assert.AreEqual(Adherence.Configuration.Adherence.In, loaded.Adherence);
         }
 
-        protected override Repository<IRtaRule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+        protected override Repository<IRtaRule> ResolveRepository()
         {
-            return new RtaRuleRepository(currentUnitOfWork);
+			return Container.Resolve<Adherence.Configuration.IRepository<IRtaRule>>() as Repository<IRtaRule> ;
         }
 
 	    [Test]
@@ -48,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		    var rule = new RtaRule(new Description("."), Color.AliceBlue, 0, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 			
-			var loaded = new RtaRuleRepository(CurrentUnitOfWork).LoadAll().Single();
+			var loaded = (ResolveRepository() as RtaRuleRepository).LoadAll().Single();
 
 			loaded.IsAlarm.Should().Be.False();
 	    }
@@ -61,7 +62,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		    rule.IsAlarm = false;
 			PersistAndRemoveFromUnitOfWork(rule);
 			
-			var loaded = new RtaRuleRepository(CurrentUnitOfWork).LoadAll().Single();
+			var loaded = (ResolveRepository() as RtaRuleRepository).LoadAll().Single();
 
 			loaded.IsAlarm.Should().Be.False();
 	    }
@@ -72,7 +73,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			var rule = new RtaRule(new Description("."), Color.AliceBlue, 0, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 
-			var loaded = new RtaRuleRepository(CurrentUnitOfWork).LoadAll().Single();
+			var loaded = (ResolveRepository() as RtaRuleRepository).LoadAll().Single();
 
 			loaded.AlarmColor.ToArgb().Should().Be(Color.AliceBlue.ToArgb());
 		}
@@ -85,7 +86,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			rule.AlarmColor = Color.AntiqueWhite;
 			PersistAndRemoveFromUnitOfWork(rule);
 
-			var loaded = new RtaRuleRepository(CurrentUnitOfWork).LoadAll().Single();
+			var loaded = (ResolveRepository() as RtaRuleRepository).LoadAll().Single();
 
 			loaded.AlarmColor.ToArgb().Should().Be(Color.AntiqueWhite.ToArgb());
 		}

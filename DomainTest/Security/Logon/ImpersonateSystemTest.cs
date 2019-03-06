@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 				{
 					var scenario = new Domain.Common.Scenario("s");
 					Scenarios.Add(scenario);
-					entityGotBusinessUnit = scenario.BusinessUnit;
+					entityGotBusinessUnit = scenario.GetOrFillWithBusinessUnit_DONTUSE();
 				});
 
 			entityGotBusinessUnit.Id.Should().Be(businessUnid);

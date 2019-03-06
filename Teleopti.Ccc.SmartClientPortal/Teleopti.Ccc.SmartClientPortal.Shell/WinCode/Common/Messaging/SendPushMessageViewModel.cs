@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
         private void SendMessage(IUnitOfWork uow)
         {
             var repository = _repositoryFactory.CreatePushMessageRepository(uow);
-	        var persister = new PushMessagePersister(repository, new PushMessageDialogueRepository(uow),
+	        var persister = new PushMessagePersister(repository, PushMessageDialogueRepository.DONT_USE_CTOR(uow),
 		        new CreatePushMessageDialoguesService());
 			CreateSendPushMessageService().SendConversation(persister);
             uow.PersistAll();

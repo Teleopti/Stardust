@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			var badgeType = Domain.InterfaceLegacy.Domain.BadgeType.GetBadgeType(BadgeType);
 
-			var setting = new GamificationSettingRepository(uow).FindAllGamificationSettingsSortedByDescription().First();
+			var setting = GamificationSettingRepository.DONT_USE_CTOR(uow).FindAllGamificationSettingsSortedByDescription().First();
 			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 			var totalBadgeAmount = (Gold * goldToSilverBadgeRate + Silver) * silverToBronzeBadgeRate + Bronze;
 
-			var rep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
+			var rep = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(uow), null, null);
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				InsertedOn = new DateTime(2014, 8, 20, 0, 0, 0, DateTimeKind.Utc)
 			};
 
-			var badgeRep = new AgentBadgeTransactionRepository(uow);
+			var badgeRep = AgentBadgeTransactionRepository.DONT_USE_CTOR(uow);
 			badgeRep.Add(AgentBadge);
 		}
 	}

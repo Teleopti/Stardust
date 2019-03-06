@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
-		public ITransactionHooksScope TransactionHooksScope;
-		public IEnumerable<ITransactionHook> TransactionHooks;
 		public FakeMessageSender MessageSender;
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
@@ -49,16 +47,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IHangfireClientStarter HangfireClientStarter;
 		public ICurrentPrincipalContext PrincipalContext;
 		public IPrincipalFactory PrincipalFactory;
-		private IDisposable _transactionHookScope;
 		
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeInfraTestConfig();
 			return config;
 		}
 
@@ -66,9 +59,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.Extend(extend, configuration);
 			
-			extend.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
 			extend.AddService<Database>();
 			extend.AddService<AnalyticsDatabase>();
+			extend.AddService<FakeTransactionHook>();
 		}
 
 		//
@@ -106,8 +99,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (QueryAllAttributes<ExtendScopeAttribute>().Any())
 				isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 
-			isolate.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
-
 			// fake for now. if real repo needs to be included in the scope....
 			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 			
@@ -126,41 +117,36 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
-				TestTenantName.Name,
-				InfraTestConfigReader.ConnectionString,
-				InfraTestConfigReader.AnalyticsConnectionString,
+				InfraTestConfigReader.TenantName(),
+				InfraTestConfigReader.ApplicationConnectionString(),
+				InfraTestConfigReader.AnalyticsConnectionString(),
 				null);
 
 			MessageSender.AllNotifications.Clear();
 			TransactionHook.Clear();
-
-			_transactionHookScope = TransactionHooksScope.GloballyUse(TransactionHooks);
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
 
-			_transactionHookScope?.Dispose();
 			DataSourceForTenant?.Dispose();
 			DataSourceForTenant = null;
 			HangfireClientStarter = null;
 			MessageSender = null;
 			Publisher = null;
 			TransactionHook = null;
-			TransactionHooks = null;
-			TransactionHooksScope = null;
 		}
 
 		protected void Login(IPerson person, IBusinessUnit businessUnit)
 		{
-			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(TestTenantName.Name), null);
+			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(InfraTestConfigReader.TenantName()), null);
 			PrincipalContext.SetCurrentPrincipal(principal);
 		}
 		
 		protected void Logout()
 		{
-			PrincipalContext.SetCurrentPrincipal(null);
+			PrincipalContext?.SetCurrentPrincipal(null);
 		}
 	}
 }

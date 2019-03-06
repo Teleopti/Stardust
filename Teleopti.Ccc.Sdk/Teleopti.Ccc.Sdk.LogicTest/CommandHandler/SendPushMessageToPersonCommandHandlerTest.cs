@@ -10,9 +10,9 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository mock;
 		private IPushMessagePersister pushMessageRepository;
         private IUnitOfWorkFactory unitOfWorkFactory;
-        private SendPushMessageToPersonCommandHandler target;
     	private IPersonRepository personRepository;
         private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
@@ -35,15 +34,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             personRepository = mock.StrictMock<IPersonRepository>();
             unitOfWorkFactory = mock.StrictMock<IUnitOfWorkFactory>();
             currentUnitOfWorkFactory = mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-			target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory);
         }
 
 		[Test]
 		public void ShouldSendPushMessageSuccessfully()
 		{
 			var untiOfWork = mock.StrictMock<IUnitOfWork>();
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
+			var person = PersonFactory.CreatePerson().WithId();
 			var messageId = Guid.NewGuid();
 
 			using (mock.Record())
@@ -65,11 +62,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(person.Id.GetValueOrDefault());
 
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					target.Handle(command);
-				}
-
+				var target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory, new FullPermission());
+				target.Handle(command);
+				
 				command.Result.AffectedItems.Should().Be.EqualTo(1);
 				command.Result.AffectedId.Should().Be.EqualTo(messageId);
 			}
@@ -87,6 +82,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				Enumerable.Range(0, 51).ForEach(i => command.Recipients.Add(Guid.NewGuid()));
+
+				var target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory, new FullPermission());
 				Assert.Throws<FaultException>(() => target.Handle(command));
 			}
 		}
@@ -95,8 +92,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldSetDefaultReplyOptionIfNoneGiven()
 		{
 			var untiOfWork = mock.StrictMock<IUnitOfWork>();
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
+			var person = PersonFactory.CreatePerson().WithId();
 
 			using (mock.Record())
 			{
@@ -117,10 +113,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(person.Id.GetValueOrDefault());
 
-				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-				{
-					target.Handle(command);
-				}
+				var target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory, new FullPermission());
+				target.Handle(command);
 			}
 		}
 
@@ -143,6 +137,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(personId);
+
+				var target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory, new FullPermission());
 				target.Handle(command);
 				command.Result.AffectedItems.Should().Be.EqualTo(0);
 				command.Result.AffectedId.HasValue.Should().Be.False();
@@ -153,8 +149,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void ShouldNotSendPushMessageWhenNotPermittedToPerson()
 		{
 			var untiOfWork = mock.StrictMock<IUnitOfWork>();
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
+			var person = PersonFactory.CreatePerson().WithId();
 
 			using (mock.Record())
 			{
@@ -165,14 +160,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();
 				Expect.Call(untiOfWork.Dispose);
 			}
+
 			using (mock.Playback())
 			{
-				using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
-				{
-					var command = new SendPushMessageToPeopleCommandDto();
-					command.Recipients.Add(person.Id.GetValueOrDefault());
-					Assert.Throws<FaultException>(() => target.Handle(command));
-				}
+				var command = new SendPushMessageToPeopleCommandDto();
+				command.Recipients.Add(person.Id.GetValueOrDefault());
+
+				var target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory, new NoPermission());
+				Assert.Throws<FaultException>(() => target.Handle(command));
 			}
 		}
     }

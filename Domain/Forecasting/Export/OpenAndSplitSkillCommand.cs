@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
 	    public void Execute(ISkill skill, DateOnlyPeriod period, IList<TimePeriod> openHoursList)
 	    {
-            var scenario = _scenarioRepository.LoadDefaultScenario(skill.BusinessUnit);
+            var scenario = _scenarioRepository.LoadDefaultScenario(skill.GetOrFillWithBusinessUnit_DONTUSE());
             var skillDays = _skillDayRepository.FindRange(period, skill, scenario);
 			var allSkillDays = _skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, s =>
 				{ 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 				if (workloadDayBase.Parent is ISkillDay skillDay)
 				{
 					skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
-                    setTargetBusinessUnit(skillDay, skill.BusinessUnit);
+                    setTargetBusinessUnit(skillDay, skill.GetOrFillWithBusinessUnit_DONTUSE());
                 }
             }
 			_skillDayRepository.AddRange(allSkillDays);

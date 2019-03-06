@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         {
             using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                OutlierRepository outlierRepository = new OutlierRepository(unitOfWork);
+                OutlierRepository outlierRepository = OutlierRepository.DONT_USE_CTOR(unitOfWork);
                 IList<IOutlier> outliers = outlierRepository.FindByWorkload(_workload);
                 foreach (IOutlier outlier in outliers)
                 {

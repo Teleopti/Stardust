@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -36,6 +37,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICreateBusinessUnit _createBusinessUnit;
 		private readonly IHashFunction _currentHashFunction;
 		private readonly IInstallationEnvironment _installationEnvironment;
+		private readonly IConfigReader _config;
 
 		public DatabaseController(
 			IDatabaseHelperWrapper databaseHelperWrapper,
@@ -47,7 +49,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IUpdateCrossDatabaseView updateCrossDatabaseView,
 			ICreateBusinessUnit createBusinessUnit, 
 			IHashFunction currentHashFunction, 
-			IInstallationEnvironment installationEnvironment)
+			IInstallationEnvironment installationEnvironment,
+			IConfigReader config)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
@@ -59,6 +62,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_createBusinessUnit = createBusinessUnit;
 			_currentHashFunction = currentHashFunction;
 			_installationEnvironment = installationEnvironment;
+			_config = config;
 		}
 
 
@@ -122,9 +126,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(checkCreateDbInternal(createLoginConnectionString(model)));
 		}
 
-		private static string createLoginConnectionString(CreateTenantModel model)
+		private string createLoginConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
@@ -133,9 +137,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private static string createAppDbConnectionString(CreateTenantModel model)
+		private string createAppDbConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
@@ -144,9 +148,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private static string createAnalyticsDbConnectionString(CreateTenantModel model)
+		private string createAnalyticsDbConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
@@ -155,9 +159,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private static string createAggDbConnectionString(CreateTenantModel model)
+		private string createAggDbConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
@@ -166,9 +170,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private static string appConnectionString(CreateTenantModel model)
+		private string appConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
@@ -177,9 +181,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private static string analyticsConnectionString(CreateTenantModel model)
+		private string analyticsConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
@@ -188,9 +192,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private static string aggConnectionString(CreateTenantModel model)
+		private string aggConnectionString(CreateTenantModel model)
 		{
-			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
@@ -244,7 +248,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				};
 			}
 
-			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			var builder = new SqlConnectionStringBuilder(_config.ConnectionString("Tenancy"))
 			{
 				IntegratedSecurity = false,
 				UserID = model.CreateDbUser,

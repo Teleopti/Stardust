@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
 			Browser.Interactions.AssertAnyContains(".md-label", agentName);
-			Browser.Interactions.AssertExists($".schedule .layer.personAbsence[projection-name='{absence}']");
+			Browser.Interactions.AssertExists($".schedule .layer[projection-name='{absence}']");
 		}
 
 		[Then(@"I should see schedule with no absence for '(.*)' displayed")]
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
 				() =>
 				{
-					Browser.Interactions.AssertExistsUsingJQuery($".projection-layer[projection-name={shift}]");
+					Browser.Interactions.AssertExistsUsingJQuery($".layer[projection-name={shift}]");
 				});
 		}
 
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenISelectedActivity(string description)
 		{
 			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
-			Browser.Interactions.Click($".projection-layer[projection-name={description}]");
+			Browser.Interactions.Click($".layer[projection-name={description}]");
 		}
 
 		[When(@"I apply remove activity")]
@@ -358,8 +358,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
 			{
-				Browser.Interactions.AssertExists("td.shift-category-cell");
-				Browser.Interactions.Click("td.shift-category-cell");
+				Browser.Interactions.AssertExists(".shift-category-cell span");
+				Browser.Interactions.Click(".shift-category-cell span");
 			});
 		}
 
@@ -384,14 +384,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
 			{
-				Browser.Interactions.AssertFirstContains("td.shift-category-cell", name);
+				Browser.Interactions.AssertFirstContains(".shift-category-cell span", name);
 			});
 		}
 
 		[Then(@"I should be able to see command check")]
 		public void ThenIShouldBeAbleToSeeCommandCheck()
 		{
-			Browser.Interactions.AssertExists(".teamschedule-command-container .command-check");
+			Browser.Interactions.AssertExists("command-check");
 		}
 
 		[Then(@"I should be able to see week view toggle button")]

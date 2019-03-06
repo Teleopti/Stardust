@@ -2,7 +2,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { DowngradeableComponent } from '@wfm/types';
-import { PlanningGroupService, PlanningPeriodService } from './shared';
+import {IntradayHelper, PlanningGroupService, PlanningPeriodService} from './shared';
 import { IStateService } from 'angular-ui-router';
 import { TitleBarComponent } from './components/title-bar';
 import { PlanningGroupsOverviewComponent } from './pages/planning-groups/planning-groups-overview.component';
@@ -10,9 +10,11 @@ import { PlanningPeriodOverviewComponent } from './pages/planning-period/plannin
 import {DateFormatPipe, MomentModule} from "ngx-moment";
 import {HeatMapColorHelper} from "./shared/heatmapcolor.service";
 import {PlanningPeriodActionService} from "./shared/planningperiod.action.service";
+import {IntradayComponent} from "./components/chart";
+import {TogglesService} from "../core/services";
 
 @NgModule({
-	declarations: [TitleBarComponent, PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
+	declarations: [TitleBarComponent, IntradayComponent,  PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
 	imports: [
 		SharedModule, 
 		TranslateModule.forChild(),
@@ -23,12 +25,14 @@ import {PlanningPeriodActionService} from "./shared/planningperiod.action.servic
 		PlanningPeriodActionService,
 		PlanningPeriodService,
 		HeatMapColorHelper,
+		IntradayHelper,
 		DateFormatPipe,
 		{
 			provide: '$state',
 			useFactory: (i: any): IStateService => i.get('$state'),
 			deps: ['$injector']
-		}
+		},
+		TogglesService
 	],
 	exports: [],
 	entryComponents: [PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent]

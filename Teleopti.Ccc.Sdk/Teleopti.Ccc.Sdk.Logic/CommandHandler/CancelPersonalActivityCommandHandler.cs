@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var personAssignment = scheduleDay.PersonAssignment();
 				if (personAssignment != null)
 				{
-					cancelPersonalActivity(personAssignment, dateTimePeriod);					
+					tryCancelPersonalActivity(personAssignment, dateTimePeriod, command.ActivityId);					
 				}
 
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
@@ -72,11 +72,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
 		}
 
-		private static void cancelPersonalActivity(IPersonAssignment personAssignment, DateTimePeriod period)
+		private static void tryCancelPersonalActivity(IPersonAssignment personAssignment, DateTimePeriod period, Guid? activityId)
 		{
 			var layers = personAssignment.PersonalActivities().ToList();
 			foreach (var layer in layers)
 			{
+				if (activityId != null && activityId != layer.Payload.Id)
+				{
+					continue;
+				}
+
 				var layerPeriod = layer.Period;
 				if (!layerPeriod.Intersect(period)) continue;
 

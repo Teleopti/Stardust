@@ -101,16 +101,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonRepository(new FromFactory(() => UnitOfWorkFactory.Current), null, null);
+				var rep = PersonRepository.DONT_USE_CTOR(new FromFactory(() => UnitOfWorkFactory.Current), null, null);
 				var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366), DateOnly.Today.AddDays(366));
 
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					new ContractScheduleRepository(unitOfWork).LoadAllAggregate();
-					new ContractRepository(unitOfWork).LoadAll();
+					ContractScheduleRepository.DONT_USE_CTOR(unitOfWork).LoadAllAggregate();
+					ContractRepository.DONT_USE_CTOR(unitOfWork).LoadAll();
 				}
 
-				new PartTimePercentageRepository(unitOfWork).LoadAll();
+				PartTimePercentageRepository.DONT_USE_CTOR(unitOfWork).LoadAll();
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
 				var dateTimePeriod =
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 				_setting.EndDate = Period.EndDate.Date;
 				_setting.GroupPage = reportAgentSelector1.SelectedGroupPageKey;
 
-				new PersonalSettingDataRepository(uow).PersistSettingValue(_setting);
+				PersonalSettingDataRepository.DONT_USE_CTOR(uow).PersistSettingValue(_setting);
 				uow.PersistAll();
 			}
 		}
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_setting = new PersonalSettingDataRepository(uow).FindValueByKey("ReportSettingsScheduledTimeVersusTarget",
+				_setting = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("ReportSettingsScheduledTimeVersusTarget",
 					new ReportSettingsScheduledTimeVersusTarget());
 			}
 
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var scenarioRepository = new ScenarioRepository(unitOfWork);
+				var scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 				var scenarios = scenarioRepository.LoadAll();
 
 				foreach (var scenario in scenarios)

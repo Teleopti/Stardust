@@ -20,11 +20,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+			config.FakeInfraTestConfig();
 			return config;
 		}
 

@@ -87,9 +87,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestSynchronousValidator>().As<IAbsenceRequestSynchronousValidator>()
 				.SingleInstance();
 			builder.RegisterType<BusinessRuleConfigProvider>().As<IBusinessRuleConfigProvider>().SingleInstance();
-			registerType
-				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProviderToggle74889Off>(builder,
-					Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889);
 
 			builder.RegisterType<FilterOutRequestsHandledByReadmodel>().As<IFilterRequests>().SingleInstance();
 

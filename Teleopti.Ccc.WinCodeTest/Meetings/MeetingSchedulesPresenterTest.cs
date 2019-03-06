@@ -8,19 +8,18 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
 {
-    public class MeetingSchedulesPresenterTest
+	public class MeetingSchedulesPresenterTest
     {
         private MockRepository _mocks;
         private IPerson _person;
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view = _mocks.DynamicMock<IMeetingSchedulesView>();
             _person = PersonFactory.CreatePerson();
 			_timeZone = TimeZoneInfo.Utc;
-			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(_timeZone);
 			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _startDate = new DateOnly(2009, 10, 27);
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
@@ -58,15 +56,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			    _schedulerStateHolder,
 			    _startDate,
 			    new List<IPerson>(),
-			    new ThisIsNow(_startDate.Date.AddHours(15))
-			    );
+			    new ThisIsNow(_startDate.Date.AddHours(15)), new FakeTimeZoneGuard());
             _model.StartTime = TimeSpan.FromHours(8);
             _model.EndTime = TimeSpan.FromHours(10);
 
             _meetingMover = _mocks.StrictMock<IMeetingMover>();
             _meetingMousePositionDecider = _mocks.StrictMock<IMeetingMousePositionDecider>();
 
-            _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
+            _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider, new FakeTimeZoneGuard());
         }
 
         [TearDown]
@@ -384,7 +381,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             using (_mocks.Playback())
             {
-                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
+                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider, new FakeTimeZoneGuard());
                 _target.Model.AddParticipants(new List<ContactPersonViewModel> { new ContactPersonViewModel(person) }, new List<ContactPersonViewModel>());
                 _target.RecreateParticipantList();
                 var period = _target.MergedOrDefaultPeriod();
@@ -420,7 +417,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             using (_mocks.Playback())
             {
-                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
+                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider, new FakeTimeZoneGuard());
                 _target.Model.AddParticipants(new List<ContactPersonViewModel> { new ContactPersonViewModel(person) }, new List<ContactPersonViewModel>());
                 _target.RecreateParticipantList();
                 var period = _target.MergedOrDefaultPeriod();

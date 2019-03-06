@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillRepository = new SkillRepository(currentUnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(currentUnitOfWork);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == Skill);
 
 			var startDateUtc = TimeZoneHelper.ConvertToUtc(StartDate, skill.TimeZone);

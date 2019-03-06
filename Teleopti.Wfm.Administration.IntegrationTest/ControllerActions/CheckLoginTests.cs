@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				new SqlConnectionStringBuilder(InfraTestConfigReader.ApplicationConnectionString());
 
 			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "passwordPassword7");
 			

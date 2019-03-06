@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		{
 			var today = DateTime.UtcNow;
 
-			var multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(unitOfWork);
+			var multiplicatorDefinitionSetRepository = MultiplicatorDefinitionSetRepository.DONT_USE_CTOR(unitOfWork);
 			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime);
 			multiplicatorDefinitionSetRepository.Add(multiplicatorDefinitionSet);
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			PersonRequest.TrySetMessage(
 				"This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}

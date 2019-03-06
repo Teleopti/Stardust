@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -26,8 +27,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPartTimePercentageRepository _partTimePercentageRepository;
         private readonly IContractScheduleRepository _contractScheduleRepository;
         private readonly IContractRepository _contractRepository;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-        public ChangePersonEmploymentCommandHandler(IAssembler<IPersonPeriod, PersonSkillPeriodDto> personSkillPeriodAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IExternalLogOnRepository externalLogOnRepository, IPersonRepository personRepository, ITeamRepository teamRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository)
+		public ChangePersonEmploymentCommandHandler(IAssembler<IPersonPeriod, PersonSkillPeriodDto> personSkillPeriodAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IExternalLogOnRepository externalLogOnRepository, IPersonRepository personRepository, ITeamRepository teamRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ICurrentBusinessUnit currentBusinessUnit, ICurrentAuthorization currentAuthorization)
         {
             _personSkillPeriodAssembler = personSkillPeriodAssembler;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -38,7 +41,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _partTimePercentageRepository = partTimePercentageRepository;
             _contractScheduleRepository = contractScheduleRepository;
             _contractRepository = contractRepository;
-        }
+			_currentBusinessUnit = currentBusinessUnit;
+			_currentAuthorization = currentAuthorization;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ChangePersonEmploymentCommandDto command)
@@ -48,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
-				person.VerifyCanBeModifiedByCurrentUser();
+				person.VerifyCanBeModifiedByCurrentUser(_currentAuthorization);
 
 	            if (startDate > person.TerminalDate)
 					throw new FaultException("You cannot change person employment after his leaving date.");
@@ -77,19 +82,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var team = command.Team == null
                                ? lastPersonPeriod.Team
                                : _teamRepository.Load(command.Team.Id.GetValueOrDefault());
-				team.Site.ValidateBusinessUnitConsistency();
+				team.Site.ValidateBusinessUnitConsistency(_currentBusinessUnit);
                 newPersonPeriod = new PersonPeriod(command.Period.StartDate.ToDateOnly(), 
                                                    command.PersonContract == null
                                                        ? lastPersonPeriod.PersonContract
                                                        : createPersonContract(command.PersonContract),team);
                 person.AddPersonPeriod(newPersonPeriod);
-                var externalLogOnDtos = new List<ExternalLogOnDto>();
-                lastPersonPeriod.ExternalLogOnCollection.ForEach(
-                    e => externalLogOnDtos.Add(new ExternalLogOnDto
-                        {
-                            AcdLogOnOriginalId = e.AcdLogOnOriginalId,
-                            AcdLogOnName = e.AcdLogOnName
-                        }));
+				var externalLogOnDtos = lastPersonPeriod.ExternalLogOnCollection.Select(e => new ExternalLogOnDto
+					{AcdLogOnOriginalId = e.AcdLogOnOriginalId, AcdLogOnName = e.AcdLogOnName}).ToList();
 
                 var personSkillPeriodDtos = _personSkillPeriodAssembler.DomainEntityToDto(lastPersonPeriod);
                 addDefaultPersonSkillsWhenNoDefined(command, personSkillPeriodDtos);
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             if (command.Team != null)
             {
 				person.ChangeTeam(_teamRepository.Get(command.Team.Id.GetValueOrDefault()), existPersonPeriod);
-				existPersonPeriod.Team.Site.ValidateBusinessUnitConsistency();
+				existPersonPeriod.Team.Site.ValidateBusinessUnitConsistency(_currentBusinessUnit);
             }
             if (command.PersonContract != null)
             {
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private IPersonPeriod createPersonPeriod(ChangePersonEmploymentCommandDto command)
         {
             var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
-			team.Site.ValidateBusinessUnitConsistency();
+			team.Site.ValidateBusinessUnitConsistency(_currentBusinessUnit);
             var personContract = createPersonContract(command.PersonContract);
             return new PersonPeriod(command.Period.StartDate.ToDateOnly(), personContract, team);
         }
@@ -176,9 +176,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var contractSchedule = _contractScheduleRepository.Load(personContractDto.ContractScheduleId.GetValueOrDefault());
             var contract = _contractRepository.Load(personContractDto.ContractId.GetValueOrDefault());
 
-			partTimePercentage.ValidateBusinessUnitConsistency();
-			contractSchedule.ValidateBusinessUnitConsistency();
-			contract.ValidateBusinessUnitConsistency();
+			partTimePercentage.ValidateBusinessUnitConsistency(_currentBusinessUnit);
+			contractSchedule.ValidateBusinessUnitConsistency(_currentBusinessUnit);
+			contract.ValidateBusinessUnitConsistency(_currentBusinessUnit);
 
             return new PersonContract(contract, partTimePercentage, contractSchedule);
         }
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             foreach (var personSkills in PersonSkills(commandDto))
             {
                 var skill = _skillRepository.Load(personSkills.SkillId);
-				skill.ValidateBusinessUnitConsistency();
+				skill.ValidateBusinessUnitConsistency(_currentBusinessUnit);
                 person.AddSkill(new PersonSkill(skill, new Percent(personSkills.Proficiency)) {Active = personSkills.Active}, personPeriod);
             }
         }
@@ -220,13 +220,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         {
 			  person.ResetExternalLogOn(personPeriod);
             var externalLogOns = _externalLogOnRepository.LoadAll();
-            var filteredExternalLogOns = new List<IExternalLogOn>();
-	        filteredExternalLogOns.AddRange(externalLogOns.Where(e =>
+            var filteredExternalLogOns = externalLogOns.Where(e =>
 	        {
 				return externalLogOnDtos.Any(edto =>
 					edto.AcdLogOnName.Equals(e.AcdLogOnName) &&
 					edto.AcdLogOnOriginalId.Equals(e.AcdLogOnOriginalId));
-	        }));
+	        }).ToList();
 	        foreach (var filteredExternalLogOn in filteredExternalLogOns)
 	        {
 		        person.AddExternalLogOn(filteredExternalLogOn,personPeriod);

@@ -5,20 +5,13 @@ export interface BankHolidayCalendar {
 }
 
 export interface BankHolidayCalendarItem extends BankHolidayCalendar {
-	CurrentYearIndex: number;
+	ActiveYearIndex: number;
 }
 
 export interface BankHolidayCalendarYear {
 	Year: string;
 	Dates: BankHolidayCalendarDateItem[];
-}
-
-export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
-	ModifiedDates?: BankHolidayCalendarDateItem[];
-	YearDate: Date;
-	DisabledDate?: Function;
-	SelectedDates: number[];
-	Active: boolean;
+	Active?: boolean;
 }
 
 export interface BankHolidayCalendarDate {

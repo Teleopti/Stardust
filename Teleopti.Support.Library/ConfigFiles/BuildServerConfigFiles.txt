@@ -42,3 +42,9 @@ $(Repository)Teleopti.Ccc.Scheduling.PerformanceTest\bin\Release\Teleopti.Ccc.Sc
 $(Repository)Teleopti.Wfm.Adherence.Test\App.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
 $(Repository)Teleopti.Wfm.Adherence.Test\bin\Debug\Teleopti.Wfm.Adherence.Test.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
 $(Repository)Teleopti.Wfm.Adherence.Test\bin\Release\Teleopti.Wfm.Adherence.Test.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Ccc.AbsenceRequest.PerformanceTest\App.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Ccc.AbsenceRequest.PerformanceTest\bin\Release\Teleopti.Ccc.AbsenceRequest.PerformanceTest.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Ccc.AbsenceRequest.PerformanceTest\bin\Debug\Teleopti.Ccc.AbsenceRequest.PerformanceTest.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Wfm.OvertimeRequest.PerformanceTest\App.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Wfm.OvertimeRequest.PerformanceTest\bin\Release\Teleopti.Wfm.OvertimeRequest.PerformanceTest.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Wfm.OvertimeRequest.PerformanceTest\bin\Debug\Teleopti.Wfm.OvertimeRequest.PerformanceTest.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config

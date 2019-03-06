@@ -157,10 +157,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SwapShifts, "xxSwapShifts", DefinedRaptorApplicationFunctionForeignIds.SwapShifts);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.EditShiftCategory, "xxEditShiftCategory", DefinedRaptorApplicationFunctionForeignIds.EditShiftCategory);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, "xxMoveInvalidOverlappedActivity", DefinedRaptorApplicationFunctionForeignIds.MoveInvalidOverlappedActivity);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, "xxModifyAdherence", DefinedRaptorApplicationFunctionForeignIds.ModifyAdherence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxAdherence", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, "xxApprove", DefinedRaptorApplicationFunctionForeignIds.ModifyAdherence);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.HistoricalOverview, "xxHistoricalOverview", DefinedRaptorApplicationFunctionForeignIds.HistoricalOverview);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AdjustAdherence, "xxAdjustAdherence", DefinedRaptorApplicationFunctionForeignIds.AdjustAdherence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AdjustAdherence, "xxAdjustToNeutral", DefinedRaptorApplicationFunctionForeignIds.AdjustAdherence);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPlans, "xxPlans", DefinedRaptorApplicationFunctionForeignIds.WebPlans);

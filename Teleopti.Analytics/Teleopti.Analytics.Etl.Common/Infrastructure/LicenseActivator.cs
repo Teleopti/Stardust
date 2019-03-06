@@ -12,7 +12,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 
-				var xmlLicenseService = new XmlLicenseServiceFactory().Make(new LicenseRepository(uow), 0);
+				var xmlLicenseService = new XmlLicenseServiceFactory().Make(LicenseRepository.DONT_USE_CTOR(uow), 0);
 
                 LicenseProvider.ProvideLicenseActivator(UnitOfWorkFactory.Current.Name,xmlLicenseService);	
 			}

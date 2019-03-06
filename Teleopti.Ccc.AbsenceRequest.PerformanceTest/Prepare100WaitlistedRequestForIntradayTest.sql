@@ -1,6 +1,6 @@
 -- ta bort alla PersonAbsence d�r vi vill leka d� blir det l�ttare att f� godk�nt
 declare @start datetime = '2016-04-03 00:00:00' 
-declare @end datetime = '2016-04-09 00:00:00' 
+declare @end datetime = '2016-04-21 00:00:00' 
 declare @startRequest datetime = '2016-04-06 8:00:00' 
 declare @endRequest datetime = '2016-04-06 17:00:00'
 --select * 

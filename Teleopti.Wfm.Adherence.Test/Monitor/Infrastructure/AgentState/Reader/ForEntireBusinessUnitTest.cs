@@ -18,12 +18,11 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 	[TestFixture]
 	public class ForEntireBusinessUnitTest
 	{
-		public Database Database;
 		public IAgentStateReadModelPersister StatePersister;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
-		public ICurrentBusinessUnit BusinessUnit;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldGetAgentStates()
@@ -38,13 +37,13 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = person1,
-					BusinessUnitId = BusinessUnit.Current().Id,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					SiteId = londonId
 				});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = person2,
-					BusinessUnitId = BusinessUnit.Current().Id,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					SiteId = parisId
 				});
 			});
@@ -68,7 +67,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = person1,
-					BusinessUnitId = BusinessUnit.Current().Id,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					SiteId = londonId,
 					AlarmStartTime = "2017-08-03 08:00".Utc(),
 					IsRuleAlarm = true
@@ -77,7 +76,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = person2,
-					BusinessUnitId = BusinessUnit.Current().Id,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					SiteId = parisId,
 					AlarmStartTime = "2017-08-03 08:00".Utc(),
 					IsRuleAlarm = true
@@ -99,8 +98,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
-					BusinessUnitId = BusinessUnit.Current().Id,
-
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
@@ -124,11 +122,10 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
-					BusinessUnitId = BusinessUnit.Current().Id,
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 					SiteId = Guid.NewGuid(),
 					AlarmStartTime = "2017-08-02 08:00".Utc(),
 					IsRuleAlarm = true
-
 				});
 				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
@@ -153,8 +150,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
-					BusinessUnitId = BusinessUnit.Current().Id,
-
+					BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
@@ -178,7 +174,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 						StatePersister.Upsert(new AgentStateReadModelForTest
 						{
 							PersonId = Guid.NewGuid(),
-							BusinessUnitId = BusinessUnit.Current().Id,
+							BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 							SiteId = Guid.NewGuid()
 						});
 					});
@@ -199,7 +195,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 					.ForEach(i => StatePersister.UpsertWithState(new AgentStateReadModelForTest
 					{
 						PersonId = Guid.NewGuid(),
-						BusinessUnitId = BusinessUnit.Current().Id,
+						BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 						SiteId = Guid.NewGuid(),
 						AlarmStartTime = "2017-08-02 08:00".Utc(),
 						IsRuleAlarm = true

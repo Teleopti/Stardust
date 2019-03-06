@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Support.Library;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -7,11 +8,13 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		private readonly DatabasePatcher _databasePatcher;
 		private readonly IDbPathProvider _pathProvider;
+		private readonly IConfigReader _config;
 
-		public DatabaseUpgrader(DatabasePatcher databasePatcher, IDbPathProvider pathProvider)
+		public DatabaseUpgrader(DatabasePatcher databasePatcher, IDbPathProvider pathProvider, IConfigReader config)
 		{
 			_databasePatcher = databasePatcher;
 			_pathProvider = pathProvider;
+			_config = config;
 		}
 
 		public int Upgrade(string server, string database, DatabaseType type, string adminUserName, string adminPassword, bool useIntegratedSecurity, string appUser, string appPassword, bool permissionMode, string tenant, int tenantId)
@@ -30,7 +33,7 @@ namespace Teleopti.Wfm.Administration.Core
 				CreatePermissions = permissionMode,
 				UseIntegratedSecurity = useIntegratedSecurity
 			};
-			_databasePatcher.SetLogger(new TenantLogger(tenant, tenantId));
+			_databasePatcher.SetLogger(new TenantLogger(tenant, tenantId, _config));
 			return _databasePatcher.Run(command);
 		}
 	}

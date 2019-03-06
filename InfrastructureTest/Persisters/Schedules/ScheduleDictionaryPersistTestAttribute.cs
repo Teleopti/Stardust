@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		IScheduleDictionary MakeDictionary();
 	}
 
-	public class ScheduleDictionaryPersistTestAttribute : PrincipalAndStateTestAttribute, IScheduleDictionaryPersistTestHelper
+	public class ScheduleDictionaryPersistTestAttribute : DatabaseTestAttribute, IScheduleDictionaryPersistTestHelper
 	{
 		public WithUnitOfWork WithUnitOfWork;
 		public IActivityRepository ActivityRepository;

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValidators
 {
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValid
 	/// </remarks>
 	public interface IAtomicValidator
 	{
-		SikuliValidationResult Validate();
+		SikuliValidationResult Validate(ITimeZoneGuard timeZoneGuard);
 		string Description { get; }
 	}
 }

@@ -126,12 +126,12 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.15.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.18.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.15.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.18.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -277,8 +277,8 @@
     <Reference Include="StackExchange.Redis.StrongName, Version=1.1.608.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.1.608\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.840, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.840\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.845, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.845\lib\net451\Stardust.Manager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -436,6 +436,7 @@
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
+    <Compile Include="Areas\SystemSetting\SystemSettingController.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -1429,6 +1430,7 @@
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Status\StatusController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\Domain\FeatureFlags\toggles.txt">
@@ -1505,6 +1507,7 @@
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordView.js" />
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
+    <Content Include="Content\axios\axios.min.js" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
     <Content Include="Content\Error\404.aspx" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
@@ -1525,8 +1528,12 @@
     </None>
     <Content Include="Content\signalr\jquery.signalR-2.3.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.3.0.min.js" />
+    <Content Include="Content\vue\vue.min.js" />
     <Content Include="Content\webchat\readme.txt" />
     <Content Include="Content\webchat\webchat-es5.js" />
+    <Content Include="Status\index.html" />
+    <Content Include="Status\status.css" />
+    <Content Include="Status\status.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
@@ -1568,7 +1575,6 @@
     <Content Include="WFM\app\gamification\html\measureConfigForm2.tpl.html" />
     <Content Include="WFM\app\gamification\html\measureConfigHeader.tpl.html" />
     <Content Include="WFM\app\gamification\_modules.js" />
-    <Content Include="WFM\app\global\shortcuts\shortcuts.tab.service.js" />
     <Content Include="WFM\app\global\shortcuts\_modules.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.spec.js" />
@@ -1602,8 +1608,6 @@
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
-    <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
-    <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.js" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.component.spec.js" />
@@ -1626,8 +1630,6 @@
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.single.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\_modules.js" />
-    <Content Include="WFM\app\global\skill-group\skillgroup.controller.js" />
-    <Content Include="WFM\app\global\skill-group\skillgroup.html" />
     <Content Include="WFM\app\global\skill-group\skillgroup.service.js" />
     <Content Include="WFM\app\global\skill-group\_modules.js" />
     <Content Include="WFM\app\global\utilities\colorUtils.service.js" />
@@ -1745,8 +1747,12 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.picker.buttons.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta-historical.adjustAdherenceToNeutral_80594.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.inputValidationForApprovingAdherencePeriods_77045.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adjustAdherenceToNeutral.neutralAdherences.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.AdjustAdherenceToNeutral_80594.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adjustAdherenceToNeutral_80594.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
@@ -1915,6 +1921,7 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
+    <Content Include="WFM\app\teamSchedule\html\schedulelist.html" />
     <Content Include="WFM\app\teamSchedule\html\shiftEditor.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />
@@ -2417,6 +2424,10 @@
     <Content Include="WFM\src\app\people\shared\workspace.service.ts" />
     <Content Include="WFM\src\app\people\utils\count-roles.ts" />
     <Content Include="WFM\src\app\people\utils\index.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.scss" />
+    <Content Include="WFM\src\app\plans\components\chart\index.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.ts" />
+    <Content Include="WFM\src\app\plans\components\chart\intraday.component.html" />
     <Content Include="WFM\src\app\plans\components\index.ts" />
     <Content Include="WFM\src\app\plans\components\title-bar\index.ts" />
     <Content Include="WFM\src\app\plans\components\title-bar\title-bar.component.html" />
@@ -2435,6 +2446,7 @@
     <Content Include="WFM\src\app\plans\plans.module.ts" />
     <Content Include="WFM\src\app\plans\shared\heatmapcolor.service.ts" />
     <Content Include="WFM\src\app\plans\shared\index.ts" />
+    <Content Include="WFM\src\app\plans\shared\intraday.helper.ts" />
     <Content Include="WFM\src\app\plans\shared\planninggroup.service.ts" />
     <Content Include="WFM\src\app\plans\shared\planningperiod.action.service.ts" />
     <Content Include="WFM\src\app\plans\shared\planningperiod.service.ts" />
@@ -2493,11 +2505,6 @@
     <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\bank-holiday-calendar-assign-to-sites.component.spec.ts" />
     <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\index.ts" />
     <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\bank-holiday-calendar-assign-to-sites.component.scss" />
-    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.html" />
-    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\index.ts" />
-    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.ts" />
-    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.spec.ts" />
-    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.scss" />
     <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.html" />
     <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.scss" />
     <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.spec.ts" />
@@ -2511,6 +2518,7 @@
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.ts" />
     <Content Include="WFM\src\app\system-settings\shared\bank-calendar-data.service.ts" />
     <Content Include="WFM\src\app\system-settings\shared\index.ts" />
+    <Content Include="WFM\src\app\system-settings\shared\system-settings.service.ts" />
     <Content Include="WFM\src\app\system-settings\system-settings.module.ts" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.html" />
     <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.scss" />
@@ -2618,6 +2626,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.viewStateKeeper.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.js" />
+    <Content Include="WFM\css\_teamschedule.schedulelist.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\app\outbound\outbound.service.campaign.js" />
@@ -2757,8 +2766,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AlertActivity.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.WeekViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.WeekViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
@@ -2873,7 +2880,6 @@
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
     <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
     <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />

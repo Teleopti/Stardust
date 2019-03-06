@@ -33,14 +33,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		public EditSkillDayTemplate(ISkillDayTemplate skillDayTemplate) : this()
 		{
-			var skillRepository = new SkillRepository(UnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_skill = skillRepository.Get(skillDayTemplate.Parent.Id.GetValueOrDefault());
 			_skillDayTemplate = (ISkillDayTemplate) _skill.TryFindTemplateByName(TemplateTarget.Skill, skillDayTemplate.Name);
 		}
 
 		public EditSkillDayTemplate(IEntity skill) : this()
 		{
-			var skillRepository = new SkillRepository(UnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_skill = skillRepository.Get(skill.Id.GetValueOrDefault());
 
 			var serviceAgreement = initializeServiceAgreement();
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			: this()
 		{
 			if (skillDay == null) throw new ArgumentNullException("skillDay");
-			var skillRepository = new SkillRepository(UnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_skill = skillRepository.Get(skillDay.Skill.Id.GetValueOrDefault());
 			
 			var serviceAgreement = initializeServiceAgreement();

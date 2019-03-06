@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanCreate()
         {
-            Assert.IsNotNull(new WorkloadRepository(UnitOfWork));
+            Assert.IsNotNull(WorkloadRepository.DONT_USE_CTOR(UnitOfWork));
         }
 
         [Test]
@@ -120,12 +120,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             double tasks = GetWorkloadTasks(skillDay);
             Assert.AreEqual(tasks, skillDay.TotalTasks);
 
-            WorkloadRepository workloadRepository = new WorkloadRepository(UnitOfWork);
+            WorkloadRepository workloadRepository = WorkloadRepository.DONT_USE_CTOR(UnitOfWork);
 
             workloadRepository.Remove(firstWorkload);
             PersistAndRemoveFromUnitOfWork(firstWorkload);
 
-            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            SkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(UnitOfWork);
             IList<ISkillDay> skillDays = skillDayRepository.FindRange(period, _skill, skillDay.Scenario).ToList();
             
             Assert.AreEqual(1, skillDays.Count);
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IWorkload> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new WorkloadRepository(currentUnitOfWork);
+            return WorkloadRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

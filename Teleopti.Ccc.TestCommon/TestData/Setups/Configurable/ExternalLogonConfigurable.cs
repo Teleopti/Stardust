@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
                 DataSourceId = DataSourceId
             };
 
-			new ExternalLogOnRepository(currentUnitOfWork).Add(ExternalLogOn);
+			ExternalLogOnRepository.DONT_USE_CTOR(currentUnitOfWork).Add(ExternalLogOn);
 		}
 	}
 }

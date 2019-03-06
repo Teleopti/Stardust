@@ -12,6 +12,7 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -25,6 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly PmInfoProvider _pmInfoProvider;
 		private readonly IToggleFiller _toggleFiller;
+		private readonly IMarkEtlPing _markEtlPing;
 
 		private readonly string _connectionString;
 		private readonly JobExtractor _jobExtractor;
@@ -40,7 +42,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			ITenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository,
 			PmInfoProvider pmInfoProvider,
-			IToggleFiller toggleFiller)
+			IToggleFiller toggleFiller,
+			IMarkEtlPing markEtlPing)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
@@ -48,6 +51,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_pmInfoProvider = pmInfoProvider;
 			_toggleFiller = toggleFiller;
+			_markEtlPing = markEtlPing;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 		}
 
@@ -59,14 +63,19 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		public bool Tick()
 		{
-			return checkForEtlJob();
+			var res = checkForEtlJob();
+			if(res)
+			{
+				_markEtlPing.Store();
+			}
+			return res;
 		}
 
 		private bool checkForEtlJob()
 		{
 			log.Debug("Checking configuration");
-			var configHandler =
-				new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)), new BaseConfigurationValidator());
+			var generalFunctions = new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository));
+			var configHandler = new ConfigurationHandler(generalFunctions, new BaseConfigurationValidator());
 			configHandler.SetConnectionString(_connectionString);
 			if (!configHandler.IsConfigurationValid)
 			{
@@ -119,11 +128,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			);
 
 			log.DebugFormat("Running job {0}", jobToRun.Name);
-			var success = runEtlJob(jobToRun, scheduleToRun, repository, jobScheduleRepository);
-			return success;
+			runEtlJob(jobToRun, scheduleToRun, repository, jobScheduleRepository);
+			return true;
 		}
 
-		private bool runEtlJob(IJob jobToRun, IEtlJobSchedule scheduleJob, IJobLogRepository repository,
+		private void runEtlJob(IJob jobToRun, IEtlJobSchedule scheduleJob, IJobLogRepository repository,
 			IJobScheduleRepository jobScheduleRepository)
 		{
 			var runController = new RunController((IRunControllerRepository) repository);
@@ -132,7 +141,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if (!runController.CanIRunAJob(out var etlRunningInformation))
 			{
 				logConflictingEtlRun(jobToRun, etlRunningInformation);
-				return true;
+				return;
 			}
 
 			try
@@ -145,10 +154,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 					var etlTenantName = scheduleJob.TenantName;
 					var etlTenants = Tenants.IsAllTenants(etlTenantName)
-						? _tenants.EtlTenants().ToList()
+						? _tenants.EtlTenants(true).ToList()
 						: new List<TenantInfo>
 						{
-							_tenants.Tenant(etlTenantName)
+							_tenants.Tenant(etlTenantName, true)
 						};
 					
 					foreach (var tenant in etlTenants)
@@ -205,8 +214,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					GC.WaitForFullGCComplete();
 				}
 			}
-
-			return true;
 		}
 
 		private static void logConflictingEtlRun(IJob jobToRun, IEtlRunningInformation etlRunningInformation)

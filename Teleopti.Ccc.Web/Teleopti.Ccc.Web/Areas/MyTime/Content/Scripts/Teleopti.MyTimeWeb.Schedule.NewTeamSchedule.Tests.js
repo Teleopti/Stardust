@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(function() {
 	var agentSchedulesHtml = '',
 		completeLoadedCount = 0,
 		fakeTeamScheduleData,
@@ -15,7 +15,7 @@
 		vm;
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule', {
-		setup: function () {
+		setup: function() {
 			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTeamScheduleView_75989');
 			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
 			setup();
@@ -28,7 +28,7 @@
 				PMDesignator: 'PM'
 			});
 		},
-		teardown: function () {
+		teardown: function() {
 			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTeamScheduleView_75989');
 			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
 
@@ -43,17 +43,17 @@
 		}
 	});
 
-	test('should select today as selectedDate(displayDate)', function () {
+	test('should select today as selectedDate(displayDate)', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
 		var today = moment().format(dateFormat);
 
 		equal(vm.selectedDate().format(dateFormat), today);
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), today);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), today);
 	});
 
-	test('should format displayDate', function () {
+	test('should format displayDate', function() {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: true,
 			DateFormat: 'YYYY-MM-DD',
@@ -66,12 +66,12 @@
 		initVm();
 
 		equal(
-			$('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(),
+			$('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(),
 			Teleopti.MyTimeWeb.Common.FormatDate(moment())
 		);
 	});
 
-	test('should change selected date after clicking on "previous day" icon', function () {
+	test('should change selected date after clicking on "previous day" icon', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 		var today = moment();
@@ -81,10 +81,10 @@
 		var expectDateStr = today.add(-1, 'days').format(dateFormat);
 
 		equal(vm.selectedDate().format(dateFormat), expectDateStr);
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), expectDateStr);
 	});
 
-	test('should change selected date after clicking on "next day" icon', function () {
+	test('should change selected date after clicking on "next day" icon', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -95,10 +95,10 @@
 		var expectDateStr = today.add(1, 'days').format(dateFormat);
 
 		equal(vm.selectedDate().format(dateFormat), expectDateStr);
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), expectDateStr);
 	});
 
-	test('should change display date after changing selected date', function () {
+	test('should change display date after changing selected date', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -108,10 +108,10 @@
 
 		var expectDateStr = vm.selectedDate().format(dateFormat);
 
-		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
+		equal($('.new-teamschedule-view-nav .mobile-datepicker button.formatted-date-text').text(), expectDateStr);
 	});
 
-	test('should reset loaded agent index after changing selected date', function () {
+	test('should reset loaded agent index after changing selected date', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -124,7 +124,7 @@
 		equal(vm.loadedAgentIndex, 49);
 	});
 
-	test('should reset the filling block width after changing selected date', function () {
+	test('should reset the filling block width after changing selected date', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -137,9 +137,9 @@
 		equal($('.left-filling-block').width(), 0);
 	});
 
-	test('should render sites and teams on mobile', function () {
+	test('should render sites and teams on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -160,9 +160,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should select default team on mobile', function () {
+	test('should select default team on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -178,7 +178,7 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should handle sites and teams hierarchy when user has no group page permission', function () {
+	test('should handle sites and teams hierarchy when user has no group page permission', function() {
 		fakeAvailableTeamsData = {
 			teams: [{ id: '34590a63-6331-4921-bc9f-9b5e015ab495', text: 'London/Team Preferences' }],
 			allTeam: { id: 'allTeams', text: 'All Teams' }
@@ -200,13 +200,12 @@
 		equal($($(selector)[0][1]).text(), 'London/Team Preferences');
 	});
 
-	test('should set correct selected team id when click "AllTeams" item', function () {
-		
+	test('should set correct selected team id when click "AllTeams" item', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
 		$('.new-teamschedule-team-filter').click();
-		vm.loadGroupAndTeams(function () {
+		vm.loadGroupAndTeams(function() {
 			vm.isTeamsAndGroupsLoaded(true);
 		});
 
@@ -223,9 +222,9 @@
 		equal(vm.selectedTeamIds[4], '23e29d14-21cf-43ad-a482-b4c5c6bb3890');
 	});
 
-	test('should not load sites and teams until user toggle the selection list on iPad', function () {
+	test('should not load sites and teams until user toggle the selection list on iPad', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAniPad;
-		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -245,13 +244,13 @@
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn;
 	});
 
-	test('should not load sites and teams until user toggle the selection list on desktop', function () {
+	test('should not load sites and teams until user toggle the selection list on desktop', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return false;
 		};
-		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
 			return false;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -272,9 +271,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
 	});
 
-	test('should select default team on iPad', function () {
+	test('should select default team on iPad', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAniPad;
-		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -285,13 +284,13 @@
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn;
 	});
 
-	test('should select default team on desktop', function () {
+	test('should select default team on desktop', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return false;
 		};
-		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
 			return false;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -303,9 +302,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
 	});
 
-	test('should not trigger schedule reload when changing selected team without clicking search button on mobile', function () {
+	test('should not trigger schedule reload when changing selected team without clicking search button on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -326,13 +325,13 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should trigger schedule reload when changing selected team on desktop', function () {
+	test('should trigger schedule reload when changing selected team on desktop', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return false;
 		};
-		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
 			return false;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -341,7 +340,7 @@
 		equal(completeLoadedCount, 1);
 		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
 
-		vm.loadGroupAndTeams(function () {
+		vm.loadGroupAndTeams(function() {
 			vm.isTeamsAndGroupsLoaded(true);
 		});
 
@@ -356,9 +355,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
 	});
 
-	test('should trigger schedule reload when changing selected team on iPad', function () {
+	test('should trigger schedule reload when changing selected team on iPad', function() {
 		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
-		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
 			return false;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -367,7 +366,7 @@
 		equal(completeLoadedCount, 1);
 		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
 
-		vm.loadGroupAndTeams(function () {
+		vm.loadGroupAndTeams(function() {
 			vm.isTeamsAndGroupsLoaded(true);
 		});
 
@@ -381,7 +380,7 @@
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
 	});
 
-	test('should render timeline', function () {
+	test('should render timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 		vm.selectedDate(moment(selectedDate));
@@ -396,7 +395,7 @@
 		equal($(labelSelector)[31].innerText, '06:00 +1');
 	});
 
-	test('should update timeline after load more schedules', function () {
+	test('should update timeline after load more schedules', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 		vm.selectedDate(moment(selectedDate));
@@ -620,7 +619,7 @@
 		equal($(labelSelector)[33].innerText, '08:00 +1');
 	});
 
-	test('should render overnight timeline', function () {
+	test('should render overnight timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 		vm.selectedDate(moment(selectedDate));
@@ -637,7 +636,7 @@
 		equal($(labelSelector)[31].innerText, '06:00 +1');
 	});
 
-	test('should render my schedule', function () {
+	test('should render my schedule', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -649,7 +648,7 @@
 		equal($('.new-teamschedule-view .my-schedule-column .new-teamschedule-layer strong').text(), 'Phone');
 	});
 
-	test('should render overtime on day off', function () {
+	test('should render overtime on day off', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -660,7 +659,7 @@
 		);
 	});
 
-	test("should render teammates's schedules", function () {
+	test("should render teammates's schedules", function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -677,7 +676,7 @@
 		);
 	});
 
-	test('should not show title when the activity length is less than 30 minutes', function () {
+	test('should not show title when the activity length is less than 30 minutes', function() {
 		fakeOriginalAgentSchedulesData.splice(1);
 		fakeOriginalAgentSchedulesData[0].Periods = [
 			{
@@ -710,14 +709,14 @@
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer strong:visible').length, 0);
 	});
 
-	test('should show shift category for my schedule', function () {
+	test('should show shift category for my schedule', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
 		equal($('.new-teamschedule-view .new-teamschedule-agent-name.my-name span.shift-category-cell').text(), 'AM');
 	});
 
-	test('should show day off short name for my schedule', function () {
+	test('should show day off short name for my schedule', function() {
 		fakeTeamScheduleData.MySchedule.ShiftCategory.Name = 'Day Off';
 		fakeTeamScheduleData.MySchedule.ShiftCategory.ShortName = 'DO';
 
@@ -727,7 +726,7 @@
 		equal($('.new-teamschedule-view .new-teamschedule-agent-name.my-name span.shift-category-cell').text(), 'DO');
 	});
 
-	test('should reload schedule after clicking on "previous day" icon', function () {
+	test('should reload schedule after clicking on "previous day" icon', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -736,7 +735,7 @@
 		equal(fetchTeamScheduleDataRequestCount, 2);
 	});
 
-	test('should reload schedule after clicking on "next day" icon', function () {
+	test('should reload schedule after clicking on "next day" icon', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -745,7 +744,7 @@
 		equal(fetchTeamScheduleDataRequestCount, 2);
 	});
 
-	test('should reset skip count after changing selected date', function () {
+	test('should reset skip count after changing selected date', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -758,7 +757,7 @@
 		equal(vm.paging.skip, 0);
 	});
 
-	test('should reset skip count after clicking on "previous day" icon', function () {
+	test('should reset skip count after clicking on "previous day" icon', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -768,7 +767,7 @@
 		equal(vm.paging.skip, 0);
 	});
 
-	test('should reset skip count after clicking on "next day" icon', function () {
+	test('should reset skip count after clicking on "next day" icon', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -778,9 +777,9 @@
 		equal(vm.paging.skip, 0);
 	});
 
-	test('should filter agent schedules on mobile', function () {
+	test('should filter agent schedules on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -802,7 +801,7 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should update agent names after loaded schedules', function () {
+	test('should update agent names after loaded schedules', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -820,7 +819,7 @@
 		);
 	});
 
-	test('should update agent names after loaded more schedules', function () {
+	test('should update agent names after loaded more schedules', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -880,9 +879,9 @@
 		);
 	});
 
-	test('should reset search name to empty after click cancel button in panel', function () {
+	test('should reset search name to empty after click cancel button in panel', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -899,9 +898,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should reset search name text to last submitted value after click cancel button in panel', function () {
+	test('should reset search name text to last submitted value after click cancel button in panel', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -920,9 +919,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should reset to selected team default team after click cancel button in panel', function () {
+	test('should reset to selected team default team after click cancel button in panel', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -938,9 +937,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should reset selected team to last submitted team after click cancel button in panel', function () {
+	test('should reset selected team to last submitted team after click cancel button in panel', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -959,7 +958,7 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should map dayOff of MySchedule', function () {
+	test('should map dayOff of MySchedule', function() {
 		fakeTeamScheduleData.MySchedule.Periods = [];
 		$('body').append(agentSchedulesHtml);
 		initVm();
@@ -975,7 +974,7 @@
 		);
 	});
 
-	test('should map dayOff of agent schedule', function () {
+	test('should map dayOff of agent schedule', function() {
 		fakeTeamScheduleData.AgentSchedules[0] = {
 			Name: 'Test Day Off agent',
 			Periods: [],
@@ -1003,7 +1002,7 @@
 		);
 	});
 
-	test('should map day off but not show "Day off" text when having overtime on day offs', function () {
+	test('should map day off but not show "Day off" text when having overtime on day offs', function() {
 		fakeTeamScheduleData.AgentSchedules[0] = {
 			Name: 'Test Day Off agent',
 			Periods: [
@@ -1045,7 +1044,7 @@
 		equal($('.teammates-schedules-column .new-teamschedule-layer-container .dayoff').length, 1);
 	});
 
-	test('should map notScheduled of MySchedule', function () {
+	test('should map notScheduled of MySchedule', function() {
 		$('body').append(agentSchedulesHtml);
 		fakeTeamScheduleData.MySchedule.IsNotScheduled = true;
 		initVm();
@@ -1054,7 +1053,7 @@
 		equal($('.my-schedule-column .not-scheduled-text').text(), '@Resources.NotScheduled');
 	});
 
-	test("should map notScheduled of agents' schedule", function () {
+	test("should map notScheduled of agents' schedule", function() {
 		$('body').append(agentSchedulesHtml);
 		if (fakeOriginalAgentSchedulesData.length > 0) {
 			fakeOriginalAgentSchedulesData[0].IsNotScheduled = true;
@@ -1071,7 +1070,7 @@
 		);
 	});
 
-	test("should filter agents' day off after turn on show only day off toggle on desktop", function () {
+	test("should filter agents' day off after turn on show only day off toggle on desktop", function() {
 		$('body').append(agentSchedulesHtml);
 
 		if (fakeOriginalAgentSchedulesData.length > 0) {
@@ -1086,7 +1085,7 @@
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
 
-	test('should filter agents using search name after switch show only day off toggle on desktop', function () {
+	test('should filter agents using search name after switch show only day off toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		if (fakeOriginalAgentSchedulesData.length > 0) {
@@ -1102,7 +1101,7 @@
 		equal(ajaxOption.ScheduleFilter.searchNameText, 'this is a test search name text');
 	});
 
-	test('should reset paging after turn on show only day off toggle', function () {
+	test('should reset paging after turn on show only day off toggle', function() {
 		$('body').append(agentSchedulesHtml);
 
 		if (fakeOriginalAgentSchedulesData.length > 0) {
@@ -1122,7 +1121,7 @@
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
 
-	test("should filter agents' with night shift only after turn on show only night shifts toggle on desktop", function () {
+	test("should filter agents' with night shift only after turn on show only night shifts toggle on desktop", function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1136,7 +1135,7 @@
 		equal($('.teammates-schedules-container .teammates-schedules-column').length == 2, true);
 	});
 
-	test('should keep panel open after turn on show only night shifts toggle on desktop', function () {
+	test('should keep panel open after turn on show only night shifts toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1148,7 +1147,7 @@
 		equal(vm.isPanelVisible(), true);
 	});
 
-	test('should keep panel open after turn off show only night shifts toggle on desktop', function () {
+	test('should keep panel open after turn off show only night shifts toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1165,7 +1164,7 @@
 		equal(vm.isPanelVisible(), true);
 	});
 
-	test('should filter schedules with start and end time when toggling off show only night shifts on desktop', function () {
+	test('should filter schedules with start and end time when toggling off show only night shifts on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1183,7 +1182,7 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes, '06:00-10:00');
 	});
 
-	test('should set show only day off to false when changing show only night shifts toggle on desktop', function () {
+	test('should set show only day off to false when changing show only night shifts toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1197,7 +1196,7 @@
 		equal(ajaxOption.ScheduleFilter.isDayOff, false);
 	});
 
-	test('should set show only night shifts to false when changing show only day off toggle on desktop', function () {
+	test('should set show only night shifts to false when changing show only day off toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1213,9 +1212,9 @@
 		equal(vm.hasTimeFiltered(), true);
 	});
 
-	test('should restore show only day off toggle state after clicking cancel button on mobile', function () {
+	test('should restore show only day off toggle state after clicking cancel button on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -1225,7 +1224,7 @@
 		}
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-day-off-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-default').click();
 
@@ -1234,15 +1233,15 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should set showOnlyNightShift after turn on show only night shifts toggle and click search button on mobile', function () {
+	test('should set showOnlyNightShift after turn on show only night shifts toggle and click search button on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-primary').click();
 
@@ -1252,7 +1251,7 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should close panel after clicking search button on desktop', function () {
+	test('should close panel after clicking search button on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1263,19 +1262,19 @@
 		equal(vm.isPanelVisible(), false);
 	});
 
-	test('should restore show only night shifts toggle state after clicking cancel button on mobile', function () {
+	test('should restore show only night shifts toggle state after clicking cancel button on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-primary').click();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-default').click();
 
@@ -1286,9 +1285,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should restore show only day off toggle state after clicking filter icon on mobile', function () {
+	test('should restore show only day off toggle state after clicking filter icon on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -1298,26 +1297,26 @@
 		}
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-day-off-toggle input').click();
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 
 		equal(completeLoadedCount, 1);
 		equal(vm.showOnlyDayOff(), false);
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should restore show only night shifts toggle state after clicking filter icon on mobile', function () {
+	test('should restore show only night shifts toggle state after clicking filter icon on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 		$('.show-only-night-shift-toggle input').click();
-		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-team-filter button').click();
 
 		equal(completeLoadedCount, 1);
 		equal(vm.showOnlyNightShift(), false);
@@ -1325,9 +1324,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test("should not filter agents' day off immediately after turn on show only day off toggle but widthout clicking search on mobile", function () {
+	test("should not filter agents' day off immediately after turn on show only day off toggle but widthout clicking search on mobile", function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -1342,9 +1341,9 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test("should filter agents' day off after turn on show only day off toggle and click search on mobile", function () {
+	test("should filter agents' day off after turn on show only day off toggle and click search on mobile", function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function () {
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
 			return true;
 		};
 		$('body').append(agentSchedulesHtml);
@@ -1370,7 +1369,7 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should filter agents using start time slider', function () {
+	test('should filter agents using start time slider', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1386,7 +1385,7 @@
 		equal($($('.teammates-agent-name-row .new-teamschedule-agent-name')[0]).find('.text-name').length, 0);
 	});
 
-	test('should not filter agents using start time slider if both start time start and start time end are zero', function () {
+	test('should not filter agents using start time slider if both start time start and start time end are zero', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1402,7 +1401,7 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
 	});
 
-	test('should reset start time filter after clicking start time cross icon', function () {
+	test('should reset start time filter after clicking start time cross icon', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1421,7 +1420,7 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
 	});
 
-	test('should filter agents using end time slider', function () {
+	test('should filter agents using end time slider', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1443,7 +1442,7 @@
 		);
 	});
 
-	test('should not filter agents using end time slider if both end time start and end time end are zero', function () {
+	test('should not filter agents using end time slider if both end time start and end time end are zero', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1459,7 +1458,7 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
 	});
 
-	test('should reset end time filter after clicking end time cross icon', function () {
+	test('should reset end time filter after clicking end time cross icon', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1478,7 +1477,7 @@
 		equal(ajaxOption.ScheduleFilter.filteredEndTimes === '', true);
 	});
 
-	test('should filter agents using both start and end time slider', function () {
+	test('should filter agents using both start and end time slider', function() {
 		$('body').append(agentSchedulesHtml);
 
 		initVm();
@@ -1503,12 +1502,12 @@
 		);
 	});
 
-	test('should not show meeting info for agents schedule', function () {
+	test('should not show meeting info for agents schedule', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
-		$(".teammates-schedules-column .new-teamschedule-layer").click();
-		equal($("div.meeting-detail").length, 0);
+		$('.teammates-schedules-column .new-teamschedule-layer').click();
+		equal($('div.meeting-detail').length, 0);
 	});
 
 	function setup() {
@@ -1519,7 +1518,7 @@
 		setupAjax();
 
 		Teleopti.MyTimeWeb.UserInfo = {
-			WhenLoaded: function (whenLoadedCallBack) {
+			WhenLoaded: function(whenLoadedCallBack) {
 				var data = { WeekStart: 1 };
 				whenLoadedCallBack(data);
 			}
@@ -1874,7 +1873,7 @@
 						EndTime: selectedDate + 'T06:45:00',
 						Summary: '',
 						StyleClassName: '',
-						Meeting: { Title: "dp meeting", Location: "dp meeting", Description: "another plan" },
+						Meeting: { Title: 'dp meeting', Location: 'dp meeting', Description: 'another plan' },
 						StartPositionPercentage: '',
 						EndPositionPercentage: '',
 						Color: '#80FF80',
@@ -1901,7 +1900,7 @@
 
 	function setupAjax() {
 		ajax = {
-			Ajax: function (option) {
+			Ajax: function(option) {
 				if (option.url === 'Team/TeamsAndGroupsWithAllTeam') {
 					option.success(fakeAvailableTeamsData);
 				}
@@ -1921,7 +1920,7 @@
 					filteredAgentSchedulesData = fakeOriginalAgentSchedulesData;
 
 					if (ajaxOption.ScheduleFilter.isDayOff) {
-						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function (s) {
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
 							return s.IsDayOff;
 						});
 					}
@@ -1935,7 +1934,7 @@
 						var endHour = parseInt(end.split(':')[0]);
 						var endMinute = parseInt(end.split(':')[1]);
 
-						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function (s) {
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
 							var startTime = moment(s.Periods[0].StartTime);
 							return (
 								(startTime.hours() > startHour ||
@@ -1955,7 +1954,7 @@
 						var endHour = parseInt(end.split(':')[0]);
 						var endMinute = parseInt(end.split(':')[1]);
 
-						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function (s) {
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
 							var endTime = moment(s.Periods[0].EndTime);
 							return (
 								(endTime.hours() > startHour ||
@@ -2004,13 +2003,13 @@
 			'			<li class="mobile-datepicker">',
 			'				<div class="input-group">',
 			'					<span class="input-group-btn">',
-			'						<button class="btn btn-default previous-day" data-bind="click: previousDay">',
+			'						<button class="btn btn-default previous-day" aria-label="@Resources.PreviousDay" data-bind="click: previousDay">',
 			'							<i class="glyphicon glyphicon-chevron-left"></i>',
 			'						</button>',
 			'					</span>',
-			'					<a class="text-center formatted-date-text moment-datepicker"></a>',
+			'					<button class="btn btn-default formatted-date-text moment-datepicker" aria-haspopup="true"></button>',
 			'					<span class="input-group-btn">',
-			'						<button class="btn btn-default next-day" data-bind="click: nextDay">',
+			'						<button class="btn btn-default next-day" " aria-label="@Resources.NextDay" data-bind="click: nextDay">',
 			'							<i class="glyphicon glyphicon-chevron-right"></i>',
 			'						</button>',
 			'					</span>',
@@ -2018,32 +2017,32 @@
 			'			</li>',
 			'			<!-- ko if: isHostAMobile || isHostAniPad -->',
 			'			<li class="mobile-today" data-bind="click: today">',
-			'				<a>',
+			'				<button class="btn btn-default" aria-label="@Resources.Today">',
 			'					<i class="glyphicon glyphicon-home"></i>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko if: isHostADesktop -->',
 			"			<li class=\"mobile-today\" data-bind=\"click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'				<a>',
+			'				<button class="btn btn-default" aria-label="@Resources.Today">',
 			'					<i class="glyphicon glyphicon-home"></i>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko if: isHostAMobile -->',
 			'			<li class="new-teamschedule-team-filter" data-bind="css: {\'new-teamschedule-has-time-filter\': hasFilteredOnMobile}">',
-			'				<a class="relative">',
+			'				<button class="btn btn-default" aria-label="@Resources.Filter" aria-haspopup="true">',
 			'					<i class="glyphicon glyphicon-filter"></i>',
 			'					<span></span>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko if: isHostADesktop || isHostAniPad -->',
 			"			<li class=\"new-teamschedule-time-filter\" data-bind=\"css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'				<a>',
+			'				<button class="btn btn-default" aria-label="@Resources.Filter" aria-haspopup="true">',
 			'					<i class="glyphicon glyphicon-filter"></i>',
 			'					<span></span>',
-			'				</a>',
+			'				</button>',
 			'			</li>',
 			'			<li class="new-teamschedule-filter-component relative">',
 			'				<div data-bind="click: openTeamSelectorPanel"></div>',
@@ -2078,7 +2077,7 @@
 			'		<div class="teammates-agent-name-row relative">',
 			'			<div class="left-filling-block"></div>',
 			'			<!-- ko foreach: agentNames -->',
-			"			<span class=\"new-teamschedule-agent-name relative\" data-bind=\"tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true\">",
+			"			<span class=\"new-teamschedule-agent-name relative\" data-bind=\"tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true\">",
 			'				<span class="text-name" data-bind="text: $data.name"></span>',
 			'				<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {\'dayoff\': $data.isDayOff}"></span>',
 			'			</span>',
@@ -2099,7 +2098,7 @@
 			'			<!-- ko if: mySchedule -->',
 			'			<div class="new-teamschedule-layer-container relative">',
 			'				<!-- ko foreach: mySchedule().layers -->',
-			"				<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyActivityTooltipPositionInTeamSchedule: true\">",
+			"				<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true\">",
 			'					<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">',
 			'						<strong data-bind="text: title"></strong>',
 			'						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>',
@@ -2136,7 +2135,7 @@
 			'			<div class="teammates-schedules-column relative" data-bind="attr: {\'index\': index}">',
 			'				<div class="new-teamschedule-layer-container relative">',
 			'					<!-- ko foreach: layers -->',
-			"					<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true\">",
+			"					<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true\">",
 			'						<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">',
 			'							<strong data-bind="text: title"></strong>',
 			'							<span class="fullwidth displayblock" data-bind="visible: showDetail && false, text: timeSpan"></span>',
@@ -2154,14 +2153,14 @@
 			'					</div>',
 			'					<!-- /ko -->',
 			'					<!--ko if:isDayOff-->',
-			'					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">',
+			'					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true">',
 			'						<!-- ko if: layers && layers.length == 0 -->',
 			'						<span class="dayoff-text" data-bind="text: dayOffName"></span>',
 			'						<!-- /ko -->',
 			'					</div>',
 			'					<!--/ko-->',
 			'					<!-- ko if:isNotScheduled -->',
-			'					<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">@Resources.NotScheduled</div>',
+			'					<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>',
 			'					<!-- /ko -->',
 			'				</div>',
 			'			</div>',
@@ -2296,7 +2295,7 @@
 		vm = Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Vm();
 	}
 
-	function fakeReadyForInteractionCallback() { }
+	function fakeReadyForInteractionCallback() {}
 
 	function fakeCompletelyLoadedCallback() {
 		completeLoadedCount++;

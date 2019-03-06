@@ -4,31 +4,6 @@ Feature: Absence request from requests
 	As an agent
 	I want to be able to submit requests as absence
 
-@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-Scenario: When requesting absence tracked as days view remaining and used days
-Given I am an agent
-And I am american
-And I have a requestable absence with
-| Field       | Value    |
-| Name        | Vacation |
-| TrackerType | Day      |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Vacation   |
-| FromDate    | 2014-01-01 |
-| Accrued     | 25         |
-And I have an absence with
-| Field     | Value            |
-| Name      | Vacation         |
-| StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-03 23:59 |
-And I am viewing requests
-When I click to add a new absence request
-And I input absence request values with 'Vacation' for date '2014-10-03'
-Then I should see the remaining days is '22 Days'
-And I should see the used days is '3 Days'
-
-@OnlyRunIfEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')
 @suppressHangfireQueue
 Scenario: Should show request list when cancel add absence request
 	Given I am an agent
@@ -43,65 +18,6 @@ Scenario: Should show request list when cancel add absence request
 	And I cancel to add absence request
 	Then I should see the request of type 'Vacation' in the list
 
-@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-@NotKeyExample
-Scenario: When requesting absence tracked by hours view remaining and used time
-Given I am an agent
-And I have a requestable absence with
-| Field       | Value   |
-| Name        | Illness |
-| TrackerType | Time    |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Illness    |
-| FromDate    | 2014-01-01 |
-| Accrued     | 250:00     |
-And there is a contract with
-    | Field                     | Value         |
-    | Name                      | 8 hours a day |
-    | Average work time per day | 8:00          |
-And I have an absence with
-| Field     | Value            |
-| Name      | Illness          |
-| StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-03 23:59 |
-And I am viewing requests
-When I click to add a new absence request
-And I input absence request values with 'Illness' for date '2014-10-03'
-Then I should see the used time is '24:00'
-And I should see the remaining time is '226:00'
-
-@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-Scenario: When changing absence type update remaining and used time
-Given I am an agent
-And I am american
-And I have a requestable absence with
-| Field       | Value    |
-| Name        | Vacation |
-| TrackerType | Day      |
-And I have a requestable absence with
-| Field       | Value   |
-| Name        | Illness |
-| TrackerType | Time    |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Illness    |
-| FromDate    | 2014-01-01 |
-| Accrued     | 250:00     |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Vacation   |
-| FromDate    | 2014-01-01 |
-| Accrued     | 25         |
-And I am viewing requests
-When I click to add a new absence request
-And I input absence request values with 'Illness' for date '2014-10-03'
-And I see the remaining time is '250:00'
-And I see the used time is '0:00'
-And I input absence request values with 'Vacation' for date '2014-10-03'
-Then I should see the remaining days is '25 Days'
-And I should see the used days is '0 Days'
-
 Scenario: Do not show personal account when select an absence type not tracked
 Given I am an agent
 And I have an open workflow control set with absence request waitlisting enabled
@@ -109,68 +25,6 @@ And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should not see the remaining and used time
-
-@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-Scenario: When changing request date change remaining and used time
-Given I am an agent
-And I am american
-And I have a requestable absence with
-| Field       | Value    |
-| Name        | Vacation |
-| TrackerType | Day      |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Vacation   |
-| FromDate    | 2014-01-01 |
-| Accrued     | 25         |
-And I have an absence with
-| Field     | Value            |
-| Name      | Vacation         |
-| StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-03 23:59 |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Vacation   |
-| FromDate    | 2015-01-01 |
-| Accrued     | 25         |
-And I am viewing requests
-And I click to add a new absence request
-And I input absence request values with 'Vacation' for date '2014-10-03'
-And I see the remaining time is '22 Days'
-And I see the used time is '3 Days'
-When I input absence request values with 'Vacation' for date '2015-10-03'
-Then I should see the remaining days is '25 Days'
-And I should see the used days is '0 Days'
-
-@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-@NotKeyExample
-Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
-Given I am an agent
-And I am american
-And I have a requestable absence with
-| Field       | Value    |
-| Name        | Vacation |
-| TrackerType | Day      |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Vacation   |
-| FromDate    | 2014-01-01 |
-| Accrued     | 25         |
-And I have a personal account with
-| Field       | Value      |
-| Absence     | Vacation   |
-| FromDate    | 2015-01-01 |
-| Accrued     | 25         |
-And I have an absence with
-| Field     | Value            |
-| Name      | Vacation         |
-| StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-04 23:59 |
-And I am viewing requests
-When I click to add a new absence request
-And I input absence request values with "Vacation" from "2014-12-28" to "2015-10-11"
-Then I should see the remaining days is '25 Days'
-And I should see the used days is '0 Days'
 
 @NotKeyExample
 Scenario: Do Not show personal account when you do not have permission
@@ -218,19 +72,6 @@ Scenario: Add absence request
 	And I input absence request values with Vacation
 	And I click the send button
 	Then I should see the request of type 'Vacation' in the list
-
-	@NotKeyExample
-@suppressHangfireQueue
-@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-Scenario: Add absence request when multiple absences exist
-	Given I am an agent
-	And I have a requestable absence called Vacation
-	And I have a requestable absence called Holiday
-	And I am viewing requests
-	When I click to add a new absence request
-	And I input absence request values with Holiday
-	And I click the send button
-	Then I should see the request of type 'Holiday' in the list
 
 	@NotKeyExample
 Scenario: Can not add absence request from request view if no permission
@@ -305,16 +146,6 @@ Scenario: View absence types
 	When I click to add a new absence request
 	Then I should see an absence type called Vacation in droplist
 
-	@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
-	@NotKeyExample
-Scenario: View absence request details
-	Given I am an agent
-	And I have an existing absence request
-	And I am viewing requests
-	When I click on the existing request in the list
-	Then I should see the detail form for the existing request in the list
-	And I should see the values of the absence request
-
 	@NotKeyExample
 Scenario: View absence request waitlist
 	Given I am an agent
@@ -368,17 +199,6 @@ Scenario: Can not edit approved absence requests
 Scenario: Can not edit denied absence requests
 	Given I am an agent
 	And I have a denied absence request
-	And I am viewing requests
-	When I click on the existing request in the list
-	Then I should see the detail form for the existing request in the list
-	And I should not be able to edit the values for the existing absence request
-	And I should not be able to submit possible changes for the existing request
-
-	@ignore
-Scenario: Can not edit waitlisted absence requests
-	Given I am an agent
-	And I have an open workflow control set with absence request waitlisting enabled
-	And I have an auto denied absence request
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should see the detail form for the existing request in the list

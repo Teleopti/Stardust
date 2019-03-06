@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -24,17 +23,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         private readonly IDayPresenterScaleCalculator _scaleCalculator;
         private DateOnly _selectedDate;
         private DateTimePeriod _scalePeriod;
-        private const int timeLineHeaderIndex = 1; 
+        private const int timeLineHeaderIndex = 1;
+		private readonly IScheduleViewBase _view;
 
-        public DayPresenterNew(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, 
+
+		public DayPresenterNew(IScheduleViewBase view, ISchedulerStateHolder schedulerState, IGridlockManager lockManager, 
             ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IDayPresenterScaleCalculator scaleCalculator, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer)
-            : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IDayPresenterScaleCalculator scaleCalculator, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
+            : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard)
         {
             _schedulerState = schedulerState;
             _lockManager = lockManager;
             _scaleCalculator = scaleCalculator;
-        }
+			_view = view;
+		}
 
         public override int ColCount => (int)ColumnType.StartScheduleColumns;
 
@@ -74,8 +76,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         public void SelectDate(DateOnly dateOnly)
         {
             _selectedDate = dateOnly;
-            _scalePeriod = _scaleCalculator.CalculateScalePeriod(_schedulerState, _selectedDate);
-            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+            _scalePeriod = _scaleCalculator.CalculateScalePeriod(_schedulerState, _selectedDate, _view.TimeZoneGuard);
+            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), View.TimeZoneGuard.CurrentTimeZone());
         }
 
 
@@ -148,7 +150,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     e.Style.Tag = _selectedDate;
                     //set tip text
                     if (daySchedule.FullAccess)
-                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
+                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule, TimeZoneGuard);
                     //set background color
                     View.SetCellBackTextAndBackColor(e, _selectedDate, true, false, daySchedule);
                 }

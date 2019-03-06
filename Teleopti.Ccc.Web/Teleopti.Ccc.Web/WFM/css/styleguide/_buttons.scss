@@ -178,9 +178,11 @@ div.wfm-btn {
 	background-color: $white;
 	border: 1px solid $gray-300;
 
-	&:not([disabled]):not(.wfm-btn-invis-disabled):hover {
+	&:not([disabled]):not(.wfm-btn-invis-disabled):hover,
+	&:focus {
 		color: $primary;
 		border-color: $primary;
+		outline: none;
 	}
 }
 
@@ -189,10 +191,12 @@ div.wfm-btn {
 	background-color: $primary;
 	border: 1px solid $primary;
 
-	&:not([disabled]):not(.wfm-btn-invis-disabled):hover {
+	&:not([disabled]):not(.wfm-btn-invis-disabled):hover,
+	&:focus {
 		color: $btn-white;
 		background-color: $secondary;
 		border-color: $secondary;
+		outline: none;
 	}
 }
 
@@ -202,10 +206,12 @@ div.wfm-btn {
 	background-color: $gray-100;
 	border: 1px solid $gray-300;
 
-	&:not([disabled]):not(.wfm-btn-invis-disabled):hover {
+	&:not([disabled]):not(.wfm-btn-invis-disabled):hover,
+	&:focus {
 		color: $btn-white;
 		background-color: $red-800;
 		border-color: $red-800;
+		outline: none;
 	}
 }
 
@@ -214,8 +220,11 @@ div.wfm-btn {
 	background-color: $white;
 	@extend .material-depth-1;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		@extend .material-depth-2;
+		outline: none;
+		color: $primary;
 	}
 }
 
@@ -223,9 +232,12 @@ div.wfm-btn {
 	color: $btn-white;
 	background-color: $primary;
 	@extend .material-depth-1;
+	outline: none;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		@extend .material-depth-2;
+		outline: none;
 	}
 }
 
@@ -274,7 +286,8 @@ div.wfm-btn {
 		max-height: 34px;
 	}
 
-	&:hover {
+	&:hover,
+	&:focus {
 		@extend .material-depth-2;
 	}
 }

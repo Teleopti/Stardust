@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			var businessUnits = role.AvailableData.AvailableBusinessUnits.Where(b => businessUnitId == b.Id.GetValueOrDefault()).ToArray();
 			businessUnits.ForEach(businessUnit =>
 			{
-				var sites = role.AvailableData.AvailableSites.Where(s => businessUnit.Id.GetValueOrDefault() == s.BusinessUnit.Id.GetValueOrDefault()).ToArray();
+				var sites = role.AvailableData.AvailableSites.Where(s => businessUnit.Id.GetValueOrDefault() == s.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()).ToArray();
 				sites.ForEach(site =>
 				{
 					var teams = role.AvailableData.AvailableTeams.Where(t => site.Id.GetValueOrDefault() == t.Site.Id.GetValueOrDefault()).ToArray();

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldThrowIfNotFullyConverterted()
 		{
-			var paRep = new PersonAssignmentRepository(CurrUnitOfWork);
+			var paRep = PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 
 			var pa = createAndStoreAssignment(start);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			PersistAndRemoveFromUnitOfWork(pa.MainActivities().First().Payload);
 			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
-			new PersonAssignmentRepository(CurrUnitOfWork).Add(pa);
+			PersonAssignmentRepository.DONT_USE_CTOR(CurrUnitOfWork).Add(pa);
 			Session.Flush();
 			return pa;
 		}

@@ -7,17 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public abstract class SettingDataRepository
     {
-	    protected SettingDataRepository(IUnitOfWork unitOfWork)
-        {
-			CurrentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-        }
-
-
-	    protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
-				{
-			CurrentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
-				}
-
 	    protected SettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
 	    {
 			CurrentUnitOfWork = currentUnitOfWork;

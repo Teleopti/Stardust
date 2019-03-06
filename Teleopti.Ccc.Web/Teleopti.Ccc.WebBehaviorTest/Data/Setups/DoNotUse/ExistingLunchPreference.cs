@@ -46,12 +46,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (LunchActivity == null)
 			{
 				lunchActivity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
-				var activityRepository = new ActivityRepository(currentUnitOfWork);
+				var activityRepository = ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 				activityRepository.Add(lunchActivity);
 			}
 			else
 			{
-				var activityRepository = new ActivityRepository(currentUnitOfWork);
+				var activityRepository = ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null);
 				lunchActivity = activityRepository.LoadAll().FirstOrDefault(a => a.Description.Name == LunchActivity);
 			}
 			var activityRestriction = new ActivityRestriction(lunchActivity)

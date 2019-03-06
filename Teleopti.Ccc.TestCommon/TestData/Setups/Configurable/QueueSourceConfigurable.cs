@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var qs = new QueueSource { Name = Name, QueueMartId = QueueId };
-			new QueueSourceRepository(currentUnitOfWork).Add(qs);
+			QueueSourceRepository.DONT_USE_CTOR(currentUnitOfWork).Add(qs);
 		}
 
 	}

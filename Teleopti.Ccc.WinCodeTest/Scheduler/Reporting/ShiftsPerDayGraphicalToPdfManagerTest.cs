@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
@@ -240,7 +241,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 
 			using (_mockRepository.Playback())
 			{
-				var doc = _manager.ExportAgentView();
+				var doc = _manager.ExportAgentView(new FakeTimeZoneGuard());
 				Assert.IsNotNull(doc);
 			}
 		}

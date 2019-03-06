@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
-			SetMaxConsecutiveWorkingDaysVisibility(_toggleManager);
 			checkOvertimeProbabilityLicense();
 			checkOvertimeRequestsLicense();
 			loadOvertimeRequestAutoGrantTypeAdapterCollection();
@@ -67,18 +66,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter = presenter;
 			_presenter.SetParentView(this);
-		}
-
-		private void SetMaxConsecutiveWorkingDaysVisibility(IToggleManager toggleManager)
-		{
-			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889))
-			{
-				tableLayoutPanelShiftTrade.RowStyles[tableLayoutPanelShiftTrade.GetRow(this.tableLayoutPanel3)].Height = 0;
-				tableLayoutPanelShiftTrade.RowStyles[tableLayoutPanelShiftTrade.GetRow(this.panel10)].Height = 0;
-				this.tableLayoutPanel3.Visible = false;
-				this.panel10.Visible = false;
-
-			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

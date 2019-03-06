@@ -5,7 +5,7 @@
 	<PropertyGroup>
 		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<ASCompile>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</ASCompile>
-		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
+		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
 	</PropertyGroup>
 	
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>

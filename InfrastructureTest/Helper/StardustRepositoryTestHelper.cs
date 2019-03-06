@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Helper
 {
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 
 		private static string connectionString()
 		{
-			return ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString;
+			return InfraTestConfigReader.ApplicationConnectionString();
 		}
 	}
 }

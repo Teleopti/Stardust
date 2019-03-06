@@ -53,6 +53,32 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
 		}
+		
+		[Test]
+		public void ShouldHaveIntervalDetails()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.LoadDefaultScenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Day, 1);
+			PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay, 1, new Tuple<TimePeriod, double>(new TimePeriod(13, 14), 2)));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, SchedulePeriodType.Day,1);
+			
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			var intervalDetails = result.SkillResultList.Single().SkillDetails.Single().IntervalDetails.ToArray();
+			intervalDetails.Length.Should().Be.EqualTo(24);
+			intervalDetails[8].ForecastAgents.Should().Be.EqualTo(1);
+			intervalDetails[8].ScheduledAgents.Should().Be.EqualTo(1);
+			intervalDetails[8].StartTime.Should().Be.EqualTo("8:00");
+			intervalDetails[13].ForecastAgents.Should().Be.EqualTo(2);
+			intervalDetails[13].ScheduledAgents.Should().Be.EqualTo(1);
+			intervalDetails[13].StartTime.Should().Be.EqualTo("13:00");
+		}
 
 		[Test]
 		public void ShouldShowAgentsWithNoScheduleAsNotScheduledEvenWithTolerance()

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
 
@@ -23,10 +24,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.AtomicValid
 			get { return "The daily's standard deviation must be under the limit."; }
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITimeZoneGuard timeZoneGuard)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var sumOfStandardDeviations = ValidatorHelperMethods.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
+			var sumOfStandardDeviations = ValidatorHelperMethods.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill, timeZoneGuard);
 
 			if (sumOfStandardDeviations > _limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;

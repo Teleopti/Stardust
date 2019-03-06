@@ -71,7 +71,7 @@
 					<input class="request-new-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable() && IsDateInputEditable"
 					 type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+						<button class="btn btn-sm" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
@@ -82,7 +82,7 @@
 					<div class="input-group">
 						<input type="text" class="request-new-timefrom input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, enable: IsEditable, visible: IsTimeInputVisible, scrollIntoViewWhenClick:'#Request-add-section'" />
 						<span class="input-group-btn" data-bind="visible: IsTimeInputVisible">
-							<button class="btn btn-sm right-align" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}">
+							<button class="btn btn-sm right-align" aria-label="@Resources.SelectTime" aria-haspopup="true" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>
@@ -96,7 +96,7 @@
 					<input class="request-new-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable() && IsDateInputEditable"
 					 type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+						<button class="btn btn-sm" aria-label="@Resources.SelectDate" aria-haspopup="true" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
@@ -107,7 +107,7 @@
 					<div class="input-group">
 						<input type="text" class="request-new-timeto input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, enable: IsEditable, visible: IsTimeInputVisible, scrollIntoViewWhenClick:'#Request-add-section'" />
 						<span class="input-group-btn" data-bind="visible: IsTimeInputVisible">
-							<button class="btn btn-sm right-align" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}">
+							<button class="btn btn-sm right-align" aria-label="@Resources.SelectTime" aria-haspopup="true" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>

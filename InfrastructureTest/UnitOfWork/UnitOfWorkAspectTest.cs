@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.Web;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class UnitOfWorkAspectTest : IExtendSystem
 	{		
 		public void Extend(IExtend extend, IocConfiguration configuration)

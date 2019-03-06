@@ -3,13 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -23,8 +21,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 	public class AbsenceTypesProviderTest : IIsolateSystem
 	{
 		public AbsenceTypesProvider Target;
-		public FakeToggleManager ToggleManager;
-		public FakeAbsenceRepository AbsenceRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePersonRepository PersonRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
@@ -36,14 +32,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			isolate.UseTestDouble<AbsenceTypesProvider>().For<IAbsenceTypesProvider>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-		}
-
-		[Test]
-		public void ShouldReturnAbsenceTypes()
-		{
-			ToggleManager.Disable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
-			var ret = Target.GetRequestableAbsences();
-			ret.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -61,7 +49,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var expactedAbsenceName = "requestableAbsence";
 			var openPeriod = new DateOnlyPeriod(requestDate.AddDays(-2), requestDate.AddDays(2));
 			setupData(expactedAbsenceName, openPeriod);
-			ToggleManager.Enable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
 			var ret = Target.GetRequestableAbsences();
 			ret.ToList().First().Name.Should().Be.EqualTo(expactedAbsenceName);
 		}
@@ -74,7 +61,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var expactedAbsenceName = "requestableAbsence";
 			var openPeriod = new DateOnlyPeriod(requestDate.AddDays(-2), requestDate.AddDays(2));
 			setupData(expactedAbsenceName, openPeriod, false);
-			ToggleManager.Enable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
 			var ret = Target.GetRequestableAbsences();
 			ret.Should().Be.Empty();
 		}
@@ -87,7 +73,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var expactedAbsenceName = "requestableAbsence";
 			var openPeriod = new DateOnlyPeriod(requestDate.AddDays(2), requestDate.AddDays(4));
 			setupData(expactedAbsenceName, openPeriod);
-			ToggleManager.Enable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
 			var ret = Target.GetRequestableAbsences();
 			ret.Should().Be.Empty();
 		}

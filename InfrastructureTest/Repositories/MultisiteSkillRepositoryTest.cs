@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IMultisiteSkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultisiteSkillRepository(currentUnitOfWork);
+            return MultisiteSkillRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
 
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             CleanUpAfterTest();
             IMultisiteSkill skill = CreateAggregateWithCorrectBusinessUnit();
             IMultisiteDayTemplate dayTemplate = skill.TemplateMultisiteWeekCollection.Values.First();
-            SkillRepository skillRep = new SkillRepository(UnitOfWork);
+            SkillRepository skillRep = SkillRepository.DONT_USE_CTOR(UnitOfWork);
             skillRep.Add(skill);
 
             IChildSkill childSkill = SkillFactory.CreateChildSkill("Child1", skill);

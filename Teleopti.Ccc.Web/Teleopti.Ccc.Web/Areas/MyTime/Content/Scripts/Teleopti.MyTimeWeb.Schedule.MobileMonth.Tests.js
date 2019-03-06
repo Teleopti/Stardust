@@ -202,7 +202,7 @@
 							ShortName: 'IL'
 						}
 					],
-					BankHolidayCalendarInfo: {
+					BankHolidayCalendar: {
 						CalendarId: '63b6db25-e400-4b28-9473-a9dd000f7961',
 						CalendarName: '2017',
 						DateDescription: 'Bank holiday calendar date'
@@ -233,7 +233,7 @@
 							Color: 'rgb(255,0,0)'
 						}
 					],
-					BankHolidayCalendarInfo: null,
+					BankHolidayCalendar: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Early',
@@ -249,7 +249,7 @@
 					FixedDate: '2017-10-03',
 					Absences: null,
 					Overtimes: null,
-					BankHolidayCalendarInfo: null,
+					BankHolidayCalendar: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Early',
@@ -265,7 +265,7 @@
 					FixedDate: '2017-10-04',
 					Absences: null,
 					Overtimes: null,
-					BankHolidayCalendarInfo: null,
+					BankHolidayCalendar: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Early',
@@ -281,7 +281,7 @@
 					FixedDate: '2017-10-05',
 					Absences: null,
 					Overtimes: null,
-					BankHolidayCalendarInfo: null,
+					BankHolidayCalendar: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Day',
@@ -297,7 +297,7 @@
 					FixedDate: '2017-10-06',
 					Absences: null,
 					Overtimes: null,
-					BankHolidayCalendarInfo: null,
+					BankHolidayCalendar: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Day',
@@ -313,7 +313,7 @@
 					FixedDate: '2017-10-07',
 					Absences: null,
 					Overtimes: null,
-					BankHolidayCalendarInfo: null,
+					BankHolidayCalendar: null,
 					IsDayOff: true,
 					Shift: {
 						Name: null,

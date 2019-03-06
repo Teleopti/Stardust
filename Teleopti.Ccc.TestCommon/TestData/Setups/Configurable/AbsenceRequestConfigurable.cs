@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			IAbsence absence;
 			if (Absence != null)
 			{
-				absence = new AbsenceRepository(unitOfWork).LoadAll().Single(a => a.Name == Absence);
+				absence = AbsenceRepository.DONT_USE_CTOR(unitOfWork).LoadAll().Single(a => a.Name == Absence);
 			}
 			else
 			{
 				absence  = AbsenceFactory.CreateAbsence("Legacy common absence", "LCA", Color.FromArgb(210, 150, 150));
-				var absenceRepository = new AbsenceRepository(unitOfWork);
+				var absenceRepository = AbsenceRepository.DONT_USE_CTOR(unitOfWork);
 				absenceRepository.Add(absence);
 			}
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var personRequest = new PersonRequest(person, absenceRequest) { Subject = "I need some vacation" };
 			personRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
 
-			var requestRepository = new PersonRequestRepository(unitOfWork);
+			var requestRepository = PersonRequestRepository.DONT_USE_CTOR(unitOfWork);
 			var personAbsenceRepository = new PersonAbsenceRepository(unitOfWork);
 			IPersonAbsence personAbsence = null;
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				personRequest.ForcePending();
 				personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest(), true);
-				var scenarioRepository = new ScenarioRepository(unitOfWork);
+				var scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 				var scenario = scenarioRepository.LoadDefaultScenario();
 				personAbsence = createPersonAbsence(absence, personRequest, scenario);
 			}

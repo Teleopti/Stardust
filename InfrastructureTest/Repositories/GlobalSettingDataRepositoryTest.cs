@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override void SetupForRepositoryTest()
         {
-            rep = new GlobalSettingDataRepository(UnitOfWork);
+            rep = GlobalSettingDataRepository.DONT_USE_CTOR(UnitOfWork);
         }
 
         [Test]
@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		  [Test]
 		  public void SaveGlobalSettingForTwoBU()
 		  {
-			  var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
-			  var personRepository = new PersonRepository( new ThisUnitOfWork(UnitOfWork), null, null);
+			  var businessUnitRepository = BusinessUnitRepository.DONT_USE_CTOR(UnitOfWork);
+			  var personRepository = PersonRepository.DONT_USE_CTOR(new ThisUnitOfWork(UnitOfWork), null, null);
 			  const string key = "SMS";
 
 			  var businessUnit1 = BusinessUnitFactory.CreateSimpleBusinessUnit("BU1");

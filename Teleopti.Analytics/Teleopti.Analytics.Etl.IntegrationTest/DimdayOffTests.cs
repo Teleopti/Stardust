@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			const string datasourceName = "Teleopti CCC Agg: Default log object";
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 
-			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null);
+			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			var dsFactory = DataSourceFactoryFactory.MakeLegacyWay().Make();
 			jobParameters = new JobParameters(

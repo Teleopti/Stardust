@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence
 {
@@ -8,20 +10,44 @@ namespace Teleopti.Wfm.Adherence
 		public static IEnumerable<OpenPeriod> Subtract(this IEnumerable<OpenPeriod> periods, IEnumerable<OpenPeriod> toSubtract)
 		{
 			var result = periods.ToArray().AsEnumerable();
-			toSubtract.ForEach(s =>
-			{
-				result = result.subtract(s);
-			});
+			toSubtract.ForEach(s => { result = result.subtract(s); });
 			return result;
 		}
+
+		public static OpenPeriod Intersection(this OpenPeriod instance, OpenPeriod period)
+		{
+			if (!instance.intersects(period)) return null;
+
+			var start = instance.startsBefore(period) ? period.StartTime : instance.StartTime;
+			var end = instance.endsAfter(period) ? period.EndTime : instance.EndTime;
+			return new OpenPeriod(start, end);
+		}
+		
+		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
+		{
+			var result = new List<OpenPeriod>();
+			periods
+				.OrderBy(x => x.StartTime)
+				.ForEach(x =>
+				{
+					if (result.Any() && result.Last().intersects(x))
+						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
+					else
+						result.Add(x);
+				});
+			return result;
+		}
+		
+		public static IEnumerable<AdherencePeriod> ToAdherencePeriods(this IEnumerable<OpenPeriod> periods) =>
+			periods
+				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
+				.ToArray();
+
 
 		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
 		{
 			var result = new List<OpenPeriod>();
-			subtractFroms.ForEach(x =>
-			{
-				result.AddRange(x.subtract(toSubtract));
-			});
+			subtractFroms.ForEach(x => { result.AddRange(x.subtract(toSubtract)); });
 			return result;
 		}
 
@@ -44,21 +70,6 @@ namespace Teleopti.Wfm.Adherence
 			return timePeriods;
 		}
 
-		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
-		{
-			var result = new List<OpenPeriod>();
-			periods
-				.OrderBy(x => x.StartTime)
-				.ForEach(x =>
-				{
-					if (result.Any() && result.Last().intersects(x))
-						result.Last().EndTime = new[] {x.EndTime, result.Last().EndTime}.Max();
-					else
-						result.Add(x);
-				});
-			return result;
-		}
-
 		private static bool intersects(this OpenPeriod instance, OpenPeriod period)
 		{
 			var startsAfterPeriodEnds = instance.StartTime > period.EndTime;
@@ -79,6 +90,6 @@ namespace Teleopti.Wfm.Adherence
 			if (instance.EndTime == null && period.EndTime != null)
 				return true;
 			return instance.EndTime > period.EndTime;
-		}
+		}		
 	}
 }

@@ -23,14 +23,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			var businessUnit = BusinessUnit.Current().Id.Value;
-			Persister.UpsertAssociation(new AssociationInfoForTest
+			var businessUnit = BusinessUnit.CurrentId();
+			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person1,
 				BusinessUnitId = businessUnit,
 				SiteId = site,
 			});
-			Persister.UpsertAssociation(new AssociationInfoForTest
+			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person2,
 				BusinessUnitId = Guid.NewGuid(),

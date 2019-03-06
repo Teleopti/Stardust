@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -100,6 +102,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		public GridControl ViewGrid { get { return _grid; } }
+		public ITimeZoneGuard TimeZoneGuard { get {return new FakeTimeZoneGuard();} }
+
 		public IList<IScheduleDay> CurrentColumnSelectedSchedules()
 		{
 			throw new NotImplementedException();

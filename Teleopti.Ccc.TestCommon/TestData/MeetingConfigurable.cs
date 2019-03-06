@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Purple) };
-			var activityRepository = new ActivityRepository(unitOfWork);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null);
 			activityRepository.Add(activity);
 			
 			if (Scenario == null)

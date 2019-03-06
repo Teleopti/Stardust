@@ -1,30 +1,29 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using NHibernate;
 using NHibernate.Criterion;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {
 	public abstract class RepositoryTest<T> : DatabaseTest where T : IAggregateRoot
 	{
-		private Repository<T> rep;
-		private T simpleEntity;
+		private T _simpleEntity;
 
 		protected override void SetupForRepositoryTest()
 		{
-			rep = TestRepository(new ThisUnitOfWork(UnitOfWork));
 			ConcreteSetup();
-			simpleEntity = CreateAggregateWithCorrectBusinessUnit();
+			_simpleEntity = CreateAggregateWithCorrectBusinessUnit();
 		}
+
+		protected abstract Repository<T> ResolveRepository();
 
 		[Test]
 		public void VerifyIncorrectBusinessUnitIsNotReadable()
@@ -41,9 +40,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 				var inCorrect = CreateAggregateWithCorrectBusinessUnit();
 				PersistAndRemoveFromUnitOfWork(inCorrect);
 
-				var retList = rep.LoadAll();
+				var retList = ResolveRepository().LoadAll();
 				if (buRef != null)
-					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).GetOrFillWithBusinessUnit_DONTUSE().Equals(buRef.GetOrFillWithBusinessUnit_DONTUSE())));
 				if (buRefId != null)
 					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
 			}
@@ -77,39 +76,42 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		public void CanLoadAndPropertiesAreSet()
 		{
 			var id = Guid.NewGuid();
-			Session.Save(simpleEntity, id);
+			Session.Save(_simpleEntity, id);
 			Session.Flush();
-			Session.Evict(simpleEntity);
-			var loadedAggregate = rep.Load(id);
+			Session.Evict(_simpleEntity);
+			var loadedAggregate = ResolveRepository().Load(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-				Assert.AreEqual(_businessUnit, buRef.BusinessUnit);
+				Assert.AreEqual(BusinessUnit, buRef.BusinessUnit);
 			if (loadedAggregate is IFilterOnBusinessUnitId buId)
-				Assert.AreEqual(_businessUnit.Id.Value, buId.BusinessUnit);
-			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
+				Assert.AreEqual(BusinessUnit.Id.Value, buId.BusinessUnit);
+			VerifyAggregateGraphProperties(_simpleEntity, loadedAggregate);
 		}
 
 		[Test]
 		public void CanGetAndPropertiesAreSet()
 		{
 			var id = Guid.NewGuid();
-			Session.Save(simpleEntity, id);
+			Session.Save(_simpleEntity, id);
 			Session.Flush();
-			Session.Evict(simpleEntity);
-			var loadedAggregate = rep.Get(id);
+			Session.Evict(_simpleEntity);
+			var loadedAggregate = ResolveRepository().Get(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-				Assert.AreEqual(_businessUnit, buRef.BusinessUnit);
+			{
+				Assert.AreEqual(BusinessUnit, buRef.BusinessUnit);
+				Assert.AreEqual(BusinessUnit, buRef.GetOrFillWithBusinessUnit_DONTUSE());
+			}
 			if (loadedAggregate is IFilterOnBusinessUnitId buId)
-				Assert.AreEqual(_businessUnit.Id.Value, buId.BusinessUnit);
-			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
+				Assert.AreEqual(BusinessUnit.Id.Value, buId.BusinessUnit);
+			VerifyAggregateGraphProperties(_simpleEntity, loadedAggregate);
 		}
 
 		[Test]
 		public void VerifyAddAndRemoveWorks()
 		{
 			T entity = CreateAggregateWithCorrectBusinessUnit();
-			rep.Add(entity);
+			ResolveRepository().Add(entity);
 			Assert.IsTrue(UnitOfWork.Contains(entity));
 			Assert.IsTrue(UnitOfWork.IsDirty());
 			UnitOfWork.Remove(entity);
@@ -122,29 +124,35 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			var root = CreateAggregateWithCorrectBusinessUnit();
 			if (!isMutable(root)) return;
 
-			rep.Add(root);
+			ResolveRepository().Add(root);
 			Session.Flush();
 
-			rep.Remove(root);
+			ResolveRepository().Remove(root);
 			Session.Flush();
 
-			Assert.IsFalse(rep.LoadAll().Contains(root));
+			Assert.IsFalse(ResolveRepository().LoadAll().Contains(root));
 		}
 
 		[Test]
 		public void VerifyAddingWhileLoggedOut()
 		{
 			var entity = CreateAggregateWithCorrectBusinessUnit();
+			EndUnitOfWork();
 			Logout();
-			switch (entity)
+			using (Container.Resolve<IDataSourceScope>().OnThisThreadUse(InfraTestConfigReader.TenantName()))
 			{
-				case IChangeInfo _:
-				case IFilterOnBusinessUnit _:
-					Assert.Throws<PermissionException>(() => rep.Add(entity));
-					break;
-				default:
-					rep.Add(entity);
-					break;
+				OpenUnitOfWork();
+				switch (entity)
+				{
+					case IChangeInfo _:
+					case IFilterOnBusinessUnit _:
+						Assert.Throws<PermissionException>(() => ResolveRepository().Add(entity));
+						break;
+					default:
+						ResolveRepository().Add(entity);
+						break;
+				}
+				EndUnitOfWork();
 			}
 		}
 
@@ -155,8 +163,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		protected abstract T CreateAggregateWithCorrectBusinessUnit();
 
 		protected abstract void VerifyAggregateGraphProperties(T saved, T loaded);
-
-		protected abstract Repository<T> TestRepository(ICurrentUnitOfWork currentUnitOfWork);
 
 		private bool isMutable(T root)
 		{

@@ -51,7 +51,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				new FakeContainerHolder(), false
 			)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString(), null, null), null)
 			};
 			var result = new List<IJobResult>();
 			JobStepBase step = new StageScenarioJobStep(jobParameters);

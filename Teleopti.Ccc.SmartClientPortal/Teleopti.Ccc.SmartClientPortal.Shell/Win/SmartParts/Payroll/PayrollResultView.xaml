@@ -49,8 +49,14 @@
                 <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Time}" SortMemberPath="Timestamp" Binding="{Binding Path=Timestamp,Mode=OneWay,Converter={StaticResource dateTimeToLocalConverter}}" Width="Auto"/>
                 <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Type}" Binding="{Binding Path=DetailLevel,Mode=OneWay}" Width="Auto"/>
                 <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Message}" Binding="{Binding Path=Message,Mode=OneWay}" Width="Auto"/>
-                <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.ErrorMessage}" Binding="{Binding Path=ExceptionMessage,Mode=OneWay}" Width="*"/>
-            </DataGrid.Columns>
+				<DataGridTextColumn  HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.ErrorMessage}" Binding="{Binding Path=ExceptionMessage,Mode=OneWay}" Width="*">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="TextBlock">
+							<Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
+			</DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>

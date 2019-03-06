@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
             using (var uow = _dataSource.Application.CreateAndOpenUnitOfWork())
             {
                 _businessUnit =
-                    new BusinessUnitRepository(uow).Get(_tokenWithBusinessUnit.BusinessUnit);
+                    BusinessUnitRepository.DONT_USE_CTOR(uow).Get(_tokenWithBusinessUnit.BusinessUnit);
                 return _businessUnit != null;
             }
         }

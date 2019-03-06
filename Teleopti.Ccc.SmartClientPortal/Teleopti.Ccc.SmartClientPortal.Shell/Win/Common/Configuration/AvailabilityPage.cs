@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			UnitOfWork = value;
 			// Creates a new repository.
-			Repository = new AvailabilityRepository(UnitOfWork);
+			Repository = AvailabilityRepository.DONT_USE_CTOR(UnitOfWork);
 		}
 
 		public void Persist()

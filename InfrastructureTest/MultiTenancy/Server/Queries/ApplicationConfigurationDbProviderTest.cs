@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		protected override void SetupForRepositoryTest()
 		{
 			base.SetupForRepositoryTest();
-			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
+			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ApplicationConnectionString());
 			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 			personInfo = new PersonInfo();
 			fakeContext = new FakeHttpContext();

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		public SkillDayTemplates(ISkill skill) : this()
 		{
-			var skillRepository = new SkillRepository(UnitOfWork);
+			var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 			_skill = skillRepository.Get(skill.Id.GetValueOrDefault());
 			initializeTabs();
 			handleTabSelectionChanged();
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			if (reloadSkill)
 			{
-				var skillRepository = new SkillRepository(UnitOfWork);
+				var skillRepository = SkillRepository.DONT_USE_CTOR(UnitOfWork);
 				_skill = skillRepository.Get(skill.Id.GetValueOrDefault());
 			}
 			else

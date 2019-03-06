@@ -1,15 +1,13 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
-using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Description = Teleopti.Wfm.Adherence.Configuration.Description;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
@@ -40,6 +38,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
         protected override IRtaMap CreateAggregateWithCorrectBusinessUnit()
         {
 			activity = new Activity("roger") { DisplayColor = Color.White };
+			activity.SetBusinessUnit(BusinessUnit);
 			PersistAndRemoveFromUnitOfWork(activity);
 
             IRtaMap rtaMap = new RtaMap{StateGroup = stateGroup, Activity = activity.Id.Value};
@@ -59,9 +58,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             Assert.AreEqual(org.StateGroup.Id, loaded.StateGroup.Id);
         }
 
-        protected override Repository<IRtaMap> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
-        {
-            return new RtaMapRepository(currentUnitOfWork);
+        protected override Repository<IRtaMap> ResolveRepository()
+		{
+			return Container.Resolve<Adherence.Configuration.IRepository<IRtaMap>>() as Repository<IRtaMap> ;
         }
 
         [Test]
@@ -70,7 +69,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             var rtaMap = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(rtaMap);
 
-            var result = new RtaMapRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
+            var result = (ResolveRepository() as RtaMapRepository).LoadAllCompleteGraph();
             Assert.AreEqual(1, result.Count());
 			Session.Close();
 			result.Single().Activity.ToString();

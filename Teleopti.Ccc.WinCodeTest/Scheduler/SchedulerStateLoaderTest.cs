@@ -11,13 +11,13 @@ using Teleopti.Ccc.Domain.Repositories;
 
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInstanceIsCreatedWithRepositoryFactory()
         {
-			_targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
+			_targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory, new FakeTimeZoneGuard());
             Assert.IsNotNull(_targetStateLoader);
         }
 
@@ -80,13 +80,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             skillDayRepository.Stub(x => x.FindReadOnlyRange(_targetPeriod, new List<ISkill>(), _targetScenario)).IgnoreArguments().Return(new Collection<ISkillDay>());
 			
 
-            _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
+            _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory, new FakeTimeZoneGuard());
             var scheduleDateTimePeriod = new ScheduleDateTimePeriod(_period);
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);
             _targetStateHolder.SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			
 
-			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, new StaffingCalculatorServiceFacade());
+			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, new StaffingCalculatorServiceFacade());
 
             Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
             Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));

@@ -4,9 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Staffing;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
-
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
@@ -29,13 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
-			StaffingPossiblityType staffingPossiblityType, bool returnOneWeekData)
+			StaffingPossiblityType staffingPossibilityType, bool returnOneWeekData)
 		{
-			if (staffingPossiblityType == StaffingPossiblityType.Absence)
+			if (staffingPossibilityType == StaffingPossiblityType.Absence)
 			{
 				return getAbsencePeriodStaffingPossibilityViewModels(startDate, returnOneWeekData);
 			}
-			if (staffingPossiblityType == StaffingPossiblityType.Overtime)
+			if (staffingPossibilityType == StaffingPossiblityType.Overtime)
 			{
 				return getOvertimePeriodStaffingPossibilityViewModels(startDate, returnOneWeekData);
 			}
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (period.HasValue)
 			{
 				var possibilityModels = _absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(currentUser, period.Value);
-				return createPeriodStaffingPossibilityViewModels(possibilityModels);
+				return createPeriodStaffingPossibilityViewModels(possibilityModels.Models);
 			}
 			return emptyResult();
 		}

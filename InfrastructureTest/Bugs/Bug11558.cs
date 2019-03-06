@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			var dsFactory = DataSourceFactoryFactory.MakeLegacyWay().Make();
 	        using (
 		        var dataSource =
-			        dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, 1),
-				        InfraTestConfigReader.AnalyticsConnectionString))
+			        dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ApplicationConnectionString(), 1),
+				        InfraTestConfigReader.AnalyticsConnectionString()))
 	        {
 		        const string query = @"select 1 WAITFOR DELAY :waitFor";
 

@@ -15,25 +15,30 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DatabaseTestSetup
 	{
-		private static int createdDataHash = 0;
+		private static readonly PerTestWorker<object> data = new PerTestWorker<object>();
 
-		public static void Setup(Func<CreateDataContext, int> createData)
+		public static T Setup<T>(Func<CreateDataContext, CreateDataResult<T>> createData)
 		{
-			if (createdDataHash != 0)
+			if (data.Value != null)
 			{
-				DataSourceHelper.RestoreApplicationDatabase(createdDataHash);
-				DataSourceHelper.RestoreAnalyticsDatabase(createdDataHash);
-				return;
+				var cachedData = (CreateDataResult<T>) data.Value;
+				DataSourceHelper.RestoreApplicationDatabase(cachedData.Hash);
+				DataSourceHelper.RestoreAnalyticsDatabase(cachedData.Hash);
+				return cachedData.Data;
 			}
 
+			var createDataResult = default(CreateDataResult<T>);
 			withContainer(container =>
 			{
-				container.Resolve<DatabaseTestHelper>().CreateDatabases();
-				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(TestTenantName.Name);
+				container.Resolve<DatabaseTestHelper>()
+					.CreateDatabases(InfraTestConfigReader.TenantName());
+
+				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
+
 				var dataSourceScope = container.Resolve<IDataSourceScope>();
 				using (dataSourceScope.OnThisThreadUse(dataSource))
 				{
-					createdDataHash = createData.Invoke(new CreateDataContext
+					var result = createData.Invoke(new CreateDataContext
 					{
 						DataSource = dataSource,
 						DataSourceScope = dataSourceScope,
@@ -42,15 +47,18 @@ namespace Teleopti.Ccc.TestCommon
 						BusinessUnits = container.Resolve<IBusinessUnitRepository>(),
 						Persons = container.Resolve<IPersonRepository>()
 					});
+					if (result.Hash == 0)
+						throw new Exception("create data function needs to return a number representing the data created");
+					createDataResult = result;
 				}
-				if (createdDataHash == 0)
-					throw new Exception("create data function needs to return a number representing the data created");
-
-				DataSourceHelper.BackupApplicationDatabase(createdDataHash);
-				DataSourceHelper.BackupAnalyticsDatabase(createdDataHash);
 			});
-		}
 
+			data.Set(() => createDataResult);
+			DataSourceHelper.BackupApplicationDatabase(createDataResult.Hash);
+			DataSourceHelper.BackupAnalyticsDatabase(createDataResult.Hash);
+			return createDataResult.Data;
+		}
+		
 		private static void withContainer(Action<IComponentContext> action)
 		{
 			var builder = new ContainerBuilder();
@@ -58,12 +66,19 @@ namespace Teleopti.Ccc.TestCommon
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<DatabaseTestHelper>().SingleInstance();
+			builder.RegisterInstance(new FakeConfigReader().FakeInfraTestConfig()).AsSelf().As<IConfigReader>().SingleInstance();
 			var container = builder.Build();
-			
+
 			action.Invoke(container);
-			
+
 			container.Dispose();
 		}
+	}
+
+	public class CreateDataResult<T>
+	{
+		public int Hash;
+		public T Data;
 	}
 
 	public class CreateDataContext

@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var siteId = team?.Site.Id;
 			var siteName = team?.Site.Description.Name;
 			var teamName = team?.Description.Name;
-			var businessUnitId = team?.Site.BusinessUnit.Id;
+			var businessUnitId = team?.Site.GetOrFillWithBusinessUnit_DONTUSE().Id;
 			var externalLogons = (currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
 				.Select(x => new ExternalLogon
 				{

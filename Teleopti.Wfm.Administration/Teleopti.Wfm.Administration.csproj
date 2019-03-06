@@ -80,9 +80,18 @@
       <HintPath>..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="MbCache, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.18.0\lib\net40\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.18.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\packages\MbCache.2.18.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -242,7 +251,6 @@
     <Content Include="Content\angular-material.min.css" />
     <Content Include="Content\images\error_alert_24px.svg" />
     <Content Include="Content\images\ic_search_white_24px.svg" />
-    <Content Include="Content\status.css" />
     <Content Include="Etl\config.html" />
     <Content Include="Etl\etlBaseConfigModal.component.js" />
     <Content Include="Etl\etlConfigController.js" />
@@ -269,7 +277,6 @@
     <Content Include="Etl\modal.html" />
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
-    <Content Include="status.html" />
     <Content Include="HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
@@ -319,9 +326,7 @@
     <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.service.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
-    <Content Include="Scripts\App\status.js" />
     <Content Include="Scripts\App\Services\tenant.service.js" />
-    <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -348,7 +353,6 @@
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobFailedController.js" />
     <Content Include="Scripts\StardustApp\summaryController.js" />
-    <Content Include="Scripts\vue.min.js" />
     <Content Include="StardustDashboard\failedJobs.html" />
     <Content Include="StardustDashboard\jobqueuedetails.html" />
     <Content Include="StardustDashboard\nodedetails.html" />
@@ -406,13 +410,17 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AntiForgeryTokenValidationFilter.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\EtlController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\ToggleController.cs" />
     <Compile Include="Core\Hangfire\MvcAntiforgery.cs" />
+    <Compile Include="Core\ILicenseDataFactoryWrapper.cs" />
     <Compile Include="Core\InitializeApplicationInsight.cs" />
+    <Compile Include="Core\LicenseDataFactoryWrapper.cs" />
     <Compile Include="Core\PurgeNoneEmployeeData.cs" />
+    <Compile Include="Core\PurgeNoneEmployeeDataOld.cs" />
     <Compile Include="Core\PurgeOldSignInAttempts.cs" />
     <Compile Include="Core\RecurrentEventTimer.cs" />
     <Compile Include="Core\PreloadAdminPage.cs" />
@@ -442,7 +450,6 @@
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />
-    <Compile Include="Status\StatusController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />

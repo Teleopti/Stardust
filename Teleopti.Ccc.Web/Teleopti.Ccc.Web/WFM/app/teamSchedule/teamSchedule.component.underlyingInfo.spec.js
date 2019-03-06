@@ -27,7 +27,6 @@
 		};
 		var panel = setUp(scheduleDate, {
 			UnderlyingScheduleSummary: underlyingSchedulesSummary,
-			HasUnderlyingSchedules: function () { return true; }
 		});
 
 		var element = panel[0].querySelector(".underlying-info");
@@ -49,7 +48,6 @@
 		};
 		var panel = setUp(scheduleDate, {
 			UnderlyingScheduleSummary: underlyingSchedulesSummary,
-			HasUnderlyingSchedules: function () { return true; }
 		});
 
 		var element = panel[0].querySelector(".underlying-info");

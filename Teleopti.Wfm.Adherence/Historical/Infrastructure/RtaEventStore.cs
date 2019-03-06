@@ -170,7 +170,7 @@ ORDER BY [Id] ASC
 					.SetParameter("date", date.Date)
 			);
 
-		public IEnumerable<IEvent> LoadAllOfType<T>() =>
+		public IEnumerable<IEvent> LoadOfTypeForPeriod<T>(DateTimePeriod period) =>
 			loadEvents(
 				_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
@@ -180,10 +180,14 @@ SELECT
 FROM 
 	[rta].[Events] WITH (NOLOCK)
 WHERE
-	Type = :eventType
+	Type = :eventType AND
+	StartTime <= :EndTime AND 
+	EndTime >= :StartTime
 ORDER BY [Id] ASC
 ")
 					.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
+					.SetParameter("StartTime", period.StartDateTime)
+					.SetParameter("EndTime", period.EndDateTime)
 			);
 
 		public LoadedEvents LoadForSynchronization(long fromEventId)
@@ -213,17 +217,19 @@ ORDER BY [Id]
 		public long ReadLastId() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
-		public int CountOfTypeFromId<T>(long fromEventId) =>
-		_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT COUNT (*) 
+		public bool AnyEventsOfType<T>(long fromEventId) =>
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+SELECT TOP 1 1 
 FROM 
 	[rta].[Events] WITH (NOLOCK)
 WHERE
 	[Type] = :eventType AND 
 	[Id] > :fromEventId
 ")
-			.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
-			.SetParameter("fromEventId", fromEventId)
-			.UniqueResult<int>();
+				.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
+				.SetParameter("fromEventId", fromEventId)
+				.UniqueResult<int>() != 0;
 
 		private IEnumerable<IEvent> loadEvents(IQuery query) =>
 			load(query).Select(x => x.DeserializedEvent).ToArray();

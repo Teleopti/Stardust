@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator,
 			IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, 
 			IScheduleStorageFactory scheduleStorageFactory, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, ITimeZoneGuard timeZoneGuard)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			_skillPriorityProvider = skillPriorityProvider;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulingScreenState, scheduleStorageFactory);
+			_timeZoneGuard = timeZoneGuard;
+			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulingScreenState, scheduleStorageFactory, timeZoneGuard);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
 			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
@@ -325,13 +327,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		private IMeetingImpactView getImpactView()
 		{
 			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulingScreenState, this, 
-				_resourceOptimizationHelper, _skillPriorityProvider, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory);
+				_resourceOptimizationHelper, _skillPriorityProvider, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory, _timeZoneGuard);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingDetailView createMeetingSchedulesView(IMeetingViewModel model, SchedulingScreenState holder)
 		{
-			var meetingSchedulesView = new MeetingSchedulesView(model, holder, this);
+			var meetingSchedulesView = new MeetingSchedulesView(model, holder, this, _timeZoneGuard);
 			return meetingSchedulesView;
 		}
 

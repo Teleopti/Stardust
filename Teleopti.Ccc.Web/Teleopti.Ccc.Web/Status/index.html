@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Status of TeleoptiWFM</title>
+	<script src="../Content/Vue/vue.min.js"></script>
+	<script src="../Content/axios/axios.min.js"></script>
+	<script src="status.js" defer></script>
+	<link rel="stylesheet" href="status.css">
+</head>
+<body>
+<div id="steps">
+	<div v-for="step in steps" class="stepItem">
+		<div>
+			<b>{{step.stepName}}</b><br>
+			<small>
+				<a v-bind:href="step.url">{{step.url}}</a><br>
+				(Returns 200 when success)
+			</small>
+		</div>
+		<div>{{step.description}}</div>
+		<div v-bind:class="outputColor(step.stepSuccess)">
+			{{step.output}}
+		</div>
+	</div>
+	<div v-bind:class="{ stepsAreLoadedMarker: stepsAreLoaded }">
+		<!-- Keep this. Verified by test -->
+	</div>	
+</div>
+</body>
+</html>

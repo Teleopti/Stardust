@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			return new ScheduleChangedEvent
 			{
-				LogOnBusinessUnitId = scenario.BusinessUnit.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				ScenarioId = scenario.Id.Value,
 				PersonId = @event.PersonId,
 				StartDateTime = periodStart,

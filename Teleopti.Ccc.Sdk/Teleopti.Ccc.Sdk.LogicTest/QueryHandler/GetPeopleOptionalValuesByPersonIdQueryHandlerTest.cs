@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	[TestFixture]
 	public class GetPeopleOptionalValuesByPersonIdQueryHandlerTest
 	{
-		private GetPeopleOptionalValuesByPersonIdQueryHandler target;
 		private IPersonRepository personRepository;
 		private IOptionalColumnRepository optionalColumnRepository;
 		private IPerson person;
@@ -36,9 +34,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
 
 			optionalColumn = new OptionalColumn("Shoe size");
-
-			target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
-				new FakeCurrentUnitOfWorkFactory(null));
 		}
 
 		[Test]
@@ -49,15 +44,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> {optionalColumn});
+			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>())
+				.Return(new List<IOptionalColumn> {optionalColumn});
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				var result = target.Handle(query);
-				result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
-				result.First().OptionalValueCollection.First().Key.Should().Be.EqualTo("Shoe size");
-				result.First().OptionalValueCollection.First().Value.Should().Be.EqualTo("42");
-			}
+			var target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
+				new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
+			var result = target.Handle(query);
+			result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			result.First().OptionalValueCollection.First().Key.Should().Be.EqualTo("Shoe size");
+			result.First().OptionalValueCollection.First().Value.Should().Be.EqualTo("42");
 		}
 
 		[Test]
@@ -66,15 +61,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> {optionalColumn});
+			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>())
+				.Return(new List<IOptionalColumn> {optionalColumn});
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				var result = target.Handle(query);
-				result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
-				result.First().OptionalValueCollection.First().Key.Should().Be.EqualTo("Shoe size");
-				result.First().OptionalValueCollection.First().Value.Should().Be.EqualTo(string.Empty);
-			}
+			var target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
+				new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
+			var result = target.Handle(query);
+			result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			result.First().OptionalValueCollection.First().Key.Should().Be.EqualTo("Shoe size");
+			result.First().OptionalValueCollection.First().Value.Should().Be.EqualTo(string.Empty);
 		}
 
 		[Test]
@@ -87,11 +82,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> {optionalColumn});
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				var result = target.Handle(query);
-				result.Count.Should().Be.EqualTo(0);
-			}
+			var target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
+				new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
+			var result = target.Handle(query);
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -100,10 +94,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
-			{
-				Assert.Throws<FaultException>(() => target.Handle(query));
-			}
+			var target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
+				new FakeCurrentUnitOfWorkFactory(null), new NoPermission());
+			Assert.Throws<FaultException>(() => target.Handle(query));
 			optionalColumnRepository.AssertWasNotCalled(x => x.GetOptionalColumns<Person>());
 		}
 
@@ -113,11 +106,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			Enumerable.Range(0, 51).ForEach(i => query.PersonIdCollection.Add(Guid.NewGuid()));
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				Assert.Throws<FaultException>(() => target.Handle(query));
-				optionalColumnRepository.AssertWasNotCalled(x => x.GetOptionalColumns<Person>());
-			}
+			var target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository,
+				new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
+			Assert.Throws<FaultException>(() => target.Handle(query));
+			optionalColumnRepository.AssertWasNotCalled(x => x.GetOptionalColumns<Person>());
 		}
 	}
 }

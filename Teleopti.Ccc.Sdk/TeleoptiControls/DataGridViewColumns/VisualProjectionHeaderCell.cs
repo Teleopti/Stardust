@@ -91,6 +91,7 @@ namespace TeleoptiControls.DataGridViewColumns
                 int firstIndex = (int)timePeriod.StartTime.TotalHours;
                 for (int i = firstIndex; i <= (int)timePeriod.EndTime.TotalHours; i++)
                 {
+					if(i == -1) continue;
                     string time = DateTime.MinValue.Add(TimeSpan.FromHours(i)).ToShortTimeString();
                     SizeF size = graphics.MeasureString(time, font);
 

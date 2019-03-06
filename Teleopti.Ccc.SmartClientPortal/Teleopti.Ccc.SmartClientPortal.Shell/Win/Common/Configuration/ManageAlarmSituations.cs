@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_view = new ManageAlarmSituationView(gridControlAlarms);
 			var currentUnitOfWork = UnitOfWorkFactory.CurrentUnitOfWork();
 			_view.Presenter = new ManageAlarmSituationPresenter(UnitOfWorkFactory.Current,
-																new RtaRuleRepository(currentUnitOfWork),
-																new RtaStateGroupRepository(currentUnitOfWork),
-																new ActivityRepository(currentUnitOfWork),
-																new RtaMapRepository(currentUnitOfWork),
+																RtaRuleRepository.DONT_USE_CTOR(currentUnitOfWork),
+																RtaStateGroupRepository.DONT_USE_CTOR(currentUnitOfWork),
+																ActivityRepository.DONT_USE_CTOR(currentUnitOfWork, null, null),
+																RtaMapRepository.DONT_USE_CTOR(currentUnitOfWork),
 																MessageBrokerInStateHolder.Instance, 
 																_view);
 			_view.LoadGrid();

@@ -10,14 +10,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData;
-
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -69,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _partTimePercentageRepository = MockRepository.GenerateMock<IPartTimePercentageRepository>();
             _contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
             _contractRepository = MockRepository.GenerateMock<IContractRepository>();
-            _target = new ChangePersonEmploymentCommandHandler(_personSkillPeriodAssembler,_currentUnitOfWorkFactory,_skillRepository,_externalLogOnRepository,_personRepository,_teamRepository,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository);
+            _target = new ChangePersonEmploymentCommandHandler(_personSkillPeriodAssembler,_currentUnitOfWorkFactory,_skillRepository,_externalLogOnRepository,_personRepository,_teamRepository,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository, new SpecificBusinessUnit(BusinessUnitUsedInTests.BusinessUnit), new FullPermission());
 
             _externalLogOnDto = new ExternalLogOnDto { Id = Guid.NewGuid(), AcdLogOnOriginalId = "test Id", AcdLogOnName="test Acd"};
             _externalLogOnList = new List<ExternalLogOnDto> { _externalLogOnDto };
@@ -83,8 +81,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 PartTimePercentageId = Guid.NewGuid()
             };
 
-            _person = PersonFactory.CreatePerson("test");
-            _person.SetId(Guid.NewGuid());
+            _person = PersonFactory.CreatePerson("test").WithId();
 
             _personSkillPeriodDto = new PersonSkillPeriodDto
             {
@@ -96,13 +93,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             _personSkillPeriodCollection = new List<PersonSkillPeriodDto> { _personSkillPeriodDto };
 
-            _team = TeamFactory.CreateSimpleTeam("Test Team");
-            _team.SetId(Guid.NewGuid());
+            _team = TeamFactory.CreateSimpleTeam("Test Team").WithId();
             _team.Site = SiteFactory.CreateSimpleSite("test site");
             _teamDto = new TeamDto { Id = Guid.NewGuid(), Description = _team.Description.Name, SiteAndTeam = _team.SiteAndTeam};
 
-            _skill = SkillFactory.CreateSkill("TestSkill");
-            _skill.SetId(Guid.NewGuid());
+            _skill = SkillFactory.CreateSkill("TestSkill").WithId();
 
             _changePersonEmploymentCommandDto = new ChangePersonEmploymentCommandDto
             {
@@ -118,12 +113,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Note = "test Note"
             };
 
-            _contract = new Contract("test contract");
-            _contract.SetId(Guid.NewGuid());
-            _contractSchedule = new ContractSchedule("temp contract schedule");
-            _contractSchedule.SetId(Guid.NewGuid());
-            _partTimePercentage = new PartTimePercentage("temp part time percentage");
-            _partTimePercentage.SetId(Guid.NewGuid());
+            _contract = new Contract("test contract").WithId();
+            _contractSchedule = new ContractSchedule("temp contract schedule").WithId();
+            _partTimePercentage = new PartTimePercentage("temp part time percentage").WithId();
         }
 
         [Test]
@@ -151,10 +143,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_team);
             _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
@@ -236,10 +225,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = 0.9,SkillId = _skill.Id.GetValueOrDefault()});
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
@@ -277,10 +263,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
@@ -318,10 +301,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection = null;
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
@@ -360,10 +340,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add( _skill.Id.GetValueOrDefault());
 #pragma warning restore 618
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
@@ -399,10 +376,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(new PersonSkillPeriodDto());
             _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
@@ -423,10 +397,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 _contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
                 _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
@@ -449,12 +420,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
 			_externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 			_personSkillPeriodAssembler.Stub(x => x.DomainEntityToDto(personPeriod)).Return(new PersonSkillPeriodDto());
-			
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
 
+			_target.Handle(_changePersonEmploymentCommandDto);
+			
 			var newPeriod = _person.Period(DateOnly.Today);
 			newPeriod.BudgetGroup.Should().Be.EqualTo(personPeriod.BudgetGroup);
 			newPeriod.RuleSetBag.Should().Be.EqualTo(personPeriod.RuleSetBag);
@@ -483,10 +451,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = .9,SkillId = _skill.Id.GetValueOrDefault()});
 
-			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
-				_target.Handle(_changePersonEmploymentCommandDto);
-			}
+			_target.Handle(_changePersonEmploymentCommandDto);
 
 			_person.PersonPeriodCollection[0].PersonSkillCollection.Count().Should().Be.EqualTo(1);
             unitOfWork.AssertWasCalled(x => x.PersistAll());
@@ -531,7 +496,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
             _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _team.Site.SetBusinessUnit(new BusinessUnit("asdf"));
-            _team.Site.BusinessUnit.SetId(Guid.NewGuid());
+            _team.Site.GetOrFillWithBusinessUnit_DONTUSE().WithId();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);

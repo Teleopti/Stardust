@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
+				ScenarioRepository scenarioRepository = ScenarioRepository.DONT_USE_CTOR(unitOfWork);
 				var scenarios = scenarioRepository.LoadAll().ToList();
 
 				comboBoxAdvScenario.DisplayMember = "Description";

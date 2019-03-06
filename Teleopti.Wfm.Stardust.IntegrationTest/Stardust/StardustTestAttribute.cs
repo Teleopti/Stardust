@@ -1,12 +1,10 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using Autofac;
 using NUnit.Framework.Interfaces;
+using System;
+using System.Diagnostics;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -30,22 +28,25 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IBusinessUnitRepository BusinessUnits;
 		public IHangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
-		public IConfigReader ConfigReader;
+		public FakeConfigReader ConfigReader;
 		public TestLog TestLog;
+
+		private static int lastPortUsed = 57000;
 
 		public override void BeforeTest(ITest testDetails)
 		{
 			base.BeforeTest(testDetails);
-			TestSiteConfigurationSetup.Setup();
-
+			TestSiteConfigurationSetup.Setup(false,null, lastPortUsed);
+			lastPortUsed += 3;
+			
 			var dataHash = DefaultDataCreator.HashValue;
 			var path = "";
 #if DEBUG
 			path = "./";
 #else
-				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+				path = System.IO.Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 #endif
-			
+
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
@@ -92,20 +93,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			HangfireClientStarter.Start();
 			TestLog.Debug("HangfireClientStarter.Start");
 			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse(DataSourceHelper.TenantName))
+			using (DataSource.OnThisThreadUse(InfraTestConfigReader.TenantName()))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			TestLog.Debug("AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId)");
-			AsSystem.Logon(DataSourceHelper.TenantName, businessUnitId);
+			AsSystem.Logon(InfraTestConfigReader.TenantName(), businessUnitId);
 
 			TestLog.Debug("Setting up ConfigValues..");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("MessageBroker");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("NumberOfNodes");
-
-			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
-			((TestConfigReader)ConfigReader).ConfigValues.Add("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri );
-			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
-			
+			ConfigReader = ConfigReader.FakeInfraTestConfig();
 		}
 
 		

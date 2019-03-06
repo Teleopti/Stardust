@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			var service = new IoCTestService(new[] { this }, null);
 
 			var config = service.Config();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeInfraTestConfig();
 
 			var toggles = service.Toggles();
 

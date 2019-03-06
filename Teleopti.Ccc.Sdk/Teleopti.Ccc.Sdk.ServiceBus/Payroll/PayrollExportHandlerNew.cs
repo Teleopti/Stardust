@@ -81,10 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
 
 					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
-
 					_serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
-
-					_stardustJobFeedback.SendProgress("Payroll export initiated");
 					IEnumerable<IPerson> people;
 					var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
 					using (_businessUnitScope.OnThisThreadUse(bu))
@@ -103,19 +100,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 					
 					var result = wrapper.RunPayroll(_sdkServiceFactory, dto, @event, payrollResult.Id.GetValueOrDefault(),
 						_serviceBusPayrollExportFeedback, searchPath.Path);
-					if (result != null)
-						payrollResult.XmlResult.SetResult(result);
+					
+					payrollResult.XmlResult.SetResult(result.XmlResult);
 					payrollResult.FinishedOk = true;
+
+					foreach (var payrollResultDetailData in result.ResultDetails)
+					{
+						var stardustFeedbackMessage = $"{payrollResultDetailData.DetailLevel}: {payrollResultDetailData.Message}";
+						if (payrollResultDetailData.Exception != null)
+						{
+							stardustFeedbackMessage += $" Exception:{payrollResultDetailData.Exception.Message} Stacktrace:{payrollResultDetailData.Exception.StackTrace} InnerException:{payrollResultDetailData.Exception.InnerException?.Message}";
+						}
+						
+						_stardustJobFeedback.SendProgress(stardustFeedbackMessage);
+					}
+					
 				}
 				catch (Exception exception)
 				{
-				
+					logger.Error("An error occurred while running the payroll export. ", exception);
 					//a very unusual way of reporting error but we need that to make the UI more responsive
 					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
 					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
 					_stardustJobFeedback.SendProgress("An error occurred while running the payroll export. " + exception.StackTrace);
 					_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
-					logger.Error("An error occurred while running the payroll export. ", exception);
 				}
 				finally
 				{

@@ -568,7 +568,18 @@ BEGIN
 			fs.business_unit_id,
 			ch.person_code
 		FROM mart.fact_schedule fs
-		INNER JOIN #stg_schedule_changed ch
+		INNER JOIN 
+			(
+			SELECT 
+				person_code, 
+				shift_startdate_local_id, 
+				person_id 
+			FROM #stg_schedule_changed 
+			GROUP BY 
+				 person_code, 
+				 shift_startdate_local_id, 
+				 person_id 
+			) ch
 			ON ch.shift_startdate_local_id = fs.shift_startdate_local_id
 			AND ch.person_id = fs.person_id
 		WHERE fs.scenario_id = @scenario_id
@@ -600,7 +611,7 @@ BEGIN
 				interval_id				= fa.interval_id,
 				acd_login_id			= fa.acd_login_id,
 				ready_time_s			= fa.ready_time_s
-			FROM #stg_schedule_changed ch
+			FROM (SELECT DISTINCT acd_login_id from #stg_schedule_changed) ch
 			INNER JOIN mart.fact_agent fa
 			ON ch.acd_login_id			= fa.acd_login_id
 			where fa.date_id BETWEEN @schedule_change_start_date_id AND @schedule_change_end_date_id

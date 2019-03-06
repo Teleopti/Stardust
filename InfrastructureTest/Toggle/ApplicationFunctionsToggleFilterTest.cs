@@ -69,15 +69,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 
 		[Test]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.Gamification)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.WebReplyRequest)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.SystemSetting)]
 		public void ShouldHideApplicationFunctionWithToggleOff(string applicationFunctionPath)
 		{
@@ -103,7 +99,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 
 		[Test]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.BpoExchange)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]

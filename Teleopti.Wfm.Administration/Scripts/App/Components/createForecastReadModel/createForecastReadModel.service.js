@@ -10,7 +10,7 @@ function createForecastReadModelService($http) {
 	};
 
 	function createForecastReadModel(tenant, startDate, endDate) {
-		return $http.post('/Stardust/TriggerSkillForecastCalculation', {"Tenant": tenant, "StartDate": startDate, "EndDate": endDate})
+		return $http.post('./Stardust/TriggerSkillForecastCalculation', {"Tenant": tenant, "StartDate": startDate, "EndDate": endDate})
 			.then(createForecastReadModelComplete)
 			.catch(createForecastReadModelFailed);
 

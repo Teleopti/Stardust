@@ -18,15 +18,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         public GeneralPreferencesPanel()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
         }
 
 	    public void Initialize(
 		    GeneralPreferences generalPreferences,
 		    IEnumerable<IScheduleTag> scheduleTags,
-		    IEventAggregator eventAggregator)
+		    IEventAggregator eventAggregator,
+			bool useRightToLeft)
 	    {
-		    _generalPreferences = generalPreferences;
+			if (!useRightToLeft)
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+			_generalPreferences = generalPreferences;
 		    _scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 		    _eventAggregator = eventAggregator;
 

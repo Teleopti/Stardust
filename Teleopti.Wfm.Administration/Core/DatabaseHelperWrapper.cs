@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Support.Library;
 using Teleopti.Wfm.Administration.Models;
@@ -12,11 +13,13 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		private readonly IDbPathProvider _dbPathProvider;
 		private readonly IInstallationEnvironment _installationEnvironment;
+		private readonly IConfigReader _config;
 
-		public DatabaseHelperWrapper(IDbPathProvider dbPathProvider, IInstallationEnvironment installationEnvironment)
+		public DatabaseHelperWrapper(IDbPathProvider dbPathProvider, IInstallationEnvironment installationEnvironment, IConfigReader config)
 		{
 			_dbPathProvider = dbPathProvider;
 			_installationEnvironment = installationEnvironment;
+			_config = config;
 		}
 
 		public DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType)
@@ -82,7 +85,7 @@ namespace Teleopti.Wfm.Administration.Core
 				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
 				//
 			}
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType, _installationEnvironment, true) { Logger = new TenantLogger(tenant, tenantId), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType, _installationEnvironment) { ForceMasterInAzure = true, Logger = new TenantLogger(tenant, tenantId, _config), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			if (helper.Tasks().Exists(helper.DatabaseName))
 				return;
 

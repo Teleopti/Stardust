@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(StartTime,SwedishCultureInfo)));
 		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(EndTime,SwedishCultureInfo)));
 
-			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var assignmentRepository = PersonAssignmentRepository.DONT_USE_CTOR(unitOfWork);
 
 			IActivity activity;
-			var activityRepository = new ActivityRepository(unitOfWork);
+			var activityRepository = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null);
 			if (Activity != null)
 			{
-				activity = new ActivityRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+				activity = ActivityRepository.DONT_USE_CTOR(unitOfWork, null, null).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			}
 			else
 			{
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-			new ShiftCategoryRepository(unitOfWork).Add(shiftCategory);
+			ShiftCategoryRepository.DONT_USE_CTOR(unitOfWork).Add(shiftCategory);
 			ShiftCategory = shiftCategory;
 
 			assignment.SetShiftCategory(shiftCategory);

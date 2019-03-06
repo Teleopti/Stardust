@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldThrowIfDefaultScenarioDoesNotExist()
 		{
-			var repository = new ScenarioRepository(UnitOfWork);
+			var repository = ScenarioRepository.DONT_USE_CTOR(UnitOfWork);
 			foreach (var scenario in repository.LoadAll())
 			{
 				((IDeleteTag)scenario).SetDeleted();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnSortedListWithDefaultScenarioFirst()
 		{
-			var repository = new ScenarioRepository(UnitOfWork);
+			var repository = ScenarioRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var scenarioA = CreateAggregateWithCorrectBusinessUnit();
 			scenarioA.ChangeName("A");
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldIgnoreScenariosNotEnabledForReporting()
 		{
-			var repository = new ScenarioRepository(UnitOfWork);
+			var repository = ScenarioRepository.DONT_USE_CTOR(UnitOfWork);
 
 			var scenarioA = CreateAggregateWithCorrectBusinessUnit();
 			scenarioA.ChangeName("A");
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IScenario> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ScenarioRepository(currentUnitOfWork);
+            return ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork);
         }
     }
 }

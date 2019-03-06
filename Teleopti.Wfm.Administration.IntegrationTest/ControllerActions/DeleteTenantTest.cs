@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Teleopti WFM");
-				tenant.DataSourceConfiguration.SetApplicationConnectionString(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				tenant.DataSourceConfiguration.SetApplicationConnectionString(InfraTestConfigReader.ApplicationConnectionString());
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
 			Target.DeleteTenant("Teleopti WFM").Content.Success.Should().Be.False();

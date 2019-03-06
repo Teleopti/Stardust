@@ -4173,6 +4173,10 @@ Accounts</value>
     <value>Understaffing</value>
     <comment>Understaffing</comment>
   </data>
+  <data name="HasCriticalIntervals" xml:space="preserve">
+    <value>Has critical intervals</value>
+    <comment>Used in plans heatmap tooltip</comment>
+  </data>
   <data name="StaffingLevels" xml:space="preserve">
     <value>Staffing levels</value>
     <comment>Label for skill create</comment>
@@ -10190,7 +10194,7 @@ These options are activated:
     <value>Schedule audit trail is not running.</value>
     <comment>Schedule audit trail is not running.</comment>
   </data>
-    <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+  <data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
     <value>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</value>
     <comment>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</comment>
   </data>
@@ -14177,6 +14181,10 @@ Check your internet connection or contact your administrator.</value>
     <value>Critical Understaffing:</value>
     <comment>Understaffing is critical</comment>
   </data>
+  <data name="CriticalInterval" xml:space="preserve">
+    <value>Critical interval</value>
+    <comment>Used in the plans' interday graph legends</comment>
+  </data>
   <data name="InvalidInput" xml:space="preserve">
     <value>Invalid input</value>
     <comment>Input is not valid</comment>
@@ -17887,7 +17895,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Label for permission item</comment>
   </data>
   <data name="EditInsightsReport" xml:space="preserve">
-    <value>Edit report</value>
+    <value>Create/Edit report</value>
     <comment>Label for permission item</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
@@ -18185,6 +18193,10 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Adjust Adherence (to neutral because of technical issues) </value>
     <comment>Permission to adjust adherence to neutral because of technical issues</comment>
   </data>
+  <data name="AdjustToNeutral" xml:space="preserve">
+    <value>Adjust to Neutral</value>
+    <comment>Button text for adjusting adherence to neutral</comment>
+  </data>
   <data name="NoSkillGroupCreated" xml:space="preserve">
     <value>No skill group created</value>
     <comment>Placeholder in skill group picker if no skill group is created</comment>
@@ -18197,10 +18209,6 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Adjust Adherence</value>
     <comment>Link to the adjust adherence page</comment>
   </data>
-  <data name="AdjustToNeutral" xml:space="preserve">
-    <value>Adjust to Neutral</value>
-    <comment>Button text for adjusting adherence to neutral</comment>
-  </data>
   <data name="AddPeriod" xml:space="preserve">
     <value>Add Period</value>
     <comment>Button text for displaying adjust adherence form</comment>
@@ -18212,5 +18220,77 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="ReadOnlyDistribution" xml:space="preserve">
     <value>Distribution change is not allowed</value>
     <comment>Distribution change is not allowed when saving as template on multi site skill</comment>
+  </data>
+  <data name="HideMenu" xml:space="preserve">
+    <value>Hide menu</value>
+    <comment>On button to hide main navigation menu</comment>
+  </data>
+  <data name="ShowMenu" xml:space="preserve">
+    <value>Show menu</value>
+    <comment>On button to show main navigation menu</comment>
+  </data>
+  <data name="PreviousDay" xml:space="preserve">
+    <value>Previous day</value>
+    <comment>Previous day</comment>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Previous week</value>
+    <comment>Previous week</comment>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>Next week</value>
+    <comment>Next week</comment>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>Select date</value>
+    <comment>Select date</comment>
+  </data>
+  <data name="SelectTime" xml:space="preserve">
+    <value>Select time</value>
+    <comment>Select time</comment>
+  </data>
+  <data name="SelectPeriod" xml:space="preserve">
+    <value>Select period</value>
+    <comment>Select period</comment>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>Out</value>
+    <comment>Adherence type</comment>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>Neutral</value>
+    <comment>Adherence type</comment>
+  </data>
+  <data name="MostUnderstaffedDay" xml:space="preserve">
+    <value>Most understaffed day</value>
+    <comment>Displays the Most undertaffed day in heatmap in Plans</comment>
+  </data>
+  <data name="MostOverstaffedDay" xml:space="preserve">
+    <value>Most overstaffed day</value>
+    <comment>Displays the Most overaffed day in heatmap in Plans</comment>
+  </data>
+  <data name="PleaseInputCalendarNameFirst" xml:space="preserve">
+    <value>Please input calendar name first</value>
+    <comment>this is for calendar name hint when user adds a new bank holiday calendar</comment>
+  </data>
+  <data name="CalendarAutomaticallySaved" xml:space="preserve">
+    <value>Calendar is automatically saved</value>
+    <comment>when bank holiday calendar is changed will be automatically save, it is a message hint</comment>
+  </data>
+  <data name="NextMonth" xml:space="preserve">
+    <value>Next month</value>
+    <comment>Next month</comment>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Previous month</value>
+    <comment>Previous month</comment>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>Select month</value>
+    <comment>Select month</comment>
+  </data>
+  <data name="SelectWeek" xml:space="preserve">
+    <value>Select week</value>
+    <comment>Select week</comment>
   </data>
 </root>

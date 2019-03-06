@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 			WithUnitOfWork.Do(() =>
 			{
 				var result = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
-				result.Should().Be.Null();
+				result.ShiftLayers.Should().Be.Empty();
 			});
 
 			VerifyJobResultIsUpdated();
@@ -133,6 +133,51 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 			{
 				var result = PersonAssignmentRepository.LoadAll().SingleOrDefault(x => x.BelongsToScenario(TargetScenario));
 				result.Should().Not.Be.Null();
+			});
+
+			VerifyJobResultIsUpdated();
+		}
+
+		[Test]
+		public void ShouldMergeWhenTargetHasPersonAssignment()
+		{
+			AddDefaultTypesToRepositories();
+			Guid? existingId = Guid.Empty;
+			var targetCategory = new ShiftCategory("targetCategory");
+			var targetActivity = new Activity("targetActivity");
+			var targetAssignment = new PersonAssignment(Person, TargetScenario, Period.StartDate);
+			targetAssignment.SetShiftCategory(targetCategory);
+			targetAssignment.AddActivity(targetActivity, new TimePeriod(8, 15));
+			
+			var sourceCategory = new ShiftCategory("sourceCategory");
+			var sourceActivity = new Activity("sourceActivity");
+			var sourceAssignment = new PersonAssignment(Person, SourceScenario, Period.StartDate);
+			sourceAssignment.SetShiftCategory(sourceCategory);
+			sourceAssignment.AddActivity(sourceActivity, new TimePeriod(8, 15));
+
+			WithUnitOfWork.Do(() =>
+			{
+				ShiftCategoryRepository.Add(targetCategory);
+				ActivityRepository.Add(targetActivity);
+				ScheduleStorage.Add(targetAssignment);
+
+				ShiftCategoryRepository.Add(sourceCategory);
+				ActivityRepository.Add(sourceActivity);
+				ScheduleStorage.Add(sourceAssignment);	
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				existingId = PersonAssignmentRepository.LoadAll().Single(x => x.BelongsToScenario(TargetScenario)).Id;
+			});
+
+			Target.Handle(createImportEvent());
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = PersonAssignmentRepository.LoadAll().Single(x => x.BelongsToScenario(TargetScenario));
+				result.Id.Should().Be.EqualTo(existingId);
+				result.ShiftCategory.Description.Should().Be.EqualTo(sourceCategory.Description);
 			});
 
 			VerifyJobResultIsUpdated();
@@ -342,7 +387,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 				JobResultId = JobResultId,
 				LogOnBusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
 				TotalMessages = 1,
-				LogOnDatasource = DataSourceHelper.TenantName
+				LogOnDatasource = InfraTestConfigReader.TenantName()
 			};
 		}
 

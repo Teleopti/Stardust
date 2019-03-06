@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.LoadAll<IPersonAbsence>()
 				.Any(pa =>
 				{
-					var inThisBu = pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId;
+					var inThisBu = pa.Person.PersonPeriodCollection.First().Team.Site.GetOrFillWithBusinessUnit_DONTUSE().Id == businessUnitId;
 					var startDate = new DateOnly(pa.Period.StartDateTime);
 					var endDate = new DateOnly(pa.Period.EndDateTime);
 					return inThisBu && (period.Contains(startDate) || period.Contains(endDate));

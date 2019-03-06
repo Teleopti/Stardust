@@ -44,8 +44,9 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		httpTestingController = TestBed.get(HttpTestingController);
 	}));
 
-	it('should create component', () => {
+	it('should create component', doneFn => {
 		expect(component).toBeTruthy();
+		doneFn();
 	});
 
 	it('should render sites list', () => {
@@ -399,7 +400,6 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar renamed',
-				CurrentYearIndex: 0,
 				Years: [
 					{
 						Year: '2013',
@@ -412,7 +412,8 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 							}
 						]
 					}
-				]
+				],
+				ActiveYearIndex: 0
 			}
 		]);
 		fixture.detectChanges();

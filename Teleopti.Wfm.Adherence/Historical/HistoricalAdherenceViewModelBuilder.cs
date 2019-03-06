@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Historical
 {
-	public class HistoricalAdherenceViewModelBuilder
+	public class HistoricalAdherenceViewModelBuilder : IHistoricalAdherenceViewModelBuilder
 	{
 		private readonly IPersonRepository _persons;
 		private readonly ScheduleLoader _schedule;
@@ -179,5 +179,11 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		private string formatForUser(DateTime? time) =>
 			time.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(time.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss") : null;
+	}
+
+	public interface IHistoricalAdherenceViewModelBuilder
+	{
+		HistoricalAdherenceViewModel Build(Guid person);
+		HistoricalAdherenceViewModel Build(Guid person, DateOnly date);
 	}
 }

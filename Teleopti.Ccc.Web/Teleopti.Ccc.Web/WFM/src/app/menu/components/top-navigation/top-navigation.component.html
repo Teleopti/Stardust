@@ -1,33 +1,36 @@
 <div class="top-nav" role="navigation">
 
-	<div (click)="toggleMenuService.toggle()" tabindex="0" class="toggle-menu" role="button">
+	<div (click)="toggleMenuService.toggle()" tabindex="0" class="toggle-menu" role="button"
+		[attr.aria-label]="(toggleMenuService.showMenu$ | async ) ? ('HideMenu' | translate) : ('ShowMenu' | translate)"
+		[nzTitle]="(toggleMenuService.showMenu$ | async ) ? ('HideMenu' | translate) : ('ShowMenu' | translate)"
+		nzPlacement="bottomLeft" [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" nz-tooltip>
 		<i class="mdi text-white" [class.mdi-menu]="!(toggleMenuService.showMenu$ | async)" [class.mdi-backburger]="toggleMenuService.showMenu$ | async"></i>
 	</div>
 
 	<a [nzTitle]="'MainScreen' | translate" nzPlacement="bottom" nz-tooltip class="home" [href]="mainUrl"
 	 [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0">Teleopti WFM</a>
 
-	<business-unit-selector [nzTitle]="'BusinessUnit'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
+	<business-unit-selector [nzTitle]="'BusinessUnit'|translate" [attr.aria-label]="'BusinessUnit'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
 	 [nzMouseLeaveDelay]="0"></business-unit-selector>
 
 	<div class="right-side">
-		<a class="feedback-wrapper-wrapper" [nzTitle]="'Feedback'|translate" nzPlacement="bottom" nz-tooltip
+		<a class="feedback-wrapper-wrapper" [nzTitle]="'Feedback'|translate" [attr.aria-label]="'Feedback'|translate" nzPlacement="bottom" nz-tooltip
 		 [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank"
 		 rel="noopener">
 			<feedback></feedback>
 		</a>
 
-		<a class="system-settings-icon" *ngIf="isSystemSettingsVisible" [nzTitle]="'SystemSettings' | translate"
-			nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" rel="noopener" (click)="goToSystemSettings()">
+		<a class="system-settings-icon" *ngIf="isSystemSettingsVisible" [nzTitle]="'SystemSettings' | translate" [attr.aria-label]="'SystemSettings' | translate"
+			nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" rel="noopener" (click)="goToSystemSettings()" href="#">
 			<i nz-icon type="setting" theme="outline"></i>
 		</a>
 
-		<a [href]="helpUrl$ | async" [nzTitle]="'HelpLabel'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
+		<a [href]="helpUrl$ | async" [nzTitle]="'HelpLabel'|translate" [attr.aria-label]="'HelpLabel'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
 		 [nzMouseLeaveDelay]="0" target="_blank" class="help-link" rel="noopener">
 			<i nz-icon type="question-circle" theme="outline" style="font-size: 18px"></i>
 		</a>
 
-		<settings-menu class="settings-menu" [nzTitle]="'UserSettings'|translate" nzPlacement="bottom" nzOverlayClassName="tooltip"
+		<settings-menu class="settings-menu" [nzTitle]="'UserSettings'|translate" nzPlacement="bottomRight" nzOverlayClassName="tooltip"
 		 [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" nz-tooltip>
 		</settings-menu>
 

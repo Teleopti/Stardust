@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
-using System.Security.Policy;
 using System.Web.Http;
 using log4net;
 using Teleopti.Analytics.Etl.Common;
@@ -14,12 +13,10 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
-
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 using Teleopti.Wfm.Administration.Models;
@@ -28,13 +25,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 {
 	/// <summary>
 	/// Changes to this file may affect third party connections, i.e. Twillio, TalkDesk etc.
-	/// Please contact CloudOps when changes are required and made. 
+	/// Please contact CloudOps when changes are required and made.
 	/// </summary>
 	[TenantTokenAuthentication]
 	public class EtlController : ApiController
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(EtlController));
-		private readonly IToggleManager _toggleManager;
 		private readonly JobCollectionModelProvider _jobCollectionModelProvider;
 		private readonly TenantLogDataSourcesProvider _tenantLogDataSourcesProvider;
 		private readonly EtlJobScheduler _etlJobScheduler;
@@ -49,8 +45,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private const string allBusinessUnitId = "00000000-0000-0000-0000-000000000002";
 
 
-		public EtlController(IToggleManager toggleManager,
-			JobCollectionModelProvider jobCollectionModelProvider,
+		public EtlController(JobCollectionModelProvider jobCollectionModelProvider,
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
 			EtlJobScheduler etlJobScheduler,
 			IConfigReader configReader,
@@ -59,9 +54,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IConfigurationHandler configurationHandler,
 			IGeneralFunctions generalFunctions, 
 			INow now,
-			IJobHistoryRepository jobHistoryRepository, BaseConfigurationValidator baseConfigurationValidator)
+			IJobHistoryRepository jobHistoryRepository,
+			BaseConfigurationValidator baseConfigurationValidator)
 		{
-			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
 			_tenantLogDataSourcesProvider = tenantLogDataSourcesProvider;
 			_etlJobScheduler = etlJobScheduler;

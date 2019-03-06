@@ -6,13 +6,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
 			if ((vm || '') == '') {
-				var toggleOn = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
-					'MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947'
-				);
+				
 				var ajax = new Teleopti.MyTimeWeb.Ajax();
-				vm = toggleOn
-					? new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax)
-					: new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+				vm = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 				ko.cleanNode(elementToBind);
 				ko.applyBindings(vm, elementToBind);
 			}
@@ -34,8 +30,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 	}
 
 	function _initBulletinBoard() {
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776'))
-			Teleopti.MyTimeWeb.Request.List.HideRequests(true);
+		Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 		var elementToBind = $('#Request-shift-trade-bulletin-board')[0];
 		if (elementToBind !== undefined) {
 			if ((vmBulletin || '') == '') {
@@ -131,8 +126,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 			return setShiftTradeBulletinBoardDate(date);
 		},
 		OpenAddShiftTradeWindow: function(date) {
-			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776'))
-				Teleopti.MyTimeWeb.Request.List.HideRequests(true);
+			Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 			if (vm.chooseHistorys != undefined) {
 				vm.chooseHistorys.removeAll();
 			}

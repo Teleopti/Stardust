@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			setAgentsPerPageSettingOwner(pageSizeSetting, person);
-			new PersonalSettingDataRepository(unitOfWork) .PersistSettingValue(pageSizeSetting);
+			PersonalSettingDataRepository.DONT_USE_CTOR(unitOfWork) .PersistSettingValue(pageSizeSetting);
 		}
 
 		private void setAgentsPerPageSettingOwner(AgentsPerPageSetting setting, IPerson user)

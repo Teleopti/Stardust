@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
 			using (mocks.Record())
 			{
-				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
+				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.GetOrFillWithBusinessUnit_DONTUSE())).Return(sourceScenario);
 				Expect.Call(skillDayLoadHelper.LoadSchedulerSkillDays(selection.Period, new[] { multisiteSkill },
 																	  sourceScenario)).Return(
 																		  new Dictionary<ISkill, IEnumerable<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
 			using (mocks.Record())
 			{
-				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
+				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.GetOrFillWithBusinessUnit_DONTUSE())).Return(sourceScenario);
 				Expect.Call(skillDayLoadHelper.LoadSchedulerSkillDays(selection.Period, new[] { multisiteSkill },
 																	  sourceScenario)).Return(
 																		  new Dictionary<ISkill, IEnumerable<ISkillDay>> { { childSkill, new[] { childSkillDay } } });

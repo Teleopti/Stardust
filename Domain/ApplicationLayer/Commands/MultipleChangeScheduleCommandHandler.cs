@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftEditor
 				EndDateTime = personAssignment.Period.EndDateTime,
 				ScenarioId = personAssignment.Scenario.Id.Value,
 				CommandId = command.TrackedCommandInfo?.TrackId ?? Guid.Empty,
-				LogOnBusinessUnitId = personAssignment.Scenario.BusinessUnit.Id.Value,
+				LogOnBusinessUnitId = personAssignment.Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.Value,
 				InitiatorId = command.TrackedCommandInfo?.OperatedPersonId ?? Guid.Empty,
 				LogOnDatasource = _currentDataSource.CurrentName()
 			});

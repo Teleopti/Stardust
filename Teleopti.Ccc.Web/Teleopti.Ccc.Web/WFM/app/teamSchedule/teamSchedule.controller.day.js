@@ -41,6 +41,7 @@
 		var personIdInEditing;
 		var hasScheduleUpdatedInEditor = null; // init it to null because of only if it's false then need to update schedule after shift editor closed
 
+
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 
@@ -54,6 +55,7 @@
 		vm.permissions = {};
 		vm.isRefreshButtonVisible = !!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826;
 		vm.havingScheduleChanged = false;
+		vm.useScheuleList = !!toggleSvc.WfmTeamSchedule_VirtualRepeatInScheduleTable_80404;
 
 
 		initSelectedGroups(mode.BusinessHierarchy, [], '');
@@ -88,53 +90,40 @@
 			}
 		}
 
-		function getTotalTableRowHeight() {
-			var rows = $document[0].querySelectorAll('.big-table-wrapper table tr');
-			var sum = 0;
-			angular.forEach(rows,
-				function (r) {
-					sum += r.offsetHeight;
-				});
-			return sum;
-		}
 
 		function initTeamSize() {
 			var container = $document[0].querySelector('#materialcontainer');
 			if (!container) return;
-			var viewHeader = $document[0].querySelector('.view-header');
-			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
-			var footer = $document[0].querySelector('.teamschedule-footer');
-			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 
-			var maxDefaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
-			var totalRowHeight = getTotalTableRowHeight();
-
-			var defaultHeight = totalRowHeight > maxDefaultHeight ? maxDefaultHeight : totalRowHeight;
-			var defaultTableBodyHeight = defaultHeight - tHeaderHeight;
-
-			var storageSize = StaffingConfigStorageService.getConfig();
-			var size = storageSize || {
-				tableHeight: defaultHeight * 0.64,
-				tableBodyHeight: defaultTableBodyHeight * 0.62,
-				chartHeight: defaultHeight * 0.3 - 40
-			};
 			if (vm.staffingEnabled) {
+				var storageSize = StaffingConfigStorageService.getConfig();
+				if (!storageSize) storageSize = getDefaultStorageSize();
 				vm.scheduleTableWrapperStyle = {
-					'height': size.tableHeight + 'px',
-					'min-height': '0'
+					'min-height': storageSize.tableHeight + 'px'
 				};
 				vm.scheduleTableBodyStyle = {
-					'max-height': size.tableBodyHeight + 'px',
-					'min-height': '0'
+					'max-height': storageSize.tableBodyHeight + 'px'
 				};
-				vm.chartHeight = size.chartHeight;
+				vm.chartHeight = storageSize.chartHeight;
+				vm.scheduleBodyHeight = storageSize.tableBodyHeight;
 			}
 			else {
-				vm.scheduleTableWrapperStyle = { 'height': defaultHeight + 'px' };
-				vm.scheduleTableBodyStyle = { 'max-height': defaultTableBodyHeight + 'px' };
+				var defaultStorageSize = getDefaultStorageSize();
+				vm.scheduleTableWrapperStyle = { 'min-height': defaultStorageSize.tableHeight + 'px' };
+				vm.scheduleTableBodyStyle = { 'min-height': defaultStorageSize.tableBodyHeight + 'px' };
+				vm.scheduleBodyHeight = defaultStorageSize.tableBodyHeight;
 			}
 		};
+
+		function getDefaultStorageSize() {
+			var bodyHeight = $document[0].body.clientHeight;
+			var tableHeight = bodyHeight * (vm.staffingEnabled ? 0.4 : 0.64);
+			return {
+				tableHeight: tableHeight,
+				tableBodyHeight: tableHeight - 40,
+				chartHeight: bodyHeight * 0.3 - 40
+			};
+		}
 
 		vm.paginationOptions = {
 			pageSize: 20,
@@ -144,7 +133,6 @@
 
 		vm.hasSelectedAllPeopleInEveryPage = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
-
 
 		var commandContainerId = 'teamschedule-command-container';
 		var settingsContainerId = 'teamschedule-settings-container';
@@ -214,8 +202,10 @@
 			var container = $document[0].querySelector('#materialcontainer');
 			var viewHeader = $document[0].querySelector('.view-header');
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
+			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper table thead';
+			var tHeader = $document[0].querySelector(tHeaderSelector);
 			var footer = $document[0].querySelector('.teamschedule-footer');
+
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var tableHeight = d.height - footer.offsetHeight;
 			var tBodyHeight = tableHeight - tHeaderHeight;
@@ -243,13 +233,13 @@
 			}
 			StaffingConfigStorageService.setSize(tableHeight, tBodyHeight, chartHeight);
 			vm.scheduleTableWrapperStyle = {
-				'height': tableHeight + 'px',
-				'min-height': '0'
+				'min-height': tableHeight + 'px'
 			};
 			vm.scheduleTableBodyStyle = {
 				'max-height': tBodyHeight + 'px',
 				'min-height': '0'
 			}
+			vm.scheduleBodyHeight = tBodyHeight;
 			vm.chartHeight = chartHeight;
 
 		});
@@ -371,7 +361,6 @@
 		vm.onScheduleDateChanged = function () {
 			vm.isLoading = true;
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			personSelectionSvc.clearPersonInfo();
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
 			vm.getGroupPagesAsync();
@@ -381,7 +370,6 @@
 			if (vm.searchOptions.searchKeywordChanged) {
 				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			}
-			personSelectionSvc.clearPersonInfo();
 			vm.selectedFavorite = false;
 			vm.resetSchedulePage();
 		};
@@ -420,7 +408,10 @@
 			});
 		};
 
-		function afterSchedulesLoaded(result) {
+		function afterSchedulesLoaded(date, result) {
+			scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
+			ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
+
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.scheduleCount = scheduleMgmtSvc.groupScheduleVm.Schedules.length;
 			vm.total = result.Total;
@@ -430,6 +421,12 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			];
 			vm.scheduleFullyLoaded = true;
+
+			vm.checkValidationWarningForCurrentPage();
+			populateAvailableTimezones(result);
+			vm.isLoading = false;
+			vm.searchOptions.focusingSearch = false;
+
 		}
 
 		function populateAvailableTimezones(schedules) {
@@ -452,41 +449,18 @@
 
 			vm.isLoading = true;
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
+
 			if (vm.searchEnabled) {
-				var params = getParamsForLoadingSchedules();
-				teamScheduleSvc.searchSchedules(params).then(function (response) {
+				teamScheduleSvc.searchSchedules(getParamsForLoadingSchedules()).then(function (response) {
 					var result = response.data;
-					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
-					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
-					afterSchedulesLoaded(result);
+					afterSchedulesLoaded(date, result);
+					personSelectionSvc.syncProjectionSelection(scheduleMgmtSvc.groupScheduleVm.Schedules, date, vm.hasSelectedAllPeopleInEveryPage);
 
-					if (vm.hasSelectedAllPeopleInEveryPage) {
-						personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-					}
-					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-
-					vm.checkValidationWarningForCurrentPage();
-					populateAvailableTimezones(result);
-					vm.isLoading = false;
-					vm.searchOptions.focusingSearch = false;
 				});
 			} else if (vm.preSelectPersonIds.length > 0) {
 				teamScheduleSvc.getSchedules(date, vm.preSelectPersonIds).then(function (result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
-					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
-					afterSchedulesLoaded(result);
-
-					if (vm.hasSelectedAllPeopleInEveryPage) {
-						personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-					}
-					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-
-					personSelectionSvc.preSelectPeople(vm.preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
-
-					vm.checkValidationWarningForCurrentPage();
-					populateAvailableTimezones(result);
-					vm.isLoading = false;
-					vm.searchOptions.focusingSearch = false;
+					afterSchedulesLoaded(date, result);
+					personSelectionSvc.preSelectPeople(vm.preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, date);
 				});
 			}
 		};
@@ -501,13 +475,19 @@
 				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) {
 					return schedule.PersonId;
 				});
-				ValidateRulesService.getValidateRulesResultForCurrentPage(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), currentPagePersonIds);
+				vm.isLoading = true;
+				ValidateRulesService.updateValidateRulesResultForPeople(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), currentPagePersonIds).then(function () {
+					vm.isLoading = false;
+				});
 			}
 		};
 
 		vm.checkValidationWarningForCommandTargets = function (personIds) {
 			if (vm.currentSettings.validateWarningEnabled) {
-				ValidateRulesService.updateValidateRulesResultForPeople(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), personIds);
+				vm.isLoading = true;
+				ValidateRulesService.updateValidateRulesResultForPeople(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), personIds).then(function () {
+					vm.isLoading = false;
+				});
 			}
 		};
 
@@ -515,7 +495,6 @@
 			vm.isLoading = true;
 			resetHavingScheduleChange(personIdList);
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
-				personSelectionSvc.clearPersonInfo();
 				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
@@ -526,30 +505,24 @@
 			}
 		};
 
-		vm.selectAllForAllPages = function () {
-			personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			vm.hasSelectedAllPeopleInEveryPage = true;
-		};
-
-		vm.unselectAllForAllPages = function () {
-			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			vm.hasSelectedAllPeopleInEveryPage = false;
-		};
-
 		vm.commandPanelClosed = function () {
 			return !$mdSidenav(commandContainerId).isOpen();
 		};
 
 		vm.selectAllVisible = function () {
-			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
-			return (vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total)
-				&& !vm.hasSelectedAllPeopleInEveryPage;
+			return vm.paginationOptions.totalPages > 1;
 		};
 
-		vm.hasSelectedAllPeople = function () {
-			return vm.hasSelectedAllPeopleInEveryPage;
-		};
+		vm.toggleSelectAll = function () {
+			vm.hasSelectedAllPeopleInEveryPage = !vm.hasSelectedAllPeopleInEveryPage;
+			if (vm.hasSelectedAllPeopleInEveryPage) {
+				personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			} else {
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			}
+		}
+
 
 		vm.toggleErrorDetails = function () {
 			vm.showErrorDetails = !vm.showErrorDetails;
@@ -602,7 +575,6 @@
 
 		vm.validateWarningEnabled = false;
 
-		vm.scheduleTableSelectMode = true;
 		vm.onUseShrinkageChanged = function (useShrinkage) {
 			StaffingConfigStorageService.setShrinkage(useShrinkage);
 		};
@@ -614,7 +586,6 @@
 
 		vm.onSelectedTeamsChanged = function () {
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			personSelectionSvc.clearPersonInfo();
 			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
 		};
@@ -705,12 +676,13 @@
 
 				vm.resetSchedulePage();
 				vm.permissions = teamsPermissions.all();
+				initTeamSize();
 			});
-
-			personSelectionSvc.clearPersonInfo();
 
 			if (vm.staffingEnabled)
 				vm.showStaffing();
+
+			personSelectionSvc.clearPersonInfo();
 		}
 
 		init();

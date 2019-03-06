@@ -10,10 +10,13 @@ using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
@@ -57,6 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private HandlePersonRequestView _handlePersonRequestView1;
 		private ElementHost _elementHost1;
 		private MultipleHostControl _multipleHostControl3;
+		private ITimeZoneGuard _timeZoneGuard;
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs>
 			RestrictionsNotAbleToBeScheduledProgress;
@@ -66,8 +70,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public SchedulerSplitters()
 		{
 			InitializeComponent();
-			if (!DesignMode)
-				SetTexts();
 			_pinnedSkillHelper = new PinnedSkillHelper();
 			tabSkillData.TabStyle = typeof(SkillTabRenderer);
 			tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
@@ -90,12 +92,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void InitializeSkillResultGrids(ILifetimeScope container)
 		{
-			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>());
-			_skillWeekGridControl = new SkillWeekGridControl();
-			_skillMonthGridControl = new SkillMonthGridControl();
-			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
+			_timeZoneGuard = container.Resolve<ITimeZoneGuard>();
+			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
+			_skillWeekGridControl = new SkillWeekGridControl(_timeZoneGuard);
+			_skillMonthGridControl = new SkillMonthGridControl(_timeZoneGuard);
+			_skillFullPeriodGridControl = new SkillFullPeriodGridControl(_timeZoneGuard);
 			_skillIntraDayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart",
-				container.Resolve<ISkillPriorityProvider>());
+				container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
 
 			DayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
 			IntraDayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
@@ -107,6 +110,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder,
 			SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns, SchedulingScreenSettings currentSchedulingScreenSettings)
 		{
+			if (container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112))
+			{
+				if (!DesignMode) SetTextsNoRightToLeft();
+				shiftCategoryDistributionControl1.PrepareToRemoveRightToLeft();
+			}
+			else
+			{
+				if (!DesignMode) SetTexts();
+			}
+				
 			Grid.VScrollPixel = false;
 			Grid.HScrollPixel = false;
 			_virtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
@@ -176,7 +189,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 						aggregateSkillSkill,
 						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-							_currentIntraDayDate.AddDays(1).Date, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()));
+							_currentIntraDayDate.AddDays(1).Date, _timeZoneGuard.CurrentTimeZone()));
 				control.Presenter.RowManager?.SetDataSource(skillStaffPeriods);
 			}
 			else
@@ -198,21 +211,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer => lessIntellegentSplitContainerAdvMainContainer;
 
-		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get => _splitContainerView; private set => _splitContainerView = value; }
+		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get => _splitContainerView; }
 
-		public ChartControl ChartControlSkillData { get => _chartControlSkillData; private set => _chartControlSkillData = value; }
+		public ChartControl ChartControlSkillData { get => _chartControlSkillData; }
 
 		public ContextMenuStrip ContextMenuSkillGrid => _contextMenuSkillGrid;
 
 		public TabControlAdv TabSkillData => tabSkillData;
 
-		public ElementHost ElementHostRequests { get => _elementHostRequests; private set => _elementHostRequests = value; }
+		public ElementHost ElementHostRequests { get => _elementHostRequests; }
 
-		public HandlePersonRequestView HandlePersonRequestView1 { get => _handlePersonRequestView1; private set => _handlePersonRequestView1 = value; }
+		public HandlePersonRequestView HandlePersonRequestView1 { get => _handlePersonRequestView1; }
 
-		public ElementHost ElementHost1 { get => _elementHost1; private set => _elementHost1 = value; }
+		public ElementHost ElementHost1 { get => _elementHost1; }
 
-		public GridControl Grid { get => _grid; private set => _grid = value; }
+		public GridControl Grid { get => _grid; }
 
 		public SkillDayGridControl DayGridControl => _skillDayGridControl;
 
@@ -299,13 +312,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			_filteredPersons = filteredPersons.ToList();
 			if (tabInfoPanels.SelectedIndex == 2)
-			{
 				validationAlertsView1.ReDraw(_filteredPersons);
-			}
+
+			if (tabInfoPanels.SelectedIndex == 1)
+				shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
 
 			tabInfoPanels.Refresh();
-
-			shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
 		}
 
 		public void TogglePropertyPanel(bool value)
@@ -655,7 +667,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_chartDescription = string.Empty;
 			IList<ISkillStaffPeriod> skillStaffPeriods;
 			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-				_currentIntraDayDate.AddDays(1).Date, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+				_currentIntraDayDate.AddDays(1).Date, _timeZoneGuard.CurrentTimeZone());
 			if (aggregateSkillSkill.IsVirtual)
 			{
 				_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(

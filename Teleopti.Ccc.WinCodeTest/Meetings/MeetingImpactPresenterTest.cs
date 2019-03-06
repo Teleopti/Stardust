@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			SetLoadExpectations();
 			SetUpdateViewFromModelExpectations();
 			Expect.Call(_gridHandler.SetupSkillTabs);
-			Expect.Call(_gridHandler.DrawSkillGrid);
+			Expect.Call(() =>_gridHandler.DrawSkillGrid(_timeZone));
 			Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
 			Expect.Call(() => _impactCalculator.RecalculateResources(new DateOnly(2010, 11, 1)));
 
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			SetLoadExpectations();
 			SetUpdateViewFromModelExpectations();
 			Expect.Call(_gridHandler.SetupSkillTabs);
-			Expect.Call(_gridHandler.DrawSkillGrid);
+			Expect.Call(() => _gridHandler.DrawSkillGrid(_timeZone));
 			Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
 			Expect.Call(() => _impactCalculator.RecalculateResources(new DateOnly(2010, 11, 1)));
 			SetUpdateBeforeDrawMeetingExpectations();
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			SetLoadExpectations();
 			SetUpdateViewFromModelExpectations();
 			Expect.Call(_gridHandler.SetupSkillTabs);
-			Expect.Call(_gridHandler.DrawSkillGrid);
+			Expect.Call(() => _gridHandler.DrawSkillGrid(_timeZone));
 			Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
 			Expect.Call(() => _impactCalculator.RecalculateResources(new DateOnly(2010, 11, 1)));
 
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			SetLoadExpectations();
 			SetUpdateViewFromModelExpectations();
 			Expect.Call(_gridHandler.SetupSkillTabs);
-			Expect.Call(_gridHandler.DrawSkillGrid);
+			Expect.Call(() => _gridHandler.DrawSkillGrid(_timeZone));
 			Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
 			Expect.Call(() => _impactCalculator.RecalculateResources(new DateOnly(2010, 11, 1)));
 			//Expect.Call(() => _meetingImpactView.SetSearchInfo(""));
@@ -422,12 +422,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			_mocks.BackToRecordAll();
 
 			Expect.Call(_meetingImpactView.SelectedSkill()).Return(_skill);
-			Expect.Call(_gridHandler.DrawSkillGrid);
+			Expect.Call(() => _gridHandler.DrawSkillGrid(_timeZone));
 			Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
 			Expect.Call(() => _impactCalculator.RecalculateResources(new DateOnly(2010, 11, 1)));
 			SetUpdateBeforeDrawMeetingExpectations();
 			Expect.Call(() => _transparentMeetingHandler.DrawMeeting(TimeSpan.FromHours(11), TimeSpan.FromHours(12)));
 			Expect.Call(() => _transparentMeetingHandler.ScrollMeetingIntoView());
+			Expect.Call(_meetingViewModel.TimeZone).Return(_timeZone);
 			_mocks.ReplayAll();
 			_target.SkillTabChange();
 			_mocks.VerifyAll();

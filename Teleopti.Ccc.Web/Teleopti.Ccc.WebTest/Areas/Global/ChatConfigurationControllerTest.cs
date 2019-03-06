@@ -20,12 +20,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public ChatConfigurationController Target;
 		public FakeHttpServer HttpServer;
 		public FakeServerConfigurationRepository ServerConfigurationRepository;
-		public FakeConfigReader ConfigReader;
 
 		[Test]
 		public void ShouldCheckIfBotIsConfigured()
 		{
-			ConfigReader.FakeSetting(ServerConfigurationKey.GrantBotApiUrl.ToString(),"test");
+			ServerConfigurationRepository.Update(ServerConfigurationKey.GrantBotApiUrl.ToString(),"test");
 			HttpServer.FakeResponseMessage(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(true))});
 
 			Target.Exists(new TenantCredential{Host = "localhost:52858", Tenant = "Teleopti WFM"}).GetAwaiter().GetResult().Should().Be.True();
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public void ShouldCheckIfBotIsConfiguredUsingServerSettings()
 		{
-			ConfigReader.FakeSetting(ServerConfigurationKey.GrantBotApiUrl.ToString(), "test");
 			ServerConfigurationRepository.Update(ServerConfigurationKey.GrantBotApiUrl.ToString(), "myurl");
 			HttpServer.FakeResponseMessage(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(true))});
 
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public async Task ShouldConfigureBotUsingAppConfig()
 		{
-			ConfigReader.FakeSetting(ServerConfigurationKey.GrantBotApiUrl.ToString(), "test");
+			ServerConfigurationRepository.Update(ServerConfigurationKey.GrantBotApiUrl.ToString(), "test");
 
 			var tenantCredential = new TenantCredential {Host = "localhost:52858", Tenant = "Teleopti WFM", ApiKey = "topsecretkeygoeshere"};
 			await Target.Configure(tenantCredential);
@@ -59,7 +57,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		[Test]
 		public async Task ShouldConfigureBotUsingServerSettings()
 		{
-			ConfigReader.FakeSetting(ServerConfigurationKey.GrantBotApiUrl.ToString(), "test");
 			ServerConfigurationRepository.Update(ServerConfigurationKey.GrantBotApiUrl.ToString(), "myurl");
 
 			var tenantCredential = new TenantCredential {Host = "localhost:52858", Tenant = "Teleopti WFM", ApiKey = "topsecretkeygoeshere"};

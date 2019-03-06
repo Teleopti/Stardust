@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_rightToLeft = rightToLeft;
 		}
 
-		public void Export()
+		public void Export(ITimeZoneGuard timeZoneGuard)
 		{
 			var model = new ScheduleReportDialogGraphicalModel();
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			else
 				ScheduleToPdfManager.ExportShiftPerDayAgentViewGraphical(_culture, personDic, period,
 																		 _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
-																		 _rightToLeft, _schedulingScreen, path, model);
+																		 _rightToLeft, _schedulingScreen, path, model, timeZoneGuard);
 		}
 	}
 }

@@ -61,7 +61,7 @@ GO
 COMMIT
 BEGIN TRANSACTION
 GO
-CREATE TABLE dbo.Tmp_queues
+CREATE TABLE dbo.Tmp_queues_to_process
 	(
 	queue int NOT NULL IDENTITY (1, 1),
 	orig_desc nvarchar(100) NULL,
@@ -70,15 +70,15 @@ CREATE TABLE dbo.Tmp_queues
 	display_desc nvarchar(100) NULL
 	)
 GO
-ALTER TABLE dbo.Tmp_queues SET (LOCK_ESCALATION = TABLE)
+ALTER TABLE dbo.Tmp_queues_to_process SET (LOCK_ESCALATION = TABLE)
 GO
-SET IDENTITY_INSERT dbo.Tmp_queues ON
+SET IDENTITY_INSERT dbo.Tmp_queues_to_process ON
 GO
 IF EXISTS(SELECT * FROM dbo.queues)
-	 EXEC('INSERT INTO dbo.Tmp_queues (queue, orig_desc, log_object_id, orig_queue_id, display_desc)
+	 EXEC('INSERT INTO dbo.Tmp_queues_to_process (queue, orig_desc, log_object_id, orig_queue_id, display_desc)
 		SELECT queue, orig_desc, log_object_id, CONVERT(nvarchar(100), orig_queue_id), display_desc FROM dbo.queues WITH (HOLDLOCK TABLOCKX)')
 GO
-SET IDENTITY_INSERT dbo.Tmp_queues OFF
+SET IDENTITY_INSERT dbo.Tmp_queues_to_process OFF
 GO
 ALTER TABLE dbo.agent_logg
 	DROP CONSTRAINT FK_agent_logg_queues
@@ -88,7 +88,7 @@ ALTER TABLE dbo.queue_logg
 GO
 DROP TABLE dbo.queues
 GO
-EXECUTE sp_rename N'dbo.Tmp_queues', N'queues', 'OBJECT' 
+EXECUTE sp_rename N'dbo.Tmp_queues_to_process', N'queues', 'OBJECT' 
 GO
 ALTER TABLE dbo.queues ADD CONSTRAINT
 	PK_queues PRIMARY KEY CLUSTERED 

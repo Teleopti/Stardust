@@ -1,14 +1,15 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import {PlanningGroupService, PlanningPeriodService} from '../../shared';
+import {IntradayHelper, PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
-import { NavigationService } from '../../../core/services';
+import {NavigationService, TogglesService} from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
 import {debounceTime, groupBy, map, mergeMap, reduce, tap, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
 import {from} from "rxjs";
 import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
+import * as moment from 'moment';
 
 @Component({
 	selector: 'plans-period-overview',
@@ -33,7 +34,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	planningPeriodInfo: any = {};
 	planningGroupInfo: any = {};
 	totalAgents = 0;
-	valLoading = true;
+	loadingValidations = true;
+	loadingLastResult = true;
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
 	months : any;
@@ -41,11 +43,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	worstUnderStaffDay: any;
 	worstOverStaffDay: any;
 	showNumbers: false;
+	selectedDay = null;
+	selectedSkill: string = null;
 
 	validationFilter;
 
 	skills;
 	filteredSkills;
+	lastUpdated;
 	
 	forTesting = false;
 
@@ -63,6 +68,24 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		SkillName   : null
 	};
 
+    preValidationsSortName = null;
+    preValidationsSortValue = null;
+	preValidationsSortMap = {
+		Resource: null,
+		Area: null,
+		Description: null
+    };
+	
+	scheduleIssuesSortName = null;
+	scheduleIssuesSortValue = null;
+	scheduleIssuesSortMap = {
+		Resource: null,
+		Area: null,
+		Description: null
+	};
+
+	WFM_Plans_IntradayIssuesInHeatMap_79113 = false;
+
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
 		private planningPeriodActionService: PlanningPeriodActionService,
@@ -71,52 +94,28 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private translate: TranslateService,
 		private navService: NavigationService,
 		private fb: FormBuilder,
-		private heatMapColorHelper:HeatMapColorHelper, 
-		private amDateFormat: DateFormatPipe
+		private heatMapColorHelper:HeatMapColorHelper,
+		public amDateFormat: DateFormatPipe,
+		private togglesService: TogglesService
 	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
+		this.togglesService.toggles$.subscribe({
+			next: toggles => {
+				this.WFM_Plans_IntradayIssuesInHeatMap_79113 = toggles.WFM_Plans_IntradayIssuesInHeatMap_79113;
+			}
+		});
 	}
 
 	ngOnInit() {
 		this.preValidationFilterControl.valueChanges
-			.pipe(
-				map(filterString => {
-					return this.valData.preValidation.filter(
-						g =>
-							g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
-							g.ValidationErrors.some(
-								item =>
-									item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
-									this.translate
-										.instant(item.ResourceType.toLowerCase())
-										.includes(filterString.toLowerCase())
-							)
-					);
-				})
-			)
-			.subscribe(filteredPreValidations => {
-				this.filteredPreValidations = filteredPreValidations;
+			.subscribe(filterString => {
+				this.searchPreValidations(filterString);
 			});
 
 		this.scheduleIssuesFilterControl.valueChanges
-			.pipe(
-				map(filterString => {
-					return this.valData.scheduleIssues.filter(
-						g =>
-							g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
-							g.ValidationErrors.some(
-								item =>
-									item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
-									this.translate
-										.instant(item.ResourceType.toLowerCase())
-										.includes(filterString.toLowerCase())
-							)
-					);
-				})
-			)
-			.subscribe(filteredScheduleIssues => {
-				this.filteredScheduleIssues = filteredScheduleIssues;
+			.subscribe(filterString => {
+				this.searchScheduleIssues(filterString);
 			});
 
 		this.skillFilterControl.valueChanges
@@ -137,7 +136,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		clearInterval(this.timer);
 	}
 
-	public search(filterString: string){
+	private search(filterString: string){
 		const data = this.skills.filter(g => g.SkillName.toLowerCase().includes(filterString.toLowerCase()));
 		if (this.sortName && this.sortValue) {
 			this.filteredSkills = data.sort((a, b) => (this.sortValue === 'ascend') ?
@@ -153,6 +152,90 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.sortValue = value;
 		this.search(this.skillFilterControl.value);
 	}
+	
+	private searchPreValidations(filterString: string){
+		const data = this.valData.preValidation.filter(
+			g =>
+				g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
+				g.ValidationErrors.some(
+					item =>
+						item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
+						this.translate
+							.instant(item.ResourceType.toLowerCase())
+							.includes(filterString.toLowerCase())
+				)
+		);
+		if (this.preValidationsSortName && this.preValidationsSortValue) {
+			this.filteredPreValidations = data.sort((a, b) => 
+			{
+				if(this.preValidationsSortName == 'Resource'){
+					return (this.preValidationsSortValue === 'ascend') ?
+						(a['ResourceName'].toLowerCase() > b['ResourceName'].toLowerCase() ? 1 : -1) :
+						(b['ResourceName'].toLowerCase() > a['ResourceName'].toLowerCase() ? 1 : -1)
+				}else if(this.preValidationsSortName == 'Area'){
+					return (this.preValidationsSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ResourceType > b['ValidationErrors'][0].ResourceType ? 1 : -1) :
+						(b['ValidationErrors'][0].ResourceType > a['ValidationErrors'][0].ResourceType ? 1 : -1)
+				}else if(this.preValidationsSortName == 'Description'){
+					return (this.preValidationsSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ErrorMessageLocalized > b['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1) :
+						(b['ValidationErrors'][0].ErrorMessageLocalized > a['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1)
+				}else{
+					throw new Error('Not supported!');
+				}
+			});
+		}else{
+			this.filteredPreValidations = data;
+		}
+	}
+	
+	public sortPreValidations(key: string, value: string): void{
+		this.preValidationsSortName = key;
+		this.preValidationsSortValue = value;
+		this.searchPreValidations(this.preValidationFilterControl.value);
+	}
+	
+	private searchScheduleIssues(filterString: string){
+		const data = this.valData.scheduleIssues.filter(
+			g =>
+				g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
+				g.ValidationErrors.some(
+					item =>
+						item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
+						this.translate
+							.instant(item.ResourceType.toLowerCase())
+							.includes(filterString.toLowerCase())
+				)
+		);
+		if (this.scheduleIssuesSortName && this.scheduleIssuesSortValue) {
+			this.filteredScheduleIssues = data.sort((a, b) =>
+			{
+				if(this.scheduleIssuesSortName == 'Resource'){
+					return (this.scheduleIssuesSortValue === 'ascend') ?
+						(a['ResourceName'].toLowerCase() > b['ResourceName'].toLowerCase() ? 1 : -1) :
+						(b['ResourceName'].toLowerCase() > a['ResourceName'].toLowerCase() ? 1 : -1)
+				}else if(this.scheduleIssuesSortName == 'Area'){
+					return (this.scheduleIssuesSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ResourceType > b['ValidationErrors'][0].ResourceType ? 1 : -1) :
+						(b['ValidationErrors'][0].ResourceType > a['ValidationErrors'][0].ResourceType ? 1 : -1)
+				}else if(this.scheduleIssuesSortName == 'Description'){
+					return (this.scheduleIssuesSortValue === 'ascend') ?
+						(a['ValidationErrors'][0].ErrorMessageLocalized > b['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1) :
+						(b['ValidationErrors'][0].ErrorMessageLocalized > a['ValidationErrors'][0].ErrorMessageLocalized ? 1 : -1)
+				}else{
+					throw new Error('Not supported!');
+				}
+			});
+		}else{
+			this.filteredScheduleIssues = data;
+		}
+	}
+
+	public sortScheduleIssues(key: string, value: string): void{
+		this.scheduleIssuesSortName = key;
+		this.scheduleIssuesSortValue = value;
+		this.searchScheduleIssues(this.scheduleIssuesFilterControl.value);
+	} 
 
 	private initLegends(){
 		for(let i = 0; i <41;i++){
@@ -215,11 +298,28 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	public editPlanningGroup() {
-		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId });
+		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId, planningPeriodId: this.ppId });
 	}
 
 	public isDisabled() {
-		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;
+		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;	
+	}
+	
+	public updateIntradayChart(selectedDay, skillName, chartElement: HTMLElement){
+		if(this.selectedDay) {
+			this.selectedDay.selected = false;
+		}
+		if(this.selectedDay === selectedDay){
+			this.selectedDay = null;
+			this.selectedSkill = null;
+		} else{
+			this.selectedDay = selectedDay;
+			this.selectedDay.selected = true;
+			this.selectedSkill = skillName;
+		}
+		setTimeout(()=>{
+			chartElement.scrollIntoView();
+		} , 1);
 		
 	}
 
@@ -260,6 +360,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					this.scheduledAgents = 0;
 					this.skills = undefined;
 					this.status = '';
+					this.selectedDay = null;
+					this.selectedSkill = null;
 					return;
 				}
 				if (clearScheduleStatus.Failed) {
@@ -372,10 +474,12 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	private loadLastResult() {
+		this.loadingLastResult = true;
 		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data => {
 			const fullSchedulingResult = data.FullSchedulingResult;
 			if (fullSchedulingResult) {
 				this.isScheduled = true;
+				this.lastUpdated = moment(data.LastUpdated).format('YYYY-MM-DD HH:mm');
 				this.scheduledAgents = data.FullSchedulingResult.ScheduledAgentsCount;
 				this.valData.scheduleIssues = data.FullSchedulingResult.BusinessRulesValidationResults;
 				this.scheduleIssuesFilterControl.updateValueAndValidity();
@@ -405,6 +509,20 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 							if (weekday === culturalDaysOff.start) {
 								day.weekstart = true;
 							}
+							day.hasCritical = false;
+							if(day.IntervalDetails&&this.WFM_Plans_IntradayIssuesInHeatMap_79113){
+								let sum = 0;
+								day.IntervalDetails.forEach(interval =>{
+									sum+=interval.f;
+								});
+								day.IntervalDetails.some(interval=>{
+									if(IntradayHelper.isCritical(interval, day.RelativeDifference)){
+										day.hasCritical = true;
+										return true;
+									}
+								});
+							}
+							
 							day.RelativeDifferencePercent = relativeDifferencePercent.toFixed(2);
 							if(day.ColorId === 4){
 								day.DisplayedPercent = '';
@@ -415,7 +533,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 							}else {
 								day.DisplayedPercent = relativeDifferencePercent.toFixed(0);
 							}
-							day.tooltip = (day.ColorId === 4? this.translate.instant('Closed') : this.translate.instant('RelativeDifference') + ' ' + day.RelativeDifferencePercent + '%') + ' | ' + skill.SkillName + ' | ' + this.amDateFormat.transform(day.Date, 'L');
 						});
 					});
 
@@ -442,15 +559,16 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			} else {
 				this.isScheduled = false;
 			}
+			this.loadingLastResult = false;
 		});
 	}
 
 	private loadValidations() {
-		this.valLoading = true;
+		this.loadingValidations = true;
 		this.planningPeriodService.getValidation(this.ppId).subscribe(data => {
 			this.valData.preValidation = data.InvalidResources;
 			this.preValidationFilterControl.updateValueAndValidity();
-			this.valLoading = false;
+			this.loadingValidations = false;
 			this.updateValidationErrorsNumber();
 		});
 	}

@@ -8,21 +8,26 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class PublicNoteRepository: Repository<IPublicNote>, IPublicNoteRepository 
     {
-#pragma warning disable 618
-        public PublicNoteRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
-		
-        public PublicNoteRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork, null, null)
+		public static PublicNoteRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new PublicNoteRepository(currentUnitOfWork, null, null);
+		}
+
+		public static PublicNoteRepository DONT_USE_CTOR(IUnitOfWork unitOfWork)
+		{
+			return new PublicNoteRepository(new ThisUnitOfWork(unitOfWork), null, null);
+		}
+
+		public PublicNoteRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 	    {
-		    
 	    }
 
         public IList<IPublicNote> Find(DateTimePeriod period, IScenario scenario)

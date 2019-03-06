@@ -14,9 +14,9 @@ Teleopti.MyTimeWeb.Ajax = function () {
 	}
 
 	function _setupUrl(options) {
-		if (options.url.indexOf('://') != -1)
+		if (options.url.indexOf('://') !== -1)
 			return;
-		if (options.url.indexOf('/') == 0)
+		if (options.url.indexOf('/') === 0)
 			return;
 		options.url = Teleopti.MyTimeWeb.AjaxSettings.baseUrl + options.url;
 	}
@@ -29,23 +29,23 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		var errorCallback = options.error;
 
 		options.error = function (jqXHR, textStatus, errorThrown) {
-			if (options.abort && jqXHR && textStatus == "abort") {
+			if (options.abort && jqXHR && textStatus === "abort") {
 				options.abort(jqXHR, textStatus, errorThrown);
 				return;
 			}
-			if (options.statusCode400 && jqXHR && jqXHR.status == 400) {
+			if (options.statusCode400 && jqXHR && jqXHR.status === 400) {
 				options.statusCode400(jqXHR, textStatus, errorThrown);
 				return;
 			}
-			if (options.statusCode401 && jqXHR && jqXHR.status == 401) {
+			if (options.statusCode401 && jqXHR && jqXHR.status === 401) {
 				options.statusCode401(jqXHR, textStatus, errorThrown);
 				return;
 			}
-			if (options.statusCode403 && jqXHR && jqXHR.status == 403) {
+			if (options.statusCode403 && jqXHR && jqXHR.status === 403) {
 				options.statusCode403(jqXHR, textStatus, errorThrown);
 				return;
 			}
-			if (options.statusCode404 && jqXHR && jqXHR.status == 404) {
+			if (options.statusCode404 && jqXHR && jqXHR.status === 404) {
 				options.statusCode404(jqXHR, textStatus, errorThrown);
 				return;
 			}
@@ -94,7 +94,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 	}
 
 	function _handleCallWhenAllAjaxCompleted() {
-		if (callWhenAllAjaxIsCompleted && _requests.length == 0) {
+		if (callWhenAllAjaxIsCompleted && _requests.length === 0) {
 			callWhenAllAjaxIsCompleted();
 			callWhenAllAjaxIsCompleted = null; // prevent next call. good or bad?
 		}
@@ -132,7 +132,8 @@ Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 				if (response.Message) {
 					errorMessage = response.Message;
 				}
-			} catch (e) { }
+			} catch (e) {
+			}
 		}
 		return errorMessage;
 	}

@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Permissions
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
 					new SiteAuthorization
 					{
-						BusinessUnitId = mySite.BusinessUnit.Id.Value,
+						BusinessUnitId = mySite.GetOrFillWithBusinessUnit_DONTUSE().Id.Value,
 						SiteId = mySite.Id.Value
 					})
 				.Should().Be.True();
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
 					new SiteAuthorization
 					{
-						BusinessUnitId = otherSite.BusinessUnit.Id.Value,
+						BusinessUnitId = otherSite.GetOrFillWithBusinessUnit_DONTUSE().Id.Value,
 						SiteId = otherSite.Id.Value
 					})
 				.Should().Be.False();

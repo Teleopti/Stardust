@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertExists(".message-list");
 			// TODO: should probably be injected somehow
-			var repository = new PushMessageDialogueRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			var repository = PushMessageDialogueRepository.DONT_USE_CTOR(UnitOfWorkFactory.CurrentUnitOfWork());
 			var pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
 			var id = pushMessageDialogue.Id.GetValueOrDefault();
 

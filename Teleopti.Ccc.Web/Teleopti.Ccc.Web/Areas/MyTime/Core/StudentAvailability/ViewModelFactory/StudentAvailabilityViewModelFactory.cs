@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider;
 
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory
@@ -14,13 +15,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 		private readonly StudentAvailabilityDayFeedbackViewModelMapper _feedbackMapper;
 		private readonly StudentAvailabilityDayViewModelMapper _dayMapper;
 		private readonly IStudentAvailabilityProvider _studentAvailabilityProvider;
+		private readonly IBankHolidayCalendarProvider _bankHolidayCalendarProvider;
 
-		public StudentAvailabilityViewModelFactory(StudentAvailabilityViewModelMapper mapper, StudentAvailabilityDayFeedbackViewModelMapper feedbackMapper, StudentAvailabilityDayViewModelMapper dayMapper, IStudentAvailabilityProvider studentAvailabilityProvider)
+		public StudentAvailabilityViewModelFactory(StudentAvailabilityViewModelMapper mapper, StudentAvailabilityDayFeedbackViewModelMapper feedbackMapper, 
+			StudentAvailabilityDayViewModelMapper dayMapper, IStudentAvailabilityProvider studentAvailabilityProvider, 
+			IBankHolidayCalendarProvider bankHolidayCalendarProvider)
 		{
 			_mapper = mapper;
 			_feedbackMapper = feedbackMapper;
 			_dayMapper = dayMapper;
 			_studentAvailabilityProvider = studentAvailabilityProvider;
+			_bankHolidayCalendarProvider = bankHolidayCalendarProvider;
 		}
 
 		public StudentAvailabilityViewModel CreateViewModel(DateOnly dateInPeriod)
@@ -37,7 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 		{
 			var studentAvailability = _studentAvailabilityProvider.GetStudentAvailabilityDayForDate(date);
 			if (studentAvailability == null) return null;
-			return _dayMapper.Map(studentAvailability);
+
+			var calendarDate = _bankHolidayCalendarProvider.GetMySiteBankHolidayDates(date.ToDateOnlyPeriod()).ToList();
+			return _dayMapper.Map(studentAvailability, calendarDate.FirstOrDefault());
 		}
 
 		public IEnumerable<StudentAvailabilityDayViewModel> CreateStudentAvailabilityAndSchedulesViewModels(
@@ -45,8 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 		{
 			var period = new DateOnlyPeriod(from, to);
 			var studentAvailabilityDays = _studentAvailabilityProvider.GetStudentAvailabilityDayForPeriod(period);
+			var calendarDates = _bankHolidayCalendarProvider.GetMySiteBankHolidayDates(period).ToList();
 
-			return studentAvailabilityDays.Select(_dayMapper.Map);
+			return  (from availableDay in studentAvailabilityDays
+				let bankHolidayDate = calendarDates.FirstOrDefault(cd => cd.Date == availableDay.RestrictionDate)
+				select _dayMapper.Map(availableDay, bankHolidayDate)).ToArray();
 		}
 	}
 }

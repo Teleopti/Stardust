@@ -226,30 +226,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetOngoingPeriodAgentBadgesWhenToggleOff()
-		{
-			Now.Is(new DateTime(2017, 04, 09, 23, 0, 0, DateTimeKind.Utc));
-
-			ToggleManager.Disable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
-			var calculatedDate = new DateOnly(2017, 4, 9);
-			var gamificationSetting = createGamificationSetting();
-			createTeamGamificationSetting(gamificationSetting);
-			setAgentBadge(gamificationSetting, calculatedDate);
-			setAgentBadgeWithRank(gamificationSetting, calculatedDate);
-
-			var result = Target.CreatePortalViewModel().Badges.ToList();
-			result[0].BronzeBadge.Should().Be.EqualTo(1);
-			result[0].SilverBadge.Should().Be.EqualTo(0);
-			result[0].GoldBadge.Should().Be.EqualTo(0);
-			result[1].BronzeBadge.Should().Be.EqualTo(5);
-			result[1].SilverBadge.Should().Be.EqualTo(0);
-			result[1].GoldBadge.Should().Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldGetDefaultSettingPeriodAgentBadgesWhenToggleOn()
 		{
-			ToggleManager.Enable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
 			createTeamGamificationSetting(gamificationSetting);
@@ -271,7 +249,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var calculatedDate = new DateOnly(2017, 4, 9);
 
 			Now.Is(new DateTime(2017,04,08,23,0,0,DateTimeKind.Utc));
-			ToggleManager.Enable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 
 			var gamificationSetting = createWeeklyGamificationSetting();
 			createTeamGamificationSetting(gamificationSetting, calculatedDate);

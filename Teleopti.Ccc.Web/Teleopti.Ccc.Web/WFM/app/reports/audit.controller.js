@@ -41,6 +41,7 @@
 				.locale(JSON.stringify(local))
 				.subtract(1, 'days'),
 			endDate: moment().locale(JSON.stringify(local))
+				.add(1, 'days')
 		};
 		vm.dateModifyRange = {
 			startDate: moment()

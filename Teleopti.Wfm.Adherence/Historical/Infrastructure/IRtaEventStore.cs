@@ -27,10 +27,10 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 	public interface IRtaEventStoreReader
 	{
 		IEnumerable<IEvent> Load(Guid personId, DateOnly date);
-		IEnumerable<IEvent> LoadAllOfType<T>();
+		IEnumerable<IEvent> LoadOfTypeForPeriod<T>(DateTimePeriod period);
 		LoadedEvents LoadForSynchronization(long fromEventId);
 		long ReadLastId();
-		int CountOfTypeFromId<T>(long fromEventId);
+		bool AnyEventsOfType<T>(long fromEventId);
 	}
 
 	public class LoadedEvents

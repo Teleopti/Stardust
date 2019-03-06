@@ -114,7 +114,7 @@
 				</h1>
 				<div class="modal-inner-content">
 					<div ng-repeat="rule in requestsCommandsPane.allBusinessRulesForApproving">
-						<md-checkbox ng-if="rule.Enabled" ng-model="rule.Checked" aria-label="Checkbox">{{rule.Description}}</md-checkbox>
+						<md-checkbox ng-if="rule.Enabled" ng-model="rule.Checked">{{rule.Description}}</md-checkbox>
 					</div>
 				</div>
 				<div class="modal-actions">

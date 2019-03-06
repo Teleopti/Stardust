@@ -5655,6 +5655,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calendar is automatically saved.
+        /// </summary>
+        public static string CalendarAutomaticallySaved {
+            get {
+                return ResourceManager.GetString("CalendarAutomaticallySaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Call List Length.
         /// </summary>
         public static string CallListLength {
@@ -8471,6 +8480,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Critical interval.
+        /// </summary>
+        public static string CriticalInterval {
+            get {
+                return ResourceManager.GetString("CriticalInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Critical Understaffing:.
         /// </summary>
         public static string CriticalUnderstaffingColon {
@@ -8866,7 +8884,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///Last name: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
         ///Language: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
         ///Company: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
-        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get access to [rest of string was truncated]&quot;;.
+        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get acc [rest of string was truncated]&quot;;.
         /// </summary>
         public static string DataProtectionQuestion {
             get {
@@ -11144,7 +11162,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit report.
+        ///   Looks up a localized string similar to Create/Edit report.
         /// </summary>
         public static string EditInsightsReport {
             get {
@@ -14889,6 +14907,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Has critical intervals.
+        /// </summary>
+        public static string HasCriticalIntervals {
+            get {
+                return ResourceManager.GetString("HasCriticalIntervals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Person {0} has personal activity, overtime activity or meeting in the shift on date {1}..
         /// </summary>
         public static string HasNonMainShiftActivityErrorMessage {
@@ -15038,6 +15065,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string HideFilter {
             get {
                 return ResourceManager.GetString("HideFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide menu.
+        /// </summary>
+        public static string HideMenu {
+            get {
+                return ResourceManager.GetString("HideMenu", resourceCulture);
             }
         }
         
@@ -20012,6 +20048,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most overstaffed day.
+        /// </summary>
+        public static string MostOverstaffedDay {
+            get {
+                return ResourceManager.GetString("MostOverstaffedDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most understaffed day.
+        /// </summary>
+        public static string MostUnderstaffedDay {
+            get {
+                return ResourceManager.GetString("MostUnderstaffedDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move.
         /// </summary>
         public static string Move {
@@ -20878,6 +20932,15 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Neutral.
         /// </summary>
+        public static string Neutral {
+            get {
+                return ResourceManager.GetString("Neutral", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neutral.
+        /// </summary>
         public static string NeutralAdherence {
             get {
                 return ResourceManager.GetString("NeutralAdherence", resourceCulture);
@@ -21670,6 +21733,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next month.
+        /// </summary>
+        public static string NextMonth {
+            get {
+                return ResourceManager.GetString("NextMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next
         ///Period.
         /// </summary>
@@ -21703,6 +21775,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NextStart {
             get {
                 return ResourceManager.GetString("NextStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next week.
+        /// </summary>
+        public static string NextWeek {
+            get {
+                return ResourceManager.GetString("NextWeek", resourceCulture);
             }
         }
         
@@ -24354,6 +24435,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Out.
+        /// </summary>
+        public static string Out {
+            get {
+                return ResourceManager.GetString("Out", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Outbound.
         /// </summary>
         public static string Outbound {
@@ -26634,6 +26724,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please input calendar name first.
+        /// </summary>
+        public static string PleaseInputCalendarNameFirst {
+            get {
+                return ResourceManager.GetString("PleaseInputCalendarNameFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please input end time.
         /// </summary>
         public static string PleaseInputEndTime {
@@ -26986,6 +27085,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous day.
+        /// </summary>
+        public static string PreviousDay {
+            get {
+                return ResourceManager.GetString("PreviousDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous month.
+        /// </summary>
+        public static string PreviousMonth {
+            get {
+                return ResourceManager.GetString("PreviousMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous
         ///Period.
         /// </summary>
@@ -27001,6 +27118,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PreviousSavedOvertimeAvailabilityColon {
             get {
                 return ResourceManager.GetString("PreviousSavedOvertimeAvailabilityColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous week.
+        /// </summary>
+        public static string PreviousWeek {
+            get {
+                return ResourceManager.GetString("PreviousWeek", resourceCulture);
             }
         }
         
@@ -31967,6 +32093,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select date.
+        /// </summary>
+        public static string SelectDate {
+            get {
+                return ResourceManager.GetString("SelectDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a date and a scenario.
         /// </summary>
         public static string SelectDateAndScenario {
@@ -32246,6 +32381,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select month.
+        /// </summary>
+        public static string SelectMonth {
+            get {
+                return ResourceManager.GetString("SelectMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select multiple dates.
         /// </summary>
         public static string SelectMultipleDates {
@@ -32305,6 +32449,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectPeopleToAddToRole {
             get {
                 return ResourceManager.GetString("SelectPeopleToAddToRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select period.
+        /// </summary>
+        public static string SelectPeriod {
+            get {
+                return ResourceManager.GetString("SelectPeriod", resourceCulture);
             }
         }
         
@@ -32561,6 +32714,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select time.
+        /// </summary>
+        public static string SelectTime {
+            get {
+                return ResourceManager.GetString("SelectTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select today.
         /// </summary>
         public static string SelectToday {
@@ -32575,6 +32737,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectToModify {
             get {
                 return ResourceManager.GetString("SelectToModify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select week.
+        /// </summary>
+        public static string SelectWeek {
+            get {
+                return ResourceManager.GetString("SelectWeek", resourceCulture);
             }
         }
         
@@ -34036,6 +34207,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowMainShift {
             get {
                 return ResourceManager.GetString("ShowMainShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show menu.
+        /// </summary>
+        public static string ShowMenu {
+            get {
+                return ResourceManager.GetString("ShowMenu", resourceCulture);
             }
         }
         
@@ -38317,8 +38497,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///In order to give us valuable information about this error, we ask you to kindly report it by clicking on the &quot;Send e-mail report&quot; button below. This will open your default e-mail program. Please also include the following:
         ///
         ///1.  Step by step on how to reproduce the error
-        ///2.  Information about what data you were working with
-        /// [rest of string was truncated]&quot;;.
+        ///2.  Information about what data you were working  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string UnhandledExceptionMessage {
             get {

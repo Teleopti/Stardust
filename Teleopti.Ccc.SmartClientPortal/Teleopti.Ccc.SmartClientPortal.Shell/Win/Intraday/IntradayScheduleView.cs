@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -29,12 +30,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public IntradayScheduleView(GridControl gridControl, IIntradayView intradayView, ISchedulerStateHolder schedulerState,
             GridlockManager lockManager, SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer)
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer, ITimeZoneGuard timeZoneGuard)
             : base(null)
 		{
 			_gridControl = gridControl;
             _intradayView = intradayView;
-            Presenter = new DayPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer);
+            Presenter = new DayPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer, timeZoneGuard);
         }
 
         public bool IsOverviewColumnsHidden { get; set; }
@@ -109,7 +110,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		    RefreshRangeForAgentPeriod(schedulePart.Person, new DateTimePeriod());
 	    }
 
-	    /// <summary>
+		public ITimeZoneGuard TimeZoneGuard { get; }
+
+		/// <summary>
         /// Gets a list with selected schedules for current column
         /// </summary>
         /// <returns></returns>

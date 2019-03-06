@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_presenter = new RequestAllowancePresenter(this,
 													   new RequestAllowanceModel(UnitOfWorkFactory.Current,
 														   new BudgetDayRepository(currentUnitOfWork),
-														   new BudgetGroupRepository(currentUnitOfWork),
-														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUnitOfWork)),
+														   BudgetGroupRepository.DONT_USE_CTOR(currentUnitOfWork),
+														   new DefaultScenarioFromRepository(ScenarioRepository.DONT_USE_CTOR(currentUnitOfWork)),
 														   new ScheduleProjectionReadOnlyPersister(currentUnitOfWork)));
 
 			_presenter.Initialize(budgetGroup, defaultDate);

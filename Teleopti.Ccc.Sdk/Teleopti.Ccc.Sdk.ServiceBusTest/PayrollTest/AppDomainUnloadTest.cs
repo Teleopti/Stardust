@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception?.Message}\r\nException.Stacktrace: {i.Exception?.StackTrace}\r\n" ));
 				feedback.PayrollResultDetails.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
 					.Be.Empty();
-				document.DocumentElement.ChildNodes.Count.Should().Be(5);
+				document.XmlResult.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				var target = new AppdomainCreatorWrapper();
 				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto, 
 					new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments()), _searchPath.Path);
-				document.DocumentElement.ChildNodes.Count.Should().Be(5);
+				document.XmlResult.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				var target = new AppdomainCreatorWrapper();
 				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto,
 					new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments()), _searchPath.Path);
-				document.DocumentElement.ChildNodes.Count.Should().Be(5);
+				document.XmlResult.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			var result = target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(),
 				feedback, _searchPath.Path);
 			feedback.PayrollResultDetails.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
-			result.InnerXml.Should().Be.Empty();
+			result.XmlResult.InnerXml.Should().Be.Empty();
 			file.Close();
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}

@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			IDayOffTemplate dayOffTemplate;
 			if (Preference != null)
 			{
-				dayOffTemplate = new DayOffTemplateRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Preference));
+				dayOffTemplate = DayOffTemplateRepository.DONT_USE_CTOR2(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Preference));
 			}
 			else
 			{
 				dayOffTemplate = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(currentUnitOfWork);
+				var repository = DayOffTemplateRepository.DONT_USE_CTOR2(currentUnitOfWork);
 				repository.Add(dayOffTemplate);
 				Preference = dayOffTemplate.Description.Name;
 			}

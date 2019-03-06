@@ -36,13 +36,13 @@
 			<li class="mobile-datepicker">
 				<div class="input-group">
 					<span class="input-group-btn">
-						<button class="btn btn-default previous-day" data-bind="click: previousDay">
+						<button class="btn btn-default previous-day" aria-label="@Resources.PreviousDay" data-bind="click: previousDay">
 							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
-					<a class="text-center formatted-date-text moment-datepicker"></a>
+					<button class="btn btn-default formatted-date-text moment-datepicker" aria-haspopup="true"></button>
 					<span class="input-group-btn">
-						<button class="btn btn-default next-day" data-bind="click: nextDay">
+						<button class="btn btn-default next-day" aria-label="@Resources.NextDay" data-bind="click: nextDay">
 							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 					</span>
@@ -50,35 +50,35 @@
 			</li>
 			<!-- ko if: isHostAMobile || isHostAniPad -->
 			<li class="mobile-today" data-bind="click: today">
-				<a>
+				<button class="btn btn-default" aria-label="@Resources.Today">
 					<i class="glyphicon glyphicon-home"></i>
-				</a>
+				</button>
 			</li>
 			<!-- /ko -->
 
 			<!-- ko if: isHostADesktop -->
 			<li class="mobile-today" data-bind="click: today, tooltip: { title: '@Resources.Today', html: true, placement: 'bottom'}">
-				<a>
+				<button class="btn btn-default" aria-label="@Resources.Today">
 					<i class="glyphicon glyphicon-home"></i>
-				</a>
+				</button>
 			</li>
 			<!-- /ko -->
 
 			<!-- ko if: isHostAMobile -->
 			<li class="new-teamschedule-team-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasFilteredOnMobile}">
-				<a class="relative">
+				<button class="btn btn-default" aria-label="@Resources.Filter" aria-haspopup="true">
 					<i class="glyphicon glyphicon-filter"></i>
 					<span></span>
-				</a>
+				</button>
 			</li>
 			<!-- /ko -->
 
 			<!-- ko if: isHostADesktop || isHostAniPad -->
 			<li class="new-teamschedule-time-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: $root.isHostADesktop ? 'hover' : 'click', placement: 'bottom'}">
-				<a>
+				<button class="btn btn-default" aria-label="@Resources.Filter" aria-haspopup="true">
 					<i class="glyphicon glyphicon-filter"></i>
 					<span></span>
-				</a>
+				</button>
 			</li>
 			<li class="new-teamschedule-filter-component relative">
 				<div data-bind="click: openTeamSelectorPanel"></div>
@@ -115,7 +115,7 @@
 		<div class="teammates-agent-name-row relative">
 			<div class="left-filling-block"></div>
 			<!-- ko foreach: agentNames -->
-			<span class="new-teamschedule-agent-name relative" data-bind="tooltip: { title: $data.name, trigger: $root.isHostADesktop ? 'hover' : 'click', placement: 'bottom'}, attr: {'index': index}, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+			<span class="new-teamschedule-agent-name relative" data-bind="tooltip: { title: $data.name, trigger: $root.isHostADesktop ? 'hover' : 'click', placement: 'bottom'}, attr: {'index': index}">
 				<span class="text-name" data-bind="text: $data.name"></span>
 				<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {'dayoff': $data.isDayOff}"></span>
 			</span>
@@ -138,7 +138,7 @@
 			<!-- ko if: mySchedule -->
 			<div class="new-teamschedule-layer-container relative">
 				<!-- ko foreach: mySchedule().layers -->
-				<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true}, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, adjustMyActivityTooltipPositionInTeamSchedule: true">
+				<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true}, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}">
 					<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
 						<!-- ko if: showMeetingIcon -->
 						<div class="meeting">
@@ -177,7 +177,7 @@
 			<div class="teammates-schedules-column relative" data-bind="attr: {'index': index}">
 				<div class="new-teamschedule-layer-container relative">
 					<!-- ko foreach: layers -->
-					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true}, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true}, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}">
 						<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
 							<!-- ko if: showMeetingIcon -->
 							<div class="meeting">
@@ -196,14 +196,14 @@
 					</div>
 					<!-- /ko -->
 					<!--ko if:isDayOff-->
-					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true}, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true}">
 						<!-- ko if: layers && layers.length == 0 -->
 						<span class="dayoff-text" data-bind="text: dayOffName"></span>
 						<!-- /ko -->
 					</div>
 					<!--/ko-->
 					<!-- ko if:isNotScheduled -->
-					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: $root.isHostADesktop ? 'hover' : 'click'}, adjustAgentActivityTooltipPositionInTeamSchedule: true">@Resources.NotScheduled</div>
+					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: $root.isHostADesktop ? 'hover' : 'click'}">@Resources.NotScheduled</div>
 					<!-- /ko -->
 				</div>
 			</div>

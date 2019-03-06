@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 	        Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
 			_mocks.Replay(_schedulerStateHolder);
-			_target = new MeetingStateHolderLoaderHelper(_peopleAndSkillLoaderDecider, _schedulerStateHolder, _schedulerStateLoader, _unitOfWorkFactory, _staffingCalculatorServiceFacade);
+			_target = new MeetingStateHolderLoaderHelper(_peopleAndSkillLoaderDecider, _schedulerStateHolder, _schedulerStateLoader, _unitOfWorkFactory, _staffingCalculatorServiceFacade, new FakeTimeZoneGuard());
 
             _scenario = new Scenario("s");
             _period = new DateTimePeriod(2011,2,28,2011,3,7);
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_schedulingResultStateHolder.LoadedAgents).Return(new List<IPerson>());
             Expect.Call(_loaderDeciderResult.FilterPeople(new List<IPerson>())).Return(0);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => _schedulerStateLoader.LoadSchedulingResultAsync(null, unitOfWork, null,new List<ISkill>(), _staffingCalculatorServiceFacade)).IgnoreArguments();
+            Expect.Call(() => _schedulerStateLoader.LoadSchedulingResultAsync(null, null, new List<ISkill>(), _staffingCalculatorServiceFacade)).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             _mocks.ReplayAll();
             _target.ReloadResultIfNeeded(_scenario, _period, _persons);

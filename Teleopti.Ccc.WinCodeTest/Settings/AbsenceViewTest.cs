@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             Assert.AreEqual(_absence.InWorkTime, _absenceView.InWorkTime);
             Assert.AreEqual(_absence.Description, _absenceView.Description);
             Assert.AreEqual(_absence.DisplayColor, _absenceView.DisplayColor);
-            Assert.AreEqual(_absence.BusinessUnit, _absenceView.BusinessUnit);
+            Assert.AreEqual(_absence.GetOrFillWithBusinessUnit_DONTUSE(), _absenceView.BusinessUnit);
             Assert.AreEqual(_absence.Requestable, _absenceView.Requestable);
             Assert.AreEqual(_absence.Priority, _absenceView.Priority);
             Assert.AreEqual(_absence.PayrollCode,_absenceView.PayrollCode );

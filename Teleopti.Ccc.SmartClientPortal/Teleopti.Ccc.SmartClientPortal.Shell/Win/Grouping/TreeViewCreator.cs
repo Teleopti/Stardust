@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
         {
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+                ISettingDataRepository settingDataRepository = GlobalSettingDataRepository.DONT_USE_CTOR(uow);
 
                 _commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
             }

@@ -41,5 +41,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// </summary>
 		[DataMember(Order = 2, IsRequired = false)]
 		public Guid? ScheduleTagId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Activity id. If omitted then all will be cancelled.
+		/// </summary>
+		[DataMember(Order = 2, IsRequired = false)]
+		public Guid? ActivityId { get; set; }
 	}
 }

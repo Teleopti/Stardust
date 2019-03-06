@@ -40,8 +40,23 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		public DateTimePeriod DisplayPeriod() => _calculatedDisplayPeriod.GetValueOrDefault();
 		public IEnumerable<HistoricalChangeModel> Changes() => _calculatedChanges;
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _calculatedRecordedOutOfAdherences.ToArray();
+		public IEnumerable<AdherencePeriod> RecordedNeutralAdherences()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<AdherencePeriod> ApprovedPeriods() => _calculatedApprovedPeriods;
 		public IEnumerable<AdherencePeriod> OutOfAdherences() => _calculatedOutOfAdherences;
+		public IEnumerable<AdherencePeriod> NeutralAdherences()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AdherencePeriod> AdjustedToNeutralAdherences()
+		{
+			throw new NotImplementedException();
+		}
+
 		public int? Percentage() => _adherencePercentage;
 		public int? SecondsInAdherence() => _secondsInAdherence;
 		public int? SecondsOutOfAdherence() => _secondsOutOfAdherence;

@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonRepository : Repository<IPerson>, IPersonRepository, IWriteSideRepository<IPerson>,
 		IProxyForId<IPerson>
 	{
+		public static PersonRepository DONT_USE_CTOR(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+		{
+			return new PersonRepository(currentUnitOfWork, currentBusinessUnit, updatedBy);
+		}
+
 		public PersonRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
 			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
@@ -422,7 +427,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Session.CreateCriteria(typeof(RuleSetBag))
 						.Fetch("RuleSetCollection")
 						.List();
-					new WorkShiftRuleSetRepository(UnitOfWork).FindAllWithLimitersAndExtenders();
+					WorkShiftRuleSetRepository.DONT_USE_CTOR(UnitOfWork).FindAllWithLimitersAndExtenders();
 				}
 			}
 

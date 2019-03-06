@@ -12,16 +12,16 @@
 				<li class="col-xs-12">
 					<span class="input-group" style="max-width: 294px;">
 						<span class="input-group-btn">
-							<button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
+							<button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button" aria-label="@Resources.PreviousDay">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
 						<input class="form-control text-center" style="width: 100%" id="report-view-date-nav-current" data-bind="value: selectedDate().format(datePickerFormat())" type="text" readonly="readonly" />
 						<span class="input-group-btn">
-							<button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
+							<button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button" aria-label="@Resources.SelectDate">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-							<button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
+							<button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button" aria-label="@Resources.NextDay">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>

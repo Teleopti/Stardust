@@ -79,15 +79,4 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ruleOrders.ContainsKey(ruleType) ? ruleOrders[ruleType] : int.MaxValue;
 		}
 	}
-
-	public class BusinessRuleConfigProviderToggle74889Off : BusinessRuleConfigProvider
-	{
-		public BusinessRuleConfigProviderToggle74889Off(IBusinessRuleProvider businessRuleProvider,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
-			: base(businessRuleProvider, schedulingResultStateHolder, shiftTradeSpecifications)
-		{
-			schedulingResultStateHolder.UseMaximumWorkday = false;
-		}
-	}
 }

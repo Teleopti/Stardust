@@ -50,14 +50,12 @@ Layout = null;
 		<button class="fab" data-bind="click: enableMenu" tabindex="0"></button>
 		<div class="navbar teleopti-toolbar subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 			<ul class="nav navbar-nav teleopti-toolbar row submenu">
-				<!-- ko if: showRequestListButton-->
 				@if (Model.RequestPermission.RequestListPermission)
 				{
 				<li data-bind="css: { active: requestListActive }" class="col-xs-12 col-sm-4">
 					<a id="requestList" href="#" class="request-list" data-bind="click: clickRequestList"><i class="glyphicon glyphicon-th-list"></i>&nbsp;@Resources.RequestList</a>
 				</li>
 				}
-				<!-- /ko -->
 				@if (Model.RequestPermission.TextRequestPermission)
 				{
 				<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
@@ -106,14 +104,12 @@ Layout = null;
 		<div class="navbar teleopti-toolbar subnavbar" tabindex="0">
 			<div class="container">
 				<ul class="nav navbar-nav teleopti-toolbar row submenu">
-					<!-- ko if: showRequestListButton-->
 					@if (Model.RequestPermission.RequestListPermission)
 					{
 					<li data-bind="css: { active: requestListActive }" class="col-xs-12 col-sm-4">
 						<a id="requestList" href="#" class="request-list" data-bind="click: clickRequestList"><i class="glyphicon glyphicon-th-list"></i>&nbsp;@Resources.RequestList</a>
 					</li>
 					}
-					<!-- /ko -->
 					@if (Model.RequestPermission.TextRequestPermission)
 					{
 					<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">

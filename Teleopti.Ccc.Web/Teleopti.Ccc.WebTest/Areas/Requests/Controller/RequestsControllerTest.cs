@@ -231,22 +231,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		}
 
 		[Test]
-		public void ShouldHasPermissionsWhenToggleOff()
-		{
-			ToggleManager.Disable(Toggles.WFM_Request_View_Permissions_77731);
-
-			var result = Target.GetRequestsPermissions();
-			
-			result.Content.HasApproveOrDenyPermission.Should().Be.True();
-			result.Content.HasCancelPermission.Should().Be.True();
-			result.Content.HasEditSiteOpenHoursPermission.Should().Be.True();
-			result.Content.HasReplyPermission.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldHasApproveOrDenyPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest);
 
 			var result = Target.GetRequestsPermissions();
@@ -257,8 +243,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldNotHasApproveOrDenyPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
-
 			var result = Target.GetRequestsPermissions();
 
 			result.Content.HasApproveOrDenyPermission.Should().Be.False();
@@ -267,7 +251,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldHasCancelPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebCancelRequest);
 
 			var result = Target.GetRequestsPermissions();
@@ -278,8 +261,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldNotHasCancelPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
-
 			var result = Target.GetRequestsPermissions();
 
 			result.Content.HasCancelPermission.Should().Be.False();
@@ -288,7 +269,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldHasReplyPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebReplyRequest);
 
 			var result = Target.GetRequestsPermissions();
@@ -299,8 +279,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldNotHasReplyPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
-
 			var result = Target.GetRequestsPermissions();
 
 			result.Content.HasReplyPermission.Should().Be.False();
@@ -309,7 +287,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldHasEditSiteOpenHoursPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours);
 
 			var result = Target.GetRequestsPermissions();
@@ -320,8 +297,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldNotHasEditSiteOpenHoursPermission()
 		{
-			ToggleManager.Enable(Toggles.WFM_Request_View_Permissions_77731);
-
 			var result = Target.GetRequestsPermissions();
 
 			result.Content.HasEditSiteOpenHoursPermission.Should().Be.False();

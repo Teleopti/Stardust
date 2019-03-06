@@ -23,14 +23,13 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		[Test]
 		public void ShouldRead()
 		{
-			var businessUnitId = CurrentBusinessUnit.Current().Id.Value;
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = CurrentBusinessUnit.CurrentId(),
 				PersonId = Guid.NewGuid(),
-				BusinessUnitId = businessUnitId,
 				SiteId = siteId,
 				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:00".Utc()
@@ -38,7 +37,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 
 			var result = Target.Read().Single();
 
-			result.BusinessUnitId.Should().Be(businessUnitId);
+			result.BusinessUnitId.Should().Be(CurrentBusinessUnit.CurrentId());
 			result.SiteId.Should().Be(siteId);
 			result.TeamId.Should().Be(teamId);
 			result.InAlarmCount.Should().Be(1);

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 
@@ -41,16 +42,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             SetCommonTexts();
         }
 
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// Sets the common texts.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-03
-        /// </remarks>
-        protected virtual void SetCommonTexts()
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveRightToLeft_81112)]
+		public void SetTextsNoRightToLeft()
+		{
+			new LanguageResourceHelper().SetTexts(this, false);
+			SetCommonTexts();
+		}
+
+		/// <summary>
+		/// Sets the common texts.
+		/// </summary>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-03
+		/// </remarks>
+		protected virtual void SetCommonTexts()
         {
         }
 

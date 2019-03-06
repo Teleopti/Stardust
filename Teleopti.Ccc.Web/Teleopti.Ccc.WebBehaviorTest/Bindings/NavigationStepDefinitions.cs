@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var buId = (from t in DataMaker.Data().UserDatasOfType<SiteConfigurable>()
 										let site = t.Site
 										where site.Description.Name.Equals(siteName)
-										select site.BusinessUnit.Id.GetValueOrDefault()).First();
+										select site.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()).First();
 			return buId;
 		}
 

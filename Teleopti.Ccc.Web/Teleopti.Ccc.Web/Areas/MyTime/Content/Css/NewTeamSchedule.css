@@ -17,16 +17,7 @@
 	align-items: center;
 	height: 50px;
 }
-.new-teamschedule-view-nav .teleopti-toolbar.navbar-nav > li > a,
-.new-teamschedule-view-nav .teleopti-toolbar.navbar-nav > li > a:hover,
-.new-teamschedule-view-nav .teleopti-toolbar.navbar-nav > li > a:focus {
-	cursor: pointer;
-	border-radius: 3px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 41px;
-}
+
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
 	border-color: white;
@@ -34,18 +25,18 @@
 	color: white;
 	font-weight: bold;
 }
-.new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default {
+.new-teamschedule-view-nav .btn.btn-default {
 	padding: 9px 10px;
 	border-radius: 3px;
 }
-.new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default:focus {
+.new-teamschedule-view-nav .btn.btn-default:focus {
 	outline: none;
 }
 .new-teamschedule-view-nav .mobile-datepicker .input-group {
 	width: 192px;
 }
 @media (max-width: 500px) {
-	.new-teamschedule-view-nav span.input-group-btn .btn {
+	.new-teamschedule-view-nav .btn {
 		padding: 10px;
 	}
 }
@@ -54,7 +45,7 @@
 		padding-left: 0;
 		padding-right: 0;
 	}
-	.new-teamschedule-view-nav span.input-group-btn .btn {
+	.new-teamschedule-view-nav .btn {
 		padding-left: 15px;
 		padding-right: 15px;
 	}
@@ -119,12 +110,12 @@
 	display: inline-block;
 	padding: 10px;
 }
-.new-teamschedule-team-filter a span,
-.new-teamschedule-time-filter a span {
+.new-teamschedule-team-filter button span,
+.new-teamschedule-time-filter button span {
 	visibility: hidden;
 }
-.new-teamschedule-team-filter.new-teamschedule-has-time-filter a span,
-.new-teamschedule-time-filter.new-teamschedule-has-time-filter a span {
+.new-teamschedule-team-filter.new-teamschedule-has-time-filter button span,
+.new-teamschedule-time-filter.new-teamschedule-has-time-filter button span {
 	content: '';
 	visibility: visible;
 	width: 8px;
@@ -135,7 +126,7 @@
 	background: orange;
 	border-radius: 50%;
 }
-.new-teamschedule-time-filter.new-teamschedule-has-time-filter a span {
+.new-teamschedule-time-filter.new-teamschedule-has-time-filter button span {
 	top: 10.5px;
 	right: 8px;
 }

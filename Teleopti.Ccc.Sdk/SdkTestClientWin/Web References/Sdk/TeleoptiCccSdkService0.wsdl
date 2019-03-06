@@ -267,15 +267,6 @@
   <wsdl:message name="TeleoptiSchedulingService_SavePersonRequest_FaultExceptionFault_FaultMessage">
     <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q3:FaultException" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePersonAbsenceRequest_InputMessage">
-    <wsdl:part name="parameters" element="tns:SavePersonAbsenceRequest" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePersonAbsenceRequest_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SavePersonAbsenceRequestResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePersonAbsenceRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q4:FaultException" />
-  </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetAllPersonRequests_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAllPersonRequests" />
   </wsdl:message>
@@ -301,7 +292,7 @@
     <wsdl:part name="parameters" element="tns:CreateShiftTradeRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_CreateShiftTradeRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q5:FaultException" />
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q4:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SetShiftTradeRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:SetShiftTradeRequest" />
@@ -310,7 +301,7 @@
     <wsdl:part name="parameters" element="tns:SetShiftTradeRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SetShiftTradeRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q6:FaultException" />
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q5:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_UpdatePersonRequestMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdatePersonRequestMessage" />
@@ -319,7 +310,7 @@
     <wsdl:part name="parameters" element="tns:UpdatePersonRequestMessageResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_UpdatePersonRequestMessage_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q7:FaultException" />
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q6:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_AcceptShiftTradeRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:AcceptShiftTradeRequest" />
@@ -328,7 +319,7 @@
     <wsdl:part name="parameters" element="tns:AcceptShiftTradeRequestResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_AcceptShiftTradeRequest_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q8:FaultException" />
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q7:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DenyShiftTradeRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:DenyShiftTradeRequest" />
@@ -397,7 +388,7 @@
     <wsdl:part name="parameters" element="tns:SaveExtendedPreferenceTemplateResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SaveExtendedPreferenceTemplate_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q9:FaultException" />
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q8:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DeleteExtendedPreferenceTemplate_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteExtendedPreferenceTemplate" />
@@ -406,7 +397,7 @@
     <wsdl:part name="parameters" element="tns:DeleteExtendedPreferenceTemplateResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DeleteExtendedPreferenceTemplate_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q10:FaultException" />
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q9:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetExtendedPreferenceTemplates_InputMessage">
     <wsdl:part name="parameters" element="tns:GetExtendedPreferenceTemplates" />
@@ -415,7 +406,7 @@
     <wsdl:part name="parameters" element="tns:GetExtendedPreferenceTemplatesResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetExtendedPreferenceTemplates_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q11:FaultException" />
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q10:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetValidatedSchedulePartsOnSchedulePeriod_InputMessage">
     <wsdl:part name="parameters" element="tns:GetValidatedSchedulePartsOnSchedulePeriod" />
@@ -454,7 +445,7 @@
     <wsdl:part name="parameters" element="tns:GetPublicNotesResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetPublicNotes_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q12:FaultException" />
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q11:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_InputMessage">
     <wsdl:part name="parameters" element="tns:SavePublicNote" />
@@ -463,7 +454,7 @@
     <wsdl:part name="parameters" element="tns:SavePublicNoteResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_SavePublicNote_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q13:FaultException" />
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q12:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DeletePublicNote_InputMessage">
     <wsdl:part name="parameters" element="tns:DeletePublicNote" />
@@ -514,7 +505,7 @@
     <wsdl:part name="parameters" element="tns:GetScheduleChangeSubscriptionsByQueryResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetScheduleChangeSubscriptionsByQuery_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q14:FaultException" />
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q13:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_GetSites_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSites" />
@@ -679,7 +670,7 @@
     <wsdl:part name="parameters" element="tns:UpdatePersonResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_UpdatePerson_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q15:FaultException" />
+    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q14:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_AddPersonPeriod_InputMessage">
     <wsdl:part name="parameters" element="tns:AddPersonPeriod" />
@@ -688,7 +679,7 @@
     <wsdl:part name="parameters" element="tns:AddPersonPeriodResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_AddPersonPeriod_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q16:FaultException" />
+    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q15:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_GetSitesOnBusinessUnit_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSitesOnBusinessUnit" />
@@ -709,7 +700,7 @@
     <wsdl:part name="parameters" element="tns:SetWriteProtectionDateOnPersonResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_SetWriteProtectionDateOnPerson_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q17="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q17:FaultException" />
+    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q16:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_GetWriteProtectionDateOnPerson_InputMessage">
     <wsdl:part name="parameters" element="tns:GetWriteProtectionDateOnPerson" />
@@ -832,7 +823,7 @@
     <wsdl:part name="parameters" element="tns:TransferSessionInternalResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_TransferSessionInternal_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q18="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q18:FaultException" />
+    <wsdl:part xmlns:q17="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q17:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_GetAppSettingsInternal_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAppSettingsInternal" />
@@ -847,7 +838,7 @@
     <wsdl:part name="parameters" element="tns:ExecuteCommandResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_ExecuteCommand_FaultExceptionFault_FaultMessage">
-    <wsdl:part xmlns:q19="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q19:FaultException" />
+    <wsdl:part xmlns:q18="http://schemas.datacontract.org/2004/07/System.ServiceModel" name="detail" element="q18:FaultException" />
   </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_GetAgentPortalSettingsByQuery_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAgentPortalSettingsByQuery" />
@@ -1016,11 +1007,6 @@
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonRequest" message="tns:TeleoptiSchedulingService_SavePersonRequest_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonRequestResponse" message="tns:TeleoptiSchedulingService_SavePersonRequest_OutputMessage" />
       <wsdl:fault wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonRequestFaultExceptionFault" name="FaultExceptionFault" message="tns:TeleoptiSchedulingService_SavePersonRequest_FaultExceptionFault_FaultMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SavePersonAbsenceRequest">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonAbsenceRequest" message="tns:TeleoptiSchedulingService_SavePersonAbsenceRequest_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonAbsenceRequestResponse" message="tns:TeleoptiSchedulingService_SavePersonAbsenceRequest_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonAbsenceRequestFaultExceptionFault" name="FaultExceptionFault" message="tns:TeleoptiSchedulingService_SavePersonAbsenceRequest_FaultExceptionFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAllPersonRequests">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAllPersonRequests" message="tns:TeleoptiSchedulingService_GetAllPersonRequests_InputMessage" />

@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 				{
 					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
-						_currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster",
+						_currentSettings = PersonalSettingDataRepository.DONT_USE_CTOR(uow).FindValueByKey("Forecaster",
 																								 new ForecasterSettings());
 						return _currentSettings;
 					}

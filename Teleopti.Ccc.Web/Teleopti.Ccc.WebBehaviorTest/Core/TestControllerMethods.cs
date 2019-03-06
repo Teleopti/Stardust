@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		private static void innerLogon(string userName, string password, bool isPersistent = false)
 		{
-			var businessUnitName = DataMaker.Me().Person.PermissionInformation.ApplicationRoleCollection.First().BusinessUnit.Name;
+			var businessUnitName = DataMaker.Me().Person.PermissionInformation.ApplicationRoleCollection.First().GetOrFillWithBusinessUnit_DONTUSE().Name;
 			var queryString =
 				$"?businessUnitName={businessUnitName}&userName={userName}&password={password}&isPersistent={isPersistent}";
 			Navigation.Navigation.GoToPage("Test/Logon" + queryString);
