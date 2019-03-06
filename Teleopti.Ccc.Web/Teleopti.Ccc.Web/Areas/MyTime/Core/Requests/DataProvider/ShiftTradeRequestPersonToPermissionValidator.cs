@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var teamFrom = shiftTradeRequest.PersonFrom.MyTeam(checkDate);
 			var teamTo = shiftTradeRequest.PersonTo.MyTeam(checkDate);
 			var site = teamTo?.Site;
-			var businessUnit = site.GetOrFillWithBusinessUnit_DONTUSE();
+			var businessUnit = site?.GetOrFillWithBusinessUnit_DONTUSE();
 
 			var authorizeOrganisationDetail = new PersonSelectorShiftTrade
 			{

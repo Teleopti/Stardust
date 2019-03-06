@@ -116,7 +116,7 @@ namespace Teleopti.Wfm.Adherence.States
 			var persons = _persons.FindPeople(personIds)
 				.Select(x => new
 				{
-					businessUnitId = (x.Period(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(date.Date))?.Team?.Site).GetOrFillWithBusinessUnit_DONTUSE()?.Id,
+					businessUnitId = x.Period(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(date.Date))?.Team?.Site?.GetOrFillWithBusinessUnit_DONTUSE()?.Id,
 					person = x
 				})
 				.ToArray();

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return IsPermitted(functionPath, dateOnly, new TeamAuthorization
 			{
-				BusinessUnitId = (team.Site.GetOrFillWithBusinessUnit_DONTUSE()?.Id).GetValueOrDefault(),
+				BusinessUnitId = (team.Site?.GetOrFillWithBusinessUnit_DONTUSE()?.Id).GetValueOrDefault(),
 				SiteId = (team.Site?.Id).GetValueOrDefault(),
 				TeamId = team.Id.Value
 			});
