@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					EndDateTime = affectedData.Max(s => s.Period.EndDateTime),
 					InitiatorId = command.TrackedCommandInfo.OperatedPersonId,
 					CommandId = command.TrackedCommandInfo.TrackId,
-					LogOnBusinessUnitId = scenario.BusinessUnit.Id.Value,
+					LogOnBusinessUnitId = scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.Value,
 					LogOnDatasource = _currentDataSource.Current().DataSourceName
 				});
 			});

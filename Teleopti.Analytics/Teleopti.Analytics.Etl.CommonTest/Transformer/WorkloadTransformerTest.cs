@@ -73,8 +73,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public void VerifyAggregateRoot()
 		{
 			//BusinessUnit
-			Assert.AreEqual(_workloadList[0].BusinessUnit.Id, _rowWorkload0["business_unit_code"]);
-			Assert.AreEqual(_workloadList[1].BusinessUnit.Description.Name, _rowWorkload1["business_unit_name"]);
+			Assert.AreEqual(_workloadList[0].GetOrFillWithBusinessUnit_DONTUSE().Id, _rowWorkload0["business_unit_code"]);
+			Assert.AreEqual(_workloadList[1].GetOrFillWithBusinessUnit_DONTUSE().Description.Name, _rowWorkload1["business_unit_name"]);
 			//UpdatedOn
 			Assert.AreEqual(RaptorTransformerHelper.GetUpdatedDate(_workloadList[0]),
 				_rowWorkload0["datasource_update_date"]);
@@ -144,11 +144,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreEqual(workload2.Id, _rowWorkloadQueue1["workload_code"]);
 
 			//BusinessUnit
-			Assert.AreEqual(workload0.BusinessUnit.Id, _rowWorkloadQueue0["business_unit_code"]);
-			Assert.AreEqual(workload0.BusinessUnit.Description.Name, _rowWorkloadQueue0["business_unit_name"]);
+			Assert.AreEqual(workload0.GetOrFillWithBusinessUnit_DONTUSE().Id, _rowWorkloadQueue0["business_unit_code"]);
+			Assert.AreEqual(workload0.GetOrFillWithBusinessUnit_DONTUSE().Description.Name, _rowWorkloadQueue0["business_unit_name"]);
 
-			Assert.AreEqual(workload2.BusinessUnit.Id, _rowWorkloadQueue1["business_unit_code"]);
-			Assert.AreEqual(workload2.BusinessUnit.Description.Name, _rowWorkloadQueue1["business_unit_name"]);
+			Assert.AreEqual(workload2.GetOrFillWithBusinessUnit_DONTUSE().Id, _rowWorkloadQueue1["business_unit_code"]);
+			Assert.AreEqual(workload2.GetOrFillWithBusinessUnit_DONTUSE().Description.Name, _rowWorkloadQueue1["business_unit_name"]);
 		}
 	}
 }

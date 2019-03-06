@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 		private void sendMessage(byte[] binaryData)
 		{
 			_messageBroker.Send(_unitOfWorkFactory.Current().Name,
-				_jobResult.BusinessUnit.Id.GetValueOrDefault
+				_jobResult.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault
 					(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 				typeof(IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
 		}

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 				StartDateTime = absenceCreatorInfo.EventTimePeriod.StartDateTime,
 				EndDateTime = absenceCreatorInfo.EventTimePeriod.EndDateTime,
 				ScenarioId = currentScenario.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = currentScenario.BusinessUnit.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = currentScenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				LogOnDatasource = _currentDataSource.CurrentName()
 			};
 			if (command.TrackedCommandInfo != null)

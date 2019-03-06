@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
                 unitOfWork.Reassociate(persons);
                 if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, _model.SelectedPeriod.StartDate, view, PrincipalAuthorization.Current_DONTUSE()))
                     return;
-                unitOfWork.Reassociate(meeting.BusinessUnit);
+                unitOfWork.Reassociate(meeting.GetOrFillWithBusinessUnit_DONTUSE());
                 if (!meetingId.HasValue)
                 {
                     _meetingRepository.Add(meeting);

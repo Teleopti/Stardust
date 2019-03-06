@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 				new TeleoptiIdentity("test", null, () => businessUnit.Id, businessUnit.Name, null, null), new PersonAndBusinessUnit(PersonFactory.CreatePerson(), null));			
 			var site = SiteFactory.CreateSimpleSite();
 
-			businessUnit.SetId(site.BusinessUnit.Id);
+			businessUnit.SetId(site.GetOrFillWithBusinessUnit_DONTUSE().Id);
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
 			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
@@ -673,7 +673,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 				new TeleoptiIdentity("test", null, () => businessUnit.Id, businessUnit.Name, null, null), new PersonAndBusinessUnit(PersonFactory.CreatePerson(), null));			
 			var site = SiteFactory.CreateSimpleSite();
 
-			businessUnit.SetId(site.BusinessUnit.Id);
+			businessUnit.SetId(site.GetOrFillWithBusinessUnit_DONTUSE().Id);
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
 			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);

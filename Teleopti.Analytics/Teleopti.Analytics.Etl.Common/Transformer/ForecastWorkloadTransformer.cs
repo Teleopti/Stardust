@@ -95,8 +95,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			dataRow["period_length_min"] =
 				 templateTaskPeriod.Period.EndDateTime.Subtract(templateTaskPeriod.Period.StartDateTime).TotalMinutes;
 
-			dataRow["business_unit_code"] = workloadDay.Workload.Skill.BusinessUnit.Id;
-			dataRow["business_unit_name"] = workloadDay.Workload.Skill.BusinessUnit.Name;
+			dataRow["business_unit_code"] = workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Id;
+			dataRow["business_unit_name"] = workloadDay.Workload.Skill.GetOrFillWithBusinessUnit_DONTUSE().Name;
 			dataRow["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 			dataRow["insert_date"] = _insertDateTime;
 			dataRow["update_date"] = _insertDateTime;

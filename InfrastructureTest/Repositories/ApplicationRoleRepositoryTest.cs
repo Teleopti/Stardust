@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var rolesList = ApplicationRoleRepository.DONT_USE_CTOR(UnitOfWork).LoadAllApplicationRolesSortedByName();
 			Assert.AreEqual(roleCount, rolesList.Count);
 
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].BusinessUnit));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].GetOrFillWithBusinessUnit_DONTUSE()));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].ApplicationFunctionCollection));
 		}
 

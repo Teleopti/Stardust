@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.CommandId.Should().Be(trackId);
-			@event.LogOnBusinessUnitId.Should().Be(scenario.Current().BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be(scenario.Current().GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 		}
 
 		private static IPersonAssignment createPersonAssignmentWithOneLayer(IActivity activity, IPerson agent, DateTime orgStart, DateTime orgEnd, IUserTimeZone userTimeZone)

@@ -91,8 +91,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 						row["group_name"] = rootGroup.Name;
 						row["group_is_custom"] = isCustomGroup;
 						row["person_code"] = person.Id.Value;
-						row["business_unit_code"] = gpCasted.BusinessUnit.Id;
-						row["business_unit_name"] = gpCasted.BusinessUnit.Description.Name;
+						row["business_unit_code"] = gpCasted.GetOrFillWithBusinessUnit_DONTUSE().Id;
+						row["business_unit_name"] = gpCasted.GetOrFillWithBusinessUnit_DONTUSE().Description.Name;
 						row["datasource_id"] = 1;
 						dataTable.Rows.Add(row);
 					}

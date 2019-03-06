@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.EndDateTime.Should().Be(personAbsence.Layer.Period.EndDateTime);
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.CommandId.Should().Be(trackId);
-			@event.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be(scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 		}
 
 		[Test]

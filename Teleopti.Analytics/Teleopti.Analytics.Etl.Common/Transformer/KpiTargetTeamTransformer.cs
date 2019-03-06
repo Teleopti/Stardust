@@ -38,8 +38,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["lower_than_min_color"] = kpiTargetTeam.LowerThanMinColor.ToArgb();
 				row["higher_than_max_color"] = kpiTargetTeam.HigherThanMaxColor.ToArgb();
 
-				row["business_unit_code"] = kpiTargetTeam.BusinessUnit.Id;
-				row["business_unit_name"] = kpiTargetTeam.BusinessUnit.Name;
+				row["business_unit_code"] = kpiTargetTeam.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				row["business_unit_name"] = kpiTargetTeam.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				//row["business_unit_code"] = RaptorTransformerHelper.CurrentBusinessUnit.Id;
 				//row["business_unit_name"] = RaptorTransformerHelper.CurrentBusinessUnit.Description.Name;
 				row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.

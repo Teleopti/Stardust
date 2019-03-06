@@ -54,8 +54,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		[Test]
 		public void VerifyTheMatrixInternalData()
 		{
-			Assert.AreEqual(_scorecardList[0].BusinessUnit.Id, _dataRow0["business_unit_code"]);
-			Assert.AreEqual(_scorecardList[0].BusinessUnit.Name, _dataRow0["business_unit_name"]);
+			Assert.AreEqual(_scorecardList[0].GetOrFillWithBusinessUnit_DONTUSE().Id, _dataRow0["business_unit_code"]);
+			Assert.AreEqual(_scorecardList[0].GetOrFillWithBusinessUnit_DONTUSE().Name, _dataRow0["business_unit_name"]);
 			Assert.AreEqual(1, _dataRow0["datasource_id"]);
 			Assert.AreEqual(_insertDateTime, _dataRow1["insert_date"]);
 			Assert.AreEqual(_insertDateTime, _dataRow0["update_date"]);

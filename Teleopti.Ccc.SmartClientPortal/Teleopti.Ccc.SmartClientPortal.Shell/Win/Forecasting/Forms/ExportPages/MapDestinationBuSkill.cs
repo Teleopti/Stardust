@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
                     {
                         var lvi = new ListViewItem();
                         lvi.Tag = skill;
-                        lvi.Text = skill.BusinessUnit.Name;
+                        lvi.Text = skill.GetOrFillWithBusinessUnit_DONTUSE().Name;
                         lvi.SubItems.Add(skill.Name);
                         _allItems.Add(lvi);
                     }

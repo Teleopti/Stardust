@@ -92,8 +92,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			row["scheduled_paid_time_m"] = timeInfo.PaidTime.Time;
 			row["scheduled_paid_time_activity_m"] = timeInfo.PaidTime.ActivityTime;
 			row["scheduled_paid_time_absence_m"] = timeInfo.PaidTime.AbsenceTime;
-			row["business_unit_code"] = scheduleProjection.SchedulePart.Scenario.BusinessUnit.Id;
-			row["business_unit_name"] = scheduleProjection.SchedulePart.Scenario.BusinessUnit.Name;
+			row["business_unit_code"] = scheduleProjection.SchedulePart.Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id;
+			row["business_unit_name"] = scheduleProjection.SchedulePart.Scenario.GetOrFillWithBusinessUnit_DONTUSE().Name;
 			row["datasource_id"] = 1;
 			row["insert_date"] = insertDateTime;
 			row["update_date"] = insertDateTime;

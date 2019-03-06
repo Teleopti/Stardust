@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void SetBusinessUnit(IBusinessUnit value)
 		{
-			BusinessUnit = value;
+			_businessUnit = value;
 		}
 
 		public virtual ReadOnlyCollection<ITeam> TeamCollection => new ReadOnlyCollection<ITeam>(_teamCollection);

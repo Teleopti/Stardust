@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork (morningBooking);
 			updatePersonScheduleDayFromBooking (morningBooking);
 
-			updatePersonScheduleDay (dateOnly.Date.AddHours (13), dateOnly.Date.AddHours (17), person2, morningBooking.BusinessUnit);
+			updatePersonScheduleDay (dateOnly.Date.AddHours (13), dateOnly.Date.AddHours (17), person2, morningBooking.GetOrFillWithBusinessUnit_DONTUSE());
 
 			var repo = new SeatBookingRepository (CurrUnitOfWork);
 
@@ -512,7 +512,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		
 		private static void updatePersonScheduleDayFromBooking(SeatBooking booking)
 		{
-			updatePersonScheduleDay (booking.StartDateTime, booking.EndDateTime, booking.Person,booking.BusinessUnit);
+			updatePersonScheduleDay (booking.StartDateTime, booking.EndDateTime, booking.Person,booking.GetOrFillWithBusinessUnit_DONTUSE());
 		}
 
 

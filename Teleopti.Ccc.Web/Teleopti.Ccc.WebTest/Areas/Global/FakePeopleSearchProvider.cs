@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var team = p.MyTeam(date);
 			var site = team?.Site;
-			var bu = site?.BusinessUnit;
+			var bu = site.GetOrFillWithBusinessUnit_DONTUSE();
 
 			return new PersonFinderDisplayRow
 			{

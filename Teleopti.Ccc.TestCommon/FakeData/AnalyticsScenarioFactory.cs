@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				ScenarioCode = scenario.Id.GetValueOrDefault(),
 				ScenarioName = scenario.Description.Name,
 				ScenarioId = 1,
-				BusinessUnitCode = scenario.BusinessUnit.Id.GetValueOrDefault(),
+				BusinessUnitCode = scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 				BusinessUnitId = businessUnitId
 			};
 		}

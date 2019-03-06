@@ -61,11 +61,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </summary>
 		public virtual void Add(T root)
 		{
-			if (root is IFilterOnBusinessUnit)
+			if (root is IFilterOnBusinessUnit withBusinessUnit)
 			{
 				var currentBusinessUnit = _currentBusinessUnit ?? ServiceLocator_DONTUSE.CurrentBusinessUnit;
-				if (currentBusinessUnit.Current() == null)
+				var businessUnit = currentBusinessUnit.Current();
+				if (businessUnit == null)
 					throw new PermissionException("Business unit is required");
+				if (withBusinessUnit.BusinessUnit == null)
+					withBusinessUnit.BusinessUnit = businessUnit;
 			}
 
 			if (root is IChangeInfo)

@@ -32,8 +32,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 					dataRow["overtime_code"] = multiplicatorDefinitionSet.Id;
 					dataRow["overtime_name"] = multiplicatorDefinitionSet.Name;
-					dataRow["business_unit_code"] = multiplicatorDefinitionSet.BusinessUnit.Id;
-					dataRow["business_unit_name"] = multiplicatorDefinitionSet.BusinessUnit.Name;
+					dataRow["business_unit_code"] = multiplicatorDefinitionSet.GetOrFillWithBusinessUnit_DONTUSE().Id;
+					dataRow["business_unit_name"] = multiplicatorDefinitionSet.GetOrFillWithBusinessUnit_DONTUSE().Name;
 					dataRow["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 					dataRow["insert_date"] = _insertDateTime;
 					dataRow["update_date"] = _insertDateTime;

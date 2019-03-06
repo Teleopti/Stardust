@@ -38,8 +38,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["absence_shortname"] = absence.Description.ShortName;
 				row["display_color"] = absence.DisplayColor.ToArgb();
 				row["display_color_html"] = ColorTranslator.ToHtml(absence.DisplayColor);
-				row["business_unit_code"] = absence.BusinessUnit.Id;
-				row["business_unit_name"] = absence.BusinessUnit.Name;
+				row["business_unit_code"] = absence.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				row["business_unit_name"] = absence.GetOrFillWithBusinessUnit_DONTUSE().Name;
 
 				row["in_contract_time"] = absence.InContractTime;
 				row["in_paid_time"] = absence.InPaidTime;

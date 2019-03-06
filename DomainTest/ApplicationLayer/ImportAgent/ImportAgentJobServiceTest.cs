@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var person1 = setCurrentLoggedOnUser();
 			CurrentBusinessUnit.OnThisThreadUse(bu1);
 			var result = createValidJob() as JobResult;
-			result.BusinessUnit.Should().Be(bu1);
+			result.GetOrFillWithBusinessUnit_DONTUSE().Should().Be(bu1);
 
 			var bu2 = BusinessUnitFactory.CreateWithId("bu2");
 			CurrentBusinessUnit.OnThisThreadUse(bu2);

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Permissions
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
 					new TeamAuthorization
 					{
-						BusinessUnitId = myTeam.Site.BusinessUnit.Id.Value,
+						BusinessUnitId = myTeam.Site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value,
 						SiteId = myTeam.Site.Id.Value,
 						TeamId = myTeam.Id.Value
 					})
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Permissions
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
 					new TeamAuthorization
 					{
-						BusinessUnitId = otherTeam.Site.BusinessUnit.Id.Value,
+						BusinessUnitId = otherTeam.Site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value,
 						SiteId = otherTeam.Site.Id.Value,
 						TeamId = otherTeam.Id.Value
 					})

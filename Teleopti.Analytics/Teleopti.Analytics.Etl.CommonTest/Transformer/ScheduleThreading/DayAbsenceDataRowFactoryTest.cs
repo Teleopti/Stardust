@@ -50,7 +50,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
             Assert.AreEqual(absencePeriod.StartDateTime, _dayAbsenceDataRow["starttime"]);
             Assert.AreEqual(absence.Id, _dayAbsenceDataRow["absence_code"]);
             Assert.AreEqual(1, _dayAbsenceDataRow["day_count"]);
-            Assert.AreEqual(absence.BusinessUnit.Id, _dayAbsenceDataRow["business_unit_code"]);
+            Assert.AreEqual(absence.GetOrFillWithBusinessUnit_DONTUSE().Id, _dayAbsenceDataRow["business_unit_code"]);
             Assert.AreEqual(RaptorTransformerHelper.GetUpdatedDate(personAbsence),
                             _dayAbsenceDataRow["datasource_update_date"]);
         }

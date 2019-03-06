@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 PersistAndRemoveFromUnitOfWork(inCorrect);
 
                 var retList = rep.LoadAll();
-                Assert.IsTrue(retList.OfType<IFilterOnBusinessUnit>().All(r => r.BusinessUnit.Equals(buRef.BusinessUnit)));
+                Assert.IsTrue(retList.OfType<IFilterOnBusinessUnit>().All(r => r.GetOrFillWithBusinessUnit_DONTUSE().Equals(buRef.GetOrFillWithBusinessUnit_DONTUSE())));
             }
             else
             {
@@ -96,7 +96,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             T loadedAggregate = rep.Load(id);
             Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-                Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.BusinessUnit);
+			{
+				Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.BusinessUnit);
+				Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.GetOrFillWithBusinessUnit_DONTUSE());
+			}
             VerifyAggregateGraphProperties(loadedAggregate);
         }
 
@@ -110,7 +113,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             T loadedAggregate = rep.Get(id);
             Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-                Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.BusinessUnit);
+			{
+				Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.BusinessUnit);
+				Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.GetOrFillWithBusinessUnit_DONTUSE());
+			}
             VerifyAggregateGraphProperties(loadedAggregate);
         }
 

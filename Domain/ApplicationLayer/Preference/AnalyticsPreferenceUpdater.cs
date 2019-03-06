@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 		private AnalyticBusinessUnit getBusinessUnit(IScenario scenario)
 		{
-			var analyticBusinessUnit = _analyticsBusinessUnitRepository.Get(scenario.BusinessUnit.Id.GetValueOrDefault());
+			var analyticBusinessUnit = _analyticsBusinessUnitRepository.Get(scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 			if (analyticBusinessUnit == null)
 				throw new BusinessUnitMissingInAnalyticsException();
 			return analyticBusinessUnit;

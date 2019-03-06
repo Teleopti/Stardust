@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
         {
             get
             {
-                return ContainedEntity.BusinessUnit;
+                return ContainedEntity.GetOrFillWithBusinessUnit_DONTUSE();
             }
         }
 

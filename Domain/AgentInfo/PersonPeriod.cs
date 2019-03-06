@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public virtual DateTime PrincipalEndDate() => EndDate().Date;
 		public virtual Guid? PrincipalTeamId() => Team?.Id.GetValueOrDefault();
 		public virtual Guid? PrincipalSiteId() => Team?.Site?.Id.GetValueOrDefault();
-		public virtual Guid? PrincipalBusinessUnitId() => Team?.Site?.BusinessUnit?.Id.GetValueOrDefault();
+		public virtual Guid? PrincipalBusinessUnitId() => Team?.Site?.GetOrFillWithBusinessUnit_DONTUSE()?.Id.GetValueOrDefault();
 
 	}
 }

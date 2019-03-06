@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			dataRow["restriction_date"] = availDay.RestrictionDate.Date;
 			dataRow["person_code"] = schedulePart.Person.Id;
 			dataRow["scenario_code"] = schedulePart.Scenario.Id;
-			dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
+			dataRow["business_unit_code"] = schedulePart.Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id;
 			dataRow["available_time_m"] = getMaxAvailable(availRestriction);
 			var workTime = scheduledWorkTime(schedulePart);
 			dataRow["scheduled_time_m"] = workTime;

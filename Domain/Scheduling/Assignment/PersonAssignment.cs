@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					Date = Date.Date,
 					PersonId = Person.Id.Value,
 					ScenarioId = Scenario.Id.Value,
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 				});
 			}
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					  StartDateTime = layer.Period.StartDateTime,
 					  EndDateTime = layer.Period.EndDateTime,
 					  ScenarioId = Scenario.Id.Value,
-					  LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					  LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 				  };
 				  if (trackedCommandInfo != null)
 				  {
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						StartDateTime = period.StartDateTime,
 						EndDateTime = period.EndDateTime,
 						ScenarioId = Scenario.Id.Value,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						StartDateTime = period.StartDateTime,
 						EndDateTime = period.EndDateTime,
 						ScenarioId = Scenario.Id.GetValueOrDefault(),
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						StartDateTime = period.StartDateTime,
 						EndDateTime = period.EndDateTime,
 						ScenarioId = Scenario.Id.GetValueOrDefault(),
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{
@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						Date = Date.Date,
 						PersonId = Person.Id.Value,
 						ScenarioId = Scenario.Id.Value,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{
@@ -450,7 +450,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					ScenarioId = Scenario.Id.Value,
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 				};
 				return someEventForNotification;
 			});
@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					StartDateTime = affectedPeriod.StartDateTime,
 					EndDateTime = affectedPeriod.EndDateTime,
 					ScenarioId = Scenario.Id.Value,
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 				};
 				if (trackedCommandInfo != null)
 				{
@@ -602,7 +602,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						StartDateTime = affectedPeriods.Min(p => p.StartDateTime),
 						EndDateTime = affectedPeriods.Max(p => p.EndDateTime),
 						ScenarioId = Scenario.Id.Value,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{
@@ -646,7 +646,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						StartDateTime = affectedPeriod.StartDateTime,
 						EndDateTime = affectedPeriod.EndDateTime,
 						ScenarioId = Scenario.Id.Value,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{
@@ -684,7 +684,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 							Date = Date.Date,
 							PersonId = Person.Id.Value,
 							ScenarioId = Scenario.Id.Value,
-							LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+							LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 						};
 						if (trackedCommandInfo != null)
 						{
@@ -708,7 +708,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						Date = Date.Date,
 						PersonId = Person.Id.Value,
 						ScenarioId = Scenario.Id.Value,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
 					};
 					if (trackedCommandInfo != null)
 					{

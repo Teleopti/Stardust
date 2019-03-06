@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(_target, _target.TemplateWeekCollection[0].Parent);
             Assert.AreSame(workloadClone, workloadClone.TemplateWeekCollection[0].Parent);
             Assert.AreEqual(_target.Description,workloadClone.Description);
-            Assert.AreEqual(_target.BusinessUnit,workloadClone.BusinessUnit);
+            Assert.AreEqual(_target.GetOrFillWithBusinessUnit_DONTUSE(),workloadClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(_target.Name, workloadClone.Name);
             Assert.AreEqual(_target.QueueSourceCollection.Count, workloadClone.QueueSourceCollection.Count);
             Assert.AreEqual(_target.Skill, workloadClone.Skill);
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(_target, _target.TemplateWeekCollection[0].Parent);
             Assert.AreSame(workloadClone, workloadClone.TemplateWeekCollection[0].Parent);
             Assert.AreEqual(_target.Description, workloadClone.Description);
-            Assert.AreEqual(_target.BusinessUnit, workloadClone.BusinessUnit);
+            Assert.AreEqual(_target.GetOrFillWithBusinessUnit_DONTUSE(), workloadClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(_target.Name, workloadClone.Name);
             Assert.AreEqual(_target.QueueSourceCollection.Count, workloadClone.QueueSourceCollection.Count);
             Assert.AreEqual(_target.Skill, workloadClone.Skill);
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(_target, _target.TemplateWeekCollection[0].Parent);
             Assert.AreSame(workloadClone, workloadClone.TemplateWeekCollection[0].Parent); 
             Assert.AreEqual(_target.Description, workloadClone.Description);
-            Assert.AreEqual(_target.BusinessUnit, workloadClone.BusinessUnit);
+            Assert.AreEqual(_target.GetOrFillWithBusinessUnit_DONTUSE(), workloadClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(_target.Name, workloadClone.Name);
             Assert.AreEqual(_target.QueueSourceCollection.Count, workloadClone.QueueSourceCollection.Count);
             Assert.AreEqual(_target.Skill, workloadClone.Skill);

@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public bool IsThereScheduledAgents(Guid businessUnitId, DateOnlyPeriod period)
 		{
-			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId &&
+			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.GetOrFillWithBusinessUnit_DONTUSE().Id == businessUnitId &&
 				period.Contains(pa.Date));
 		}
 	}

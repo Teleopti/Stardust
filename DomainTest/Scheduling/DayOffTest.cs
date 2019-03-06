@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             
             Assert.AreEqual(_target.Description, cloneWithoutId.Description);
             Assert.AreEqual(_target.Anchor, cloneWithoutId.Anchor);
-            Assert.AreEqual(_target.BusinessUnit, cloneWithoutId.BusinessUnit);
+            Assert.AreEqual(_target.GetOrFillWithBusinessUnit_DONTUSE(), cloneWithoutId.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(_target.DisplayColor, cloneWithoutId.DisplayColor);
             Assert.AreEqual(_target.Flexibility, cloneWithoutId.Flexibility);
             Assert.AreEqual(_target.PayrollCode, cloneWithoutId.PayrollCode);
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_target.Id, cloneWithId.Id);
             Assert.AreEqual(_target.Description, cloneWithId.Description);
             Assert.AreEqual(_target.Anchor, cloneWithId.Anchor);
-            Assert.AreEqual(_target.BusinessUnit, cloneWithId.BusinessUnit);
+            Assert.AreEqual(_target.GetOrFillWithBusinessUnit_DONTUSE(), cloneWithId.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(_target.DisplayColor, cloneWithId.DisplayColor);
             Assert.AreEqual(_target.Flexibility, cloneWithId.Flexibility);
             Assert.AreEqual(_target.PayrollCode, cloneWithId.PayrollCode);

@@ -155,9 +155,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				foreach (IMultiplicatorDefinitionSet multiplicatorDefinitionSet in multiplicatorDefninitionSets)
 				{
-					if (!LazyLoadingManager.IsInitialized(multiplicatorDefinitionSet.BusinessUnit))
+					if (!LazyLoadingManager.IsInitialized(multiplicatorDefinitionSet.GetOrFillWithBusinessUnit_DONTUSE()))
 					{
-						LazyLoadingManager.Initialize(multiplicatorDefinitionSet.BusinessUnit);
+						LazyLoadingManager.Initialize(multiplicatorDefinitionSet.GetOrFillWithBusinessUnit_DONTUSE());
 					}
 				}
 
@@ -553,8 +553,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 						if (!LazyLoadingManager.IsInitialized(personSkill.Skill.Activity))
 							LazyLoadingManager.Initialize(personSkill.Skill.Activity);
 					}
-					if (!LazyLoadingManager.IsInitialized(personPeriod.Team.Site.BusinessUnit))
-						LazyLoadingManager.Initialize(personPeriod.Team.Site.BusinessUnit);
+					if (!LazyLoadingManager.IsInitialized(personPeriod.Team.Site.GetOrFillWithBusinessUnit_DONTUSE()))
+						LazyLoadingManager.Initialize(personPeriod.Team.Site.GetOrFillWithBusinessUnit_DONTUSE());
 				}
 			}
 		}
@@ -1232,8 +1232,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				uow.Reassociate(scenario);
 				foreach (ISkill skill in skills)
 				{
-					if (!LazyLoadingManager.IsInitialized(skill.BusinessUnit))
-						LazyLoadingManager.Initialize(skill.BusinessUnit);
+					if (!LazyLoadingManager.IsInitialized(skill.GetOrFillWithBusinessUnit_DONTUSE()))
+						LazyLoadingManager.Initialize(skill.GetOrFillWithBusinessUnit_DONTUSE());
 				}
 
 				ISkillDayRepository skillDayRepository = SkillDayRepository.DONT_USE_CTOR(uow);
@@ -1503,8 +1503,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				foreach (MatrixPermissionHolder permissionHolder in permissionHolders)
 				{
-					if (!LazyLoadingManager.IsInitialized(permissionHolder.Team.Site.BusinessUnit))
-						LazyLoadingManager.Initialize(permissionHolder.Team.Site.BusinessUnit);
+					if (!LazyLoadingManager.IsInitialized(permissionHolder.Team.Site.GetOrFillWithBusinessUnit_DONTUSE()))
+						LazyLoadingManager.Initialize(permissionHolder.Team.Site.GetOrFillWithBusinessUnit_DONTUSE());
 				}
 
 				return permissionHolders;
@@ -1684,8 +1684,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 							LazyLoadingManager.Initialize(skill.Activity);
 						if (!LazyLoadingManager.IsInitialized(skill.SkillType))
 							LazyLoadingManager.Initialize(skill.SkillType);
-						if (!LazyLoadingManager.IsInitialized(skill.BusinessUnit))
-							LazyLoadingManager.Initialize(skill.BusinessUnit);
+						if (!LazyLoadingManager.IsInitialized(skill.GetOrFillWithBusinessUnit_DONTUSE()))
+							LazyLoadingManager.Initialize(skill.GetOrFillWithBusinessUnit_DONTUSE());
 					}
 				}
 				return ret;

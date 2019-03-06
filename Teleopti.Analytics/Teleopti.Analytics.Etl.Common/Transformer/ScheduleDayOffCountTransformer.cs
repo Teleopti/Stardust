@@ -55,7 +55,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			dataRow["day_off_name"] = personDayOff.Description.Name; //Get from domain
 			dataRow["day_off_shortname"] = personDayOff.Description.ShortName; //Get from domain
 			dataRow["day_count"] = 1;
-			dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
+			dataRow["business_unit_code"] = schedulePart.Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id;
 			dataRow["datasource_update_date"] = ass == null ? DateTime.UtcNow : ass.UpdatedOn;
 
 			return dataRow;

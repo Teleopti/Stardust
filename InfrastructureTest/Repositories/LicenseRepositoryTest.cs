@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
 			if (deletedBusinessUnit)
 			{
-				((IDeleteTag)site.BusinessUnit).SetDeleted();
+				((IDeleteTag)site.GetOrFillWithBusinessUnit_DONTUSE()).SetDeleted();
 			}
-			PersistAndRemoveFromUnitOfWork(site.BusinessUnit);
+			PersistAndRemoveFromUnitOfWork(site.GetOrFillWithBusinessUnit_DONTUSE());
 			PersistAndRemoveFromUnitOfWork(personContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
 			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);

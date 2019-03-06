@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		        _payrollResultProgressEncoder.Encode(payrollExportProgress);
 	        
 			_messageBroker.Send(_unitOfWorkFactory.Current().Name,
-		        _payrollResult.BusinessUnit.Id.
+		        _payrollResult.GetOrFillWithBusinessUnit_DONTUSE().Id.
 			        GetValueOrDefault(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty,
 		        Guid.Empty, typeof (IJobResultProgress), DomainUpdateType.NotApplicable,
 		        binaryData);

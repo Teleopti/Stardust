@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var theSkill = skillRepo.LoadAll().SingleOrDefault(x => x.Name == _skill);
 			
 			var currentBu = new FakeCurrentBusinessUnit();
-			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(theSkill.BusinessUnit.Id.GetValueOrDefault()));
+			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(theSkill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()));
 			var skillComboList = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource

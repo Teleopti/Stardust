@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 			Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>{new MeetingPerson(new Person(), false)}));
 			Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
 
-			Expect.Call(meeting.BusinessUnit).Return(bu);
+			Expect.Call(meeting.GetOrFillWithBusinessUnit_DONTUSE()).Return(bu);
 			Expect.Call(() => unitOfWork.Reassociate(bu));
 			//Expect.Call(_model.SelectedPeriod).Return(period);
 			Expect.Call(_meetingParticipantPermittedChecker.ValidatePermittedPersons(new List<IPerson>(),
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>()));
             Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
-            Expect.Call(meeting.BusinessUnit).Return(bu);
+            Expect.Call(meeting.GetOrFillWithBusinessUnit_DONTUSE()).Return(bu);
             Expect.Call(() => unitOfWork.Reassociate(bu));
             //Expect.Call(_model.SelectedPeriod).Return(period);
             Expect.Call(_meetingParticipantPermittedChecker.ValidatePermittedPersons(new List<IPerson>(),

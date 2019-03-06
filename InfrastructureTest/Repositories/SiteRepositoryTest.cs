@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
         protected override void VerifyAggregateGraphProperties(ISite loadedAggregateFromDatabase)
         {
-            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, loadedAggregateFromDatabase.BusinessUnit);
+            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, loadedAggregateFromDatabase.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual("for test", loadedAggregateFromDatabase.Description.Name);
         }
 

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_isDeleted = true;
 		}
 
-		public virtual IBusinessUnit BusinessUnitExplicit => _site?.BusinessUnit ?? ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
+		public virtual IBusinessUnit BusinessUnitExplicit => _site?.GetOrFillWithBusinessUnit_DONTUSE() ?? ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 
 		public virtual IScorecard Scorecard
 		{

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
                 return result.Value;
             }
 
-            IBusinessUnit businessUnit = site.BusinessUnit;
+            IBusinessUnit businessUnit = site.GetOrFillWithBusinessUnit_DONTUSE();
             return Check(queryingPerson, dateOnly, businessUnit.Id.GetValueOrDefault());
         }
 

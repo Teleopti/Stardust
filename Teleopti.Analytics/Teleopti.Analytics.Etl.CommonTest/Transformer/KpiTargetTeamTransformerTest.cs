@@ -45,8 +45,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
         public void VerifyAggregateRoot()
         {
             //BusinessUnit
-            Assert.AreEqual(_kpiTargetTeamCollection[0].BusinessUnit.Id, _dataRow0["business_unit_code"]);
-            Assert.AreEqual(_kpiTargetTeamCollection[0].BusinessUnit.Description.Name,
+            Assert.AreEqual(_kpiTargetTeamCollection[0].GetOrFillWithBusinessUnit_DONTUSE().Id, _dataRow0["business_unit_code"]);
+            Assert.AreEqual(_kpiTargetTeamCollection[0].GetOrFillWithBusinessUnit_DONTUSE().Description.Name,
                             _dataRow0["business_unit_name"]);
             //UpdatedOn
             Assert.AreEqual(RaptorTransformerHelper.GetUpdatedDate(_kpiTargetTeamCollection[0]),

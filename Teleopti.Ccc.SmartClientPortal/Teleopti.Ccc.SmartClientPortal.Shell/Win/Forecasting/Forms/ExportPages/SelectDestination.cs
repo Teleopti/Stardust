@@ -83,11 +83,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 
 						var mappingModel = new ChildSkillMappingModel(model.Skill.Id.GetValueOrDefault(),
 																	  selectedSkill.Id.GetValueOrDefault(),
-																	  selectedSkill.BusinessUnit.Name,
+																	  selectedSkill.GetOrFillWithBusinessUnit_DONTUSE().Name,
 																	  selectedSkill.Name);
 
 						model.ChildSkillMapping.Add(mappingModel);
-						model.TargetBu = selectedSkill.BusinessUnit.Name;
+						model.TargetBu = selectedSkill.GetOrFillWithBusinessUnit_DONTUSE().Name;
 						model.TargetSkill = selectedSkill.Name;
 					}
 					gridControlDestination.Refresh();

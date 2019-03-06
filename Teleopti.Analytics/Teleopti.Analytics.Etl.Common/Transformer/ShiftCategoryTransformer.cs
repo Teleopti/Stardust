@@ -34,8 +34,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["shift_category_name"] = shiftCategory.Description.Name;
 				row["shift_category_short_name"] = shiftCategory.Description.ShortName;
 				row["display_color"] = shiftCategory.DisplayColor.ToArgb();
-				row["business_unit_code"] = shiftCategory.BusinessUnit.Id;
-				row["business_unit_name"] = shiftCategory.BusinessUnit.Name;
+				row["business_unit_code"] = shiftCategory.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				row["business_unit_name"] = shiftCategory.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 				row["insert_date"] = _insertDateTime;
 				row["update_date"] = _insertDateTime;

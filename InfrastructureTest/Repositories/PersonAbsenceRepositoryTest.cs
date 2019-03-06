@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod);
 			PersistAndRemoveFromUnitOfWork(agent);
 
-			var buWithAgentScheduled = team.Site.BusinessUnit;
+			var buWithAgentScheduled = team.Site.GetOrFillWithBusinessUnit_DONTUSE();
 
 			var scenario = new Scenario("scenario");
 			scenario.SetBusinessUnit(buWithAgentScheduled);

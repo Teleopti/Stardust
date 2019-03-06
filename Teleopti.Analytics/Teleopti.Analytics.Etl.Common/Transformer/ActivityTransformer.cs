@@ -37,8 +37,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				row["in_contract_time"] = activity.InContractTime;
 				row["in_paid_time"] = activity.InPaidTime;
 				row["in_work_time"] = activity.InWorkTime;
-				row["business_unit_code"] = activity.BusinessUnit.Id;
-				row["business_unit_name"] = activity.BusinessUnit.Name;
+				row["business_unit_code"] = activity.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				row["business_unit_name"] = activity.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				//row["business_unit_code"] = RaptorTransformerHelper.CurrentBusinessUnit.Id;
 				//row["business_unit_name"] = RaptorTransformerHelper.CurrentBusinessUnit.Description.Name;
 				row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.

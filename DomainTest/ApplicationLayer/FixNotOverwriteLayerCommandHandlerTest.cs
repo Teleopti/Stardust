@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(loadedPersonAss.Scenario.Id.GetValueOrDefault());
 			@event.InitiatorId.Should().Be(operatePersonId);
 			@event.CommandId.Should().Be(trackId);
-			@event.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
+			@event.LogOnBusinessUnitId.Should().Be(scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault());
 		}
 
 		[Test]

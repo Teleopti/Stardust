@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Sdk.Logic
 		public static void ValidateBusinessUnitConsistency(this IFilterOnBusinessUnit belongsToBusinessUnit, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			var businessUnit = currentBusinessUnit.CurrentId().GetValueOrDefault();
-			if (belongsToBusinessUnit.BusinessUnit != null && businessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())
+			if (belongsToBusinessUnit.GetOrFillWithBusinessUnit_DONTUSE() != null && businessUnit != belongsToBusinessUnit.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault())
 			{
 				throw new FaultException(
-					$"Adding references to items from a different business unit than the currently specified in the header is not allowed. (Type: {belongsToBusinessUnit.GetType()}, Current business unit id: {currentBusinessUnit}, Attempted business unit id: {belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault()})");
+					$"Adding references to items from a different business unit than the currently specified in the header is not allowed. (Type: {belongsToBusinessUnit.GetType()}, Current business unit id: {currentBusinessUnit}, Attempted business unit id: {belongsToBusinessUnit.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()})");
 			}
 		}
 	}

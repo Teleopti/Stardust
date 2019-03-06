@@ -201,8 +201,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreEqual(gp.RootGroupCollection[0].Name, row["group_name"]);
 			Assert.IsFalse((bool)row["group_is_custom"]);
 			Assert.AreEqual(gp.RootGroupCollection[0].PersonCollection[0].Id, row["person_code"]);
-			Assert.AreEqual(gpCasted.BusinessUnit.Id, row["business_unit_code"]);
-			Assert.AreEqual(gpCasted.BusinessUnit.Description.Name, row["business_unit_name"]);
+			Assert.AreEqual(gpCasted.GetOrFillWithBusinessUnit_DONTUSE().Id, row["business_unit_code"]);
+			Assert.AreEqual(gpCasted.GetOrFillWithBusinessUnit_DONTUSE().Description.Name, row["business_unit_name"]);
 			Assert.AreEqual(1, row["datasource_id"]);
 		}
 
@@ -231,8 +231,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreEqual(gp.RootGroupCollection[0].Name, row["group_name"]);
 			Assert.IsTrue((bool)row["group_is_custom"]);
 			Assert.AreEqual(gp.RootGroupCollection[0].PersonCollection[0].Id, row["person_code"]);
-			Assert.AreEqual(gpCasted.BusinessUnit.Id, row["business_unit_code"]);
-			Assert.AreEqual(gpCasted.BusinessUnit.Description.Name, row["business_unit_name"]);
+			Assert.AreEqual(gpCasted.GetOrFillWithBusinessUnit_DONTUSE().Id, row["business_unit_code"]);
+			Assert.AreEqual(gpCasted.GetOrFillWithBusinessUnit_DONTUSE().Description.Name, row["business_unit_name"]);
 			Assert.AreEqual(1, row["datasource_id"]);
 		}
 

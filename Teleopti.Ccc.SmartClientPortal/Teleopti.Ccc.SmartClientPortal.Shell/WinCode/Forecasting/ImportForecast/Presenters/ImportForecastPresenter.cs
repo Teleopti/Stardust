@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecas
 					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
 					ImportMode = _model.ImportMode,
 					LogOnDatasource = _unitOfWorkFactory.Name,
-					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault(),
+					LogOnBusinessUnitId = _model.SelectedSkill.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault(),
 					JobName = "Import forecast from file",
 					InitiatorId = person.Id.GetValueOrDefault()
 				};

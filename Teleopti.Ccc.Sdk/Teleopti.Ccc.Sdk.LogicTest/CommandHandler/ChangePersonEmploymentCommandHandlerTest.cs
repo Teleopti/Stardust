@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
             _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _team.Site.SetBusinessUnit(new BusinessUnit("asdf"));
-            _team.Site.BusinessUnit.WithId();
+            _team.Site.GetOrFillWithBusinessUnit_DONTUSE().WithId();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);

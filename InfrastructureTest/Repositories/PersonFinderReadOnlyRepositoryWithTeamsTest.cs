@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Persons.Add(per);
 			});
 
-			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2011, 1, 1));
+			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value, new DateTime(2011, 1, 1));
 
 			var crit = new PersonFinderSearchCriteria(new Dictionary<PersonFinderField, string>(), 10,
 				new DateOnly(2020, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Persons.Add(per);
 			});
 
-			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2011, 1, 1));
+			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value, new DateTime(2011, 1, 1));
 
 			var crit = new PersonFinderSearchCriteria(new Dictionary<PersonFinderField, string>(), 10,
 				new DateOnly(2020, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Persons.Add(per);
 			});
 
-			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2011, 1, 1));
+			createAndSaveReadModel(per.Id.Value, per.Name.FirstName, per.Name.LastName, team.Id.Value, site.Id.Value, site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value, new DateTime(2011, 1, 1));
 
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley", 10,
 				new DateOnly(2020, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));

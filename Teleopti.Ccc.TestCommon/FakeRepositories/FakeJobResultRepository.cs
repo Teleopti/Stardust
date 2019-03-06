@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public override IEnumerable<IJobResult> LoadAll()
 		{
-			return _result.Where(r => (r as JobResult).BusinessUnit?.Id == _currentBusinessUnit.Current()?.Id).ToList();
+			return _result.Where(r => (r as JobResult).GetOrFillWithBusinessUnit_DONTUSE()?.Id == _currentBusinessUnit.Current()?.Id).ToList();
 		}
 	}
 }

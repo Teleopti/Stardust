@@ -824,7 +824,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 
 				foreach (ISite site in sites)
 				{
-					if (businessUnitDto.Id.Value == site.BusinessUnit.Id.Value)
+					if (businessUnitDto.Id.Value == site.GetOrFillWithBusinessUnit_DONTUSE().Id.Value)
 					{
 						SiteDto dto = new SiteDto { DescriptionName = site.Description.Name, Id = site.Id };
 						sitesOnBusinessUnit.Add(dto);

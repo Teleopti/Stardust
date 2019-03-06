@@ -100,7 +100,7 @@ namespace Teleopti.Wfm.Adherence
 			var to = period.EndDateTime.ToDateOnly().AddDays(1);
 			var days = new DateOnlyPeriod(from, to);
 
-			var businessUnitId = person.Period(from)?.Team?.Site?.BusinessUnit?.Id;
+			var businessUnitId = (person.Period(@from)?.Team?.Site).GetOrFillWithBusinessUnit_DONTUSE()?.Id;
 			if (businessUnitId == null)
 				return Enumerable.Empty<dateForPeriod>();
 			var businessUnit = _businessUnits.Load(businessUnitId.GetValueOrDefault());

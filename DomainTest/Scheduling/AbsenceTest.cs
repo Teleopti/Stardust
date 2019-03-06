@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(Color.DarkSalmon.ToArgb(), target.DisplayColor.ToArgb());
             Assert.AreEqual("Sjuk", target.Description.Name);
             Assert.AreEqual("SJ", target.Description.ShortName);
-            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, target.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(37, target.Priority);
             Assert.IsFalse(target.Requestable);
             target.Requestable = true;
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.DisplayColor, absenceClone.DisplayColor);
             Assert.AreEqual(target.InPaidTime, absenceClone.InPaidTime);
             Assert.AreEqual(target.InContractTime, absenceClone.InContractTime);
-            Assert.AreEqual(target.BusinessUnit, absenceClone.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), absenceClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.InWorkTime, absenceClone.InWorkTime);
             Assert.AreEqual(target.Name, absenceClone.Name);
             Assert.AreEqual(target.PayrollCode, absenceClone.PayrollCode);
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.DisplayColor, absenceClone.DisplayColor);
             Assert.AreEqual(target.InPaidTime, absenceClone.InPaidTime);
             Assert.AreEqual(target.InContractTime, absenceClone.InContractTime);
-            Assert.AreEqual(target.BusinessUnit, absenceClone.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), absenceClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.InWorkTime, absenceClone.InWorkTime);
             Assert.AreEqual(target.Name, absenceClone.Name);
             Assert.AreEqual(target.PayrollCode, absenceClone.PayrollCode);
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.DisplayColor, absenceClone.DisplayColor);
             Assert.AreEqual(target.InPaidTime, absenceClone.InPaidTime);
             Assert.AreEqual(target.InContractTime, absenceClone.InContractTime);
-            Assert.AreEqual(target.BusinessUnit, absenceClone.BusinessUnit);
+            Assert.AreEqual(target.GetOrFillWithBusinessUnit_DONTUSE(), absenceClone.GetOrFillWithBusinessUnit_DONTUSE());
             Assert.AreEqual(target.InWorkTime, absenceClone.InWorkTime);
             Assert.AreEqual(target.Name, absenceClone.Name);
             Assert.AreEqual(target.PayrollCode, absenceClone.PayrollCode);

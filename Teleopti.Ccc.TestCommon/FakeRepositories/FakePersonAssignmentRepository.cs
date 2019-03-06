@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 
 			return _storage.LoadAll<IPersonAssignment>()
-				.Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId && period.Contains(pa.Date));
+				.Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.GetOrFillWithBusinessUnit_DONTUSE().Id == businessUnitId && period.Contains(pa.Date));
 		}
 
 		public IPersonAssignment GetSingle(DateOnly dateOnly)

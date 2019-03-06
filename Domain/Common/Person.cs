@@ -127,9 +127,9 @@ namespace Teleopti.Ccc.Domain.Common
 				{
 					info.SiteId = period.Team.Site.Id.GetValueOrDefault();
 					info.SiteName = period.Team.Site.Description.Name;
-					if (period.Team.Site.BusinessUnit != null)
+					if (period.Team.Site.GetOrFillWithBusinessUnit_DONTUSE() != null)
 					{
-						info.BusinessUnitId = period.Team.Site.BusinessUnit.Id.GetValueOrDefault();
+						info.BusinessUnitId = period.Team.Site.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault();
 					}
 				}
 			}

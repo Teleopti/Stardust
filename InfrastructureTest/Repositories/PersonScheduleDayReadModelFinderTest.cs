@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Persons.Add(per3);
 			});
 
-			createAndSaveReadModel((Guid)per1.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10, 14);
-			createAndSaveReadModel((Guid)per2.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 7, 15);
-			createAndSaveReadModel((Guid)per3.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8, 13);
+			createAndSaveReadModel((Guid)per1.Id, (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 10, 14);
+			createAndSaveReadModel((Guid)per2.Id, (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 7, 15);
+			createAndSaveReadModel((Guid)per3.Id, (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 8, 13);
 
 			var result = WithUnitOfWork.Get(() => Target.ForPersons(new DateOnly(2012, 8, 28),
 				new[] { per1.Id.Value, per2.Id.Value, per3.Id.Value }, new Paging() { Skip = 0, Take = 20 }, timeSortOrder: "end desc"));
@@ -161,8 +161,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 
-			createAndSaveReadModel((Guid) per2.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8);
-			createAndSaveReadModel((Guid) per3.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
+			createAndSaveReadModel((Guid) per2.Id, (Guid) site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 8);
+			createAndSaveReadModel((Guid) per3.Id, (Guid) site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 10);
 
 			var result = WithUnitOfWork.Get(() => Target.ForPersons(new DateOnly(2012, 8, 28),
 				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging() { Skip = 0, Take = 20 }));
@@ -200,8 +200,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Persons.Add(per3);
 			});
 
-			createAndSaveReadModel((Guid)per2.Id,  (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8);
-			createAndSaveReadModel((Guid)per3.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
+			createAndSaveReadModel((Guid)per2.Id,  (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 8);
+			createAndSaveReadModel((Guid)per3.Id, (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 10);
 
 
 			var timeFilterInfo = new TimeFilterInfo() { IsDayOff = false, IsWorkingDay = true, IsEmptyDay = false };
@@ -239,8 +239,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Persons.Add(per3);
 			});
 
-			createAndSaveReadModel((Guid)per2.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8, isDayoff:true);
-			createAndSaveReadModel((Guid)per3.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
+			createAndSaveReadModel((Guid)per2.Id, (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 8, isDayoff:true);
+			createAndSaveReadModel((Guid)per3.Id, (Guid)site.GetOrFillWithBusinessUnit_DONTUSE().Id, new DateTime(2012, 8, 28), 10);
 
 			var timeFilterInfo = new TimeFilterInfo { IsDayOff = true };
 

@@ -97,7 +97,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 															  scheduleForecastSkillKey.ScenarioCode);
 
 							setScheduleForecastSkill(scheduleForecastSkill, skillStaffPeriodView,
-															 skillDay.Skill.BusinessUnit, insertDateTime, useShrinkage);
+															 skillDay.Skill.GetOrFillWithBusinessUnit_DONTUSE(), insertDateTime, useShrinkage);
 
 							_scheduleForecastSkillDictionary.Add(scheduleForecastSkillKey, scheduleForecastSkill);
 						}
@@ -105,7 +105,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 						{
 							// Update existing records in dictionary
 							setScheduleForecastSkill(scheduleForecastSkill, skillStaffPeriodView,
-															 skillDay.Skill.BusinessUnit, insertDateTime, useShrinkage);
+															 skillDay.Skill.GetOrFillWithBusinessUnit_DONTUSE(), insertDateTime, useShrinkage);
 						}
 					}
 				}

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyDefaultPropertiesAreSet()
         {
             Assert.AreEqual("test", testContractSchedule.Description.Name);
-            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, testContractSchedule.BusinessUnit);
+            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, testContractSchedule.GetOrFillWithBusinessUnit_DONTUSE());
         }
 
         /// <summary>

@@ -86,7 +86,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow["preference_unfulfilled"] = 1;
 			}
 
-			dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
+			dataRow["business_unit_code"] = schedulePart.Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id;
 			return dataRow;
 		}
 	}

@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
         [Test]
         public void VerifyBusinessUnitCanBeSet()
         {
-            Assert.IsNull(_target.BusinessUnit);
+            Assert.IsNull(_target.GetOrFillWithBusinessUnit_DONTUSE());
             _target.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
-            Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, _target.BusinessUnit);
+            Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, _target.GetOrFillWithBusinessUnit_DONTUSE());
         }
 
         [Test]

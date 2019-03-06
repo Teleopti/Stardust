@@ -40,8 +40,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow["time_zone_code"] = workload.Skill.TimeZone.Id;
 				dataRow["forecast_method_code"] = workload.Skill.SkillType.Id;
 				dataRow["forecast_method_name"] = workload.Skill.SkillType.ForecastSource.ToString();
-				dataRow["business_unit_code"] = workload.BusinessUnit.Id;
-				dataRow["business_unit_name"] = workload.BusinessUnit.Name;
+				dataRow["business_unit_code"] = workload.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				dataRow["business_unit_name"] = workload.GetOrFillWithBusinessUnit_DONTUSE().Name;
 
 				var adjustments = workload.QueueAdjustments;
 				dataRow["percentage_offered"] = adjustments.OfferedTasks.Value;
@@ -86,8 +86,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow2["log_object_data_source_id"] = queueSource.DataSourceId;
 				dataRow2["log_object_name"] = queueSource.LogObjectName;
 
-				dataRow2["business_unit_code"] = workload.BusinessUnit.Id;
-				dataRow2["business_unit_name"] = workload.BusinessUnit.Name;
+				dataRow2["business_unit_code"] = workload.GetOrFillWithBusinessUnit_DONTUSE().Id;
+				dataRow2["business_unit_name"] = workload.GetOrFillWithBusinessUnit_DONTUSE().Name;
 				dataRow2["datasource_id"] = 1;
 
 				workloadQueueTable.Rows.Add(dataRow2);

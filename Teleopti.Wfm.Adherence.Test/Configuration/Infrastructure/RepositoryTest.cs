@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 				var retList = ResolveRepository().LoadAll();
 				if (buRef != null)
-					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).GetOrFillWithBusinessUnit_DONTUSE().Equals(buRef.GetOrFillWithBusinessUnit_DONTUSE())));
 				if (buRefId != null)
 					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
 			}
@@ -98,7 +98,10 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			var loadedAggregate = ResolveRepository().Get(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
+			{
 				Assert.AreEqual(BusinessUnit, buRef.BusinessUnit);
+				Assert.AreEqual(BusinessUnit, buRef.GetOrFillWithBusinessUnit_DONTUSE());
+			}
 			if (loadedAggregate is IFilterOnBusinessUnitId buId)
 				Assert.AreEqual(BusinessUnit.Id.Value, buId.BusinessUnit);
 			VerifyAggregateGraphProperties(_simpleEntity, loadedAggregate);

@@ -74,7 +74,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					row["request_starttime"] = requestPeriod.StartDateTimeLocal(personTimeZone);
 					row["request_endtime"] = requestPeriod.EndDateTimeLocal(personTimeZone);
 
-					row["business_unit_code"] = personRequest.BusinessUnit.Id;
+					row["business_unit_code"] = personRequest.GetOrFillWithBusinessUnit_DONTUSE().Id;
 
 					row["request_day_count"] = 1;
 					row["request_start_date_count"] = dateOnly == numOfDays.StartDate ? 1 : 0;

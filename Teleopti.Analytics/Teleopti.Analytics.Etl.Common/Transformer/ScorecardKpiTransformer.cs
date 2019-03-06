@@ -36,8 +36,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					row["scorecard_code"] = scorecard.Id;
 					row["kpi_code"] = kpi.Id;
 
-					row["business_unit_code"] = scorecard.BusinessUnit.Id;
-					row["business_unit_name"] = scorecard.BusinessUnit.Name;
+					row["business_unit_code"] = scorecard.GetOrFillWithBusinessUnit_DONTUSE().Id;
+					row["business_unit_name"] = scorecard.GetOrFillWithBusinessUnit_DONTUSE().Name;
 					row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 					row["insert_date"] = _insertDateTime;
 					row["update_date"] = _insertDateTime;

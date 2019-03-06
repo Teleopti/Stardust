@@ -141,6 +141,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			if (setBusinessUnitId(entity, propertyNames, state))
 				ret = true;
 
+			if (setBusinessUnit(entity, propertyNames, state))
+				ret = true;
+
 			return ret;
 		}
 
@@ -203,29 +206,27 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			else
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Update));
 		}
-		
+
 		private bool setCreatedBy(object entity, IEnumerable<string> propertyNames, IList<object> state)
 		{
 			if (!(entity is ICreateInfo)) return false;
-			
+
 			var props = propertyIndexesForInsert(propertyNames);
 			var nu = DateTime.UtcNow;
 			state[props[createdByPropertyName]] = _updatedBy.Person();
 			state[props[createdOnPropertyName]] = nu;
 			return true;
-
 		}
-		
+
 		private bool setUpdatedBy(object entity, IEnumerable<string> propertyNames, object[] currentState)
 		{
 			if (!(entity is IChangeInfo)) return false;
-			
+
 			var nu = DateTime.UtcNow;
 			var props = propertyIndexesForUpdate(propertyNames);
 			currentState[props[updatedByPropertyName]] = _updatedBy.Person();
 			currentState[props[updatedOnPropertyName]] = nu;
 			return true;
-
 		}
 
 		private bool setBusinessUnitId(object entity, IEnumerable<string> propertyNames, IList<object> state)
@@ -240,6 +241,21 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var businessUnitId = _businessUnit.CurrentId();
 			state[index] = businessUnitId;
 			belongsToBusinessUnitId.BusinessUnit = businessUnitId;
+			return true;
+		}
+
+		private bool setBusinessUnit(object entity, IEnumerable<string> propertyNames, IList<object> state)
+		{
+			if (!(entity is IFilterOnBusinessUnit belongsToBusinessUnit))
+				return false;
+
+			var props = propertyIndexesForInsert(propertyNames);
+			var index = props["BUSINESSUNIT"];
+			if (state[index] != null) return false;
+
+			var businessUnit = _businessUnit.Current();
+			state[index] = businessUnit;
+			belongsToBusinessUnit.BusinessUnit = businessUnit;
 			return true;
 		}
 

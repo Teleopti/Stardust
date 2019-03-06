@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection));
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection[0].BusinessUnit));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection[0].GetOrFillWithBusinessUnit_DONTUSE()));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team.Site));
@@ -613,7 +613,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.PersonContract.Contract));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team.Site));
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team.Site.BusinessUnit));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team.Site.GetOrFillWithBusinessUnit_DONTUSE()));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.PersonSkillCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.ExternalLogOnCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.PersonSchedulePeriodCollection));
