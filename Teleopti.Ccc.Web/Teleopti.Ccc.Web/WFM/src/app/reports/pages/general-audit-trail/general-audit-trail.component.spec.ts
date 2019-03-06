@@ -48,7 +48,7 @@ class MockAuditTrailService implements Partial<AuditTrailService> {
 	}
 }
 
-describe('SearchPageComponent', () => {
+describe('GeneralAuditTrailComponent', () => {
 	let component: GeneralAuditTrail;
 	let fixture: ComponentFixture<GeneralAuditTrail>;
 	let page: Page;
