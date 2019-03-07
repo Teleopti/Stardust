@@ -2,6 +2,7 @@ using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
@@ -40,7 +41,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		[When(@"I approve out of adherence starting at '(.*)' as in adherence")]
 		public void WhenIApproveAdherenceAsInAdherenceBetween(string from)
 		{
-			Browser.Interactions.ClickContaining(".recorded-out-of-adherence", from);
+			if (_toggles.IsEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			{
+				Browser.Interactions.ClickContaining(".recorded-adherence", from);
+			}
+			else
+			{
+				Browser.Interactions.ClickContaining(".recorded-out-of-adherence", from);
+			}
+
 			Browser.Interactions.Click(".approve-adherence-submit");
 		}
 
@@ -90,8 +99,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		[Then(@"I should see recorded out of adherence between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeRecordedOutOfAdherenceBetween(string from, string to)
 		{
-			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", from);
-			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", to);
+			if (_toggles.IsEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			{
+				Browser.Interactions.AssertAnyContains(".recorded-adherence", from);
+				Browser.Interactions.AssertAnyContains(".recorded-adherence", to);
+			}
+			else
+			{
+				Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", from);
+				Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", to);
+			}
+		
 		}
 
 		[Then(@"I should see approved period between '(.*)' and '(.*)'")]
@@ -104,15 +122,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		[Then(@"I should not be able to approve out of adherences")]
 		public void ThenIShouldNotBeAbleToApproveOutOfAdherences()
 		{
-			Browser.Interactions.Click(".recorded-out-of-adherence");
-			Browser.Interactions.AssertNotExists(".recorded-out-of-adherence", ".approve-adherence-submit");
+			if (_toggles.IsEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			{
+				Browser.Interactions.Click(".recorded-adherence");
+				Browser.Interactions.AssertNotExists(".recorded-adherence", ".approve-adherence-submit");
+			}
+			else
+			{
+				Browser.Interactions.Click(".recorded-out-of-adherence");
+				Browser.Interactions.AssertNotExists(".recorded-out-of-adherence", ".approve-adherence-submit");
+			}
 		}
 
 		[Then(@"I should be able to approve out of adherences")]
 		public void ThenIShouldBeAbleToApproveOutOfAdherences()
 		{
-			Browser.Interactions.Click(".recorded-out-of-adherence");
+			if (_toggles.IsEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			{
+				Browser.Interactions.Click(".recorded-adherence");
+			}
+			else
+			{
+				Browser.Interactions.Click(".recorded-out-of-adherence");
+			}
 			Browser.Interactions.AssertExists(".approve-adherence-submit");
+		
 		}
 
 		[Then(@"I should not be able to remove approved out of adherences")]
