@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				  {
 					  Date = Date.Date,
 					  PersonId = Person.Id.Value,
-					  StartDateTime = layer.Period.StartDateTime,
+					  StartDateTime = getStartTimeForEvent(layer.Period),
 					  EndDateTime = layer.Period.EndDateTime,
 					  ScenarioId = Scenario.Id.Value,
 					  LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						Date = Date.Date,
 						PersonId = Person.Id.Value,
 						ActivityId = activity.Id.Value,
-						StartDateTime = period.StartDateTime,
+						StartDateTime = getStartTimeForEvent(period),
 						EndDateTime = period.EndDateTime,
 						ScenarioId = Scenario.Id.Value,
 						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						Date = Date.Date,
 						PersonId = Person.Id.GetValueOrDefault(),
 						ActivityId = activity.Id.GetValueOrDefault(),
-						StartDateTime = period.StartDateTime,
+						StartDateTime = getStartTimeForEvent(period),
 						EndDateTime = period.EndDateTime,
 						ScenarioId = Scenario.Id.GetValueOrDefault(),
 						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 			}
 		}
-		
+
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)
 		{
 			AddActivity(activity, new DateTimePeriod(start, end), null);
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						Date = Date.Date,
 						PersonId = Person.Id.GetValueOrDefault(),
 						ActivityId = activity.Id.GetValueOrDefault(),
-						StartDateTime = period.StartDateTime,
+						StartDateTime = getStartTimeForEvent(period),
 						EndDateTime = period.EndDateTime,
 						ScenarioId = Scenario.Id.GetValueOrDefault(),
 						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 			else if (shiftLayer is OvertimeShiftLayer overtimeLayer)
 			{
-				InsertOvertimeLayer(overtimeLayer.Payload, newLayerPeriod, originalOrderIndex,  overtimeLayer.DefinitionSet);
+				InsertOvertimeLayer(overtimeLayer.Payload, newLayerPeriod, originalOrderIndex, overtimeLayer.DefinitionSet);
 			}
 
 			var affectedPeriod = shiftLayer.Period.MaximumPeriod(newLayerPeriod);
@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var activityMovedEvent = new ActivityMovedEvent
 					{
 						PersonId = Person.Id.Value,
-						StartDateTime = affectedPeriod.StartDateTime,
+						StartDateTime = getStartTimeForEvent(newLayerPeriod),
 						EndDateTime = affectedPeriod.EndDateTime,
 						ScenarioId = Scenario.Id.Value,
 						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
@@ -750,7 +750,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet, muteEvent);
 			}
 		}
-		
+
+		private DateTime getStartTimeForEvent(DateTimePeriod period)
+		{
+			var isOnOvernightShift = Date.Date < period.StartDateTime.Date;
+			return isOnOvernightShift ? Period.StartDateTime : period.StartDateTime;
+		}
 
 		#region Equals
 

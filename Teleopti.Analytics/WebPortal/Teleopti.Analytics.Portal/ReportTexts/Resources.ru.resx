@@ -1111,4 +1111,28 @@
   <data name="ResPlannedOvertimeH" xml:space="preserve">
     <value>Запланированные сверхурочные (чч:мм)</value>
   </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Расчет Соблюдения Времени Готовности:</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Соблюдение Времени Готовности по оператору</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Соблюдение Времени Готовности за день</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Соблюдение Времени Готовности (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Соблюдение Времени Готовности / Интервал (%)</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>ESL с Сокращением (%)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Сверхурочные</value>
+  </data>
 </root>

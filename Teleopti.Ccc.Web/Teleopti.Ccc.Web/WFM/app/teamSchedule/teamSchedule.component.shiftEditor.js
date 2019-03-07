@@ -68,13 +68,13 @@
 		vm.selectedShiftLayers = [];
 
 		vm.$onInit = function () {
-			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId});
+			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId });
 			createScheduleVm(vm.rawSchedule);
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
 				vm.availableActivities = data;
 			});
-			
+
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
 			var intervals = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange).Intervals;
 			vm.timelineHtml = getTimelineHtml(intervals);
@@ -608,29 +608,23 @@
 				vm.isChangedByOthers = true;
 				return;
 			}
-			var dateMoment = moment.tz(vm.date, vm.timezone);
-			var viewRangeStart = dateMoment.clone().add(-1, 'day').startOf('day');
-			var viewRangeEnd = dateMoment.clone().add(1, 'day').startOf('day');
-			
 			for (var i = 0; i < d.messages.length; i++) {
 				var message = d.messages[i];
-				var startDate = moment.tz(message.StartDate.substring(1, message.StartDate.length), 'Etc/Utc').tz(vm.timezone);
-				var endDate = moment.tz(message.EndDate.substring(1, message.EndDate.length), 'Etc/Utc').tz(vm.timezone);
-				var isScheduleDateInMessageRange = startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
-					|| endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]');
 				if (message.DomainReferenceId === vm.personId
-					&& isScheduleDateInMessageRange) {
+					&& isScheduleDateInMessageRange(message)) {
 					if (vm.trackId !== message.TrackId) {
 						vm.isChangedByOthers = true;
 					}
-					return;
+					break;
 				}
 			}
 		});
 
 
-		function getMomentDate(date) {
-			return moment(serviceDateFormatHelper.getDateOnly(moment.tz(date.substring(1, date.length),'Etc/Utc').tz(vm.scheduleVm.Timezone)));
+		function isScheduleDateInMessageRange(message) {
+			var startDate = serviceDateFormatHelper.getDateOnly(moment.tz(message.StartDate.substring(1, message.StartDate.length), 'Etc/UTC').tz(vm.scheduleVm.Timezone));
+			var endDate = serviceDateFormatHelper.getDateOnly(moment.tz(message.EndDate.substring(1, message.EndDate.length), 'Etc/UTC').tz(vm.scheduleVm.Timezone));
+			return vm.date <= endDate && vm.date >= startDate;
 		}
 
 		function getChangedLayers() {

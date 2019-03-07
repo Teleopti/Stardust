@@ -3205,7 +3205,7 @@ Periods</comment>
     <comment>Ready... </comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Недопустимое назначение сотрудника. {0}</value>
+    <value>Недопустимое назначение сотрудника.</value>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="Hide" xml:space="preserve">
@@ -11547,7 +11547,7 @@ Teleopti R&amp;D</value>
     <value>проблема(-ы)</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
-    <value>Отсутствует прогноз с</value>
+    <value>Отсутствует прогноз с {0:d} до {1:d}</value>
   </data>
   <data name="MissingSkills" xml:space="preserve">
     <value>Для этих навыков отсутствует прогноз</value>
@@ -12240,7 +12240,7 @@ Teleopti R&amp;D</value>
     <value>Отсутствия для выбранных операторов успешно добавлены</value>
   </data>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
-    <value>{0} отсутствие(-я) успешно добавлено(-ы), невозможно добавить {1} отсутсвие(-й)</value>
+    <value>Добавление отсутствий для {0} операторов: {1} успешно и {2} не добавлены.</value>
   </data>
   <data name="SwapShifts" xml:space="preserve">
     <value>Обменять смены</value>
@@ -12276,10 +12276,10 @@ Teleopti R&amp;D</value>
     <value>Отсутствие успешно удалено.</value>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>У вас нет прав доступа для добавления отсутствия на часть дня для {0}</value>
+    <value>У вас нет прав доступа для добавления отсутствия на часть дня</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>У вас нет прав доступа для добавления отсутствия на полный день для {0}</value>
+    <value>У вас нет прав доступа для добавления отсутствия на полный день</value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Сервер недоступен!
@@ -12377,7 +12377,7 @@ Teleopti R&amp;D</value>
     <value>Вернуться к последнему сохранению</value>
   </data>
   <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
-    <value>Результат поиска по ключевым словам превышает 500, измените условия поиска.</value>
+    <value>Результат поиска по ключевым словам превысит {0}, измените условия поиска.</value>
   </data>
   <data name="ClearOverride" xml:space="preserve">
     <value>Очистить изменения</value>
@@ -12528,10 +12528,10 @@ Teleopti R&amp;D</value>
     <value>Необходимо выбрать двух операторов для обмена.</value>
   </data>
   <data name="NoPermissionAddAgentActivity" xml:space="preserve">
-    <value>Нет прав, чтобы добавить активность для оператора {0}.</value>
+    <value>Нет прав на добавление активности оператора</value>
   </data>
   <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
-    <value>Нет прав, чтобы удалить активность для оператора {0}.</value>
+    <value>Нет прав на удаление активности оператора</value>
   </data>
   <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
     <value>Запрос на отсутствие для {0} был отменен и отсутствие было удалено из вашего расписания.</value>
@@ -12645,7 +12645,7 @@ Teleopti R&amp;D</value>
     <value>За сколько дней до даты отсутствия запрос может быть отменен:</value>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
-    <value>Нет прав доступа на изменение активности для оператора {0}.</value>
+    <value>Нет прав на изменение активности оператора</value>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
     <value>Выбранные операторы:</value>
@@ -12693,7 +12693,7 @@ Teleopti R&amp;D</value>
     <value>Отменить выделение</value>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>Нет прав доступа для добавления персональной активности для оператора {0}.</value>
+    <value>Нет прав на добавление персональной активности оператора</value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
     <value>Вы не можете добавить персональную активность, если нет смены</value>
@@ -13165,7 +13165,7 @@ Teleopti R&amp;D</value>
     <value>Активность не может быть добавлена к</value>
   </data>
   <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
-    <value>Нет прав доступа для удаления отсутствия.</value>
+    <value>Нет прав на удаление отсутствия оператора</value>
   </data>
   <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
     <value>Отсутствие не может быть добавлено к</value>
@@ -13294,7 +13294,7 @@ Teleopti R&amp;D</value>
     <value>Запрашиваемый период слишком длинный</value>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>Нет прав доступа для добавление сверхурочного времени для оператора {0}.</value>
+    <value>Нет прав на добавление сверхурочного времени оператора</value>
   </data>
   <data name="Level" xml:space="preserve">
     <value>Уровень</value>
@@ -13429,7 +13429,7 @@ Teleopti R&amp;D</value>
     <value>Сохранить избранный поиск</value>
   </data>
   <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
-    <value>Нет прав доступа для удаления сверхурочного времени для оператора(-ов)</value>
+    <value>Нет прав на удаление сверхурочного времени оператора</value>
   </data>
   <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
     <value>Толерантность времени контракта превышена.</value>
@@ -13601,7 +13601,7 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
     <value>Введите значение</value>
   </data>
   <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
-    <value>{0} заменено на резервные значения</value>
+    <value>{0} исправлено на '{1}'</value>
   </data>
   <data name="NewImport" xml:space="preserve">
     <value>Новый импорт</value>
@@ -13616,10 +13616,10 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
     <value>Не удалось загрузить правила выходных дней.</value>
   </data>
   <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Не удалось оптимизировать выходные дни для выбранного периода по техническим причинам. Попробуйте еще раз.</value>
+    <value>Не удалось оптимизировать выходные дни в периоде {0} - {1} по техническим причинам. Попробуйте еще раз.</value>
   </data>
   <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Не удалось запланировать выбранный период по техническим причинам. Попробуйте еще раз.</value>
+    <value>Не удалось запланировать период {0} - {1} по техническим причинам. Попробуйте еще раз.</value>
   </data>
   <data name="OnlySupport" xml:space="preserve">
     <value>Поддерживает только: {0}</value>
@@ -14039,7 +14039,7 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
     <value>Сдвинуть сверхурочные</value>
   </data>
   <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
-    <value>Нет прав на изменение сверхурочных для оператора(ов)</value>
+    <value>Нет прав на изменение сверхурочных оператора</value>
   </data>
   <data name="ChooseDayOffset" xml:space="preserve">
     <value>Выбрать день</value>
@@ -14189,31 +14189,31 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
     <value>Веб</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>У вас новый бронзовый уровень! Ваше соблюдение расписания в {1-yyyy-MM-dd} выше {0}</value>
+    <value>У вас новый бронзовый уровень! Ваше соблюдение времени готовности в {1:yyyy-MM-dd} выше {0}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>У вас новый бронзовый уровень! Ваш AHT в {1-yyyy-MM-dd} ниже {0}</value>
+    <value>У вас новый бронзовый уровень! Ваш AHT в {1:yyyy-MM-dd} ниже {0} секунд</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>У вас новый бронзовый уровень! Вы обслужили более чем {0} звонков в {1-yyyy-MM-dd}</value>
+    <value>У вас новый бронзовый уровень! Вы обслужили более чем {0} звонков в {1:yyyy-MM-dd}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>У вас новый золотой уровень! Ваше соблюдение расписания в {1-yyyy-MM-dd} выше {0}</value>
+    <value>У вас новый золотой уровень! Ваше соблюдение времени готовности в {1:yyyy-MM-dd} выше {0}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
-    <value>У вас новый золотой уровень! Ваш AHT в {1-yyyy-MM-dd} ниже {0}</value>
+    <value>У вас новый золотой уровень! Ваш AHT в {1:yyyy-MM-dd} ниже {0}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
-    <value>У вас новый золотой уровень! Вы обслужили более чем {0} звонков в {1-yyyy-MM-dd}</value>
+    <value>У вас новый золотой уровень! Вы обслужили более чем {0} звонков в {1:yyyy-MM-dd}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>У вас новый серебряный уровень! Ваше соблюдение расписания в {1-yyyy-MM-dd} выше {0}</value>
+    <value>У вас новый серебряный уровень! Ваше соблюдение времени готовности в {1:yyyy-MM-dd} выше {0}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
-    <value>У вас новый серебряный уровень! Ваш AHT в {1-yyyy-MM-dd} ниже {0}</value>
+    <value>У вас новый серебряный уровень! Ваш AHT в {1:yyyy-MM-dd} ниже {0}</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
-    <value>У вас новый серебряный уровень! Вы обслужили более чем {0} звонков в {1-yyyy-MM-dd}</value>
+    <value>У вас новый серебряный уровень! Вы обслужили более чем {0} звонков в {1:yyyy-MM-dd}</value>
   </data>
   <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
     <value>Запрос сверхурочных {0}-{1} согласован</value>
@@ -14270,5 +14270,281 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
     <value>Ключ активации продукта успешно применен.
 Поздравляем! Теперь вы являетесь лицензированным пользователем этого WFM решения.
 Сейчас приложение закроется.</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>Нейтральный</value>
+  </data>
+  <data name="SetupIntervalLength" xml:space="preserve">
+    <value>Установите длину интервала</value>
+  </data>
+  <data name="GamificationSettingsMovedToWeb" xml:space="preserve">
+    <value>Настройка геймификации теперь доступна в Teleopti WFM Web</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebManualMessage" xml:space="preserve">
+    <value>Для перехода на веб страницу настройки геймификации нажмите здесь.</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebMessage" xml:space="preserve">
+    <value>При открытии автоматически должна загружаться страница настроек геймификации </value>
+  </data>
+  <data name="UseDefaultStartTime" xml:space="preserve">
+    <value>Использовать время начала по умолчанию</value>
+  </data>
+  <data name="Measures" xml:space="preserve">
+    <value>Показатели</value>
+  </data>
+  <data name="ValuesShouldBeInAscendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>Значения должны быть в порядке возрастания от Золотого к Бронзовому</value>
+  </data>
+  <data name="ValuesShouldBeInDescendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>Значения должны быть в порядке убывания от Золотого к Бронзовому</value>
+  </data>
+  <data name="TextIsTooLong" xml:space="preserve">
+    <value>Текст слишком длинный</value>
+  </data>
+  <data name="InvalidHoursRange" xml:space="preserve">
+    <value>Период не может превышать {0} часов(с).</value>
+  </data>
+  <data name="AgentsAnalyzed" xml:space="preserve">
+    <value>Анализ ограничений</value>
+  </data>
+  <data name="ManyAgentsAlert" xml:space="preserve">
+    <value>Выбрано {0} операторов, нажмите Обновить для начала анализа</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
+    <value>Время отдыха между сменами будет нарушено</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
+    <value>Слишком мало рабочего времени в периоде</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
+    <value>Слишком много рабочего времени в периоде</value>
+  </data>
+  <data name="RequestStartDate" xml:space="preserve">
+    <value>Дата начала</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedShift" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {0} смен у {1} операторов?</value>
+  </data>
+  <data name="RemoveShift" xml:space="preserve">
+    <value>Удалить смену</value>
+  </data>
+  <data name="ImportBpoShowingTheFirstXErrorMessagesOfY" xml:space="preserve">
+    <value>Показаны первые {0} уведомлений об ошибке из {1}.</value>
+  </data>
+  <data name="YouGotANewSilverBadge" xml:space="preserve">
+    <value>У вас новый серебряный уровень за {0} на {1}.</value>
+  </data>
+  <data name="YouGotANewGoldBadge" xml:space="preserve">
+    <value>У вас новый золотой уровень за {0} на {1}.</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonConflictingRestrictions" xml:space="preserve">
+    <value>Несовместимые ограничения</value>
+  </data>
+  <data name="YouGotANewBronzeBadge" xml:space="preserve">
+    <value>У вас новый бронзовый уровень за {0} на {1}.</value>
+  </data>
+  <data name="ApprovedAsInAdherence" xml:space="preserve">
+    <value>Соблюдение графика подтверждено</value>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>Опубликовать расписание</value>
+  </data>
+  <data name="RecordedOutOfAdherence" xml:space="preserve">
+    <value>Зафиксировано несоблюдение графика</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooManyDaysOff" xml:space="preserve">
+    <value>Слишком много выходных в периоде</value>
+  </data>
+  <data name="Changes" xml:space="preserve">
+    <value>Изменения</value>
+  </data>
+  <data name="RequestEndDate" xml:space="preserve">
+    <value>Дата Окончания</value>
+  </data>
+  <data name="DuplicateName" xml:space="preserve">
+    <value>Повторяющееся имя</value>
+  </data>
+  <data name="NoStartDateToDisplay" xml:space="preserve">
+    <value>Нет даты начала</value>
+  </data>
+  <data name="NoStartAndEndDateToDisplay" xml:space="preserve">
+    <value>Нет даты начала и окончания</value>
+  </data>
+  <data name="NoEndToDisplay" xml:space="preserve">
+    <value>Нет даты окончания</value>
+  </data>
+  <data name="ImportBpoSkillListedMoreThanOnce" xml:space="preserve">
+    <value>Навык {0} указан более одного раза в одной строке.</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>В Business unit '{0}' отсутствует группа состояний для незалогиненных операторов. State snapshot feature will not work until this is configured. Configure this in Windows client's options.</value>
+  </data>
+  <data name="RtaConfigurationIssuesFound" xml:space="preserve">
+    <value>Проблема конфигурации</value>
+  </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>Вы должны выбрать хотя бы один фильтр</value>
+  </data>
+  <data name="MeasureNameIsMandatory" xml:space="preserve">
+    <value>Название показателя обязательно.</value>
+  </data>
+  <data name="AgentIdIsMandatory" xml:space="preserve">
+    <value>ID оператора обязателен.</value>
+  </data>
+  <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
+    <value>Перетащите свой CSV файл сюда или нажмите для выбора</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
+    <value>В сервисе РТА нет группы состояний для незалогиненных операторов. </value>
+  </data>
+  <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
+    <value>Должен быть выбран навык.</value>
+  </data>
+  <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
+    <value>Дата начала периода экспорта должна быть раньше даты окончания.</value>
+  </data>
+  <data name="GamificationViewImportFileFormat" xml:space="preserve">
+    <value>Посмотреть детали формата файла импорта</value>
+  </data>
+  <data name="NoPermissionToViewWFMModuleErrorMessage" xml:space="preserve">
+    <value>У вас нет права доступа к просмотру {0}.</value>
+  </data>
+  <data name="ValidateStartDate" xml:space="preserve">
+    <value>Дата начала должна быть раньше даты окончания</value>
+  </data>
+  <data name="ValidateEndDate" xml:space="preserve">
+    <value>Дата окончания должна быть позже даты начала</value>
+  </data>
+  <data name="SelectStartDateAndEndDate" xml:space="preserve">
+    <value>Выберите даты начала и окончания</value>
+  </data>
+  <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
+    <value>Период экспорта должен быть в диапазоне {0}.</value>
+  </data>
+  <data name="NoPermissionRemovingShift" xml:space="preserve">
+    <value>Нет прав на удаление смены оператора</value>
+  </data>
+  <data name="RemoveDayOff" xml:space="preserve">
+    <value>Удалить выходной</value>
+  </data>
+  <data name="PickATemplate" xml:space="preserve">
+    <value>Выберите шаблон</value>
+  </data>
+  <data name="TheImportFailed" xml:space="preserve">
+    <value>Ошибка импорта!</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>Выберите дату начала</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipImported" xml:space="preserve">
+    <value>Импортирован</value>
+  </data>
+  <data name="ImportBpoFileImportDateInformation" xml:space="preserve">
+    <value>Все даты в UTC</value>
+  </data>
+  <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
+    <value>Информация по импорту файла BPO</value>
+  </data>
+  <data name="BusinessRuleMaximumWorkdayFriendlyName" xml:space="preserve">
+    <value>Слишком много последовательных рабочих дней.</value>
+  </data>
+  <data name="ModifyAdherence" xml:space="preserve">
+    <value>Изменять Соблюдение графика</value>
+  </data>
+  <data name="ApproveAsInAdherence" xml:space="preserve">
+    <value>Подтверждать Соблюдение графика</value>
+  </data>
+  <data name="LateXMinutes" xml:space="preserve">
+    <value>Опоздание на {0} мин</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipAt" xml:space="preserve">
+    <value>в</value>
+  </data>
+  <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>B Business unit '{0}' нет дефолтной группы состояний операторов. Нераспознанные статусы не будут отображаться. Требуется ее конфигурация в Опциях.</value>
+  </data>
+  <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
+    <value>Слишком длинное название источника. Допустимый максимум 100 знаков.</value>
+  </data>
+  <data name="ReadyTimeAdherence" xml:space="preserve">
+    <value>Соблюдение времени готовности</value>
+  </data>
+  <data name="ReadyTimeAdherenceReportCalculation" xml:space="preserve">
+    <value>Мой Отчет: расчет соблюдения времени готовности</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Соблюдение Времени Готовности за день</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Соблюдение Времени Готовности по оператору</value>
+  </data>
+  <data name="AvailableRoles" xml:space="preserve">
+    <value>Доступные роли</value>
+  </data>
+  <data name="WithAbsence" xml:space="preserve">
+    <value>С Отсутствием</value>
+  </data>
+  <data name="WithOvertime" xml:space="preserve">
+    <value>Со Сверхурочными</value>
+  </data>
+  <data name="Deviation" xml:space="preserve">
+    <value>Отклонение</value>
+  </data>
+  <data name="PasswordChangedSuccessfully" xml:space="preserve">
+    <value>Ваш пароль изменен.</value>
+  </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>Запросы Сверхурочных</value>
+  </data>
+  <data name="SaveToOtherScenario" xml:space="preserve">
+    <value>Сохранить на другом сценарии</value>
+  </data>
+  <data name="BeforeRunningAForecastYouNeedToCreateASkillDot" xml:space="preserve">
+    <value>До начала прогнозирования создайте навык.</value>
+  </data>
+  <data name="BadgeCalculation" xml:space="preserve">
+    <value>Расчет уровней</value>
+  </data>
+  <data name="BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod" xml:space="preserve">
+    <value>Выполняется расчет уровней за выбранный период.</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>Пороги уровней:</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>Порог бронзового уровня:</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>Порог золотого уровня:</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>Порог серебряного уровня:</value>
+  </data>
+  <data name="NoPermissionAddDayOff" xml:space="preserve">
+    <value>Нет прав на добавление выходного дня</value>
+  </data>
+  <data name="NoPermissionRemoveDayOff" xml:space="preserve">
+    <value>Нет прав на удаление выходного дня</value>
+  </data>
+  <data name="NoPermissionSwapShifts" xml:space="preserve">
+    <value>Нет прав на обмен сменами</value>
+  </data>
+  <data name="NoPermissionToViewSchedules" xml:space="preserve">
+    <value>Нет прав на просмотр расписания</value>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>Просмотр пользователей</value>
+  </data>
+  <data name="BronzeBadgeThreshold" xml:space="preserve">
+    <value>Порог бронзового уровня</value>
+  </data>
+  <data name="GoldBadgeThreshold" xml:space="preserve">
+    <value>Порог золотого уровня</value>
+  </data>
+  <data name="BadgeThreshold" xml:space="preserve">
+    <value>Порог уровня</value>
+  </data>
+  <data name="SilverBadgeThreshold" xml:space="preserve">
+    <value>Порог серебряного уровня</value>
   </data>
 </root>

@@ -21,7 +21,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 {
 	[TestFixture, TeamScheduleTest]
-	public class AbsencePersisterTest :IIsolateSystem
+	public class AbsencePersisterTest : IIsolateSystem
 	{
 		public IAbsencePersister Target;
 		public FakePersonRepository PersonRepository;
@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			ScenarioRepository.Has(scenario);
 			AbsenceRepository.Has(abs);
 
-			var command = new AddFullDayAbsenceCommand {
+			var command = new AddFullDayAbsenceCommand
+			{
 				PersonId = person.Id.GetValueOrDefault(),
 				AbsenceId = abs.Id.GetValueOrDefault(),
 				StartDate = new DateTime(2019, 1, 8, 0, 0, 0),
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 				PersonId = person.Id.GetValueOrDefault(),
 				AbsenceId = abs.Id.GetValueOrDefault(),
 				StartTime = new DateTime(2019, 1, 8, 0, 0, 0),
-				EndTime= new DateTime(2019, 1, 9, 0, 0, 0),
+				EndTime = new DateTime(2019, 1, 9, 0, 0, 0),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = person.Id.GetValueOrDefault(),
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			var dateTimePeriod = new DateTimePeriod(2018, 2, 12, 8, 2018, 2, 12, 18);
 			PermissionProvider.PublishToDate(date.AddDays(-1));
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, person, date);
-			
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
 			scenario.SetBusinessUnit(businessUnit);
@@ -230,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("main shift").WithId();
 			var activity = ActivityFactory.CreateActivity("activity").WithId();
-			
+
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainDateTimePeriod, shiftCategory, activity);
 
 			var absence = AbsenceFactory.CreateAbsenceWithId();
@@ -258,7 +259,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 		}
 
 		[Test]
-		public void ShouldRaiseEventWithPeriodIncludingScheduleDateWhenCurrentDayHasOvernightShiftAndTheIntradayAbsIsAddedToTheOvernightPart()
+		public void ShouldRaiseEventWithPeriodIncludingScheduleDateWhenPreviousDayHasOvernightShiftAndTheIntradayAbsIsAddedToTheOvernightPart()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 			var scenario = ScenarioFactory.CreateScenario("default", true, false).WithId();
@@ -270,13 +271,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			ScenarioRepository.Has(scenario);
 			AbsenceRepository.Has(abs);
 
-			var overNightShift =
+			var previousOverNightShift =
 				PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, shiftPeriod);
-			foreach (var shiftLayer in overNightShift.ShiftLayers)
+			foreach (var shiftLayer in previousOverNightShift.ShiftLayers)
 			{
 				shiftLayer.WithId();
 			}
-			PersonAssignmentRepo.Has(overNightShift);
+			PersonAssignmentRepo.Has(previousOverNightShift);
+
+			var currentShift =
+				PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, new DateTimePeriod(2019, 1, 4, 10, 2019, 1, 4, 18));
+			foreach (var shiftLayer in currentShift.ShiftLayers)
+			{
+				shiftLayer.WithId();
+			}
+			PersonAssignmentRepo.Has(currentShift);
 
 			Target.PersistIntradayAbsence(new AddIntradayAbsenceCommand
 			{
@@ -290,7 +299,44 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 
 			EventPublisher.PublishedEvents.OfType<PersonAbsenceAddedEvent>().Single().StartDateTime.Should().Be.EqualTo(new DateTime(2019, 1, 3, 20, 0, 0));
 		}
-		
+
+		[Test]
+		public void ShouldRaiseEventWithPeriodIncludingScheduleDateWhenCurrentScheduleOnLogonTimezoneIsOvernightShiftAndIntradayAbsIsAddedToOvernightPart()
+		{
+			UserTimeZone.Is(TimeZoneInfo.Utc);
+
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+
+			var scenario = ScenarioFactory.CreateScenario("default", true, false).WithId();
+			scenario.SetBusinessUnit(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId());
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
+
+			PersonRepository.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
+
+			var currentShift =
+				PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, new DateTimePeriod(2019, 3, 7, 17, 2019, 3, 8, 2));
+			foreach (var shiftLayer in currentShift.ShiftLayers)
+			{
+				shiftLayer.WithId();
+			}
+			PersonAssignmentRepo.Has(currentShift);
+
+			Target.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+			{
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2019, 3, 8, 1, 0, 0),
+				EndTime = new DateTime(2019, 3, 8, 2, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			});
+
+
+			EventPublisher.PublishedEvents.OfType<PersonAbsenceAddedEvent>().Single().StartDateTime.Should().Be.EqualTo(new DateTime(2019, 3, 7, 17, 0, 0));
+		}
+
 		[Test]
 		public void ShouldRaiseEventWithPeriodIncludingScheduleDateWhenAddIntradayAbsence()
 		{
