@@ -55,7 +55,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				Enabled = false,
 				HandleOptionOnFailed = RequestHandleOption.AutoDeny
 			};
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] { shiftTradeBusinessRuleConfig});
+			var _shiftTradeBusinessRuleConfig =new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+				Enabled = false,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] { shiftTradeBusinessRuleConfig,_shiftTradeBusinessRuleConfig });
 			Assert.IsTrue(personRequest.IsPending);
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);

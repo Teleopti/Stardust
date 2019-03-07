@@ -18,10 +18,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
 			var responseList = new HashSet<IBusinessRuleResponse>();
-
+			
 			foreach (var scheduleDay in scheduleDays)
 			{
 				var person = scheduleDay.Person;
+				if(person.WorkflowControlSet==null) break;
 				var maxConsecutiveWorkday = person.WorkflowControlSet.MaximumConsecutiveWorkingDays;
 				var scheduleRange = rangeClones[person];
 				var startDate = scheduleDay.DateOnlyAsPeriod.DateOnly;

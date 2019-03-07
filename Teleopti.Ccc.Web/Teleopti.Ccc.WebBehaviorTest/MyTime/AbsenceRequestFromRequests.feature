@@ -205,6 +205,16 @@ Scenario: Can not edit denied absence requests
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
 
+
+Scenario: Can not edit denied absence requests even it has mulitple absence type
+	Given I am an agent
+	And I have two requestable absences
+	And I have a denied absence request
+	And I am viewing requests
+	When I click on the existing request in the list
+	Then I should see the detail form for the existing request in the list
+	And I should not be able to edit the values for the existing absence request
+
 Scenario: Can not delete approved absence request
 	Given I am an agent
 	And I have an approved absence request

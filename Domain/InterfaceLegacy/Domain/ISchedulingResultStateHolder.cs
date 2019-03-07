@@ -93,12 +93,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// If the scheduler is opened in Team Leader Mode
 		///</summary>
 		bool TeamLeaderMode { get; set; }
-
-		/// <summary>
-		/// if the rule for maximum workday check should be used
-		/// </summary>
-		bool UseMaximumWorkday { get; set; }
-
+		
 		///<summary>
 		/// If the modify uses all BusinessRules or just the mandatory
 		///</summary>

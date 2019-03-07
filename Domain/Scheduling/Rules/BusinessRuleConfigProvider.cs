@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleProvider = businessRuleProvider;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_shiftTradeSpecifications = shiftTradeSpecifications;
-			_schedulingResultStateHolder.UseMaximumWorkday = true;
 		}
 
 		public IEnumerable<IShiftTradeBusinessRuleConfig> GetDefaultConfigForShiftTradeRequest()

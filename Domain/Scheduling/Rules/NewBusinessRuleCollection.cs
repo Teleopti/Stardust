@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				new NotOverwriteLayerRule()
 			};
 
-			if (schedulingResultStateHolder.UseMaximumWorkday) ret.Add(new MaximumWorkdayRule());
+			ret.Add(new MaximumWorkdayRule());
 
 			ret.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 

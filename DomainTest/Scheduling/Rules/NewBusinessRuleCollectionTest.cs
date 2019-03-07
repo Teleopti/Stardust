@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	public class NewBusinessRuleCollectionTest
 	{
 		private INewBusinessRuleCollection _target;
-		private const int totalNumberOfRules = 11;
+		private const int totalNumberOfRules = 12;
 		private ISchedulingResultStateHolder _state;
 
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -224,11 +225,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			setup();
 			_state = new SchedulingResultStateHolder
 			{
-				UseMaximumWorkday = true,
 				UseValidation = true
 			};
 			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
-			Assert.AreEqual(totalNumberOfRules + 1, allForScheduling.Count);
+			Assert.AreEqual(totalNumberOfRules, allForScheduling.Count);
 			Assert.IsTrue(collectionContainsType(allForScheduling, typeof(MaximumWorkdayRule)));
 		}
 

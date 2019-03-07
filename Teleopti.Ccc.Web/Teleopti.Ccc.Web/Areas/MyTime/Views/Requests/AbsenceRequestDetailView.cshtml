@@ -19,7 +19,7 @@
 	</label>
 	<div class="row">
 		<div class="col-xs-6" style="padding-top: 6px;">
-			<select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable && '@(Model.AbsenceTypes.Count > 0)' == 'True'">
+			<select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable">
 				@if (Model.AbsenceTypes.Count > 0)
 				{
 					foreach (var absenceType in Model.AbsenceTypes)

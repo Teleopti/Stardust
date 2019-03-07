@@ -108,8 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				Message = personRequest.GetMessage(new NoFormatting()),
-				UseSiteOpenHoursRule = true,
-				UseMaximumWorkday = true
+				UseSiteOpenHoursRule = true
 			});
 		}
 
