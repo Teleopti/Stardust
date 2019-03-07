@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 		[ImpersonateSystem]
 		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			var projectionChangedEvents = publishEvent<ProjectionChangedEventNew>(@event);
