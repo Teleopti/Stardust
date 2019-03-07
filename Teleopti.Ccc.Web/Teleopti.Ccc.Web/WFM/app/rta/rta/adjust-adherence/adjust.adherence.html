@@ -1,4 +1,9 @@
 <div class="rta-view adjust-adherence">
+    <input ng-show="vm.testMode" ng-model="vm.startDate" type="text" class="start-date" ng-model-options="{ updateOn: 'blur'}"/>
+    <input ng-show="vm.testMode" ng-model="vm.startTime" type="text" class="start-time" ng-model-options="{ updateOn: 'blur'}"/>
+    <input ng-show="vm.testMode" ng-model="vm.endDate" type="text" class="end-date" ng-model-options="{ updateOn: 'blur'}"/>
+    <input ng-show="vm.testMode" ng-model="vm.endTime" type="text" class="end-time" ng-model-options="{ updateOn: 'blur'}"/>
+
     <div class="view-header">
         <div class="view-title">
             <div class="pull-left">
@@ -25,7 +30,7 @@
                 <h3 style="padding-top: 10px">{{'AdjustedPeriods'|translate}}</h3>
             </div>
             <div class="con-flex">
-                <button class="wfm-btn wfm-btn-primary pull-right"
+                <button class="wfm-btn wfm-btn-primary pull-right add-period"
                         ng-click="vm.toggleAdjustToNeutralForm()">{{'AddPeriod'|translate}}
                 </button>
             </div>
@@ -68,7 +73,7 @@
             <div class="con-flex">
                 <div class="pull-right" style="padding-bottom:12px">
                     <span style="font-weight: 700">{{vm.selectedPeriod}}</span>
-                    <button class="wfm-btn wfm-btn-primary"
+                    <button class="wfm-btn wfm-btn-primary adjust-adherence"
                             ng-click="vm.adjustToNeutral()">{{'AdjustToNeutral'|translate}}
                     </button>
                 </div>
@@ -83,7 +88,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="period in vm.adjustedPeriods">
+            <tr ng-repeat="period in vm.adjustedPeriods" class="adjusted-period">
                 <td>{{period.StartTime}}</td>
                 <td>{{period.EndTime}}</td>
             </tr>

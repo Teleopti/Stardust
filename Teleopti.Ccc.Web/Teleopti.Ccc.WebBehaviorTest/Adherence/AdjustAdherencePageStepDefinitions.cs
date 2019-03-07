@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		public void WhenIViewAdjustAdherence()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToPage("wfm/#/rta/adjust-adherence");
+			Navigation.GoToPage("wfm/#/rta/adjust-adherence?testMode=true");
 		}
 
 		[When(@"I adjust adherence '(.*)' to '(.*)' as neutral adherence")]
@@ -24,11 +25,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			var start = DateTime.Parse(from);
 			var end = DateTime.Parse(to);
 			Browser.Interactions.Click(".add-period");
-			Browser.Interactions.FillWith(".start-date", start.ToString("d"));
-			Browser.Interactions.FillWith(".start-time", start.ToString("t"));
-			Browser.Interactions.FillWith(".end-date", end.ToString("d"));
-			Browser.Interactions.FillWith(".end-time", end.ToString("t"));
-			Browser.Interactions.Click(".adjust-adherence");
+			Browser.Interactions.FillWith(".start-date", start.ToString("yyyy-MM-dd HH:mm"));		
+			Browser.Interactions.FillWith(".start-time", start.ToString("yyyy-MM-dd HH:mm"));
+			Browser.Interactions.FillWith(".end-date", end.ToString("yyyy-MM-dd HH:mm"));
+			Browser.Interactions.FillWith(".end-time", end.ToString("yyyy-MM-dd HH:mm"));
+			Browser.Interactions.Click(".wfm-btn.adjust-adherence"); // fix
 		}
 	}
 }

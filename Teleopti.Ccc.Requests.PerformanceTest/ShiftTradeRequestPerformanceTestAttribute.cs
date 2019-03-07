@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 		}
 
-		protected override void Startup (IComponentContext container)
+		protected override void BeforeInject (IComponentContext container)
 		{
-			base.Startup (container);
+			base.BeforeInject (container);
 
 			// normal test injection is not working...
 			((MutableNow) container.Resolve<INow>()).Is (new DateTime (2016, 04, 01, 10, 00, 00, DateTimeKind.Utc));

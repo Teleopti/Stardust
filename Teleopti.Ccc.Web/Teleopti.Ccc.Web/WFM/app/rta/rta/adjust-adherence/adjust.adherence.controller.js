@@ -5,12 +5,13 @@
             .module('wfm.rta')
             .controller('AdjustAdherenceController', AdjustAdherenceController);
 
-        AdjustAdherenceController.$inject = ['CurrentUserInfo', 'rtaStateService', '$http', '$scope', '$state', '$timeout'];
+        AdjustAdherenceController.$inject = ['CurrentUserInfo', 'rtaStateService', '$http', '$scope', '$state', '$timeout', '$stateParams'];
 
-        function AdjustAdherenceController(currentUserInfo, rtaStateService, $http, $scope, $state, $timeout) {
+        function AdjustAdherenceController(currentUserInfo, rtaStateService, $http, $scope, $state, $timeout, $stateParams) {
             var vm = this;
             vm.showAdjustToNeutralForm = false;
             vm.adjustedPeriods = [];
+            vm.testMode = $stateParams.testMode;
 
             currentUserInfo.Load().then(function (data) {
                 preselectDateAndTime(data);
@@ -71,21 +72,21 @@
             }, function () {
                 if (shouldAutoFixDate())
                     vm.endDate = vm.startDate;
-                if (shouldAutoFixTime())
-                    vm.endTime = vm.startTime;
+                // if (shouldAutoFixTime())
+                //     vm.endTime = vm.startTime;
                 buildSelectedPeriod();
             });
 
             $scope.$watch(function () {
                 return vm.startTime;
             }, function () {
-                if (shouldAutoFixTime()) {
-                    $timeout(function() {
-                        if(!moment(vm.startTime).isValid())
-                            return;
-                        vm.endTime = vm.startTime;
-                    }, 1000)
-                }
+                // if (shouldAutoFixTime()) {
+                //     // $timeout(function() {
+                //         if(!moment(vm.startTime).isValid())
+                //             return;
+                //         vm.endTime = vm.startTime;
+                //     // }, 1000)
+                // }
                 buildSelectedPeriod();
             });
 
@@ -94,36 +95,39 @@
             }, function () {
                 if (shouldAutoFixDate())
                     vm.startDate = vm.endDate;
-                if (shouldAutoFixTime())
-                    vm.startTime = vm.endTime;
+                // if (shouldAutoFixTime())
+                //     vm.startTime = vm.endTime;
                 buildSelectedPeriod();
             });
 
             $scope.$watch(function () {
                 return vm.endTime;
             }, function () {
-                if (shouldAutoFixTime()) {
-                    $timeout(function(){
-                        if(!moment(vm.endTime).isValid())
-                            return;
-                        vm.startTime = vm.endTime;
-                    }, 1000);
-                }
+                // if (shouldAutoFixTime()) {
+                //     // $timeout(function(){
+                //         if(!moment(vm.endTime).isValid())
+                //             return;
+                //         vm.startTime = vm.endTime;
+                //     // }, 1000);
+                // }
                 buildSelectedPeriod();
             });
-
-            function shouldAutoFixTime() {
-                var isSameDay = moment(vm.startDate).isSame(moment(vm.endDate), 'day');
-                var isStartTimeAfterEndTime = moment(vm.startTime).isAfter(moment(vm.endTime));
-
-                return (isSameDay && isStartTimeAfterEndTime);
-            }
+            //
+            // function shouldAutoFixTime() {
+            //     // var isSameDay = moment(vm.startDate).isSame(moment(vm.endDate), 'day');
+            //     // var isStartTimeAfterEndTime = moment(vm.startTime).isAfter(moment(vm.endTime));
+            //     //
+            //     // return (isSameDay && isStartTimeAfterEndTime);
+            //     return false;
+            // }
 
             function shouldAutoFixDate() {
                 return moment(vm.startDate).isAfter(moment(vm.endDate), 'day');
             }
             
-            vm.toggleAdjustToNeutralForm = function () {vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;};
+            vm.toggleAdjustToNeutralForm = function () {
+                vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
+            };
 
             vm.goToAgents = rtaStateService.goToAgents;
             vm.goToOverview = rtaStateService.goToOverview;

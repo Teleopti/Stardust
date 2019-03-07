@@ -22,16 +22,21 @@ namespace Teleopti.Ccc.TestCommon
 			if (data.Value != null)
 			{
 				var cachedData = (CreateDataResult<T>) data.Value;
-				DataSourceHelper.RestoreApplicationDatabase(cachedData.Hash);
-				DataSourceHelper.RestoreAnalyticsDatabase(cachedData.Hash);
+				withContainer(container =>
+				{
+					var database = container.Resolve<DatabaseTestHelper>();
+					database.RestoreApplicationDatabase(cachedData.Hash);
+					database.RestoreAnalyticsDatabase(cachedData.Hash);
+				});
 				return cachedData.Data;
 			}
 
 			var createDataResult = default(CreateDataResult<T>);
 			withContainer(container =>
 			{
-				container.Resolve<DatabaseTestHelper>()
-					.CreateDatabases(InfraTestConfigReader.TenantName());
+				var database = container.Resolve<DatabaseTestHelper>();
+				
+				database.CreateDatabases(InfraTestConfigReader.TenantName());
 
 				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
 
@@ -51,11 +56,13 @@ namespace Teleopti.Ccc.TestCommon
 						throw new Exception("create data function needs to return a number representing the data created");
 					createDataResult = result;
 				}
+				
+				data.Set(() => createDataResult);
+				database.BackupApplicationDatabase(createDataResult.Hash);
+				database.BackupAnalyticsDatabase(createDataResult.Hash);
+				
 			});
 
-			data.Set(() => createDataResult);
-			DataSourceHelper.BackupApplicationDatabase(createDataResult.Hash);
-			DataSourceHelper.BackupAnalyticsDatabase(createDataResult.Hash);
 			return createDataResult.Data;
 		}
 		
