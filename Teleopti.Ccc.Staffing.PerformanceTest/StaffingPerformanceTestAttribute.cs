@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble<UpdateSkillForecastReadModelHandler>().For<UpdateSkillForecastReadModelHandler>();
 		}
 
-		protected override void Startup(IComponentContext container)
+		protected override void BeforeInject(IComponentContext container)
 		{
-			base.Startup(container);
+			base.BeforeInject(container);
 			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}

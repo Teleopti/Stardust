@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 		}
 
-		protected virtual void Startup(IComponentContext container)
+		protected virtual void BeforeInject(IComponentContext container)
 		{
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				throw new NotSupportedException("This fixture (or base fixtures) is not compatible with a IoC test attributeDatabaseTest");
 			_service = new IoCTestService(testDetails, this);
 			buildContainer();
-			Startup(_container);
+			BeforeInject(_container);
 			_service.InjectFrom(_container);
 			
 			Now.Is("2014-12-18 13:31");

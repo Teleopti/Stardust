@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 
 		}
 
-		protected override void Startup(IComponentContext container)
+		protected override void BeforeInject(IComponentContext container)
 		{
-			base.Startup(container);
+			base.BeforeInject(container);
 			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}

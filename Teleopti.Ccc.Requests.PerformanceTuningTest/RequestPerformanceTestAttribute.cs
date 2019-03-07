@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
-		protected override void Startup(IComponentContext container)
+		protected override void BeforeInject(IComponentContext container)
 		{
-			base.Startup(container);
+			base.BeforeInject(container);
 			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}
