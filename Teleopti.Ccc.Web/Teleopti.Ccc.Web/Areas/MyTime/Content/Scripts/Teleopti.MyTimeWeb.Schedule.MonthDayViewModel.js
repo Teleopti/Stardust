@@ -7,9 +7,11 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleData, selectedD
 
 	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
 		self.dayOfMonth = currentDate.jDate();
+		self.dayOfWeek = currentDate.format('dddd');
 		self.isOutsideMonth = selectedDate.jMonth() != currentDate.jMonth();
 	} else {
 		self.dayOfMonth = currentDate.date();
+		self.dayOfWeek = currentDate.format('dddd');
 		self.isOutsideMonth = selectedDate.month() != currentDate.month();
 	}
 

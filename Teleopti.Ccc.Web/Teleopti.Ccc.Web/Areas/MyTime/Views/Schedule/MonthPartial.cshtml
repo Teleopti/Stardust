@@ -34,14 +34,14 @@
 
 <div class="container pagebody">
 	<div id="calendar" style="width: 100%;">
-		<div class="cal-row-fluid cal-row-head visible-lg" data-bind="foreach: weekDayNames">
+		<div class="cal-row-fluid cal-row-head visible-lg" data-bind="foreach: weekDayNames" aria-hidden="true">
 			<div class="cal-cell cal-weekday-header weekday-name" data-bind="text: Name"></div>
 		</div>
-		<div class="cal-row-fluid cal-row-head visible-md" data-bind="foreach: weekDayNames">
+		<div class="cal-row-fluid cal-row-head visible-md" data-bind="foreach: weekDayNames" aria-hidden="true">
 			<div class="cal-cell cal-weekday-header weekday-name" data-bind="text: Name"></div>
 		</div>
 
-		<div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames">
+		<div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames" aria-hidden="true">
 			<div class="cal-cell cal-weekday-header weekday-shortname" data-bind="text: ShortName"></div>
 		</div>
 
@@ -49,7 +49,8 @@
 			<div class="cal-row-fluid" data-bind="foreach: dayViewModels">
 				<div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
 					<div class="cal-month-day" data-bind="click: $root.week,css: {'cal-day-outmonth': isOutsideMonth,}">
-						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date },css: {'bank-holiday-day-shape':bankHoliday!=null},tooltip:{title: bankHoliday!=null?bankHoliday.dateDescription:null, html: true}" class="day-header-day label label-default" ></span>
+						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date, 'aria-label' : bankHoliday!=null?(dayOfWeek + ' ' + date + ', ' + bankHoliday.dateDescription):(dayOfWeek + ' ' + date) },css: {'bank-holiday-day-shape':bankHoliday!=null},tooltip:{title: bankHoliday!=null?bankHoliday.dateDescription:null, html: true}"
+							class="day-header-day label label-default" role="heading"></span>
 
 						<!-- ko if: hasAbsence -->
 						<div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
