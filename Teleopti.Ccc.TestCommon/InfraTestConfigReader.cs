@@ -15,24 +15,21 @@ namespace Teleopti.Ccc.TestCommon
 		public static string DatabaseBackupLocation => ConfigurationManager.AppSettings["InfraTest.DatabaseBackupLocation"];
 		public static string AnalyticsDatabaseName() => new SqlConnectionStringBuilder(AnalyticsConnectionString()).InitialCatalog;
 
-		// Using this before we change the way we have information about where agg database. This works for tests.
-		private static string getAggConnectionString()
-		{
-			var aggName = "InfraTest_Agg";
-			var analyticsConnectionString = ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"];
-			const string initCatString = "Initial Catalog=";
-			var firstIndex = analyticsConnectionString.IndexOf(initCatString, StringComparison.Ordinal) + initCatString.Length;
-			var lastIndex = analyticsConnectionString.IndexOf(";", firstIndex, StringComparison.Ordinal);
-			lastIndex = lastIndex == -1 ? analyticsConnectionString.Length : lastIndex;
-			return $"{analyticsConnectionString.Substring(0, firstIndex)}{aggName}{analyticsConnectionString.Substring(lastIndex)}";
-		}
-
 		private static readonly PerTestWorker<string> suffixPerWorkerId = new PerTestWorker<string>();
 
 		public static string TenantName() => augmentName("TestData");
 		public static string ApplicationConnectionString() => augmentConnectionString(ConfigurationManager.AppSettings["InfraTest.ConnectionString"]);
 		public static string AnalyticsConnectionString() => augmentConnectionString(ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"]);
 		public static string AggConnectionString() => augmentConnectionString(getAggConnectionString());
+
+		private static string getAggConnectionString()
+		{
+			var builder = new SqlConnectionStringBuilder(ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"]);
+			builder.InitialCatalog = builder.InitialCatalog.Contains("Analytics") ? 
+				builder.InitialCatalog.Replace("Analytics", "Agg") : 
+				"InfraTest_Agg";
+			return builder.ToString();
+		}
 
 		private static string augmentConnectionString(string connectionString)
 		{
