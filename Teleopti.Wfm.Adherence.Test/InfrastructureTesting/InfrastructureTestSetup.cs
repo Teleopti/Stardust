@@ -11,7 +11,6 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 	{
 		public static (IPerson Person, IBusinessUnit BusinessUnit) Setup()
 		{
-			SqlConnection.ClearAllPools(); // makes restore faster, move inside later
 			return DatabaseTestSetup.Setup(context =>
 			{
 				var businessUnit = new BusinessUnit(RandomName.Make());
