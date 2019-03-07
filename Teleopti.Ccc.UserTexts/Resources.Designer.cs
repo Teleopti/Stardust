@@ -28096,11 +28096,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relative overstaffing.
+        /// </summary>
+        public static string RelativeOverstaffing {
+            get {
+                return ResourceManager.GetString("RelativeOverstaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Relative Start.
         /// </summary>
         public static string RelativeStart {
             get {
                 return ResourceManager.GetString("RelativeStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relative understaffing.
+        /// </summary>
+        public static string RelativeUnderstaffing {
+            get {
+                return ResourceManager.GetString("RelativeUnderstaffing", resourceCulture);
             }
         }
         
