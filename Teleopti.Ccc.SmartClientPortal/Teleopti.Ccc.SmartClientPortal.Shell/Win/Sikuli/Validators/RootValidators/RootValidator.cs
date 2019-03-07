@@ -44,16 +44,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			get { return _atomicValidators ?? (_atomicValidators = new List<IAtomicValidator>()); }
 		}
 
-		protected SikuliValidationResult ValidateAtomicValidators(IEnumerable<IAtomicValidator> validators, ITimeZoneGuard timeZoneGuard)
-		{
-			var result = new SikuliValidationResult();
-			foreach (var validator in validators)
-			{
-				var validatorResult = validator.Validate(timeZoneGuard);
-				result.Result = result.CombineResultValue(validatorResult);
-				result.CombineDetails(validatorResult);
-			}
-			return result;
-		}
+		
 	}
 }

@@ -4,16 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DowngradeableComponent } from '@wfm/types';
 import { IStateParamsService, IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { WorkspaceComponent } from './components';
 import { ReportComponent } from './components/report/report.component';
 import { ReportService } from './core/report.service';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
 	declarations: [WorkspaceComponent, ReportComponent],
-	imports: [CommonModule, FormsModule, NgZorroAntdModule, RouterModule],
+	imports: [CommonModule, FormsModule, NgZorroAntdModule, RouterModule, SharedModule, TranslateModule.forChild()],
 	providers: [
 		ReportService,
+		TranslateModule,
 		{
 			provide: '$stateParams',
 			useFactory: (i: any): IStateParamsService => i.get('$stateParams'),
