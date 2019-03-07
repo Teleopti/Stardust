@@ -5041,13 +5041,12 @@
 		expect(refreshButton.disabled).toBeFalsy();
 	});
 
-	it('should enable refresh button when the overnight schedule was changed by others', function () {
-		var date = '2019-01-08';
+	it('should enable refresh button when schedule was changed on next date in UTC and schedule is also on next date in selected timezone', function () {
 		var personId = 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22';
 		var schedule = {
 			PersonId: personId,
 			Name: 'Annika Andersson',
-			Date: date,
+			Date: '2019-03-07',
 			WorkTimeMinutes: 240,
 			ContractTimeMinutes: 240,
 			Projection: [
@@ -5055,9 +5054,9 @@
 					ShiftLayerIds: ['11678e5a-ac3f-4daa-9577-a83800e49622'],
 					Color: '#ffffff',
 					Description: 'Phone',
-					Start: '2019-01-08 22:00',
-					End: '2019-01-09 04:00',
-					Minutes: 360,
+					Start: '2019-03-08 04:00',
+					End: '2019-03-08 05:00',
+					Minutes: 60,
 					IsOvertime: false,
 					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
 					TopShiftLayerId: null
@@ -5066,26 +5065,26 @@
 					ShiftLayerIds: ['21678e5a-ac3f-4daa-9577-a83800e49622'],
 					Color: '#FF0000',
 					Description: 'Invoice',
-					Start: '2019-01-09 04:00',
-					End: '2019-01-09 06:00',
-					Minutes: 120,
+					Start: '2019-03-08 05:00',
+					End: '2019-03-08 06:00',
+					Minutes: 60,
 					IsOvertime: false,
 					ActivityId: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
 					TopShiftLayerId: null
 				}
 			],
-			Timezone: { IanaId: 'Europe/Berlin' }
+			Timezone: { IanaId: 'US/Mountain' }
 		};
 		var scope = $rootScope.$new();
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2019-01-08', 'Europe/Berlin', schedule, scope);
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2019-03-07', 'Europe/Berlin', schedule, scope);
 		scope.$apply();
 
 		scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', {
 			messages: [
 				{
 					DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
-					StartDate: 'D2019-01-09T03:00:00',
-					EndDate: 'D2019-01-09T05:00:00',
+					StartDate: 'D2019-03-08T05:00:00',
+					EndDate: 'D2019-03-08T06:00:00',
 					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
 				}
 			]

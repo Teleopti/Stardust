@@ -75,11 +75,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var previousDayAssignment = previousScheduleDay.PersonAssignment();
 			var hasIntersectionWithPreviousDayShift = previousDayAssignment != null && previousDayAssignment.Period.Intersect(absenceTimePeriodInUtc);
+			var currentScheduleDay = scheduleRange.ScheduledDay(startDate);
 
-			var scheduleDay = hasIntersectionWithPreviousDayShift ? previousScheduleDay : scheduleRange.ScheduledDay(startDate);
+			var scheduleDay = hasIntersectionWithPreviousDayShift ? previousScheduleDay : currentScheduleDay;
+			var currentSchedulePeriod = currentScheduleDay.PersonAssignment()?.Period ?? currentScheduleDay.Period;
+			var isAddedToCurrentDayOvernightPart = currentSchedulePeriod.Intersect(absenceTimePeriodInUtc)
+				&& currentScheduleDay.Period.StartDateTime.Date != absenceTimePeriodInUtc.StartDateTime.Date;
+
 			var eventPeriod = hasIntersectionWithPreviousDayShift
 				? new DateTimePeriod(previousDayAssignment.Period.StartDateTime, absenceTimePeriodInUtc.EndDateTime)
-				: absenceTimePeriodInUtc;
+				: isAddedToCurrentDayOvernightPart ? new DateTimePeriod(currentSchedulePeriod.StartDateTime, absenceTimePeriodInUtc.EndDateTime)
+													: absenceTimePeriodInUtc;
 
 			var creatorInfo = new AbsenceCreatorInfo()
 			{
