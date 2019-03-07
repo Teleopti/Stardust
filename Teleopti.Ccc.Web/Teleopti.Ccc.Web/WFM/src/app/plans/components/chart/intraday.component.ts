@@ -18,6 +18,13 @@ export class IntradayComponent implements OnChanges {
 	@Input()
 	skill: string;
 	
+	colors = {
+		StaffingScaffold: '#FFFFFF',
+		Overstaffing: '#0a84d6',
+		Understaffing: '#D32F2F',
+		CriticalInterval: '#5f5f5f',
+	};
+	
 	constructor(private translate: TranslateService) {
 	}
 
@@ -65,12 +72,7 @@ export class IntradayComponent implements OnChanges {
 					Forecasted: 'line',
 					Scheduled: 'line'
 				},
-				colors: {
-					StaffingScaffold: '#FFFFFF',
-					Overstaffing: '#0a84d6',
-					Understaffing: '#D32F2F',
-					CriticalInterval: '#5f5f5f',
-				},
+				colors: this.colors,
 				names: {
 					Forecasted: this.translate.instant('ForecastedAgents'),
 					Scheduled: this.translate.instant('ScheduledAgents'),
@@ -108,59 +110,35 @@ export class IntradayComponent implements OnChanges {
 				return name;
 			};
 		const valueFormat = config.tooltip_format_value || defaultValueFormat;
-		let text: string = null;
 
-		let criticalInterval: number = 0;
-		for (let d of data) {
-			if (d.id === 'CriticalInterval') {
-				if (d.value !== 0) {
-					criticalInterval = d.value;
-				}
-			}
-		}
-
+		const criticalInterval: number = data.filter(d => d.id === 'CriticalInterval')[0].value;
 		const scheduled = data.filter(d => d.id === 'Scheduled')[0];
 		const forecasted = data.filter(d => d.id === 'Forecasted')[0];
 		const relativeDifferenceInterval =(scheduled.value-forecasted.value)/forecasted.value;
+
+		let title = titleFormat(config.axis_x_categories[data[0].index]);
+		let text = "<table class='" + CLASS.tooltip + "'>" + (title ? "<tr><th colspan='2'>" + title + '</th></tr>' : '');
+		
 		for (let d of data) {
-			if (
-				d.id === 'StaffingScaffold' ||
-				d.id === 'CriticalInterval' ||
-				(d.id === 'Overstaffing' && d.value === 0)
-			) {
+			if (d.id === 'StaffingScaffold' || (d.id === 'CriticalInterval' && d.value === 0) || (d.id === 'Understaffing' && d.value === 0) || (d.id === 'Overstaffing' && d.value === 0)) {
 				continue;
 			}
-
-			if (d.id === 'Understaffing') {
-				if (d.value === 0) {
-					if (criticalInterval !== 0) {
-						d.value = criticalInterval;
-					} else {
-						continue;
-					}
-				}
-			}
-
-			if (!text) {
-				let title = titleFormat(config.axis_x_categories[d.index]);
-				text =
-					"<table class='" +
-					CLASS.tooltip +
-					"'>" +
-					(title ? "<tr><th colspan='2'>" + title + '</th></tr>' : '');
-			}
-
 			let name = nameFormat(d.name);
 			let value = valueFormat(d.value, d.ratio, d.id, d.index);
 			let bgcolor = root.levelColor ? root.levelColor(d.value) : color(d.id);
 
 			text += "<tr class='" + CLASS.tooltipName + '-' + d.id + "'>";
+			if(d.id === 'CriticalInterval'){
+				bgcolor = '#D32F2F';
+				name = 'Understaffing';
+			}
 			text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + '</td>';
 			text += "<td class='value'>" + value + '</td>';
 			text += '</tr>';
-			if (d.id === 'Understaffing' || d.id === 'Overstaffing') {
+			if (d.id === 'Understaffing' || d.id === 'Overstaffing' || d.id === 'CriticalInterval') {
 				text += "<tr>";
-				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:#5f5f5f'></span>" + 'Relative understaffing' + '</td>';
+				const nameForPercentage = (d.id === 'Overstaffing'?'Relative overstaffing':'Relative understaffing');
+				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:"+bgcolor+"'></span>" + nameForPercentage + '</td>';
 				text += "<td class='value'"+(criticalInterval!==0?"style='color:#FF0000'":'')+">" + ' '+(Math.abs(relativeDifferenceInterval)*100).toFixed(1)+'% '+'</td>';
 				text += '</tr>';
 			}
