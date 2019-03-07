@@ -37,6 +37,16 @@
 				DateTimeDefaultValues: dateTimeDefaultValues,
 				DateFormatLocale: "@Model.DateFormatLocale"
 			});
+
+		$('.navbar-toggle-button').click(function () {
+			if ( $('.offcanvas.in').length ) {
+				$('.navbar-toggle-button').attr("aria-label", "@Resources.ShowMenu");
+				$('.navbar-toggle-button').attr("aria-expanded", "false");
+			} else {
+				$('.navbar-toggle-button').attr("aria-label", "@Resources.HideMenu");
+				$('.navbar-toggle-button').attr("aria-expanded", "true");
+			}
+		});
 	});
 
 	var requestsMessagesUserTexts = {
@@ -210,7 +220,7 @@
 		<div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
 
 		<div class="navbar-header pull-left">
-			<button type="button" class="navbar-toggle navbar-toggle-button" data-toggle="offcanvas" data-target=".navbar-offcanvas">
+			<button type="button" class="navbar-toggle navbar-toggle-button" data-toggle="offcanvas" data-target=".navbar-offcanvas" aria-label="@Resources.ShowMenu" aria-expanded="false">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
