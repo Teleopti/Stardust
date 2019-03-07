@@ -57,14 +57,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			Browser.Interactions.Click($".remove-approved-period[data-starttime='{from}'][data-endtime='{to}']");
 		}
 
-		[Then(@"I should see adjusted period between'(.*)' and '(.*)'")]
+		[Then(@"I should see adjusted period between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeAdjustedPeriodBetween(string from, string to)
 		{
 			Browser.Interactions.AssertAnyContains(".adjusted-period", from);
 			Browser.Interactions.AssertAnyContains(".adjusted-period", to);
 		}
 
-		[Then(@"I should see neutral adherence between'(.*)' and '(.*)'")]
+		[Then(@"I should see neutral adherence between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeNeutralAdherenceBetween(string from, string to)
 		{
 			Browser.Interactions.AssertExists(".neutral-adherence[data-starttime='{0}'][data-endtime='{1}']", from, to);

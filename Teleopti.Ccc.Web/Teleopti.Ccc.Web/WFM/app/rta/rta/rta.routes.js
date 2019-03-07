@@ -6,7 +6,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 
 	$stateProvider
         .state('rta-adjust-adherence', {
-            url: '/rta/adjust-adherence',
+            url: '/rta/adjust-adherence?testMode',
             templateUrl: function () {
                 if (toggles.RTA_AdjustAdherenceToNeutral_80594)
                 	return 'app/rta/rta/adjust-adherence/adjust.adherence.html';
