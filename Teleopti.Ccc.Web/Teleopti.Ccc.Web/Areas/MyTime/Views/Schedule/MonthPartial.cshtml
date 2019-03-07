@@ -9,27 +9,55 @@
 			<li class="col-xs-12 col-sm-4">
 				<span class="input-group " style="max-width: 329px;">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" data-bind="click: previousMonth" aria-label="@Resources.PreviousMonth">
+						<button
+							class="btn btn-default"
+							type="button"
+							data-bind="click: previousMonth"
+							aria-label="@Resources.PreviousMonth"
+						>
 							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
-					<input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
+					<input
+						id="CurrentMonth"
+						class="form-control text-center"
+						type="text"
+						data-bind="value: formattedSelectedDate"
+						value=""
+						readonly="readonly"
+					/>
 					<div class="input-group-btn">
-						<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }" aria-label="@Resources.SelectMonth" aria-haspopup="true">
+						<button
+							class="btn btn-default"
+							type="button"
+							data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }"
+							aria-label="@Resources.SelectMonth"
+							aria-haspopup="true"
+						>
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
-						<button class="btn btn-default" type="button" data-bind="click: nextMonth" aria-label="@Resources.NextMonth">
+						<button
+							class="btn btn-default"
+							type="button"
+							data-bind="click: nextMonth"
+							aria-label="@Resources.NextMonth"
+						>
 							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 					</div>
 				</span>
 			</li>
-			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-			<li class="col-xs-12 col-sm-4"><a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-			<li class="col-xs-12 col-sm-4 active"><a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+			<li class="col-xs-12 col-sm-4">
+				<a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a>
+			</li>
+			<li class="col-xs-12 col-sm-4">
+				<a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a>
+			</li>
+			<li class="col-xs-12 col-sm-4 active">
+				<a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a>
+			</li>
 		</ul>
 	</div>
-
 </div>
 
 <div class="container pagebody">
@@ -41,7 +69,11 @@
 			<div class="cal-cell cal-weekday-header weekday-name" data-bind="text: Name"></div>
 		</div>
 
-		<div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames" aria-hidden="true">
+		<div
+			class="cal-row-fluid cal-row-head hidden-lg hidden-md"
+			data-bind="foreach: weekDayNames"
+			aria-hidden="true"
+		>
 			<div class="cal-cell cal-weekday-header weekday-shortname" data-bind="text: ShortName"></div>
 		</div>
 
@@ -49,17 +81,22 @@
 			<div class="cal-row-fluid" data-bind="foreach: dayViewModels">
 				<div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
 					<div class="cal-month-day" data-bind="click: $root.week,css: {'cal-day-outmonth': isOutsideMonth,}">
-						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date, 'aria-label' : bankHoliday!=null?(dayOfWeek + ' ' + date + ', ' + bankHoliday.dateDescription):(dayOfWeek + ' ' + date) },css: {'bank-holiday-day-shape':bankHoliday!=null},tooltip:{title: bankHoliday!=null?bankHoliday.dateDescription:null, html: true}"
-							class="day-header-day label label-default" role="heading"></span>
+						<span
+							data-bind="text: dayOfMonth, attr: { 'data-cal-date': date, 'aria-label' : bankHoliday!=null?(dayOfWeek + ' ' + date + ', ' + bankHoliday.dateDescription):(dayOfWeek + ' ' + date) },css: {'bank-holiday-day-shape':bankHoliday!=null},tooltip:{title: bankHoliday!=null?bankHoliday.dateDescription:null, html: true}"
+							class="day-header-day label label-default"
+							role="heading"
+						></span>
 
 						<!-- ko if: hasAbsence -->
-						<div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
+						<div
+							class="absence"
+							data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }"
+						>
 							<!-- ko if: !hasShift || isFullDayAbsence -->
 							<strong class="visible-lg" data-bind="text: absenceName"></strong>
 							<strong class="visible-md" data-bind="text: absenceName"></strong>
 							<div class="hidden-md hidden-lg">
 								<strong data-bind="text: absenceShortName"></strong>
-
 							</div>
 							<!--ko if:hasOvertime-->
 							<div class="overtime">
@@ -77,7 +114,10 @@
 						</div>
 						<!-- /ko -->
 						<!-- ko if: hasShift && !isFullDayAbsence -->
-						<div class="shift" data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }">
+						<div
+							class="shift"
+							data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }"
+						>
 							<div>
 								<strong class="visible-lg visible-md" data-bind="text: shiftName"></strong>
 								<div class="hidden-md hidden-lg">
@@ -94,19 +134,22 @@
 							<!-- ko if: hasSeatBooking-->
 
 							<table class="hidden-xs hidden-sm seat-booking-table">
-
 								<tr class="seat-booking-row" data-bind="foreach: seatBookings">
 									<td>
-										<div class="seatbooking-symbol" data-bind="tooltip: { title: $parent.seatBookingMessage, html: true }"></div>
+										<div
+											class="seatbooking-symbol"
+											data-bind="tooltip: { title: $parent.seatBookingMessage, html: true }"
+										></div>
 									</td>
 									<td>
-										<div data-bind="text: $parent.seatName($data), tooltip: { title: $parent.seatBookingMessage, html: true }"></div>
+										<div
+											data-bind="text: $parent.seatName($data), tooltip: { title: $parent.seatBookingMessage, html: true }"
+										></div>
 									</td>
 								</tr>
 							</table>
 
 							<!-- /ko -->
-
 						</div>
 						<!-- /ko -->
 						<!-- ko if: isDayOff && !hasAbsence -->
@@ -119,7 +162,6 @@
 							<!-- /ko -->
 						</div>
 						<!-- /ko -->
-
 					</div>
 				</div>
 			</div>

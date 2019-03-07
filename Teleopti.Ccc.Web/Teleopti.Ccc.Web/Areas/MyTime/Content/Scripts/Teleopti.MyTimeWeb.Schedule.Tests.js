@@ -368,9 +368,9 @@
 		equal($('.traffic-light-progress').length, 0);
 	});
 
-	test('should not show new "traffic light" icon for past time on week view', function () {
+	test('should not show new "traffic light" icon for past time on week view', function() {
 		var fakeAjax = {
-			Ajax: function (option) {
+			Ajax: function(option) {
 				if (option.url === '../api/Schedule/FetchWeekData') {
 					option.success(getFakeScheduleData());
 				}
@@ -397,11 +397,11 @@
 
 		$('body').append(setupHtml());
 
-		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function (callback) {
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function(callback) {
 			callback({ WeekStart: 1 });
 		};
 
-		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { }, function () { }, fakeAjax);
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function() {}, function() {}, fakeAjax);
 		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
@@ -409,9 +409,15 @@
 
 		var vm = Teleopti.MyTimeWeb.Schedule.Vm();
 		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.Days[0].FixedDate = moment(fakeScheduleData.Days[0].FixedDate).add('day', -3).format('YYYY-MM-DD');
-		fakeScheduleData.Days[1].FixedDate = moment(fakeScheduleData.Days[1].FixedDate).add('day', -3).format('YYYY-MM-DD');
-		fakeScheduleData.Days[2].FixedDate = moment(fakeScheduleData.Days[2].FixedDate).add('day', -3).format('YYYY-MM-DD');
+		fakeScheduleData.Days[0].FixedDate = moment(fakeScheduleData.Days[0].FixedDate)
+			.add('day', -3)
+			.format('YYYY-MM-DD');
+		fakeScheduleData.Days[1].FixedDate = moment(fakeScheduleData.Days[1].FixedDate)
+			.add('day', -3)
+			.format('YYYY-MM-DD');
+		fakeScheduleData.Days[2].FixedDate = moment(fakeScheduleData.Days[2].FixedDate)
+			.add('day', -3)
+			.format('YYYY-MM-DD');
 		vm.initializeData(fakeScheduleData);
 
 		equal($('.traffic-light-progress').length, 0);
