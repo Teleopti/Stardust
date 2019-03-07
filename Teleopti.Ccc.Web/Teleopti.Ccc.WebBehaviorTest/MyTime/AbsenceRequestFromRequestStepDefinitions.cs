@@ -23,7 +23,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest(null, false));
 		}
-		
+
+		[Given(@"I have two requestable absences")]
+		public void GivenIHaveDeniedAbsenceRequestWithTwoAbsenceType()
+		{
+			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Vacation", Requestable = true });
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open1",
+					AvailableAbsence = "Vacation",
+					AbsenceRequestWaitlistEnabled = true,
+					AutoGrant = "yes"
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open1" });
+
+			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Holiday", Requestable = true });
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open2",
+					AvailableAbsence = "Holiday",
+					AbsenceRequestWaitlistEnabled = true,
+					AutoGrant = "yes"
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open2" });
+		}
+
+
 		[When(@"I change the absence request values with")]
 		public void WhenIChangeTheAbsenceRequestValuesWith(Table table)
 		{
