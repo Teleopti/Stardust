@@ -25,6 +25,14 @@ export class IntradayComponent implements OnChanges {
 		CriticalInterval: '#5f5f5f',
 	};
 	
+	names = {
+		Forecasted: this.translate.instant('ForecastedAgents'),
+		Scheduled: this.translate.instant('ScheduledAgents'),
+		Overstaffing: this.translate.instant('Overstaffing'),
+		Understaffing: this.translate.instant('Understaffing'),
+		CriticalInterval: this.translate.instant('CriticalInterval'),
+	};
+	
 	constructor(private translate: TranslateService) {
 	}
 
@@ -73,13 +81,7 @@ export class IntradayComponent implements OnChanges {
 					Scheduled: 'line'
 				},
 				colors: this.colors,
-				names: {
-					Forecasted: this.translate.instant('ForecastedAgents'),
-					Scheduled: this.translate.instant('ScheduledAgents'),
-					Overstaffing: this.translate.instant('Overstaffing'),
-					Understaffing: this.translate.instant('Understaffing'),
-					CriticalInterval: this.translate.instant('CriticalInterval'),
-				},
+				names: this.names,
 				groups: [['StaffingScaffold', 'Overstaffing', 'Understaffing', 'CriticalInterval']]
 			};
 		} else {
@@ -99,52 +101,39 @@ export class IntradayComponent implements OnChanges {
 		}
 	}
 
-	private tooltip_contents(data, defaultTitleFormat, defaultValueFormat, color): string {
-		const root: any = this;
-		const config = root.config;
-		const CLASS = root.CLASS;
-		const titleFormat = config.tooltip_format_title || defaultTitleFormat;
-		const nameFormat =
-			config.tooltip_format_name ||
-			function(name) {
-				return name;
-			};
-		const valueFormat = config.tooltip_format_value || defaultValueFormat;
-
-		const criticalInterval: number = data.filter(d => d.id === 'CriticalInterval')[0].value;
+	tooltip_contents = (data, defaultTitleFormat, defaultValueFormat, color): string => {
 		const scheduled = data.filter(d => d.id === 'Scheduled')[0];
 		const forecasted = data.filter(d => d.id === 'Forecasted')[0];
 		const relativeDifferenceInterval =(scheduled.value-forecasted.value)/forecasted.value;
-
-		let title = titleFormat(config.axis_x_categories[data[0].index]);
-		let text = "<table class='" + CLASS.tooltip + "'>" + (title ? "<tr><th colspan='2'>" + title + '</th></tr>' : '');
-		
+		const criticalInterval: number = data.filter(d => d.id === 'CriticalInterval')[0].value;
+		let title = defaultTitleFormat(this.chart.category(data[0].index));
+		let text = "<table class='c3-tooltip'>" + (title ? "<tr><th colspan='2'>" + title + '</th></tr>' : '');
 		for (let d of data) {
 			if (d.id === 'StaffingScaffold' || (d.id === 'CriticalInterval' && d.value === 0) || (d.id === 'Understaffing' && d.value === 0) || (d.id === 'Overstaffing' && d.value === 0)) {
 				continue;
 			}
-			let name = nameFormat(d.name);
-			let value = valueFormat(d.value, d.ratio, d.id, d.index);
-			let bgcolor = root.levelColor ? root.levelColor(d.value) : color(d.id);
+			let name = d.name;
+			let value = defaultValueFormat(d.value, d.ratio, d.id, d.index);
+			let bgcolor = color(d.id);
 
-			text += "<tr class='" + CLASS.tooltipName + '-' + d.id + "'>";
+			text += "<tr>";
 			if(d.id === 'CriticalInterval'){
-				bgcolor = '#D32F2F';
-				name = 'Understaffing';
+				bgcolor = this.colors.Understaffing;
+				name = this.names.Understaffing;
 			}
 			text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + '</td>';
 			text += "<td class='value'>" + value + '</td>';
 			text += '</tr>';
 			if (d.id === 'Understaffing' || d.id === 'Overstaffing' || d.id === 'CriticalInterval') {
 				text += "<tr>";
-				const nameForPercentage = (d.id === 'Overstaffing'?'Relative overstaffing':'Relative understaffing');
+				const nameForPercentage = (d.id === 'Overstaffing'?this.translate.instant('RelativeOverstaffing'):this.translate.instant('RelativeUnderstaffing'));
 				text += "<td class='name'"+(criticalInterval!==0?"style='color:#FF0000'":'')+"><span style='background-color:"+bgcolor+"'></span>" + nameForPercentage + '</td>';
 				text += "<td class='value'"+(criticalInterval!==0?"style='color:#FF0000'":'')+">" + ' '+(Math.abs(relativeDifferenceInterval)*100).toFixed(1)+'% '+'</td>';
 				text += '</tr>';
 			}
 		}
 		return text + '</table>';
-	}
+	};
 
 	private initChart(inData: c3.Data) {
 		if (this.chart) {

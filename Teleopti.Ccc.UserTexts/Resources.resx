@@ -4177,6 +4177,14 @@ Accounts</value>
     <value>Has critical intervals</value>
     <comment>Used in plans heatmap tooltip</comment>
   </data>
+  <data name="RelativeOverstaffing" xml:space="preserve">
+    <value>Relative overstaffing</value>
+    <comment>Used in plans intraday chart tooltip</comment>
+  </data>
+  <data name="RelativeUnderstaffing" xml:space="preserve">
+    <value>Relative understaffing</value>
+    <comment>Used in plans intraday chart tooltip</comment>
+  </data>
   <data name="StaffingLevels" xml:space="preserve">
     <value>Staffing levels</value>
     <comment>Label for skill create</comment>
