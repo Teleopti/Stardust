@@ -173,31 +173,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
-		public void ShouldApproveWhenNotUseMaximumWorkday()
-		{
-			Now.Is("2018-05-09 06:00");
-			var personFromId = Guid.NewGuid();
-			var personToId = Guid.NewGuid();
-			Database
-				.WithShiftTradeWorkflow(2);
-			WithBusinessRuleForShiftTrade();
-			Database
-				.WithAgent(personFromId)
-				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
-				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
-				.WithScheduleDayOff("2018-05-11")
-				.WithAgent(personToId)
-				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
-				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")
-				;
-
-			Target.Handle(createAcceptShiftTradeEvent(personToId, false));
-
-			var handledRequest = PersonRequestRepository.Get(Database.CurrentPersonRequestId());
-			handledRequest.IsApproved.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldApprovedWhenMaximumWorkdaySettingDisabled()
 		{
 			Now.Is("2018-05-09 06:00");
@@ -315,15 +290,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				});
 		}
 
-		private AcceptShiftTradeEvent createAcceptShiftTradeEvent(Guid personToId, bool useMaximumWorkday = true)
+		private AcceptShiftTradeEvent createAcceptShiftTradeEvent(Guid personToId)
 		{
 			return new AcceptShiftTradeEvent
 			{
 				LogOnDatasource = Database.TenantName(),
 				LogOnBusinessUnitId = Database.CurrentBusinessUnitId(),
 				AcceptingPersonId = personToId,
-				PersonRequestId = Database.CurrentPersonRequestId(),
-				UseMaximumWorkday = useMaximumWorkday
+				PersonRequestId = Database.CurrentPersonRequestId()
 			};
 		}
 	}

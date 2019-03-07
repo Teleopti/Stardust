@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			return person;
 		}
 
-		internal IPersonRequest PrepareAndExecuteRequest(IPerson personTo, IPerson personFrom, DateOnly scheduleDateOnly, IPerson[] allPeople, DateTime scheduleDate)
+		internal IPersonRequest PrepareAndExecuteRequest(IPerson personTo, IPerson personFrom, DateOnly scheduleDateOnly, IPerson[] allPeople, DateTime scheduleDate,ShiftTradeBusinessRuleConfig[] shiftTradeBusinessRuleConfigs=null)
 		{
 			SetPersonAccounts(personTo, personFrom, scheduleDateOnly);
 			var personRequest = PrepareAndGetPersonRequest(personFrom, personTo, scheduleDateOnly);
@@ -143,7 +143,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var @event = GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
 			@event.UseSiteOpenHoursRule = true;
 
-			var businessRuleProvider = new BusinessRuleProvider();
+			BusinessRuleProvider businessRuleProvider;
+			if (shiftTradeBusinessRuleConfigs == null)
+			{
+				businessRuleProvider = new BusinessRuleProvider();
+			}
+			else
+			{
+				var shiftTradeSettings = new ShiftTradeSettings
+				{
+					BusinessRuleConfigs = shiftTradeBusinessRuleConfigs
+				};
+				_globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, shiftTradeSettings);
+				businessRuleProvider = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
+			}
+
 			var scheduleDictionary =
 				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(allPeople, new ScheduleDictionaryLoadOptions(false,false), 
 					new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());

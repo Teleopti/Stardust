@@ -126,6 +126,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 					Enabled = false,
 					HandleOptionOnFailed = RequestHandleOption.AutoDeny
 				}
+				,
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+					Enabled = false,
+					HandleOptionOnFailed = RequestHandleOption.AutoDeny
+				}
 			);
 			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
 			Assert.IsTrue(personRequest.IsApproved);
@@ -333,6 +340,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 					BusinessRuleType = typeof(NightlyRestRule).FullName,
 					Enabled = true,
 					HandleOptionOnFailed = RequestHandleOption.Pending
+				},
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+					Enabled = false,
+					HandleOptionOnFailed = RequestHandleOption.AutoDeny
 				}
 			);
 
@@ -399,6 +412,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new DayOffTemplate(new Description("DayOff_PersonTo")));
 			PersonAssignmentRepository.Add(assPersonTo);
 
+			var businessRuleProvider = getConfigurableBusinessRuleProvider(
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+					Enabled = false,
+					HandleOptionOnFailed = RequestHandleOption.AutoDeny
+				}
+			);
+
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
 				new ScheduleDictionaryLoadOptions(false,false), new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
 			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
@@ -412,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_shiftTradeTestHelper.HandleRequest(
 				_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, shiftTradeRequest.Id.GetValueOrDefault()),
-				getConfigurableBusinessRuleProvider());
+				businessRuleProvider);
 
 			Assert.IsTrue(shiftTradeRequest.IsApproved);
 
@@ -470,6 +492,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new DayOffTemplate(new Description("DayOff_PersonTo")));
 			PersonAssignmentRepository.Add(assPersonTo);
 
+			var businessRuleProvider = getConfigurableBusinessRuleProvider(
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+					Enabled = false,
+					HandleOptionOnFailed = RequestHandleOption.AutoDeny
+				}
+			);
+
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
 				new ScheduleDictionaryLoadOptions(false,false), new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
 			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
@@ -483,7 +514,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_shiftTradeTestHelper.HandleRequest(
 				_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, shiftTradeRequest.Id.GetValueOrDefault()),
-				getConfigurableBusinessRuleProvider());
+				businessRuleProvider);
 
 			Assert.IsTrue(shiftTradeRequest.IsApproved);
 
@@ -565,9 +596,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				PersonRequest = personRequest
 			};
 		}
-		
+
 		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool autoGrantShiftTrade = true, 
-			IShiftExchangeOffer offer = null, bool useMaximumWorkday = false)
+			IShiftExchangeOffer offer = null)
 		{
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
@@ -597,8 +628,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var @event = _shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
 			@event.UseSiteOpenHoursRule = true;
-			@event.UseMaximumWorkday = useMaximumWorkday;
-			_schedulingResultStateHolder.UseMaximumWorkday = useMaximumWorkday;
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, new ScheduleDictionaryLoadOptions(false,false), 
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.LoadDefaultScenario());

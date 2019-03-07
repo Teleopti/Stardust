@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
@@ -97,8 +98,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFrom = createPersonWithSiteMaxSeats(1);
 			addPersonAssignment(personFrom, afternoonShiftTimePeriodSite2, requiresSeatActivity);
 
+			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+				Enabled = false,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+
 			var personRequest15MinuteInterval = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
-				new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
+				new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate, new[] { shiftTradeBusinessRuleConfig });
 
 			ShiftTradeTestHelper.OverrideShiftTradeGlobalSettings(new ShiftTradeSettings
 			{
@@ -219,7 +227,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFrom = createPersonWithSiteMaxSeats(1);
 			addPersonAssignment(personFrom, morningShiftTimePeriod, requiresSeatActivity);
 
-			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
+			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+				Enabled = false,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate,new[] { shiftTradeBusinessRuleConfig });
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
@@ -256,7 +271,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFrom = createPersonWithSiteMaxSeats(1);
 			addPersonAssignment(personFrom, morningShiftTimePeriod, requiresSeatActivity);
 
-			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
+			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+				Enabled = false,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate,new[] { shiftTradeBusinessRuleConfig });
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
@@ -307,8 +329,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				createActivity (true, startTime.AddHours (3), startTime.AddHours (4), requiresSeatActivity, doesNotRequireSeatActivity),
 				createActivity (false, startTime.AddHours (4), startTime.AddHours (5), requiresSeatActivity, doesNotRequireSeatActivity)
 			});
-
-			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
+			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(MaximumWorkdayRule).FullName,
+				Enabled = false,
+				HandleOptionOnFailed = RequestHandleOption.AutoDeny
+			};
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate, new[] { shiftTradeBusinessRuleConfig });
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}

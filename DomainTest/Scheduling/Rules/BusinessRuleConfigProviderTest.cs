@@ -22,13 +22,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var ruleToRemove1 = typeof(MinWeeklyRestRule);
 			var ruleToRemove2 = typeof(MinWeekWorkTimeRule);
+			var ruleToRemove3 = typeof(MaximumWorkdayRule);
 
-			var rulesToRemove = new List<Type> { ruleToRemove1, ruleToRemove2 };
+			var rulesToRemove = new List<Type> { ruleToRemove1, ruleToRemove2 , ruleToRemove3 };
 
 			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			var businessRules = NewBusinessRuleCollection.All(new SchedulingResultStateHolder());
 			businessRules.DoNotHaltModify(ruleToRemove1);
 			businessRules.DoNotHaltModify(ruleToRemove2);
+			businessRules.DoNotHaltModify(ruleToRemove3);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
@@ -79,7 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldReturnMaximumWorkdayRuleConfig()
 		{
 			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
-			stateHolder.UseMaximumWorkday = true;
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -95,7 +96,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldSetDefaultFalseForMaximumWorkdayRuleConfig()
 		{
 			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
-			stateHolder.UseMaximumWorkday = true;
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -110,22 +110,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				if (shiftTradeBusinessRuleConfig.BusinessRuleType == typeof(MaximumWorkdayRule).FullName)
 					Assert.IsTrue(shiftTradeBusinessRuleConfig.Enabled == false);
 			}
-		}
-
-		[Test]
-		public void ShouldNotReturnMaximumWorkdayRuleConfig()
-		{
-			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
-			stateHolder.UseMaximumWorkday = false;
-			var businessRules = NewBusinessRuleCollection.All(stateHolder);
-
-			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
-			businessRuleProvider.Stub(x => x.GetBusinessRulesForShiftTradeRequest(stateHolder, true))
-				.IgnoreArguments().Return(businessRules);
-
-			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder, new IShiftTradeSpecification[] { });
-			var result = target.GetDefaultConfigForShiftTradeRequest().ToList();
-			Assert.IsFalse(result.Any(r => r.BusinessRuleType == typeof(MaximumWorkdayRule).FullName));
 		}
 
 		[Test]
