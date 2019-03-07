@@ -72,8 +72,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			try
 			{
-				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
-				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+				var workflowControlSet = personRequest.Person.WorkflowControlSet;
+				var absenceRequest = (IAbsenceRequest)personRequest.Request;
+
+				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
 				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
@@ -81,27 +83,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var loadSchedulesPeriodToCoverForMidnightShifts = requestPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
-
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
-				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod).ToList();
-
-				var absenceRequest = (IAbsenceRequest) personRequest.Request;
-				var adjustedRequestPeriod = requestPeriod;
-				if (absenceRequest.FullDay)
-				{
-					var scheduleDayToday = scheduleDays.SingleOrDefault(x => x.Period.Contains(requestPeriod));
-					if (scheduleDayToday != null)
-					{
-						var shiftPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(requestPeriod,
-							personRequest.Person, scheduleDayToday, scheduleDayToday,_globalSettingDataRepository);
-						adjustedRequestPeriod = new DateTimePeriod(requestPeriod.StartDateTime, shiftPeriod.EndDateTime);
-					}
-				}
-
-				if (personRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
+				
+				if (workflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
 				{
 					var periods = personRequest.Person.PersonPeriods(requestPeriod.ToDateOnlyPeriod(timeZone));
-					var absenceReqThresh = personRequest.Person.WorkflowControlSet.AbsenceRequestExpiredThreshold.GetValueOrDefault();
+					var absenceReqThresh = workflowControlSet.AbsenceRequestExpiredThreshold.GetValueOrDefault();
 					var skills = periods.SelectMany(x => x.PersonSkillCollection.Select(y => y.Skill.Id.GetValueOrDefault())).Distinct();
 
 					var hasWaitlisted = _personRequestRepository.HasWaitlistedRequestsOnSkill(skills,
@@ -113,6 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						return;
 					}
 				}
+
 				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
 					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonSystemBusy, CultureInfo.GetCultureInfo("en-US")) + $"Read model is not up to date Request {personRequest.Request.Id}");
@@ -120,14 +107,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
+				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod).ToList();
+				var adjustedRequestPeriod = adjustFullDayRequestPeriodForOvernightShift(scheduleDays, absenceRequest);
+
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(adjustedRequestPeriod).ToArray();
 
-				dynamic skillCombLogObject = new ExpandoObject();
-				skillCombLogObject.SkillCombinationResourcesRaw = combinationResources;
-				skillCombLogObject.SkillCombinationResourcesZeroresources = combinationResources.Where(x => x.Resource <= 0);
-				
 				if (!combinationResources.Any())
 				{
 					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonNoSkillCombinationsFound, CultureInfo.GetCultureInfo("en-US")) + $" Can not find any skillcombinations for period {requestPeriod} and Request {personRequest.Request.Id}.");
@@ -135,6 +122,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 
+				dynamic skillCombLogObject = new ExpandoObject();
+				skillCombLogObject.SkillCombinationResourcesRaw = combinationResources;
+				skillCombLogObject.SkillCombinationResourcesZeroresources = combinationResources.Where(x => x.Resource <= 0);
+				
 				_activityRepository.LoadAll();
 				var allSkills = _skillRepository.LoadAll().ToHashSet();
 				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToHashSet();
@@ -160,27 +151,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				skillCombLogObject.SkillCombinationZeroResourcesAfterDeltaDist = combinationResources.Where(x => x.Resource <= 0);
 				_extensiveLogRepository.Add(skillCombLogObject, personRequest.Id.GetValueOrDefault(), "PersonRequest.CombinationResources");
 
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
 				if (staffingThresholdValidators.Any())
 				{
-					var originRequestDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(requestPeriod.StartDateTime.Date),
-						new DateOnly(requestPeriod.EndDateTime.Date));
-					var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(originRequestDateOnlyPeriod, allSkills, _currentScenario.Current());
+					calculateForecastedAgentsForEmailSkills(requestPeriod, false, allSkills);
 
-					calculateForecastedAgentsForEmailSkills(requestPeriod, false, skillDaysBySkills);
-					
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
-					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(adjustedRequestPeriod, combinationResources.ToList(), useShrinkage);
-					var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
-					foreach (var projectionPeriod in shiftPeriodList)
-					{
-						var staffingIntervalsWithinPeriod = skillStaffingIntervals.Where(x =>
-							x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime).ToList();
-						
-						requestsLogger.Debug($"Adding {staffingIntervalsWithinPeriod.Count} intervals to validate for request: {personRequest.Request.Id} from period: {projectionPeriod.StartDateTime} - {projectionPeriod.EndDateTime}");
-						skillStaffingIntervalsToValidate.AddRange(staffingIntervalsWithinPeriod);
-					}
-					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)personRequest.Request, skillStaffingIntervalsToValidate);
+					var validator = staffingThresholdValidators.First();
+					var skillStaffingIntervalsToValidate = getFilteredSkillStaffingIntervals(adjustedRequestPeriod, combinationResources, useShrinkage, shiftPeriodList, personRequest.Request.Id);
+
+					var validatedRequest = validator.ValidateLight(absenceRequest, skillStaffingIntervalsToValidate);
 
 					dynamic logObject = new ExpandoObject();
 					logObject.ValidationResult = validatedRequest;
@@ -212,6 +193,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonSystemBusy, CultureInfo.GetCultureInfo("en-US")) + exp);
 				sendDenyCommand(personRequest, Resources.DenyReasonSystemBusy, PersonRequestDenyOption.TechnicalIssues);
 			}
+		}
+
+		private DateTimePeriod adjustFullDayRequestPeriodForOvernightShift(List<IScheduleDay> scheduleDays,IAbsenceRequest absenceRequest)
+		{
+			var adjustedRequestPeriod = absenceRequest.Period;
+			if (absenceRequest.FullDay)
+			{
+				var scheduleDayToday = scheduleDays.SingleOrDefault(x => x.Period.Contains(absenceRequest.Period));
+				if (scheduleDayToday != null)
+				{
+					var shiftPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(absenceRequest.Period,
+						absenceRequest.Person, scheduleDayToday, scheduleDayToday, _globalSettingDataRepository);
+					adjustedRequestPeriod = new DateTimePeriod(absenceRequest.Period.StartDateTime, shiftPeriod.EndDateTime);
+				}
+			}
+
+			return adjustedRequestPeriod;
+		}
+
+		private List<SkillStaffingInterval> getFilteredSkillStaffingIntervals(DateTimePeriod requestPeriod,
+			SkillCombinationResource[] combinationResources, bool useShrinkage, List<DateTimePeriod> shiftPeriodList,
+			Guid? requestId)
+		{
+			var skillStaffingIntervals =
+				_skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(requestPeriod,
+					combinationResources.ToList(), useShrinkage);
+			var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
+			foreach (var projectionPeriod in shiftPeriodList)
+			{
+				var staffingIntervalsWithinPeriod = skillStaffingIntervals.Where(x =>
+						x.StartDateTime >= projectionPeriod.StartDateTime &&
+						x.StartDateTime < projectionPeriod.EndDateTime)
+					.ToList();
+
+				requestsLogger.Debug(
+					$"Adding {staffingIntervalsWithinPeriod.Count} intervals to validate for request: {requestId} from period: {projectionPeriod.StartDateTime} - {projectionPeriod.EndDateTime}");
+				skillStaffingIntervalsToValidate.AddRange(staffingIntervalsWithinPeriod);
+			}
+
+			return skillStaffingIntervalsToValidate;
 		}
 
 		private void sendDenyCommand(IPersonRequest personRequest, string denyReason, PersonRequestDenyOption denyOption)
@@ -250,8 +271,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		private void calculateForecastedAgentsForEmailSkills(DateTimePeriod period, bool useShrinkage,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+			HashSet<ISkill> allSkills)
 		{
+			var originRequestDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.Date),
+				new DateOnly(period.EndDateTime.Date));
+			var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(originRequestDateOnlyPeriod, allSkills, _currentScenario.Current());
+
 			var skillGroupsByResuolution = skillDays.Keys
 				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
 				.GroupBy(x => x.DefaultResolution);
