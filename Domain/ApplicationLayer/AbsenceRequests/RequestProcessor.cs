@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using System.Globalization;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IExtensiveLogRepository _extensiveLogRepository;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		public RequestProcessor(ICommandDispatcher commandDispatcher,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository,
@@ -45,7 +47,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now, SmartDeltaDoer smartDeltaDoer,
-			ISkillDayLoadHelper skillDayLoadHelper, IScheduledStaffingProvider scheduledStaffingProvider, IExtensiveLogRepository extensiveLogRepositor)
+			ISkillDayLoadHelper skillDayLoadHelper, IScheduledStaffingProvider scheduledStaffingProvider, IExtensiveLogRepository extensiveLogRepositor,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -62,6 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_extensiveLogRepository = extensiveLogRepositor;
+			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -77,6 +81,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var loadSchedulesPeriodToCoverForMidnightShifts = requestPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
+
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
+				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod).ToList();
+
+				var absenceRequest = (IAbsenceRequest) personRequest.Request;
+				var adjustedRequestPeriod = requestPeriod;
+				if (absenceRequest.FullDay)
+				{
+					var scheduleDayToday = scheduleDays.SingleOrDefault(x => x.Period.Contains(requestPeriod));
+					if (scheduleDayToday != null)
+					{
+						var shiftPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(requestPeriod,
+							personRequest.Person, scheduleDayToday, scheduleDayToday,_globalSettingDataRepository);
+						adjustedRequestPeriod = new DateTimePeriod(requestPeriod.StartDateTime, shiftPeriod.EndDateTime);
+					}
+				}
 
 				if (personRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
 				{
@@ -102,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
-				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(requestPeriod).ToArray();
+				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(adjustedRequestPeriod).ToArray();
 
 				dynamic skillCombLogObject = new ExpandoObject();
 				skillCombLogObject.SkillCombinationResourcesRaw = combinationResources;
@@ -117,14 +137,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				_activityRepository.LoadAll();
 				var allSkills = _skillRepository.LoadAll().ToHashSet();
-
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
-
-				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
-
 				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToHashSet();
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
-				
+
 				var shiftPeriodList = new List<DateTimePeriod>();
 				foreach (var day in scheduleDays)
 				{
@@ -155,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					calculateForecastedAgentsForEmailSkills(requestPeriod, false, skillDaysBySkills);
 					
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
-					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(requestPeriod, combinationResources.ToList(), useShrinkage);
+					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(adjustedRequestPeriod, combinationResources.ToList(), useShrinkage);
 					var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
 					foreach (var projectionPeriod in shiftPeriodList)
 					{

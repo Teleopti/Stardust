@@ -1748,7 +1748,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 2));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 2));
 
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod){FullDay = true}).WithId();
 
 			Target.Process(personRequest);
 
