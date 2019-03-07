@@ -236,15 +236,15 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<div>
 								<span class="gold-badge">
-									<i class="glyphicon glyphicon-star" style="color: gold"></i>
+									<i class="glyphicon glyphicon-star" style="color: gold" aria-label="Gold badges"></i>
 									@Model.Badges.Sum(x => x.GoldBadge)
 								</span>
 								<span class="silver-badge">
-									<i class="glyphicon glyphicon-star" style="color: silver"></i>
+									<i class="glyphicon glyphicon-star" style="color: silver" aria-label="Silver badges"></i>
 									@Model.Badges.Sum(x => x.SilverBadge)
 								</span>
 								<span class="bronze-badge">
-									<i class="glyphicon glyphicon-star" style="color: brown"></i>
+									<i class="glyphicon glyphicon-star" style="color: brown" aria-label="Bronze badges"></i>
 									@Model.Badges.Sum(x => x.BronzeBadge)
 								</span>
 							</div>
@@ -267,15 +267,15 @@
 										<div class="badge-detail" data-bind="foreach: badgeCounts">
 											<div class="badge-type" data-bind="text: $data.Name"></div>
 											<span class="gold-badge">
-												<i class="glyphicon glyphicon-star" style="color: gold"></i>
+												<i class="glyphicon glyphicon-star" style="color: gold" aria-label="Gold badges"></i>
 												<span data-bind="text: $data.GoldBadge"></span>
 											</span>
 											<span class="silver-badge">
-												<i class="glyphicon glyphicon-star" style="color: silver"></i>
+												<i class="glyphicon glyphicon-star" style="color: silver" aria-label="Silver badges"></i>
 												<span data-bind="text: $data.SilverBadge"></span>
 											</span>
 											<span class="bronze-badge">
-												<i class="glyphicon glyphicon-star" style="color: brown"></i>
+												<i class="glyphicon glyphicon-star" style="color: brown" aria-label="Bronze badges"></i>
 												<span data-bind="text: $data.BronzeBadge"></span>
 											</span>
 										</div>
@@ -289,15 +289,15 @@
 											<div class="badge-detail">
 												<div class="badge-type">@badge.Name</div>
 												<span class="gold-badge">
-													<i class="glyphicon glyphicon-star" style="color: gold"></i>
+													<i class="glyphicon glyphicon-star" style="color: gold" aria-label="Gold badges"></i>
 													@badge.GoldBadge
 												</span>
 												<span class="silver-badge">
-													<i class="glyphicon glyphicon-star" style="color: silver"></i>
+													<i class="glyphicon glyphicon-star" style="color: silver" aria-label="Silver badges"></i>
 													@badge.SilverBadge
 												</span>
 												<span class="bronze-badge">
-													<i class="glyphicon glyphicon-star" style="color: brown"></i>
+													<i class="glyphicon glyphicon-star" style="color: brown" aria-label="Bronze badges"></i>
 													@badge.BronzeBadge
 												</span>
 											</div>
@@ -309,11 +309,11 @@
 					</li>
 				}
 				<li class="dropdown pull-left" id="user-settings">
-					<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">
+					<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown" aria-haspopup="true">
 						<i class="glyphicon glyphicon-user"></i>
 						<span class="user-name" title=@Model.CurrentLogonAgentName><small> @Model.CurrentLogonAgentName</small></span> <b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu show-outside-toolbar">
+					<ul class="dropdown-menu show-outside-toolbar" role="menu">
 						<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
 						@if (Model.ShowChangePassword)
 						{
@@ -366,8 +366,8 @@
 				@if (Model.ReportNavigationItems.Any())
 				{
 					<li class="dropdown">
-						<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
-						<ul id="report-list" class="dropdown-menu">
+						<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">@Resources.Reports <b class="caret"></b></a>
+						<ul id="report-list" class="dropdown-menu" role="menu">
 							@foreach (var reportNavSection in Model.ReportNavigationItems)
 							{
 								if (reportNavSection.IsDivider && !Request.UserAgent.Contains("app/android") && !Request.UserAgent.Contains("app/ios"))
