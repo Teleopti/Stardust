@@ -62,7 +62,7 @@ Layout = null;
 			<li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
 			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
 			<li class="col-xs-12 col-sm-4 weekview-probability-toggle" data-bind="visible: showProbabilityToggle">
-				<div class="input-group pull-right">
+				<div class="input-group pull-right" id="probabilityDropdownMenu">
 					<a class="btn btn-default dropdown-toggle" id="dropdown-probability-type" data-toggle="dropdown" aria-haspopup="true" href="#">
 						<i class="glyphicon" data-bind="css: {'glyphicon-eye-open': selectedProbabilityType > probabilityTypes.none, 'glyphicon-eye-close': selectedProbabilityType === probabilityTypes.none}"></i>
 						<span data-bind="text: probabilityLabel()" class="probabilityLabel"></span>
