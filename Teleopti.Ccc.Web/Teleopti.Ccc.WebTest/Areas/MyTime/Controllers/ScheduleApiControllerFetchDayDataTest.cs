@@ -807,7 +807,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotMapPersonalActivityToSummaryTimespanOnFetchDayData()
+		public void ShouldMapPersonalActivityToSummaryTimespanOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
 			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
@@ -819,7 +819,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchDayData(date).Schedule;
 			result.Summary.TimeSpan.Should()
-				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
+				.Be.EqualTo(new DateTimePeriod(2014, 12, 18, 5, 2014, 12, 18, 16).TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 		}
 
 		[Test]
@@ -937,7 +937,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
 
-			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime).Schedule;
+			var result = Target.FetchDayData(date, StaffingPossibilityType.Overtime).Schedule;
 			result.OpenHourPeriod.Equals(timePeriod).Should().Be.True();
 		}
 

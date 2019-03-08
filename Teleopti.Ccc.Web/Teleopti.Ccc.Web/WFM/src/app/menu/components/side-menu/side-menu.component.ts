@@ -61,12 +61,14 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 		public toggleMenuService: ToggleMenuService,
 		private mediaQueryService: MediaQueryService
 	) {
-		this.areaService.getAreas().subscribe(areas => {
-			this.areas = areas;
-			const filterEmptyGroups = (group: AreaGroup) => group.length > 0;
-			this.groups = GROUPS.map(group => this.filterPermittedAreas(group))
-				.filter(group => filterEmptyGroups(group))
-				.map(group => this.addAreaInfo(group));
+		this.areaService.areas$.subscribe({
+			next: areas => {
+				this.areas = areas;
+				const filterEmptyGroups = (group: AreaGroup) => group.length > 0;
+				this.groups = GROUPS.map(group => this.filterPermittedAreas(group))
+					.filter(group => filterEmptyGroups(group))
+					.map(group => this.addAreaInfo(group));
+			}
 		});
 	}
 

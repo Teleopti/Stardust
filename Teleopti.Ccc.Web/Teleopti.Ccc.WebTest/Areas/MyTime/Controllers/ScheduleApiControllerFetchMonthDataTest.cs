@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
 			result.Shift.Should().Not.Be.Null();
-			result.Shift.TimeSpan.Should().Be.EqualTo(period.TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
+			result.Shift.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(2014, 12, 1, 5, 2014, 12, 1, 16).TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
 		}
 
 		[Test]

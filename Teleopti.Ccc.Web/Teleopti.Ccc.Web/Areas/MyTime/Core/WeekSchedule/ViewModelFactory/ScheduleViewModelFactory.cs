@@ -47,22 +47,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return _monthMapper.Map(domainData, true);
 		}
 
-		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
+		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossibilityType staffingPossibilityType)
 		{
 			var weekDomainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
-			if (needAdjustTimeline(staffingPossiblityType, date, true))
+			if (needAdjustTimeline(staffingPossibilityType, date, true))
 			{
 				_scheduleWeekMinMaxTimeCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
 
-			var isOvertimeStaffingPossiblity = staffingPossiblityType == StaffingPossiblityType.Overtime;
-			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, isOvertimeStaffingPossiblity);
+			var isOvertimeStaffingPossibility = staffingPossibilityType == StaffingPossibilityType.Overtime;
+			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, isOvertimeStaffingPossibility);
 			return weekScheduleViewModel;
 		}
 
-		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)
+		private bool needAdjustTimeline(StaffingPossibilityType staffingPossibilityType, DateOnly date, bool forThisWeek)
 		{
-			return staffingPossiblityType == StaffingPossiblityType.Overtime &&
+			return staffingPossibilityType == StaffingPossibilityType.Overtime &&
 				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(_loggedOnUser.CurrentUser(), date, forThisWeek).HasValue;
 		}
 	}

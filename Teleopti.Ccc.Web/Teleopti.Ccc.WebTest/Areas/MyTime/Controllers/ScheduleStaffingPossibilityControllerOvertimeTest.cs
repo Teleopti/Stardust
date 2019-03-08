@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				BetweenDays = new MinMax<int>(0, staffingInfoAvailableDays)
 			});
 
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(3), StaffingPossiblityType.Overtime).ToList();
+			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(3), StaffingPossibilityType.Overtime).ToList();
 			result.Count.Should().Be.EqualTo(14);
 			DateHelper.GetWeekPeriod(new DateOnly(Now.UtcDateTime()).AddWeeks(3), CultureInfo.CurrentCulture)
 				.DayCollection()
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				BetweenDays = new MinMax<int>(0, staffingInfoAvailableDays)
 			});
 
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(4), StaffingPossiblityType.Overtime).ToList();
+			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(4), StaffingPossibilityType.Overtime).ToList();
 			result.Count.Should().Be.EqualTo(14);
 			DateHelper.GetWeekPeriod(new DateOnly(Now.UtcDateTime()).AddWeeks(4), CultureInfo.CurrentCulture)
 				.DayCollection()
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupDefaultTestData();
 			setupWorkFlowControlSet();
 			PersonAssignmentRepository.Clear();
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 		}
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			overtimeRequestOpenPeriod.AddPeriodSkillType(
 				new OvertimeRequestOpenPeriodSkillType(new SkillTypePhone(new Description("NotSupportedSkillType"),
 					ForecastSource.Backoffice)));
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime).ToList();
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime).ToList();
 			Assert.AreEqual(0, possibilities.Count);
 		}
 
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupWorkFlowControlSet();
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupWorkFlowControlSet();
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 0.001, 0.001d }, new double?[] { 0d, 0d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(0, possibilities.Count);
 		}
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 1), StaffingPossiblityType.Overtime);
+			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 1), StaffingPossibilityType.Overtime);
 
 			var possibilitiesOn2nd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 2).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(possibilitiesOn2nd.ElementAt(0).StartTime, new DateTime(2018, 2, 2, 7, 0, 0));
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 3), StaffingPossiblityType.Overtime, false);
+			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 3), StaffingPossibilityType.Overtime, false);
 
 			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 3).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(possibilitiesOn3rd.ElementAt(0).StartTime, new DateTime(2018, 2, 3, 8, 0, 0));
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 1), StaffingPossiblityType.Overtime);
+			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 1), StaffingPossibilityType.Overtime);
 
 			var possibilitiesOn1st = possibilities.Where(d => d.Date == new DateOnly(2018, 1, 31).ToFixedClientDateOnlyFormat()).ToList();
 			var possibilitiesOn2nd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 1).ToFixedClientDateOnlyFormat()).ToList();
@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupWorkFlowControlSet();
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 6d, 6d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				OvertimeRequestStaffingCheckMethod.Intraday;
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 8d, 8d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -471,7 +471,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 8d, 8d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 16d, 6d });
 			setupWorkFlowControlSet();
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -510,7 +510,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			createAssignment(person, activity1, activity2);
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -562,7 +562,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			createAssignment(person, activity1, activity2);
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).AddDays(1).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
@@ -580,7 +580,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(),
 				new DateOnly(Now.UtcDateTime()), new DayOffTemplate());
 			PersonAssignmentRepository.Has(assignment);
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
 		}
@@ -604,7 +604,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
 
 			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 					.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat())
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -634,7 +634,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
 
 			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -664,7 +664,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
 
 			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -698,7 +698,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addPersonSkillsToPersonPeriod(primaryPersonSkill2, primaryPersonSkill3);
 
 			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -726,7 +726,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addPersonSkillsToPersonPeriod(primaryPersonSkill, primaryPersonSkill2);
 
 			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 					.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat())
 					.ToList();
 
@@ -754,7 +754,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addPersonSkillsToPersonPeriod(nonPrimaryPersonSkill);
 
 			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
 					.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat())
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -776,7 +776,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			setupDefaultTestData();
 			setupWorkFlowControlSet();
-			var result = getPossibilityViewModels(null, StaffingPossiblityType.Overtime, false).ToList();
+			var result = getPossibilityViewModels(null, StaffingPossibilityType.Overtime, false).ToList();
 			result.Count.Should().Be.EqualTo(0);
 		}
 
@@ -800,7 +800,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			setupDefaultTestData();
 			setupWorkFlowControlSet();
-			var result = getPossibilityViewModels(null, StaffingPossiblityType.Overtime).ToList();
+			var result = getPossibilityViewModels(null, StaffingPossibilityType.Overtime).ToList();
 			result.Count.Should().Be.EqualTo(4);
 
 			var possibilities = result.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
@@ -824,7 +824,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(3), StaffingPossiblityType.Overtime).ToList();
+			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(3), StaffingPossibilityType.Overtime).ToList();
 			result.Count.Should().Be.EqualTo(0);
 		}
 
@@ -844,7 +844,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			};
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime).ToList();
+			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()), StaffingPossibilityType.Overtime).ToList();
 			result.Count.Should().Be.EqualTo(6);
 		}
 
@@ -885,7 +885,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
-			var result = Target.GetPossibilityViewModels(date, StaffingPossiblityType.Overtime, false).ToList();
+			var result = Target.GetPossibilityViewModels(date, StaffingPossibilityType.Overtime, false).ToList();
 			result.Count.Should().Be.EqualTo(8);
 			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(180);
 		}
@@ -917,7 +917,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			createAssignment(person, activity1);
 
-			var possibilitiesWeek = getPossibilityViewModels(today, StaffingPossiblityType.Overtime)
+			var possibilitiesWeek = getPossibilityViewModels(today, StaffingPossibilityType.Overtime)
 				.Where(d => d.Date == today.ToFixedClientDateOnlyFormat()).ToList();
 
 			Assert.AreEqual(2, possibilitiesWeek.Count);
@@ -1043,7 +1043,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> getPossibilityViewModels(DateOnly? date,
-			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
+			StaffingPossibilityType staffingPossiblityType = StaffingPossibilityType.None,
 			bool returnOneWeekData = true)
 		{
 			return Target.GetPossibilityViewModels(date, staffingPossiblityType, returnOneWeekData).Where(view => intervals.Contains(view.StartTime.TimeOfDay));

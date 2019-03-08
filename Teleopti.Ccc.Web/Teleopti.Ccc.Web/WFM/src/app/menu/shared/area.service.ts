@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Area {
@@ -13,11 +13,22 @@ export interface Area {
 
 @Injectable()
 export class AreaService {
-	constructor(@Inject('$state') private $state: IStateService, private http: HttpClient) {}
+	private _areas$ = new ReplaySubject<Area[]>();
+	public get areas$(): Observable<Area[]> {
+		return this._areas$;
+	}
 
-	getAreas(): Observable<Area[]> {
+	constructor(@Inject('$state') private $state: IStateService, private http: HttpClient) {
+		this.getAreas();
+	}
+
+	private getAreas() {
 		const areas$ = this.http.get('../api/Global/Application/WfmAreasWithPermission') as Observable<Area[]>;
-		return areas$.pipe(map(areas => areas.map(area => this.joinAreaWithRouteConfig(area))));
+		areas$.pipe(map(areas => areas.map(area => this.joinAreaWithRouteConfig(area)))).subscribe({
+			next: (areas: Area[]) => {
+				this._areas$.next(areas);
+			}
+		});
 	}
 
 	joinAreaWithRouteConfig(area: Area): Area {

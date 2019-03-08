@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 		[Test]
 		[SetCulture("en-US")]
-		public void ShouldMapTimeSpanForWorkingDayExcludingPersonalActivity()
+		public void ShouldMapTimeSpanForWorkingDayIncludingPersonalActivity()
 		{
 			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var result = target.Map(new MonthScheduleDomainData { Days = new[] { domainData } }).ScheduleDays.First();
 
 			result.Shift.Should().Not.Be.Null();
-			result.Shift.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+			result.Shift.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(2011, 5, 18, 5, 2011, 5, 18, 16).TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
 		}
 
 		[Test]

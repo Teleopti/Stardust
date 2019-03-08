@@ -81,14 +81,16 @@
                     return {
                         StartTime: o.StartTime,
                         EndTime: o.EndTime,
-                        Type: out
+                        Type: out,
+                        isOutOfAdherence: true
                     }
                 });
                 var neutrals = data.RecordedNeutralAdherences.map(function (n) {
                     return {
                         StartTime: n.StartTime,
                         EndTime: n.EndTime,
-                        Type: neutral
+                        Type: neutral,
+                        isNeutralAdherence: true
                     }
                 });
 
@@ -156,6 +158,8 @@
                 .map(function (interval) {
                     var o = buildInterval(timeline, interval);
                     o.Type = interval.Type;
+                    o.isOutOfAdherence = interval.isOutOfAdherence;
+                    o.isNeutralAdherence = interval.isNeutralAdherence;
                     o.click = function () {
                         highlightClickedInterval(vm.recordedAdherences, o);
 

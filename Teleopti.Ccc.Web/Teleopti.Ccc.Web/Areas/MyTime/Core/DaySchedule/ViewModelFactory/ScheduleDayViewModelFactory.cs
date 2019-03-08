@@ -7,7 +7,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 {
 	public class ScheduleDayViewModelFactory : IScheduleDayViewModelFactory
@@ -35,27 +34,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
+		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossibilityType staffingPossibilityType)
 		{
 			var daySchedule = _dayScheduleDomainDataProvider.GetDaySchedule(date);
 			var hasVisualSchedule = hasAnyVisualSchedule(date, daySchedule);
 
 			if (!hasVisualSchedule)
 			{
-				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour), TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour));
+				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour),
+					TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour));
 				daySchedule.MinMaxTime = defaultTimeLinePeriod;
 				daySchedule.MinMaxTime = defaultTimeLinePeriod;
 			}
 
-			if (needAdjustTimeline(staffingPossiblityType, date, false))
+			if (needAdjustTimeline(staffingPossibilityType, date, false))
 			{
 				_scheduleDayMinMaxTimeCalculator.AdjustScheduleMinMaxTime(daySchedule);
 			}
 
 			daySchedule.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
-			var isOvertimeStaffingPossiblity = staffingPossiblityType == StaffingPossiblityType.Overtime;
-			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossiblity);
+			var isOvertimeStaffingPossibility = staffingPossibilityType == StaffingPossibilityType.Overtime;
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossibility);
 			return dayScheduleViewModel;
 		}
 
@@ -73,9 +73,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 			if (daySchedule?.Projection == null)
 				return false;
 
-			var timeZone = daySchedule?.ScheduleDay.TimeZone;
+			var timeZone = daySchedule.ScheduleDay.TimeZone;
 			var hasVisualLayerToday = daySchedule.Projection.Any(p => periodIsVisible(p.Period, date, timeZone));
-			var hasVisualLayerYesterday = daySchedule.ProjectionYesterday != null && daySchedule.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
+			var hasVisualLayerYesterday = daySchedule.ProjectionYesterday != null
+			                              && daySchedule.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
 
 			var hasVisibleOvertimeToday = periodIsVisible(daySchedule.OvertimeAvailability?.Period, date, timeZone);
 			var hasVisibleOvertimeYesterday = existsVisibleOvertimeYesterday(date, daySchedule, timeZone);
@@ -111,9 +112,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 			return periodIsVisible(period, date, timeZone);
 		}
 
-		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)
+		private bool needAdjustTimeline(StaffingPossibilityType staffingPossibilityType, DateOnly date, bool forThisWeek)
 		{
-			return staffingPossiblityType == StaffingPossiblityType.Overtime &&
+			return staffingPossibilityType == StaffingPossibilityType.Overtime &&
 				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(_loggedOnUser.CurrentUser(), date, forThisWeek).HasValue;
 		}
 	}

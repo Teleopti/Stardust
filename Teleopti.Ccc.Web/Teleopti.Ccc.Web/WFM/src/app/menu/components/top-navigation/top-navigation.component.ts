@@ -28,17 +28,16 @@ export class TopNavigationComponent {
 		public areaService: AreaService,
 		public systemSettingsService: SystemSettingsService
 	) {
-		this.systemSettingsService.checkPermission().subscribe(hasPermission => {
-			toggleService.toggles$.subscribe({
-				next: toggles => {
-					this.isSystemSettingsVisible =
-						toggles.WFM_Setting_BankHolidayCalendar_Create_79297 && hasPermission;
-				}
-			});
-		});
-
-		areaService.getAreas().subscribe(areas => {
-			this.systemSettingArea = areas.filter(a => a.InternalName === 'systemSettings')[0];
+		areaService.areas$.subscribe({
+			next: areas => {
+				this.systemSettingArea = areas.filter(a => a.InternalName === 'systemSettings')[0];
+				toggleService.toggles$.subscribe({
+					next: toggles => {
+						this.isSystemSettingsVisible =
+							toggles.WFM_Setting_BankHolidayCalendar_Create_79297 && this.systemSettingArea;
+					}
+				});
+			}
 		});
 	}
 	goToSystemSettings() {

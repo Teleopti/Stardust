@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public interface IScheduleViewModelFactory
 	{
-		WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossiblityType staffingPossiblityType);
+		WeekScheduleViewModel CreateWeekViewModel(DateOnly dateOnly, StaffingPossibilityType staffingPossibilityType);
 
 		MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly);
 

@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						{
 							Title = shiftCategory?.Description.Name,
 							Summary = toFormattedTimeSpan(s.Projection.ContractTime()),
-							TimeSpan = personAssignment?.PeriodExcludingPersonalActivity()
+							TimeSpan = personAssignment?.Period
 								.TimePeriod(s.ScheduleDay?.TimeZone)
 								.ToShortTimeString(),
 							StyleClassName = shiftCategory?.DisplayColor.ToStyleClass(),

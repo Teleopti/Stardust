@@ -7,7 +7,7 @@ import { NzToolTipModule } from 'ng-zorro-antd';
 import { ReplaySubject } from 'rxjs';
 import { PasswordService } from 'src/app/authentication/services/password.service';
 import { NavigationService, ThemeService, TogglesService, UserService } from 'src/app/core/services';
-import { AreaService } from '../../shared/area.service';
+import { Area, AreaService } from '../../shared/area.service';
 import { BusinessUnitService } from '../../shared/businessunit.service';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
 import { FeedbackComponent } from '../feedback';
@@ -15,15 +15,23 @@ import { TopNavigationComponent } from './top-navigation.component';
 import { MockTranslationModule } from '@wfm/mocks/translation';
 import { SystemSettingsService } from '../../../system-settings/shared/system-settings.service';
 
-class MockStateService implements Partial<IStateService> {
-	public current: {
-		name: 'systemSettings';
-	};
-
-	public href() {
+const areaOne: Area = {
+	InternalName: 'systemSettings',
+	Name: 'System Settings',
+	icon: '',
+	url: ''
+};
+const mockStateService: Partial<IStateService> = {
+	current: {
+		name: areaOne.InternalName
+	},
+	href() {
 		return '';
+	},
+	get() {
+		return this.current.name;
 	}
-}
+};
 
 class MockToggleMenuService implements Partial<ToggleMenuService> {
 	public get showMenu$() {
@@ -54,7 +62,7 @@ describe('TopNavigation', () => {
 			providers: [
 				{
 					provide: '$state',
-					useClass: MockStateService
+					useValue: mockStateService
 				},
 				{ provide: ToggleMenuService, useClass: MockToggleMenuService },
 				TogglesService,
@@ -83,7 +91,7 @@ describe('TopNavigation', () => {
 	it('should show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is on and having related permission', () => {
 		const toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: true });
-		httpMock.match('../api/SystemSetting/HasPermission')[0].flush({ HasPermission: true });
+		httpMock.match('../api/Global/Application/WfmAreasWithPermission')[0].flush([areaOne]);
 		fixture.detectChanges();
 
 		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
@@ -101,7 +109,7 @@ describe('TopNavigation', () => {
 	});
 
 	it('should not show system settings icon when having no related permission', () => {
-		httpMock.match('../api/SystemSetting/HasPermission')[0].flush({ HasPermission: false });
+		httpMock.match('../api/Global/Application/WfmAreasWithPermission')[0].flush([]);
 		fixture.detectChanges();
 
 		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];

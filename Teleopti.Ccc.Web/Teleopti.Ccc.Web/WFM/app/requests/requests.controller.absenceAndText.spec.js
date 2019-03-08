@@ -48,7 +48,6 @@ describe('Requests - absence and text controller tests: ', function() {
 			$provide.service('Toggle', function() {
 				return {
 					Wfm_Requests_People_Search_36294: true,
-					WFM_Request_Show_Shift_for_Absence_Requests_79008: true,
 					togglesLoaded: {
 						then: function(cb) {
 							cb();

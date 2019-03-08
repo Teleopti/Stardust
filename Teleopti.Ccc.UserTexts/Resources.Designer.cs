@@ -3304,6 +3304,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete report &quot;{repName}&quot;?.
+        /// </summary>
+        public static string AreYouSureToDeleteReportWithReportName {
+            get {
+                return ResourceManager.GetString("AreYouSureToDeleteReportWithReportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this report?.
+        /// </summary>
+        public static string AreYouSureToDeleteThisReport {
+            get {
+                return ResourceManager.GetString("AreYouSureToDeleteThisReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure to delete year {0} from calendar {1}?.
         /// </summary>
         public static string AreYouSureToDeleteYearFromCalendar {
@@ -4517,6 +4535,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BackToList {
             get {
                 return ResourceManager.GetString("BackToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to view mode.
+        /// </summary>
+        public static string BackToViewMode {
+            get {
+                return ResourceManager.GetString("BackToViewMode", resourceCulture);
             }
         }
         
@@ -8200,6 +8227,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created by {creator}.
+        /// </summary>
+        public static string CreatedByWithCreatorName {
+            get {
+                return ResourceManager.GetString("CreatedByWithCreatorName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created date.
         /// </summary>
         public static string CreatedDate {
@@ -8287,6 +8323,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CreatemessageWithCustomOptions {
             get {
                 return ResourceManager.GetString("CreatemessageWithCustomOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new report.
+        /// </summary>
+        public static string CreateNewReport {
+            get {
+                return ResourceManager.GetString("CreateNewReport", resourceCulture);
             }
         }
         
@@ -8884,7 +8929,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///Last name: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
         ///Language: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
         ///Company: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;&lt;br&gt;
-        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get acc [rest of string was truncated]&quot;;.
+        ///This data will ensure that you are automatically signed on to the Teleopti Customer Web and get access to [rest of string was truncated]&quot;;.
         /// </summary>
         public static string DataProtectionQuestion {
             get {
@@ -12062,6 +12107,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error message: {message}.
+        /// </summary>
+        public static string ErrorMessageWithParameter {
+            get {
+                return ResourceManager.GetString("ErrorMessageWithParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not save!.
         /// </summary>
         public static string ErrorMsgCaptionDuplicateUserCredentials {
@@ -12773,11 +12827,38 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create report.
+        /// </summary>
+        public static string FailedToCreateReport {
+            get {
+                return ResourceManager.GetString("FailedToCreateReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create scheduling job for selected planning period..
         /// </summary>
         public static string FailedToCreateSchedulingJobForSelectedPlanningPeriod {
             get {
                 return ResourceManager.GetString("FailedToCreateSchedulingJobForSelectedPlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete report.
+        /// </summary>
+        public static string FailedToDeleteReport {
+            get {
+                return ResourceManager.GetString("FailedToDeleteReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete report &quot;{repName}&quot;.
+        /// </summary>
+        public static string FailedToDeleteReportWithReportName {
+            get {
+                return ResourceManager.GetString("FailedToDeleteReportWithReportName", resourceCulture);
             }
         }
         
@@ -12809,6 +12890,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load reports.
+        /// </summary>
+        public static string FailedToLoadReport {
+            get {
+                return ResourceManager.GetString("FailedToLoadReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to open report.
+        /// </summary>
+        public static string FailedToOpenReport {
+            get {
+                return ResourceManager.GetString("FailedToOpenReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to optimize days off for planning period {0} - {1} due to technical error. Please try again..
         /// </summary>
         public static string FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError {
@@ -12818,11 +12917,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to print report.
+        /// </summary>
+        public static string FailedToPrintReport {
+            get {
+                return ResourceManager.GetString("FailedToPrintReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to remove selected absence..
         /// </summary>
         public static string FailedToRemoveAbsence {
             get {
                 return ResourceManager.GetString("FailedToRemoveAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to save as new report.
+        /// </summary>
+        public static string FailedToSaveAsNewReport {
+            get {
+                return ResourceManager.GetString("FailedToSaveAsNewReport", resourceCulture);
             }
         }
         
@@ -12841,6 +12958,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FailedToSwapShifts {
             get {
                 return ResourceManager.GetString("FailedToSwapShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update token for report&quot;.
+        /// </summary>
+        public static string FailedToUpdateToken {
+            get {
+                return ResourceManager.GetString("FailedToUpdateToken", resourceCulture);
             }
         }
         
@@ -16290,6 +16416,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InputError {
             get {
                 return ResourceManager.GetString("InputError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input name for new copy of report &quot;{repName}&quot;:.
+        /// </summary>
+        public static string InputNameForNewClonedReport {
+            get {
+                return ResourceManager.GetString("InputNameForNewClonedReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input name for new report.
+        /// </summary>
+        public static string InputNameForNewReport {
+            get {
+                return ResourceManager.GetString("InputNameForNewReport", resourceCulture);
             }
         }
         
@@ -21436,6 +21580,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New report name....
+        /// </summary>
+        public static string NewReportNameWith3Dots {
+            get {
+                return ResourceManager.GetString("NewReportNameWith3Dots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Request.
         /// </summary>
         public static string NewRequest {
@@ -22522,6 +22675,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionToViewErrorMessage {
             get {
                 return ResourceManager.GetString("NoPermissionToViewErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have permission to view Insights report..
+        /// </summary>
+        public static string NoPermissionToViewInsightsReport {
+            get {
+                return ResourceManager.GetString("NoPermissionToViewInsightsReport", resourceCulture);
             }
         }
         
@@ -30627,6 +30789,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save as new report.
+        /// </summary>
+        public static string SaveAsNewReport {
+            get {
+                return ResourceManager.GetString("SaveAsNewReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as new....
+        /// </summary>
+        public static string SaveAsNewWith3Dots {
+            get {
+                return ResourceManager.GetString("SaveAsNewWith3Dots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save as Scenario.
         /// </summary>
         public static string SaveAsScenario {
@@ -31569,6 +31749,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SearchASiteOrTeam {
             get {
                 return ResourceManager.GetString("SearchASiteOrTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search by report name....
+        /// </summary>
+        public static string SearchByReportNameWith3Dots {
+            get {
+                return ResourceManager.GetString("SearchByReportNameWith3Dots", resourceCulture);
             }
         }
         
@@ -38515,7 +38704,8 @@ namespace Teleopti.Ccc.UserTexts {
         ///In order to give us valuable information about this error, we ask you to kindly report it by clicking on the &quot;Send e-mail report&quot; button below. This will open your default e-mail program. Please also include the following:
         ///
         ///1.  Step by step on how to reproduce the error
-        ///2.  Information about what data you were working  [rest of string was truncated]&quot;;.
+        ///2.  Information about what data you were working with
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string UnhandledExceptionMessage {
             get {

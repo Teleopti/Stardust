@@ -959,7 +959,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotMapPersonalActivityToSummaryTimespan()
+		public void ShouldMapPersonalActivityToSummaryTimespan()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
 			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
@@ -970,7 +970,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchWeekData(null).Days.ElementAt(3);
 			result.Summary.TimeSpan.Should()
-				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
+				.Be.EqualTo(new DateTimePeriod(2014, 12, 18, 5, 2014, 12, 18, 16).TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 		}
 
 		[Test]
@@ -1123,7 +1123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupLoggedOnUser(new DateOnly(2014,1,1));
 			User.CurrentUser().PersonPeriods(Now.ServerDate_DontUse().ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
-			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime).Days.ElementAt(3);
+			var result = Target.FetchWeekData(null, StaffingPossibilityType.Overtime).Days.ElementAt(3);
 			result.OpenHourPeriod.Equals(timePeriod).Should().Be.True();
 		}
 
@@ -1160,7 +1160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
-			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossibilityType.Overtime);
 			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
 			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(10));
 			result.Days.ElementAt(4).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(10));
@@ -1180,7 +1180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossibilityType.Overtime);
 			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(7));
 			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(18));
 		}
@@ -1201,7 +1201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossibilityType.Overtime);
 			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
 			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(20));
 		}
@@ -1222,7 +1222,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(null, StaffingPossibilityType.Overtime);
 			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.Zero);
 			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(24));
 		}

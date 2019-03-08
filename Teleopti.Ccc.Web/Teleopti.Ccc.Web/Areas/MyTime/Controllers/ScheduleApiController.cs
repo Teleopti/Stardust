@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IIntradayScheduleEdgeTimeCalculator _intradayScheduleEdgeTimeCalculator;
 		private readonly IPushMessageProvider _pushMessageProvider;
 
-		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator, IPushMessageProvider pushMessageProvider, IScheduleDayViewModelFactory scheduleDayViewModelFactory)
+		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now,
+			IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator,
+			IPushMessageProvider pushMessageProvider, IScheduleDayViewModelFactory scheduleDayViewModelFactory)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_now = now;
@@ -45,10 +47,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchDayData"), HttpGet]
-		public virtual DayScheduleViewModel FetchDayData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
+		public virtual DayScheduleViewModel FetchDayData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date,
+			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None)
 		{
 			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
-			return _scheduleDayViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
+			return _scheduleDayViewModelFactory.CreateDayViewModel(showForDate, staffingPossibilityType);
 		}
 
 		[UnitOfWork, Route("api/Schedule/GetUnreadMessageCount"), HttpGet]
@@ -58,10 +61,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchWeekData"), HttpGet]
-		public virtual WeekScheduleViewModel FetchWeekData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
+		public virtual WeekScheduleViewModel FetchWeekData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date,
+			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None)
 		{
 			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
-			return _scheduleViewModelFactory.CreateWeekViewModel(showForDate, staffingPossiblityType);
+			return _scheduleViewModelFactory.CreateWeekViewModel(showForDate, staffingPossibilityType);
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchMonthData"), HttpGet]

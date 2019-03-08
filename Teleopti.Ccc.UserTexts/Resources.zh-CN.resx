@@ -15385,5 +15385,68 @@ Teleopti R&amp;D</value>
   </data>
   <data name="Neutral" xml:space="preserve">
     <value>中立</value>
+  </data> 
+  <data name="CreatedByWithCreatorName" xml:space="preserve">
+    <value>创建人：{creator}</value>
+  </data>
+  <data name="SearchByReportNameWith3Dots" xml:space="preserve">
+    <value>按报表名称搜索...</value>
+  </data>
+  <data name="SaveAsNewWith3Dots" xml:space="preserve">
+    <value>另存为新报表...</value>
+  </data>
+  <data name="CreateNewReport" xml:space="preserve">
+    <value>创建新报表</value>
+  </data>
+  <data name="SaveAsNewReport" xml:space="preserve">
+    <value>另存为新报表</value>
+  </data>
+  <data name="BackToViewMode" xml:space="preserve">
+    <value>返回到浏览模式</value>
+  </data>
+  <data name="NoPermissionToViewInsightsReport" xml:space="preserve">
+    <value>你没有权限查看 Insights 报表。</value>
+  </data>
+  <data name="FailedToLoadReport" xml:space="preserve">
+    <value>加载报表失败</value>
+  </data>
+  <data name="FailedToOpenReport" xml:space="preserve">
+    <value>打开报表失败</value>
+  </data>
+  <data name="FailedToCreateReport" xml:space="preserve">
+    <value>创建报表失败</value>
+  </data>
+  <data name="FailedToPrintReport" xml:space="preserve">
+    <value>打印报表失败</value>
+  </data>
+  <data name="FailedToSaveAsNewReport" xml:space="preserve">
+    <value>另存报表失败</value>
+  </data>
+  <data name="FailedToDeleteReport" xml:space="preserve">
+    <value>删除报表失败</value>
+  </data>
+  <data name="FailedToDeleteReportWithReportName" xml:space="preserve">
+    <value>删除报表“{repName}”失败</value>
+  </data>
+  <data name="FailedToUpdateToken" xml:space="preserve">
+    <value>更新报表的 Token 失败"</value>
+  </data>
+  <data name="AreYouSureToDeleteThisReport" xml:space="preserve">
+    <value>你确定要删除此报表吗？</value>
+  </data>
+  <data name="AreYouSureToDeleteReportWithReportName" xml:space="preserve">
+    <value>你确定要删除报表“{repName}”吗？</value>
+  </data>
+  <data name="ErrorMessageWithParameter" xml:space="preserve">
+    <value>错误信息：{message}</value>
+  </data>
+  <data name="NewReportNameWith3Dots" xml:space="preserve">
+    <value>新报表名称...</value>
+  </data>
+  <data name="InputNameForNewReport" xml:space="preserve">
+    <value>请输入新报表名称</value>
+  </data>
+  <data name="InputNameForNewClonedReport" xml:space="preserve">
+    <value>请输入报表“{repName}”另存后的新名称：</value>
   </data>
 </root>

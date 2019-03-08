@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
 import { NzNotificationService } from 'ng-zorro-antd';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Permission } from '../../models/Permission.model';
 import { ReportService } from '../../core/report.service';
@@ -33,6 +34,7 @@ export class ReportComponent implements OnInit {
 
 	constructor(
 		@Inject('$state') private $state: IStateService,
+		private translate: TranslateService,
 		private reportSvc: ReportService,
 		public nav: NavigationService,
 		private notification: NzNotificationService) {
@@ -78,7 +80,9 @@ export class ReportComponent implements OnInit {
 
 			this.initialized = true;
 		}).catch(error => {
-			this.notification.create('error', 'Failed to open report', 'Error message: ' + error, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToOpenReport');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 	}
 
@@ -103,7 +107,9 @@ export class ReportComponent implements OnInit {
 				self.setTokenExpirationListener(config.Expiration, 2, reportId);
 			});
 		}).catch(error => {
-			console.error('Failed to update token for report, Error message: ' + error);
+			const title = this.translate.instant('FailedToUpdateToken');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 	}
 
@@ -174,7 +180,9 @@ export class ReportComponent implements OnInit {
 	public printReport() {
 		const report = this.pbiCoreService.get(this.getReportContainer());
 		report.print().catch(error => {
-			this.notification.create('error', 'Failed to print report', 'Error message: ' + error, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToPrintReport');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 	}
 
@@ -187,7 +195,9 @@ export class ReportComponent implements OnInit {
 			this.isProcessing = false;
 			this.nav.editReport(newReport.ReportId);
 		}).catch(error => {
-			this.notification.create('error', 'Failed to save as new report', 'Error message: ' + error, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToSaveAsNewReport');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 	}
 
@@ -199,14 +209,15 @@ export class ReportComponent implements OnInit {
 			if (deleted) {
 				this.nav.gotoInsights();
 			} else {
-				errorMessage = 'Failed to delete report "' + this.reportName + '"';
+				errorMessage = this.translate.instant('FailedToDeleteReportWithReportName', {repName: this.reportName});
 			}
 		}).catch(error => {
-			errorMessage = 'Error message: ' + error;
+			errorMessage = this.translate.instant('ErrorMessageWithParameter', {message: error});
 		});
 
 		if (errorMessage && errorMessage.length > 0) {
-			this.notification.create('error', 'Failed to delete report', errorMessage, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToDeleteReport');
+			this.notification.create('error', title, errorMessage, this.errorNotificationOption);
 		}
 	}
 }

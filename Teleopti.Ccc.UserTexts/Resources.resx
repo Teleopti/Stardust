@@ -18301,4 +18301,88 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Select week</value>
     <comment>Select week</comment>
   </data>
+  <data name="CreatedByWithCreatorName" xml:space="preserve">
+    <value>Created by {creator}</value>
+    <comment>Message for Insights, please do NOT translate "{creator}"</comment>
+  </data>
+  <data name="SearchByReportNameWith3Dots" xml:space="preserve">
+    <value>Search by report name...</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="SaveAsNewWith3Dots" xml:space="preserve">
+    <value>Save as new...</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="CreateNewReport" xml:space="preserve">
+    <value>Create new report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="SaveAsNewReport" xml:space="preserve">
+    <value>Save as new report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="BackToViewMode" xml:space="preserve">
+    <value>Back to view mode</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="NoPermissionToViewInsightsReport" xml:space="preserve">
+    <value>You do not have permission to view Insights report.</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToLoadReport" xml:space="preserve">
+    <value>Failed to load reports</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToOpenReport" xml:space="preserve">
+    <value>Failed to open report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToCreateReport" xml:space="preserve">
+    <value>Failed to create report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToPrintReport" xml:space="preserve">
+    <value>Failed to print report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToSaveAsNewReport" xml:space="preserve">
+    <value>Failed to save as new report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToDeleteReport" xml:space="preserve">
+    <value>Failed to delete report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="FailedToDeleteReportWithReportName" xml:space="preserve">
+    <value>Failed to delete report "{repName}"</value>
+    <comment>Message for Insights, please do NOT translate {repName}</comment>
+  </data>
+  <data name="FailedToUpdateToken" xml:space="preserve">
+    <value>Failed to update token for report"</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="AreYouSureToDeleteThisReport" xml:space="preserve">
+    <value>Are you sure you want to delete this report?</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="AreYouSureToDeleteReportWithReportName" xml:space="preserve">
+    <value>Are you sure you want to delete report "{repName}"?</value>
+    <comment>Message for Insights, please do NOT translate {repName}</comment>
+  </data>
+  <data name="ErrorMessageWithParameter" xml:space="preserve">
+    <value>Error message: {message}</value>
+    <comment>Message for Insights, please do NOT translate {message}</comment>
+  </data>
+  <data name="NewReportNameWith3Dots" xml:space="preserve">
+    <value>New report name...</value>
+    <comment>Message for Insights, please do NOT translate {repName}</comment>
+  </data>
+  <data name="InputNameForNewReport" xml:space="preserve">
+    <value>Please input name for new report</value>
+    <comment>Message for Insights</comment>
+  </data>
+  <data name="InputNameForNewClonedReport" xml:space="preserve">
+    <value>Please input name for new copy of report "{repName}":</value>
+    <comment>Message for Insights, please do NOT translate {repName}</comment>
+  </data>
 </root>
