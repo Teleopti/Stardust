@@ -311,28 +311,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void SholdGetPeriodIncludePersonalActivity()
-		{
-			var date = new DateOnly(2014, 12, 15);
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-			var period = new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 17);
-			var phoneActivity = new Activity("Phone")
-			{
-				InWorkTime = true,
-				InContractTime = true,
-				DisplayColor = Color.Green
-			};
-			assignment.AddActivity(phoneActivity, period);
-			assignment.SetShiftCategory(new ShiftCategory("sc"));
-			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, period.MovePeriod(TimeSpan.FromHours(-2)));
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchDayData(date);
-			result.Schedule.Summary.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(2014, 12, 15, 6, 2014, 12, 15, 17)
-				.TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
-		}
-
-		[Test]
 		public void ShouldCreatePeriodViewModelFromActivityLayerOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
@@ -829,7 +807,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotMapPersonalActivityToSummaryTimespanOnFetchDayData()
+		public void ShouldMapPersonalActivityToSummaryTimespanOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);
 			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
@@ -841,7 +819,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchDayData(date).Schedule;
 			result.Summary.TimeSpan.Should()
-				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
+				.Be.EqualTo(new DateTimePeriod(2014, 12, 18, 5, 2014, 12, 18, 16).TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
 		}
 
 		[Test]

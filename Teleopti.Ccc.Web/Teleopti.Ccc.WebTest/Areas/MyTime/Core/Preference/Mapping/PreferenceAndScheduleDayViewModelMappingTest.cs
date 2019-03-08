@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldNotMapPersonalShiftsToTime()
+		public void ShouldMapPersonalShiftsToTime()
 		{
 			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			var result = _target.Map(scheduleDay, null);
-			result.PersonAssignment.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+			result.PersonAssignment.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(2011, 5, 18, 5, 2011, 5, 18, 16).TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
 		}
 	}
 }
