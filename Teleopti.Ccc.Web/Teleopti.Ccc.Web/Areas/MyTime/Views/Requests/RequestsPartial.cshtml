@@ -176,24 +176,22 @@ Layout = null;
 			<div class="row">
 				<div id="request-filter-row" class="row filter-row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-						<div class="new-filter">
-							<div class="form-group" data-bind="visible: !isLoadingRequests()">
-								<select class="form-control" data-bind="options: filters, optionsText: 'name',
-									optionsValue: 'show', value: hideOldRequests"
-								 id="sel1">
-								</select>
-							</div>
+						<div class="form-group" data-bind="visible: !isLoadingRequests()">
+							<label for="sel1">@Resources.Show</label>
+							<select class="form-control" data-bind="options: filters, optionsText: 'name',
+								optionsValue: 'show', value: hideOldRequests"
+								id="sel1">
+							</select>
 						</div>
 					</div>
 
 					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
 						<div class="form-group">
-							<div class="new-filter">
-								<select class="form-control" data-bind="visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
-									optionsValue: 'show', value: IsSortByUpdateDate"
-								 id="sel2">
-								</select>
-							</div>
+							<label for="sel1">@Resources.SortBy</label>
+							<select class="form-control" data-bind="visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
+								optionsValue: 'show', value: IsSortByUpdateDate"
+								id="sel2">
+							</select>
 						</div>
 					</div>
 				</div>
