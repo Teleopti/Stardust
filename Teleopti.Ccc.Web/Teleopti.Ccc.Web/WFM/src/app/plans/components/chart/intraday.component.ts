@@ -23,7 +23,7 @@ export class IntradayComponent implements OnChanges {
 		StaffingScaffold: '#FFFFFF',
 		Overstaffing: '#0a84d6',
 		Understaffing: '#D32F2F',
-		CriticalInterval: '#5f5f5f',
+		CriticalInterval: '#3f3f3f',
 	};
 	
 	names = {
@@ -31,7 +31,7 @@ export class IntradayComponent implements OnChanges {
 		Scheduled: this.translate.instant('ScheduledAgents'),
 		Overstaffing: this.translate.instant('Overstaffing'),
 		Understaffing: this.translate.instant('Understaffing'),
-		CriticalInterval: this.translate.instant('CriticalInterval'),
+		CriticalInterval: this.translate.instant('PoorStaffing'),
 	};
 	
 	constructor(private translate: TranslateService) {

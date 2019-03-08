@@ -4173,8 +4173,12 @@ Accounts</value>
     <value>Understaffing</value>
     <comment>Understaffing</comment>
   </data>
-  <data name="HasCriticalIntervals" xml:space="preserve">
-    <value>Has critical intervals</value>
+  <data name="HasIntervalsWithPoorStaffing" xml:space="preserve">
+    <value>Has intervals with poor staffing</value>
+    <comment>Used in plans heatmap tooltip</comment>
+  </data>
+  <data name="PoorStaffing" xml:space="preserve">
+    <value>Poor staffing</value>
     <comment>Used in plans heatmap tooltip</comment>
   </data>
   <data name="RelativeOverstaffing" xml:space="preserve">
