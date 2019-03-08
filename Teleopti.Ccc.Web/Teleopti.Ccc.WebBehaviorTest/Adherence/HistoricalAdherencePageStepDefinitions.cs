@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		[Then(@"I should see adjusted period between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeAdjustedPeriodBetween(string from, string to)
 		{
-			Browser.Interactions.AssertAnyContains(".adjusted-period", from);
-			Browser.Interactions.AssertAnyContains(".adjusted-period", to);
+			Browser.Interactions.AssertExists(".adjusted-period[data-starttime='{0}'][data-endtime='{1}']", from, to);
 		}
 
 		[Then(@"I should see neutral adherence between '(.*)' and '(.*)'")]

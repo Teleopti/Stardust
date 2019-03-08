@@ -88,7 +88,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="period in vm.adjustedPeriods" class="adjusted-period">
+            <tr ng-repeat="period in vm.adjustedPeriods" class="adjusted-period" data-starttime="{{period.StartTime}}" data-endtime="{{period.EndTime}}">
                 <td>{{period.StartTime}}</td>
                 <td>{{period.EndTime}}</td>
             </tr>

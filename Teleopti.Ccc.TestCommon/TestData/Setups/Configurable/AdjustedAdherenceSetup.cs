@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime EndTime { get; set; }
 	}
 
-	public class AdjustedAdherenceSetup : IUserDataSetup<AdjustedAdherenceSpec>
+	public class AdjustedAdherenceSetup : IDataSetup<AdjustedAdherenceSpec>
 	{
 		private readonly AdjustAdherenceToNeutral _adjustedAsNeutral;
 
@@ -21,8 +21,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			_adjustedAsNeutral = adjustedAsNeutral;
 		}
 
-		public void Apply(AdjustedAdherenceSpec spec, IPerson person, CultureInfo cultureInfo)
+		public void Apply(AdjustedAdherenceSpec spec)
 		{
+			_adjustedAsNeutral.Adjust(
+				new AdjustedPeriod
+				{
+					StartTime = spec.StartTime,
+					EndTime = spec.EndTime						
+				});
 		}
 	}
 }

@@ -32,12 +32,11 @@ Feature: Adjust adherence to neutral
 	When I view adjust adherence
 	And I adjust adherence '2019-01-14 09:00' to '2019-01-14 12:00' as neutral adherence
 	Then I should see adjusted period between '2019-01-14 09:00' and '2019-01-14 12:00'
-
-	@ignore
+	
   Scenario: Adjust adherence to neutral affecting historical adherence
 	Given Ashley Andeen has a 'Phone' shift between '2019-01-14 09:00' and '17:00'
 	And today is '2019-01-15'
-	And at '09:00' 'Ashley Andeen sets his phone state to 'LoggedOff'
+	And at '09:00' 'Ashley Andeen' sets his phone state to 'LoggedOff'
 	And at '10:00' 'Ashley Andeen' sets his phone state to 'Ready'
 	And the period between '2019-01-14 09:00' and '2019-01-14 12:00' is adjusted to neutral
 	When I view historical adherence for 'Ashley Andeen' on '2019-01-14'

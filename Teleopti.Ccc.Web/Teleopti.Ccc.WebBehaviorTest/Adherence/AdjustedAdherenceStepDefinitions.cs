@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		{
 		}
 		
-		[When(@"the period between '(.*)' and '(.*)' is adjusted to neutral")]
+		[Given(@"the period between '(.*)' and '(.*)' is adjusted to neutral")]
 		public void AndThePeriodIsAdjustedToNeutral(string from, string to)
 		{
 			var period = CurrentTime.MagicParse(from, to);
