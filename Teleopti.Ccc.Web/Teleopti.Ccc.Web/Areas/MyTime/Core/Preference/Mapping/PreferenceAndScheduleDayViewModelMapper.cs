@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				ContractTime =
 					TimeHelper.GetLongHourMinuteTimeString(contractTime,
 						CultureInfo.CurrentUICulture),
-				TimeSpan = personAssignment.PeriodExcludingPersonalActivity().TimePeriod(s.TimeZone).ToShortTimeString(),
+				TimeSpan = personAssignment.Period.TimePeriod(s.TimeZone).ToShortTimeString(),
 				ContractTimeMinutes = (int) contractTime.TotalMinutes
 			};
 		}

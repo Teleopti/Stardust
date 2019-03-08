@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -44,6 +46,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
 		public FakeBankHolidayDateRepository BankHolidayDateRepository;
 		private ISite _site;
+		public FakeScenarioRepository Scenario;
+		public FakeUserTimeZone TimeZone;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -104,6 +108,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.PreferencesAndSchedules(date.AddDays(-1), date.AddDays(1)).Data as IEnumerable<PreferenceAndScheduleDayViewModel>;
 			result.First().BankHolidayCalendar.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldMapPeriodTimeIncludePersonalActivity()
+		{
+			var date = DateOnly.Today;
+			var scenario = Scenario.LoadDefaultScenario();
+			var assignment = new PersonAssignment(LoggedOnUser.CurrentUser(), scenario, date);
+			var startTime = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startTime, endTime);
+			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, period.MovePeriod(TimeSpan.FromHours(-2)));
+			var schedule = ScheduleDayFactory.Create(date, LoggedOnUser.CurrentUser(), scenario);
+			schedule.Add(assignment);
+			ScheduleProvider.AddScheduleDay(schedule);
+
+			var result = Target.PreferencesAndSchedules(date.AddDays(-1), date.AddDays(1)).Data as IEnumerable<PreferenceAndScheduleDayViewModel>;
+			result.First().PersonAssignment.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(startTime.AddHours(-2), endTime).TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
