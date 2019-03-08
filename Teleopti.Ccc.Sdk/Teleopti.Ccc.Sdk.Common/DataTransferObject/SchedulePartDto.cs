@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     /// <summary>
     /// Represents an SchedulePartDto object which contains schedule information for one day.
     /// </summary>
+	[DebuggerDisplay("{Date?.DateTime.ToShortDateString()} - {PersonId}")]
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
     public class SchedulePartDto : Dto
     {
