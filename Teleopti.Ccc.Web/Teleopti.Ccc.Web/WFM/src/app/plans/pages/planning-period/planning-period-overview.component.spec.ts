@@ -239,7 +239,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
-	it('should check progress and return schedule is done with success', async() => {
+	it('should check progress and return schedule is done with success', () => {
 		component.runScheduling = true;
 		expect(component.isDisabled()).toEqual(true);
 		
@@ -254,7 +254,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(false);
 	});
 
-	it('should check progress and return schedule is failed', async() => {
+	it('should check progress and return schedule is failed', () => {
 		component.runScheduling = true;
 		expect(component.isDisabled()).toEqual(true);
 
