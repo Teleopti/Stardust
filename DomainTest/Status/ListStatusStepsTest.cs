@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 	{
 		public ListStatusSteps Target;
 		public FakeStatusStep FakeStatusStep;
+		public FakeFetchCustomStatusSteps FetchCustomStatusSteps;
 		private const string actionName = "action/Name";
 		private static readonly Uri uri = new Uri("http://www.something.com");
 
@@ -48,10 +49,23 @@ namespace Teleopti.Ccc.DomainTest.Status
 		
 			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).Description.Should().Be.EqualTo(FakeStatusStep.Description);
 		}
-		
+
+		[Test]
+		public void ShouldReturnCustomStatusSteps()
+		{
+			var stepName = Guid.NewGuid().ToString();
+			var description = Guid.NewGuid().ToString();
+			var statusStep = new CustomStatusStep(stepName, description);
+			FetchCustomStatusSteps.Has(statusStep);
+
+			Target.Execute(uri, stepName).Single(x => x.Name == statusStep.Name).Description
+				.Should().Be.EqualTo(description);
+		}
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeStatusStep>().For<IStatusStep>();
+			isolate.UseTestDouble<FakeFetchCustomStatusSteps>().For<IFetchCustomStatusSteps>();
 		}
 	}
 }
