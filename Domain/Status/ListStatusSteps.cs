@@ -6,18 +6,18 @@ namespace Teleopti.Ccc.Domain.Status
 {
 	public class ListStatusSteps
 	{
-		private readonly IEnumerable<IStatusStep> _monitorSteps;
+		private readonly IEnumerable<IStatusStep> _fixedStatusSteps;
 		private readonly IFetchCustomStatusSteps _fetchCustomStatusSteps;
 
-		public ListStatusSteps(IEnumerable<IStatusStep> monitorSteps, IFetchCustomStatusSteps fetchCustomStatusSteps)
+		public ListStatusSteps(IEnumerable<IStatusStep> fixedStatusSteps, IFetchCustomStatusSteps fetchCustomStatusSteps)
 		{
-			_monitorSteps = monitorSteps;
+			_fixedStatusSteps = fixedStatusSteps;
 			_fetchCustomStatusSteps = fetchCustomStatusSteps;
 		}
 		
 		public IEnumerable<StatusStepInfo> Execute(Uri virtualDirectoryAbsolutePath, string actionString)
 		{
-			var steps = _monitorSteps.Union(_fetchCustomStatusSteps.Execute());
+			var steps = _fixedStatusSteps.Union(_fetchCustomStatusSteps.Execute());
 			var basePath = virtualDirectoryAbsolutePath.ToString().TrimEnd('/') + "/" + actionString + "/";
 			foreach (var monitorStep in steps)
 			{
