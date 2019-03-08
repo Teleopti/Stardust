@@ -1,4 +1,5 @@
-$NugetExe = "$PSScriptRoot\..\..\.nuget\NuGet.exe"
+$CurrentDir = $PWD.Path
+$NugetExe = "$CurrentDir\..\..\.nuget\NuGet.exe"
 $PAT = "c4a7hfpkb7ibp5zd67impuueu3hmrg3ta6yqrgrqcyvrmnxgep4q"
 $Feed = "https://teleopti.pkgs.visualstudio.com/_packaging/TeleoptiNugets/nuget/v3/index.json"
 $PackageName = 'Teleopti.Cube.Xmla'
@@ -20,14 +21,14 @@ if($Version -match "(?<=Teleopti.Cube.Xmla \d+\.\d+\.)(?<bv>\d+)")
     $NugetPkgName = $NewNugetPkg[0]
     $NugetPkgVersion = $NewNugetPkg[1]
     
-    $NugetNuspec = $PSScriptRoot + '\' + $NugetPkgName + '.Nuspec'
+    $NugetNuspec = $CurrentDir + '\' + $NugetPkgName + '.Nuspec'
             
     Write-Host "Will create a new NuGet pkg: '$NewVersion'"
     & $NugetExe pack $NugetNuspec -Version "$NugetPkgVersion"
     
     $NewPkgToPush = $NewVersion + '.nupkg'
     Write-Host "Pushing NuGet pkg to VSTS: '$NewPkgToPush'..."
-    & $NugetExe -Source "TeleoptiNugets" -ApiKey AzureDevOps $NewPkgToPush
+    & $NugetExe push -Source "TeleoptiNugets" -ApiKey AzureDevOps $NewPkgToPush
             
 } 
 else
