@@ -90,14 +90,14 @@ ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = true
 ResourcePlanner_QueryHintOnLayers_79780 = true
 ResourcePlanner_TeamSchedulingInPlans_79283 = RC #Note to ourselves: remember to remove a build step in ethiopian team after remove this toggle
 ResourcePlanner_DelayShiftCreations_81680 = RC
-ResourcePlanner_PrepareToRemoveRightToLeft_81112 = RC
-WFM_Plans_Redesign_81198 = RC
-WFM_Plans_HeatMap_79112_80785 = RC
+ResourcePlanner_PrepareToRemoveRightToLeft_81112 = true
+WFM_Plans_Redesign_81198 = true
+WFM_Plans_HeatMap_79112_80785 = true
 WFM_Plans_IntradayIssuesInHeatMap_79113 = DEV
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = true
-WFM_Intraday_Browser_Tab_81482 = RC
+WFM_Intraday_Browser_Tab_81482 = true
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
@@ -134,4 +134,4 @@ MyTimeWeb_Availability_Indicate_BankHoliday_81656 = RC #Depending on WFM_Setting
 
 # Tech #
 WFM_ChatBot_77547 = RC
-WFM_Insights_80704 = RC
+WFM_Insights_80704 = true
