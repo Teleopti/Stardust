@@ -82,7 +82,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 			Years: []
 		});
 		fixture.detectChanges();
-		expectSuccessAlertMessage();
+		expectAlertMessage('success');
 		expect(component.newCalendar.Name).toBe(
 			'I am a new calendar - name from backend which should match the cal name from frontend'
 		);
@@ -103,7 +103,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 	it('should show calendar name hint', () => {
 		const addBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 
-		expectSuccessAlertMessage();
+		expectAlertMessage('info');
 		component.calendarName = 'Bank Holiday';
 		const input = addBankHolidayCalendarPanel.querySelector('.edit-bank-holiday-calendar-header input');
 		input.dispatchEvent(new Event('blur'));
@@ -115,6 +115,21 @@ describe('BankHolidayCalendarEditComponent', () => {
 		input.dispatchEvent(new Event('change'));
 		fixture.detectChanges();
 		expect(addBankHolidayCalendarPanel.querySelectorAll('nz-alert[nztype="error"]').length).toBe(1);
+	});
+
+	it('should show a hint to remind user to select bank holiday dates only after a valid name is given', () => {
+		const addBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		expectAlertMessage('info');
+		const bankHolidayHintMsgElements = addBankHolidayCalendarPanel.querySelectorAll('nz-alert');
+		expect(bankHolidayHintMsgElements.length).toBe(1);
+
+		component.calendarName = 'Bank Holiday';
+		const input = addBankHolidayCalendarPanel.querySelector('.edit-bank-holiday-calendar-header input');
+		input.dispatchEvent(new Event('blur'));
+		fixture.detectChanges();
+
+		expect(addBankHolidayCalendarPanel.querySelectorAll('nz-alert[nztype="success"]').length).toBe(0);
+		expect(addBankHolidayCalendarPanel.querySelectorAll('nz-alert[nztype="info"]').length).toBe(1);
 	});
 
 	it('should trim space before and after when checking the existing name', () => {
@@ -176,7 +191,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
-		expectSuccessAlertMessage();
+		expectAlertMessage('success');
 
 		component.dateChangeCallback(new Date('2015-01-11'));
 		fixture.detectChanges();
@@ -280,7 +295,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
 		expect(dateRows[0].innerHTML.indexOf('BankHoliday New Description') > -1).toBeTruthy();
-		expectSuccessAlertMessage();
+		expectAlertMessage('success');
 	});
 
 	it('should set is last added after adding dates', () => {
@@ -482,7 +497,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		});
 		fixture.detectChanges();
 
-		expectSuccessAlertMessage();
+		expectAlertMessage('success');
 
 		const dateContent = document.getElementsByClassName('bank-holiday-calendar-date-content')[0];
 
@@ -644,17 +659,6 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(component.newCalendar.Years[1].Year).toBe('2016');
 		expect(component.newCalendar.Years[1].Dates.length).toBe(1);
 		expect(component.newCalendar.Years[1].Dates[0].Date).toBe('2016-01-10');
-	});
-
-	it('should show a hint message off adding date when there is no date', () => {
-		const hintElement = document.getElementsByClassName('bank-holiday-no-date-tip');
-
-		expect(hintElement.length).toBe(1);
-		expect(
-			hintElement[0].innerHTML.indexOf(
-				'ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday'
-			) > -1
-		).toBeTruthy();
 	});
 
 	it('should save after user input calendar name and select a date', () => {
@@ -1015,10 +1019,10 @@ describe('BankHolidayCalendarEditComponent', () => {
 			.getElementsByTagName('nz-list-item');
 	}
 
-	function expectSuccessAlertMessage() {
+	function expectAlertMessage(type) {
 		const addBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		const nzAlert = addBankHolidayCalendarPanel.querySelectorAll('nz-alert');
 
-		expect(nzAlert[0].getAttribute('nzType')).toBe('success');
+		expect(nzAlert[0].getAttribute('nzType')).toBe(type);
 	}
 });

@@ -11,7 +11,7 @@
 		/>
 		<nz-alert
 			*ngIf="isShowCalendarNameHint && !isNewCalendarNameEmpty"
-			nzType="success"
+			nzType="info"
 			[nzMessage]="'PleaseInputCalendarNameFirst' | translate"
 		></nz-alert>
 		<nz-alert
@@ -86,7 +86,7 @@
 		</nz-collapse>
 
 		<nz-alert
-			*ngIf="newCalendarYearsForDisplay.length == 0"
+			*ngIf="newCalendarYearsForDisplay.length == 0 && !isShowCalendarNameHint && !isNewCalendarNameEmpty"
 			nzType="info"
 			class="bank-holiday-no-date-tip"
 			[nzMessage]="'NoBankHolidays' | translate"
