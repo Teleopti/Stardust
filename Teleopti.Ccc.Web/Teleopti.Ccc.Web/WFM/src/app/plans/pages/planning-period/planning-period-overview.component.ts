@@ -96,7 +96,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private navService: NavigationService,
 		private fb: FormBuilder,
 		private heatMapColorHelper:HeatMapColorHelper,
-		public amDateFormat: DateFormatPipe,
+		private amDateFormat: DateFormatPipe,
 		private togglesService: TogglesService,
 		private cdr: ChangeDetectorRef
 	) {

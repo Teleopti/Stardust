@@ -114,7 +114,7 @@
 									>
 										<ng-template #titleTemplate>
 											<div>
-												<div>{{subnode.SkillName}} | {{amDateFormat.transform(node.Date, 'YYYY-MM-DD')}}</div>
+												<div>{{subnode.SkillName}} | {{node.Date | amDateFormat:'YYYY-MM-DD'}}</div>
 												<div *ngIf="node.ColorId !== 4">{{'RelativeDifference' | translate}} : {{node.RelativeDifferencePercent + '%'}}</div>
 												<div *ngIf="node.ColorId === 4">{{'Closed' | translate}}</div>
 												<div *ngIf="node.hasCritical">{{'HasCriticalIntervals' | translate}}</div>
