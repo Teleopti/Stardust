@@ -7,6 +7,9 @@
 		{Id: "NpmStart", Icon: "CommandLine.png", Text: "npm start", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "start"]},
 		{Id: "NpmTest", Icon: "CommandLine.png", Text: "npm test", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "test"]},
 		{Id: "NpmTestRta", Icon: "CommandLine.png", Text: "npm run test:rta", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "run", "test:rta"]},
+		{Id: "NpmBuildDev", Icon: "CommandLine.png", Text: "npm run dev:build", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "run", "dev:build"]},
+		{Id: "NpmBuildProd", Icon: "CommandLine.png", Text: "npm run prod:build", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "run", "prod:build"]},
+		{Id: "NpmWatch", Icon: "CommandLine.png", Text: "npm run dev:watch", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "run", "dev:watch"]},
 		{Id: "Etl", Text: "Etl", Directory: "Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\", Run: ["Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe"]},
 		{Id: "cmd_WFM", Icon: "CommandLine.png", Text: "cmd: WFM", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: []},
 		{Id: "cmd_Repository", Icon: "CommandLine.png", Text: "cmd: Repository", Directory: "", Run: []}
