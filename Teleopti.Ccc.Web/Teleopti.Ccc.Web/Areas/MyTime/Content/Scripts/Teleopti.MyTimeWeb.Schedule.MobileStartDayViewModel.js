@@ -106,7 +106,7 @@
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.isDayOff = data.Schedule.IsDayOff;
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
-		self.periods = data.Schedule.Periods;
+		self.periods = data.Schedule.Periods || [];
 		self.unreadMessageCount(data.UnReadMessageCount);
 		self.asmEnabled(data.AsmEnabled);
 		self.openHourPeriod = data.Schedule.OpenHourPeriod;
@@ -416,13 +416,9 @@
 				self.updateProbabilityData
 			);
 		} else {
-			var probabilities = oneWeekRawProbabilities.filter(function(r) {
-				return r.Date === self.selectedDate().format('YYYY-MM-DD');
-			});
-
 			self.probabilities(
 				Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
-					probabilities,
+					filterProbabilities(oneWeekRawProbabilities),
 					self,
 					buildProbabilityOptions()
 				)
@@ -433,17 +429,12 @@
 
 	self.updateProbabilityData = function(rawProbabilities) {
 		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) return;
+
 		oneWeekRawProbabilities = rawProbabilities;
-
-		self.fixedDate = moment(self.selectedDate());
-
-		var targetProbabilities = oneWeekRawProbabilities.filter(function(r) {
-			return r.Date === self.selectedDate().format('YYYY-MM-DD');
-		});
 
 		self.probabilities(
 			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
-				targetProbabilities,
+				filterProbabilities(oneWeekRawProbabilities),
 				self,
 				buildProbabilityOptions()
 			)
@@ -464,6 +455,43 @@
 		resetRequestViewModel();
 	};
 
+	function filterProbabilities(rawProbabilities) {
+		var schedulePeriodStart = self.periods[0] ? moment(self.periods[0].StartTime) : null;
+		var schedulePeriodEnd = self.periods[self.periods.length - 1]
+			? moment(self.periods[self.periods.length - 1].EndTime)
+			: null;
+
+		var isOvernight =
+			(schedulePeriodStart !== null) & (schedulePeriodEnd !== null) &&
+			schedulePeriodStart.format(constants.serviceDateTimeFormat.dateOnly) !==
+				schedulePeriodEnd.format(constants.serviceDateTimeFormat.dateOnly);
+
+		self.fixedDate = moment(self.selectedDate());
+
+		var targetProbabilities = rawProbabilities.filter(function(r) {
+			return r.Date === self.selectedDate().format(constants.serviceDateTimeFormat.dateOnly);
+		});
+
+		if (isOvernight && self.selectedProbabilityOptionValue() === constants.probabilityType.absence) {
+			targetProbabilities = rawProbabilities.filter(function(probability) {
+				return (
+					schedulePeriodStart <= moment(probability.StartTime) &&
+					moment(probability.EndTime) <= schedulePeriodEnd
+				);
+			});
+		} else if (isOvernight && self.selectedProbabilityOptionValue() === constants.probabilityType.overtime) {
+			targetProbabilities = rawProbabilities.filter(function(probability) {
+				return (
+					probability.Date === self.selectedDate().format(constants.serviceDateTimeFormat.dateOnly) ||
+					(schedulePeriodStart <= moment(probability.StartTime) &&
+						moment(probability.EndTime) <= schedulePeriodEnd)
+				);
+			});
+		}
+
+		return targetProbabilities;
+	}
+
 	function buildProbabilityOptions() {
 		return {
 			probabilityType: self.selectedProbabilityOptionValue(),
@@ -472,7 +500,8 @@
 			mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
 			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
 			userTexts: self.userTexts,
-			daylightSavingTimeAdjustment: self.daylightSavingTimeAdjustment
+			daylightSavingTimeAdjustment: self.daylightSavingTimeAdjustment,
+			allowOvernight: true
 		};
 	}
 
