@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
 import * as moment from 'moment';
@@ -7,7 +7,8 @@ import { IntradayHelper } from '../../shared';
 @Component({
 	selector: 'plans-intraday',
 	templateUrl: './intraday.component.html',
-	styleUrls: ['./intraday.component.scss']
+	styleUrls: ['./intraday.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class IntradayComponent implements OnChanges {
 	chart: c3.ChartAPI;
