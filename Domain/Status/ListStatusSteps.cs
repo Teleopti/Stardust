@@ -1,25 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Status
 {
 	public class ListStatusSteps
 	{
-		private readonly IEnumerable<IStatusStep> _fixedStatusSteps;
-		private readonly IFetchCustomStatusSteps _fetchCustomStatusSteps;
+		private readonly AllSteps _allSteps;
 
-		public ListStatusSteps(IEnumerable<IStatusStep> fixedStatusSteps, IFetchCustomStatusSteps fetchCustomStatusSteps)
+		public ListStatusSteps(AllSteps allSteps)
 		{
-			_fixedStatusSteps = fixedStatusSteps;
-			_fetchCustomStatusSteps = fetchCustomStatusSteps;
+			_allSteps = allSteps;
 		}
 		
 		public IEnumerable<StatusStepInfo> Execute(Uri virtualDirectoryAbsolutePath, string actionString)
 		{
-			var steps = _fixedStatusSteps.Union(_fetchCustomStatusSteps.Execute());
 			var basePath = virtualDirectoryAbsolutePath.ToString().TrimEnd('/') + "/" + actionString + "/";
-			foreach (var monitorStep in steps)
+			foreach (var monitorStep in _allSteps.FetchAll())
 			{
 				var stepName = monitorStep.Name;
 				yield return new StatusStepInfo(stepName, monitorStep.Description, basePath + stepName);
