@@ -93,7 +93,7 @@ ResourcePlanner_DelayShiftCreations_81680 = RC
 ResourcePlanner_PrepareToRemoveRightToLeft_81112 = true
 WFM_Plans_Redesign_81198 = true
 WFM_Plans_HeatMap_79112_80785 = true
-WFM_Plans_IntradayIssuesInHeatMap_79113 = DEV
+WFM_Plans_IntradayIssuesInHeatMap_79113 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = true
