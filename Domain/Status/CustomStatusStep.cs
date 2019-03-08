@@ -2,15 +2,19 @@ namespace Teleopti.Ccc.Domain.Status
 {
 	public class CustomStatusStep : IStatusStep
 	{
-		public CustomStatusStep(string name, string description)
+		private readonly ITimeSinceLastPing _timeSinceLastPing;
+
+		public CustomStatusStep(string name, string description, ITimeSinceLastPing timeSinceLastPing)
 		{
+			_timeSinceLastPing = timeSinceLastPing;
 			Name = name;
 			Description = description;
 		}
 		
 		public StatusStepResult Execute()
 		{
-			throw new System.NotImplementedException();
+			_timeSinceLastPing.Execute(this);
+			return null;
 		}
 
 		public string Name { get; }

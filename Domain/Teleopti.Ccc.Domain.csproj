@@ -251,9 +251,11 @@
     <Compile Include="Status\CheckLegacySystemStatus.cs" />
     <Compile Include="Status\CustomStatusStep.cs" />
     <Compile Include="Status\EtlChecker.cs" />
+    <Compile Include="Status\FakeTimeSinceLastPing.cs" />
     <Compile Include="Status\ICallLegacySystemStatus.cs" />
     <Compile Include="Status\IFetchCustomStatusSteps.cs" />
     <Compile Include="Status\IStatusStep.cs" />
+    <Compile Include="Status\ITimeSinceLastPing.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
     <Compile Include="Status\StardustChecker.cs" />
     <Compile Include="Status\StatusStepInfo.cs" />
