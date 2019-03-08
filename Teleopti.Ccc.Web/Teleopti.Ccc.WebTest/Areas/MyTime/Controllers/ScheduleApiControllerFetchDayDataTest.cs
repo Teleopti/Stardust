@@ -937,7 +937,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
 
-			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime).Schedule;
+			var result = Target.FetchDayData(date, StaffingPossibilityType.Overtime).Schedule;
 			result.OpenHourPeriod.Equals(timePeriod).Should().Be.True();
 		}
 

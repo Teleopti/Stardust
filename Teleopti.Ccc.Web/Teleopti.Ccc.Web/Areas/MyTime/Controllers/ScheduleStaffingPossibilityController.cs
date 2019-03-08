@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public ScheduleStaffingPossibilityController(IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory, INow now, IUserTimeZone userTimeZone)
+		public ScheduleStaffingPossibilityController(IStaffingPossibilityViewModelFactory staffingPossibilityViewModelFactory,
+			INow now, IUserTimeZone userTimeZone)
 		{
 			_staffingPossibilityViewModelFactory = staffingPossibilityViewModelFactory;
 			_now = now;
@@ -29,13 +30,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork, Route("api/ScheduleStaffingPossibility"), HttpGet]
 		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetPossibilityViewModels(
 			[ModelBinder(typeof(DateOnlyModelBinder))] DateOnly? date,
-			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
+			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None,
 			bool returnOneWeekData = true)
 		{
 			var showForDate = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return
 				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(
-					date.GetValueOrDefault(showForDate), staffingPossiblityType, returnOneWeekData);
+					date.GetValueOrDefault(showForDate), staffingPossibilityType, returnOneWeekData);
 		}
 	}
 }

@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 {
 	public interface IScheduleDayViewModelFactory
 	{
-		DayScheduleViewModel CreateDayViewModel(DateOnly dateOnly, StaffingPossiblityType staffingPossiblityType);
+		DayScheduleViewModel CreateDayViewModel(DateOnly dateOnly, StaffingPossibilityType staffingPossibilityType);
 	}
 }

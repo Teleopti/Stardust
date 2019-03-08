@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
-			StaffingPossiblityType staffingPossibilityType, bool returnOneWeekData)
+			StaffingPossibilityType staffingPossibilityType, bool returnOneWeekData)
 		{
-			if (staffingPossibilityType == StaffingPossiblityType.Absence)
+			if (staffingPossibilityType == StaffingPossibilityType.Absence)
 			{
 				return getAbsencePeriodStaffingPossibilityViewModels(startDate, returnOneWeekData);
 			}
-			if (staffingPossibilityType == StaffingPossiblityType.Overtime)
+			if (staffingPossibilityType == StaffingPossibilityType.Overtime)
 			{
 				return getOvertimePeriodStaffingPossibilityViewModels(startDate, returnOneWeekData);
 			}

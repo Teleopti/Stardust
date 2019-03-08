@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, getTodayDateOnlyPeriod(), StaffingPossiblityType.Absence) / personCount;
+				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, getTodayDateOnlyPeriod(), StaffingPossibilityType.Absence) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Absence) / personCount;
+				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossibilityType.Absence) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Overtime) / personCount;
+				var elapsedMilliseconds = calculatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossibilityType.Overtime) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			return new DateOnly(usersNow).ToDateOnlyPeriod();
 		}
 
-		private long calculatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod, StaffingPossiblityType staffingPossiblityType)
+		private long calculatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod, StaffingPossibilityType staffingPossiblityType)
 		{
 			long totalElapsedMilliseconds = 0;
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				setAbsenceRequestOpenPeriods(person.WorkflowControlSet);
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
-				var possibilities = staffingPossiblityType == StaffingPossiblityType.Absence
+				var possibilities = staffingPossiblityType == StaffingPossibilityType.Absence
 					? AbsenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod).Models
 					: OvertimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod, true);
 				stopwatch.Stop();

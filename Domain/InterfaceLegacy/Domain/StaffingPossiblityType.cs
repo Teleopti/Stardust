@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public enum StaffingPossiblityType
+	public enum StaffingPossibilityType
 	{
 		None = 0,
 		Absence = 1,
