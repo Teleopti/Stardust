@@ -1,17 +1,18 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
-import { configureTestSuite } from '@wfm/test';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarAssignToSitesComponent } from './bank-holiday-calendar-assign-to-sites.component';
 import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 import { BankCalendarDataService } from '../../shared';
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
+import { By } from '@angular/platform-browser';
 
 describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAssignToSitesComponent>;
@@ -19,6 +20,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	let dataService: BankCalendarDataService;
 	let component: BankHolidayCalendarAssignToSitesComponent;
 	let httpTestingController: HttpTestingController;
+	let page: Page;
 
 	configureTestSuite();
 
@@ -33,11 +35,12 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 				HttpClientTestingModule,
 				NoopAnimationsModule
 			],
-			providers: [MockTranslateService, UserService, GroupPageService, BankCalendarDataService]
+			providers: [MockTranslateService, GroupPageService, BankCalendarDataService]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarAssignToSitesComponent);
 		document = TestBed.get(DOCUMENT);
+		page = new Page(fixture);
 		component = fixture.componentInstance;
 		dataService = TestBed.get(BankCalendarDataService);
 		fixture.autoDetectChanges(true);
@@ -188,13 +191,11 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		fixture.detectChanges();
 
-		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		const listItems = list.getElementsByTagName('nz-list-item');
+		page.listItems[0].nativeElement.click();
 
-		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
 
-		document.getElementsByClassName('ant-select-dropdown-menu-item')[0].dispatchEvent(new Event('click'));
+		page.dropdownOptions[0].click();
 
 		httpTestingController
 			.expectOne('../api/SiteBankHolidayCalendars/Update')
@@ -256,13 +257,11 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		fixture.detectChanges();
 
-		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		const listItems = list.getElementsByTagName('nz-list-item');
+		page.listItems[0].nativeElement.click();
 
-		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
 
-		document.getElementsByClassName('ant-select-dropdown-menu-item')[0].dispatchEvent(new Event('click'));
+		page.dropdownOptions[0].click();
 
 		httpTestingController
 			.expectOne('../api/SiteBankHolidayCalendars/Update')
@@ -381,12 +380,11 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		expect(component.sitesList[1].SelectedCalendarId).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
 		expect(component.siteCalendarsList.length).toBe(2);
 
-		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		const listItems = list.getElementsByTagName('nz-list-item');
+		page.listItems[0].nativeElement.click();
 
-		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
-		document.getElementsByClassName('ant-select-dropdown-menu-item')[0].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		page.dropdownOptions[0].click();
 
 		httpTestingController
 			.expectOne('../api/SiteBankHolidayCalendars/Update')
@@ -461,12 +459,11 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		expect(component.siteCalendarsList.length).toBe(1);
 
-		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		const listItems = list.getElementsByTagName('nz-list-item');
+		page.listItems[0].nativeElement.click();
 
-		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
-		document.getElementsByClassName('ant-select-dropdown-menu-item')[0].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		page.dropdownOptions[0].click();
 
 		httpTestingController
 			.expectOne('../api/SiteBankHolidayCalendars/Update')
@@ -524,12 +521,11 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		expect(component.siteCalendarsList[0].Calendars[0]).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
 
-		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		const listItems = list.getElementsByTagName('nz-list-item');
+		page.listItems[0].nativeElement.click();
 
-		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
-		document.getElementsByClassName('ant-select-dropdown-menu-item')[1].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		page.dropdownOptions[1].click();
 
 		httpTestingController
 			.expectOne('../api/SiteBankHolidayCalendars/Update')
@@ -540,3 +536,21 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		expect(component.siteCalendarsList[0].Calendars[0]).toBe('bab44a97-2f77-419e-a5bb-cd12a8c39300');
 	});
 });
+
+class Page extends PageObject {
+	get container() {
+		return this.query('.bank-holiday-calendar-assign-to-sites');
+	}
+
+	get list() {
+		return this.container.query(By.css('.bank-holiday-calendar-sites-list'));
+	}
+
+	get listItems() {
+		return this.list.queryAll(By.css('input'));
+	}
+
+	get dropdownOptions() {
+		return this.fixture.nativeElement.ownerDocument.querySelectorAll('.ant-select-dropdown-menu-item') as HTMLElement[];
+	}
+}

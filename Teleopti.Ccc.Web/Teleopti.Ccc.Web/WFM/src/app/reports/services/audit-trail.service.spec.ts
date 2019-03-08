@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
-import { AuditEntry, Person } from 'src/app/shared/types';
-import { AuditTrailService } from './audit-trail.service';
+import { AuditEntry } from 'src/app/shared/types';
+import { AuditTrailService, PersonByKeyWordResponse } from './audit-trail.service';
 
 describe('Audit-trail service', () => {
 	let httpClientSpy: { get: jasmine.Spy };
@@ -12,12 +12,14 @@ describe('Audit-trail service', () => {
 	});
 
 	it('should return person by keyword', () => {
-		const mockPersonList: Person[] = [{ Id: '', FirstName: 'Foo', LastName: 'Bar' }];
+		const mockPersonResponse: PersonByKeyWordResponse = {
+			Persons: [{ Id: '', FirstName: 'Foo', LastName: 'Bar' }]
+		};
 
-		httpClientSpy.get.and.returnValue(of(mockPersonList));
+		httpClientSpy.get.and.returnValue(of(mockPersonResponse));
 
 		auditTrailService.getPersonByKeyword('Ash').subscribe(persons => {
-			expect(persons).toBe(mockPersonList);
+			expect(persons).toBe(mockPersonResponse);
 		});
 
 		expect(httpClientSpy.get.calls.count()).toEqual(1);
