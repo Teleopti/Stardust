@@ -105,7 +105,9 @@ BEGIN
 		sys.datasource_id = ' + CAST(@datasource_id as nvarchar(10)) + '
 	WHERE 
 		mart.dim_queue.queue_agg_id		= agg.queue			AND
-		mart.dim_queue.datasource_id	= sys.datasource_id'
+		mart.dim_queue.datasource_id	= sys.datasource_id AND
+		agg.orig_queue_id IS NOT NULL AND
+		agg.orig_desc IS NOT NULL'
 		
 	---Exec
 	EXEC sp_executesql @sqlstring
