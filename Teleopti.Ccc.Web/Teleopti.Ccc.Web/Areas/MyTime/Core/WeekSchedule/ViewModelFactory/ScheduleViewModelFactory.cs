@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				_scheduleWeekMinMaxTimeCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
 
-			var isOvertimeStaffingPossibility = staffingPossibilityType == StaffingPossibilityType.Overtime;
-			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, isOvertimeStaffingPossibility);
+			var isOvertimeStaffingPossiblity = staffingPossibilityType == StaffingPossibilityType.Overtime;
+			var weekScheduleViewModel = _scheduleViewModelMapper.Map(weekDomainData, isOvertimeStaffingPossiblity);
 			return weekScheduleViewModel;
 		}
 

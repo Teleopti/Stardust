@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 
 			daySchedule.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
-			var isOvertimeStaffingPossibility = staffingPossibilityType == StaffingPossibilityType.Overtime;
-			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossibility);
+			var isOvertimeStaffingPossiblity = staffingPossibilityType == StaffingPossibilityType.Overtime;
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossiblity);
 			return dayScheduleViewModel;
 		}
 
