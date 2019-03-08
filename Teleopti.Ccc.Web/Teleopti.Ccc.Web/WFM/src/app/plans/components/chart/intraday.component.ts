@@ -151,12 +151,6 @@ export class IntradayComponent implements OnChanges {
 				},
 				legend: {
 					hide: ['StaffingScaffold'],
-					item: {
-						onclick: id => {}
-					}
-				},
-				transition: {
-					duration: null
 				},
 				axis: {
 					x: {

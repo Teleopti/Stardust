@@ -189,15 +189,12 @@ describe('Planning Period Overview', () => {
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
 				PlanningPeriodActionService,
+				HeatMapColorHelper,
+				DateFormatPipe,
 				{ provide: PlanningPeriodService, useClass: MockPlanningPeriodService },
-				{ provide: HeatMapColorHelper, useClass: HeatMapColorHelper },
-				{ provide: DateFormatPipe, useClass: DateFormatPipe },
-				{
-					provide: '$state',
-					useValue: mockStateService
-				},
+				{ provide: '$state', useValue: mockStateService },
 				{ provide: NavigationService, useValue: {} },
-				TogglesService
+				TogglesService,
 			]
 		}).compileComponents();
 
@@ -225,7 +222,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
-	it('should check progress and return schedule is running', function() {
+	it('should check progress and return schedule is running', () => {
 		component.runScheduling = true;
 		expect(component.isDisabled()).toEqual(true);
 		
@@ -242,7 +239,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
-	it('should check progress and return schedule is done with success', function() {
+	it('should check progress and return schedule is done with success', async() => {
 		component.runScheduling = true;
 		expect(component.isDisabled()).toEqual(true);
 		
@@ -254,11 +251,10 @@ describe('Planning Period Overview', () => {
 			}
 		};
 		fixture.detectChanges();
-		
 		expect(component.isDisabled()).toEqual(false);
 	});
 
-	it('should check progress and return schedule is failed', function() {
+	it('should check progress and return schedule is failed', async() => {
 		component.runScheduling = true;
 		expect(component.isDisabled()).toEqual(true);
 
@@ -270,7 +266,6 @@ describe('Planning Period Overview', () => {
 			} 
 		};
 		fixture.detectChanges();
-
 		expect(component.isDisabled()).toEqual(false);
 	});
 
@@ -283,7 +278,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
-	it('should check intraday optimization progress and return intraday optimization is done with success', function() {
+	it('should check intraday optimization progress and return intraday optimization is done with success', () => {
 		component.runIntraday = true;
 
 		planningPeriodService.jobStatus = {
@@ -298,7 +293,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(false);
 	});
 
-	it('should check intraday optimization progress and return intraday optimization is failed', function() {
+	it('should check intraday optimization progress and return intraday optimization is failed', () => {
 		component.runIntraday = true;
 
 		planningPeriodService.jobStatus = {
@@ -320,9 +315,9 @@ describe('Planning Period Overview', () => {
 
 		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
 		expect(component.isDisabled()).toEqual(true);
-    });
+    }); 
 
-	it('should check clear schedule progress and return clear schedule is done with success', function() {
+	it('should check clear schedule progress and return clear schedule is done with success', () => {
 		component.runClear = true;
 
 		planningPeriodService.jobStatus = {
@@ -337,7 +332,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(false);
 	});
 
-	it('should check clear schedule progress and return clear schedule is failed', function() {
+	it('should check clear schedule progress and return clear schedule is failed', () => {
 		component.runClear = true;
 
 		planningPeriodService.jobStatus = {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {IntradayHelper, PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,7 +15,8 @@ import * as moment from 'moment';
 	selector: 'plans-period-overview',
 	templateUrl: './planning-period-overview.component.html',
 	styleUrls: ['./planning-period-overview.component.scss'],
-	providers: []
+	providers: [],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	preValidationFilterControl: FormControl = this.fb.control('');
@@ -40,8 +41,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	filteredScheduleIssues: any[];
 	months : any;
 	legends: any[] = [];
-	worstUnderStaffDay: any;
-	worstOverStaffDay: any;
+	worstUnderStaffDay: any = {};
+	worstOverStaffDay: any = {};
 	showNumbers: false;
 	selectedDay = null;
 	selectedSkill: string = null;
@@ -96,7 +97,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private fb: FormBuilder,
 		private heatMapColorHelper:HeatMapColorHelper,
 		public amDateFormat: DateFormatPipe,
-		private togglesService: TogglesService
+		private togglesService: TogglesService,
+		private cdr: ChangeDetectorRef
 	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
@@ -111,17 +113,20 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.preValidationFilterControl.valueChanges
 			.subscribe(filterString => {
 				this.searchPreValidations(filterString);
+				this.cdr.detectChanges();
 			});
 
 		this.scheduleIssuesFilterControl.valueChanges
 			.subscribe(filterString => {
 				this.searchScheduleIssues(filterString);
+				this.cdr.detectChanges();
 			});
 
 		this.skillFilterControl.valueChanges
 			.pipe(this.forTesting ? tap() : debounceTime(600))
 			.subscribe(filterString => {
 				this.search(filterString);
+				this.cdr.detectChanges();
 			});
 		
 		this.loadPlanningGroupInfo();
@@ -392,6 +397,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					return;
 				}
 			}
+			this.cdr.detectChanges();
 		});
 	};
 
@@ -399,12 +405,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data => {
 			this.planningPeriodInfo = data ? data : {};
 			this.totalAgents = data ? data.TotalAgents : 0;
+			this.cdr.detectChanges();
 		});
 	}
 
 	private loadPlanningGroupInfo() {
 		this.planningGroupService.getPlanningGroup(this.groupId).subscribe(data => {
 			this.planningGroupInfo = data ? data : {};
+			this.cdr.detectChanges();
 		});
 	}
 
@@ -560,6 +568,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 				this.isScheduled = false;
 			}
 			this.loadingLastResult = false;
+			this.cdr.detectChanges();
 		});
 	}
 
@@ -570,6 +579,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			this.preValidationFilterControl.updateValueAndValidity();
 			this.loadingValidations = false;
 			this.updateValidationErrorsNumber();
+			this.cdr.detectChanges();
 		});
 	}
 }
