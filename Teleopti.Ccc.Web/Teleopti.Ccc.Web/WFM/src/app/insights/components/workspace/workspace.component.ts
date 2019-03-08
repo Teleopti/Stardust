@@ -1,5 +1,6 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NzModalRef, NzModalService, NzNotificationService } from 'ng-zorro-antd';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { NavigationService } from '../../core/navigation.service';
 import { ReportService } from '../../core/report.service';
 import { Permission } from '../../models/Permission.model';
@@ -30,6 +31,7 @@ export class WorkspaceComponent implements OnInit {
 	modalReport: Report;
 
 	constructor(private reportSvc: ReportService,
+		private translate: TranslateService,
 		public nav: NavigationService,
 		private notification: NzNotificationService) {
 		this.initialized = false;
@@ -71,7 +73,9 @@ export class WorkspaceComponent implements OnInit {
 			this.reports = reports.sort();
 			this.isLoading = false;
 		}).catch(error => {
-			this.notification.create('error', 'Failed to load reports', 'Error message: ' + error, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToLoadReport');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 	}
 
@@ -98,7 +102,9 @@ export class WorkspaceComponent implements OnInit {
 			this.nav.editReport(newReport.ReportId);
 			return true;
 		}).catch(error => {
-			this.notification.create('error', 'Failed to create report', 'Error message: ' + error, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToCreateReport');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 
 		this.newReportName = undefined;
@@ -118,7 +124,9 @@ export class WorkspaceComponent implements OnInit {
 			this.loadReportList();
 			return true;
 		}).catch(error => {
-			this.notification.create('error', 'Failed to clone reports', 'Error message: ' + error, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToSaveAsNewReport');
+			const content = this.translate.instant('ErrorMessageWithParameter', {message: error});
+			this.notification.create('error', title, content, this.errorNotificationOption);
 		});
 
 		this.newReportName = undefined;
@@ -131,15 +139,15 @@ export class WorkspaceComponent implements OnInit {
 	public confirmCreateReport() {
 		this.modalType = 'create';
 		this.modalIsVisible = true;
-		this.messageForNewReportName = 'Please input name for new report:';
-		this.modalTitle = 'Create new report';
+		this.messageForNewReportName = this.translate.instant('InputNameForNewReport');
+		this.modalTitle = this.translate.instant('CreateNewReport');
 	}
 
 	public confirmCloneReport(report) {
 		this.modalType = 'clone';
-		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
+		this.messageForNewReportName = this.translate.instant('InputNameForNewClonedReport', {repName: report.Name});
 		this.modalIsVisible = true;
-		this.modalTitle = 'Save as new report';
+		this.modalTitle = this.translate.instant('SaveAsNewReport');
 		this.modalReport = report;
 	}
 
@@ -151,14 +159,15 @@ export class WorkspaceComponent implements OnInit {
 			if (deleted) {
 				this.loadReportList();
 			} else {
-				errorMessage = 'Failed to delete report "' + report.Name + '"';
+				errorMessage = this.translate.instant('FailedToDeleteReportWithReportName', {repName: report.Name});
 			}
 		}).catch(error => {
-			errorMessage = 'Error message: ' + error;
+			errorMessage = this.translate.instant('ErrorMessageWithParameter', {message: error});
 		});
 
 		if (errorMessage && errorMessage.length > 0) {
-			this.notification.create('error', 'Failed to delete report', errorMessage, this.errorNotificationOption);
+			const title = this.translate.instant('FailedToDeleteReport');
+			this.notification.create('error', title, errorMessage, this.errorNotificationOption);
 		}
 	}
 }

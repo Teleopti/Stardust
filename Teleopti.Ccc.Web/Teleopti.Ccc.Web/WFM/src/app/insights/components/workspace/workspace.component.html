@@ -12,14 +12,14 @@
 		<div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8 }" class="container">
 			<div nz-col nzSpan="8">
 				<nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
-					<input type="text" nz-input placeholder="Search by report name..." [(ngModel)]="reportNameCriteria">
+					<input type="text" nz-input placeholder="{{'SearchByReportNameWith3Dots' | translate}}" [(ngModel)]="reportNameCriteria">
 				</nz-input-group>
 				<ng-template #prefixTemplate><i nz-icon type="search"></i></ng-template>
 				<ng-template #suffixTemplate><i nz-icon type="close-circle" (click)="reportNameCriteria=null" *ngIf="reportNameCriteria"></i>
 				</ng-template>
 			</div>
 			<div nz-col nzSpan="16" style="text-align: right;">
-				<button nz-button nzType="default" *ngIf="initialized && permission.CanEditReport" (click)="confirmCreateReport()"><i nz-icon type="plus-circle" theme="outline"></i> New Report</button>
+				<button nz-button nzType="default" *ngIf="initialized && permission.CanEditReport" (click)="confirmCreateReport()"><i nz-icon type="plus-circle" theme="outline"></i>{{'NewReport' | translate}}</button>
 			</div>
 		</div>
 		<div style="text-align: center;"><nz-spin *ngIf="isLoading"></nz-spin></div>
@@ -28,36 +28,38 @@
 				<nz-list-item [nzContent]="reportName" [hidden]="reportNameCriteria && !item.Name.toLowerCase().includes(reportNameCriteria.toLowerCase())" [nzActions]="[editAction,cloneAction,deleteAction]"></nz-list-item>
 				<ng-template #reportName>
 					<div nz-col nzSpan="16"><a (click)="nav.viewReport(item.Id)"><strong>{{item.Name}}</strong></a></div>
-					<div nz-col nzSpan="8" *ngIf="item.CreatedBy && item.CreatedBy.length > 0">Created by {{item.CreatedBy}}</div>
+					<div nz-col nzSpan="8" *ngIf="item.CreatedBy && item.CreatedBy.length > 0">{{'CreatedByWithCreatorName' | translate: {creator: item.CreatedBy} }}</div>
 				</ng-template>
 				<ng-template #editAction>
-					<a (click)="nav.editReport(item.Id)" *ngIf="permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</a>
-					<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</span>
+					<a (click)="nav.editReport(item.Id)" *ngIf="permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i>{{'Edit' | translate}}</a>
+					<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i>{{'Edit' | translate}}</span>
 				</ng-template>
 				<ng-template #cloneAction>
-					<a (click)="confirmCloneReport(item)" *ngIf="permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i> Save as new...</a>
-					<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i> Save as new...</span>
+					<a (click)="confirmCloneReport(item)" *ngIf="permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i>{{'SaveAsNewWith3Dots' | translate}}</a>
+					<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i>{{'SaveAsNewWith3Dots' | translate}}</span>
 				</ng-template>
 				<ng-template #deleteAction>
-					<a nz-popconfirm nzTitle='Are you sure you want to delete report "{{item.Name}}"?' nzOkText="Ok" nzCancelText="Cancel" (nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
-						<i nz-icon type="delete" theme="outline"></i> Delete
+					<a nz-popconfirm nzTitle="{{ 'AreYouSureToDeleteReportWithReportName' | translate : { repName: item.Name } }}"
+							nzOkText="{{'Ok' | translate}}" nzCancelText="{{'Cancel' | translate}}"
+							(nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
+						<i nz-icon type="delete" theme="outline"></i>{{'Delete' | translate}}
 					</a>
-					<span class="disabledLink" *ngIf="!permission.CanDeleteReport"><i nz-icon type="delete" theme="outline"></i> Delete</span>
+					<span class="disabledLink" *ngIf="!permission.CanDeleteReport"><i nz-icon type="delete" theme="outline"></i>{{'Delete' | translate}}</span>
 				</ng-template>
 			</ng-template>
 		</nz-list>
 		<nz-alert
 			[hidden]="!initialized || permission.CanViewReport" 
 			nzType="error"
-			nzMessage="Error"
-			nzDescription="You do not have permission to view Insights report."
+			nzMessage="{{'Error' | translate}}"
+			nzDescription="{{'NoPermissionToViewInsightsReport' | translate}}"
 			nzShowIcon
 			nzBanner>
 		</nz-alert>
 
 		<nz-modal [(nzVisible)]="modalIsVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
 			<p>{{messageForNewReportName}}</p>
-			<input type="text" nz-input placeholder="New report name..." [(ngModel)]="newReportName">
+			<input type="text" nz-input placeholder="{{'NewReportNameWith3Dots' | translate}}" [(ngModel)]="newReportName">
 		</nz-modal>	
 	</div>
 </section>
