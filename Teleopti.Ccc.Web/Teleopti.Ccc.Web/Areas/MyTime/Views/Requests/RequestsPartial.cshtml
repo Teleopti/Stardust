@@ -59,20 +59,20 @@ Layout = null;
 				@if (Model.RequestPermission.TextRequestPermission)
 				{
 				<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-					<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+					<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.TextRequest</a>
 				</li>
 				}
 				@if (Model.RequestPermission.AbsenceRequestPermission)
 				{
 				<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-					<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+					<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.AbsenceRequest</a>
 				</li>
 				}
 				@if (Model.RequestPermission.ShiftTradeRequestPermission)
 				{
 				<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
 					<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i
-						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+						 class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 				</li>
 				}
 
@@ -80,12 +80,12 @@ Layout = null;
 				{
 				<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
 					<a id="addShiftTradeRequestFromBulletinBoard" href="#" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i
-						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+						 class="glyphicon glyphicon-retweet"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
 				</li>
 
 				<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
 					<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i
-						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+						 class="glyphicon glyphicon-pushpin"></i>&nbsp;@Resources.AnnounceShift</a>
 				</li>
 				}
 
@@ -93,7 +93,7 @@ Layout = null;
 				{
 				<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }">
 					<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
-						<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
+						<i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeRequest
 					</a>
 				</li>
 				}
@@ -113,20 +113,20 @@ Layout = null;
 					@if (Model.RequestPermission.TextRequestPermission)
 					{
 					<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-						<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+						<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.TextRequest</a>
 					</li>
 					}
 					@if (Model.RequestPermission.AbsenceRequestPermission)
 					{
 					<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-						<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+						<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.AbsenceRequest</a>
 					</li>
 					}
 					@if (Model.RequestPermission.ShiftTradeRequestPermission)
 					{
 					<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
 						<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i
-							 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+							 class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 					</li>
 					}
 
@@ -134,12 +134,12 @@ Layout = null;
 					{
 					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
 						<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i
-							 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+							 class="glyphicon glyphicon-retweet"></i>&nbsp;&nbsp;@Resources.ShiftTradeBulletinBoard</a>
 					</li>
 
 					<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-						<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i
-							 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+						<a id="addPostShiftForTrade" href="#" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i
+							 class="glyphicon glyphicon-pushpin"></i>&nbsp;&nbsp;@Resources.AnnounceShift</a>
 					</li>
 					}
 
@@ -147,7 +147,7 @@ Layout = null;
 					{
 					<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }">
 						<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
-							<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
+							<i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeRequest
 						</a>
 					</li>
 					}

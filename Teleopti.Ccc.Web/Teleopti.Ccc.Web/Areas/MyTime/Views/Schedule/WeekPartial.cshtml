@@ -100,26 +100,26 @@ Layout = null;
 			@if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)
 			{
 			<li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel() != undefined && requestViewModel().type() == requestViewModelTypes.overtimeAvailability }">
-				<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+				<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeAvailability</a>
 			</li>
 			}
 			<li data-bind="visible: textPermission, css: {active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.textRequest}">
-				<a id="addTextRequest" class="text-request-add" href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+				<a id="addTextRequest" class="text-request-add" href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.TextRequest</a>
 			</li>
 			<li data-bind="visible: absenceRequestPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.absenceRequest }">
 				<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: showAddAbsenceRequestForm"><i
-					 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+					 class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.AbsenceRequest</a>
 			</li>
 			<li data-bind="visible: shiftExchangePermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.shiftOffer }">
-				<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+				<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-pushpin"></i>&nbsp;@Resources.AnnounceShift</a>
 			</li>
 			<li data-bind="visible: isAbsenceReportAvailable, css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.absenceReport  }">
-				<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+				<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.AbsenceReport</a>
 			</li>
 			@if (Model.RequestLicense.IsOvertimeRequestEnabled)
 			{
 			<li data-bind="visible: isOvertimeRequestAvailable(), css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.overtimeRequest }">
-				<a id="addOvertimeRequest" href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest</a>
+				<a id="addOvertimeRequest" href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeRequest</a>
 			</li>
 			}
 		</ul>

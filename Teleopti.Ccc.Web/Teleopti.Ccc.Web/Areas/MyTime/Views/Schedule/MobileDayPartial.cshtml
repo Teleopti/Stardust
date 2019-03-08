@@ -176,28 +176,28 @@ Layout = null;
 			@if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)
 			{
 			<li data-bind="visible: overtimeAvailabilityPermission" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: showOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+				<a href="#" data-bind="click: showOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeAvailability</a>
 			</li>
 			}
 			<li data-bind="visible: showAbsenceReportingCommandItem" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: showAbsenceReportingForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+				<a href="#" data-bind="click: showAbsenceReportingForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.AbsenceReport</a>
 			</li>
 			<li data-bind="visible: textRequestPermission" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+				<a href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.TextRequest</a>
 			</li>
 			<li data-bind="visible: absenceRequestPermission" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+				<a href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.AbsenceRequest</a>
 			</li>
 			<li data-bind="visible: shiftTradeRequestPermission" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: redirectToShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				<a href="#" data-bind="click: redirectToShiftTradeRequest"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 			</li>
 			<li data-bind="visible: showPostShiftTradeMenu" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: showPostShiftForTradeForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+				<a href="#" data-bind="click: showPostShiftForTradeForm"><i class="glyphicon glyphicon-pushpin"></i>&nbsp;@Resources.AnnounceShift</a>
 			</li>
 			@if (Model.RequestLicense.IsOvertimeRequestEnabled)
 			{
 			<li data-bind="visible: showAddOvertimeRequestMenu()" class="col-xs-12 col-sm-4">
-				<a href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest</a>
+				<a href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeRequest</a>
 			</li>
 			}
 		</ul>
