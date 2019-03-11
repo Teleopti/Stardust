@@ -23,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			var person = Guid.NewGuid();
 			History
 				.AdjustedAdherenceToNeutral("2019-02-25 08:00", "2019-02-25 09:00");
+			
 			var data = Target.Build(person);
 
 			data.AdjustedToNeutralAdherences.Single().StartTime.Should().Be("2019-02-25T08:00:00");
@@ -37,6 +38,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			History
 				.AdjustedAdherenceToNeutral("2019-02-25 08:00", "2019-02-25 09:00")
 				.AdjustedAdherenceToNeutral("2019-02-25 09:00", "2019-02-25 10:00");
+			
 			var data = Target.Build(person);
 
 			data.AdjustedToNeutralAdherences.First().StartTime.Should().Be("2019-02-25T08:00:00");
@@ -53,6 +55,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			History
 				.AdjustedAdherenceToNeutral("2019-02-24 08:00", "2019-02-24 09:00")
 				.AdjustedAdherenceToNeutral("2019-02-25 09:00", "2019-02-25 10:00");
+			
 			var data = Target.Build(person, new DateOnly("2019-02-25".Utc()));
 
 			data.AdjustedToNeutralAdherences.Single().StartTime.Should().Be("2019-02-25T09:00:00");

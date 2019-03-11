@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 
 		private DateTimePeriod? _collectedShift;
 		private readonly IList<OpenPeriod> _collectedApprovedPeriods = new List<OpenPeriod>();
-		private readonly IList<OpenPeriod> _collectedAdjustedToNeutralPeriods = new List<OpenPeriod>();
+		private IList<OpenPeriod> _collectedAdjustedToNeutralPeriods = new List<OpenPeriod>();
 		private readonly IList<HistoricalChangeModel> _collectedChanges = new List<HistoricalChangeModel>();
 
 		private DateTimePeriod? _displayPeriod;
@@ -85,6 +85,10 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			var shift = determineShift(_collectedShift, _shiftFromSchedule);
 			_displayPeriod = determineDisplayPeriod(_fullDay, shift);
 			_changesWithinDisplayPeriod = changesWithinDisplayPeriod(_collectedChanges, _displayPeriod.Value);
+			
+			_collectedAdjustedToNeutralPeriods =_collectedAdjustedToNeutralPeriods
+				.Where(x => x.StartTime.Value < _displayPeriod.Value.EndDateTime && x.EndTime.Value > _displayPeriod.Value.StartDateTime)
+				.ToArray();
 
 			var (recordedOutOfAdherences, recordedNeutralAdherences) = recordedAdherences();
 			var (projectedOutOfAdherences, projectedNeutralAdherences) = projectedAdherences(recordedOutOfAdherences, recordedNeutralAdherences);

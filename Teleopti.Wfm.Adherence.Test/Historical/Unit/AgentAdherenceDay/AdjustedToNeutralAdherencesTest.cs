@@ -25,6 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			History
 				.AdjustedAdherenceToNeutral("2019-02-25 08:00", "2019-02-25 09:00");
+			
 			var data = Target.LoadUntilNow(person);
 
 			data.AdjustedToNeutralAdherences().Single().StartTime.Should().Be("2019-02-25 08:00:00".Utc());
@@ -39,6 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			History
 				.AdjustedAdherenceToNeutral("2019-02-25 08:00", "2019-02-25 09:00")
 				.AdjustedAdherenceToNeutral("2019-02-25 09:00", "2019-02-25 10:00");
+			
 			var data = Target.LoadUntilNow(person);
 
 			data.AdjustedToNeutralAdherences().First().StartTime.Should().Be("2019-02-25 08:00:00".Utc());
@@ -55,6 +57,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			History
 				.AdjustedAdherenceToNeutral("2019-02-24 08:00", "2019-02-24 09:00")
 				.AdjustedAdherenceToNeutral("2019-02-25 09:00", "2019-02-25 10:00");
+			
 			var data = Target.LoadUntilNow(person, new DateOnly("2019-02-25".Utc()));
 
 			data.AdjustedToNeutralAdherences().Single().StartTime.Should().Be("2019-02-25 09:00:00".Utc());
@@ -70,6 +73,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.StateChanged(person, "2019-02-28 08:00", Adherence.Configuration.Adherence.Out)
 				.StateChanged(person, "2019-02-28 09:00", Adherence.Configuration.Adherence.In)
 				.AdjustedAdherenceToNeutral("2019-02-28 08:00", "2019-02-28 09:00");
+			
 			var data = Target.LoadUntilNow(person);
 
 			data.OutOfAdherences().Should().Be.Empty();
@@ -85,6 +89,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.StateChanged(person, "2019-02-28 10:00", Adherence.Configuration.Adherence.In)
 				.AdjustedAdherenceToNeutral("2019-02-28 08:00", "2019-02-28 09:00")
 				.ApprovedPeriod(person, "2019-02-28 09:00", "2019-02-28 10:00");
+			
 			var data = Target.LoadUntilNow(person);
 
 			data.OutOfAdherences().Should().Be.Empty();
@@ -98,6 +103,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			History
 				.StateChanged(person, "2019-02-28 08:00", Adherence.Configuration.Adherence.In)
 				.AdjustedAdherenceToNeutral("2019-02-28 08:00", "2019-02-28 09:00");
+			
 			var data = Target.LoadUntilNow(person);
 
 			data.NeutralAdherences().Single().StartTime.Should().Be("2019-02-28 08:00".Utc());
@@ -113,9 +119,53 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.StateChanged(person, "2019-02-28 08:00", Adherence.Configuration.Adherence.In)
 				.AdjustedAdherenceToNeutral("2019-02-28 08:00", "2019-02-28 09:00")
 				.ApprovedPeriod(person, "2019-02-28 08:00", "2019-02-28 09:00");
+			
 			var data = Target.LoadUntilNow(person);
 
 			data.NeutralAdherences().Should().Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldNotGetAdjustedToNeutralAdherencesThatDoNotIntersectPeriod()
+		{
+			Now.Is("2019-03-11 15:00");
+			var person = Guid.NewGuid();			
+			History
+				.ShiftStart(person, "2019-03-10 08:00", "2019-03-10 17:00")	
+				.AdjustedAdherenceToNeutral("2019-03-10 05:00", "2019-03-10 06:00");
+			
+			var data = Target.Load(person, new DateOnly("2019-03-10".Utc()));
+
+			data.AdjustedToNeutralAdherences().Should().Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldGetAdjustedToNeutralAdherencesIntersectingPeriodStart()
+		{
+			Now.Is("2019-03-11 15:00");
+			var person = Guid.NewGuid();			
+			History
+				.ShiftStart(person, "2019-03-10 08:00", "2019-03-10 17:00")	
+				.AdjustedAdherenceToNeutral("2019-03-10 05:00", "2019-03-10 07:30");
+			
+			var data = Target.Load(person, new DateOnly("2019-03-10".Utc()));
+
+			data.AdjustedToNeutralAdherences().Single().StartTime.Should().Be("2019-03-10 05:00".Utc());
+			data.AdjustedToNeutralAdherences().Single().EndTime.Should().Be("2019-03-10 07:30".Utc());
+		}
+		
+		[Test]
+		public void ShouldNotGetAdjustedToNeutralAdherencesAfterPeriod()
+		{
+			Now.Is("2019-03-11 15:00");
+			var person = Guid.NewGuid();			
+			History
+				.ShiftStart(person, "2019-03-10 08:00", "2019-03-10 17:00")	
+				.AdjustedAdherenceToNeutral("2019-03-10 19:00", "2019-03-10 20:00");
+			
+			var data = Target.Load(person, new DateOnly("2019-03-10".Utc()));
+
+			data.AdjustedToNeutralAdherences().Should().Be.Empty();
 		}
 	}
 }
