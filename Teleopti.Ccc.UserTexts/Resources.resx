@@ -18385,4 +18385,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Please input name for new copy of report "{repName}":</value>
     <comment>Message for Insights, please do NOT translate {repName}</comment>
   </data>
+  <data name="MinuteShort" xml:space="preserve">
+    <value>min</value>
+    <comment>Abbreviation of minute(s)</comment>
+  </data>
 </root>

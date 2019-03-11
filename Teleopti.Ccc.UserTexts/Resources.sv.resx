@@ -16241,4 +16241,10 @@ Applikationen kommer nu att stängas. </value>
   <data name="CriticalInterval" xml:space="preserve">
     <value>Kritiskt intervall</value>
   </data>
+  <data name="MinuteShort" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>Valideringsproblem</value>
+  </data>
 </root>
