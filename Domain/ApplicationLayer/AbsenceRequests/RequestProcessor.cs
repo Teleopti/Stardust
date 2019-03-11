@@ -80,9 +80,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var requestPeriod = personRequest.Request.Period;
-				var loadSchedulesPeriodToCoverForMidnightShifts = requestPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
+				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(timeZone);
 				
 				if (workflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
 				{
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), requestPeriod, _currentScenario.Current())[personRequest.Person];
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod).ToList();
 				var adjustedRequestPeriod = adjustFullDayRequestPeriodToCoverOvernightShift(scheduleDays, absenceRequest);
 
@@ -200,11 +199,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var adjustedRequestPeriod = absenceRequest.Period;
 			if (absenceRequest.FullDay && scheduleDays.Any())
 			{
-				var shiftPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(
+				adjustedRequestPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(
 					absenceRequest.Period,
 					absenceRequest.Person, scheduleDays.First(), scheduleDays.Last(), _globalSettingDataRepository);
-				adjustedRequestPeriod =
-					new DateTimePeriod(absenceRequest.Period.StartDateTime, shiftPeriod.EndDateTime);
 			}
 
 			return adjustedRequestPeriod;
