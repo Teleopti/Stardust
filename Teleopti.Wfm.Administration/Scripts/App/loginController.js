@@ -50,24 +50,19 @@
 		$scope.menuItems = [
 			{
 				text: "Tenant administration",
-				link: "#/",
-				toggle: true
+				link: "#/"
 			}, {
 				text: "Stardust Dashboard",
-				link: "#/StardustDashboard",
-				toggle: true
+				link: "#/StardustDashboard"
 			}, {
 				text: "Hangfire Dashboard",
-				link: "#/HangfireDashboard",
-				toggle: true
+				link: "#/HangfireDashboard"
 			}, {
 				text: "Hangfire Statistics",
-				link: "#/HangfireStatistics",
-				toggle: true
+				link: "#/HangfireStatistics"
 			},{
 				text: "ETL",
-				link: "#/ETL",
-				toggle: true
+				link: "#/ETL"
 			}
 		];
 
