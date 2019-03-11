@@ -1020,11 +1020,8 @@ wfm-multiple-search-input {
 	.search-button {
 		margin: 2px;
 		padding: 5px;
-		border-radius: 4px;
-
-		&:hover {
-			background: $gray-300;
-		}
+		background-color: transparent;
+		border-color: transparent;
 
 		.search-icon {
 			display: inline-block;
