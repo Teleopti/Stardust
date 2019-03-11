@@ -27,16 +27,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_userTimeZone = userTimeZone;
 		}
 
-		[UnitOfWork, Route("api/ScheduleStaffingPossibility"), HttpGet]
-		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetPossibilityViewModels(
+		[UnitOfWork, Route("api/ScheduleStaffingPossibilityForWeek"), HttpGet]
+		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetPossibilityViewModelsForWeek(
 			[ModelBinder(typeof(DateOnlyModelBinder))] DateOnly? date,
-			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None,
-			bool returnOneWeekData = true)
+			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None)
 		{
 			var showForDate = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return
-				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(
-					date.GetValueOrDefault(showForDate), staffingPossibilityType, returnOneWeekData);
+				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModelsForWeek(
+					date.GetValueOrDefault(showForDate), staffingPossibilityType);
+		}
+
+		[UnitOfWork, Route("api/ScheduleStaffingPossibilityForMobileDay"), HttpGet]
+		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetPossibilityViewModelsForMobileDay(
+			[ModelBinder(typeof(DateOnlyModelBinder))] DateOnly? date,
+			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None)
+		{
+			var showForDate = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
+			return
+				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModelsForMobileDay(
+					date.GetValueOrDefault(showForDate), staffingPossibilityType);
 		}
 	}
 }

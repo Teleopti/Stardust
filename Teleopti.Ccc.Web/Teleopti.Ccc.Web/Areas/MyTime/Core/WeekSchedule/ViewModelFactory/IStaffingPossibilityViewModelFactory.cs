@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public interface IStaffingPossibilityViewModelFactory
 	{
-		IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
-			StaffingPossibilityType staffingPossibilityType, bool returnOneWeekData);
+		IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModelsForWeek(DateOnly startDate, StaffingPossibilityType staffingPossibilityType);
+
+		IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModelsForMobileDay(DateOnly startDate, StaffingPossibilityType staffingPossibilityType);
 	}
 }
