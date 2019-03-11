@@ -544,6 +544,7 @@
     <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="Audit\StaffingContextReaderService.cs" />
     <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />
+    <Compile Include="Status\FetchCustomStatusSteps.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\Admin\FetchAllToggleOverrides.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />

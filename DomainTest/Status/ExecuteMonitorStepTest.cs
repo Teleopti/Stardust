@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Status;
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 	{
 		public ExecuteStatusStep Target;
 		public FakeStatusStep StatusStep;
+		public FakeFetchCustomStatusSteps FetchCustomStatusSteps;
 		
 		[Test]
 		public void ShouldExecuteMonitorStep()
@@ -46,9 +48,23 @@ namespace Teleopti.Ccc.DomainTest.Status
 			});
 		}
 
+		[Test]
+		public void ShouldIncludeCustomSteps()
+		{
+			var stepName = Guid.NewGuid().ToString();
+			var timeSinceLastPing = new FakeTimeSinceLastPing();
+			var step = new CustomStatusStep(stepName, string.Empty, timeSinceLastPing);
+			FetchCustomStatusSteps.Has(step);
+
+			Target.Execute(stepName);
+			
+			timeSinceLastPing.WasExecuted(step).Should().Be.True();
+		}
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeStatusStep>().For<IStatusStep>();
+			isolate.UseTestDouble<FakeFetchCustomStatusSteps>().For<IFetchCustomStatusSteps>();
 		}
 	}
 }

@@ -15033,11 +15033,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has critical intervals.
+        ///   Looks up a localized string similar to Has intervals with poor staffing.
         /// </summary>
-        public static string HasCriticalIntervals {
+        public static string HasIntervalsWithPoorStaffing {
             get {
-                return ResourceManager.GetString("HasCriticalIntervals", resourceCulture);
+                return ResourceManager.GetString("HasIntervalsWithPoorStaffing", resourceCulture);
             }
         }
         
@@ -27017,6 +27017,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Poor {
             get {
                 return ResourceManager.GetString("Poor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poor staffing.
+        /// </summary>
+        public static string PoorStaffing {
+            get {
+                return ResourceManager.GetString("PoorStaffing", resourceCulture);
             }
         }
         

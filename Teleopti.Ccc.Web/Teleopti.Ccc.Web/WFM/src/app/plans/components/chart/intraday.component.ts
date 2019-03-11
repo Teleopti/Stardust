@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
 import * as moment from 'moment';
@@ -7,7 +7,8 @@ import { IntradayHelper } from '../../shared';
 @Component({
 	selector: 'plans-intraday',
 	templateUrl: './intraday.component.html',
-	styleUrls: ['./intraday.component.scss']
+	styleUrls: ['./intraday.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class IntradayComponent implements OnChanges {
 	chart: c3.ChartAPI;
@@ -22,7 +23,7 @@ export class IntradayComponent implements OnChanges {
 		StaffingScaffold: '#FFFFFF',
 		Overstaffing: '#0a84d6',
 		Understaffing: '#D32F2F',
-		CriticalInterval: '#5f5f5f',
+		CriticalInterval: '#3f3f3f',
 	};
 	
 	names = {
@@ -30,7 +31,7 @@ export class IntradayComponent implements OnChanges {
 		Scheduled: this.translate.instant('ScheduledAgents'),
 		Overstaffing: this.translate.instant('Overstaffing'),
 		Understaffing: this.translate.instant('Understaffing'),
-		CriticalInterval: this.translate.instant('CriticalInterval'),
+		CriticalInterval: this.translate.instant('PoorStaffing'),
 	};
 	
 	constructor(private translate: TranslateService) {

@@ -3,16 +3,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
-import { configureTestSuite, MockComponent, PageObject } from '@wfm/test';
+import { configureTestSuite, MockComponent, MockToggles, PageObject } from '@wfm/test';
 import {
 	NzButtonModule,
 	NzFormModule,
 	NzInputModule,
+	NzSpinModule,
 	NzTableModule,
-	NzToolTipModule,
-	NzSpinModule
+	NzToolTipModule
 } from 'ng-zorro-antd';
 import { of } from 'rxjs';
+import { TogglesService } from '../../../core/services';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import {
 	COLUMNS,
@@ -26,12 +27,12 @@ import {
 	WorkspaceService
 } from '../../shared';
 import { SearchPageComponent } from './search-page.component';
-import { TogglesService } from '../../../core/services';
 
 describe('SearchPageComponent', () => {
 	let component: SearchPageComponent;
 	let fixture: ComponentFixture<SearchPageComponent>;
 	let page: Page;
+	let toggleService: TogglesService;
 
 	configureTestSuite();
 
@@ -61,7 +62,7 @@ describe('SearchPageComponent', () => {
 				SearchOverridesService,
 				{ provide: NavigationService, useValue: {} },
 				RolesService,
-				TogglesService
+				MockToggles({ Wfm_PeopleWeb_Improve_Search_81681: false })
 			]
 		}).compileComponents();
 	}));
@@ -69,32 +70,40 @@ describe('SearchPageComponent', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(SearchPageComponent);
 		component = fixture.componentInstance;
+		toggleService = TestBed.get(TogglesService);
 		page = new Page(fixture);
-		fixture.detectChanges();
 	});
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should display search results', async(() => {
+	it('should display search results', async(async () => {
+		// overrideToggles(toggleService, { Wfm_PeopleWeb_Improve_Search_81681: false });
+
+		fixture.detectChanges();
+
 		component.searchPeople();
 
 		fixture.detectChanges();
 
-		fixture.whenStable().then(() => {
-			expect(page.resultRows.length).toBeGreaterThan(0);
-		});
+		await fixture.whenStable();
+
+		expect(page.resultRows.length).toBeGreaterThan(0);
 	}));
 
 	it('should be able to select people', async(() => {
+		fixture.detectChanges();
+
 		component.searchPeople();
 
 		fixture.detectChanges();
 
 		fixture.whenStable().then(() => {
 			expect(page.resultRows.length).toBeGreaterThan(0);
-			page.resultRows[0].nativeElement.click();
+
+			page.resultRowsCheckboxes[0].nativeElement.click();
+
 			component.workspaceService.getSelectedPeople().subscribe({
 				next: people => {
 					expect(people.length).toEqual(1);
@@ -104,6 +113,7 @@ describe('SearchPageComponent', () => {
 	}));
 
 	it('should be able to select all people', async(() => {
+		fixture.detectChanges();
 		component.searchPeople();
 
 		fixture.detectChanges();
@@ -138,6 +148,7 @@ describe('SearchPageComponent', () => {
 		fixture.detectChanges();
 
 		page.sortOnFirstName.nativeElement.click();
+		fixture.detectChanges();
 
 		fixture.whenStable().then(() => {
 			let searchQuery = searchSpy.calls.argsFor(0)[0] as PeopleSearchQuery;
@@ -156,15 +167,19 @@ describe('SearchPageComponent', () => {
 
 class Page extends PageObject {
 	get resultRows() {
-		return this.queryAll('[data-test-search] [data-test-person]');
+		return this.queryAll('tbody [data-test-person]');
+	}
+
+	get resultRowsCheckboxes() {
+		return this.queryAll('tbody input[type="checkbox"]');
 	}
 
 	get resultRowsFirstName() {
-		return this.queryAll('[data-test-search] [data-test-person] [data-test-person-firstname]');
+		return this.queryAll('[data-test-person] [data-test-person-firstname]');
 	}
 
 	get selectAllCheckbox() {
-		return this.queryAll('[data-test-search] [data-test-selectall-toggle] input')[0];
+		return this.queryAll('thead input[type="checkbox"]')[0];
 	}
 
 	get sortOnFirstName() {

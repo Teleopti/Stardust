@@ -78,8 +78,8 @@
 			if (!!changesObj.groupPages && !!changesObj.groupPages.currentValue && changesObj.groupPages.currentValue !== changesObj.groupPages.previousValue) {
 				rawData = changesObj.groupPages.currentValue;
 				ctrl.setPickerData();
-				updateSelectedGroupsInView();
 				removeNotExistTeamsFromSelection();
+				updateSelectedGroupsInView();
 				ctrl.isDataAvailable = true;
 			}
 			if (!!changesObj.selectedGroups && !!changesObj.selectedGroups.currentValue && !!changesObj.selectedGroups.previousValue && changesObj.selectedGroups.currentValue !== changesObj.selectedGroups.previousValue) {
@@ -87,8 +87,10 @@
 				var previousValue = changesObj.selectedGroups.previousValue;
 				if (!!currentValue.mode && !!previousValue.mode && currentValue.mode != previousValue.mode) {
 					selectedIndex = tabIndexMap[currentValue.mode];
+					ctrl.setPickerData();
 					resetSelectionInGroupsInView(previousValue.mode);
 				}
+				removeNotExistTeamsFromSelection();
 				updateSelectedGroupsInView();
 			}
 		};

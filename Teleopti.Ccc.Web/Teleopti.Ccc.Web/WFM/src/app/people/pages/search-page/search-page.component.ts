@@ -29,13 +29,7 @@ export class SearchPageComponent implements OnInit {
 		public searchPageService: SearchPageService,
 		public searchService: SearchService,
 		public togglesService: TogglesService
-	) {
-		this.togglesService.toggles$.subscribe({
-			next: toggles => {
-				this.improvedSearchActive = toggles.Wfm_PeopleWeb_Improve_Search_81681;
-			}
-		});
-	}
+	) {}
 
 	improvedSearchActive = false;
 	displayedColumns = ['select', 'FirstName', 'LastName', 'SiteTeam', 'Roles'];
@@ -49,6 +43,11 @@ export class SearchPageComponent implements OnInit {
 	};
 
 	ngOnInit() {
+		this.togglesService.toggles$.subscribe({
+			next: toggles => {
+				this.improvedSearchActive = toggles.Wfm_PeopleWeb_Improve_Search_81681;
+			}
+		});
 		this.searchControl.setValue(this.searchService.keyword);
 		this.pagination.length = this.searchService.lastQuerySize;
 		this.searchPageService.getPeople().subscribe({

@@ -1,24 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Teleopti.Ccc.Domain.Status
 {
 	public class ExecuteStatusStep
 	{
-		private readonly IEnumerable<IStatusStep> _statusSteps;
+		private readonly AllSteps _allSteps;
 		public readonly string NonExistingStepName = "'{0}' is not a known step name";
 
-		public ExecuteStatusStep(IEnumerable<IStatusStep> statusSteps)
+		public ExecuteStatusStep(AllSteps allSteps)
 		{
-			_statusSteps = statusSteps;
+			_allSteps = allSteps;
 		}
 		
-		public StatusStepResult Execute(string monitorStepName)
+		public StatusStepResult Execute(string stepName)
 		{
-			var step = _statusSteps.SingleOrDefault(x => string.Equals(x.Name, monitorStepName, StringComparison.InvariantCultureIgnoreCase));
+			var step = _allSteps.Fetch(stepName);
 			return step == null ? 
-				new StatusStepResult(false, string.Format(NonExistingStepName, monitorStepName)) : 
+				new StatusStepResult(false, string.Format(NonExistingStepName, stepName)) : 
 				step.Execute();
 		}
 	}

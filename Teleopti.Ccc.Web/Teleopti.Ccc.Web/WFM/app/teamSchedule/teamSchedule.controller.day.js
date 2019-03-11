@@ -667,7 +667,7 @@
 				var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
 				if (defaultFavoriteSearch) {
-					vm.selectedGroups.groupIds = defaultFavoriteSearch.TeamIds.slice(0);
+					initSelectedGroups(mode.BusinessHierarchy, defaultFavoriteSearch.TeamIds.slice(0), '');
 					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
 					vm.selectedFavorite = defaultFavoriteSearch;
 				} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {

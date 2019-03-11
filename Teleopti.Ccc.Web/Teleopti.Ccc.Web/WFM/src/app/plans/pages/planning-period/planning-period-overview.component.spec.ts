@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { configureTestSuite, PageObject } from '@wfm/test';
+import { configureTestSuite, PageObject, MockToggles } from '@wfm/test';
 import { MockTranslationModule } from '@wfm/mocks/translation';
 import {
 	NzInputModule,
@@ -194,7 +194,7 @@ describe('Planning Period Overview', () => {
 				{ provide: PlanningPeriodService, useClass: MockPlanningPeriodService },
 				{ provide: '$state', useValue: mockStateService },
 				{ provide: NavigationService, useValue: {} },
-				TogglesService,
+				MockToggles({WFM_Plans_IntradayIssuesInHeatMap_79113: true}),
 			]
 		}).compileComponents();
 
@@ -363,6 +363,7 @@ describe('Planning Period Overview', () => {
 	});
 
 	it('should apply filter for skills', async() => {
+		fixture.detectChanges();
 		component.skillFilterControl.setValue('channel');
 		fixture.detectChanges();
 		await fixture.whenStable();
@@ -373,14 +374,17 @@ describe('Planning Period Overview', () => {
 
 	it('should display pre-validations', async() => {
 		fixture.detectChanges();
+		page.validationsTab.nativeElement.click();
 		await fixture.whenStable();
+		fixture.detectChanges();
 		expect(page.filteredPreValidations.length).toBe(2);
 	});
 
 	it('should apply filter for pre-validations', async() => {
+		fixture.detectChanges();
+		page.validationsTab.nativeElement.click();
 		component.preValidationFilterControl.setValue('kobsa');
 		fixture.detectChanges();
-		await fixture.whenStable();
 		expect(page.filteredPreValidations.length).toBe(1);
 		const name = page.filteredPreValidations[0];
 		expect(name.nativeElement.innerText).toBe('Alfred Kobsa');
@@ -388,14 +392,16 @@ describe('Planning Period Overview', () => {
 
 	it('should display schedule issues', async() => {
 		fixture.detectChanges();
-		await fixture.whenStable();
+		page.validationsTab.nativeElement.click();
+		fixture.detectChanges();
 		expect(page.filteredScheduleIssues.length).toBe(2);
 	});
 
 	it('should apply filter for schedule issues', async() => {
+		fixture.detectChanges();
+		page.validationsTab.nativeElement.click();
 		component.scheduleIssuesFilterControl.setValue('bts2');
 		fixture.detectChanges();
-		await fixture.whenStable();
 		expect(page.filteredScheduleIssues.length).toBe(1);
 		const name = page.filteredScheduleIssues[0];
 		expect(name.nativeElement.innerText).toBe('BTS2');
@@ -412,6 +418,10 @@ class PlanningPeriodOverviewPage extends PageObject {
 
 	get filteredPreValidations() {
 		return this.queryAll('.data-test-pre-validation');
+	}
+
+	get validationsTab() {
+		return this.queryAll('.ant-tabs-tab')[1];
 	}
 
 	get filteredScheduleIssues() {

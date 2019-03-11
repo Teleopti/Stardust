@@ -5,17 +5,17 @@ namespace Teleopti.Ccc.Domain.Status
 {
 	public class ListStatusSteps
 	{
-		private readonly IEnumerable<IStatusStep> _monitorSteps;
+		private readonly AllSteps _allSteps;
 
-		public ListStatusSteps(IEnumerable<IStatusStep> monitorSteps)
+		public ListStatusSteps(AllSteps allSteps)
 		{
-			_monitorSteps = monitorSteps;
+			_allSteps = allSteps;
 		}
 		
 		public IEnumerable<StatusStepInfo> Execute(Uri virtualDirectoryAbsolutePath, string actionString)
 		{
 			var basePath = virtualDirectoryAbsolutePath.ToString().TrimEnd('/') + "/" + actionString + "/";
-			foreach (var monitorStep in _monitorSteps)
+			foreach (var monitorStep in _allSteps.FetchAll())
 			{
 				var stepName = monitorStep.Name;
 				yield return new StatusStepInfo(stepName, monitorStep.Description, basePath + stepName);
