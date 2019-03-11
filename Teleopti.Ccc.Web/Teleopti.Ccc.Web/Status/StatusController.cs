@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Status;
+using Teleopti.Ccc.Infrastructure.Status;
 
 namespace Teleopti.Ccc.Web.Status
 {
@@ -10,19 +11,23 @@ namespace Teleopti.Ccc.Web.Status
 	{
 		private readonly ExecuteStatusStep _executeStatusStep;
 		private readonly ListStatusSteps _listStatusSteps;
+		private readonly PingCustomStep _pingCustomStep;
 		private const string relPathToCheckAction = "status/check";
 
-		public StatusController(ExecuteStatusStep executeStatusStep, ListStatusSteps listStatusSteps)
+		public StatusController(ExecuteStatusStep executeStatusStep, 
+			ListStatusSteps listStatusSteps,
+			PingCustomStep pingCustomStep)
 		{
 			_executeStatusStep = executeStatusStep;
 			_listStatusSteps = listStatusSteps;
+			_pingCustomStep = pingCustomStep;
 		}
 		
 		[HttpGet]
-		[Route(relPathToCheckAction + "/{statusStep}")]
-		public HttpResponseMessage Check(string statusStep)
+		[Route(relPathToCheckAction + "/{stepName}")]
+		public HttpResponseMessage Check(string stepName)
 		{
-			var result = _executeStatusStep.Execute(statusStep);
+			var result = _executeStatusStep.Execute(stepName);
 			return Request.CreateResponse(result.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError, result.Output);
 		}
 		
@@ -31,6 +36,14 @@ namespace Teleopti.Ccc.Web.Status
 		public IHttpActionResult List()
 		{
 			return Ok(_listStatusSteps.Execute(new Uri(Request.RequestUri, RequestContext.VirtualPathRoot), relPathToCheckAction));
+		}
+
+		[HttpGet]
+		[Route("status/ping/{stepName}")]
+		public IHttpActionResult Ping(string stepName)
+		{
+			var result = _pingCustomStep.Execute(stepName);
+			return result ? (IHttpActionResult) Ok() : BadRequest();
 		}
 	}
 }

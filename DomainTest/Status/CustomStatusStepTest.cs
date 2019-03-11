@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		[Test]
 		public void ShouldSetSuccessCorrectly([Range(0, 3)]int secondsSinceLastPing, [Range(0, 3)] int secondsLimit)
 		{
-			var timeSinceLastPing = new FakeTimeSinceLastPing().SetValue(TimeSpan.FromSeconds(secondsSinceLastPing));
-			var target = new CustomStatusStep(string.Empty, string.Empty, timeSinceLastPing, TimeSpan.FromSeconds(secondsLimit));
+			var target = new CustomStatusStep(string.Empty, string.Empty, TimeSpan.FromSeconds(secondsSinceLastPing), TimeSpan.FromSeconds(secondsLimit));
 			var expected = secondsSinceLastPing <= secondsLimit;
 
 			target.Execute().Success
@@ -25,8 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			const int secondsSinceLastPing = 50;
 			var statusName = Guid.NewGuid().ToString();
-			var timeSinceLastPing = new FakeTimeSinceLastPing().SetValue(TimeSpan.FromSeconds(secondsSinceLastPing));
-			var target = new CustomStatusStep(statusName, string.Empty, timeSinceLastPing, TimeSpan.FromSeconds(secondsSinceLastPing + 50));
+			var target = new CustomStatusStep(statusName, string.Empty, TimeSpan.FromSeconds(secondsSinceLastPing), TimeSpan.FromSeconds(secondsSinceLastPing + 50));
 			
 			target.Execute().Output
 				.Should().Be.EqualTo(string.Format(CustomStatusStep.Message, statusName, secondsSinceLastPing));
@@ -37,8 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			const int secondsSinceLastPing = 100;
 			var statusName = Guid.NewGuid().ToString();
-			var timeSinceLastPing = new FakeTimeSinceLastPing().SetValue(TimeSpan.FromSeconds(secondsSinceLastPing));
-			var target = new CustomStatusStep(statusName, string.Empty, timeSinceLastPing, TimeSpan.FromSeconds(secondsSinceLastPing - 50));
+			var target = new CustomStatusStep(statusName, string.Empty, TimeSpan.FromSeconds(secondsSinceLastPing), TimeSpan.FromSeconds(secondsSinceLastPing - 50));
 			
 			target.Execute().Output
 				.Should().Be.EqualTo(string.Format(CustomStatusStep.Message, statusName, secondsSinceLastPing));
@@ -48,8 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		public void ShouldSetMessageWhenDeadForLongTime()
 		{
 			var statusName = Guid.NewGuid().ToString();
-			var timeSinceLastPing = new FakeTimeSinceLastPing().SetValue(TimeSpan.FromDays(50));
-			var target = new CustomStatusStep(statusName, string.Empty, timeSinceLastPing, TimeSpan.FromSeconds(50));
+			var target = new CustomStatusStep(statusName, string.Empty, TimeSpan.FromDays(50), TimeSpan.FromSeconds(50));
 			
 			target.Execute().Output
 				.Should().Be.EqualTo(string.Format(CustomStatusStep.MessageWhenDeadForLongTime, statusName));

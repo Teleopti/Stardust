@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Status;
 
 namespace Teleopti.Ccc.DomainTest.Status
@@ -12,9 +13,14 @@ namespace Teleopti.Ccc.DomainTest.Status
 			_statusSteps.Add(statusStep);
 		}
 		
-		public IEnumerable<IStatusStep> Execute()
+		public IEnumerable<CustomStatusStep> Execute()
 		{
 			return _statusSteps;
+		}
+
+		public CustomStatusStep Execute(string name)
+		{
+			return _statusSteps.SingleOrDefault(x => x.Name == name);
 		}
 	}
 }

@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString);
+			config.FakeConnectionString("Status", InfraTestConfigReader.ApplicationConnectionString);
 			config.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);

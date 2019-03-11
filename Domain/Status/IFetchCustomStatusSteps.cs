@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Domain.Status
 {
 	public interface IFetchCustomStatusSteps
 	{
-		IEnumerable<IStatusStep> Execute();
+		IEnumerable<CustomStatusStep> Execute();
+		CustomStatusStep Execute(string name);
 	}
 }

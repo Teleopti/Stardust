@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Status
 				timeSinceLastEtlPing.TotalDays > 1 ? MessageWhenDeadForLongTime : string.Format(Message, timeSinceLastEtlPing.TotalSeconds));
 		}
 
-		public string Name { get; } = "ETL";
+		public string Name { get; } = "ETL_old";
 		public string Description { get; } = "Verifies ETL service is alive";
 	}
 }

@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<PingCustomStep>().SingleInstance();
+			builder.RegisterType<StoreNewCustomStatusStep>().SingleInstance();
 			builder.RegisterType<AllSteps>().SingleInstance();
 			builder.RegisterType<FetchCustomStatusSteps>().As<IFetchCustomStatusSteps>().SingleInstance();
 			builder.RegisterType<TimeSinceLastEtlPing>().As<ITimeSinceLastEtlPing>().As<IMarkEtlPing>().SingleInstance();

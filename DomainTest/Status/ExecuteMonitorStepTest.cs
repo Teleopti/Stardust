@@ -52,13 +52,12 @@ namespace Teleopti.Ccc.DomainTest.Status
 		public void ShouldIncludeCustomSteps()
 		{
 			var stepName = Guid.NewGuid().ToString();
-			var timeSinceLastPing = new FakeTimeSinceLastPing();
-			var step = new CustomStatusStep(stepName, string.Empty, timeSinceLastPing, TimeSpan.Zero);
+
+			var step = new CustomStatusStep(stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(step);
 
-			Target.Execute(stepName);
-			
-			timeSinceLastPing.WasExecuted(step).Should().Be.True();
+			Target.Execute(stepName)
+				.Should().Not.Be.Null();
 		}
 
 		public void Isolate(IIsolate isolate)
