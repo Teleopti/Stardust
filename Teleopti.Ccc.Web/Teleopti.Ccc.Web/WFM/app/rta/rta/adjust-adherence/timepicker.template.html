@@ -21,13 +21,13 @@
         <td class="form-group uib-time hours" ng-class="{'has-error': invalidHours}">
             <input type="text" placeholder="HH" ng-model="hours" ng-change="updateHours()"
                    class="form-control text-center" ng-readonly="::readonlyInput" maxlength="2"
-                   tabindex="{{::tabindex}}" ng-disabled="noIncrementHours()" ng-blur="blur()">
+                   tabindex="{{::tabindex}}" ng-disabled="noIncrementHours()" ng-blur="blur()" ng-model-options="{ updateOn: 'blur'}">
         </td>
         <td class="uib-separator">:</td>
         <td class="form-group uib-time minutes" ng-class="{'has-error': invalidMinutes}">
             <input type="text" placeholder="MM" ng-model="minutes" ng-change="updateMinutes()"
                    class="form-control text-center" ng-readonly="::readonlyInput" maxlength="2"
-                   tabindex="{{::tabindex}}" ng-disabled="noIncrementMinutes()" ng-blur="blur()">
+                   tabindex="{{::tabindex}}" ng-disabled="noIncrementMinutes()" ng-blur="blur()" ng-model-options="{ updateOn: 'blur'}">
         </td>
         <td ng-show="showSeconds" class="uib-separator">:</td>
         <td class="form-group uib-time seconds" ng-class="{'has-error': invalidSeconds}" ng-show="showSeconds">

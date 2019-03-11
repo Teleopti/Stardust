@@ -21,9 +21,9 @@
 
             function preselectDateAndTime(data) {
                 vm.startDate = moment(new Date()).add(-1, 'days');
-                vm.endDate = moment(new Date()).add(-1, 'days');
-
                 vm.startTime = moment(new Date()).set({h: 8, m: 0});
+
+                vm.endDate = moment(new Date()).add(-1, 'days');
                 vm.endTime = moment(new Date()).set({h: 18, m: 0});
 
                 vm.showMeridian = data.DateTimeFormat.ShowMeridian;
@@ -33,8 +33,8 @@
                 var startTime = moment(vm.startTime).isValid() ? moment(vm.startTime).format('LT') : '?';
                 var endTime = moment(vm.endTime).isValid() ? moment(vm.endTime).format('LT') : '?';
                 var start = moment(vm.startDate).format('L') + ' ' + startTime;
-                var endTime = moment(vm.endDate).format('L') + ' ' + endTime;
-                vm.selectedPeriod = start + ' - ' + endTime;
+                var end = moment(vm.endDate).format('L') + ' ' + endTime;
+                vm.selectedPeriod = start + ' - ' + end;
             }
 
             function loadData() {
@@ -55,7 +55,7 @@
             }
 
             vm.adjustToNeutral = function () {
-                if(!(moment(vm.startTime).isValid() && moment(vm.endTime).isValid()))
+                if (!(moment(vm.startTime).isValid() && moment(vm.endTime).isValid()))
                     return;
                 $http.post('../api/Adherence/AdjustPeriod', {
                     StartDateTime: formatDateTime(vm.startDate, vm.startTime),
@@ -72,21 +72,16 @@
             }, function () {
                 if (shouldAutoFixDate())
                     vm.endDate = vm.startDate;
-                // if (shouldAutoFixTime())
-                //     vm.endTime = vm.startTime;
+                if (shouldAutoFixTime())
+                    vm.endTime = vm.startTime;
                 buildSelectedPeriod();
             });
 
             $scope.$watch(function () {
                 return vm.startTime;
             }, function () {
-                // if (shouldAutoFixTime()) {
-                //     // $timeout(function() {
-                //         if(!moment(vm.startTime).isValid())
-                //             return;
-                //         vm.endTime = vm.startTime;
-                //     // }, 1000)
-                // }
+                if (shouldAutoFixTime())
+                    vm.endTime = vm.startTime;
                 buildSelectedPeriod();
             });
 
@@ -95,36 +90,30 @@
             }, function () {
                 if (shouldAutoFixDate())
                     vm.startDate = vm.endDate;
-                // if (shouldAutoFixTime())
-                //     vm.startTime = vm.endTime;
+                if (shouldAutoFixTime())
+                    vm.startTime = vm.endTime;
                 buildSelectedPeriod();
             });
 
             $scope.$watch(function () {
                 return vm.endTime;
             }, function () {
-                // if (shouldAutoFixTime()) {
-                //     // $timeout(function(){
-                //         if(!moment(vm.endTime).isValid())
-                //             return;
-                //         vm.startTime = vm.endTime;
-                //     // }, 1000);
-                // }
+                if (shouldAutoFixTime())
+                    vm.startTime = vm.endTime;
                 buildSelectedPeriod();
             });
-            //
-            // function shouldAutoFixTime() {
-            //     // var isSameDay = moment(vm.startDate).isSame(moment(vm.endDate), 'day');
-            //     // var isStartTimeAfterEndTime = moment(vm.startTime).isAfter(moment(vm.endTime));
-            //     //
-            //     // return (isSameDay && isStartTimeAfterEndTime);
-            //     return false;
-            // }
+
+            function shouldAutoFixTime() {
+                var isSameDay = moment(vm.startDate).isSame(moment(vm.endDate), 'day');
+                var isStartTimeAfterEndTime = moment(vm.startTime).isAfter(moment(vm.endTime));
+
+                return (isSameDay && isStartTimeAfterEndTime);
+            }
 
             function shouldAutoFixDate() {
                 return moment(vm.startDate).isAfter(moment(vm.endDate), 'day');
             }
-            
+
             vm.toggleAdjustToNeutralForm = function () {
                 vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
             };
