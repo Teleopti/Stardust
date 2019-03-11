@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			var stepName = Guid.NewGuid().ToString();
 			var timeSinceLastPing = new FakeTimeSinceLastPing();
-			var step = new CustomStatusStep(stepName, string.Empty, timeSinceLastPing);
+			var step = new CustomStatusStep(stepName, string.Empty, timeSinceLastPing, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(step);
 
 			Target.Execute(stepName);
