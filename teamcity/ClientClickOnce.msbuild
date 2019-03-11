@@ -5,8 +5,7 @@
 		<WorkingDirectory>WillBeSetByTC</WorkingDirectory>
 		<OutputDirectory>WillBeSetByTC</OutputDirectory>
 		<CCCVersion>WillBeSetByTC</CCCVersion>
-		
-		<MageTool>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\mage.exe</MageTool>
+		<MageTool>\\to-files-01\RnD\MSI_Dependencies\ccc7_server\mage.exe</MageTool>
 		<SourceDirectory>$(WorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDirectory>
 		<NameOfClickOnceItem>Teleopti.Ccc.SmartClientPortal.Shell</NameOfClickOnceItem>
 		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
