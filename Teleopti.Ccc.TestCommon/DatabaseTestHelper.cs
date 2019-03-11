@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_repositoryRoot = RepositoryRootFolderLocator.LocateFolderUsingBlackMagic(TestContext.CurrentContext.TestDirectory);
 		}
-		
+
 		public void CreateDatabases(string tenant)
 		{
 			createOrRestoreApplication(tenant);
@@ -107,7 +107,8 @@ namespace Teleopti.Ccc.TestCommon
 			configure.MergePersonAssignments();
 
 			configure.PersistAuditSetting();
-			configure.SetTenantConnectionInfo(tenant ?? InfraTestConfigReader.TenantName(), database.ConnectionString, analytics().ConnectionString);
+			
+			setTenantInfo(database);
 		}
 
 		private void backupByFileCopy(DatabaseHelper database, int dataHash)
@@ -130,7 +131,11 @@ namespace Teleopti.Ccc.TestCommon
 				return false;
 
 			var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(file));
-			return database.BackupByFileCopy().TryRestore(backup);
+			var result = database.BackupByFileCopy().TryRestore(backup);
+
+			setTenantInfo(database);
+
+			return result;
 		}
 
 		private void restoreByFileCopy(DatabaseHelper database, int dataHash)
@@ -141,6 +146,16 @@ namespace Teleopti.Ccc.TestCommon
 			var result = database.BackupByFileCopy().TryRestore(backup);
 			if (!result)
 				throw new Exception("Restore failed!");
+
+			setTenantInfo(database);
+		}
+
+		private static void setTenantInfo(DatabaseHelper database)
+		{
+			if (database.DatabaseType != DatabaseType.TeleoptiCCC7) 
+				return;
+			var configure = database.ConfigureSystem();
+			configure.SetTenantConnectionInfo(InfraTestConfigReader.TenantName(), database.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static DatabaseHelper application()

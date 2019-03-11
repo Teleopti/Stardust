@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 
 		public string DatabaseName { get; }
-		
+
 		public Backup Backup(string name)
 		{
 			var backup = new Backup();
@@ -33,8 +33,13 @@ namespace Teleopti.Ccc.DBManager.Library
 					using (var reader = command.ExecuteReader())
 					{
 						backup.Files = (from r in reader.Cast<IDataRecord>()
-							let file = r.GetString(r.GetOrdinal("filename"))
-							select new BackupFile {Source = file})
+								let source = r.GetString(r.GetOrdinal("filename"))
+								let destination = source.Replace(DatabaseName, "$(DatabaseName)")
+								select new BackupFile
+								{
+									Source = source,
+									Destination = destination
+								})
 							.ToArray();
 					}
 				}
@@ -50,6 +55,7 @@ namespace Teleopti.Ccc.DBManager.Library
 						throw new Exception();
 				});
 			}
+
 			return backup;
 		}
 
@@ -59,9 +65,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				return backup.Files.All(f =>
 				{
-					var command = $@"COPY ""{f.Backup}"" ""{f.Source}""";
-					var result = executeShellCommandOnServer(command);
-					return result.Contains("1 file(s) copied.");
+					var destination = f.Destination.Replace("$(DatabaseName)", DatabaseName);
+					var command = $@"COPY ""{f.Backup}"" ""{destination}""";
+					var shellOutput = executeShellCommandOnServer(command);
+					return shellOutput.Contains("1 file(s) copied.");
 				});
 			}
 		}
@@ -76,16 +83,19 @@ namespace Teleopti.Ccc.DBManager.Library
 					cmd.CommandText = "EXEC sp_configure 'show advanced options', 1";
 					cmd.ExecuteNonQuery();
 				}
+
 				using (var cmd = conn.CreateCommand())
 				{
 					cmd.CommandText = "RECONFIGURE";
 					cmd.ExecuteNonQuery();
 				}
+
 				using (var cmd = conn.CreateCommand())
 				{
 					cmd.CommandText = "EXEC sp_configure 'xp_cmdshell', 1";
 					cmd.ExecuteNonQuery();
 				}
+
 				using (var cmd = conn.CreateCommand())
 				{
 					cmd.CommandText = "RECONFIGURE";
@@ -115,6 +125,6 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		public string Source { get; set; }
 		public string Backup { get; set; }
+		public string Destination { get; set; }
 	}
-
 }
