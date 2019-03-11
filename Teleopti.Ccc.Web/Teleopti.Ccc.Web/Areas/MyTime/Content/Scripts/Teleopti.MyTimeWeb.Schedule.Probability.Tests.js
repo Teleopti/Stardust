@@ -629,7 +629,8 @@
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period", function() {		var fakeScheduleData = getFakeScheduleData();
+	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period", function() {
+		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.StaffingInfoAvailableDays = 14;
 
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
@@ -721,7 +722,7 @@
 	test('should select hide staffing info option when switching to hide probability', function() {
 		var ajax = {
 			Ajax: function(options) {
-				if (options.url === '../api/ScheduleStaffingPossibility') {
+				if (options.url === '../api/ScheduleStaffingPossibilityForWeek') {
 					options.success(getFakeProbabilityData());
 				}
 			}
@@ -745,7 +746,7 @@
 	test('should select hide staffing info option when CheckStaffingByIntraday is changed to false from true', function() {
 		var ajax = {
 			Ajax: function(options) {
-				if (options.url === '../api/ScheduleStaffingPossibility') {
+				if (options.url === '../api/ScheduleStaffingPossibilityForWeek') {
 					options.success(getFakeProbabilityData());
 				}
 			}
