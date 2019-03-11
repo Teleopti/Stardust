@@ -61,7 +61,7 @@ describe('<group-page-picker>', function () {
 		expectPanelOpen();
 
 		clickTab(1);
-		
+
 		expectTabOpen(1, 'GroupPages');
 
 		var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
@@ -187,7 +187,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should close panel when I click the Close button', function () {
-		 
+
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
 		expectPanelOpen();
@@ -198,7 +198,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should display teams are selected', function () {
-		 
+
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
 		expectPanelOpen();
@@ -211,7 +211,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should display groups are selected', function () {
-		 
+
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
 		expectPanelOpen();
@@ -234,7 +234,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should preselect teams ', function () {
-		 
+
 		scope.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: ['site1team1', 'site2team1']
@@ -261,7 +261,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should preselect group pages', function () {
-		 
+
 		scope.selectedGroups = {
 			mode: 'GroupPages',
 			groupPageId: 'groupPage1',
@@ -334,7 +334,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should clear all selection when click clear button on GroupPage tab', function () {
-		 
+
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
 		expectPanelOpen();
@@ -589,7 +589,7 @@ describe('<group-page-picker>', function () {
 	describe("when I am on the Business Hierarchy tab", function () {
 
 		it('should clear all selection when click clear button ', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -614,7 +614,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('can select multiple sites',
-			function() {
+			function () {
 
 				var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 				openPanel(picker);
@@ -631,7 +631,6 @@ describe('<group-page-picker>', function () {
 			});
 
 		it('can select teams from multiple sites', function () {
-			 
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -657,7 +656,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should filter teams when team names are matched', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			increaseRepeatContainerHeight(picker);
 			openPanel(picker);
@@ -678,7 +677,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should filter sites when site names are matched', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			increaseRepeatContainerHeight(picker);
 			openPanel(picker);
@@ -699,7 +698,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should display selection status when filtering result contains selected teams only', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			increaseRepeatContainerHeight(picker);
 			openPanel(picker);
@@ -724,7 +723,7 @@ describe('<group-page-picker>', function () {
 
 		});
 		it('should display selection status when filtering result contains selected teams', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			increaseRepeatContainerHeight(picker);
 			openPanel(picker);
@@ -751,7 +750,7 @@ describe('<group-page-picker>', function () {
 
 		});
 		it('should display selection status when the whole site is selected and filtering result contains selected teams', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -777,7 +776,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should preserve selection status when select filtered team', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -806,7 +805,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should preserve selection status when whole site is checked', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -831,7 +830,7 @@ describe('<group-page-picker>', function () {
 		it('should the indeterminate status be switched to checked '
 			+ 'when initail filtered site is partially checked '
 			+ 'and then changing filter to contain 1 team only', function () {
-				 
+
 				var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 				openPanel(picker);
 				expectPanelOpen();
@@ -851,11 +850,19 @@ describe('<group-page-picker>', function () {
 				expect(parentGroups[0].querySelector('md-checkbox').checked).toEqual(true);
 			});
 
+		it('should remove not exists teams from selection when some of selected group ids was changed and some ids are not exists in avaliable groups', function () {
+			scope.selectedGroups = { groupIds: ['site1team1'] };
+			setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			scope.selectedGroups = { groupIds: ['site1team1', 'site1team3'] };
+			scope.$apply();
+			expect(scope.selectedGroups.groupIds).toEqual(['site1team1']);
+		});
+
 	});
 
 	describe('should sync data, and', function () {
 		it('should check parent group when all child groups are checked', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -876,7 +883,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should uncheck parent group when all child groups are unchecked', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -907,7 +914,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should display indeterminate status for parent group when some of child groups are checked', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -925,7 +932,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should check all child groups when an unchecked parent group is checked', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -958,7 +965,7 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should check all when group page  is partially selected', function () {
-			 
+
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -1083,7 +1090,7 @@ describe('<group-page-picker>', function () {
 		} else {
 			$rootScope.$digest();
 		}
-		
+
 		attachedElements.push(el);
 		return el;
 	}
