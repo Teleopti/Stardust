@@ -25,7 +25,7 @@ namespace Teleopti.Runtime.Environment
 			{
 				ServicePointManager.SecurityProtocol = (SecurityProtocolType) 3072;
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				//system doesn't support tls1.2
 			}
