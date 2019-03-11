@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -15,6 +16,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -35,6 +37,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly ITenants _tenants;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
+		
+		private static readonly HttpClient httpClient = new HttpClient();
 
 		public EtlJobStarter(
 			JobHelper jobHelper,
@@ -67,6 +71,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			if(res)
 			{
 				_markEtlPing.Store();
+				httpClient.GetAsync(ConfigurationManager.AppSettings["statusurl"] + "ping/etl");
 			}
 			return res;
 		}
