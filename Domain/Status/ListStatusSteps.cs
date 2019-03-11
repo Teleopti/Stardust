@@ -12,13 +12,14 @@ namespace Teleopti.Ccc.Domain.Status
 			_allSteps = allSteps;
 		}
 		
-		public IEnumerable<StatusStepInfo> Execute(Uri virtualDirectoryAbsolutePath, string actionString)
+		public IEnumerable<StatusStepInfo> Execute(Uri virtualDirectoryAbsolutePath, string statusPath)
 		{
-			var basePath = virtualDirectoryAbsolutePath.ToString().TrimEnd('/') + "/" + actionString + "/";
+			var basePath = virtualDirectoryAbsolutePath.ToString().TrimEnd('/') + "/" + statusPath + "/";
 			foreach (var monitorStep in _allSteps.FetchAll())
 			{
 				var stepName = monitorStep.Name;
-				yield return new StatusStepInfo(stepName, monitorStep.Description, basePath + stepName);
+				var pingUrl = monitorStep is CustomStatusStep customStep ? basePath + "ping/" + customStep.Name : null;
+				yield return new StatusStepInfo(stepName, monitorStep.Description, basePath + "check/" + stepName, pingUrl);
 			}
 		}
 	}

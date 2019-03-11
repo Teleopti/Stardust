@@ -17,11 +17,12 @@
 							stepName: step.Name,
 							stepSuccess: false,
 							output: 'Verifying...',
-							url: step.Url,
+							statusUrl: step.StatusUrl,
+							pingUrl: step.PingUrl,
 							description : step.Description
 						};
 						vm.steps.push(newStep);
-						axios.get(step.Url)
+						axios.get(step.StatusUrl)
 							.then(function (result) {
 								newStep.output = result.data;
 								newStep.stepSuccess = true;

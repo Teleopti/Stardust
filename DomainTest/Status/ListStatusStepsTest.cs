@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		public ListStatusSteps Target;
 		public FakeStatusStep FakeStatusStep;
 		public FakeFetchCustomStatusSteps FetchCustomStatusSteps;
-		private const string actionName = "action/Name";
+		private const string statusPath = "status";
 		private static readonly Uri uri = new Uri("http://www.something.com");
 
 		[Test]
@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var baseUrl = new Uri(uri, "virtualDir");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(baseUrl, actionName).Single(x => x.Name == FakeStatusStep.Name).Url.Should().Be.EqualTo(baseUrl + "/" + actionName + "/" + FakeStatusStep.Name);
+			Target.Execute(baseUrl, statusPath).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+				.Should().Be.EqualTo(baseUrl + "/" + statusPath + "/check/" + FakeStatusStep.Name);
 		}
 		
 		[Test]
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var baseUrl = new Uri(uri, "/");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(baseUrl, actionName).Single(x => x.Name == FakeStatusStep.Name).Url.Should().Be.EqualTo(baseUrl + actionName + "/" + FakeStatusStep.Name);
+			Target.Execute(baseUrl, statusPath).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+				.Should().Be.EqualTo(baseUrl + statusPath + "/check/" + FakeStatusStep.Name);
 		}
 
 		[Test]
@@ -47,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Description = Guid.NewGuid().ToString();
 		
-			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).Description.Should().Be.EqualTo(FakeStatusStep.Description);
+			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).Description
+				.Should().Be.EqualTo(FakeStatusStep.Description);
 		}
 
 		[Test]
@@ -60,6 +63,27 @@ namespace Teleopti.Ccc.DomainTest.Status
 
 			Target.Execute(uri, stepName).Single(x => x.Name == statusStep.Name).Description
 				.Should().Be.EqualTo(description);
+		}
+
+		[Test]
+		public void ShouldIncludePingUrlIfCustomStatusStep()
+		{
+			var baseUrl = new Uri(uri, "virtDir");
+			var stepName = Guid.NewGuid().ToString();
+			var statusStep = new CustomStatusStep(stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
+			FetchCustomStatusSteps.Has(statusStep);
+			
+			Target.Execute(baseUrl, statusPath).Single(x => x.Name == stepName).PingUrl
+				.Should().Be.EqualTo(baseUrl + "/" + statusPath + "/ping/" + stepName);
+		}
+		
+		[Test]
+		public void ShouldSetPingUrlToNullIfNotCustomStatusStep()
+		{
+			FakeStatusStep.Name = Guid.NewGuid().ToString();
+			
+			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).PingUrl
+				.Should().Be.Null();
 		}
 
 		public void Isolate(IIsolate isolate)

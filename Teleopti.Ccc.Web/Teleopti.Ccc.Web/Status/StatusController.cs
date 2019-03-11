@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Web.Status
 		private readonly ExecuteStatusStep _executeStatusStep;
 		private readonly ListStatusSteps _listStatusSteps;
 		private readonly PingCustomStep _pingCustomStep;
-		private const string relPathToCheckAction = "status/check";
 
 		public StatusController(ExecuteStatusStep executeStatusStep, 
 			ListStatusSteps listStatusSteps,
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Web.Status
 		}
 		
 		[HttpGet]
-		[Route(relPathToCheckAction + "/{stepName}")]
+		[Route("status/check/{stepName}")]
 		public HttpResponseMessage Check(string stepName)
 		{
 			var result = _executeStatusStep.Execute(stepName);
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Web.Status
 		[Route("status/list")]
 		public IHttpActionResult List()
 		{
-			return Ok(_listStatusSteps.Execute(new Uri(Request.RequestUri, RequestContext.VirtualPathRoot), relPathToCheckAction));
+			return Ok(_listStatusSteps.Execute(new Uri(Request.RequestUri, RequestContext.VirtualPathRoot), "status"));
 		}
 
 		[HttpGet]
