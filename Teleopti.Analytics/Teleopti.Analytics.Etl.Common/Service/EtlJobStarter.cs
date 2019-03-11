@@ -13,10 +13,8 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
-using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -28,7 +26,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly PmInfoProvider _pmInfoProvider;
 		private readonly IToggleFiller _toggleFiller;
-		private readonly IMarkEtlPing _markEtlPing;
 
 		private readonly string _connectionString;
 		private readonly JobExtractor _jobExtractor;
@@ -46,8 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			ITenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository,
 			PmInfoProvider pmInfoProvider,
-			IToggleFiller toggleFiller,
-			IMarkEtlPing markEtlPing)
+			IToggleFiller toggleFiller)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
@@ -55,7 +51,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_pmInfoProvider = pmInfoProvider;
 			_toggleFiller = toggleFiller;
-			_markEtlPing = markEtlPing;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 		}
 
@@ -70,7 +65,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			var res = checkForEtlJob();
 			if(res)
 			{
-				_markEtlPing.Store();
 				httpClient.GetAsync(ConfigurationManager.AppSettings["statusurl"] + "ping/etl");
 			}
 			return res;

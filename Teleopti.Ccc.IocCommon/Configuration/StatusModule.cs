@@ -1,7 +1,5 @@
 using Autofac;
-using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Status;
-using Teleopti.Ccc.Infrastructure.ETL;
 using Teleopti.Ccc.Infrastructure.Status;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -14,7 +12,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StoreNewCustomStatusStep>().SingleInstance();
 			builder.RegisterType<AllSteps>().SingleInstance();
 			builder.RegisterType<FetchCustomStatusSteps>().As<IFetchCustomStatusSteps>().SingleInstance();
-			builder.RegisterType<TimeSinceLastEtlPing>().As<ITimeSinceLastEtlPing>().As<IMarkEtlPing>().SingleInstance();
 			builder.RegisterType<CheckLegacySystemStatus>().SingleInstance();
 			builder.RegisterType<ExecuteStatusStep>().SingleInstance();
 			builder.RegisterType<ListStatusSteps>().SingleInstance();
