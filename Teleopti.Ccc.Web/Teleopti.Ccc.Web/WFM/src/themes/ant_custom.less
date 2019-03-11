@@ -89,14 +89,6 @@ select {
 	}
 }
 
-//Hide input close icon when value is empty
-//Link https://github.com/NG-ZORRO/ng-zorro-antd/issues/2823
-//Remove this when updated to new ng-zorro-antd release which will fix this problem.
-nz-select.select-input-is-empty .ant-select-selection:hover .ant-select-selection__clear {
-	display: none;
-	opacity: 0;
-}
-
 //Remove the selected day cell style in nz-datepicker under bank holiday calendar setting module because we have a customized style for the selected date cells
 .bank-holiday-calendar-datepicker .ant-calendar-selected-day .ant-calendar-date {
 	background: inherit;
