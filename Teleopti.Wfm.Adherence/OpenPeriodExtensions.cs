@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Adherence
 			var end = instance.endsAfter(period) ? period.EndTime : instance.EndTime;
 			return new OpenPeriod(start, end);
 		}
-		
+
 		public static IEnumerable<OpenPeriod> MergeIntersecting(this IEnumerable<OpenPeriod> periods)
 		{
 			var result = new List<OpenPeriod>();
@@ -37,7 +37,12 @@ namespace Teleopti.Wfm.Adherence
 				});
 			return result;
 		}
-		
+
+		public static IEnumerable<OpenPeriod> IntersectWithPeriod(this IEnumerable<OpenPeriod> periods, OpenPeriod period) =>
+			periods
+				.Where(p => p.intersects(period))
+				.ToArray();
+			
 		public static IEnumerable<AdherencePeriod> ToAdherencePeriods(this IEnumerable<OpenPeriod> periods) =>
 			periods
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
@@ -90,6 +95,6 @@ namespace Teleopti.Wfm.Adherence
 			if (instance.EndTime == null && period.EndTime != null)
 				return true;
 			return instance.EndTime > period.EndTime;
-		}		
+		}
 	}
 }
