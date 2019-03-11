@@ -29,7 +29,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 			type: 'GET',
 			data: {
 				date: selectedDate,
-				staffingPossiblityType: probabilityType
+				staffingPossibilityType: probabilityType
 			},
 			success: function(data) {
 				callback(data);
@@ -249,7 +249,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 				type: 'GET',
 				data: {
 					date: self.selectedDate().format('YYYY-MM-DD'),
-					staffingPossiblityType: self.selectedProbabilityType
+					staffingPossibilityType: self.selectedProbabilityType
 				},
 				success: function(data) {
 					self.updateProbabilityData(data);

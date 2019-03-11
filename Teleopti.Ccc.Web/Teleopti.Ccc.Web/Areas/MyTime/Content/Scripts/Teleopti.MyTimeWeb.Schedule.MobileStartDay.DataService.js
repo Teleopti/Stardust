@@ -1,13 +1,13 @@
 ﻿Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService = function(ajax) {
 	var self = this;
-	self.fetchData = function(date, staffingPossiblityType, successCallback) {
+	self.fetchData = function(date, staffingPossibilityType, successCallback) {
 		ajax.Ajax({
 			url: '../api/Schedule/FetchDayData',
 			dataType: 'json',
 			type: 'GET',
 			data: {
 				date: date,
-				staffingPossiblityType: staffingPossiblityType
+				staffingPossibilityType: staffingPossibilityType
 			},
 			success: function(data) {
 				successCallback && successCallback(data);
@@ -15,14 +15,14 @@
 		});
 	};
 
-	self.fetchProbabilityData = function(date, staffingPossiblityType, successCallback) {
+	self.fetchProbabilityData = function(date, staffingPossibilityType, successCallback) {
 		ajax.Ajax({
 			url: '../api/ScheduleStaffingPossibility',
 			dataType: 'json',
 			type: 'GET',
 			data: {
 				date: date,
-				staffingPossiblityType: staffingPossiblityType,
+				staffingPossibilityType: staffingPossibilityType,
 				returnOneWeekData: true
 			},
 			success: function(data) {

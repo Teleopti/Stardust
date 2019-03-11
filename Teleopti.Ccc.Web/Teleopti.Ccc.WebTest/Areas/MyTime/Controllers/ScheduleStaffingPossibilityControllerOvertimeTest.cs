@@ -1043,10 +1043,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> getPossibilityViewModels(DateOnly? date,
-			StaffingPossibilityType staffingPossiblityType = StaffingPossibilityType.None,
+			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None,
 			bool returnOneWeekData = true)
 		{
-			return Target.GetPossibilityViewModels(date, staffingPossiblityType, returnOneWeekData).Where(view => intervals.Contains(view.StartTime.TimeOfDay));
+			return Target.GetPossibilityViewModels(date, staffingPossibilityType, returnOneWeekData).Where(view => intervals.Contains(view.StartTime.TimeOfDay));
 		}
 
 		private void setupIntradayStaffingForSkill(ISkill skill, double?[] forecastedStaffings,

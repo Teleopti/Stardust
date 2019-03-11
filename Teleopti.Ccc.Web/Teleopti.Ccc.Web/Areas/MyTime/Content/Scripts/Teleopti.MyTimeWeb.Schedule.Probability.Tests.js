@@ -802,7 +802,7 @@
 		var ajax = {
 			Ajax: function(options) {
 				if (options.url === '../api/Schedule/FetchWeekData') {
-					probabilityParamterValue = options.data.staffingPossiblityType;
+					probabilityParamterValue = options.data.staffingPossibilityType;
 				}
 			}
 		};
