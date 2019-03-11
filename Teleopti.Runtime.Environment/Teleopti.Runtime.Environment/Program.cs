@@ -20,6 +20,16 @@ namespace Teleopti.Runtime.Environment
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+			try
+			{
+				ServicePointManager.SecurityProtocol = (SecurityProtocolType) 3072;
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.Message, @"Error");
+			}
+			
+
 			var client = new WebClient();
 	        client.Credentials = CredentialCache.DefaultNetworkCredentials;
             var starturl = ConfigurationManager.AppSettings["url"];
