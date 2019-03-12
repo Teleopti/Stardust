@@ -36,22 +36,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingIntervalUnderStaffing = skillStaffingIntervalUnderStaffing;
 		}
 
-		public CalculatedPossibilityModelResult CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
+		public CalculatedPossibilityModelResult CalculateIntradayIntervalPossibilities(IPerson person,
+			DateOnlyPeriod period)
 		{
 			var dayWithYesterday = period.StartDate.AddDays(-1);
 			var enlargedPeriod = new DateOnlyPeriod(dayWithYesterday, period.EndDate);
 			var scheduleDictionary = loadScheduleDictionary(person, enlargedPeriod);
-			var filteredVisualLayersDictionary = loadMergedVisualLayers(person, scheduleDictionary, enlargedPeriod.DayCollection());
+			var filteredVisualLayersDictionary =
+				loadMergedVisualLayers(person, scheduleDictionary, enlargedPeriod.DayCollection());
 			var skills = getSupportedPersonSkills(person, period).Select(s => s.Skill).ToArray();
 			var useShrinkageDic = getShrinkageStatusAccordingToPeriods(person, period);
 			var workflowControlSet = person.WorkflowControlSet;
 			var currentLocalDate = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
-			var workflowControlSetHasOpenAbsenceRequestPeriods = workflowControlSet?.AbsenceRequestOpenPeriods != null &&
-																 workflowControlSet.AbsenceRequestOpenPeriods.Any();
-			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date => workflowControlSetHasOpenAbsenceRequestPeriods &&
-																										   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(currentLocalDate, date));
+			var workflowControlSetHasOpenAbsenceRequestPeriods =
+				workflowControlSet?.AbsenceRequestOpenPeriods != null &&
+				workflowControlSet.AbsenceRequestOpenPeriods.Any();
 
-			return new CalculatedPossibilityModelResult(scheduleDictionary, calculatePossibilities(person, skillStaffingData, filteredVisualLayersDictionary));
+			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date =>
+				workflowControlSetHasOpenAbsenceRequestPeriods &&
+				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(currentLocalDate, date));
+
+			return new CalculatedPossibilityModelResult(scheduleDictionary,
+				calculatePossibilities(person, skillStaffingData, filteredVisualLayersDictionary));
 		}
 
 		private Dictionary<DateOnly, bool> getShrinkageStatusAccordingToPeriods(IPerson person, DateOnlyPeriod period)
