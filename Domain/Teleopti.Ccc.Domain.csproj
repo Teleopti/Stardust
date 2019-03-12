@@ -264,6 +264,7 @@
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
+    <Compile Include="Scheduling\PersonDayAbsenceProjectionChanged.cs" />
     <Compile Include="Scheduling\PersonDayProjectionChanged.cs" />
     <Compile Include="Scheduling\TeamSettings.cs" />
     <Compile Include="Scheduling\UpdateSchedulingOptionsWithTeamSettings.cs" />
