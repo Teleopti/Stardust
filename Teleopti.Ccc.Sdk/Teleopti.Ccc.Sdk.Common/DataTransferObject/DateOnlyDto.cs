@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using Teleopti.Interfaces.Domain;
 
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     /// </summary>
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
     [Serializable]
+	[DebuggerDisplay("{DateTime.ToShortDateString()}")]
     public class DateOnlyDto
 	{
 		private DateTime _dateTime;

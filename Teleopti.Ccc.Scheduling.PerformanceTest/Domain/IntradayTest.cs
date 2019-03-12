@@ -27,8 +27,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 					browserInteractions.Click(".intraday-optimization-button:enabled");
 				}
 
-				browserInteractions.AssertAnyContains("nz-spin .ant-spin-text", "Optimize intraday");
-
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
 					browserInteractions.AssertExistsUsingJQuery(

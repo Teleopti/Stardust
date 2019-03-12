@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -549,6 +550,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var invoker = inner.Resolve<IInvokeQuery<ICollection<ScheduleTagDto>>>();
+				return invoker.Invoke(queryDto);
+			}
+		}
+
+		public ScheduleChangesDto GetSchedulesByChangedDateTime(QueryDto queryDto)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ScheduleChangesDto>>();
 				return invoker.Invoke(queryDto);
 			}
 		}

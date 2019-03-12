@@ -45,10 +45,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
         var vm = t.createController();
 
-        expect(vm.adjustedToNeutralAdherences[0].StartTime).toEqual(moment('2019-02-25T08:00:00').format('LTS'));
-        expect(vm.adjustedToNeutralAdherences[0].EndTime).toEqual(moment('2019-02-25T09:00:00').format('LTS'));
+        expect(vm.adjustedToNeutralAdherences[0].StartTime).toEqual(moment('2019-02-25T08:00:00').format('LLL'));
+        expect(vm.adjustedToNeutralAdherences[0].EndTime).toEqual(moment('2019-02-25T09:00:00').format('LLL'));
     });
-
+    
     it('should have history with multiple adjusted to neutral adherences', function (t) {
         t.backend.with.historicalAdherence({
             Timeline: {
@@ -63,8 +63,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
         var vm = t.createController();
 
-        expect(vm.adjustedToNeutralAdherences[0].StartTime).toEqual(moment('2019-02-25T09:00:00').format('LTS'));
-        expect(vm.adjustedToNeutralAdherences[0].EndTime).toEqual(moment('2019-02-25T10:00:00').format('LTS'));
+        expect(vm.adjustedToNeutralAdherences[0].StartTime).toEqual(moment('2019-02-25T09:00:00').format('LLL'));
+        expect(vm.adjustedToNeutralAdherences[0].EndTime).toEqual(moment('2019-02-25T10:00:00').format('LLL'));
     });
 
     it('should not have history with adjusted to neutral adherences', function (t) {

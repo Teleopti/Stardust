@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using Teleopti.Interfaces.Domain;
 
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     /// <summary>
     /// Represents a DateTimePeriodDto object.
     /// </summary>
+	[DebuggerDisplay("UTC: {UtcStartTime} -> {UtcEndTime}  |  Local: {LocalStartDateTime} -> {LocalEndDateTime}")]
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
     [Serializable]
     public class DateTimePeriodDto : Dto

@@ -4,12 +4,12 @@
     angular.module('wfm.rta').controller('RtaHistoricalController80594', RtaHistoricalController);
 
     RtaHistoricalController.$inject = [
-        '$http', 
-        '$state', 
+        '$http',
+        '$state',
         '$stateParams',
         '$scope',
         '$translate',
-        'rtaService',  
+        'rtaService',
         'RtaTimeline'];
 
     function RtaHistoricalController($http, $state, $stateParams, $scope, $translate, rtaService, rtaTimeline) {
@@ -101,8 +101,12 @@
                     });
 
                 vm.recordedAdherences = buildRecordedAdherences(data.Timeline, recordedAdherences);
-                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === out; });
-                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function (a) { return a.Type === neutral; });
+                vm.recordedOutOfAdherences = vm.recordedAdherences.filter(function (a) {
+                    return a.Type === out;
+                });
+                vm.recordedNeutralAdherences = vm.recordedAdherences.filter(function (a) {
+                    return a.Type === neutral;
+                });
 
                 vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
 
@@ -149,14 +153,14 @@
         function buildResultingAdherences(timeline, intervals) {
             return intervals
                 .map(function (i) {
-                    return buildInterval(timeline, i)
+                    return buildInterval(timeline, i, formatDisplayInterval)
                 });
         }
 
         function buildRecordedAdherences(timeline, intervals) {
             return intervals
                 .map(function (interval) {
-                    var o = buildInterval(timeline, interval);
+                    var o = buildInterval(timeline, interval, formatDisplayInterval);
                     o.Type = interval.Type;
                     o.isOutOfAdherence = interval.isOutOfAdherence;
                     o.isNeutralAdherence = interval.isNeutralAdherence;
@@ -176,7 +180,7 @@
         function buildApprovedPeriods(timeline, intervals) {
             return intervals
                 .map(function (interval) {
-                    var o = buildInterval(timeline, interval);
+                    var o = buildInterval(timeline, interval, formatDisplayInterval);
                     o.click = function () {
                         highlightClickedInterval(vm.approvedPeriods, o);
                         vm.openApprovedPeriods = true;
@@ -197,7 +201,7 @@
         function buildAdjustedToNeutralPeriods(timeline, intervals) {
             return intervals
                 .map(function (interval) {
-                    var o = buildInterval(timeline, interval);
+                    var o = buildInterval(timeline, interval, formatDisplayAdjustedInterval);
                     o.click = function () {
                         highlightClickedInterval(vm.adjustedToNeutralAdherences, o);
 
@@ -211,28 +215,46 @@
                 });
         }
 
-        function buildInterval(timeline, interval) {
+        function buildInterval(timeline, interval, formatDisplayInterval) {
             var startTime = interval.StartTime ? moment(interval.StartTime) : moment(timeline.StartTime);
+            var endTime = interval.EndTime ? moment(interval.EndTime) : moment(timeline.EndTime);
+
+            var displayInterval = formatDisplayInterval(startTime, endTime, interval, timeline);
+
+            return {
+                Width: calculate.Width(startTime, endTime),
+                Offset: calculate.Offset(startTime),
+                StartTime: displayInterval.StartTimeDisplay,
+                EndTime: displayInterval.EndTimeDisplay
+            };
+        }
+
+        function formatDisplayInterval(startTime, endTime, interval, timeline) {
             var startTimeDisplay = undefined;
             if (interval.StartTime) {
                 startTimeDisplay = startTime.isBefore(timeline.StartTime) ?
                     startTime.format('LLL') :
                     startTime.format('LTS');
             }
-            var endTime = interval.EndTime ? moment(interval.EndTime) : moment(timeline.EndTime);
+
             var endTimeDisplay = undefined;
             if (interval.EndTime) {
                 endTimeDisplay = endTime.format('LTS');
             }
 
             return {
-                Width: calculate.Width(startTime, endTime),
-                Offset: calculate.Offset(startTime),
-                StartTime: startTimeDisplay,
-                EndTime: endTimeDisplay
-            };
+                StartTimeDisplay: startTimeDisplay,
+                EndTimeDisplay: endTimeDisplay
+            }
         }
 
+        function formatDisplayAdjustedInterval(startTime, endTime) {
+            return {
+                StartTimeDisplay: moment(startTime, endTime).format('LLL'),
+                EndTimeDisplay: moment(endTime, endTime).format('LLL')
+            }
+        }
+        
         function highlightClickedInterval(intervals, clickedInterval) {
             intervals.forEach(function (interval) {
                 interval.highlight = interval === clickedInterval;

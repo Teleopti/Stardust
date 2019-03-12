@@ -446,6 +446,14 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		ICollection<ScheduleTagDto> GetScheduleTagByQuery(QueryDto queryDto);
 
 		/// <summary>
+		/// Gets all schedule changes from a certain changing point in time.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		/// <returns></returns>
+		[OperationContract]
+		ScheduleChangesDto GetSchedulesByChangedDateTime(QueryDto queryDto);
+
+		/// <summary>
 		/// Queries the system after saved settings for the schedule change subscriptions.
 		/// </summary>
 		/// <param name="queryDto">The query.</param>

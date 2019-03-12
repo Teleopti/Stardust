@@ -1,3 +1,3 @@
-Downloaded from https://cdn.botframework.com/botframework-webchat/master/webchat-es5.js
+Downloaded from https://cdn.botframework.com/botframework-webchat/latest/webchat-es5.js
 
 Use wget NOT browser to download the file since the browser will change encoding...

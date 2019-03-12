@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Staffing;
@@ -64,13 +65,12 @@ namespace Teleopti.Wfm.Api.Query
 					Message = $"There is no staffing data available period for given date {query.StartDate:yyyy-MM-dd}"
 				};
 			}
-			
+
 			var period = new DateOnlyPeriod(query.StartDate.ToDateOnly(), query.EndDate.ToDateOnly());
-			
 			var possibilityModels = _absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person,
 				periodForAbsence.Value);
-			var scheduledTimePeriods = possibilityModels.ScheduleDictionary[person].ScheduledDayCollection(period)
-				.SelectMany(x => x.ProjectionService().CreateProjection().FilterLayers<IActivity>()).ToArray();
+			var scheduleDays = possibilityModels.ScheduleDictionary[person].ScheduledDayCollection(period);
+			var scheduledTimePeriods = scheduleDays.SelectMany(x => x.ProjectionService().CreateProjection()).ToArray();
 
 			var possibilities = createPeriodStaffingPossibilityViewModels(possibilityModels.Models, scheduledTimePeriods,
 				person.PermissionInformation.DefaultTimeZone());
@@ -100,16 +100,22 @@ namespace Teleopti.Wfm.Api.Query
 					var period = new DateTimePeriod(
 						TimeZoneHelper.ConvertToUtc(startTime, timezone),
 						TimeZoneHelper.ConvertToUtc(endTime, timezone));
-					if (!scheduledTimePeriods.Any(p => p.WorkTime() > TimeSpan.Zero && p.Period.Contains(period)))
+
+					var scheduledPeriod = scheduledTimePeriods.SingleOrDefault(p => p.Period.Contains(period));
+					if (scheduledPeriod == null)
 					{
 						continue;
 					}
+
+					var possibility = !(scheduledPeriod.Payload is Absence)
+						? calculatedPossibilityModel.IntervalPossibilies[startTime]
+						: 0;
 
 					periodStaffingPossibilityViewModels.Add(new AbsencePossibilityDto
 					{
 						StartTime = startTime,
 						EndTime = endTime,
-						Possibility = calculatedPossibilityModel.IntervalPossibilies[startTime]
+						Possibility = possibility
 					});
 				}
 			}
