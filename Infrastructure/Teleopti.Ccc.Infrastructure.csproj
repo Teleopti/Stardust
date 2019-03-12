@@ -328,6 +328,7 @@
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\InsightsReportRepository.cs" />
+    <Compile Include="Repositories\PersonDayProjectionChangedRepository.cs" />
     <Compile Include="Repositories\SkillForecastJobStartTimeRepository.cs" />
     <Compile Include="Repositories\SkillForecastReadmodelRepository.cs" />
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
