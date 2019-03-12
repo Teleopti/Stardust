@@ -88,7 +88,7 @@
             }
         };
 
-        vm.searchIconClickFn = function() {
+		vm.searchIconClickFn = function () {
             vm.searchCallback && vm.searchCallback(vm.searchOptions.keyword);
             vm.turnOffAdvancedSearch();
             vm.resetFocusSearch();
@@ -158,7 +158,8 @@
             scope: {
                 searchTitle: '=',
                 searchOptions: '=?',
-                searchCallback: '=?'
+				searchCallback: '=?',
+				disabled: '<?'
             },
             link: function (scope, element, attrs, ctrl) {
                 element.on('focusout', function (event) {
