@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 					browserInteractions.Click(".schedule-button:enabled");
 				}
 
-				browserInteractions.AssertAnyContains("nz-spin .ant-spin-text", "Scheduling");
-
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
 					browserInteractions.AssertExistsUsingJQuery(
