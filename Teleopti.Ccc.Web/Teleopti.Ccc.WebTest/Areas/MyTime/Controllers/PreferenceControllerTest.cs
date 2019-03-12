@@ -130,6 +130,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.First().PersonAssignment.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(startTime.AddHours(-2), endTime).TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
 		}
 
+		[Test]
+		public void ShouldMapPeriodTimeExcludePersonalActivity()
+		{
+			var date = DateOnly.Today;
+			var scenario = Scenario.LoadDefaultScenario();
+			var assignment = new PersonAssignment(LoggedOnUser.CurrentUser(), scenario, date);
+			var startTime = new DateTime(date.Year, date.Month, date.Day, 7, 0, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(date.Year, date.Month, date.Day, 16, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startTime, endTime);
+			var personalActivityPeriod = new DateTimePeriod(startTime.AddHours(-2), startTime.AddHours(-1));
+			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, personalActivityPeriod);
+			var schedule = ScheduleDayFactory.Create(date, LoggedOnUser.CurrentUser(), scenario);
+			schedule.Add(assignment);
+			ScheduleProvider.AddScheduleDay(schedule);
+
+			var result = Target.PreferencesAndSchedules(date.AddDays(-1), date.AddDays(1)).Data as IEnumerable<PreferenceAndScheduleDayViewModel>;
+			result.First().PersonAssignment.TimeSpan.Should().Be.EqualTo(period.TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnPreferencePartialView()
 		{

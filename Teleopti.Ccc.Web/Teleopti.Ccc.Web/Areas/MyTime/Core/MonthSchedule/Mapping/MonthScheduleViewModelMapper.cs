@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				TimeSpan =
 					isNullPersonAssignment
 						? string.Empty
-						: personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString(),
+						: personAssignment.PeriodAdjustPersonalActivity().TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString(),
 				WorkingHours = TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture)
 			};
 		}

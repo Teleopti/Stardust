@@ -974,6 +974,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotMapPersonalActivityToSummaryTimespan()
+		{
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse());
+			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
+			var personalActivityPeriod = new DateTimePeriod(2014, 12, 18, 5, 2014, 12, 18, 6);
+			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, personalActivityPeriod);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(null).Days.ElementAt(3);
+			result.Summary.TimeSpan.Should()
+				.Be.EqualTo(period.TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
+		}
+
+		[Test]
 		public void ShouldMapSummaryForAbsence()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 15));

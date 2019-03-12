@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[SetCulture("en-US")]
-		public void ShouldMapTimeSpanForWorkingDayExcludingPersonalActivity()
+		public void ShouldMapTimeSpanForWorkingDayIncludingPersonalActivity()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
@@ -232,6 +232,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
 			result.Shift.Should().Not.Be.Null();
 			result.Shift.TimeSpan.Should().Be.EqualTo(new DateTimePeriod(2014, 12, 1, 5, 2014, 12, 1, 16).TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
+		}
+
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldMapTimeSpanForWorkingDayExcludingPersonalActivity()
+		{
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
+			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
+			var personalActivityPeriod = new DateTimePeriod(2014, 12, 1, 18, 2014, 12, 1, 19);
+			assignment.AddActivity(new Activity("a") {InWorkTime = true}, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			assignment.AddPersonalActivity(new Activity("b") {InWorkTime = true}, personalActivityPeriod);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
+			result.Shift.Should().Not.Be.Null();
+			result.Shift.TimeSpan.Should().Be.EqualTo(period.TimePeriod(TimeZone.TimeZone()).ToShortTimeString());
 		}
 
 		[Test]

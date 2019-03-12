@@ -82,6 +82,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
+		public virtual DateTimePeriod PeriodAdjustPersonalActivity()
+		{
+			var purlPeriod = PeriodExcludingPersonalActivity();
+
+			if (DayOff() != null) return purlPeriod;
+
+			var allPersonalActivities = ShiftLayers.Where(shiftLayer => shiftLayer.GetType() == typeof(PersonalShiftLayer)).ToList();
+			foreach (var personalActivity in allPersonalActivities)
+			{
+				if (!personalActivity.Period.Contains(purlPeriod.StartDateTime) &&
+					!personalActivity.Period.Contains(purlPeriod.EndDateTime))
+					return purlPeriod;
+			}
+
+			return Period;
+		}
+
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			//this is quite strange... probably wrong impl if eg only overtime or personal layer exists together with dayoff

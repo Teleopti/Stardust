@@ -823,6 +823,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotMapPersonalActivityToSummaryTimespanOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var period = new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16);
+			var personalActivityPeriod = new DateTimePeriod(2014, 12, 18, 5, 2014, 12, 18, 6);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, personalActivityPeriod);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date).Schedule;
+			result.Summary.TimeSpan.Should()
+				.Be.EqualTo(new DateTimePeriod(2014, 12, 18, 7, 2014, 12, 18, 16).TimePeriod(User.CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString());
+		}
+
+		[Test]
 		public void ShouldMapSummaryForAbsenceOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 15);
