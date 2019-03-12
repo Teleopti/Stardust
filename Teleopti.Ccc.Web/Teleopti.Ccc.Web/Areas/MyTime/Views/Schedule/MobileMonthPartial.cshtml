@@ -62,7 +62,7 @@ Layout = null;
 		<!-- /ko -->
 
 		<!-- ko if: !isLoading() -->
-		<div class="mobile-month-row-fluid mobile-month-row-head clearfix" data-bind="foreach: weekDayNames">
+		<div class="mobile-month-row-fluid mobile-month-row-head clearfix" data-bind="foreach: weekDayNames" aria-hidden="true">
 			<div class="mobile-month-cell mobile-month-weekday-header weekday-shortname" data-bind="text: ShortName"></div>
 		</div>
 		<div class="mobile-month-box clearfix" data-bind="foreach: weekViewModels">
