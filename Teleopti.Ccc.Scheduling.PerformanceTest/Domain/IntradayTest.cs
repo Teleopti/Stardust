@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 					browserInteractions.Click(".intraday-optimization-button:enabled");
 				}
 
-				browserInteractions.AssertExists(".test-schedule-is-running[ng-reflect-nz-spinning='true']");
+				browserInteractions.AssertAnyContains("nz-spin .ant-spin-text", "Optimize intraday");
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 					browserInteractions.Click(".schedule-button:enabled");
 				}
 
-				browserInteractions.AssertExists(".test-schedule-is-running[ng-reflect-nz-spinning='true']");
+				browserInteractions.AssertAnyContains("nz-spin .ant-spin-text", "Scheduling");
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 				browserInteractions.AssertNotExists("body", ".server-busy");
 				//not redirected to logon page
 				browserInteractions.AssertNotExists("body", "#Login-container");
-				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
+				browserInteractions.AssertExistsUsingJQuery(".heatmap-div:visible");
 				
 				TestLog.Static.Debug(
 					$"Agents with schedules/total number of agents in planning group: {browserInteractions.GetText(".scheduled-agents")}");
