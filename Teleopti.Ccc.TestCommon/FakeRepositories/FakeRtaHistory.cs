@@ -128,6 +128,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, Adherence adherence) =>
+			AdherenceDayStart(personId, time, null, null, null, null, null, null, adherence);
+		
 		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence) =>
 			AdherenceDayStart(personId, time, null, state, activity, activityColor, rule, ruleColor, adherence);
 

@@ -85,7 +85,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_displayPeriod = determineDisplayPeriod(_fullDay, shift);		
 			_changesWithinDisplayPeriod = changesWithinDisplayPeriod(_collectedChanges, _displayPeriod.Value);
 
-			_adjustedToNeutralIntersectingDisplayPeriod = _collectedAdjustedToNeutralPeriods.IntersectWithPeriod(new OpenPeriod(_displayPeriod.Value.StartDateTime, _displayPeriod.Value.EndDateTime));
+			_adjustedToNeutralIntersectingDisplayPeriod = _collectedAdjustedToNeutralPeriods.Intersects(new OpenPeriod(_displayPeriod.Value.StartDateTime, _displayPeriod.Value.EndDateTime));
 
 			var (recordedOutOfAdherences, recordedNeutralAdherences) = recordedAdherences();
 			var (projectedOutOfAdherences, projectedNeutralAdherences) = projectedAdherences(recordedOutOfAdherences, recordedNeutralAdherences);
@@ -206,7 +206,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			closeOpenPeriod(displayPeriod, now, adherences);
 			adherences = removeTinyPeriods(adherences);
 			adherences = mergeAdjacentPeriods(adherences);
-			adherences = adherences.IntersectWithPeriod(new OpenPeriod(displayPeriod.StartDateTime, displayPeriod.EndDateTime));
+			adherences = adherences.Intersects(new OpenPeriod(displayPeriod.StartDateTime, displayPeriod.EndDateTime));
 			return adherences;
 		}
 

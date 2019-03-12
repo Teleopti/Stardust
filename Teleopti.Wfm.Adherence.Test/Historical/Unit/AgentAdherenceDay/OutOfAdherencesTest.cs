@@ -14,6 +14,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	{
 		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
+		public FakeRtaHistory History;
 		public MutableNow Now;
 
 		[Test]
@@ -143,6 +144,23 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(person, "2018-02-01".Date());
 
+			data.OutOfAdherences().Single().EndTime.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldHaveUnknownStartAndEndIfUnknown()
+		{
+			Now.Is("2019-03-12 09:00");
+			var person = Guid.NewGuid();
+			Database.WithAgent(person);
+			History
+				.AdherenceDayStart(person, "2019-03-11 07:00", Adherence.Configuration.Adherence.Out)
+				.ShiftStart(person, "2019-03-11 08:00", "2019-03-11 17:00")
+				;
+Console.WriteLine("HERE");
+			var data = Target.Load(person, "2019-03-11".Date());
+
+			data.OutOfAdherences().Single().StartTime.Should().Be(null);
 			data.OutOfAdherences().Single().EndTime.Should().Be(null);
 		}
 	}
