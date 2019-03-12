@@ -65,6 +65,21 @@
 				link: "#/ETL"
 			}
 		];
+		
+		$http.get("./Toggle/IsEnabled",
+			{
+				params: { toggle: "Status_ShowAdmin_82154" }
+			})
+			.then(function(response){
+				if(response.data){
+					$scope.menuItems.push(
+						{
+							text: "Status administration",
+							link: "#/Bar"
+						}
+					);
+				}
+			});
 
 		$http.get("./HasNoUser")
 			.then(function (response) {

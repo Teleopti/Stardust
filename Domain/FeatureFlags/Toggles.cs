@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 
 		Wfm_DisplayOnlineHelp_39402,
 
+		Status_ShowAdmin_82154,
 
 		Wfm_SkillPriorityRoutingGUI_39885,
 		WfmStaffing_AddOvertime_42524,
