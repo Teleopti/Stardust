@@ -80,9 +80,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var requestPeriod = personRequest.Request.Period;
-				var loadSchedulesPeriodToCoverForMidnightShifts = requestPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
+				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(timeZone);
 				
 				if (workflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
 				{
@@ -107,9 +106,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), requestPeriod, _currentScenario.Current())[personRequest.Person];
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod).ToList();
-				var adjustedRequestPeriod = adjustFullDayRequestPeriodForOvernightShift(scheduleDays, absenceRequest);
+				var adjustedRequestPeriod = adjustFullDayRequestPeriodToCoverOvernightShift(scheduleDays, absenceRequest);
 
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
@@ -195,18 +194,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		private DateTimePeriod adjustFullDayRequestPeriodForOvernightShift(List<IScheduleDay> scheduleDays,IAbsenceRequest absenceRequest)
+		private DateTimePeriod adjustFullDayRequestPeriodToCoverOvernightShift(List<IScheduleDay> scheduleDays,IAbsenceRequest absenceRequest)
 		{
 			var adjustedRequestPeriod = absenceRequest.Period;
-			if (absenceRequest.FullDay)
+			if (absenceRequest.FullDay && scheduleDays.Any())
 			{
-				var scheduleDayToday = scheduleDays.SingleOrDefault(x => x.Period.Contains(absenceRequest.Period));
-				if (scheduleDayToday != null)
-				{
-					var shiftPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(absenceRequest.Period,
-						absenceRequest.Person, scheduleDayToday, scheduleDayToday, _globalSettingDataRepository);
-					adjustedRequestPeriod = new DateTimePeriod(absenceRequest.Period.StartDateTime, shiftPeriod.EndDateTime);
-				}
+				adjustedRequestPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(
+					absenceRequest.Period,
+					absenceRequest.Person, scheduleDays.First(), scheduleDays.Last(), _globalSettingDataRepository);
 			}
 
 			return adjustedRequestPeriod;
