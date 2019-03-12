@@ -17,30 +17,36 @@ namespace Stardust.Node.Timers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TrySendStatusToManagerTimer));
 		private readonly CancellationTokenSource _cancellationTokenSource;
-		private readonly string _whoAmI;
+		private string _whoAmI;
 		private readonly JobDetailSender _jobDetailSender;
 		private readonly IHttpSender _httpSender;
 		public JobQueueItemEntity JobQueueItemEntity { get; set; }
-		public Uri CallbackTemplateUri { get; set; }
+		public Uri CallbackTemplateUri { get; protected set; }
 		public event EventHandler TrySendStatusSucceded;
 		protected readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
 		private bool _enableGc;
 
-		public TrySendStatusToManagerTimer(NodeConfiguration nodeConfiguration,
-		                                   Uri callbackTemplateUri,
-		                                   JobDetailSender jobDetailSender,
+		public TrySendStatusToManagerTimer(JobDetailSender jobDetailSender,
 		                                   IHttpSender httpSender, double interval = 500) : base(interval)
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
-			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
-			_enableGc = nodeConfiguration.EnableGarbageCollection;
+			//_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			//_enableGc = nodeConfiguration.EnableGarbageCollection;
 			_jobDetailSender = jobDetailSender;
 			_httpSender = httpSender;
-			CallbackTemplateUri = callbackTemplateUri;
+			//CallbackTemplateUri = callbackTemplateUri;
 			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
 			
 			Elapsed += OnTimedEvent;
 			AutoReset = true;
+		}
+
+		public virtual void Setup(NodeConfiguration nodeConfiguration, Uri getManagerJobDoneTemplateUri)
+		{
+			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			_enableGc = nodeConfiguration.EnableGarbageCollection;
+			_jobDetailSender.SetManagerLocation(nodeConfiguration.ManagerLocation);
+			CallbackTemplateUri = getManagerJobDoneTemplateUri;
 		}
 
 		public void InvokeTriggerTrySendStatusSucceded()

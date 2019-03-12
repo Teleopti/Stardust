@@ -19,8 +19,7 @@ namespace NodeTest.Fakes.Timers
 		public SendJobDoneTimerFake(NodeConfiguration nodeConfiguration,
 									JobDetailSender jobDetailSender,
 									IHttpSender httpSender,
-									double interval = 1000) : base(nodeConfiguration,
-																   jobDetailSender,
+									double interval = 1000) : base(jobDetailSender,
 																   httpSender,
 																   interval)
 		{

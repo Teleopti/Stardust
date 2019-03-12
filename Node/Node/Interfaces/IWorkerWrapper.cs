@@ -26,5 +26,7 @@ namespace Stardust.Node.Interfaces
 		HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
 
 		void CancelTimeoutCurrentMessageTask();
+
+		void Init(NodeConfiguration nodeConfiguration);
 	}
 }

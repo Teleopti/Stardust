@@ -10,12 +10,17 @@ namespace Stardust.Node.Timers
 		private readonly JobDetailSender _jobDetailSender;
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
-		public TrySendJobDetailToManagerTimer(NodeConfiguration nodeConfiguration, JobDetailSender jobDetailSender)
+		public TrySendJobDetailToManagerTimer(/*(NodeConfiguration nodeConfiguration,*/ JobDetailSender jobDetailSender)
 		{
 			_jobDetailSender = jobDetailSender;
 			_cancellationTokenSource = new CancellationTokenSource();
-			Interval = nodeConfiguration.SendDetailsToManagerMilliSeconds;
 			Elapsed += OnTimedEvent;
+		}
+
+		public void SetupAndStart(NodeConfiguration nodeConfiguration)
+		{
+			Interval = nodeConfiguration.SendDetailsToManagerMilliSeconds;
+			base.Start();
 		}
 
 		protected override void Dispose(bool disposing)

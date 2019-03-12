@@ -14,18 +14,20 @@ namespace Stardust.Node.Timers
 	{
 		private readonly IHttpSender _httpSender;
 
-		public TrySendJobFaultedToManagerTimer(NodeConfiguration nodeConfiguration,
-											   JobDetailSender jobDetailSender,
+		public TrySendJobFaultedToManagerTimer(JobDetailSender jobDetailSender,
 		                                       IHttpSender httpSender,
-		                                       double interval = 500) : base(nodeConfiguration,
-		                                                                     nodeConfiguration
-			                                                                     .GetManagerJobHasFailedTemplatedUri(),
-																			 jobDetailSender,
+		                                       double interval = 500) : base(jobDetailSender,
 		                                                                     httpSender,
 		                                                                     interval)
 		{
 			_httpSender = httpSender;
 		}
+
+		//public override void Setup(NodeConfiguration nodeConfiguration, Uri getManagerJobDoneTemplateUri)
+		//{
+		//	CallbackTemplateUri = nodeConfiguration.GetManagerJobHasFailedTemplatedUri();
+		//	base.Setup(nodeConfiguration);
+		//}
 
 
 		public AggregateException AggregateExceptionToSend { get; set; }

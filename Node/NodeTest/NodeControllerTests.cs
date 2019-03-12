@@ -43,7 +43,7 @@ namespace NodeTest
 			                                                                    new FakeHttpSender());
 			_pingToManagerFake = new PingToManagerFake();
 
-			_jobDetailSender = new JobDetailSender(_nodeConfigurationFake, new FakeHttpSender());
+			_jobDetailSender = new JobDetailSender(new FakeHttpSender());
 
 			_trySendJobDetailToManagerTimer =
 				new TrySendJobDetailToManagerTimer(_nodeConfigurationFake,
@@ -57,8 +57,7 @@ namespace NodeTest
 																 _jobDetailSender,
 			                                                     new FakeHttpSender());
 
-			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-															   _jobDetailSender,
+			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_jobDetailSender,
 			                                                   new FakeHttpSender());
 			_now = new MutableNow();
 		}

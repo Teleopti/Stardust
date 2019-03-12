@@ -45,7 +45,7 @@ namespace NodeTest
 			};
 			_nodeStartupNotification = new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
 																				new FakeHttpSender());
-			_jobDetailSender  = new JobDetailSender(_nodeConfigurationFake, new FakeHttpSender());
+			_jobDetailSender  = new JobDetailSender(new FakeHttpSender());
 			_trySendJobDetailToManagerTimer =
 				new TrySendJobDetailToManagerTimer(_nodeConfigurationFake,
 														_jobDetailSender);

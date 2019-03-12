@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Stardust.Node;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
@@ -16,11 +15,9 @@ namespace NodeTest.Fakes.Timers
 
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-		public SendJobFaultedTimerFake(NodeConfiguration nodeConfiguration,
-									   JobDetailSender jobDetailSender,
+		public SendJobFaultedTimerFake(JobDetailSender jobDetailSender,
 									   IHttpSender httpSender,
-									   double interval = 1000) : base(nodeConfiguration,
-																	  jobDetailSender,
+									   double interval = 1000) : base(jobDetailSender,
 																	  httpSender,
 																	  interval)
 		{

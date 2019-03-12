@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Core;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Entities;
@@ -29,9 +28,10 @@ namespace Stardust.Node.Workers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(WorkerWrapper));
 
 		private readonly IInvokeHandler _handler;
-		private readonly NodeConfiguration _nodeConfiguration;
+		//private readonly NodeConfigurationService _nodeConfigurationService;
+		private NodeConfiguration _nodeConfiguration;
 		private readonly TrySendNodeStartUpNotificationToManagerTimer _nodeStartUpNotificationToManagerTimer;
-		private readonly Timer _pingToManagerTimer;
+		private readonly PingToManagerTimer _pingToManagerTimer;
 
 		private readonly object _startJobLock = new object();
 		private readonly TrySendStatusToManagerTimer _trySendJobCanceledStatusToManagerTimer;
@@ -45,17 +45,19 @@ namespace Stardust.Node.Workers
 		private DateTime? _startJobTimeout;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
-							 NodeConfiguration nodeConfiguration,
+							 //NodeConfiguration nodeConfiguration,
+							 //NodeConfigurationService nodeConfigurationService,
 							 TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
-							 Timer pingToManagerTimer,
+							 PingToManagerTimer pingToManagerTimer,
 							 TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 							 TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
 							 TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
 							 TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender, INow now)
 		{
 			_handler = invokeHandler;
-			_nodeConfiguration = nodeConfiguration;
-			WhoamI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			//_nodeConfigurationService = nodeConfigurationService;
+			//_nodeConfiguration = nodeConfiguration;
+			//WhoamI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
 			_nodeStartUpNotificationToManagerTimer = nodeStartUpNotificationToManagerTimer;
 			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded +=
@@ -71,14 +73,32 @@ namespace Stardust.Node.Workers
 
 			IsWorking = false;
 
-			_trySendJobDetailToManagerTimer.Start();
-			_nodeStartUpNotificationToManagerTimer.Start();
+			//_trySendJobDetailToManagerTimer.Start();
+			//_nodeStartUpNotificationToManagerTimer.Start();
+		}
+
+		public void Init(NodeConfiguration nodeConfiguration)
+		{
+			_jobDetailSender.SetManagerLocation(nodeConfiguration.ManagerLocation);
+			_nodeConfiguration = nodeConfiguration;
+
+			_nodeStartUpNotificationToManagerTimer.SetupAndStart(_nodeConfiguration);
+			_pingToManagerTimer.SetupAndStart(_nodeConfiguration);
+
+			_trySendJobDoneStatusToManagerTimer.Setup(_nodeConfiguration, nodeConfiguration.GetManagerJobDoneTemplateUri());
+			_trySendJobCanceledStatusToManagerTimer.Setup(_nodeConfiguration, nodeConfiguration.GetManagerJobHasBeenCanceledTemplateUri());
+			_trySendJobFaultedStatusToManagerTimer.Setup(_nodeConfiguration, nodeConfiguration.GetManagerJobHasFailedTemplatedUri());
+			_trySendJobDetailToManagerTimer.SetupAndStart(_nodeConfiguration);
+
+			WhoamI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 		}
 
 		private CancellationTokenSource CurrentMessageTimeoutTaskCancellationTokenSource { get; set; }
 
 		public Task Task { get; private set; }
-		public string WhoamI { get; set; }
+
+		public string WhoamI { get; private set; }
+
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
 		public HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
@@ -314,7 +334,7 @@ namespace Stardust.Node.Workers
 																								  EventArgs e)
 		{
 			_nodeStartUpNotificationToManagerTimer.Stop();
-			_pingToManagerTimer.Start();
+			_pingToManagerTimer.SetupAndStart(_nodeConfiguration);
 		}
         
 		private void SetNodeStatusTimer(TrySendStatusToManagerTimer newTrySendStatusToManagerTimer,
@@ -336,7 +356,7 @@ namespace Stardust.Node.Workers
 			if (newTrySendStatusToManagerTimer != null)
 			{
 				_trySendStatusToManagerTimer = newTrySendStatusToManagerTimer;
-
+				//_trySendStatusToManagerTimer.Setup(_nodeConfiguration, _nodeConfiguration.GetManagerNodeHeartbeatUri());
 				_trySendStatusToManagerTimer.JobQueueItemEntity = jobQueueItemEntity;
 
 				_trySendStatusToManagerTimer.TrySendStatusSucceded +=
@@ -346,6 +366,7 @@ namespace Stardust.Node.Workers
 			}
 			else
 			{
+				_trySendStatusToManagerTimer?.Dispose();
 				_trySendStatusToManagerTimer = null;
 			}
 		}

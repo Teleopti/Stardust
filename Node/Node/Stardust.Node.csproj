@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="NodeConfiguration.cs" />
+    <Compile Include="NodeConfigurationService.cs" />
     <Compile Include="NodeController.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Workers\JobDetailSender.cs" />
     <Compile Include="Workers\Now.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
+    <Compile Include="Workers\WorkerWrapperService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

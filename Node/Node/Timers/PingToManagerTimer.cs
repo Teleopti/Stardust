@@ -13,22 +13,27 @@ namespace Stardust.Node.Timers
 	public class PingToManagerTimer : Timer
 	{
 		//private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
-		private readonly string _whoAmI;
-		private readonly NodeConfiguration _nodeConfiguration;
+		private string _whoAmI;
+		private NodeConfiguration _nodeConfiguration;
 		private readonly IHttpSender _httpSender;
 		private readonly CancellationTokenSource _cancellationTokenSource;
 		private readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
 
-		public PingToManagerTimer(NodeConfiguration nodeConfiguration,
-		                          IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
+		public PingToManagerTimer(IHttpSender httpSender)
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
 			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
-			_nodeConfiguration = nodeConfiguration;
 			_httpSender = httpSender;
-			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
 			Elapsed += OnTimedEvent;
+		}
+
+		public void SetupAndStart(NodeConfiguration nodeConfiguration)
+		{
+			_nodeConfiguration = nodeConfiguration;
+			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			Interval = nodeConfiguration.PingToManagerSeconds * 1000;
+			Start();
 		}
 
 		protected override void Dispose(bool disposing)
