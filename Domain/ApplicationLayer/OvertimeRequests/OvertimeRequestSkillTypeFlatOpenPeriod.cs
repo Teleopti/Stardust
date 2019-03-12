@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		public bool EnableWorkRuleValidation { get; set; }
 		public OvertimeValidationHandleType? WorkRuleValidationHandleType { get; set; }
 		public ISkillType SkillType { get; set; }
+		
 		public string DenyReason { get; set; }
 		public DateOnlyPeriod Period { get; set; }
 		public IOvertimeRequestOpenPeriod OriginPeriod { get; set; }

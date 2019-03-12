@@ -244,6 +244,7 @@
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
+    <Compile Include="Scheduling\Assignment\MeetingShiftLayer.cs" />
     <Compile Include="Status\AllSteps.cs" />
     <Compile Include="Status\CallLegacySystemStatus.cs" />
     <Compile Include="Status\CheckLegacySystemStatus.cs" />

@@ -49,12 +49,13 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEnumerable<MainShiftLayer> MainActivities();
 		IEnumerable<PersonalShiftLayer> PersonalActivities();
 		IEnumerable<OvertimeShiftLayer> OvertimeActivities();
+		IEnumerable<MeetingShiftLayer> Meetings();
 		IEnumerable<ShiftLayer> ShiftLayers { get; }
 		DateTimePeriod PeriodExcludingPersonalActivity();
 		DateTimePeriod PeriodAdjustPersonalActivity();
 		bool RemoveActivity(ShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
-
+		void AddMeeting(IActivity activity, DateTimePeriod period, Guid meetingId, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void AddOvertimeActivity(IActivity activity, DateTimePeriod period,
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 

@@ -163,6 +163,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			return _shiftLayers.OfType<OvertimeShiftLayer>();
 		}
+		
+		public virtual IEnumerable<MeetingShiftLayer> Meetings()
+		{
+			return _shiftLayers.OfType<MeetingShiftLayer>();
+		}
 
 		public virtual IEnumerable<ShiftLayer> ShiftLayers => _shiftLayers;
 
@@ -358,6 +363,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					return activityAddedEvent;
 				});
 			}
+		}
+
+		public virtual void AddMeeting(IActivity activity, DateTimePeriod period, Guid meetingId,  bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
+		{
+			var layer = new MeetingShiftLayer(activity, period, meetingId);
+			layer.SetParent(this);
+			_shiftLayers.Add(layer);
 		}
 
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)

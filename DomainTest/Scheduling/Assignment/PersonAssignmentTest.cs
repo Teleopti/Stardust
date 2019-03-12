@@ -133,6 +133,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(target, layer.Parent);
 			Assert.AreSame(target, layer.Root());
 		}
+		
+		[Test]
+		public void VerifyReferenceBackToAssignmentWorksFromAMeetingLayer()
+		{
+			target.AddMeeting(new Activity(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), Guid.NewGuid());
+			target.Meetings().Single().Parent.Should().Be.SameInstanceAs(target);
+		}
+		
+		[Test]
+		public void VerifyActivityIsCorrect()
+		{
+			var meetingId = Guid.NewGuid();
+			target.AddMeeting(new Activity(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), meetingId);
+			target.Meetings().Single().MeetingId.Should().Be.EqualTo(meetingId);
+		}
 
 
 		/// <summary>

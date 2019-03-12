@@ -61,6 +61,8 @@
     <Compile Include="ApiModule.cs" />
     <Compile Include="CommandDtoProvider.cs" />
     <Compile Include="Command\ActivityLayerDto.cs" />
+    <Compile Include="Command\AddMeetingDto.cs" />
+    <Compile Include="Command\AddMeetingHandler.cs" />
     <Compile Include="Command\AddPersonAbsenceDto.cs" />
     <Compile Include="Command\AddIntradayAbsenceRequestHandler.cs" />
     <Compile Include="Command\AddPersonAbsenceHandler.cs" />
