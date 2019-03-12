@@ -145,8 +145,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyActivityIsCorrect()
 		{
 			var meetingId = Guid.NewGuid();
-			target.AddMeeting(new Activity(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), meetingId);
+			var activity = new Activity();
+			target.AddMeeting(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), meetingId);
 			target.Meetings().Single().MeetingId.Should().Be.EqualTo(meetingId);
+			target.Meetings().Single().Payload.Should().Be.EqualTo(activity);
 		}
 
 
@@ -614,12 +616,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void ClearShouldRemoveEverything()
+		public void ClearShouldRemoveEverythingExceptMeeting()
 		{
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			target.AddOvertimeActivity(activity, period, null);
 			target.AddPersonalActivity(activity, period);
+			target.AddMeeting(activity, period, Guid.NewGuid());
 			target.AddActivity(activity, period);
 			target.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("cat"));
 			target.Clear();
@@ -631,6 +634,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.SetDayOff(DayOffFactory.CreateDayOff());
 			target.Clear();
 			target.DayOff().Should().Be.Null();
+			target.Meetings().Should().Not.Be.Empty();
 		}
 
 		[Test]
