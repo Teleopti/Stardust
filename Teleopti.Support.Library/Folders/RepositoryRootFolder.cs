@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Teleopti.Support.Library.Folders
 {
@@ -9,7 +10,7 @@ namespace Teleopti.Support.Library.Folders
 
 		public RepositoryRootFolder()
 		{
-			_path = locateFolderUsingBlackMagic();
+			_path = RepositoryRootFolderLocator.LocateFolderUsingBlackMagic();
 			if (_path != null)
 				_path = System.IO.Path.GetFullPath(_path);
 		}
@@ -23,21 +24,36 @@ namespace Teleopti.Support.Library.Folders
 
 		public bool IsRunningFromRepository() => _path != null;
 
-		private static string locateFolderUsingBlackMagic()
-		{
-			if (Directory.Exists(@"..\..\..\..\.debug-Setup"))
-				return @"..\..\..\..";
-			if (Directory.Exists(@"..\..\..\.debug-Setup"))
-				return @"..\..\..";
-			if (Directory.Exists(@"..\..\.debug-Setup"))
-				return @"..\..";
-			if (Directory.Exists(@"..\.debug-Setup"))
-				return @"..";
-			if (Directory.Exists(@".debug-Setup"))
-				return @".";
-			return null;
-		}
-
 		public override string ToString() => Path();
+	}
+
+	public static class RepositoryRootFolderLocator
+	{
+		public static string LocateFolderUsingBlackMagic(string testDirectory = null)
+		{
+			var relativeLookups = new[]
+			{
+				@"..\..\..\..\.debug-Setup",
+				@"..\..\..\.debug-Setup",
+				@"..\..\.debug-Setup",
+				@"..\.debug-Setup",
+				@".debug-Setup",
+			};
+			var lookupsFromTestDirectory = Enumerable.Empty<string>();
+			if (testDirectory != null)
+			{
+				lookupsFromTestDirectory = relativeLookups
+					.Select(x => Path.Combine(testDirectory, x))
+					.ToArray();
+			}
+
+			var lookups = lookupsFromTestDirectory
+				.Concat(relativeLookups)
+				.ToArray();
+			
+			var found = lookups.FirstOrDefault(Directory.Exists);
+			
+			return new FileInfo(Path.Combine(found, "..")).FullName;
+		}
 	}
 }

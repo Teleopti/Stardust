@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence
@@ -38,7 +39,7 @@ namespace Teleopti.Wfm.Adherence
 			return result;
 		}
 
-		public static IEnumerable<OpenPeriod> IntersectWithPeriod(this IEnumerable<OpenPeriod> periods, OpenPeriod period) =>
+		public static IEnumerable<OpenPeriod> Intersects(this IEnumerable<OpenPeriod> periods, OpenPeriod period) =>
 			periods
 				.Where(p => p.intersects(period))
 				.ToArray();
@@ -78,9 +79,12 @@ namespace Teleopti.Wfm.Adherence
 		private static bool intersects(this OpenPeriod instance, OpenPeriod period)
 		{
 			var startsAfterPeriodEnds = instance.StartTime > period.EndTime;
-
 			var endsBeforePeriodStarts = instance.EndTime < period.StartTime;
-			return !(startsAfterPeriodEnds || endsBeforePeriodStarts);
+			if (startsAfterPeriodEnds)
+				return false;
+			if (endsBeforePeriodStarts)
+				return false;
+			return true;
 		}
 
 		private static bool startsBefore(this OpenPeriod instance, OpenPeriod period)

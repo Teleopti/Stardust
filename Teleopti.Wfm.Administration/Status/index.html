@@ -1,0 +1,46 @@
+<div class="container body-content" ng-controller="statusController as vm">
+	<h2>Manage Custom Status Steps</h2>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><strong>Custom Status Steps</strong></div>
+	
+				<div class="panel-body text-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Limit (s)</th>
+								<th>Last ping</th>
+								<th>Ping url</th>
+								<th>Status url</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="step in vm.statusSteps">
+								<td>{{step.name}}</td>
+								<td>{{step.description}}</td>
+								<td>{{step.secondsLimit}}</td>
+								<td>{{step.lastPing}}</td>
+								<td>{{step.pingUrl}}</td>
+								<td><a href="{{step.statusUrl}}">{{step.statusUrl}}</a></td>
+								<td>[delete]</td>
+							</tr>
+							<tr>
+								<td><input type="text" /></td>
+								<td><input type="text" /></td>
+								<td><input type="text" /></td>
+								<td>...</td>
+								<td>...</td>
+								<td>...</td>
+								<td>[save]</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
