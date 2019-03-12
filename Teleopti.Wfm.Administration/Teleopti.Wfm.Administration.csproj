@@ -363,6 +363,7 @@
     <Content Include="StardustDashboard\queue.html" />
     <Content Include="StardustDashboard\style.css" />
     <Content Include="configurationDetails.html" />
+    <Content Include="Status\index.html" />
     <Content Include="userdetails.html" />
     <Content Include="details.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

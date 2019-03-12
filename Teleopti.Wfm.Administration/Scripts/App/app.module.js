@@ -89,7 +89,11 @@
 				})
 				.when('/HangfireStatistics', {
 					templateUrl: 'HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html'
-				});
+				})
+				.when('/Status', {
+					templateUrl: 'status/index.html'
+				})
+			;
 
 			$httpProvider.defaults.xsrfCookieName = "__RequestVerificationToken_Administration";
 			$httpProvider.interceptors.push('httpInterceptor');

@@ -75,7 +75,7 @@
 					$scope.menuItems.push(
 						{
 							text: "Status administration",
-							link: "#/Bar"
+							link: "#/Status"
 						}
 					);
 				}
