@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			setupScheduleData(skill, today, forecastStaffPerInterval, scheduledStaffPerInterval);
 			setupScheduleData(skill, tomorrow, forecastStaffPerInterval, scheduledStaffPerInterval);
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(today.Year, 1, 1), new[] {skill}).WithId();
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(today.Year, 1, 1), new[] { skill }).WithId();
 			var workflowControlSet = createWorkflowControlSet(today, absence);
 			person.WorkflowControlSet = workflowControlSet;
 
@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test]
-		public async System.Threading.Tasks.Task ShouldNotReturnCurrentAbsenceAsPossibility()
+		public async System.Threading.Tasks.Task ShouldReturnLowPossibilityForExistingAbsencePeriod()
 		{
 			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnlyToday = new DateOnly(today);
@@ -153,7 +153,9 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
-			resultDto["Result"].Count().Should().Be.EqualTo(0);
+			var absencePossibilities = resultDto["Result"];
+			absencePossibilities.Count().Should().Be.EqualTo((17 - 8) * 4);
+			absencePossibilities.All(x => x["Possibility"].Value<int>() == 0).Should().Be(true);
 		}
 
 		[Test]
@@ -204,8 +206,8 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var openHours = new TimePeriod(0, 24);
 			var skill = createSkill(intervalLengthInMinute, "Phone", openHours, activity);
 			SkillRepository.Has(skill);
-			
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(today.Year, 1, 1), new[] {skill})
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(today.Year, 1, 1), new[] { skill })
 				.WithId();
 			var workflowControlSet = createWorkflowControlSet(today, absence);
 			person.WorkflowControlSet = workflowControlSet;
@@ -283,7 +285,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 				TimeZone = TimeZoneInfo.Utc,
 				Activity = activity
 			}.WithId();
-			
+
 			var workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
 			workload.SetId(Guid.NewGuid());
 
