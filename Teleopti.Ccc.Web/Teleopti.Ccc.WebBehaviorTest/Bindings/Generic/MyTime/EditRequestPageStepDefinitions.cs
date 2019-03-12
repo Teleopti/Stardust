@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click add new overtime availability")]
 		public void WhenIClickAddNewOvertimeAvailability()
 		{
-			Browser.Interactions.Click(".overtime-availability-add");
+			Browser.Interactions.Click("#overtime-availability-add");
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see add overtime availability button")]
 		public void ThenIShouldNotSeeAddOvertimeAvailabilityButton()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(".overtime-availability-add");
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#overtime-availability-add");
 		}
 
 		[Then(@"I should see that the request was denied with reason '(.*)'")]
