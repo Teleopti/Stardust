@@ -3532,6 +3532,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scheduling\Assignment\MeetingShiftLayer.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

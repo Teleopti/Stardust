@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var addResult = (OkNegotiatedContentResult<NewExternalApplicationResponseModel>)Target.Add(model);
 
 			var result = (OkResult)Target.Verify(addResult.Content.Token);
+			
 			result.Should().Not.Be.Null();
 		}
 
