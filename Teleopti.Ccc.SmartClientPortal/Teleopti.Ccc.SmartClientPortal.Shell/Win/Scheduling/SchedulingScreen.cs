@@ -266,7 +266,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _scheduleView is DayViewNew)
 			{
 				drawSkillGrid();
-				schedulerSplitters1.ReloadChart();
 			}
 
 			_tmpTimer.Enabled = true;
@@ -1431,7 +1430,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			menuUpdater.Update();
 			_currentSelectedGridRow = null;
 			drawSkillGrid();
-			schedulerSplitters1.ReloadChart();
 		}
 
 		private void skillGridMenuItemPeriodClick(object sender, EventArgs e)
@@ -1709,7 +1707,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 						{
 							drawSkillGrid();
-							schedulerSplitters1.ReloadChart();
 						}
 
 						schedulerSplitters1.CurrentIntraDayDate = selectedDate;
@@ -1950,7 +1947,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleView.Sort(sortCommand);
 
 			drawSkillGrid();
-			schedulerSplitters1.ReloadChart();
 			setupRequestPresenter();
 			setupRequestViewButtonStates();
 			releaseUserInterface(e.Cancelled);
@@ -1970,7 +1966,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleView?.SelectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
 			schedulerSplitters1.CurrentIntraDayDate = new DateOnly(localDate);
 			drawSkillGrid();
-			schedulerSplitters1.ReloadChart();
 		}
 
 		private void setupRequestViewButtonStates()
@@ -2294,7 +2289,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void tabSkillDataSelectedIndexChanged(object sender, EventArgs e)
 		{
 			drawSkillGrid();
-			schedulerSplitters1.ReloadChart();
 		}
 
 		#endregion
@@ -3636,15 +3630,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 		}
 
-		private void prepareAgentRestrictionView(ScheduleViewBase detailView,
-			IList<IPerson> persons, DateOnlyPeriod selectedPeriod)
-		{
-			if (persons.Count == 0) return;
-			var view = (AgentRestrictionsDetailView)detailView;
-			schedulerSplitters1.SplitContainerView.SplitterDistance = 300;
-			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedPeriod, view);
-		}
-
 		private void zoom(ZoomLevel level)
 		{
 			schedulerSplitters1.SuspendLayout();
@@ -3716,7 +3701,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						LockManager, SchedulePartFilter, ClipsHandlerSchedule, _overriddenBusinessRulesHolder, callback,
 						_defaultScheduleTag, _container.Resolve<IWorkShiftWorkTime>(), _undoRedo, _timeZoneGuard);
 					_scheduleView.ViewGrid.ContextMenuStrip = contextMenuStripRestrictionView;
-					prepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
+					schedulerSplitters1.PrepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
 
 					if (scheduleParts != null)
 					{
@@ -3957,7 +3942,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return;
 
 			schedulerSplitters1.CurrentIntraDayDate = _scheduleView.SelectedDateLocal();
-			schedulerSplitters1.DrawSkillGrid();
+			schedulerSplitters1.DrawSkillGridAndReLoadChart();
 		}
 
 		private void loadBpos(IUnitOfWork uow, SchedulingScreenState stateHolder)
@@ -5665,7 +5650,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
 				IEnumerable<DateOnly> selectedDates = _scheduleView.AllSelectedDates(selectedSchedules);
-				prepareAgentRestrictionView(_scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)), new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max()));
+				schedulerSplitters1.PrepareAgentRestrictionView(_scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)), new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max()));
 			}
 			displayTimeZoneInfo();
 			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
@@ -5674,7 +5659,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			updateSelectionInfo(selectedSchedules);
 			updateShiftEditor();
 			drawSkillGrid();
-			schedulerSplitters1.ReloadChart();
 		}
 
 		private void displayTimeZoneInfo()

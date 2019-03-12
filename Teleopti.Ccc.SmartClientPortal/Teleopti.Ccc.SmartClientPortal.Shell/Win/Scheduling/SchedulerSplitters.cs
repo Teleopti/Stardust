@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				LeftMainSplitter = lessIntellegentSplitContainerAdvMain,
 				GraphResultSplitter = lessIntellegentSplitContainerAdvResultGraph,
 				GridEditorSplitter = teleoptiLessIntelligentSplitContainerLessIntelligent1,
-				RestrictionViewSplitter = SplitContainerView
+				RestrictionViewSplitter = _splitContainerView
 			};
 
 			GridChartManager = new GridChartManager(ChartControlSkillData, true, true, true);
@@ -211,8 +211,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer => lessIntellegentSplitContainerAdvMainContainer;
 
-		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get => _splitContainerView; }
-
 		public ChartControl ChartControlSkillData { get => _chartControlSkillData; }
 
 		public ContextMenuStrip ContextMenuSkillGrid => _contextMenuSkillGrid;
@@ -250,6 +248,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					(item as ToolStripMenuItem).Checked = ((SkillResultViewSetting)itemTag).Equals(_skillResultViewSetting);
 				}
 			}
+		}
+
+		public void PrepareAgentRestrictionView(ScheduleViewBase detailView,
+			IList<IPerson> persons, DateOnlyPeriod selectedPeriod)
+		{
+			if (persons.Count == 0) return;
+			var view = (AgentRestrictionsDetailView)detailView;
+			_splitContainerView.SplitterDistance = 300;
+			setSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedPeriod, view);
 		}
 
 		public GridChartManager GridChartManager { get; }
@@ -297,7 +304,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			agentsNotPossibleToSchedule1.ReselectSelected();
 		}
 
-		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons,
+		private void setSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
 			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
@@ -392,7 +399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ChartControlSkillData.Visible = true;
 		}
 
-		public void DrawSkillGrid()
+		public void DrawSkillGridAndReLoadChart()
 		{
 			var skillGridControl = resolveControlFromSkillResultViewSetting();
 			_chartDescription = string.Empty;
@@ -413,6 +420,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				positionControl(skillGridControl);
 				selectedSkillGridControl?.DrawDayGrid(_schedulerStateHolder, skill);
 				selectedSkillGridControl?.DrawDayGrid(_schedulerStateHolder, skill);
+				ReloadChart();
 			}
 		}
 
@@ -657,7 +665,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var validData = editSkillSummary(_schedulerStateHolder.SchedulingResultState.Skills, skill, menuItem);
 			if (validData)
 			{
-				DrawSkillGrid();
+				DrawSkillGridAndReLoadChart();
 			}
 		}
 
