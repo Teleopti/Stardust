@@ -3,6 +3,8 @@ using NUnit.Framework;
 
 namespace ManagerTest
 {
+	
+	
 	public class DatabaseTest
 	{
 		private DatabaseHelper _databaseHelper;
