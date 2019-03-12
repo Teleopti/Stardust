@@ -276,7 +276,7 @@
                                 <tr ng-repeat="approved in vm.approvedPeriods"
                                     ng-class="{'highlight': approved.highlight}"
                                     class="approved-period"
-                                    ng-click="approved.highlight = !approved.highlight">
+                                    ng-click="approved.click()">
                                     <td>
                                         {{approved.StartTime}}
                                     </td>
