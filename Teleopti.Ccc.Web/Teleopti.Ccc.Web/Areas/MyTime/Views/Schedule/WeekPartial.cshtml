@@ -147,15 +147,15 @@ Layout = null;
 			</div>
 			<!-- ko foreach: days -->
 			<div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate, 'data-mytime-state': state, 'data-mytime-dayofweek': dayOfWeek}">
-				<div class="weekview-day-header" data-bind="text: headerTitle"></div>
-				<div class="weekview-day-date clearfix">
+				<div class="weekview-day-header" data-bind="text: headerTitle" aria-hidden="true"></div>
+				<div class="weekview-day-date clearfix" aria-hidden="true">
 					<label class="weekview-day-month pull-left badge day-header-month" data-bind="text: headerDayDescription"></label>
 					<label class="pull-right badge day-header-day" data-bind="text: headerDayNumber, css: {'bank-holiday-day-shape':hasCalendar},tooltip:{title: dateDescription, html: true}"></label>
 				</div>
 				<div data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
 		            style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm"
 				 class="weekview-day-summary">
-
+					<span class="sr-only" data-bind="text: headerTitle + ' ' + fixedDate + ', ' + dateDescription"></span>
 					<strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
 					<span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
 					<span data-bind="text: summary"></span>
