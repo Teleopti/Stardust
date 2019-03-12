@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return false;
 
 			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider
-				.GetPeriodsForOvertime(currentUser, date, true).Any();
+				.GetPeriodsForOvertimeForWeek(currentUser, date).Any();
 			return isStaffingDataAvailable;
 		}
 

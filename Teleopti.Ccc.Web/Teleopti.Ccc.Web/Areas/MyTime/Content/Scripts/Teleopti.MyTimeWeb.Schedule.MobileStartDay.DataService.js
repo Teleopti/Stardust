@@ -17,13 +17,12 @@
 
 	self.fetchProbabilityData = function(date, staffingPossibilityType, successCallback) {
 		ajax.Ajax({
-			url: '../api/ScheduleStaffingPossibility',
+			url: '../api/ScheduleStaffingPossibilityForMobileDay',
 			dataType: 'json',
 			type: 'GET',
 			data: {
 				date: date,
-				staffingPossibilityType: staffingPossibilityType,
-				returnOneWeekData: true
+				staffingPossibilityType: staffingPossibilityType
 			},
 			success: function(data) {
 				successCallback && successCallback(data);

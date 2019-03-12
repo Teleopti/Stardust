@@ -1212,7 +1212,7 @@
 					fetchAbsenceAccountCallback(options);
 				} else if (requestUrls.indexOf(options.url) > -1) {
 					requestSuccessCallback(options);
-				} else if (options.url === '../api/ScheduleStaffingPossibility') {
+				} else if (options.url === '../api/ScheduleStaffingPossibilityForMobileDay') {
 					probabilityAjaxCallCount++;
 					scheduleStaffingPossibilityCallback(options);
 				}

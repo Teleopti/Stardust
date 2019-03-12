@@ -776,7 +776,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			setupDefaultTestData();
 			setupWorkFlowControlSet();
-			var result = getPossibilityViewModels(null, StaffingPossibilityType.Overtime, false).ToList();
+
+			var result = Target.GetPossibilityViewModelsForMobileDay(null, StaffingPossibilityType.Overtime).ToList();
 			result.Count.Should().Be.EqualTo(0);
 		}
 

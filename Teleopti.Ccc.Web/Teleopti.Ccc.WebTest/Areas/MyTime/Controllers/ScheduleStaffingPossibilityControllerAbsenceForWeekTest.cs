@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetFairPossibilitiesForAbsenceWhenOneOfSkillIsUnderStaffingEvenIfTheRelatedActivityIsCovered()
+		public void ShouldGetFairPossibilitiesForAbsenceWhenOneOfSkillIsUnderStaffingEvenIfTheRelatedActivityIsUnderlying()
 		{
 			setupSiteOpenHour(_defaultSiteOpenHour);
 			setupWorkFlowControlSet();

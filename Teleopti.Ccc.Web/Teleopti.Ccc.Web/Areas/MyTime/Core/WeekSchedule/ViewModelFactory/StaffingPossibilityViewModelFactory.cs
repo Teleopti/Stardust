@@ -31,49 +31,77 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			if (staffingPossibilityType == StaffingPossibilityType.Absence)
 			{
-				return getAbsencePeriodStaffingPossibilityViewModels(startDate, true);
+				var periodForAbsence = _staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForWeek(_loggedOnUser.CurrentUser(), startDate);
+
+				if (periodForAbsence.HasValue)
+				{
+					return getAbsencePeriodStaffingPossibilityViewModels(periodForAbsence.Value);
+				}
 			}
+
 			if (staffingPossibilityType == StaffingPossibilityType.Overtime)
 			{
-				return getOvertimePeriodStaffingPossibilityViewModels(startDate, true);
+				var periodsForOvertime = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertimeForWeek(_loggedOnUser.CurrentUser(), startDate);
+
+				if (periodsForOvertime.Any())
+				{
+					return getOvertimePeriodStaffingPossibilityViewModels(periodsForOvertime);
+				}
 			}
+
 			return emptyResult();
 		}
 
-		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModelsForMobileDay(DateOnly startDate,
+		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModelsForMobileDay(
+			DateOnly startDate,
 			StaffingPossibilityType staffingPossibilityType)
 		{
-			throw new NotImplementedException();
-		}
-
-		private IEnumerable<PeriodStaffingPossibilityViewModel> getOvertimePeriodStaffingPossibilityViewModels(DateOnly startDate, bool returnOneWeekData)
-		{
-			var currentUser = _loggedOnUser.CurrentUser();
-			var periods = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(currentUser, startDate, returnOneWeekData);
-			if (periods.Any())
+			if (staffingPossibilityType == StaffingPossibilityType.Absence)
 			{
-				var possibilityModels = new List<CalculatedPossibilityModel>();
-				var satisfyAllSkills = false;
-				foreach (var period in periods)
+				var period =
+					_staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForMobileDay(_loggedOnUser.CurrentUser(),
+						startDate);
+
+				if (period.HasValue)
 				{
-					possibilityModels.AddRange(
-						_overtimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(currentUser, period, satisfyAllSkills));
+					return getAbsencePeriodStaffingPossibilityViewModels(period.Value);
 				}
-				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}
+
+			if (staffingPossibilityType == StaffingPossibilityType.Overtime)
+			{
+				var periodsForOvertime = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertimeForMobileDay(_loggedOnUser.CurrentUser(), startDate);
+
+				if (periodsForOvertime.Any())
+				{
+					return getOvertimePeriodStaffingPossibilityViewModels(periodsForOvertime);
+				}
+			}
+
+
 			return emptyResult();
 		}
 
-		private IEnumerable<PeriodStaffingPossibilityViewModel> getAbsencePeriodStaffingPossibilityViewModels(DateOnly startDate, bool returnOneWeekData)
+		private IEnumerable<PeriodStaffingPossibilityViewModel> getAbsencePeriodStaffingPossibilityViewModels(
+			DateOnlyPeriod period)
 		{
-			var currentUser = _loggedOnUser.CurrentUser();
-			var period = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(currentUser, startDate, returnOneWeekData);
-			if (period.HasValue)
+			var possibilityModels =
+				_absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(_loggedOnUser.CurrentUser(), period);
+			return createPeriodStaffingPossibilityViewModels(possibilityModels.Models);
+		}
+
+		private IEnumerable<PeriodStaffingPossibilityViewModel> getOvertimePeriodStaffingPossibilityViewModels(
+			List<DateOnlyPeriod> periods)
+		{
+			var possibilityModels = new List<CalculatedPossibilityModel>();
+			foreach (var period in periods)
 			{
-				var possibilityModels = _absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(currentUser, period.Value);
-				return createPeriodStaffingPossibilityViewModels(possibilityModels.Models);
+				possibilityModels.AddRange(
+					_overtimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(
+						_loggedOnUser.CurrentUser(), period, false));
 			}
-			return emptyResult();
+
+			return createPeriodStaffingPossibilityViewModels(possibilityModels);
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> createPeriodStaffingPossibilityViewModels(

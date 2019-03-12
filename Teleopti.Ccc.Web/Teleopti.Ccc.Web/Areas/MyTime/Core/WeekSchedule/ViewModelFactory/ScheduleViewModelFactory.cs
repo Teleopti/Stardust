@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossibilityType staffingPossibilityType)
 		{
 			var weekDomainData = _weekScheduleDomainDataProvider.GetWeekSchedule(date);
-			if (needAdjustTimeline(staffingPossibilityType, date, true))
+			if (needAdjustTimeline(staffingPossibilityType, date))
 			{
 				_scheduleWeekMinMaxTimeCalculator.AdjustScheduleMinMaxTime(weekDomainData);
 			}
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return weekScheduleViewModel;
 		}
 
-		private bool needAdjustTimeline(StaffingPossibilityType staffingPossibilityType, DateOnly date, bool forThisWeek)
+		private bool needAdjustTimeline(StaffingPossibilityType staffingPossibilityType, DateOnly date)
 		{
 			return staffingPossibilityType == StaffingPossibilityType.Overtime &&
-				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(_loggedOnUser.CurrentUser(), date, forThisWeek).HasValue;
+				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForWeek(_loggedOnUser.CurrentUser(), date).HasValue;
 		}
 	}
 }

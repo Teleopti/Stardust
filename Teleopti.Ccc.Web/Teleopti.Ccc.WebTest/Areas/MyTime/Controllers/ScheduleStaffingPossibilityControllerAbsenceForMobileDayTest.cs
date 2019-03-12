@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[MyTimeWebTest]
-	public class ScheduleStaffingPossibilityControllerAbsenceForMobileDayTest : IIsolateSystem
+	public class ScheduleStaffingPossibilityControllerAbsenceForMobileDayTest : IIsolateSystem, ITestInterceptor
 	{
 		public ScheduleStaffingPossibilityController Target;
 		public ICurrentScenario Scenario;
@@ -39,11 +39,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeToggleManager ToggleManager;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 
-		private readonly TimeSpan[] intervals =
-			{TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)), TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(30))};
+
+		private readonly TimePeriod _defaultSiteOpenHour = new TimePeriod(0, 0, 24, 0);
+		private readonly TimePeriod _defaultSkillOpenHour = new TimePeriod(0, 00, 24, 00);
+		private DateTimePeriod _defaultAssignmentPeriod;
+		private int _defaultSkillStaffingIntervalNumber;
+		private TimeZoneInfo _defaultTimezone;
+		private IPerson _loggedUser;
+		private DateOnly _today;
 
 		readonly ISkillType phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
+
+		public void OnBefore()
+		{
+			_today = Now.UtcDateTime().ToDateOnly();
+			_loggedUser = User.CurrentUser();
+			_defaultTimezone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
+
+			_defaultSkillStaffingIntervalNumber =
+				(int)_defaultSkillOpenHour.EndTime.Subtract(_defaultSkillOpenHour.StartTime).TotalMinutes / 15;
+
+			_defaultAssignmentPeriod =
+				new DateTimePeriod(TimeZoneHelper.ConvertToUtc(_today.Date.AddHours(8), _defaultTimezone),
+					TimeZoneHelper.ConvertToUtc(_today.Date.AddHours(17), _defaultTimezone));
+		}
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -54,121 +74,74 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 		}
-		[Ignore("day")]
-		[Test]
-		public void ShouldReturnPossibilitiesBaseOnTopLayerSkill()
-		{
-			var today = Now.UtcDateTime().ToDateOnly();
 
-			setupSiteOpenHour();
+		[Test]
+		public void ShouldReturnPossibilitiesForCurrentDay()
+		{
+			setupSiteOpenHour(_defaultSiteOpenHour);
 			setupWorkFlowControlSet();
 
-			var person = User.CurrentUser();
-			var baseActivity = createActivity("base activity");
-			var underlyingActivitySkill = createSkill("underlyingActivitySkill", new TimePeriod(0, 24));
-			var personSkill1 = createPersonSkill(baseActivity, underlyingActivitySkill);
-			setupIntradayStaffingSkillFor24Hours(underlyingActivitySkill, 2.353d, 3.00d);
-			var period1 = new DateTimePeriod(today.Date.AddHours(8).Utc(), today.Date.AddHours(17).Utc());
-			var assignment = createAssignment(person, period1, baseActivity);
+			var activity = createActivity("activity for test");
+			createAssignment(_loggedUser, _defaultAssignmentPeriod, activity);
 
-			var onTopActivity = createActivity("on top activity");
-			var onTopActivitySkill = createSkill("onTopActivitySkill", new TimePeriod(0, 24));
-			var personSkill2 = createPersonSkill(onTopActivity, onTopActivitySkill);
-			setupIntradayStaffingSkillFor24Hours(onTopActivitySkill, 2.353d, 5.00d);
-			var period2 = new DateTimePeriod(today.Date.AddHours(10).Utc(), today.Date.AddHours(11).Utc());
-			assignment.AddActivity(onTopActivity, period2.StartDateTime, period2.EndDateTime);
-
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
-
-			var possibilities = Target.GetPossibilityViewModelsForMobileDay(today, StaffingPossibilityType.Absence).ToList();
-
-			possibilities.Count.Should().Be(96);
-			possibilities.Where(x => x.StartTime.Hour == 10 && x.Possibility == 1)
-				.ToList().Count.Should().Be(4);
-		}
-
-		[Ignore("day")]
-		[Test]
-		public void ShouldReturnPossibilitiesForCurrentWeek()
-		{
-			setupSiteOpenHour();
-			setupTestData();
-			setupWorkFlowControlSet();
-
-			var result = Target.GetPossibilityViewModelsForMobileDay(null, StaffingPossibilityType.Absence).ToList();
-			result.Count.Should().Be.EqualTo(2);
-
-			var dayCollection = new DateOnlyPeriod(Now.UtcDateTime().ToDateOnly(), Now.UtcDateTime().ToDateOnly().AddDays(2)).DayCollection().ToList();
-
-			result.Count(d => d.Date == dayCollection[0].ToFixedClientDateOnlyFormat()).Should().Be(2);
-			result.Count(d => d.Date == dayCollection[1].ToFixedClientDateOnlyFormat()).Should().Be(0);
-			result.Count(d => d.Date == dayCollection[2].ToFixedClientDateOnlyFormat()).Should().Be(0);
-		}
-
-		[Ignore("day")]
-		[Test]
-		public void ShouldReturnPossibilitiesInNextWeek()
-		{
-			setupSiteOpenHour();
-			setupWorkFlowControlSet();
-
-			var skill = createSkill("test1");
-			var activity = createActivity();
+			var skill = createSkill("skill for test", new TimePeriod(0, 24));
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(personSkill);
+			addPersonSkillsToPersonPeriod(_today, personSkill);
 
-			var timezone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var dayInNextWeek = Now.UtcDateTime().ToDateOnly().AddWeeks(1);
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(dayInNextWeek.Date.AddHours(8), timezone), TimeZoneHelper.ConvertToUtc(dayInNextWeek.Date.AddHours(17), timezone));
+			setupIntradayStaffingSkillFor24Hours(skill, _today, 2.353d, 2.00d);
 
-			createAssignment(User.CurrentUser(), period, activity);
+			var result = Target.GetPossibilityViewModelsForMobileDay(_today, StaffingPossibilityType.Absence).ToList();
 
-			setupIntradayStaffingForSkill(skill, new double?[] { 10d, 9.5d }, new double?[] { 10d, 9.5d });
-
-			var result = Target.GetPossibilityViewModelsForMobileDay(dayInNextWeek, StaffingPossibilityType.Absence).ToList();
-
-			result.Count.Should().Be.EqualTo(2);
-			result[0].Date.Should().Be.EqualTo(dayInNextWeek.ToFixedClientDateOnlyFormat());
-			result[1].Date.Should().Be.EqualTo(dayInNextWeek.ToFixedClientDateOnlyFormat());
+			result.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			result[0].Possibility.Should().Be(0);
+			result[_defaultSkillStaffingIntervalNumber - 1].Possibility.Should().Be(0);
 		}
 
-		[Ignore("day")]
 		[Test]
 		public void ShouldNotReturnPossibilitiesForPastDays()
 		{
-			setupSiteOpenHour();
-			setupTestData();
+			setupSiteOpenHour(_defaultSiteOpenHour);
 			setupWorkFlowControlSet();
 
-			var result = Target.GetPossibilityViewModelsForMobileDay(Now.UtcDateTime().ToDateOnly().AddDays(-1), StaffingPossibilityType.Absence).ToList();
+			var activity = createActivity("activity for test");
+			createAssignment(_loggedUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test", new TimePeriod(0, 24));
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(_today, personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, _today.AddDays(-1), 2.353d, 2.00d);
+
+			var result = Target.GetPossibilityViewModelsForMobileDay(_today.AddDays(-1), StaffingPossibilityType.Absence).ToList();
 
 			result.Count.Should().Be.EqualTo(0);
 		}
-		[Ignore("day")]
+
 		[Test]
 		public void ShouldGetPossibilitiesThereIsAnOvernightSchedule()
 		{
-			var person = User.CurrentUser();
-			var activity = createActivity();
-			var skill = createSkill("skill", new TimePeriod(00, 00, 24, 00));
-			var personSkill = createPersonSkill(activity, skill);
-
-			setupIntradayStaffingSkillFor24Hours(skill, 10d, 20d);
-			addPersonSkillsToPersonPeriod(personSkill);
-
-			var datetimePeriod = new DateTimePeriod(Now.UtcDateTime().Date.AddHours(18), Now.UtcDateTime().Date.AddHours(26));
-			var datetimePeriod2 = new DateTimePeriod(Now.UtcDateTime().Date.AddDays(1).AddHours(18), Now.UtcDateTime().Date.AddDays(1).AddHours(26));
-
-			createAssignment(person, datetimePeriod, activity);
-			createAssignment(person, datetimePeriod2, activity);
+			setupSiteOpenHour(_defaultSiteOpenHour);
 			setupWorkFlowControlSet();
 
-			var possibilities = Target.GetPossibilityViewModelsForMobileDay(Now.UtcDateTime().ToDateOnly().AddDays(1),
+			var activity = createActivity("activity for test");
+			var datetimePeriod = new DateTimePeriod(
+				TimeZoneHelper.ConvertToUtc(_today.Date.AddHours(18), _defaultTimezone),
+				TimeZoneHelper.ConvertToUtc(_today.Date.AddHours(26), _defaultTimezone));
+			createAssignment(_loggedUser, datetimePeriod, activity);
+
+			var skill = createSkill("skill for test", new TimePeriod(0, 24));
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(_today, personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 20d);
+			setupIntradayStaffingSkillFor24Hours(skill, _today.AddDays(1), 10d, 20d);
+
+			var possibilities = Target.GetPossibilityViewModelsForMobileDay(_today,
 				StaffingPossibilityType.Absence).ToList();
 
-			possibilities.Count.Should().Be(96);
+			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber);
 			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
-			possibilities.ElementAt(0).StartTime.Should().Be.EqualTo(Now.UtcDateTime().Date.AddDays(1));
+			possibilities.ElementAt(0).StartTime.Should().Be.EqualTo(_today.Date);
 			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
 			possibilities.ElementAt(2).Possibility.Should().Be.EqualTo(1);
 			possibilities.ElementAt(3).Possibility.Should().Be.EqualTo(1);
@@ -176,118 +149,95 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			possibilities.ElementAt(5).Possibility.Should().Be.EqualTo(1);
 			possibilities.ElementAt(6).Possibility.Should().Be.EqualTo(1);
 			possibilities.ElementAt(7).Possibility.Should().Be.EqualTo(1);
-			possibilities.ElementAt(7).StartTime.Should().Be.EqualTo(Now.UtcDateTime().Date.AddDays(1).AddHours(1).AddMinutes(45));
+			possibilities.ElementAt(7).StartTime.Should().Be.EqualTo(_today.Date.AddHours(1).AddMinutes(45));
 		}
 
-		[Ignore("day")]
-		[Test]
-		public void ShouldOnlyGetOneDayDataIfReturnOneWeekDataIsFalse()
-		{
-			setupSiteOpenHour();
-			setupTestData();
-			setupWorkFlowControlSet();
-
-			var result = Target.GetPossibilityViewModelsForMobileDay(null, StaffingPossibilityType.Absence).ToList();
-
-			result.Count.Should().Be.EqualTo(2);
-		}
-
-		[Ignore("day")]
 		[Test]
 		public void ShouldGetPossibilitiesAccordingToAgentTimeZone()
 		{
+			Now.Is(_today.Date); //Remove the default time of now 1:31:00PM and use 12:00:00AM
+
+			setupSiteOpenHour(_defaultSiteOpenHour);
+			setupWorkFlowControlSet();
+
 			var timeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
-			setupSiteOpenHour();
-			setupTestData(timezone: timeZoneInfo);
-			setupWorkFlowControlSet();
-
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime(),
+			var viewDateInUserTimeZone = new DateOnly(TimeZoneHelper.ConvertFromUtc(_today.Date,
 				User.CurrentUser().PermissionInformation.DefaultTimeZone()));
 
-			var result = Target.GetPossibilityViewModelsForMobileDay(today, StaffingPossibilityType.Absence).ToList();
+			var activity = createActivity("activity for test");
+			var datetimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(viewDateInUserTimeZone.Date.AddHours(8), timeZoneInfo),
+				TimeZoneHelper.ConvertToUtc(viewDateInUserTimeZone.Date.AddHours(17), timeZoneInfo));
+			createAssignment(_loggedUser, datetimePeriod, activity);
 
-			result.Count.Should().Be.EqualTo(2);
-			result.FirstOrDefault()?.Date.Should().Be(today.ToFixedClientDateOnlyFormat());
+			var skill = createSkill("skill for test", new TimePeriod(0, 24));
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(_today.AddDays(-3), personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, viewDateInUserTimeZone, 2.353d, 2.00d);
+
+			var result = Target
+				.GetPossibilityViewModelsForMobileDay(viewDateInUserTimeZone, StaffingPossibilityType.Absence).ToList();
+
+			result.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			result.FirstOrDefault()?.Date.Should().Be(viewDateInUserTimeZone.ToFixedClientDateOnlyFormat());
 		}
 
-		[Ignore("day")]
 		[Test]
-		public void ShouldSubtractCurrentUserShiftWhenSceduledStaffingLagerThanOne()
+		public void ShouldSubtractCurrentUserShiftWhenScheduledStaffingIsLargerThanOne()
 		{
-			var underStaffedSkill = createSkill("skill understaffed");
-			underStaffedSkill.StaffingThresholds =
-				new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0.1));
-
-			setupTestData(new double?[] { 5, 5 }, new double?[] { 5, 5 });
-
+			setupSiteOpenHour(_defaultSiteOpenHour);
 			setupWorkFlowControlSet();
 
+			var activity = createActivity("activity for test");
+			createAssignment(_loggedUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill understaffed", new TimePeriod(0, 24));
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0.1));
+
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(_today, personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 10.05d);
+
 			var possibilities =
-				Target.GetPossibilityViewModelsForMobileDay(null, StaffingPossibilityType.Absence).ToList();
+				Target.GetPossibilityViewModelsForMobileDay(_today, StaffingPossibilityType.Absence).ToList();
 
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber);
+			possibilities.ElementAt(_defaultAssignmentPeriod.StartDateTime.Hour * 4).Possibility.Should().Be(0);
 		}
-
-		private void setupIntradayStaffingSkillFor24Hours(ISkill skill, double forecastedStaffing,
-			double scheduledStaffing)
-		{
-			var period = getAvailablePeriod();
-			period.DayCollection().ToList().ForEach(day =>
-			{
-				var staffingDataList = new List<StaffingPeriodData>();
-				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, User.CurrentUser().PermissionInformation.DefaultTimeZone());
-				var start = TimeSpan.Zero;
-				while (day.Date.Add(start) < day.Date.AddDays(1).Subtract(TimeSpan.FromSeconds(1)))
-				{
-					var staffingPeriodData = new StaffingPeriodData
-					{
-						ForecastedStaffing = forecastedStaffing,
-						ScheduledStaffing = scheduledStaffing,
-						Period = new DateTimePeriod(utcDate.Date.Add(start), utcDate.Date.Add(start.Add(TimeSpan.FromMinutes(15))))
-					};
-					start += TimeSpan.FromMinutes(15);
-					staffingDataList.Add(staffingPeriodData);
-				}
-
-				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
-					staffingDataList, User.CurrentUser().PermissionInformation.DefaultTimeZone());
-			});
-		}
-
-		private static IActivity createActivity(string name = "activity")
-		{
-			var activity = ActivityFactory.CreateActivity(name);
-			activity.RequiresSkill = true;
-			return activity;
-		}
-
 
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
-				Period = new DateOnlyPeriod(Now.UtcDateTime().ToDateOnly().AddDays(-20), Now.UtcDateTime().ToDateOnly().AddDays(20)),
-				OpenForRequestsPeriod = new DateOnlyPeriod(Now.UtcDateTime().ToDateOnly().AddDays(-20), Now.UtcDateTime().ToDateOnly().AddDays(20)),
-				StaffingThresholdValidator = new StaffingThresholdValidator()
+				Absence = AbsenceFactory.CreateAbsence("absence for test"),
+				Period = new DateOnlyPeriod(_today.AddDays(-20),
+					_today.AddDays(20)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(_today.AddDays(-20),
+					_today.AddDays(20)),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
+
 			var overtimeRequestOpenDatePeriod = new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
 			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13)
 			};
+
 			var workFlowControlSet = new WorkflowControlSet();
+
 			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(overtimeRequestOpenDatePeriod);
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			_loggedUser.WorkflowControlSet = workFlowControlSet;
 		}
 
-		private void setupSiteOpenHour()
+		private void setupSiteOpenHour(TimePeriod timePeriod)
 		{
-			var personPeriod = getOrAddPersonPeriod();
-			var timePeriod = new TimePeriod(8, 0, 17, 0);
+			var personPeriod = getOrAddPersonPeriod(_today);
 			var team = personPeriod.Team;
 			team.Site.AddOpenHour(new SiteOpenHour
 			{
@@ -297,43 +247,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 		}
 
-		private PersonPeriod getOrAddPersonPeriod()
+		private PersonPeriod getOrAddPersonPeriod(DateOnly startDate)
 		{
 			var personPeriod =
-				(PersonPeriod)User.CurrentUser().PersonPeriods(Now.UtcDateTime().ToDateOnly().ToDateOnlyPeriod()).FirstOrDefault();
+				(PersonPeriod)_loggedUser.PersonPeriods(startDate.ToDateOnlyPeriod())
+					.FirstOrDefault();
 			if (personPeriod != null) return personPeriod;
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			personPeriod =
 				(PersonPeriod)
-				PersonPeriodFactory.CreatePersonPeriod(Now.UtcDateTime().ToDateOnly(), PersonContractFactory.CreatePersonContract(), team);
-			User.CurrentUser().AddPersonPeriod(personPeriod);
+				PersonPeriodFactory.CreatePersonPeriod(startDate,
+					PersonContractFactory.CreatePersonContract(), team);
+			_loggedUser.AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
 
-		private void addPersonSkillsToPersonPeriod(params IPersonSkill[] personSkills)
+		private void addPersonSkillsToPersonPeriod(DateOnly startDate, params IPersonSkill[] personSkills)
 		{
-			var personPeriod = getOrAddPersonPeriod();
+			var personPeriod = getOrAddPersonPeriod(startDate);
 			foreach (var personSkill in personSkills)
 			{
 				personPeriod.AddPersonSkill(personSkill);
 			}
-		}
-
-		private void setupTestData(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null, TimeZoneInfo timezone = null)
-		{
-			var skill = createSkill("test1");
-			setupTestData(skill, forecastedStaffing, scheduledStaffing, timezone);
-		}
-
-		private void setupTestData(ISkill skill, double?[] forecastedStaffing = null, double?[] scheduledStaffing = null, TimeZoneInfo timezone = null)
-		{
-			var activity = createActivity();
-			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(personSkill);
-			createAssignment(User.CurrentUser(), timezone, activity);
-			forecastedStaffing = forecastedStaffing ?? new Double?[] { 10d, 10d };
-			scheduledStaffing = scheduledStaffing ?? new Double?[] { 8d, 8d };
-			setupIntradayStaffingForSkill(skill, forecastedStaffing, scheduledStaffing);
 		}
 
 		private IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
@@ -343,12 +278,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return personSkill;
 		}
 
-		private ISkill createSkill(string name, TimePeriod? openHour = null)
+		private ISkill createSkill(string name, TimePeriod openHour)
 		{
 			var skill = SkillFactory.CreateSkill(name).WithId();
 			skill.SkillType = phoneSkillType;
 			skill.StaffingThresholds = createStaffingThresholds();
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHour ?? new TimePeriod(8, 00, 9, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHour);
 			SkillRepository.Has(skill);
 			return skill;
 		}
@@ -358,64 +293,87 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
 
-		private static IActivity createActivity()
+		private static IActivity createActivity(string name = "activity1")
 		{
-			var activity = ActivityFactory.CreateActivity("activity1");
+			var activity = ActivityFactory.CreateActivity(name);
 			activity.RequiresSkill = true;
 			return activity;
 		}
 
-		private void createAssignment(IPerson person, TimeZoneInfo timezone = null, params IActivity[] activities)
+		private IPersonAssignment createAssignment(IPerson person, DateTimePeriod dateTimePeriod,
+			params IActivity[] activities)
 		{
-			timezone = timezone ?? User.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var startDate = TimeZoneHelper.ConvertToUtc(Now.UtcDateTime().Date.AddHours(8), timezone);
-			var endDate = TimeZoneHelper.ConvertToUtc(Now.UtcDateTime().Date.AddHours(17), timezone);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				Scenario.Current(), new DateTimePeriod(startDate, endDate),
+				Scenario.Current(),
+				dateTimePeriod,
 				ShiftCategoryFactory.CreateShiftCategory(), activities);
 			PersonAssignmentRepository.Has(assignment);
-		}
 
-		private IPersonAssignment createAssignment(IPerson person, DateTimePeriod period, params IActivity[] activities)
-		{
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				Scenario.Current(), period,
-				ShiftCategoryFactory.CreateShiftCategory(), activities);
-			PersonAssignmentRepository.Has(assignment);
 			return assignment;
 		}
 
-		private DateOnlyPeriod getAvailablePeriod()
+		private void setupIntradayStaffingSkillFor24Hours(ISkill skill, DateOnly date, double forecastedStaffing,
+			double scheduledStaffing)
 		{
-			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
-			var today = Now.UtcDateTime();
-			var period = new DateOnlyPeriod(today, today.AddDays(staffingInfoAvailableDays)).Inflate(1);
-			return period;
+			var forecastedStaffingList = new List<double>();
+			var scheduledStaffingList = new List<double>();
+			var timePeriodsList = new List<TimePeriod>();
+
+			var start = TimeSpan.Zero;
+			while (date.Date.Add(start) < date.Date.AddDays(1).Subtract(TimeSpan.FromSeconds(1)))
+			{
+				forecastedStaffingList.Add(forecastedStaffing);
+				scheduledStaffingList.Add(scheduledStaffing);
+				timePeriodsList.Add(new TimePeriod(start, start.Add(TimeSpan.FromMinutes(15))));
+
+				start += TimeSpan.FromMinutes(15);
+			}
+
+			var skillStaffingDataList = new List<SkillStaffingData>
+			{
+				new SkillStaffingData
+				{
+					Date = date,
+					ForecastedStaffing = forecastedStaffingList,
+					ScheduledStaffing = scheduledStaffingList,
+					TimePeriods = timePeriodsList
+				}
+			};
+
+			setupStaffingForSkill(skill, skillStaffingDataList);
 		}
 
-		private void setupIntradayStaffingForSkill(ISkill skill, double?[] forecastedStaffings,
-			double?[] scheduledStaffings)
+		private void setupStaffingForSkill(ISkill skill, List<SkillStaffingData> staffingDataList)
 		{
-			var period = getAvailablePeriod();
-			period.DayCollection().ToList().ForEach(day =>
+			var staffingPeriodDataList = new List<StaffingPeriodData>();
+			staffingDataList.ForEach(staffingData =>
 			{
-				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, User.CurrentUser().PermissionInformation.DefaultTimeZone());
-				var staffingPeriodData1 = new StaffingPeriodData
+				for (var i = 0; i < staffingData.ForecastedStaffing.Count; i++)
 				{
-					ForecastedStaffing = forecastedStaffings[0].Value,
-					ScheduledStaffing = scheduledStaffings[0].Value,
-					Period = new DateTimePeriod(utcDate.Date.Add(intervals[0]), utcDate.Date.Add(intervals[0]).AddMinutes(15))
-				};
-				var staffingPeriodData2 = new StaffingPeriodData
-				{
-					ForecastedStaffing = forecastedStaffings[1].Value,
-					ScheduledStaffing = scheduledStaffings[1].Value,
-					Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
-				};
-				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
-					new[] { staffingPeriodData1, staffingPeriodData2 }, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+					var staffingPeriodData = new StaffingPeriodData
+					{
+						ForecastedStaffing = staffingData.ForecastedStaffing[i],
+						ScheduledStaffing = staffingData.ScheduledStaffing[i],
+						Period = new DateTimePeriod(staffingData.Date.Utc().Add(staffingData.TimePeriods[i].StartTime),
+							staffingData.Date.Utc().Date.Add(staffingData.TimePeriods[i].EndTime))
+					};
+					staffingPeriodDataList.Add(staffingPeriodData);
+				}
+
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, staffingData.Date,
+					staffingPeriodDataList,
+					_loggedUser.PermissionInformation.DefaultTimeZone());
+
+				staffingPeriodDataList.Clear();
 			});
 		}
 
+		class SkillStaffingData
+		{
+			public DateOnly Date;
+			public List<double> ForecastedStaffing { get; set; }
+			public List<double> ScheduledStaffing { get; set; }
+			public List<TimePeriod> TimePeriods { get; set; }
+		}
 	}
 }
