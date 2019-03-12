@@ -1762,7 +1762,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (_showEditor)
 				{
-					schedulePartToEditor(scheduleDay);
+					wpfShiftEditor1.LoadSchedulePart(scheduleDay);
+					notesEditor.LoadNote(scheduleDay);
 				}
 
 				checkEditable(_scheduleView.PartIsEditable());
@@ -1796,12 +1797,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			return _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex]
 					.CellValue as IScheduleDay;
-		}
-
-		private void schedulePartToEditor(IScheduleDay part)
-		{
-			wpfShiftEditor1.LoadSchedulePart(part);
-			notesEditor.LoadNote(part);
 		}
 
 		private void checkEditable(bool isEditable)
@@ -2239,16 +2234,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			RecalculateResources();
 		}
 
-		private bool shouldCancelBeforeStartingDeleteAction()
-		{
-			return (_backgroundWorkerRunning || _backgroundWorkerDelete.IsBusy);
-		}
-
 		private void deleteFromSchedulePart(DeleteOption deleteOption)
 		{
 			if (_scheduleView != null)
 			{
-				if (shouldCancelBeforeStartingDeleteAction()) return;
+				if (_backgroundWorkerRunning || _backgroundWorkerDelete.IsBusy) return;
 
 				disableAllExceptCancelInRibbon();
 				var clipHandler = new ClipHandler<IScheduleDay>();
@@ -2566,7 +2556,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				selectedPeriod.DayCount(),
 				() => runBackgroundWorkerScheduling(e));
 			_undoRedo.CommitBatch();
-
 		}
 
 		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
@@ -2859,7 +2848,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				selectedPeriod,
 				_optimizationPreferences,
 				dayOffOptimizationPreferenceProvider);
-
 		}
 
 		private void checkPastePermissions()
@@ -5298,7 +5286,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission,
 				_timeZoneGuard);
-
 		}
 
 		private void toolStripMenuItemEditMeetingMouseUp(object sender, MouseEventArgs e)

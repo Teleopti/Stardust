@@ -100,11 +100,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillIntraDayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart",
 				container.Resolve<ISkillPriorityProvider>(), _timeZoneGuard);
 
-			DayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
-			IntraDayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
-			WeekGridControl.ContextMenuStrip = ContextMenuSkillGrid;
-			MonthGridControl.ContextMenuStrip = ContextMenuSkillGrid;
-			FullPeriodGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			DayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+			IntraDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+			WeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+			MonthGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+			FullPeriodGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 		}
 
 		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder,
@@ -304,12 +304,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			agentsNotPossibleToSchedule1.ReselectSelected();
 		}
 
-		private void setSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons,
-			DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
-		{
-			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
-		}
-
+		
 		public void EnableOrDisableViewShiftCategoryDistribution(bool enable)
 		{
 			shiftCategoryDistributionControl1.EnableOrDisableViewShiftCategoryDistribution(enable);
@@ -425,6 +420,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		}
 
 		#region Private
+
+		private void setSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons,
+			DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
+		{
+			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
+		}
+
 
 		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()
 		{
