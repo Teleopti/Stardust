@@ -318,7 +318,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Teleopti.Ccc.Sdk.LogicTest.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
