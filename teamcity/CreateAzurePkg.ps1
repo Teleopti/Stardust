@@ -25,11 +25,11 @@ properties {
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
 	$ToBeArtifacted = "$WorkingDir\tobeartifact"
-	$BinDependencies = "\\a380\T-Files\RnD\MSI_Dependencies"
-	$Dependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server"
+	$BinDependencies = "\\to-files-01\RnD\MSI_Dependencies\Azure_Net"
+	$Dependencies = "\\to-files-01\RnD\MSI_Dependencies\ccc7_server"
 	$InternalFileShare = "\\hebe\Installation\msi\$env:CccVersion"
 
-	$AzureDependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_azure"
+	$AzureDependencies = "\\to-files-01\RnD\MSI_Dependencies\ccc7_azure"
 	$AzurePackagePath_Medium = "$WorkingDir\TeleoptiWFM_Medium.cspkg"
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	$AzurePackagePath_XLarge = "$WorkingDir\TeleoptiWFM_XLarge.cspkg"
