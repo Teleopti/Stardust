@@ -7,12 +7,10 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillTypeRepository SkillTypeRepository;
 		public FakeToggleManager ToggleManager;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
-
 
 		private readonly TimePeriod _defaultSiteOpenHour = new TimePeriod(0, 0, 24, 0);
 		private readonly TimePeriod _defaultSkillOpenHour = new TimePeriod(0, 00, 24, 00);
@@ -78,7 +75,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnPossibilitiesForCurrentDay()
 		{
-			setupSiteOpenHour(_defaultSiteOpenHour);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
 			var activity = createActivity("activity for test");
@@ -86,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var skill = createSkill("skill for test", new TimePeriod(0, 24));
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(_today, personSkill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
 			setupIntradayStaffingSkillFor24Hours(skill, _today, 2.353d, 2.00d);
 
@@ -100,7 +98,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotReturnPossibilitiesForPastDays()
 		{
-			setupSiteOpenHour(_defaultSiteOpenHour);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
 			var activity = createActivity("activity for test");
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var skill = createSkill("skill for test", new TimePeriod(0, 24));
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(_today, personSkill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
 			setupIntradayStaffingSkillFor24Hours(skill, _today.AddDays(-1), 2.353d, 2.00d);
 
@@ -120,7 +119,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetPossibilitiesThereIsAnOvernightSchedule()
 		{
-			setupSiteOpenHour(_defaultSiteOpenHour);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
 			var activity = createActivity("activity for test");
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var skill = createSkill("skill for test", new TimePeriod(0, 24));
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(_today, personSkill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
 			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 20d);
 			setupIntradayStaffingSkillFor24Hours(skill, _today.AddDays(1), 10d, 20d);
@@ -157,7 +157,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			Now.Is(_today.Date); //Remove the default time of now 1:31:00PM and use 12:00:00AM
 
-			setupSiteOpenHour(_defaultSiteOpenHour);
+			var personPeriod = getOrAddPersonPeriod(_today.AddDays(-1), _loggedUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
 			var timeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
@@ -173,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var skill = createSkill("skill for test", new TimePeriod(0, 24));
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(_today.AddDays(-3), personSkill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
 			setupIntradayStaffingSkillFor24Hours(skill, viewDateInUserTimeZone, 2.353d, 2.00d);
 
@@ -187,7 +188,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSubtractCurrentUserShiftWhenScheduledStaffingIsLargerThanOne()
 		{
-			setupSiteOpenHour(_defaultSiteOpenHour);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
 			var activity = createActivity("activity for test");
@@ -197,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0.1));
 
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(_today, personSkill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
 			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 10.05d);
 
@@ -207,6 +209,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber);
 			possibilities.ElementAt(_defaultAssignmentPeriod.StartDateTime.Hour * 4).Possibility.Should().Be(0);
 		}
+
 
 		private void setupWorkFlowControlSet()
 		{
@@ -235,22 +238,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_loggedUser.WorkflowControlSet = workFlowControlSet;
 		}
 
-		private void setupSiteOpenHour(TimePeriod timePeriod)
-		{
-			var personPeriod = getOrAddPersonPeriod(_today);
-			var team = personPeriod.Team;
-			team.Site.AddOpenHour(new SiteOpenHour
-			{
-				TimePeriod = timePeriod,
-				IsClosed = false,
-				WeekDay = DayOfWeek.Thursday
-			});
-		}
-
-		private PersonPeriod getOrAddPersonPeriod(DateOnly startDate)
+		private PersonPeriod getOrAddPersonPeriod(DateOnly startDate, IPerson person)
 		{
 			var personPeriod =
-				(PersonPeriod)_loggedUser.PersonPeriods(startDate.ToDateOnlyPeriod())
+				(PersonPeriod)person.PersonPeriods(startDate.ToDateOnlyPeriod())
 					.FirstOrDefault();
 			if (personPeriod != null) return personPeriod;
 			var team = TeamFactory.CreateTeam("team1", "site1");
@@ -258,13 +249,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				(PersonPeriod)
 				PersonPeriodFactory.CreatePersonPeriod(startDate,
 					PersonContractFactory.CreatePersonContract(), team);
-			_loggedUser.AddPersonPeriod(personPeriod);
+			person.AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
 
-		private void addPersonSkillsToPersonPeriod(DateOnly startDate, params IPersonSkill[] personSkills)
+		private void setupSiteOpenHour(TimePeriod timePeriod, ISite site)
 		{
-			var personPeriod = getOrAddPersonPeriod(startDate);
+			site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+		}
+
+		private void addPersonSkillsToPersonPeriod(PersonPeriod personPeriod, params IPersonSkill[] personSkills)
+		{
 			foreach (var personSkill in personSkills)
 			{
 				personPeriod.AddPersonSkill(personSkill);
