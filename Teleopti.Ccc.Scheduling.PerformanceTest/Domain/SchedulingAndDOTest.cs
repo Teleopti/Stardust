@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 					browserInteractions.Click(".schedule-button:enabled");
 				}
 
-				browserInteractions.AssertExists(".test-schedule-is-running");
+				browserInteractions.AssertExists(".test-schedule-is-running[ng-reflect-nz-spinning='true']");
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(1)))
 				{

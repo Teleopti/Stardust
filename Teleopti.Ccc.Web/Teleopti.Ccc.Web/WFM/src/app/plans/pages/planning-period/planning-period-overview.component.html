@@ -5,7 +5,7 @@
 </plans-title-bar>
 
 <div nz-row>
-	<nz-spin [nzTip]="status" [nzSpinning]="isDisabled()">
+	<nz-spin [nzTip]="status" [nzSpinning]="isDisabled()" class="test-schedule-is-running">
 		<button class="schedule-button" nz-button nzType="default" (click)="launchSchedule()">{{ 'ScheduleVerb' | translate }}</button>
 		<button class="intraday-optimization-button" nz-button nzType="default" (click)="optimizeIntraday()">{{ 'IntraOptimize' | translate }}</button>
 		<button nz-button nzType="default" (click)="clearSchedule()">
