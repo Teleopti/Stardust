@@ -100,7 +100,7 @@ Layout = null;
 			@if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)
 			{
 			<li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel() != undefined && requestViewModel().type() == requestViewModelTypes.overtimeAvailability }">
-				<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeAvailability</a>
+				<a id="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeAvailability</a>
 			</li>
 			}
 			<li data-bind="visible: textPermission, css: {active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.textRequest}">
@@ -152,9 +152,9 @@ Layout = null;
 					<label class="weekview-day-month pull-left badge day-header-month" data-bind="text: headerDayDescription"></label>
 					<label class="pull-right badge day-header-day" data-bind="text: headerDayNumber, css: {'bank-holiday-day-shape':hasCalendar},tooltip:{title: dateDescription, html: true}"></label>
 				</div>
-				<div data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
-		            style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm"
-				 class="weekview-day-summary">
+				<a href="#" data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
+		            style: { backgroundColor: colorForDaySummary, color: textColor, display: 'block'}, click: $parent.showAddRequestForm"
+				 class="weekview-day-summary" aria-haspopup="true">
 					<span class="sr-only" data-bind="text: headerTitle + ' ' + fixedDate + ', ' + dateDescription"></span>
 					<strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
 					<span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
@@ -165,7 +165,7 @@ Layout = null;
 					<!-- ko if: hasOvertime && !hasShift-->
 					<strong class="fullwidth displayblock overtime">@Resources.Overtime</strong>
 					<!-- /ko -->
-				</div>
+				</a>
 				<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
 					<!-- ko if: hasNote -->
 					<div class="weekview-day-icon cursorpointer" data-bind="tooltip: { title: noteMessage, html: true }">

@@ -507,7 +507,7 @@
 			'			@if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)',
 			'			{',
 			'			<li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel() != undefined && requestViewModel().type() == requestViewModelTypes.overtimeAvailability }">',
-			'				<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeAvailability</a>',
+			'				<a id="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus" aria-label="@Resources.Add"></i>&nbsp;@Resources.OvertimeAvailability</a>',
 			'			</li>',
 			'			}',
 			'			<li data-bind="visible: textPermission, css: {active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.textRequest}">',

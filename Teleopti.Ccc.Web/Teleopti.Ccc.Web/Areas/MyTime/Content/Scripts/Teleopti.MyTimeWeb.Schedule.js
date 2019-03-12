@@ -457,6 +457,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 
 		self.showAddRequestForm = function(day) {
 			self.showAddRequestFormWithData(day.fixedDate, day.overtimeAvailability);
+			$('.schedule-request-form li.active > a').focus();
 		};
 
 		self.showAddOvertimeRequestForm = function(data) {
@@ -535,7 +536,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		}
 
 		function defaultRequestFunction() {
-			if ($('.overtime-availability-add').length > 0 && self.overtimeAvailabilityPermission())
+			if ($('#overtime-availability-add').length > 0 && self.overtimeAvailabilityPermission())
 				return self.showAddOvertimeAvailabilityForm;
 			if (self.absenceRequestPermission()) return self.showAddAbsenceRequestForm;
 
@@ -655,7 +656,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		) {
 			self.fetchProbabilityData();
 		}
-		
+
 		Teleopti.MyTimeWeb.PollScheduleUpdates.AddListener('WeekScheduleWeb', function(period) {
 			var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
 			var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
