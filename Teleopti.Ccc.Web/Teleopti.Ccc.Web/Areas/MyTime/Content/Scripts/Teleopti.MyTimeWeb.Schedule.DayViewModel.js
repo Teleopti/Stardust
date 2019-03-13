@@ -42,7 +42,7 @@
 	self.summaryStyleClassName = scheduleDay.Summary.StyleClassName;
 	self.summaryTitle = scheduleDay.Summary.Title;
 	self.summaryTimeSpan = scheduleDay.Summary.TimeSpan;
-	self.summary = scheduleDay.Summary.Summary;
+	self.summary = readableShiftworkingHours(scheduleDay.Summary.Summary, parent.userTexts);
 	self.hasOvertime = scheduleDay.HasOvertime && !scheduleDay.IsFullDayAbsence;
 	self.hasShift = scheduleDay.Summary.Color !== null ? true : false;
 
@@ -116,6 +116,13 @@
 	self.layers = scheduleDay.Periods.map(function(item) {
 		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, 0, true, 0, null, false, true);
 	});
+
+	function readableShiftworkingHours(shiftWorkingHours, userTexts) {
+		if (typeof shiftWorkingHours !== 'string') return shiftWorkingHours;
+		var timeUnits = shiftWorkingHours.split(/[^\d-]/).map(Number);
+		if (!timeUnits[1]) return [timeUnits[0], userTexts.HourShort].join(' ');
+		return [timeUnits[0], userTexts.HourShort, timeUnits[1], userTexts.MinuteShort].join(' ');
+	}
 
 	function getTrafficLightColor(probabilityClass) {
 		switch (probabilityClass) {
