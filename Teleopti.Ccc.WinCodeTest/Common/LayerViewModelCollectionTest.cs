@@ -350,9 +350,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalActivities().Single(), assignment, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, new PersonAbsence(new Person(), new Scenario(), absenceLayer),null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
-						Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
-						PersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
+			PersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(null, personMeeting, null);
+			var meetingPlanerMeetingLayerViewModel = new MeetingPlanerMeetingLayerViewModel(null, new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2), Guid.NewGuid()), null, new Person());
             #endregion
 			mocks.ReplayAll();
             Stack<ILayerViewModel> stack = new Stack<ILayerViewModel>((from m in 
@@ -363,14 +364,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                                                                            mainShiftModel2,
                                                                            overtimeLayerViewModel,
                                                                            personalShiftLayerViewModel,
-                                                                           absenceLayerViewModel
+                                                                           absenceLayerViewModel,
+																		   meetingPlanerMeetingLayerViewModel
                                                                        }
                                                                        orderby m.VisualOrderIndex
                                                                        select m));
             
             //Verify that the order is what its intended for the visual layout
             Assert.AreEqual(absenceLayerViewModel, stack.Pop());
-            Assert.AreEqual(meetingLayerViewModel, stack.Pop());
+            Assert.AreEqual(meetingPlanerMeetingLayerViewModel, stack.Pop());
+			Assert.AreEqual(meetingLayerViewModel, stack.Pop());
             Assert.AreEqual(personalShiftLayerViewModel, stack.Pop());
             Assert.AreEqual(overtimeLayerViewModel, stack.Pop());
             Assert.AreEqual(mainShiftModel2, stack.Pop());
@@ -481,6 +484,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(UserTexts.Resources.Absence,target.AbsenceLayers.Description);
             Assert.AreEqual(UserTexts.Resources.Activities, target.MainShiftLayers.Description);
             Assert.AreEqual(UserTexts.Resources.Meeting, target.MeetingLayers.Description);
+            Assert.AreEqual(UserTexts.Resources.Meeting, target.MeetingPlanerMeetingLayers.Description);
             Assert.AreEqual(UserTexts.Resources.PersonalShifts, target.PersonalLayers.Description);
             Assert.AreEqual(UserTexts.Resources.Overtime, target.OvertimeLayers.Description);
 
@@ -506,6 +510,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.IsTrue(view.CurrentItem as LayerGroupViewModel<OvertimeLayerViewModel> != null, "Overtime");
             view.MoveCurrentToNext();
             Assert.IsTrue(view.CurrentItem as LayerGroupViewModel<MeetingLayerViewModel> != null, "Meeting");
+			view.MoveCurrentToNext();
+			Assert.IsTrue(view.CurrentItem is LayerGroupViewModel<MeetingPlanerMeetingLayerViewModel>, "Meeting");
             view.MoveCurrentToNext();
             Assert.IsTrue(view.CurrentItem as LayerGroupViewModel<AbsenceLayerViewModel> != null, "Absence");
 

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
     {
         public LayerGroupViewModel AbsenceLayers { get; private set; }
         public LayerGroupViewModel MeetingLayers { get; private set; }
+        public LayerGroupViewModel MeetingPlanerMeetingLayers { get; private set; }
         public LayerGroupViewModel PersonalLayers { get; private set; }
         public LayerGroupViewModel OvertimeLayers { get; private set; }
         public LayerGroupViewModel MainShiftLayers { get; private set; }
@@ -55,12 +56,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             PersonalLayers = new LayerGroupViewModel<PersonalShiftLayerViewModel>(UserTexts.Resources.PersonalShifts, this) { OrderIndex = 1 };
             OvertimeLayers = new LayerGroupViewModel<OvertimeLayerViewModel>(UserTexts.Resources.Overtime, this) { OrderIndex = 2 };
             MeetingLayers = new LayerGroupViewModel<MeetingLayerViewModel>(UserTexts.Resources.Meeting, this) { OrderIndex = 3 };
-            AbsenceLayers = new LayerGroupViewModel<AbsenceLayerViewModel>(UserTexts.Resources.Absence, this) { OrderIndex = 4 };
+            MeetingPlanerMeetingLayers = new LayerGroupViewModel<MeetingPlanerMeetingLayerViewModel>(UserTexts.Resources.Meeting, this) { OrderIndex = 4 };
+            AbsenceLayers = new LayerGroupViewModel<AbsenceLayerViewModel>(UserTexts.Resources.Absence, this) { OrderIndex = 5 };
 
             Groups.Add(MainShiftLayers);
             Groups.Add(PersonalLayers);
             Groups.Add(OvertimeLayers);
             Groups.Add(MeetingLayers);
+            Groups.Add(MeetingPlanerMeetingLayers);
             Groups.Add(AbsenceLayers);
 
             CollectionViewSource.GetDefaultView(Groups).SortDescriptions.Add(new SortDescription("OrderIndex", ListSortDirection.Ascending));

@@ -362,19 +362,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var mainShiftActivity = ActivityFactory.CreateActivity("mainshift");
 			var persShiftActivity = ActivityFactory.CreateActivity("persShfit");
+			var meetingActivity = ActivityFactory.CreateActivity("meeting");
 			target.AddActivity(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
 			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.AddMeeting(meetingActivity, new DateTimePeriod(2004, 1, 1, 2005, 1, 1), Guid.NewGuid());
 			IProjectionService svc = target.ProjectionService();
 			svc.CreateProjection();
 			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
 
-			Assert.AreEqual(3, retList.Count);
+			Assert.AreEqual(5, retList.Count);
 			Assert.AreSame(mainShiftActivity, retList[0].Payload);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2002, 1, 1), retList[0].Period);
 			Assert.AreSame(persShiftActivity, retList[1].Payload);
 			Assert.AreEqual(new DateTimePeriod(2002, 1, 1, 2003, 1, 1), retList[1].Period);
 			Assert.AreSame(mainShiftActivity, retList[2].Payload);
-			Assert.AreEqual(new DateTimePeriod(2003, 1, 1, 2010, 1, 1), retList[2].Period);
+			Assert.AreEqual(new DateTimePeriod(2003, 1, 1, 2004, 1, 1), retList[2].Period);
+			Assert.AreSame(meetingActivity, retList[3].Payload);
+			Assert.AreEqual(new DateTimePeriod(2004, 1, 1, 2005, 1, 1), retList[3].Period);
+			Assert.AreSame(mainShiftActivity, retList[4].Payload);
+			Assert.AreEqual(new DateTimePeriod(2005, 1, 1, 2010, 1, 1), retList[4].Period);
+
 		}
 
 		[Test]

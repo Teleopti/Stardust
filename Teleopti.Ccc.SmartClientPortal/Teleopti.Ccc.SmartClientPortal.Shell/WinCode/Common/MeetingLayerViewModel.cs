@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
-    public class MeetingLayerViewModel : LayerViewModel
+	public class MeetingLayerViewModel : LayerViewModel
     {
         private readonly IPersonMeeting _meeting;
 

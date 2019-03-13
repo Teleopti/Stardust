@@ -544,6 +544,7 @@
     <Compile Include="WinCode\Common\LayerViewModelSelector.cs" />
     <Compile Include="WinCode\Common\MainShiftLayerViewModel.cs" />
     <Compile Include="WinCode\Common\MeetingLayerViewModel.cs" />
+    <Compile Include="WinCode\Common\MeetingPlanerMeetingLayerViewModel.cs" />
     <Compile Include="WinCode\Common\Messaging\Filters\DialogueIsRepliedSpecification.cs" />
     <Compile Include="WinCode\Common\Messaging\Filters\DialogueReplySpecification.cs" />
     <Compile Include="WinCode\Common\Messaging\Filters\IFilterTarget.cs" />

@@ -246,6 +246,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						proj.Add(personalLayer, new VisualLayerFactory());
 					}
 				}
+				foreach (var meetingLayer in Meetings())
+				{
+					if (validPeriods.Any(validPeriod => validPeriod.Intersect(meetingLayer.Period) || validPeriod.AdjacentTo(meetingLayer.Period)))
+					{
+						proj.Add(meetingLayer, new VisualLayerFactory());
+					}
+				}
 			}
 
 			return proj;
