@@ -278,6 +278,7 @@
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
     <Content Include="HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html" />
+    <Content Include="jasmineTests.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -365,6 +366,7 @@
     <Content Include="configurationDetails.html" />
     <Content Include="Status\index.html" />
     <Content Include="Status\statusController.js" />
+    <Content Include="Status\statusController.spec.js" />
     <Content Include="userdetails.html" />
     <Content Include="details.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
