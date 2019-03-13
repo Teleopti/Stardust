@@ -151,8 +151,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				foreach (var dateTimePeriod in periodSplit)
 				{
-					var adjustedPeriod = _activityDivider.FetchPeriodForSkill(dateTimePeriod, skillOffset.Value);
-					if (_dictionary.TryGetValue(adjustedPeriod, out var interval))
+					if (_dictionary.TryGetValue(dateTimePeriod, out var interval))
 					{
 						foreach (var pair in interval.GetSkillKeyResources(activityKey))
 						{

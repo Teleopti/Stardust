@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
@@ -16,6 +17,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	public class ResourceCalculationTimeZoneTest : ResourceCalculationScenario
 	{
+		public FakeTimeZoneGuard TimeZoneGuard;
 		public ResourceCalculateWithNewContext Target;
 
 		[TestCase("Arabian Standard Time", 15)]			//+04:00
@@ -85,6 +87,27 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 
 			skillDay.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0.5);
 			skillDay.SkillStaffPeriodCollection.Second().CalculatedResource.Should().Be.EqualTo(0.5);
+		}
+
+		
+		[TestCase("Iran Standard Time", 15)]            //+03:30
+		[TestCase("W. Europe Standard Time", 15)]		//+01:00
+		[TestCase("Arabian Standard Time", 15)]         //+04:00
+		public void ShouldHandleHalfHourTimeZoneAroundMidnight(string timeZoneId, int defaultResolution)
+		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+			TimeZoneGuard.Set(timeZone);
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var dateOnly = DateOnly.Today;
+			var skill = new Skill().For(activity).InTimeZone(timeZone).DefaultResolution(defaultResolution).WithId().IsOpenBetween(0, 2);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var agent = new Person().InTimeZone(timeZone).WithPersonPeriod(skill);
+			var assignment = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(0, 1));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { assignment }, new[] { skillDay }, false, false));
+
+			skillDay.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1);
 		}
 	}
 }
