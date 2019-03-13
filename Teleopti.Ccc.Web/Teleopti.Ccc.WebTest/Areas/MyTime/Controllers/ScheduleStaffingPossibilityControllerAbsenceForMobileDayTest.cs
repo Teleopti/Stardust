@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var possibilities = Target.GetPossibilityViewModelsForMobileDay(_today,
 				StaffingPossibilityType.Absence).ToList();
 
-			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber);
+			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber * 2);
 			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
 			possibilities.ElementAt(0).StartTime.Should().Be.EqualTo(_today.Date);
 			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
@@ -210,6 +210,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			possibilities.ElementAt(_defaultAssignmentPeriod.StartDateTime.Hour * 4).Possibility.Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldGetTwoDaysOfScheduleStaffingDataForMobileDayView()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today.AddDays(-5), _loggedUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity("activity for test");
+			createAssignment(_loggedUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill understaffed", new TimePeriod(0, 24));
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 10.05d);
+			setupIntradayStaffingSkillFor24Hours(skill, _today.AddDays(1), 10d, 10.05d);
+
+			var possibilities =
+				Target.GetPossibilityViewModelsForMobileDay(_today, StaffingPossibilityType.Absence).ToList();
+
+			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber * 2);
+			possibilities[0].Date.Should().Be(_today.ToFixedClientDateOnlyFormat());
+			possibilities[_defaultSkillStaffingIntervalNumber - 1].Date.Should().Be(_today.ToFixedClientDateOnlyFormat());
+			possibilities[_defaultSkillStaffingIntervalNumber * 2 - 1].Date.Should().Be(_today.AddDays(1).ToFixedClientDateOnlyFormat());
+		}
 
 		private void setupWorkFlowControlSet()
 		{

@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 
 		public DateOnlyPeriod? GetPeriodForAbsenceForMobileDay(IPerson person, DateOnly date)
 		{
-			return getStaffingDataAvailablePeriod(person).Intersection(date.ToDateOnlyPeriod());
+			var dayPeriod = new DateOnlyPeriod(date, date.AddDays(1));
+			return getStaffingDataAvailablePeriod(person).Intersection(dayPeriod);
 		}
 
 		public List<DateOnlyPeriod> GetPeriodsForOvertimeForWeek(IPerson person, DateOnly date)
