@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
-	//public class RequestTransformer : IEtlTransformer<IPersonRequest>
 	public class RequestTransformer : IPersonRequestTransformer<IPersonRequest>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -45,15 +44,22 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					row["person_code"] = personRequest.Person.Id;
 
 					// transforming request type into request type id.
-					if (personRequest.Request is IAbsenceRequest)
+					switch (personRequest.Request)
 					{
-						row["request_type_code"] = 1;
-						row["absence_code"] = ((IAbsenceRequest)personRequest.Request).Absence.Id;
+						case IAbsenceRequest absenceRequest:
+							row["request_type_code"] = (int)RequestType.AbsenceRequest;
+							row["absence_code"] = absenceRequest.Absence.Id;
+							break;
+						case IShiftTradeRequest shiftTradeRequest:
+							row["request_type_code"] = (int)RequestType.ShiftTradeRequest;
+							break;
+						case IOvertimeRequest overtimeRequest:
+							row["request_type_code"] = (int)RequestType.OvertimeRequest;
+							break;
+						default:
+							row["request_type_code"] = (int)RequestType.TextRequest;
+							break;
 					}
-					else if (personRequest.Request is IShiftTradeRequest)
-						row["request_type_code"] = 2;
-					else
-						row["request_type_code"] = 0;
 
 					// transforming request status into request status id.
 					if (personRequest.IsPending || personRequest.IsNew)
@@ -79,8 +85,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					row["request_day_count"] = 1;
 					row["request_start_date_count"] = dateOnly == numOfDays.StartDate ? 1 : 0;
 					row["datasource_id"] = 1;
-					row["insert_date"] = System.DateTime.Now;
-					row["update_date"] = System.DateTime.Now;
+					row["insert_date"] = DateTime.Now;
+					row["update_date"] = DateTime.Now;
 					row["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(personRequest);
 					row["is_deleted"] = personRequest.IsDeleted;
 

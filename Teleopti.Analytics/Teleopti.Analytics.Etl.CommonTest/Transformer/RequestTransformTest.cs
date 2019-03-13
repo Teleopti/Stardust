@@ -4,11 +4,13 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 
@@ -65,6 +67,25 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_target = new RequestTransformer();
 			_target.Transform(_personRequestList, 96, _dataTable);
 			Assert.AreEqual(1, _personRequestList.Count);
+		}
+
+
+		[Test]
+		public void ShouldInitializeOvertimeRequestWithCorrectRequestTypeCode()
+		{
+			IPerson person = PersonFactory.CreatePerson("hello", "test").WithId();
+			IPersonRequest personRequest1 = new PersonRequest(person);
+			personRequest1.SetId(Guid.NewGuid());
+			personRequest1.Pending();
+			RaptorTransformerHelper.SetUpdatedOn(personRequest1, DateTime.UtcNow);
+
+			var ds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("ds", MultiplicatorType.Overtime);
+			personRequest1.Request = new OvertimeRequest(ds, new DateTimePeriod(new DateTime(2019, 03, 13, 22, 0, 0, DateTimeKind.Utc), new DateTime(2019, 03, 13, 23, 0, 0, DateTimeKind.Utc)));
+			_personRequestList = new List<IPersonRequest>() { personRequest1 };
+			_target = new RequestTransformer();
+			_target.Transform(_personRequestList, 96, _dataTable);
+			_dataTable.Rows.Count.Should().Be(1);
+			_dataTable.Rows[0]["request_type_code"].Should().Be.EqualTo((int)RequestType.OvertimeRequest);
 		}
 
 		[Test]
@@ -126,7 +147,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			personRequest.Cancel(new PersonRequestAuthorizationCheckerForTest());
 			RaptorTransformerHelper.SetUpdatedOn(personRequest, DateTime.UtcNow);
 
-			_personRequestList = new List<IPersonRequest>() { personRequest};
+			_personRequestList = new List<IPersonRequest>() { personRequest };
 			_target = new RequestTransformer();
 			_target.Transform(_personRequestList, 96, _dataTable);
 			Assert.AreEqual(1, _personRequestList.Count);
@@ -140,18 +161,18 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		[Test]
 		public void ShouldInitializeWaitlistedAbsenceRequest()
 		{
-			var absence = AbsenceFactory.CreateAbsenceCollection().ElementAt (0);
+			var absence = AbsenceFactory.CreateAbsenceCollection().ElementAt(0);
 
 			var startDate = DateOnly.Today.Date.ToUniversalTime();
-			var endDate = startDate.AddDays (1);
+			var endDate = startDate.AddDays(1);
 
 			var workflowControlSetOne = createWorkFlowControlSet(startDate, endDate, absence, new GrantAbsenceRequest(), true);
 			var person = createAndSetupPerson(workflowControlSetOne);
-			
+
 			IPersonRequest personRequest = new PersonRequest(person);
-			personRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(startDate, startDate.AddHours (8)));
+			personRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(startDate, startDate.AddHours(8)));
 			personRequest.SetId(Guid.NewGuid());
-			personRequest.Deny( "Work Harder", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny("Work Harder", new PersonRequestAuthorizationCheckerForTest());
 
 			RaptorTransformerHelper.SetUpdatedOn(personRequest, DateTime.UtcNow);
 
@@ -161,7 +182,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreEqual(1, _personRequestList.Count);
 
 			var row = _dataTable.Rows[0];
-			Assert.IsTrue (personRequest.IsWaitlisted);
+			Assert.IsTrue(personRequest.IsWaitlisted);
 			Assert.AreEqual(4, row["request_status_code"]);
 		}
 
@@ -169,7 +190,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			
+
 			person.WorkflowControlSet = workflowControlSet;
 
 			return person;
