@@ -32,13 +32,4 @@ describe("statusController", function() {
 
 		expect(controller.statusSteps[0].id).toBe(serverJson[0].id);
 	});
-	
-	//temp - just to verify TC///////////////
-	it("should succeed", function(){
-		expect(true).toBe(true);
-	})
-	it("should fail", function(){
-		expect(false).toBe(true);
-	})	
-	/////////////////////
 });
