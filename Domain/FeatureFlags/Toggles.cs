@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		RTA_InputValidationForApprovingAdherencePeriods_77045,
 		RTA_ImproveUsabilityExpandableCards_79025,
 		RTA_AdjustAdherenceToNeutral_80594,
+		RTA_RemoveAdjustedToNeutral_82147,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
 		MessageBroker_VeganBurger_79140,
