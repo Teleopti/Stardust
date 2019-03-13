@@ -85,12 +85,22 @@
             <tr>
                 <th>{{'From'|translate}}</th>
                 <th>{{'To'|translate}}</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="period in vm.adjustedPeriods" class="adjusted-period">
                 <td>{{period.StartTime}}</td>
                 <td>{{period.EndTime}}</td>
+                <td style="text-align: center">
+                    <span class="remove-adjusted"
+                          data-starttime="{{period.StartTime}}"
+                          data-endtime="{{period.EndTime}}"
+                          ng-click="period.remove()">
+                        <i class="mdi mdi-delete"></i>
+                        <md-tooltip>{{'Remove' | translate}}</md-tooltip>
+                    </span>
+                </td>
             </tr>
             </tbody>
         </table>
