@@ -47,10 +47,17 @@
 
             function buildAdjustedPeriods(data) {
                 return data.map(function (period) {
-                    return {
+                    var o = {
                         StartTime: moment(period.StartTime).format('L LT'),
                         EndTime: moment(period.EndTime).format('L LT')
-                    }
+                    };
+                    o.remove = function() {
+                        $http.post('../api/Adherence/RemoveAdjustedPeriod', {
+                            StartDateTime: moment(period.StartTime).format('YYYY-MM-DD HH:mm'),
+                            EndDateTime: moment(period.EndTime).format('YYYY-MM-DD HH:mm')
+                        }).then(loadData);
+                    };
+                    return o;
                 })
             }
 

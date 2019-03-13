@@ -313,7 +313,7 @@ var rtaTester = (function () {
 		if (description === 'RtaHistoricalOverviewController')
 			setup(tests, '', 'RtaHistoricalOverviewController80594');		
 		if (description === 'AdjustAdherenceController')
-			setup(tests, '', 'AdjustAdherenceController');
+			setup(tests, '', 'AdjustAdherenceController82147');
 		
 	}
 

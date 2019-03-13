@@ -1722,6 +1722,7 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.autoFixSelection.spec.js" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.removeAdjustedToNeutral.spec.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.RemoveAdjustedToNeutral_82147.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.html" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.js" />

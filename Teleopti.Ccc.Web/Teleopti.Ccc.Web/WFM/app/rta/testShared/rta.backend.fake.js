@@ -92,6 +92,11 @@
         });
 
 		service.fake({
+			name: 'removeAdjustedPeriod',
+			url: /\.\.\/api\/Adherence\/RemoveAdjustedPeriod/
+		});
+		
+		service.fake({
 			name: 'historicalAdherence',
 			url: /\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
 			clear: function () {
