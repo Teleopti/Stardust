@@ -27,7 +27,6 @@ describe("statusController", function() {
 
 		var $scope = $rootScope.$new();
 		var controller = $controller('statusController', { $scope: $scope });
-		//$scope.$digest();
 		$httpBackend.flush();
 
 		expect(controller.statusSteps[0].id).toBe(serverJson[0].id);
