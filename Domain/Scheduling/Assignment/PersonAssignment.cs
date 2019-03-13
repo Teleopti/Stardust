@@ -377,6 +377,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layer = new MeetingShiftLayer(activity, period, meetingId);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
+			
+			if (!muteEvent)
+			{
+				AddEvent(() =>
+				{
+					var activityAddedEvent = new ActivityAddedEvent
+					{
+						Date = Date.Date,
+						PersonId = Person.Id.GetValueOrDefault(),
+						ActivityId = activity.Id.GetValueOrDefault(),
+						StartDateTime = getStartTimeForEvent(period),
+						EndDateTime = period.EndDateTime,
+						ScenarioId = Scenario.Id.GetValueOrDefault(),
+						LogOnBusinessUnitId = Scenario.GetOrFillWithBusinessUnit_DONTUSE().Id.GetValueOrDefault()
+					};
+					if (trackedCommandInfo != null)
+					{
+						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+					return activityAddedEvent;
+				});
+			}
 		}
 
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)

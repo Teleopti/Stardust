@@ -907,6 +907,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldRaiseEventWithCorrectPeriodWhenMeetingAddedToOvernightShift()
+		{
+			var agent = PersonFactory.CreatePersonWithId();
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var layerPeriod = new DateTimePeriod(2019, 03, 06, 18, 2019, 03, 07, 2);
+			var assignment =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
+					ScenarioFactory.CreateScenarioWithId("_", true), layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
+
+			var activity = ActivityFactory.CreateActivity("meeting");
+			assignment.AddMeeting(activity, new DateTimePeriod(2019, 03, 07, 2, 2019, 03, 07, 3), Guid.NewGuid(), false);
+
+			var activityAddedEvents = assignment.PopAllEvents(null).OfType<ActivityAddedEvent>();
+			var @event = activityAddedEvents.Last();
+			@event.StartDateTime.Should().Be.EqualTo(new DateTime(2019, 03, 06, 18, 0, 0));
+			@event.EndDateTime.Should().Be.EqualTo(new DateTime(2019, 03, 07, 3, 0, 0));
+		}
+		
+		[Test]
 		public void ShouldRaiseEventWithCorrectPeriodWhenActivityAddedToOvernightShift()
 		{
 			var agent = PersonFactory.CreatePersonWithId();
