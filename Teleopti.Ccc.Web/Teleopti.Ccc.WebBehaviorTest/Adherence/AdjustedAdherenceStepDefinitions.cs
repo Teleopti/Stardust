@@ -1,13 +1,9 @@
 using System;
-using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 {
@@ -36,6 +32,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 				EndTime = period.EndDateTime
 			});
 		}
+		
+		[Given(@"the adjusted period between '(.*)' and '(.*)' is removed")]
+		public void AndTheAdjustedPeriodBetweenIsRemoved(string from, string to)
+		{
+			var period = CurrentTime.MagicParse(from, to);
+			_data.Data().Apply(new RemoveAdjustedAdherenceSpec
+			{
+				StartTime = period.StartDateTime,
+				EndTime = period.EndDateTime
+			});
+		}
+	}
 
+	public class RemoveAdjustedAdherenceSpec
+	{
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
+	}
+	
+	public class RemoveAdjustedAdherenceSetup : IDataSetup<RemoveAdjustedAdherenceSpec>
+	{
+		public void Apply(RemoveAdjustedAdherenceSpec spec)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

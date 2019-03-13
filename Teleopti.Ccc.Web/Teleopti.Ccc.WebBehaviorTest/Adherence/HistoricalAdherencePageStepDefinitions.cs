@@ -64,6 +64,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			Browser.Interactions.AssertAnyContains(".adjusted-period", from);
 			Browser.Interactions.AssertAnyContains(".adjusted-period", to);
 		}
+		
+		[Then(@"I should not see any adjusted periods")]
+		public void ThenIShouldNotSeeAnyAdjustedPeriods()
+		{
+			Browser.Interactions.AssertNotExists(".adjusted-periods",".adjusted-period" );
+		}
+		
 
 		[Then(@"I should see neutral adherence between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeNeutralAdherenceBetween(string from, string to)
