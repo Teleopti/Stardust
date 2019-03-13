@@ -52,7 +52,6 @@ export const mainInitializer = [
 		};
 
 		let preloadDone = false;
-		let called = false;
 		const preload = Promise.all([
 			areasService.getAreasList(),
 			areasService.getAreasWithPermission(),
@@ -73,11 +72,16 @@ export const mainInitializer = [
 		});
 
 		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams) => {
-			if (called === false) {
-				called = true;
+			if (!preloadDone) {
 				event.preventDefault();
-				preload.then(() => $state.go(next, toParams));
-			} else if (preloadDone && !isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
+				preload.then(() => {
+					if (!isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
+						handleNotPermitted(areas, noticeService, $translate, $state, next)
+						return;
+					}
+					$state.go(next, toParams);
+				});
+			} else if (!isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
 				event.preventDefault();
 				handleNotPermitted(areas, noticeService, $translate, $state, next);
 			}
