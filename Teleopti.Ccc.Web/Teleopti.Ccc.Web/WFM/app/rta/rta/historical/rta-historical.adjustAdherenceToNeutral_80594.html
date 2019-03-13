@@ -158,8 +158,7 @@
                          ng-repeat="adjustedToNeutral in vm.adjustedToNeutralAdherences"
                          ng-class="{'highlight': adjustedToNeutral.highlight}"
                          class="neutral-adherence adjusted-period"
-                         ng-attr-style="left: {{adjustedToNeutral.Offset}}; width: {{adjustedToNeutral.Width}}"
-                         data-starttime="{{adjustedToNeutral.StartTime}}" data-endtime="{{adjustedToNeutral.EndTime}}">
+                         ng-attr-style="left: {{adjustedToNeutral.Offset}}; width: {{adjustedToNeutral.Width}}">
                         <md-tooltip md-direction="top">
                             {{adjustedToNeutral.StartTime}} - {{adjustedToNeutral.EndTime}}
                         </md-tooltip>
@@ -314,7 +313,7 @@
                             <th style="width: 20%">{{'End' | translate}}</th>
                             <tr ng-repeat="adjustedToNeutralAdherence in vm.adjustedToNeutralAdherences"
                                 ng-class="{'highlight': adjustedToNeutralAdherence.highlight}"
-                                class="adjusted-to-neutral-adherence"
+                                class="adjusted-period"
                                 ng-click="adjustedToNeutralAdherence.click()">
                                 <td>
                                     {{adjustedToNeutralAdherence.StartTime}}

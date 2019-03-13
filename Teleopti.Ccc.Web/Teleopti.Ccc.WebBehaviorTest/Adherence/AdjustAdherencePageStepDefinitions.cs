@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
@@ -36,6 +37,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		public void WhenIRemoveTheAdjustedAdherenceBetweenForAllAgents(string from, string to)
 		{
 			Browser.Interactions.Click($".adjusted-period .remove-adjusted");
+		}
+		
+		[Then(@"I should see adjusted period between '(.*)' and '(.*)'")]
+		public void ThenIShouldSeeAdjustedPeriodBetween(string from, string to)
+		{
+			Browser.Interactions.AssertAnyContains(".adjusted-period", from);
+			Browser.Interactions.AssertAnyContains(".adjusted-period", to);
 		}
 		
 		[Then(@"I should not see the adjusted period between '(.*)' and '(.*)'")]

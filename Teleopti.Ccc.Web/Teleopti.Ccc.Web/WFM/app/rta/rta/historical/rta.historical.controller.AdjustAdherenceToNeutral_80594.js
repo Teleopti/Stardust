@@ -22,6 +22,7 @@
         vm.openRecordedAdherences = $stateParams.open;
         vm.openApprovedPeriods = $stateParams.open;
         vm.openApproveForm = $stateParams.open;
+        vm.openAdjustedToNeutralAdherences = $stateParams.open;
         vm.hasModifyAdherencePermission = false;
         vm.invalidTime = false;
 
