@@ -188,6 +188,9 @@
     <None Include="Web References\Sdk\ScenarioDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Sdk\ScheduleChangesDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Sdk\ScheduleChangesSubscriptionsDto1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -350,6 +353,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService23.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService24.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService3.xsd" />

@@ -74,6 +74,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EndpointTestDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EndpointTestDialog.Designer.cs">
+      <DependentUpon>EndpointTestDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ForecastImport.cs" />
     <Compile Include="PermissionView.cs" />
     <Compile Include="Form1.cs">
@@ -104,6 +110,9 @@
       <DependentUpon>UpdatePersonAccountForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WriteProtectionView.cs" />
+    <EmbeddedResource Include="EndpointTestDialog.resx">
+      <DependentUpon>EndpointTestDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>

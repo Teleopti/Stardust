@@ -93,6 +93,7 @@ namespace SdkTestWinGui
                 return;
             }
 
+
             treeView1.Nodes["All"].Text = _businessUnit.Name;
             refreshAll();
         }
@@ -835,6 +836,14 @@ namespace SdkTestWinGui
 			}
 
 			loadSchedules(treeView1.SelectedNode);
+		}
+
+		private void button9_Click(object sender, EventArgs e)
+		{
+			using (var dialog = new EndpointTestDialog(this))
+			{
+				dialog.ShowDialog(this);
+			}
 		}
 	}
 }
