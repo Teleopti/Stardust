@@ -31,5 +31,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			Browser.Interactions.FillWith(".end-time", end.ToString("yyyy-MM-dd HH:mm"));
 			Browser.Interactions.Click(".wfm-btn.adjust-adherence"); // fix
 		}
+		
+		[When(@"I remove the adjusted to neutral between '(.*)' and '(.*)'")]
+		public void WhenIRemoveTheAdjustedAdherenceBetweenForAllAgents(string from, string to)
+		{
+			Browser.Interactions.Click($".adjusted-period .remove-adjusted");
+		}
+		
+		[Then(@"I should not see the adjusted period between '(.*)' and '(.*)'")]
+		public void ThenIShouldNotSeeTheAdjustedPeriodBetween(string from, string to)
+		{
+			Browser.Interactions.AssertNotExists(".adjust-adherence", $".adjusted-period");
+		}
 	}
 }
