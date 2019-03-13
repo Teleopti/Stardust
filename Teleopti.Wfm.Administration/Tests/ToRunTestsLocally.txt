@@ -1,4 +1,2 @@
 Use chutzpah!
-Either if your IDE supports it directly or download console-app and run 
-.\chutzpah.console.exe /path [repo]\Teleopti.Wfm.Administration\Tests
-(the above is run on TC)
+Either if your IDE supports it directly or run runTests.bat in this folder (TC uses this one)

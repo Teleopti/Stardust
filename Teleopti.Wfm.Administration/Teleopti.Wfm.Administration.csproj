@@ -366,6 +366,7 @@
     <Content Include="Status\index.html" />
     <Content Include="Status\statusController.js" />
     <Content Include="Tests\dependencies.js" />
+    <Content Include="Tests\runTests.bat" />
     <Content Include="Tests\statusController.spec.js" />
     <Content Include="Tests\ToRunTestsLocally.txt" />
     <Content Include="userdetails.html" />
