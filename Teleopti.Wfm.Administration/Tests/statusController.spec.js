@@ -3,7 +3,6 @@
 describe("statusController", function() {
 	var $controller, $rootScope, $httpBackend;
 
-
 	beforeEach(function(){
 		module('adminApp');
 
