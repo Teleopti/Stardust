@@ -299,7 +299,9 @@
 		}
 
 		function removeNotExistTeamsFromSelection() {
-			if (!ctrl.selectedGroups.groupIds || !ctrl.selectedGroups.groupIds.length) {
+			if (!ctrl.nameMap
+				|| !ctrl.selectedGroups.groupIds
+				|| !ctrl.selectedGroups.groupIds.length) {
 				return;
 			}
 			var ids = angular.copy(ctrl.selectedGroups.groupIds);
