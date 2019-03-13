@@ -1,0 +1,98 @@
+<div class="rta-view adjust-adherence">
+    <input ng-show="vm.testMode" ng-model="vm.startDate" type="text" class="start-date" ng-model-options="{ updateOn: 'blur'}"/>
+    <input ng-show="vm.testMode" ng-model="vm.startTime" type="text" class="start-time" ng-model-options="{ updateOn: 'blur'}"/>
+    <input ng-show="vm.testMode" ng-model="vm.endDate" type="text" class="end-date" ng-model-options="{ updateOn: 'blur'}"/>
+    <input ng-show="vm.testMode" ng-model="vm.endTime" type="text" class="end-time" ng-model-options="{ updateOn: 'blur'}"/>
+
+    <div class="view-header">
+        <div class="view-title">
+            <div class="pull-left">
+                <h1>
+                    <i class="mdi mdi-alarm"></i>{{'Adherence'|translate}}
+                </h1>
+            </div>
+            <div class="rta-top-buttons-wrapper pull-left">
+				<span>
+					<button class="wfm-btn wfm-btn-default"
+                            ng-click="vm.goToOverview()">{{'MonitorOrganization'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default"
+                            ng-click="vm.goToAgents()">{{'MonitorAgents'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default"
+                            ng-click="vm.goToHistoricalOverview()">{{'HistoricalOverview'|translate}}</button>
+				</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel con-padding" style="width:680px">
+        <div class="con-row">
+            <div class="con-flex">
+                <h3 style="padding-top: 10px">{{'AdjustedPeriods'|translate}}</h3>
+            </div>
+            <div class="con-flex">
+                <button class="wfm-btn wfm-btn-primary pull-right add-period"
+                        ng-click="vm.toggleAdjustToNeutralForm()">{{'AddPeriod'|translate}}
+                </button>
+            </div>
+        </div>
+
+        <div class="con-row" ng-show="vm.showAdjustToNeutralForm">
+            <div class="con-flex">
+                <div style="margin-left: 20px">
+                    <div uib-datepicker
+                         ng-model="vm.startDate">
+                    </div>
+                </div>
+                <div style="margin-left: 20px; padding: 0 20px">
+                    <div uib-timepicker
+                         ng-model="vm.startTime"
+                         hour-step="1"
+                         minute-step="1"
+                         show-meridian="vm.showMeridian"
+                         template-url="app/rta/rta/adjust-adherence/timepicker.template.html">
+                    </div>
+                </div>
+            </div>
+            <div class="con-flex">
+                <div uib-datepicker
+                     ng-model="vm.endDate">
+                </div>
+                <div style="margin-right: 20px; padding: 0 20px">
+                    <div uib-timepicker
+                         ng-model="vm.endTime"
+                         hour-step="1"
+                         minute-step="1"
+                         show-meridian="vm.showMeridian"
+                         template-url="app/rta/rta/adjust-adherence/timepicker.template.html">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="con-row" ng-show="vm.showAdjustToNeutralForm">
+            <div class="con-flex">
+                <div class="pull-right" style="padding-bottom:12px">
+                    <span style="font-weight: 700">{{vm.selectedPeriod}}</span>
+                    <button class="wfm-btn wfm-btn-primary adjust-adherence"
+                            ng-click="vm.adjustToNeutral()">{{'AdjustToNeutral'|translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <table class="wfm-table">
+            <thead>
+            <tr>
+                <th>{{'From'|translate}}</th>
+                <th>{{'To'|translate}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="period in vm.adjustedPeriods" class="adjusted-period">
+                <td>{{period.StartTime}}</td>
+                <td>{{period.EndTime}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1722,9 +1722,11 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.autoFixSelection.spec.js" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.RemoveAdjustedToNeutral_82147.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.html" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.spec.js" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.RemoveAdjustedToNeutral_82147.html" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\timepicker.template.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.ReviewHistoricalAdherence_74770.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RestrictModifySkillGroups_78568.html" />

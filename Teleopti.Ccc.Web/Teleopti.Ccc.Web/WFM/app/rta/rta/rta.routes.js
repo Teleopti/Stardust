@@ -8,10 +8,14 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
         .state('rta-adjust-adherence', {
             url: '/rta/adjust-adherence?testMode',
             templateUrl: function () {
+				if (toggles.RTA_RemoveAdjustedToNeutral_82147)
+					return 'app/rta/rta/adjust-adherence/adjust.adherence.RemoveAdjustedToNeutral_82147.html';
                 if (toggles.RTA_AdjustAdherenceToNeutral_80594)
                 	return 'app/rta/rta/adjust-adherence/adjust.adherence.html';
             },
             controllerProvider: function () {
+                if (toggles.RTA_RemoveAdjustedToNeutral_82147)
+                	return 'AdjustAdherenceController82147 as vm';
                 if (toggles.RTA_AdjustAdherenceToNeutral_80594)
                 	return 'AdjustAdherenceController as vm';
             }
