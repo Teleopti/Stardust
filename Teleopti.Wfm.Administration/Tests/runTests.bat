@@ -1,3 +1,5 @@
+:: IS USED BY TEAMCITY ::
+
 @ECHO off
 
 SET THIS=%~dp0
