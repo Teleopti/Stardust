@@ -20,14 +20,15 @@
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" namespace="http://schemas.ccc.teleopti.com/sdk/2016/03/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" namespace="http://schemas.ccc.teleopti.com/sdk/2016/08/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd19" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd20" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd21" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd22" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd23" namespace="http://schemas.ccc.teleopti.com/sdk/2016/01/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd24" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" namespace="http://schemas.ccc.teleopti.com/sdk/2019/03/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" namespace="http://schemas.ccc.teleopti.com/sdk/2016/08/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd19" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd20" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd21" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd22" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd23" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd24" namespace="http://schemas.ccc.teleopti.com/sdk/2016/01/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd25" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="TeleoptiCccSdkService_ConvertToUtc_InputMessage">
@@ -497,6 +498,12 @@
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetScheduleTagByQuery_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetScheduleTagByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetSchedulesByChangedDateTime_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSchedulesByChangedDateTime" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetSchedulesByChangedDateTime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSchedulesByChangedDateTimeResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetScheduleChangeSubscriptionsByQuery_InputMessage">
     <wsdl:part name="parameters" element="tns:GetScheduleChangeSubscriptionsByQuery" />
@@ -1152,6 +1159,10 @@
     <wsdl:operation name="GetScheduleTagByQuery">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleTagByQuery" message="tns:TeleoptiSchedulingService_GetScheduleTagByQuery_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleTagByQueryResponse" message="tns:TeleoptiSchedulingService_GetScheduleTagByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSchedulesByChangedDateTime">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByChangedDateTime" message="tns:TeleoptiSchedulingService_GetSchedulesByChangedDateTime_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByChangedDateTimeResponse" message="tns:TeleoptiSchedulingService_GetSchedulesByChangedDateTime_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetScheduleChangeSubscriptionsByQuery">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleChangeSubscriptionsByQuery" message="tns:TeleoptiSchedulingService_GetScheduleChangeSubscriptionsByQuery_InputMessage" />

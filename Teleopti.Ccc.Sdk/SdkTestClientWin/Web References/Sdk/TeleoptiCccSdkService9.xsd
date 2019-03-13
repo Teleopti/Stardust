@@ -1,30 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2011/01/" elementFormDefault="qualified" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2011/09/" elementFormDefault="qualified" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" />
-  <xs:complexType name="PublicNoteLoadOptionDto">
-    <xs:sequence>
-      <xs:element xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="LoadPerson" nillable="true" type="q1:PersonDto" />
-      <xs:element xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="LoadSite" nillable="true" type="q2:SiteDto" />
-      <xs:element xmlns:q3="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="LoadTeam" nillable="true" type="q3:TeamDto" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PublicNoteLoadOptionDto" nillable="true" type="tns:PublicNoteLoadOptionDto" />
-  <xs:complexType name="ArrayOfPublicNoteDto">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PublicNoteDto" nillable="true" type="tns:PublicNoteDto" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPublicNoteDto" nillable="true" type="tns:ArrayOfPublicNoteDto" />
-  <xs:complexType name="PublicNoteDto">
+  <xs:complexType name="GetAvailableCustomGroupPagesQueryDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q4:Dto">
+      <xs:extension xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q1:QueryDto">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GetAvailableCustomGroupPagesQueryDto" nillable="true" type="tns:GetAvailableCustomGroupPagesQueryDto" />
+  <xs:complexType name="GetGroupsForGroupPageAtDateQueryDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q2:QueryDto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Date" nillable="true" type="q4:DateOnlyDto" />
-          <xs:element minOccurs="0" name="Person" nillable="true" type="q4:PersonDto" />
-          <xs:element minOccurs="0" name="ScheduleNote" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PageId" type="ser:guid" />
+          <xs:element xmlns:q3="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="QueryDate" nillable="true" type="q3:DateOnlyDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PublicNoteDto" nillable="true" type="tns:PublicNoteDto" />
+  <xs:element name="GetGroupsForGroupPageAtDateQueryDto" nillable="true" type="tns:GetGroupsForGroupPageAtDateQueryDto" />
+  <xs:complexType name="ArrayOfGroupPageDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupPageDto" nillable="true" type="tns:GroupPageDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGroupPageDto" nillable="true" type="tns:ArrayOfGroupPageDto" />
+  <xs:complexType name="GroupPageDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q4:Dto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PageName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GroupPageDto" nillable="true" type="tns:GroupPageDto" />
+  <xs:complexType name="ArrayOfGroupPageGroupDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GroupPageGroupDto" nillable="true" type="tns:GroupPageGroupDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGroupPageGroupDto" nillable="true" type="tns:ArrayOfGroupPageGroupDto" />
+  <xs:complexType name="GroupPageGroupDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q5:Dto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="GroupName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GroupPageGroupDto" nillable="true" type="tns:GroupPageGroupDto" />
 </xs:schema>

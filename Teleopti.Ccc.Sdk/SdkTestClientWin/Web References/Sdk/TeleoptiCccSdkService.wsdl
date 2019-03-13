@@ -697,6 +697,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetSchedulesByChangedDateTime">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByChangedDateTime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetScheduleChangeSubscriptionsByQuery">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleChangeSubscriptionsByQuery" style="document" />
       <wsdl:input>
