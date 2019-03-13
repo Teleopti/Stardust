@@ -53,9 +53,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleData, selectedD
 		self.shiftEndTime = tempTimespan[1];
 	}
 	self.shiftTimeSpan = scheduleData.Shift ? scheduleData.Shift.TimeSpan : null;
-	self.shiftWorkingHours = scheduleData.Shift
-		? readableShiftworkingHours(scheduleData.Shift.WorkingHours, Teleopti.MyTimeWeb.Common.GetUserTexts())
-		: null;
+	self.shiftWorkingHours = scheduleData.Shift ? scheduleData.Shift.WorkingHours : null;
 	self.shiftColor = scheduleData.Shift ? scheduleData.Shift.Color : null;
 	self.hasShift = self.shiftName != null;
 	self.backgroundColor = scheduleData.Shift ? scheduleData.Shift.Color : null;
@@ -84,13 +82,6 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleData, selectedD
 		self.dayOfMonth == new Date().getDate()
 			? 'red'
 			: '';
-
-	function readableShiftworkingHours(shiftWorkingHours, userTexts) {
-		if (typeof shiftWorkingHours !== 'string') return shiftWorkingHours;
-		var timeUnits = shiftWorkingHours.split(/[^\d-]/).map(Number);
-		if (!timeUnits[1]) return [timeUnits[0], userTexts.HourShort].join(' ');
-		return [timeUnits[0], userTexts.HourShort, timeUnits[1], userTexts.MinuteShort].join(' ');
-	}
 
 	function getSeatBookingMessage(seatBookings) {
 		var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
