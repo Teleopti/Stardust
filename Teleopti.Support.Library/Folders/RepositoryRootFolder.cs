@@ -11,8 +11,6 @@ namespace Teleopti.Support.Library.Folders
 		public RepositoryRootFolder()
 		{
 			_path = RepositoryRootFolderLocator.LocateFolderUsingBlackMagic();
-			if (_path != null)
-				_path = System.IO.Path.GetFullPath(_path);
 		}
 
 		public string Path()
@@ -50,10 +48,12 @@ namespace Teleopti.Support.Library.Folders
 			var lookups = lookupsFromTestDirectory
 				.Concat(relativeLookups)
 				.ToArray();
-			
+
 			var found = lookups.FirstOrDefault(Directory.Exists);
-			
-			return new FileInfo(Path.Combine(found, "..")).FullName;
+
+			return found != null ? 
+				Directory.GetParent(found).FullName : 
+				null;
 		}
 	}
 }
