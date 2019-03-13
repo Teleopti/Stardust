@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 		
 		[Given(@"today is '(.*)'")]
+		[When(@"today is '(.*)'")]
 		public void GivenTodayIs(string date)
 		{
 			CurrentTime.Set(date);
