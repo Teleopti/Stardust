@@ -108,6 +108,7 @@
     <Compile Include="Command\AddPersonAbsenceTest.cs" />
     <Compile Include="Command\AddIntradayAbsenceRequestTest.cs" />
     <Compile Include="Command\AddScheduleChangesListenerTest.cs" />
+    <Compile Include="Command\RemoveMeetingTest.cs" />
     <Compile Include="Command\RemovePersonAbsenceTest.cs" />
     <Compile Include="Command\SetMainShiftTest.cs" />
     <Compile Include="FakeTokenVerifier.cs" />

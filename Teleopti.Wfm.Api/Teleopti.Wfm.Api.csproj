@@ -67,6 +67,8 @@
     <Compile Include="Command\AddIntradayAbsenceRequestHandler.cs" />
     <Compile Include="Command\AddPersonAbsenceHandler.cs" />
     <Compile Include="Command\AddIntradayAbsenceRequestDto.cs" />
+    <Compile Include="Command\RemoveMeetingDto.cs" />
+    <Compile Include="Command\RemoveMeetingHandler.cs" />
     <Compile Include="Command\RemovePersonAbsenceDto.cs" />
     <Compile Include="Command\RemovePersonAbsenceHandler.cs" />
     <Compile Include="Command\AddScheduleChangesListenerDto.cs" />

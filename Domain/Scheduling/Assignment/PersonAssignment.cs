@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual void AddMeeting(IActivity activity, DateTimePeriod period, Guid meetingId,  bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
+		public virtual void AddMeeting(IActivity activity, DateTimePeriod period, Guid meetingId, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			var layer = new MeetingShiftLayer(activity, period, meetingId);
 			layer.SetParent(this);
