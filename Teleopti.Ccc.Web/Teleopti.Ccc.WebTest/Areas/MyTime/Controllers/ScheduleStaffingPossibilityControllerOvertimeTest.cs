@@ -1387,6 +1387,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			possibilitiesWeek.ElementAt(1).Possibility.Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldReturnTwoDaysPossibilitiesOvertime()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForMobileDay(_today, StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 2);
+		}
+
 		private WorkflowControlSet setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod

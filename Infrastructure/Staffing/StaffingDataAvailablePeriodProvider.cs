@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -92,21 +93,28 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 			if (workflowControlSet == null)
 				return new List<DateOnlyPeriod>();
 
+			var dayPeriod = new DateOnlyPeriod(date, date.AddDays(1));
+
 			if (workflowControlSet.OvertimeRequestOpenPeriods.Count == 0)
 			{
 				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(person);
-				return new List<DateOnlyPeriod> {staffingDataAvailablePeriod};
+				if (staffingDataAvailablePeriod.Intersection(dayPeriod).HasValue)
+				{
+					return new List<DateOnlyPeriod> {staffingDataAvailablePeriod.Intersection(dayPeriod).Value};
+
+				}
+
+				return new List<DateOnlyPeriod>();
 			}
 
-			var days = date.ToDateOnlyPeriod().DayCollection();
 			var availableDays = new List<DateOnly>();
-			foreach (var day in days)
+			foreach (var day in dayPeriod.DayCollection())
 			{
 				var overtimeRequestOpenPeriods =
 					_mergedOvertimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
 						day);
 
-				if (overtimeRequestOpenPeriods != null && overtimeRequestOpenPeriods.Any())
+				if (!overtimeRequestOpenPeriods.IsNullOrEmpty())
 				{
 					availableDays.Add(day);
 				}
@@ -117,19 +125,8 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 				return new List<DateOnlyPeriod>();
 			}
 
-			var availablePeriods = availableDays.SplitToContinuousPeriods();
-			var returnPeriods = new List<DateOnlyPeriod>();
-
-			foreach (var availablePeriod in availablePeriods)
-			{
-				var intersectionPeriod = availablePeriod.Intersection(date.ToDateOnlyPeriod());
-				if (intersectionPeriod.HasValue)
-				{
-					returnPeriods.Add(intersectionPeriod.Value);
-				}
-			}
-
-			return returnPeriods;
+			return availableDays.SplitToContinuousPeriods().Where(period => period.Intersection(dayPeriod).HasValue)
+				.ToList();
 		}
 
 		private DateOnlyPeriod getStaffingDataAvailablePeriod(IPerson person)
