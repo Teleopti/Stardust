@@ -10,9 +10,9 @@
 	using Teleopti.Ccc.Domain.Scheduling;
 	using Teleopti.Ccc.Domain.Scheduling.Assignment;
 	using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-	using Teleopti.Ccc.Domain.UnitOfWork;
 	using Teleopti.Ccc.Infrastructure.Foundation;
 	using Teleopti.Ccc.Infrastructure.Repositories;
+	using Teleopti.Ccc.TestCommon;
 	using Teleopti.Ccc.TestCommon.FakeData;
 	using Teleopti.Ccc.TestCommon.TestData;
 	
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IShiftCategory _dummyCat;
 		private IShiftCategory _dummyCategory;
 		private IMultiplicatorDefinitionSet _definitionSet;
+		private ExternalMeeting _externalMeeting;
 		private ISite site;
 
 		protected override void ConcreteSetup()
@@ -44,12 +45,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false);
 			_dummyCategory = ShiftCategoryFactory.CreateShiftCategory("Morning");
 			_definitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime);
+			_externalMeeting = new ExternalMeeting
+			{
+				Title = "",
+				Agenda = ""
+			}.WithId();
 
 			PersistAndRemoveFromUnitOfWork(_dummyCategory);
 			PersistAndRemoveFromUnitOfWork(_dummyAgent2);
 			PersistAndRemoveFromUnitOfWork(_dummyScenario);
 			PersistAndRemoveFromUnitOfWork(_dummyCat);
 			PersistAndRemoveFromUnitOfWork(_definitionSet);
+			PersistAndRemoveFromUnitOfWork(_externalMeeting);
 
 			PersonFactory.AddDefinitionSetToPerson(_dummyAgent, _definitionSet);
 			var per = _dummyAgent.Period(new DateOnly(2000, 1, 1));
@@ -70,6 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ass.SetShiftCategory(_dummyCat);
 			ass.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			ass.AddOvertimeActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
+			ass.AddMeeting(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _externalMeeting);
 			return ass;
 		}
 
@@ -79,6 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
 			Assert.AreEqual(org.PersonalActivities().Count(), loadedAggregateFromDatabase.PersonalActivities().Count());
 			Assert.AreEqual(org.OvertimeActivities().Count(), loadedAggregateFromDatabase.OvertimeActivities().Count());
+			Assert.AreEqual(org.Meetings().Count(), loadedAggregateFromDatabase.Meetings().Count());
 		}
 
 		[Test]

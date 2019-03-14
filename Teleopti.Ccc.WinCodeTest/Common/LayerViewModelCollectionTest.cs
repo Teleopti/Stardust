@@ -12,8 +12,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
@@ -353,7 +355,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
 			PersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
             MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(null, personMeeting, null);
-			var externalMeetingLayerViewModel = new ExternalMeetingLayerViewModel(null, new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2), Guid.NewGuid()), null, new Person());
+			var externalMeeting = new ExternalMeetingLayerViewModel(null, new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2), new ExternalMeeting().WithId(Guid.NewGuid())), null, new Person());
             #endregion
 			mocks.ReplayAll();
             Stack<ILayerViewModel> stack = new Stack<ILayerViewModel>((from m in 
@@ -365,14 +367,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                                                                            overtimeLayerViewModel,
                                                                            personalShiftLayerViewModel,
                                                                            absenceLayerViewModel,
-																		   externalMeetingLayerViewModel
+																		   externalMeeting
                                                                        }
                                                                        orderby m.VisualOrderIndex
                                                                        select m));
             
             //Verify that the order is what its intended for the visual layout
             Assert.AreEqual(absenceLayerViewModel, stack.Pop());
-            Assert.AreEqual(externalMeetingLayerViewModel, stack.Pop());
+            Assert.AreEqual(externalMeeting, stack.Pop());
 			Assert.AreEqual(meetingLayerViewModel, stack.Pop());
             Assert.AreEqual(personalShiftLayerViewModel, stack.Pop());
             Assert.AreEqual(overtimeLayerViewModel, stack.Pop());

@@ -4,6 +4,11 @@
 					namespace="Teleopti.Ccc.Domain.Scheduling.Assignment"
 					default-access="field.camelcase-underscore">
 	<subclass name="MeetingShiftLayer" discriminator-value="4" extends="ShiftLayer">
+		<many-to-one name="Meeting"
+					 class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.ExternalMeeting"
+					 not-null="true"
+					 foreign-key="FK_MeetingShiftLayer_ExternalMeeting"
+					 access="property"/>
 	</subclass>
 </hibernate-mapping>
 

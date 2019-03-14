@@ -323,6 +323,7 @@
     <Compile Include="Repositories\BankHolidayCalendarRepository.cs" />
     <Compile Include="Repositories\BankHolidayDateRepository.cs" />
     <Compile Include="Repositories\ExtensiveLogRepository.cs" />
+    <Compile Include="Repositories\ExternalMeetingRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepository.cs" />

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.TimeLayer">
+  <class name="ExternalMeeting" abstract="true">
+    <!--IUnique-->
+    <id name="Id" type="guid" access="nosetter.camelcase-underscore"> 
+      <generator class="assigned" />
+    </id>
+    <!--IUnique-->
+	<property name="Title" type="string"/>
+	<property name="Agenda" type="string"/>
+  </class>
+
+</hibernate-mapping>

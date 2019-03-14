@@ -9,6 +9,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -42,7 +43,10 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var assignment = day.PersonAssignment(true);
 			var activity = new Activity().WithId();
 			ActivityRepository.Has(activity);
-			assignment.AddMeeting(activity, new DateTimePeriod(start, end), Guid.NewGuid());
+			var meetingId = Guid.NewGuid();
+			var externalMeeting = new ExternalMeeting();
+			externalMeeting.SetId(meetingId);
+			assignment.AddMeeting(activity, new DateTimePeriod(start, end), externalMeeting);
 			ScheduleStorage.Add(assignment);
 			
 			Client.Authorize();
@@ -51,7 +55,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 				{
 					PersonId = person.Id.Value,
 					UtcStartTime = start,
-					UtcEndTime = end
+					UtcEndTime = end,
+					MeetingId = meetingId
 				}), Encoding.UTF8, "application/json"));
 			
 			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());

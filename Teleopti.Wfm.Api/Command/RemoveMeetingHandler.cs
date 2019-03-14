@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Api.Command
 				var meetingShiftLayers = assignment.Meetings().ToArray();
 				foreach (var meetingLayer in meetingShiftLayers)
 				{
-					if (dateTimePeriod.Equals(meetingLayer.Period))
+					if ( meetingLayer.Meeting.Id == command.MeetingId && dateTimePeriod.Equals(meetingLayer.Period))
 					{
 						assignment.RemoveActivity(meetingLayer);
 					}

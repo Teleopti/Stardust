@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		DateTimePeriod PeriodAdjustPersonalActivity();
 		bool RemoveActivity(ShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
-		void AddMeeting(IActivity activity, DateTimePeriod period, Guid meetingId, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
+		void AddMeeting(IActivity activity, DateTimePeriod period, ExternalMeeting externalMeeting, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void AddOvertimeActivity(IActivity activity, DateTimePeriod period,
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 

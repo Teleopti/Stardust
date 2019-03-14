@@ -237,6 +237,7 @@
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Infrastructure\InitializeBusinessUnitDatabaseState.cs" />
     <Compile Include="Insights\InsightsReport.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IExternalMeetingRepository.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayAppStaffingService.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="Scheduling\Assignment\MeetingShiftLayer.cs" />
+    <Compile Include="Scheduling\TimeLayer\ExternalMeeting.cs" />
     <Compile Include="Status\AllSteps.cs" />
     <Compile Include="Status\CallLegacySystemStatus.cs" />
     <Compile Include="Status\CheckLegacySystemStatus.cs" />
@@ -3599,6 +3601,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scheduling\TimeLayer\ExternalMeeting.hbm.xml" />
     <EmbeddedResource Include="Security\AuthorizationEntities\ApplicationRole.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

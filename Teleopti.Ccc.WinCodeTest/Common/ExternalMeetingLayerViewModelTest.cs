@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
 			_mocks.ReplayAll();
-			_layerWithPayload = new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), _period, Guid.NewGuid());
+			_layerWithPayload = new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), _period, new ExternalMeeting().WithId(Guid.NewGuid()));
 			_target = new ExternalMeetingLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, _person);
 			testRunner = new CrossThreadTestRunner();
 		}
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void VerifyCanMoveUpDoesNotCheckShiftWhenMoveNotPermitted()
 		{
-			var meeting = new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2000,1,1,2000,1,2), Guid.NewGuid());
+			var meeting = new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2000,1,1,2000,1,2), new ExternalMeeting().WithId(Guid.NewGuid()));
 			var model = new ExternalMeetingLayerViewModel(null, meeting, null, _person);
 			Assert.IsFalse(model.CanMoveUp, "There is a Collection, but it should never get called since moving meeting is not permitted");
 			Assert.IsFalse(model.CanMoveDown, "There is a Collection, but it should never get called since moving meeting is not permitted");

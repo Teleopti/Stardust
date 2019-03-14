@@ -64,7 +64,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var meetingShiftLayer = assignment.Meetings().First();
 			meetingShiftLayer.Period.StartDateTime.Should().Be.EqualTo(start);
 			meetingShiftLayer.Period.EndDateTime.Should().Be.EqualTo(end);
-			meetingShiftLayer.MeetingId.Should().Be.EqualTo(meetingId);
+			meetingShiftLayer.Meeting.Id.Should().Be.EqualTo(meetingId);
 			meetingShiftLayer.Payload.Id.Value.Should().Be.EqualTo(activity.Id.Value);
 		}
 	}

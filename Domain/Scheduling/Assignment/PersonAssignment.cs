@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -372,9 +373,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual void AddMeeting(IActivity activity, DateTimePeriod period, Guid meetingId, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
+		public virtual void AddMeeting(IActivity activity, DateTimePeriod period, ExternalMeeting externalMeeting, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			var layer = new MeetingShiftLayer(activity, period, meetingId);
+			var layer = new MeetingShiftLayer(activity, period, externalMeeting);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 			

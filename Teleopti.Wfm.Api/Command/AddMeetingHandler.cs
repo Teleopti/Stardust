@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 
 namespace Teleopti.Wfm.Api.Command
 {
@@ -14,14 +15,16 @@ namespace Teleopti.Wfm.Api.Command
 		private readonly IActivityRepository _activityRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
+		private readonly IExternalMeetingRepository _externalMeetingRepository;
 
-		public AddMeetingHandler(IScenarioRepository scenarioRepository, IPersonRepository personRepository, IActivityRepository activityRepository, IScheduleStorage scheduleStorage, ISaveSchedulePartService saveSchedulePartService)
+		public AddMeetingHandler(IScenarioRepository scenarioRepository, IPersonRepository personRepository, IActivityRepository activityRepository, IScheduleStorage scheduleStorage, ISaveSchedulePartService saveSchedulePartService, IExternalMeetingRepository externalMeetingRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_activityRepository = activityRepository;
 			_scheduleStorage = scheduleStorage;
 			_saveSchedulePartService = saveSchedulePartService;
+			_externalMeetingRepository = externalMeetingRepository;
 		}
 
 		[UnitOfWork]
@@ -45,7 +48,14 @@ namespace Teleopti.Wfm.Api.Command
 			var day = range.ScheduledDay(dateOnlyPeriod.StartDate);
 			var assignment = day.PersonAssignment(true);
 			var activity = _activityRepository.Load(command.ActivityId);
-			assignment.AddMeeting(activity, new DateTimePeriod(command.UtcStartTime, command.UtcEndTime), command.MeetingId);
+			var externalMeeting = _externalMeetingRepository.Get(command.MeetingId);
+			if (externalMeeting == null)
+			{
+				externalMeeting = new ExternalMeeting();
+				externalMeeting.SetId(command.MeetingId);
+				_externalMeetingRepository.Add(externalMeeting);
+			}
+			assignment.AddMeeting(activity, new DateTimePeriod(command.UtcStartTime, command.UtcEndTime), externalMeeting);
 			_saveSchedulePartService.Save(day, NewBusinessRuleCollection.Minimum(), KeepOriginalScheduleTag.Instance);
 			return new ResultDto
 			{

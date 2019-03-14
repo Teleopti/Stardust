@@ -1,16 +1,17 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class MeetingShiftLayer : ShiftLayer
 	{
-		public virtual Guid MeetingId { get; }
+		public virtual ExternalMeeting Meeting { get; protected set; }
 
-		public MeetingShiftLayer(IActivity activity, DateTimePeriod period, Guid meetingId)
+		public MeetingShiftLayer(IActivity activity, DateTimePeriod period, ExternalMeeting meeting)
 			:base(activity, period)
 		{
-			MeetingId = meetingId;
+			Meeting = meeting;
 		}
 
 		protected MeetingShiftLayer()

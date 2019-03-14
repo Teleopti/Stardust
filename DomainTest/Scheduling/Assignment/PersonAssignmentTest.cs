@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyReferenceBackToAssignmentWorksFromAMeetingLayer()
 		{
-			target.AddMeeting(new Activity(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), Guid.NewGuid());
+			target.AddMeeting(new Activity(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new ExternalMeeting().WithId(Guid.NewGuid()));
 			target.Meetings().Single().Parent.Should().Be.SameInstanceAs(target);
 		}
 		
@@ -146,8 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var meetingId = Guid.NewGuid();
 			var activity = new Activity();
-			target.AddMeeting(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), meetingId);
-			target.Meetings().Single().MeetingId.Should().Be.EqualTo(meetingId);
+			target.AddMeeting(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new ExternalMeeting().WithId(meetingId));
+			target.Meetings().Single().Meeting.Id.Should().Be.EqualTo(meetingId);
 			target.Meetings().Single().Payload.Should().Be.EqualTo(activity);
 		}
 
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var meetingActivity = ActivityFactory.CreateActivity("meeting");
 			target.AddActivity(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
 			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			target.AddMeeting(meetingActivity, new DateTimePeriod(2004, 1, 1, 2005, 1, 1), Guid.NewGuid());
+			target.AddMeeting(meetingActivity, new DateTimePeriod(2004, 1, 1, 2005, 1, 1), new ExternalMeeting().WithId(Guid.NewGuid()));
 			IProjectionService svc = target.ProjectionService();
 			svc.CreateProjection();
 			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
@@ -629,7 +629,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			target.AddOvertimeActivity(activity, period, null);
 			target.AddPersonalActivity(activity, period);
-			target.AddMeeting(activity, period, Guid.NewGuid());
+			target.AddMeeting(activity, period, new ExternalMeeting().WithId(Guid.NewGuid()));
 			target.AddActivity(activity, period);
 			target.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("cat"));
 			target.Clear();
@@ -918,7 +918,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					ScenarioFactory.CreateScenarioWithId("_", true), layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
 
 			var activity = ActivityFactory.CreateActivity("meeting");
-			assignment.AddMeeting(activity, new DateTimePeriod(2019, 03, 07, 2, 2019, 03, 07, 3), Guid.NewGuid(), false);
+			assignment.AddMeeting(activity, new DateTimePeriod(2019, 03, 07, 2, 2019, 03, 07, 3), new ExternalMeeting().WithId(Guid.NewGuid()), false);
 
 			var activityAddedEvents = assignment.PopAllEvents(null).OfType<ActivityAddedEvent>();
 			var @event = activityAddedEvents.Last();

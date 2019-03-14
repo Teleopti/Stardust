@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 
 namespace Teleopti.Wfm.Api.Command
 {
@@ -8,5 +9,6 @@ namespace Teleopti.Wfm.Api.Command
 		public DateTime UtcEndTime { get; set; }
 		public Guid? ScenarioId { get; set; }
 		public Guid PersonId { get; set; }
+		public Guid MeetingId { get; set; }
 	}
 }

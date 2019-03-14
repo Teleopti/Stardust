@@ -266,6 +266,7 @@
     <Compile Include="Repositories\Bug47522.cs" />
     <Compile Include="Repositories\CorrectHintsWhenLoadingAssignmentsTest.cs" />
     <Compile Include="Repositories\ExtensiveLogRepositoryTest.cs" />
+    <Compile Include="Repositories\ExternalMeetingRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyBug46991Test.cs" />
