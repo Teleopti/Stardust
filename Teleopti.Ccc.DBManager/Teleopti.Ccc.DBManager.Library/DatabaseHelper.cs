@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
 			Logger = log;
-			var dataSource = new SqlConnectionStringBuilder(connectionString).DataSource;
 
 			_usingMaster = new ExecuteSql(() =>
 			{
@@ -55,12 +54,12 @@ namespace Teleopti.Ccc.DBManager.Library
 
 
 		public IUpgradeLog Logger { set; get; }
-		public string ConnectionString { get; private set; }
-		public DatabaseType DatabaseType { get; private set; }
-		public string DatabaseName { get; private set; }
+		public string ConnectionString { get; }
+		public DatabaseType DatabaseType { get; }
+		public string DatabaseName { get; }
 
 		public string DbManagerFolderPath { get; set; }
-		public bool ForceMasterInAzure { get; set; } = false;
+		public bool ForceMasterInAzure { get; set; }
 
 		public string BackupNameForBackup(int dataHash) =>
 			DatabaseType + "." + DatabaseVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
