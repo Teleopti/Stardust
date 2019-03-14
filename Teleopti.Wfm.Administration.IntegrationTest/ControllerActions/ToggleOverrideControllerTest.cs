@@ -8,9 +8,9 @@ using Teleopti.Wfm.Administration.Controllers;
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
 	[WfmAdminTestAttribute]
-	public class ToggleControllerTest
+	public class ToggleOverrideControllerTest
 	{
-		public ToggleController Target;
+		public ToggleOverrideController Target;
 
 		[Test]
 		public void ShouldSaveAndGetOverride()

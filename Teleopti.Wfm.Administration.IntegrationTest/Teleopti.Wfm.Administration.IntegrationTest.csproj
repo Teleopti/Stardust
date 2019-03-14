@@ -140,7 +140,7 @@
     <Compile Include="ControllerActions\FakePingNode.cs" />
     <Compile Include="ControllerActions\StardustHealthCheckTest.cs" />
     <Compile Include="ControllerActions\StardustControllerTest.cs" />
-    <Compile Include="ControllerActions\ToggleControllerTest.cs" />
+    <Compile Include="ControllerActions\ToggleOverrideControllerTest.cs" />
     <Compile Include="ControllerActions\UpgradeDatabase.cs" />
     <Compile Include="Core\AdminAccessTokenRepositoryTest.cs" />
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
