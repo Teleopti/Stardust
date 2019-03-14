@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
 				var requestPeriod = personRequest.Request.Period;
-				var loadSchedulesPeriodToCoverForMidnightShifts = requestPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
+				var requestPeriodToCoverOvernight = requestPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
+				var dayDateOnlyPeriod = requestPeriodToCoverOvernight.ToDateOnlyPeriod(timeZone);
 				
 				if (workflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
 				{
@@ -107,9 +107,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
-				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod).ToList();
-				var adjustedRequestPeriod = adjustFullDayRequestPeriodForOvernightShift(scheduleDays, absenceRequest);
+				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, scheduleDictionaryLoadOptions, requestPeriodToCoverOvernight, _currentScenario.Current())[personRequest.Person];
+				var scheduleDays = schedules.ScheduledDayCollection(dayDateOnlyPeriod).ToList();
+				var adjustedRequestPeriod = absenceRequest.FullDay
+					? FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodForOvernightShift(absenceRequest,
+						scheduleDays,
+						_globalSettingDataRepository)
+					: requestPeriodToCoverOvernight;
+
 
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
@@ -142,9 +148,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						continue;
 					}
 
-					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.GetValueOrDefault().StartDateTime, projection.OriginalProjectionPeriod.GetValueOrDefault().EndDateTime));
-					
-					_smartDeltaDoer.Do(layers, personRequest.Person, dateOnlyPeriod.StartDate, combinationResources);
+					if (projection.OriginalProjectionPeriod.HasValue)
+					{
+						shiftPeriodList.Add(projection.OriginalProjectionPeriod.Value);
+					}
+
+					_smartDeltaDoer.Do(layers, personRequest.Person, dayDateOnlyPeriod.StartDate, combinationResources);
 				}
 
 				skillCombLogObject.SkillCombinationAfterDeltaDist = combinationResources;
@@ -158,8 +167,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					calculateForecastedAgentsForEmailSkills(requestPeriod, false, allSkills);
 
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
+					var skillStaffingIntervals =_skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(adjustedRequestPeriod,
+							combinationResources.ToList(), useShrinkage);
+
 					var validator = staffingThresholdValidators.First();
-					var skillStaffingIntervalsToValidate = getFilteredSkillStaffingIntervals(adjustedRequestPeriod, combinationResources, useShrinkage, shiftPeriodList, personRequest.Request.Id);
+					var skillStaffingIntervalsToValidate = getFilteredSkillStaffingIntervals(skillStaffingIntervals, shiftPeriodList, personRequest.Request.Id);
 
 					var validatedRequest = validator.ValidateLight(absenceRequest, skillStaffingIntervalsToValidate);
 
@@ -195,30 +207,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		private DateTimePeriod adjustFullDayRequestPeriodForOvernightShift(List<IScheduleDay> scheduleDays,IAbsenceRequest absenceRequest)
-		{
-			var adjustedRequestPeriod = absenceRequest.Period;
-			if (absenceRequest.FullDay)
-			{
-				var scheduleDayToday = scheduleDays.SingleOrDefault(x => x.Period.Contains(absenceRequest.Period));
-				if (scheduleDayToday != null)
-				{
-					var shiftPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(absenceRequest.Period,
-						absenceRequest.Person, scheduleDayToday, scheduleDayToday, _globalSettingDataRepository);
-					adjustedRequestPeriod = new DateTimePeriod(absenceRequest.Period.StartDateTime, shiftPeriod.EndDateTime);
-				}
-			}
-
-			return adjustedRequestPeriod;
-		}
-
-		private List<SkillStaffingInterval> getFilteredSkillStaffingIntervals(DateTimePeriod requestPeriod,
-			SkillCombinationResource[] combinationResources, bool useShrinkage, List<DateTimePeriod> shiftPeriodList,
+		private List<SkillStaffingInterval> getFilteredSkillStaffingIntervals(List<SkillStaffingInterval> skillStaffingIntervals, List<DateTimePeriod> shiftPeriodList,
 			Guid? requestId)
 		{
-			var skillStaffingIntervals =
-				_skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(requestPeriod,
-					combinationResources.ToList(), useShrinkage);
 			var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
 			foreach (var projectionPeriod in shiftPeriodList)
 			{
@@ -343,7 +334,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (!skillCombination.Skills.Any()) continue;
 				distributeSmartly(combinationResources, skillCombination, layer);
 			}
-
 		}
 
 		private void distributeSmartly(IEnumerable<SkillCombinationResource> combinationResources,
