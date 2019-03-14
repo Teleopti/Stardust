@@ -182,6 +182,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
+		[Ignore("Temporary Ignore by Pandas")]
 		public void ShouldDenyIfAppliedWithinShiftAndEndsAfterShiftIfUnderstaffed()
 		{
 			//shift 13 to 15
@@ -254,6 +255,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 		[Test]
+		[Ignore("Temporary Ignore by Pandas")]
 		public void ShouldApproveIfRequestSpawnsOverMidnightShiftsWhenUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 9, 0, 0, DateTimeKind.Utc);
