@@ -25,9 +25,18 @@ namespace Teleopti.Ccc.TestCommon
 		private static string getAggConnectionString()
 		{
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"]);
-			builder.InitialCatalog = builder.InitialCatalog.Contains("Analytics") ? 
-				builder.InitialCatalog.Replace("Analytics", "Agg") : 
-				"InfraTest_Agg";
+			if (builder.InitialCatalog.ToLower().Contains("analytics"))
+			{
+				builder.InitialCatalog = builder.InitialCatalog
+						.Replace("analytics", "agg")
+						.Replace("Analytics", "Agg")
+					;
+			}
+			else
+			{
+				builder.InitialCatalog = "InfraTest_Agg";
+			}
+
 			return builder.ToString();
 		}
 
