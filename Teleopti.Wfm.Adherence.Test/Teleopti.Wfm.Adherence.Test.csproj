@@ -203,10 +203,11 @@
     <Compile Include="Historical\Unit\AgentAdherenceDay\AdjustedToNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\NeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageAdjustToNeutralTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageCancelAdjustmentTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\RecordedNeutralAdherenceTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\OutOfAdherencesTest.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ChangesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\DurationOfEventsTest.cs" />

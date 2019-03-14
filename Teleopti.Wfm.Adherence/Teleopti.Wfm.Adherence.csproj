@@ -140,8 +140,10 @@
     <Compile Include="Historical\AgentAdherenceDay\AdherencePercentageCalculation.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayAdjustAdherenceToNeutral.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayCancelAdjustment.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderAdjustAdherenceToNeutral.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderCancelAdjustment.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoadException.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeAdherence.cs" />

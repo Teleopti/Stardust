@@ -156,16 +156,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
-			{
-				builder.RegisterType<AgentAdherenceDayAdjustAdherenceToNeutral>().As<IAgentAdherenceDay>().SingleInstance();
+			if (_config.IsToggleEnabled(Toggles.RTA_RemoveAdjustedToNeutral_82147))
+				builder.RegisterType<AgentAdherenceDayLoaderCancelAdjustment>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
 				builder.RegisterType<AgentAdherenceDayLoaderAdjustAdherenceToNeutral>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			}
 			else
-			{
-				builder.RegisterType<AgentAdherenceDay>().As<IAgentAdherenceDay>().SingleInstance();
 				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			}
 
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 

@@ -184,6 +184,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
+		
+		public FakeRtaHistory CanceledAdjustment(string start, string end)
+		{
+			_store.Add(new PeriodAdjustmentToNeutralCanceledEvent
+			{
+				StartTime = start.Utc(),
+				EndTime = end.Utc()
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
+			return this;
+		}
 
 		private DateOnly? belongsToDate(Guid personId, string time, string date)
 		{

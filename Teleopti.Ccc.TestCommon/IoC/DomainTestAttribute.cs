@@ -62,6 +62,7 @@ using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_RemoveAdjustedToNeutral_82147)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_AdjustAdherenceToNeutral_80594)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
