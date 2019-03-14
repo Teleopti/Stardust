@@ -1,8 +1,7 @@
 ﻿Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function(weekStart, parent, dataService) {
 	var self = this;
 
-	var constants = Teleopti.MyTimeWeb.Common.Constants,
-		oneWeekRawProbabilities = [];
+	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	self.displayDate = ko.observable();
 	self.selectedDate = ko.observable(moment().startOf('day'));
@@ -91,7 +90,7 @@
 		Teleopti.MyTimeWeb.Portal.NavigateTo('Requests/Index');
 	};
 
-	self.readData = function(data, forceReloadProbabilityData) {
+	self.readData = function(data) {
 		self.requestDay = moment(data.Date);
 
 		disposeSelectedDateSubscription();
@@ -186,7 +185,7 @@
 			(self.selectedProbabilityOptionValue() === constants.probabilityType.absence ||
 				self.selectedProbabilityOptionValue() === constants.probabilityType.overtime)
 		)
-			self.reloadProbabilityData(forceReloadProbabilityData);
+			self.reloadProbabilityData();
 
 		if (self.newTrafficLightIconEnabled) {
 			self.trafficLightIconClass(getTrafficLightIconClass(data.Schedule.ProbabilityClass));
@@ -398,43 +397,24 @@
 		parent.ReloadSchedule(null, true);
 	};
 
-	self.reloadProbabilityData = function(forceReloadProbabilityData) {
+	self.reloadProbabilityData = function() {
 		self.loadingProbabilityData(true);
 
-		var isWithinLoadedProbabilityPeriod =
-			oneWeekRawProbabilities.length > 0 &&
-			moment(oneWeekRawProbabilities[0].Date) <= self.selectedDate() &&
-			self.selectedDate() <= moment(oneWeekRawProbabilities[oneWeekRawProbabilities.length - 1].Date);
-
 		self.fixedDate = moment(self.selectedDate());
-
-		if (!isWithinLoadedProbabilityPeriod || forceReloadProbabilityData) {
-			self.probabilities([]);
-			dataService.fetchProbabilityData(
-				self.selectedDate().format('YYYY-MM-DD'),
-				self.selectedProbabilityOptionValue(),
-				self.updateProbabilityData
-			);
-		} else {
-			self.probabilities(
-				Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
-					filterProbabilities(oneWeekRawProbabilities),
-					self,
-					buildProbabilityOptions()
-				)
-			);
-			self.loadingProbabilityData(false);
-		}
+		self.probabilities([]);
+		dataService.fetchProbabilityData(
+			self.selectedDate().format('YYYY-MM-DD'),
+			self.selectedProbabilityOptionValue(),
+			self.updateProbabilityData
+		);
 	};
 
 	self.updateProbabilityData = function(rawProbabilities) {
 		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) return;
 
-		oneWeekRawProbabilities = rawProbabilities;
-
 		self.probabilities(
 			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
-				filterProbabilities(oneWeekRawProbabilities),
+				filterProbabilities(rawProbabilities),
 				self,
 				buildProbabilityOptions()
 			)
