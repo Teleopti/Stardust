@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				var database = container.Resolve<DatabaseTestHelper>();
 
-				database.CreateDatabases(InfraTestConfigReader.TenantName());
+				database.CreateDatabases();
 
 				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
 

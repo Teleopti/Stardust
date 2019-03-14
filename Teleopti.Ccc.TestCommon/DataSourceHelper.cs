@@ -11,20 +11,20 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		public static IDataSource CreateDatabasesAndDataSource(IComponentContext container, string name = null) =>
-			CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeFromContainer(container), name);
+		public static IDataSource CreateDatabasesAndDataSource(IComponentContext container) =>
+			CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeFromContainer(container));
 
-		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory, string name = null) =>
-			CreateDatabasesAndDataSource(factory.Make(), name);
+		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory) =>
+			CreateDatabasesAndDataSource(factory.Make());
 
-		public static IDataSource CreateDatabasesAndDataSource(IDataSourcesFactory factory, string name = null)
+		public static IDataSource CreateDatabasesAndDataSource(IDataSourcesFactory factory)
 		{
-			CreateDatabases(name);
-			return makeDataSource(factory, name);
+			CreateDatabases();
+			return makeDataSource(factory);
 		}
 
-		public static void CreateDatabases(string name = null) =>
-			new DatabaseTestHelper().CreateDatabases(name);
+		public static void CreateDatabases() =>
+			new DatabaseTestHelper().CreateDatabases();
 
 		public static IDataSource CreateDataSource(IComponentContext container) =>
 			CreateDataSource(DataSourceFactoryFactory.MakeFromContainer(container));
@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.TestCommon
 			CreateDataSource(factory.Make());
 
 		public static IDataSource CreateDataSource(IDataSourcesFactory factory) =>
-			makeDataSource(factory, null);
+			makeDataSource(factory);
 
-		private static IDataSource makeDataSource(IDataSourcesFactory factory, string name)
+		private static IDataSource makeDataSource(IDataSourcesFactory factory)
 		{
-			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ApplicationConnectionString(), null, name ?? InfraTestConfigReader.TenantName());
+			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ApplicationConnectionString(), null, InfraTestConfigReader.TenantName());
 			return factory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString());
 		}
 

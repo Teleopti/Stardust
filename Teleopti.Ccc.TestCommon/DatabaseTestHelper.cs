@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.TestCommon
 			_repositoryRoot = RepositoryRootFolderLocator.LocateFolderUsingBlackMagic(TestContext.CurrentContext.TestDirectory);
 		}
 
-		public void CreateDatabases(string tenant)
+		public void CreateDatabases()
 		{
-			createOrRestoreApplication(tenant);
+			createOrRestoreApplication();
 			createOrRestoreAnalytics();
 			createOrRestoreAgg();
 		}
@@ -74,24 +74,24 @@ namespace Teleopti.Ccc.TestCommon
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
-		private void createOrRestoreApplication(string tenant) =>
-			createOrRestore(application(), tenant);
+		private void createOrRestoreApplication() =>
+			createOrRestore(application());
 
 		private void createOrRestoreAnalytics() =>
-			createOrRestore(analytics(), null);
+			createOrRestore(analytics());
 
 		private void createOrRestoreAgg() =>
-			createOrRestore(agg(), null);
+			createOrRestore(agg());
 
-		private void createOrRestore(DatabaseHelper database, string tenant)
+		private void createOrRestore(DatabaseHelper database)
 		{
 			if (tryRestoreByFileCopy(database, 0))
 				return;
-			createDatabase(database, tenant);
+			createDatabase(database);
 			backupByFileCopy(database, 0);
 		}
 
-		private static void createDatabase(DatabaseHelper database, string tenant)
+		private static void createDatabase(DatabaseHelper database)
 		{
 			database.CreateByDbManager();
 			database.CreateSchemaByDbManager();
