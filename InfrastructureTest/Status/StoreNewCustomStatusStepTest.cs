@@ -1,6 +1,8 @@
 using System;
+using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Status;
 using Teleopti.Ccc.Infrastructure.Status;
 
@@ -47,6 +49,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Status
 
 			FetchCustomStatusSteps.Execute("1").TimeSinceLastPing.Ticks
 				.Should().Be.GreaterThan(TimeSpan.FromDays(300).Ticks);
+		}
+
+		[Test]
+		public void ShouldNotAllowDuplicateNames()
+		{
+			Target.Execute("1", string.Empty, TimeSpan.Zero);
+			Assert.Throws<SqlException>(() => { Target.Execute("1", string.Empty, TimeSpan.Zero); });
 		}
 	}
 }
