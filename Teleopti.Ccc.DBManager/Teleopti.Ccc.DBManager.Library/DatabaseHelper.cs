@@ -15,23 +15,23 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly ExecuteSql _usingDatabase;
 		private readonly Lazy<SqlVersion> _sqlVersion;
 		private readonly IInstallationEnvironment _installationEnvironment;
-
+		
 		public DatabaseHelper(
-			string connectionString,
-			DatabaseType databaseType,
+			string connectionString, 
+			DatabaseType databaseType, 
 			IInstallationEnvironment installationEnvironment)
 			: this(
-				connectionString,
-				databaseType,
-				new NullLog(),
+				connectionString, 
+				databaseType, 
+				new NullLog(), 
 				installationEnvironment)
 		{
 		}
-
+		
 		public DatabaseHelper(
-			string connectionString,
-			DatabaseType databaseType,
-			IUpgradeLog log,
+			string connectionString, 
+			DatabaseType databaseType, 
+			IUpgradeLog log, 
 			IInstallationEnvironment installationEnvironment)
 		{
 			ConnectionString = connectionString;
@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			_sqlVersion = new Lazy<SqlVersion>(() => new ServerVersionHelper(_usingMaster).Version());
 			_installationEnvironment = installationEnvironment;
+
 		}
 
 
@@ -62,13 +63,20 @@ namespace Teleopti.Ccc.DBManager.Library
 		public string DbManagerFolderPath { get; set; }
 		public bool ForceMasterInAzure { get; set; } = false;
 
-		public string BackupNameForBackup(int dataHash) =>
-			DatabaseType + "." + DatabaseVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
+		public string BackupNameForBackup(int dataHash)
+		{
+			return DatabaseType + "." + DatabaseName + "." + DatabaseVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
+		}
 
-		public string BackupNameForRestore(int dataHash) =>
-			DatabaseType + "." + SchemaVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
+		public string BackupNameForRestore(int dataHash)
+		{
+			return DatabaseType + "." + DatabaseName + "." + SchemaVersion() + "." + OtherScriptFilesHash() + "." + dataHash + ".backup";
+		}
 
-		public SqlVersion Version() => new ServerVersionHelper(_usingMaster).Version();
+		public SqlVersion Version()
+		{
+			return new ServerVersionHelper(_usingMaster).Version();
+		}
 
 		public void CreateByDbManager()
 		{
@@ -170,7 +178,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				schemaVersionInformation,
 				_usingDatabase,
 				databaseFolder,
-				Logger,
+				Logger, 
 				_installationEnvironment);
 			schemaCreator.Create(DatabaseType);
 		}

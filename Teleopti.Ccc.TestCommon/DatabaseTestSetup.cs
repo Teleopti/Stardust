@@ -15,44 +15,27 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DatabaseTestSetup
 	{
-		private static object previouslyCreatedData;
-		private static readonly object setupDatabasesLock = new object();
+		private static readonly PerTestWorker<object> data = new PerTestWorker<object>();
 
 		public static T Setup<T>(Func<CreateDataContext, CreateDataResult<T>> createData)
 		{
-			if (previouslyCreatedData != null)
-				return restoreDatabases<T>().Data;
-
-			lock (setupDatabasesLock)
+			if (data.Value != null)
 			{
-				if (previouslyCreatedData != null)
-					return restoreDatabases<T>().Data;
-
-				var createDataResult = createDatabases(createData);
-				previouslyCreatedData = createDataResult;
-				return createDataResult.Data;
+				var cachedData = (CreateDataResult<T>) data.Value;
+				withContainer(container =>
+				{
+					var database = container.Resolve<DatabaseTestHelper>();
+					database.RestoreApplicationDatabase(cachedData.Hash);
+					database.RestoreAnalyticsDatabase(cachedData.Hash);
+				});
+				return cachedData.Data;
 			}
-		}
 
-		private static CreateDataResult<T> restoreDatabases<T>()
-		{
-			var data = (CreateDataResult<T>) previouslyCreatedData;
-			withContainer(container =>
-			{
-				var database = container.Resolve<DatabaseTestHelper>();
-				database.RestoreApplicationDatabase(data.Hash);
-				database.RestoreAnalyticsDatabase(data.Hash);
-			});
-			return data;
-		}
-
-		private static CreateDataResult<T> createDatabases<T>(Func<CreateDataContext, CreateDataResult<T>> createData)
-		{
 			var createDataResult = default(CreateDataResult<T>);
 			withContainer(container =>
 			{
 				var database = container.Resolve<DatabaseTestHelper>();
-
+				
 				database.CreateDatabases(InfraTestConfigReader.TenantName());
 
 				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(InfraTestConfigReader.TenantName());
@@ -73,13 +56,16 @@ namespace Teleopti.Ccc.TestCommon
 						throw new Exception("create data function needs to return a number representing the data created");
 					createDataResult = result;
 				}
-
+				
+				data.Set(() => createDataResult);
 				database.BackupApplicationDatabase(createDataResult.Hash);
 				database.BackupAnalyticsDatabase(createDataResult.Hash);
+				
 			});
-			return createDataResult;
-		}
 
+			return createDataResult.Data;
+		}
+		
 		private static void withContainer(Action<IComponentContext> action)
 		{
 			var builder = new ContainerBuilder();
