@@ -34,7 +34,7 @@ function CheckSystemStatus
         {
             try
             {
-                Invoke-RestMethod -Uri $step.Url
+                Invoke-RestMethod -Uri $step.StatusUrl
             }
             catch
             {
