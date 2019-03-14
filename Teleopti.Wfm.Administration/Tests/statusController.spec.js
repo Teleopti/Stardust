@@ -25,7 +25,8 @@ describe("statusController", function() {
 				Id : 18,
 				Name : 'some name',
 				Description : 'some desc',
-				PingUrl : 'http://something.com/hejhej/ping/18'
+				PingUrl : 'http://something.com/hejhej/ping/18',
+				Limit : 15
 			}];
 		$httpBackend.expectGET('./status/listCustom').respond(serverJson);
 
@@ -37,6 +38,7 @@ describe("statusController", function() {
 		expect(controller.statusSteps[0].name).toBe(serverJson[0].Name);
 		expect(controller.statusSteps[0].description).toBe(serverJson[0].Description);
 		expect(controller.statusSteps[0].pingUrl).toBe(serverJson[0].PingUrl);
+		expect(controller.statusSteps[0].limit).toBe(serverJson[0].Limit);
 	});
 	
 	it("should handle multiple items", function(){

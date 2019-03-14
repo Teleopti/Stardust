@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Status;
 
-namespace Teleopti.Ccc.DomainTest.Status
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeFetchCustomStatusSteps : IFetchCustomStatusSteps
 	{

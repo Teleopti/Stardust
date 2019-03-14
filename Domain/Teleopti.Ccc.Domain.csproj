@@ -248,9 +248,11 @@
     <Compile Include="Status\CallLegacySystemStatus.cs" />
     <Compile Include="Status\CheckLegacySystemStatus.cs" />
     <Compile Include="Status\CustomStatusStep.cs" />
+    <Compile Include="Status\CustomStatusStepInfo.cs" />
     <Compile Include="Status\ICallLegacySystemStatus.cs" />
     <Compile Include="Status\IFetchCustomStatusSteps.cs" />
     <Compile Include="Status\IStatusStep.cs" />
+    <Compile Include="Status\ListCustomStatusSteps.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
     <Compile Include="Status\StardustChecker.cs" />
     <Compile Include="Status\StatusStepInfo.cs" />

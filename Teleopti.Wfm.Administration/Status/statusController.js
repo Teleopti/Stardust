@@ -17,7 +17,8 @@
 						id: step.Id,
 						name: step.Name,
 						description: step.Description,
-						pingUrl: step.PingUrl
+						pingUrl: step.PingUrl,
+						limit: step.Limit
 					};					
 				});
 			});

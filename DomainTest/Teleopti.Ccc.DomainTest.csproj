@@ -286,8 +286,8 @@
     <Compile Include="Status\CheckLegacySystemStatusTest.cs" />
     <Compile Include="Status\CustomStatusStepTest.cs" />
     <Compile Include="Status\FakeCallLegacySystemStatus.cs" />
-    <Compile Include="Status\FakeFetchCustomStatusSteps.cs" />
     <Compile Include="Status\FakeStatusStep.cs" />
+    <Compile Include="Status\ListCustomStatusStepsTest.cs" />
     <Compile Include="Status\ListStatusStepsTest.cs" />
     <Compile Include="Status\StatusStepTests.cs" />
     <Compile Include="Status\StardustCheckerTest.cs" />

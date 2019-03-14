@@ -18,11 +18,6 @@
 					<a v-bind:href="step.statusUrl">{{step.statusUrl}}</a><br>
 				</small>
 			</span>
-			<span v-if="step.pingUrl != null">
-				<small>
-					Ping url:({{step.pingUrl}})
-				</small>
-			</span>
 		</div>
 		<div>{{step.description}}</div>
 		<div v-bind:class="outputColor(step.stepSuccess)">

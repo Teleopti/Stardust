@@ -5,18 +5,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 {
 	public class StatusController : ApiController
 	{
-		private readonly ListStatusSteps _listStatusSteps;
+		private readonly ListCustomStatusSteps _listCustomStatusSteps;
 
-		public StatusController(ListStatusSteps listStatusSteps)
+		public StatusController(ListCustomStatusSteps listCustomStatusSteps)
 		{
-			_listStatusSteps = listStatusSteps;
+			_listCustomStatusSteps = listCustomStatusSteps;
 		}
 		
 		[HttpGet]
 		[Route("status/listCustom")]
 		public IHttpActionResult ListCustom()
 		{
-			return Ok(_listStatusSteps.Execute(false));
+			return Ok(_listCustomStatusSteps.Execute());
 		}
 	}
 }

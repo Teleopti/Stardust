@@ -32,6 +32,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.Stardust;
+using Teleopti.Ccc.Domain.Status;
 using Teleopti.Ccc.Domain.ToggleAdmin;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -316,6 +317,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeKpiRepository>().For<IKpiRepository>();
 			}
 
+			isolate.UseTestDouble<FakeFetchCustomStatusSteps>().For<IFetchCustomStatusSteps>();
+			
 			isolate.UseTestDouble<FakeGetAllWorkerNodes>().For<IGetAllWorkerNodes>();
 			
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();

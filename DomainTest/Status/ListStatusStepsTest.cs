@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Status;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Status
@@ -21,27 +22,17 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(true).Select(x => x.Name).Should().Contain(FakeStatusStep.Name);
+			Target.Execute().Select(x => x.Name).Should().Contain(FakeStatusStep.Name);
 		}
 
 		[Test]
-		public void ShouldIncludeUrl()
+		public void ShouldIncludeStatusUrl()
 		{
 			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).StatusUrl
 				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "/check/" + FakeStatusStep.Name);
-		}
-		
-		[Test]
-		public void ShouldIncludeUrl_IfBaseUrlEndsWithSlash()
-		{
-			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir/");
-			FakeStatusStep.Name = Guid.NewGuid().ToString();
-			
-			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
-				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "check/" + FakeStatusStep.Name);
 		}
 
 		[Test]
@@ -49,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Description = Guid.NewGuid().ToString();
 		
-			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).Description
+			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).Description
 				.Should().Be.EqualTo(FakeStatusStep.Description);
 		}
 
@@ -61,52 +52,13 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var statusStep = new CustomStatusStep(0, stepName, description, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 
-			Target.Execute(true).Single(x => x.Name == statusStep.Name).Description
+			Target.Execute().Single(x => x.Name == statusStep.Name).Description
 				.Should().Be.EqualTo(description);
-		}
-
-		[Test]
-		public void ShouldIncludePingUrlIfCustomStatusStep()
-		{
-			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir");
-			var stepName = Guid.NewGuid().ToString();
-			var statusStep = new CustomStatusStep(0, stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
-			FetchCustomStatusSteps.Has(statusStep);
-			
-			Target.Execute(true).Single(x => x.Name == stepName).PingUrl
-				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "/ping/" + stepName);
-		}
-		
-		[Test]
-		public void ShouldSetPingUrlToNullIfNotCustomStatusStep()
-		{
-			FakeStatusStep.Name = Guid.NewGuid().ToString();
-			
-			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).PingUrl
-				.Should().Be.Null();
-		}
-		
-		[Test]
-		public void ShouldIncludeIdIfCustomStatusStep()
-		{
-			const int id = 18;
-			var statusStep = new CustomStatusStep(id, "this", string.Empty, TimeSpan.Zero, TimeSpan.Zero);
-			FetchCustomStatusSteps.Has(statusStep);
-		
-			Target.Execute(true).Single(x => x.Name == statusStep.Name).Id
-				.Should().Be.EqualTo(id);
-		}
-
-		[Test]
-		public void ShouldSkipFixedFixedSteps()
-		{
-			Target.Execute(false).Should().Be.Empty();
 		}
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeStatusStep>().For<IStatusStep>();
-			isolate.UseTestDouble<FakeFetchCustomStatusSteps>().For<IFetchCustomStatusSteps>();
 		}
 	}
 }

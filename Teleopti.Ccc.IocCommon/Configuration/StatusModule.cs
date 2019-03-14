@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckLegacySystemStatus>().SingleInstance();
 			builder.RegisterType<ExecuteStatusStep>().SingleInstance();
 			builder.RegisterType<ListStatusSteps>().SingleInstance();
+			builder.RegisterType<ListCustomStatusSteps>().SingleInstance();
 			builder.RegisterType<CallLegacySystemStatus>().As<ICallLegacySystemStatus>();
 			builder.RegisterAssemblyTypes(typeof(IStatusStep).Assembly)
 				.Where(t => typeof(IStatusStep).IsAssignableFrom(t) && t != typeof(CustomStatusStep))

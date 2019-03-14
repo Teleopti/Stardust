@@ -246,6 +246,7 @@
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
     <Compile Include="FakeRepositories\FakeFetchAllToggleOverrides.cs" />
+    <Compile Include="FakeRepositories\FakeFetchCustomStatusSteps.cs" />
     <Compile Include="FakeRepositories\FakeForecastDayOverrideRepository.cs" />
     <Compile Include="FakeRepositories\FakeGetAllWorkerNodes.cs" />
     <Compile Include="FakeRepositories\FakeInsightsReportRepository.cs" />

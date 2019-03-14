@@ -18,7 +18,6 @@
 							stepSuccess: false,
 							output: 'Verifying...',
 							statusUrl: step.StatusUrl,
-							pingUrl: step.PingUrl,
 							description : step.Description
 						};
 						vm.steps.push(newStep);
