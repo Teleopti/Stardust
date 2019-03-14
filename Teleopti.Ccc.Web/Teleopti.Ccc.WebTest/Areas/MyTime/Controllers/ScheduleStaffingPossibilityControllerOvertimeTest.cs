@@ -20,15 +20,13 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Ccc.WebTest.Core.IoC;
-
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[MyTimeWebTest]
-	public class ScheduleStaffingPossibilityControllerOvertimeTest : IIsolateSystem
+	public class ScheduleStaffingPossibilityControllerOvertimeTest : IIsolateSystem, ITestInterceptor
 	{
 		public ScheduleStaffingPossibilityController Target;
 		public ICurrentScenario Scenario;
@@ -42,8 +40,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeToggleManager ToggleManager;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 
-		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
 		readonly ISkillType phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+
+		private readonly TimePeriod _defaultSiteOpenHour = new TimePeriod(8, 0, 17, 0);
+		private readonly TimePeriod _defaultSkillOpenHour = new TimePeriod(8, 00, 9, 30);
+		private DateTimePeriod _defaultAssignmentPeriod;
+		private int _defaultSkillStaffingIntervalNumber;
+		private TimeZoneInfo _defaultTimezone;
+		private IPerson _loggedOnUser;
+		private DateOnly _today;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -55,131 +60,361 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 		}
 
-		[Test, SetCulture("en-US")]
-		public void ShouldReturnPossibiliesForDaysLongerThan14()
+		public void OnBefore()
 		{
-			setupSiteOpenHour();
-			setupDefaultTestData();
-			setupWorkFlowControlSet();
+			_today = Now.UtcDateTime().ToDateOnly();
+			_loggedOnUser = User.CurrentUser();
+			_defaultTimezone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var workflowControlSet = User.CurrentUser().WorkflowControlSet;
+			_defaultSkillStaffingIntervalNumber =
+				(int)_defaultSkillOpenHour.EndTime.Subtract(_defaultSkillOpenHour.StartTime).TotalMinutes / 15;
 
-			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
-			{
-				BetweenDays = new MinMax<int>(0, staffingInfoAvailableDays)
-			});
-
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(3), StaffingPossibilityType.Overtime).ToList();
-			result.Count.Should().Be.EqualTo(14);
-			DateHelper.GetWeekPeriod(new DateOnly(Now.UtcDateTime()).AddWeeks(3), CultureInfo.CurrentCulture)
-				.DayCollection()
-				.ToList()
-				.ForEach(day =>
-				{
-					Assert.AreEqual(2, result.Count(d => d.Date == day.ToFixedClientDateOnlyFormat()), day.ToShortDateString());
-				});
+			_defaultAssignmentPeriod =
+				new DateTimePeriod(TimeZoneHelper.ConvertToUtc(_today.Date.AddHours(8), _defaultTimezone),
+					TimeZoneHelper.ConvertToUtc(_today.Date.AddHours(17), _defaultTimezone));
 		}
 
-		[Test, SetCulture("en-US")]
-		public void ShouldReturnPossibiliesForDaysLongerThan28()
+		[Test]
+		public void ShouldReturnPossibilitiesForDaysLessThan48()
 		{
-			setupSiteOpenHour();
-			setupDefaultTestData();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
-			var workflowControlSet = User.CurrentUser().WorkflowControlSet;
-			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(7), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var weekPeriod2 = DateHelper.GetWeekPeriod(_today.AddWeeks(6), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod2.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
 			{
-				BetweenDays = new MinMax<int>(0, staffingInfoAvailableDays)
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
 			});
 
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(4), StaffingPossibilityType.Overtime).ToList();
-			result.Count.Should().Be.EqualTo(14);
-			DateHelper.GetWeekPeriod(new DateOnly(Now.UtcDateTime()).AddWeeks(4), CultureInfo.CurrentCulture)
-				.DayCollection()
-				.ToList()
-				.ForEach(day =>
-				{
-					Assert.AreEqual(2, result.Count(d => d.Date == day.ToFixedClientDateOnlyFormat()), day.ToShortDateString());
-				});
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(6), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+		}
+
+		[Test]
+		public void ShouldNotReturnPossibilitiesForDaysOutOfOvertimeOpenPeriod()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(7), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var weekPeriod2 = DateHelper.GetWeekPeriod(_today.AddWeeks(8), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod2.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(8), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldReturnEmptyPossibilities()
 		{
-			var possibilities = getPossibilityViewModels(null).ToList();
-			Assert.AreEqual(0, possibilities.Count);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotGetOvertimePossibilitiesWhenSiteOpenHourIsClosed()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site, true);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 10d);
+
+			var result = Target.GetPossibilityViewModelsForMobileDay(_today, StaffingPossibilityType.Overtime).ToList();
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotGetOvertimePossibilitiesForDaysWhichSiteOpenHourIsClosed()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site, true);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			setupIntradayStaffingSkillFor24Hours(skill, _today, 10d, 10d);
+
+			var result = Target.GetPossibilityViewModelsForWeek(_today, StaffingPossibilityType.Overtime).ToList();
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetPossibilitiesWithoutIntradaySchedule()
 		{
-			setupSiteOpenHour();
-			setupDefaultTestData();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
 			PersonAssignmentRepository.Clear();
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
 		}
 
 		[Test]
 		public void ShouldNotGetPossibilitiesForNotSupportedSkill()
 		{
-			setupSiteOpenHour();
-			setupDefaultTestData();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
 
-			var overtimeRequestOpenPeriod = User.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.FirstOrDefault();
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
+
+			var overtimeRequestOpenPeriod = _loggedOnUser.WorkflowControlSet.OvertimeRequestOpenPeriods.FirstOrDefault();
 			overtimeRequestOpenPeriod.ClearPeriodSkillType();
 			overtimeRequestOpenPeriod.AddPeriodSkillType(
 				new OvertimeRequestOpenPeriodSkillType(new SkillTypePhone(new Description("NotSupportedSkillType"),
 					ForecastSource.Backoffice)));
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime).ToList();
-			Assert.AreEqual(0, possibilities.Count);
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffing()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
-			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 22d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(_defaultSkillStaffingIntervalNumber * 7 - 1).Possibility.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 6d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(_defaultSkillStaffingIntervalNumber * 7 - 1).Possibility.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldGetFairPossibilitiesAfterRoundStaffingDataWithTwoFractional()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
-			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 0.001, 0.001d }, new double?[] { 0d, 0d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 0.001d, 0d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(_defaultSkillStaffingIntervalNumber * 7 - 1).Possibility.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOverstaffingAndNoSkillTypeIsMatched()
 		{
-			setupSiteOpenHour();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
 
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
-			addPersonSkillsToPersonPeriod(personSkill1);
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
 
-			createAssignment(person, activity1);
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 22d);
+			}
 
 			var workflowControlSet = new WorkflowControlSet();
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
@@ -188,25 +423,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			_loggedOnUser.WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(0, possibilities.Count);
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsMatched()
 		{
-			setupSiteOpenHour();
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
-			addPersonSkillsToPersonPeriod(personSkill1);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
 
-			createAssignment(person, activity1);
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 22d);
+			}
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
@@ -214,27 +458,39 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			_loggedOnUser.WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(_defaultSkillStaffingIntervalNumber * 7 - 1).Possibility.Should().Be.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsNotSet()
+		public void ShouldReturnNoPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsNotSet()
 		{
-			setupSiteOpenHour();
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
-			addPersonSkillsToPersonPeriod(personSkill1);
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+			setupWorkFlowControlSet();
 
-			createAssignment(person, activity1);
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = SkillFactory.CreateSkill("skill for test 1 without skill type").WithId();
+			skill.StaffingThresholds = createStaffingThresholds();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, _defaultSkillOpenHour);
+			SkillRepository.Has(skill);
+
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 22d);
+			}
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
@@ -242,77 +498,98 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			_loggedOnUser.WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today, StaffingPossibilityType.Overtime)
+				.ToList();
+			possibilities.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeSetInOpenPeriod()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 
 			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
+			var activity1 = createActivity("activity 1");
+			var skill1 = createSkill("skill 1", _defaultSkillOpenHour);
 			skill1.SkillType = emailSkillType;
 			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
 
-			var activity2 = createActivity();
-			var skill2 = createSkill("skill2");
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill1, dateOnly, 10d, 15d);
+			}
+
+			var activity2 = createActivity("activity 2");
+			var skill2 = createSkill("skill 2", _defaultSkillOpenHour);
 			skill2.SkillType = phoneSkillType;
 			var personSkill2 = createPersonSkill(activity2, skill2);
-			setupIntradayStaffingForSkill(skill2, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill2, dateOnly, 10d, 5d);
+			}
 
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+			createAssignment(person, _defaultAssignmentPeriod, activity1, activity2);
 
-			createAssignment(person, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill1, personSkill2);
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
+				Period = new DateOnlyPeriod(_today, _today.AddDays(13))
 			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			_loggedOnUser.WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime).ToList();
+
+			possibilities.Count.Should().Be(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be(0);
+			possibilities.ElementAt(1).Possibility.Should().Be(0);
 		}
 
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfEachDaySetInOpenPeriod()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
+			var today = Now.UtcDateTime().ToDateOnly();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+			var personPeriod = getOrAddPersonPeriod(today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var phoneSkill = createSkill("phoneSkill", new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)));
+			var phoneSkillType =
+				new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+					.WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat)
+				.WithId();
+
+			var activity1 = createActivity("activity 1");
+			var phoneSkill = createSkill("phoneSkill", _defaultSkillOpenHour);
 			phoneSkill.SkillType = phoneSkillType;
 			var personPhoneSkill = createPersonSkill(activity1, phoneSkill);
-			setupIntradayStaffingForSkill(phoneSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
 
-			var activity2 = createActivity();
-			var chatSkill = createSkill("chatSkill", new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
+			setupIntradayStaffingSkillFor24Hours(phoneSkill, today.AddDays(1), 10d, 15d);
+			setupIntradayStaffingSkillFor24Hours(phoneSkill, today.AddDays(2), 10d, 15d);
+
+			var activity2 = createActivity("activity 2");
+			var chatSkill = createSkill("chatSkill", _defaultSkillOpenHour);
 			chatSkill.SkillType = chatSkillType;
 			var personChatSkill = createPersonSkill(activity2, chatSkill);
-			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
 
-			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
+			setupIntradayStaffingSkillFor24Hours(chatSkill, today.AddDays(1), 10d, 5d);
+			setupIntradayStaffingSkillFor24Hours(chatSkill, today.AddDays(2), 10d, 5d);
 
-			createAssignment(person, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personPhoneSkill, personChatSkill);
+
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
@@ -327,45 +604,57 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				BetweenDays = new MinMax<int>(0, 2),
 				OrderIndex = 2
 			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			_loggedOnUser.WorkflowControlSet = workflowControlSet;
 
-			var possibilities = Target.GetPossibilityViewModelsForWeek(new DateOnly(2018, 2, 1), StaffingPossibilityType.Overtime);
+			var possibilities = Target.GetPossibilityViewModelsForWeek(today, StaffingPossibilityType.Overtime);
 
-			var possibilitiesOn2nd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 2).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(possibilitiesOn2nd.ElementAt(0).StartTime, new DateTime(2018, 2, 2, 7, 0, 0));
-			Assert.AreEqual(0, possibilitiesOn2nd.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilitiesOn2nd.ElementAt(1).Possibility);
+			var possibilitiesOn2nd = possibilities.Where(d => d.Date == today.AddDays(1).ToFixedClientDateOnlyFormat())
+				.ToList();
+			possibilitiesOn2nd.ElementAt(0).StartTime.Should().Be.EqualTo(new DateTime(2018, 2, 2, 8, 0, 0));
+			possibilitiesOn2nd.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilitiesOn2nd.ElementAt(1).Possibility.Should().Be.EqualTo(1);
 
-			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 3).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(possibilitiesOn3rd.ElementAt(0).StartTime, new DateTime(2018, 2, 3, 8, 0, 0));
-			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(1).Possibility);
+			var possibilitiesOn3rd = possibilities.Where(d => d.Date == today.AddDays(2).ToFixedClientDateOnlyFormat())
+				.ToList();
+			possibilitiesOn3rd.ElementAt(0).StartTime.Should().Be(new DateTime(2018, 2, 3, 8, 0, 0));
+			possibilitiesOn3rd.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilitiesOn3rd.ElementAt(1).Possibility.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfOneDaySetInOpenPeriod()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
+			var today = Now.UtcDateTime().ToDateOnly();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+			var personPeriod = getOrAddPersonPeriod(today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var phoneSkill = createSkill("phoneSkill", new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)));
+			var phoneSkillType =
+				new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+					.WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat)
+				.WithId();
+
+			var activity1 = createActivity("activity 1");
+			var phoneSkill = createSkill("phoneSkill", new TimePeriod(8, 0, 17, 0));
 			phoneSkill.SkillType = phoneSkillType;
 			var personPhoneSkill = createPersonSkill(activity1, phoneSkill);
-			setupIntradayStaffingForSkill(phoneSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
 
-			var activity2 = createActivity();
-			var chatSkill = createSkill("chatSkill", new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
+			setupIntradayStaffingSkillFor24Hours(phoneSkill, today.AddDays(1), 10d, 15d);
+			setupIntradayStaffingSkillFor24Hours(phoneSkill, today.AddDays(2), 10d, 15d);
+
+			var activity2 = createActivity("activity 2");
+			var chatSkill = createSkill("chatSkill", new TimePeriod(8, 0, 17, 0));
 			chatSkill.SkillType = chatSkillType;
 			var personChatSkill = createPersonSkill(activity2, chatSkill);
-			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
 
-			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
+			setupIntradayStaffingSkillFor24Hours(chatSkill, today.AddDays(1), 10d, 5d);
+			setupIntradayStaffingSkillFor24Hours(chatSkill, today.AddDays(2), 10d, 5d);
 
-			createAssignment(person, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personPhoneSkill, personChatSkill);
+
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
@@ -380,34 +669,39 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				BetweenDays = new MinMax<int>(0, 2),
 				OrderIndex = 2
 			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+			_loggedOnUser.WorkflowControlSet = workflowControlSet;
 
-			var possibilities = Target.GetPossibilityViewModelsForMobileDay(new DateOnly(2018, 2, 3), StaffingPossibilityType.Overtime);
+			var possibilities =
+				Target.GetPossibilityViewModelsForMobileDay(today.AddDays(2), StaffingPossibilityType.Overtime);
 
-			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 3).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(possibilitiesOn3rd.ElementAt(0).StartTime, new DateTime(2018, 2, 3, 8, 0, 0));
-			Assert.AreEqual(possibilitiesOn3rd.Last().StartTime, new DateTime(2018, 2, 3, 16, 45, 0));
-			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(1).Possibility);
+			var possibilitiesOn3rd = possibilities.Where(d => d.Date == today.AddDays(2).ToFixedClientDateOnlyFormat())
+				.ToList();
+			possibilitiesOn3rd.ElementAt(0).StartTime.Should().Be.EqualTo(today.AddDays(2).Date.AddHours(8));
+			possibilitiesOn3rd.Last().StartTime.Should().Be.EqualTo(today.AddDays(2).Date.AddHours(16).AddMinutes(45));
+			possibilitiesOn3rd.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilitiesOn3rd.ElementAt(1).Possibility.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOneOfThePeriodIsDeny()
 		{
 			Now.Is(new DateTime(2018, 1, 31, 8, 0, 0, DateTimeKind.Utc));
+			var today = new DateOnly(new DateTime(2018, 1, 31, 8, 0, 0, DateTimeKind.Utc));
 
-			var person = User.CurrentUser();
+			var personPeriod = getOrAddPersonPeriod(today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
 			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
-			var activity = createActivity();
-			var chatSkill = createSkill("chatSkill", new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)));
+
+			var activity1 = createActivity("activity 1");
+			var chatSkill = createSkill("phoneSkill", new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)));
 			chatSkill.SkillType = chatSkillType;
-			var personChatSkill = createPersonSkill(activity, chatSkill);
-			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+			var personChatSkill = createPersonSkill(activity1, chatSkill);
+			addPersonSkillsToPersonPeriod(personPeriod, personChatSkill);
 
-			addPersonSkillsToPersonPeriod(personChatSkill);
-
-			createAssignment(person, activity);
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1);
+			setupIntradayStaffingSkillFor24Hours(chatSkill, today, 10d, 5d);
+			setupIntradayStaffingSkillFor24Hours(chatSkill, today.AddDays(1), 10d, 5d);
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
@@ -424,108 +718,210 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = Target.GetPossibilityViewModelsForWeek(new DateOnly(2018, 2, 1), StaffingPossibilityType.Overtime);
+			var possibilities = Target.GetPossibilityViewModelsForWeek(today, StaffingPossibilityType.Overtime);
 
-			var possibilitiesOn1st = possibilities.Where(d => d.Date == new DateOnly(2018, 1, 31).ToFixedClientDateOnlyFormat()).ToList();
-			var possibilitiesOn2nd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 1).ToFixedClientDateOnlyFormat()).ToList();
-			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 2).ToFixedClientDateOnlyFormat()).ToList();
+			var possibilitiesOn1st = possibilities.Where(d => d.Date == today.ToFixedClientDateOnlyFormat()).ToList();
+			var possibilitiesOn2nd = possibilities.Where(d => d.Date == today.AddDays(1).ToFixedClientDateOnlyFormat()).ToList();
+			var possibilitiesOn3rd = possibilities.Where(d => d.Date == today.AddDays(2).ToFixedClientDateOnlyFormat()).ToList();
 
-			Assert.AreEqual(possibilitiesOn1st.Count, 96);
-			Assert.AreEqual(possibilitiesOn2nd.Count, 0);
-			Assert.AreEqual(possibilitiesOn3rd.Count, 0);
-		}
-
-		[Test]
-		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
-		{
-			setupWorkFlowControlSet();
-			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 6d, 6d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+			possibilitiesOn1st.Count.Should().Be.EqualTo(96);
+			possibilitiesOn2nd.Count.Should().Be.EqualTo(0);
+			possibilitiesOn3rd.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenNotOverstaffingWithoutShrinkage()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 8d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
 			User.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod =
 				OvertimeRequestStaffingCheckMethod.Intraday;
-			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 8d, 8d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(_defaultSkillStaffingIntervalNumber * 7 - 1).Possibility.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffingWithShrinkage()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 8d);
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
 			User.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod =
 				OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
-			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 8d, 8d });
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(_defaultSkillStaffingIntervalNumber * 7 - 1).Possibility.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldGetFairAndGoodPossibilitiesForOvertime()
 		{
-			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 16d, 6d });
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+
+			var activity = createActivity();
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				var forecastedStaffingList = new List<double> { 10d, 10d };
+				var scheduledStaffingList = new List<double> { 16d, 6d };
+				var timePeriodsList = new List<TimePeriod> { new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30) };
+
+				setupStaffingForSkill(skill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = forecastedStaffingList,
+						ScheduledStaffing = scheduledStaffingList,
+						TimePeriods = timePeriodsList
+					}
+				});
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenOneOfSkillIsNotCriticalUnderStaffing()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
-			var person = User.CurrentUser();
+
 			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill1 = createPersonSkill(activity1, skill);
 
-			var activity2 = createActivity();
-			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill");
-			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
-			setupIntradayStaffingForSkill(criticalUnderStaffingSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 5d });
+			var activity2 = createActivity("activity 2");
+			var skill2 = createSkill("skill 2", _defaultSkillOpenHour);
+			skill2.SkillType = phoneSkillType;
+			var personSkill2 = createPersonSkill(activity2, skill2);
 
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
 
-			createAssignment(person, activity1, activity2);
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill1, personSkill2);
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill2, dateOnly, 10d, 15d);
+			}
+
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				var forecastedStaffingList = new List<double> { 10d, 10d };
+				var scheduledStaffingList = new List<double> { 15d, 5d };
+				var timePeriodsList = new List<TimePeriod> { new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30) };
+
+				setupStaffingForSkill(skill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = forecastedStaffingList,
+						ScheduledStaffing = scheduledStaffingList,
+						TimePeriods = timePeriodsList
+					}
+				});
+			}
+
+			var workflowControlSet = _loggedOnUser.WorkflowControlSet;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			{
+				BetweenDays = new MinMax<int>(0, StaffingInfoAvailableDaysProvider.GetDays(ToggleManager))
+			});
+
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldMergePeriodsWithSameSkillType()
 		{
-			var person = User.CurrentUser();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var phoneSkillType =
+				new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+					.WithId();
 			SkillTypeRepository.Add(phoneSkillType);
 
-			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat)
+				.WithId();
 			SkillTypeRepository.Add(chatSkillType);
 
 			var workFlowControlSet = new WorkflowControlSet();
@@ -544,320 +940,384 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				BetweenDays = new MinMax<int>(0, 48),
 				AutoGrantType = OvertimeRequestAutoGrantType.No
 			});
-			person.WorkflowControlSet = workFlowControlSet;
+			_loggedOnUser.WorkflowControlSet = workFlowControlSet;
 
 			var activity1 = createActivity();
-			var channelSupportSkill = createSkill("channelSupportCriticalUnderStaffedSkill");
+			var channelSupportSkill = createSkill("channelSupportCriticalUnderStaffedSkill", _defaultSkillOpenHour);
 			channelSupportSkill.SkillType = phoneSkillType;
 			var personSkill1 = createPersonSkill(activity1, channelSupportSkill);
-			setupIntradayStaffingForSkill(channelSupportSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+			for (var i = 0; i < 7; i++)
+			{
+				setupStaffingForSkill(channelSupportSkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = _today.AddDays(i),
+						ForecastedStaffing = new List<double> {10d, 10d},
+						ScheduledStaffing = new List<double> {5d, 5d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
 			var activity2 = createActivity();
-			var webChatSkill = createSkill("webChatSkill not cricical understaffed at first");
+			var webChatSkill = createSkill("webChatSkill not cricical understaffed at first", _defaultSkillOpenHour);
 			webChatSkill.SkillType = chatSkillType;
 			var personSkill2 = createPersonSkill(activity2, webChatSkill);
-			setupIntradayStaffingForSkill(webChatSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 5d });
+			for (var i = 0; i < 7; i++)
+			{
+				setupStaffingForSkill(webChatSkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = _today.AddDays(i),
+						ForecastedStaffing = new List<double> {10d, 10d},
+						ScheduledStaffing = new List<double> {15d, 5d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill1, personSkill2);
 
-			createAssignment(person, activity1, activity2);
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).AddDays(1).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+			var possibilities = Target.GetPossibilityViewModelsForWeek(null, StaffingPossibilityType.Overtime)
+				.Where(d => d.Date == _today.AddDays(1).ToFixedClientDateOnlyFormat()).ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 			setupWorkFlowControlSet();
-			setupSiteOpenHour();
-			setupDefaultTestData();
-			PersonAssignmentRepository.Clear();
-			var person = User.CurrentUser();
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(),
-				new DateOnly(Now.UtcDateTime()), new DayOffTemplate());
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_loggedOnUser, Scenario.Current(),
+				_today, new DayOffTemplate());
 			PersonAssignmentRepository.Has(assignment);
-			var possibilities = getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-		}
-
-		[Test]
-		public void ShouldUsePrimarySkillsWhenCalculatingOvertimeProbability()
-		{
-			setupWorkFlowControlSet();
-			var primarySkill = createSkill("primarySkill");
-			primarySkill.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
-
-			var nonPrimarySkill = createSkill("nonPrimarySkill");
-			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 4, 4 });
 
 			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
-			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
-			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(skill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {10d, 10d},
+						ScheduledStaffing = new List<double> {16d, 6d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-					.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat())
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
-		}
+			var possibilities = Target.GetPossibilityViewModelsForWeek(null, StaffingPossibilityType.Overtime)
+				.Where(d => d.Date == _today.ToFixedClientDateOnlyFormat()).ToList();
 
-		[Test]
-		public void ShouldUseAllSkillsForOvertimeProbabilityWhenUsePrimarySkillValidationIsDisabled()
-		{
-			setupWorkFlowControlSet();
-
-			User.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = false;
-
-			var primarySkill = createSkill("primarySkill");
-			primarySkill.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 10, 10 });
-
-			var nonPrimarySkill = createSkill("nonPrimarySkill");
-			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
-
-			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
-			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
-
-			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
-
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
 		}
 
 		[Test]
 		public void ShouldUsePrimarySkillsForOvertimeProbabilityWhenUsePrimarySkillValidationIsEnabled()
 		{
-			setupWorkFlowControlSet();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
-			User.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = true;
+			var workflowControlSet = setupWorkFlowControlSet();
+			workflowControlSet.OvertimeRequestUsePrimarySkill = true;
 
-			var primarySkill = createSkill("primarySkill");
+			var activity1 = createActivity();
+			var primarySkill = createSkill("primary skill for test", _defaultSkillOpenHour);
+			primarySkill.SetCascadingIndex(0);
+			var personSkill = createPersonSkill(activity1, primarySkill);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(primarySkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {1d, 1d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
+
+			var activity2 = createActivity();
+			var nonprimarySkill = createSkill("non primary skill for test", _defaultSkillOpenHour);
+			var personSkill2 = createPersonSkill(activity2, nonprimarySkill);
+
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(nonprimarySkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {6d, 6d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
+
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill, personSkill2);
+
+			var possibilities = Target.GetPossibilityViewModelsForWeek(null, StaffingPossibilityType.Overtime)
+				.Where(d => d.Date == _today.ToFixedClientDateOnlyFormat()).ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldUseAllSkillsForOvertimeProbabilityWhenUsePrimarySkillValidationIsDisabled()
+		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+
+			var workflowControlSet = setupWorkFlowControlSet();
+			workflowControlSet.OvertimeRequestUsePrimarySkill = false;
+
+			var activity1 = createActivity();
+			var primarySkill = createSkill("primary skill for test", _defaultSkillOpenHour);
 			primarySkill.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 10, 10 });
+			var personSkill = createPersonSkill(activity1, primarySkill);
 
-			var nonPrimarySkill = createSkill("nonPrimarySkill");
-			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(primarySkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {10d, 10d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
-			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
-			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+			var activity2 = createActivity();
+			var nonprimarySkill = createSkill("non primary skill for test", _defaultSkillOpenHour);
+			var personSkill2 = createPersonSkill(activity2, nonprimarySkill);
 
-			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(nonprimarySkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {1d, 1d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill, personSkill2);
+
+			var possibilities = Target.GetPossibilityViewModelsForWeek(null, StaffingPossibilityType.Overtime)
+				.Where(d => d.Date == _today.ToFixedClientDateOnlyFormat()).ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldUsePrimarySkillsForOvertimeProbabilityWhenPrimarySkillIsNotLevel1InCascading()
 		{
-			setupWorkFlowControlSet();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
-			User.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = true;
+			var workflowControlSet = setupWorkFlowControlSet();
+			workflowControlSet.OvertimeRequestUsePrimarySkill = true;
 
-			var primarySkill1 = createSkill("primarySkill");
+			var primarySkill1 = createSkill("primary skill 1 for test", _defaultSkillOpenHour);
 			primarySkill1.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill1, new double?[] { 5, 5 }, new double?[] { 10, 10 });
 
-			var primarySkill2 = createSkill("primarySkill2");
-			primarySkill2.SetCascadingIndex(2);
-			setupIntradayStaffingForSkill(primarySkill2, new double?[] { 5, 5 }, new double?[] { 10, 10 });
-
-			var primarySkill3 = createSkill("primarySkill3");
-			setupIntradayStaffingForSkill(primarySkill3, new double?[] { 5, 5 }, new double?[] { 1, 1 });
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(primarySkill1, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {10d, 10d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
 			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var primaryPersonSkill2 = createPersonSkill(activity, primarySkill2);
-			var primaryPersonSkill3 = createPersonSkill(activity, primarySkill3);
+			var primarySkill2 = createSkill("primary skill 2 for test", _defaultSkillOpenHour);
+			primarySkill2.SetCascadingIndex(2);
+			var personSkill2 = createPersonSkill(activity, primarySkill2);
 
-			addPersonSkillsToPersonPeriod(primaryPersonSkill2, primaryPersonSkill3);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(primarySkill2, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {10d, 10d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			var nonprimarySkill = createSkill("non primary skill for test", _defaultSkillOpenHour);
+			var personSkill3 = createPersonSkill(activity, nonprimarySkill);
+
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(nonprimarySkill, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {1d, 1d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
+
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill2, personSkill3);
+
+			var possibilities = Target.GetPossibilityViewModelsForWeek(null, StaffingPossibilityType.Overtime)
+				.Where(d => d.Date == _today.ToFixedClientDateOnlyFormat()).ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldGetGoodOvertimePossibilitiesWhenAllSkillsArePrimarySkillWithOneSkillCriticalUnderStaffing()
 		{
-			setupWorkFlowControlSet();
-			var primarySkill = createSkill("primarySkill1");
-			primarySkill.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 0, 0 });
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
-			var primarySkill2 = createSkill("PrimarySkill2");
+			var workflowControlSet = setupWorkFlowControlSet();
+			workflowControlSet.OvertimeRequestUsePrimarySkill = true;
+
+			var activity1 = createActivity();
+			var primarySkill1 = createSkill("primary skill 1 for test", _defaultSkillOpenHour);
+			var personSkill1 = createPersonSkill(activity1, primarySkill1);
+			primarySkill1.SetCascadingIndex(1);
+
+			var weekPeriod = DateHelper.GetWeekPeriod(_today, CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(primarySkill1, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {0d,0d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
+
+			var activity2 = createActivity();
+			var primarySkill2 = createSkill("primary skill 2 for test", _defaultSkillOpenHour);
 			primarySkill2.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill2, new double?[] { 5, 5 }, new double?[] { 7, 7 });
+			var personSkill2 = createPersonSkill(activity2, primarySkill2);
 
-			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
-			var primaryPersonSkill2 = createPersonSkill(activity, primarySkill2);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupStaffingForSkill(primarySkill2, new List<SkillStaffingData>
+				{
+					new SkillStaffingData
+					{
+						Date = dateOnly,
+						ForecastedStaffing = new List<double> {5d, 5d},
+						ScheduledStaffing = new List<double> {7d, 7d},
+						TimePeriods = new List<TimePeriod> {new TimePeriod(8, 00, 8, 15), new TimePeriod(8, 15, 8, 30)}
+					}
+				});
+			}
 
-			addPersonSkillsToPersonPeriod(primaryPersonSkill, primaryPersonSkill2);
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity1, activity2);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill1, personSkill2);
 
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-					.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat())
-					.ToList();
+			var possibilities = Target.GetPossibilityViewModelsForWeek(null, StaffingPossibilityType.Overtime)
+				.Where(d => d.Date == _today.ToFixedClientDateOnlyFormat()).ToList();
 
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber);
+			possibilities.ElementAt(0).Possibility.Should().Be.EqualTo(1);
+			possibilities.ElementAt(1).Possibility.Should().Be.EqualTo(1);
+
 		}
 
 		[Test]
-		public void ShouldGetOvertimePossibilitiesWhenAgentHasNoCascadingSkillInPrimarySkills()
+		public void ShouldReturnPossibilitiesWithoutOvertimeOpenPeriod()
 		{
-			setupWorkFlowControlSet();
-			var primarySkill = createSkill("primarySkill");
-			primarySkill.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
-
-			var nonPrimarySkill = createSkill("nonPrimarySkill");
-			nonPrimarySkill.SetCascadingIndex(2);
-			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 8, 8 });
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
 
 			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
 
-			addPersonSkillsToPersonPeriod(nonPrimaryPersonSkill);
+			var skill = createSkill("skill for test 1", _defaultSkillOpenHour);
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
 
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossibilityType.Overtime)
-					.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat())
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
-		}
-
-		[Test]
-		public void ShouldNotGetOvertimePossibilitiesWhenSiteOpenHourIsClosed()
-		{
-			var personPeriod = getOrAddPersonPeriod();
-			var team = personPeriod.Team;
-			team.Site.AddOpenHour(new SiteOpenHour
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
 			{
-				TimePeriod = new TimePeriod(),
-				IsClosed = true,
-				WeekDay = DayOfWeek.Thursday
-			});
-
-			setupDefaultTestData();
-			setupWorkFlowControlSet();
-
-			var result = Target.GetPossibilityViewModelsForMobileDay(null, StaffingPossibilityType.Overtime).ToList();
-			result.Count.Should().Be.EqualTo(0);
-		}
-
-		[Test, SetCulture("en-US")]
-		public void ShouldNotGetOvertimePossibilitiesForDaysWhichSiteOpenHourIsClosed()
-		{
-			var personPeriod = getOrAddPersonPeriod();
-			var team = personPeriod.Team;
-			team.Site.AddOpenHour(new SiteOpenHour
-			{
-				TimePeriod = new TimePeriod(),
-				IsClosed = true,
-				WeekDay = DayOfWeek.Thursday
-			});
-			team.Site.AddOpenHour(new SiteOpenHour
-			{
-				TimePeriod = new TimePeriod(8, 17),
-				IsClosed = false,
-				WeekDay = DayOfWeek.Friday
-			});
-
-			setupDefaultTestData();
-			setupWorkFlowControlSet();
-			var result = getPossibilityViewModels(null, StaffingPossibilityType.Overtime).ToList();
-			result.Count.Should().Be.EqualTo(4);
-
-			var possibilities = result.Where(d => d.Date == new DateOnly(Now.UtcDateTime()).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(0, possibilities.Count);
-		}
-
-		[Test, SetCulture("en-US")]
-		public void ShouldNotReturnPossibiliesForDaysOutOfOvertimeOpenPeriod()
-		{
-			setupSiteOpenHour();
-			setupDefaultTestData();
-
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-				.WithId();
-			SkillTypeRepository.Add(phoneSkillType);
-
-			var workFlowControlSet = new WorkflowControlSet();
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
-			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
-
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()).AddWeeks(3), StaffingPossibilityType.Overtime).ToList();
-			result.Count.Should().Be.EqualTo(0);
-		}
-
-		[Test, SetCulture("en-US")]
-		public void ShouldReturnPossibiliesWithoutOvertimeOpenPeriod()
-		{
-			setupSiteOpenHour();
-			setupDefaultTestData();
-
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-				.WithId();
-			SkillTypeRepository.Add(phoneSkillType);
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 10d, 10d);
+			}
 
 			var workFlowControlSet = new WorkflowControlSet()
 			{
 				OvertimeProbabilityEnabled = true
 			};
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			_loggedOnUser.WorkflowControlSet = workFlowControlSet;
 
-			var result = getPossibilityViewModels(new DateOnly(Now.UtcDateTime()), StaffingPossibilityType.Overtime).ToList();
-			result.Count.Should().Be.EqualTo(6);
+			var possibilities = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime)
+				.ToList();
+
+			possibilities.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
 		}
 
-		[Test, SetCulture("en-US")]
-		public void ShouldReturnCorrectEndtimeOnDSTDay()
+		[Test]
+		public void ShouldReturnCorrectEndTimeOnDSTDay()
 		{
 			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 
 			Now.Is("2018-03-11 6:00");
 
-			var personPeriod = getOrAddPersonPeriod();
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
 			var timePeriod = new TimePeriod(1, 0, 4, 0);
 			var team = personPeriod.Team;
 			team.Site.AddOpenHour(new SiteOpenHour
@@ -871,8 +1331,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var skill = createSkill("test1", timePeriod);
 			skill.TimeZone = TimeZone.TimeZone();
 			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(personSkill);
-			createAssignment(User.CurrentUser(), activity);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill);
+			createAssignment(User.CurrentUser(), _defaultAssignmentPeriod, activity);
 
 			var date = new DateOnly(2018, 3, 11);
 			var staffingPeriodData = new List<StaffingPeriodData>();
@@ -892,103 +1352,100 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetFairPossibilitiesForOvertimeWhenSeriousUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
+		public void ShouldGetFairPossibilitiesForOvertimeWhenSeriousUnderstaffingIsZeroAndForecastedAndScheduledAreEqual()
 		{
+			var personPeriod = getOrAddPersonPeriod(_today, _loggedOnUser);
+			setupSiteOpenHour(_defaultSiteOpenHour, personPeriod.Team.Site);
+
 			TimeZone.Is(TimeZoneInfoFactory.DenverTimeZoneInfo());
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			_loggedOnUser.PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 
-			Now.Is("2018-09-19 6:00");
-			var today = new DateOnly(Now.UtcDateTime());
+			var workflowControlSet = setupWorkFlowControlSet();
+			workflowControlSet.OvertimeRequestStaffingCheckMethod = OvertimeRequestStaffingCheckMethod.Intraday;
 
-			setupWorkFlowControlSet();
-			User.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod = OvertimeRequestStaffingCheckMethod.Intraday;
+			var activity = createActivity();
+			var skill = createSkill("skill for test", _defaultSkillOpenHour);
+			skill.TimeZone = TimeZone.TimeZone();
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0.1));
+			var personSkill1 = createPersonSkill(activity, skill);
 
-			setupSiteOpenHour();
+			var weekPeriod = DateHelper.GetWeekPeriod(_today.AddWeeks(1), CultureInfo.CurrentCulture);
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				setupIntradayStaffingSkillFor24Hours(skill, dateOnly, 6d, 6d);
+			}
 
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
-			skill1.TimeZone = TimeZone.TimeZone();
-			skill1.StaffingThresholds = createStaffingThresholds(0, 0, 0.1);
-			var personSkill1 = createPersonSkill(activity1, skill1);
+			addPersonSkillsToPersonPeriod(personPeriod, personSkill1);
 
-			setUpIntradayStaffing(today, skill1, new double?[] { 6d, 6d }, new double?[] { 6d, 6d });
+			createAssignment(_loggedOnUser, _defaultAssignmentPeriod, activity);
 
-			addPersonSkillsToPersonPeriod(personSkill1);
+			var possibilitiesWeek = Target
+				.GetPossibilityViewModelsForWeek(_today.AddWeeks(1), StaffingPossibilityType.Overtime).ToList();
 
-			createAssignment(person, activity1);
-
-			var possibilitiesWeek = getPossibilityViewModels(today, StaffingPossibilityType.Overtime)
-				.Where(d => d.Date == today.ToFixedClientDateOnlyFormat()).ToList();
-
-			Assert.AreEqual(2, possibilitiesWeek.Count);
-			Assert.AreEqual(0, possibilitiesWeek.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilitiesWeek.ElementAt(1).Possibility);
+			possibilitiesWeek.Count.Should().Be.EqualTo(_defaultSkillStaffingIntervalNumber * 7);
+			possibilitiesWeek.ElementAt(0).Possibility.Should().Be.EqualTo(0);
+			possibilitiesWeek.ElementAt(1).Possibility.Should().Be.EqualTo(0);
 		}
 
-		private void setupWorkFlowControlSet()
+		private WorkflowControlSet setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-20), new DateOnly(Now.UtcDateTime()).AddDays(20)),
-				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-20), new DateOnly(Now.UtcDateTime()).AddDays(20)),
-				StaffingThresholdValidator = new StaffingThresholdValidator()
+				Absence = AbsenceFactory.CreateAbsence("absence for test"),
+				Period = new DateOnlyPeriod(_today.AddDays(-20),
+					_today.AddDays(20)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(_today.AddDays(-20),
+					_today.AddDays(20)),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
 			};
+
 			var overtimeRequestOpenDatePeriod = new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
 			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13)
 			};
+
 			var workFlowControlSet = new WorkflowControlSet();
+
 			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(overtimeRequestOpenDatePeriod);
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			_loggedOnUser.WorkflowControlSet = workFlowControlSet;
+			return workFlowControlSet;
 		}
 
-		private void setupSiteOpenHour()
-		{
-			var personPeriod = getOrAddPersonPeriod();
-			var timePeriod = new TimePeriod(8, 0, 17, 0);
-			var team = personPeriod.Team;
-			team.Site.AddOpenHour(new SiteOpenHour
-			{
-				TimePeriod = timePeriod,
-				IsClosed = false,
-				WeekDay = DayOfWeek.Thursday
-			});
-		}
-
-		private PersonPeriod getOrAddPersonPeriod()
+		private PersonPeriod getOrAddPersonPeriod(DateOnly startDate, IPerson person)
 		{
 			var personPeriod =
-				(PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(Now.UtcDateTime()).ToDateOnlyPeriod()).FirstOrDefault();
+				(PersonPeriod)person.PersonPeriods(startDate.ToDateOnlyPeriod())
+					.FirstOrDefault();
 			if (personPeriod != null) return personPeriod;
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			personPeriod =
 				(PersonPeriod)
-				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(Now.UtcDateTime()), PersonContractFactory.CreatePersonContract(), team);
-			User.CurrentUser().AddPersonPeriod(personPeriod);
+				PersonPeriodFactory.CreatePersonPeriod(startDate,
+					PersonContractFactory.CreatePersonContract(), team);
+			person.AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
 
-		private void addPersonSkillsToPersonPeriod(params IPersonSkill[] personSkills)
+		private void setupSiteOpenHour(TimePeriod timePeriod, ISite site, bool isClosed = false)
 		{
-			var personPeriod = getOrAddPersonPeriod();
+			site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = isClosed,
+				WeekDay = DayOfWeek.Thursday
+			});
+		}
+
+		private void addPersonSkillsToPersonPeriod(PersonPeriod personPeriod, params IPersonSkill[] personSkills)
+		{
 			foreach (var personSkill in personSkills)
 			{
 				personPeriod.AddPersonSkill(personSkill);
 			}
-		}
-
-		private void setupDefaultTestData(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null)
-		{
-			var activity = createActivity();
-			var skill = createSkill("test1");
-			var personSkill = createPersonSkill(activity, skill);
-			addPersonSkillsToPersonPeriod(personSkill);
-			createAssignment(User.CurrentUser(), activity);
-			forecastedStaffing = forecastedStaffing ?? new Double?[] { 10d, 10d };
-			scheduledStaffing = scheduledStaffing ?? new Double?[] { 8d, 8d };
-			setupIntradayStaffingForSkill(skill, forecastedStaffing, scheduledStaffing);
 		}
 
 		private IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
@@ -998,12 +1455,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return personSkill;
 		}
 
-		private ISkill createSkill(string name, TimePeriod? openHour = null)
+		private ISkill createSkill(string name, TimePeriod openHour)
 		{
 			var skill = SkillFactory.CreateSkill(name).WithId();
 			skill.SkillType = phoneSkillType;
 			skill.StaffingThresholds = createStaffingThresholds();
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHour ?? new TimePeriod(8, 00, 9, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHour);
 			SkillRepository.Has(skill);
 			return skill;
 		}
@@ -1013,70 +1470,87 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
 
-		private static StaffingThresholds createStaffingThresholds(double seriousUnderstaffing, double understaffing, double overstaffing)
+		private static IActivity createActivity(string name = "activity1")
 		{
-			return new StaffingThresholds(new Percent(seriousUnderstaffing), new Percent(understaffing), new Percent(overstaffing));
-		}
-
-		private static IActivity createActivity()
-		{
-			var activity = ActivityFactory.CreateActivity("activity1");
+			var activity = ActivityFactory.CreateActivity(name);
 			activity.RequiresSkill = true;
 			return activity;
 		}
 
-		private void createAssignment(IPerson person, params IActivity[] activities)
+		private IPersonAssignment createAssignment(IPerson person, DateTimePeriod dateTimePeriod,
+			params IActivity[] activities)
 		{
-			var startDate = Now.UtcDateTime().Date.AddHours(8);
-			var endDate = Now.UtcDateTime().Date.AddHours(17);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				Scenario.Current(), new DateTimePeriod(startDate, endDate),
+				Scenario.Current(),
+				dateTimePeriod,
 				ShiftCategoryFactory.CreateShiftCategory(), activities);
 			PersonAssignmentRepository.Has(assignment);
+
+			return assignment;
 		}
 
-		private DateOnlyPeriod getAvailablePeriod()
+		private void setupStaffingForSkill(ISkill skill, List<SkillStaffingData> staffingDataList)
 		{
-			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
-			var today = new DateOnly(Now.UtcDateTime());
-			var period = new DateOnlyPeriod(today, today.AddDays(staffingInfoAvailableDays)).Inflate(1);
-			return period;
-		}
-
-		private IEnumerable<PeriodStaffingPossibilityViewModel> getPossibilityViewModels(DateOnly? date,
-			StaffingPossibilityType staffingPossibilityType = StaffingPossibilityType.None,
-			bool returnOneWeekData = true)
-		{
-			return Target.GetPossibilityViewModelsForWeek(date, staffingPossibilityType).Where(view => intervals.Contains(view.StartTime.TimeOfDay));
-		}
-
-		private void setupIntradayStaffingForSkill(ISkill skill, double?[] forecastedStaffings,
-			double?[] scheduledStaffings)
-		{
-			var period = getAvailablePeriod();
-			period.DayCollection().ToList().ForEach(day =>
+			var staffingPeriodDataList = new List<StaffingPeriodData>();
+			staffingDataList.ForEach(staffingData =>
 			{
-				setUpIntradayStaffing(day, skill, forecastedStaffings, scheduledStaffings);
+				for (var i = 0; i < staffingData.ForecastedStaffing.Count; i++)
+				{
+					var staffingPeriodData = new StaffingPeriodData
+					{
+						ForecastedStaffing = staffingData.ForecastedStaffing[i],
+						ScheduledStaffing = staffingData.ScheduledStaffing[i],
+						Period = new DateTimePeriod(staffingData.Date.Utc().Add(staffingData.TimePeriods[i].StartTime),
+							staffingData.Date.Utc().Date.Add(staffingData.TimePeriods[i].EndTime))
+					};
+					staffingPeriodDataList.Add(staffingPeriodData);
+				}
+
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, staffingData.Date,
+					staffingPeriodDataList,
+					_loggedOnUser.PermissionInformation.DefaultTimeZone());
+
+				staffingPeriodDataList.Clear();
 			});
 		}
 
-		private void setUpIntradayStaffing(DateOnly day, ISkill skill, double?[] forecastedStaffings, double?[] scheduledStaffings)
+		private void setupIntradayStaffingSkillFor24Hours(ISkill skill, DateOnly date, double forecastedStaffing,
+			double scheduledStaffing)
 		{
-			var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, User.CurrentUser().PermissionInformation.DefaultTimeZone());
-			var staffingPeriodData1 = new StaffingPeriodData
+			var forecastedStaffingList = new List<double>();
+			var scheduledStaffingList = new List<double>();
+			var timePeriodsList = new List<TimePeriod>();
+
+			var start = TimeSpan.Zero;
+			while (date.Date.Add(start) < date.Date.AddDays(1).Subtract(TimeSpan.FromSeconds(1)))
 			{
-				ForecastedStaffing = forecastedStaffings[0].Value,
-				ScheduledStaffing = scheduledStaffings[0].Value,
-				Period = new DateTimePeriod(utcDate.Date.Add(intervals[0]), utcDate.Date.Add(intervals[0]).AddMinutes(15))
-			};
-			var staffingPeriodData2 = new StaffingPeriodData
+				forecastedStaffingList.Add(forecastedStaffing);
+				scheduledStaffingList.Add(scheduledStaffing);
+				timePeriodsList.Add(new TimePeriod(start, start.Add(TimeSpan.FromMinutes(15))));
+
+				start += TimeSpan.FromMinutes(15);
+			}
+
+			var skillStaffingDataList = new List<SkillStaffingData>
 			{
-				ForecastedStaffing = forecastedStaffings[1].Value,
-				ScheduledStaffing = scheduledStaffings[1].Value,
-				Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
+				new SkillStaffingData
+				{
+					Date = date,
+					ForecastedStaffing = forecastedStaffingList,
+					ScheduledStaffing = scheduledStaffingList,
+					TimePeriods = timePeriodsList
+				}
 			};
-			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
-				new[] { staffingPeriodData1, staffingPeriodData2 }, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+
+			setupStaffingForSkill(skill, skillStaffingDataList);
+		}
+
+		class SkillStaffingData
+		{
+			public DateOnly Date;
+			public List<double> ForecastedStaffing { get; set; }
+			public List<double> ScheduledStaffing { get; set; }
+			public List<TimePeriod> TimePeriods { get; set; }
 		}
 	}
 }
