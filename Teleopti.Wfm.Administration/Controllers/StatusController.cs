@@ -12,12 +12,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_listStatusSteps = listStatusSteps;
 		}
 		
-		//duplicate of statuscontroller in web. remove this (or web's) endpoint later...
 		[HttpGet]
-		[Route("status/list")]
-		public IHttpActionResult List()
+		[Route("status/listCustom")]
+		public IHttpActionResult ListCustom()
 		{
-			return Ok(_listStatusSteps.Execute());
+			return Ok(_listStatusSteps.Execute(false));
 		}
 	}
 }

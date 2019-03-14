@@ -10,7 +10,7 @@
 
 		vm.statusSteps = [];
 		
-		$http.get('./status/list')
+		$http.get('./status/listCustom')
 			.then(function(response){
 				vm.statusSteps = response.data.map(function(step){
 					return {

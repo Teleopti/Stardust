@@ -27,7 +27,7 @@ describe("statusController", function() {
 				Description : 'some desc',
 				PingUrl : 'http://something.com/hejhej/ping/18'
 			}];
-		$httpBackend.expectGET('./status/list').respond(serverJson);
+		$httpBackend.expectGET('./status/listCustom').respond(serverJson);
 
 		var $scope = $rootScope.$new();
 		var controller = $controller('statusController', { $scope: $scope });
@@ -41,7 +41,7 @@ describe("statusController", function() {
 	
 	it("should handle multiple items", function(){
 		var serverJson = [{	Id : 18}, {Id :1}];
-		$httpBackend.expectGET('./status/list').respond(serverJson);
+		$httpBackend.expectGET('./status/listCustom').respond(serverJson);
 
 		var $scope = $rootScope.$new();
 		var controller = $controller('statusController', { $scope: $scope });

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute().Select(x => x.Name).Should().Contain(FakeStatusStep.Name);
+			Target.Execute(true).Select(x => x.Name).Should().Contain(FakeStatusStep.Name);
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
 				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "/check/" + FakeStatusStep.Name);
 		}
 		
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir/");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
 				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "check/" + FakeStatusStep.Name);
 		}
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Description = Guid.NewGuid().ToString();
 		
-			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).Description
+			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).Description
 				.Should().Be.EqualTo(FakeStatusStep.Description);
 		}
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var statusStep = new CustomStatusStep(0, stepName, description, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 
-			Target.Execute().Single(x => x.Name == statusStep.Name).Description
+			Target.Execute(true).Single(x => x.Name == statusStep.Name).Description
 				.Should().Be.EqualTo(description);
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var statusStep = new CustomStatusStep(0, stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 			
-			Target.Execute().Single(x => x.Name == stepName).PingUrl
+			Target.Execute(true).Single(x => x.Name == stepName).PingUrl
 				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "/ping/" + stepName);
 		}
 		
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).PingUrl
+			Target.Execute(true).Single(x => x.Name == FakeStatusStep.Name).PingUrl
 				.Should().Be.Null();
 		}
 		
@@ -93,8 +93,14 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var statusStep = new CustomStatusStep(id, "this", string.Empty, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 		
-			Target.Execute().Single(x => x.Name == statusStep.Name).Id
+			Target.Execute(true).Single(x => x.Name == statusStep.Name).Id
 				.Should().Be.EqualTo(id);
+		}
+
+		[Test]
+		public void ShouldSkipFixedFixedSteps()
+		{
+			Target.Execute(false).Should().Be.Empty();
 		}
 
 		public void Isolate(IIsolate isolate)
