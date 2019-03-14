@@ -50,5 +50,18 @@ describe("statusController", function() {
 		$httpBackend.flush();
 
 		expect(controller.statusSteps.length).toBe(2);
+	});
+	
+	it("should send new step to backend", function(){
+		$httpBackend.whenGET('./status/listCustom').respond([]);
+		
+		var $scope = $rootScope.$new();
+		var controller = $controller('statusController', { $scope: $scope });
+		controller.newStatusStep = {};
+		
+		controller.storeNew();
+		$httpBackend.expectPOST('./status/Add', controller.newStatusStep).respond(200);
+		
+		expect($httpBackend.flush).not.toThrow();
 	})
 });

@@ -25,11 +25,11 @@
 								<td><input type="button" value="Delete"/></td>
 							</tr>
 							<tr>
-								<td><input type="text" /></td>
-								<td><input type="text" /></td>
-								<td><input type="text" /></td>
+								<td><input type="text" ng-model="vm.newStatusStep.name" /></td>
+								<td><input type="text" ng-model="vm.newStatusStep.description"/></td>
+								<td><input type="text" ng-model="vm.newStatusStep.limit"/></td>
 								<td></td>
-								<td><input type="button" value="Add"/></td>
+								<td><input type="button" value="Add" ng-click="vm.storeNew()" /></td>
 							</tr>
 						</tbody>
 					</table>
