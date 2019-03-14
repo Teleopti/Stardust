@@ -202,7 +202,6 @@
     <Compile Include="ApplicationLayer\CannotPublishToHangfire.cs" />
     <Compile Include="ApplicationLayer\CurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\KeyValueStorePersister.cs" />
     <Compile Include="ApplicationLayer\SyncAllEventPublisherWithStardust.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />

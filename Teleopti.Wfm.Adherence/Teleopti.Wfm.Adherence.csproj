@@ -203,7 +203,6 @@
     <Compile Include="PermissionsViewModelBuilder.cs" />
     <Compile Include="States\ActivityChangeChecker.cs" />
     <Compile Include="States\ActivityEventPublisher.cs" />
-    <Compile Include="States\ActualAgentStateExtension.cs" />
     <Compile Include="States\AdherenceDayStartEventPublisher.cs" />
     <Compile Include="States\AdherenceEventPublisher.cs" />
     <Compile Include="States\AdherenceInfo.cs" />
@@ -228,6 +227,7 @@
     <Compile Include="States\Events\PersonShiftEndEvent.cs" />
     <Compile Include="States\Events\PersonShiftStartEvent.cs" />
     <Compile Include="States\Events\PersonStateChangedEvent.cs" />
+    <Compile Include="States\Events\UnknownStateCodeReceviedEvent.cs" />
     <Compile Include="States\ExternalLogonMapper.cs" />
     <Compile Include="States\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="States\ExternalUserStateWebModel.cs" />

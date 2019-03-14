@@ -32,17 +32,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string LastName { get; set; }
 		public DateTime Timestamp { get; set; }
 	}
-	
-	public class TeamNameChangedEvent : IEvent
-	{
-		public Guid TeamId { get; set; }
-		public string Name { get; set; }
-	}
-	
-	public class SiteNameChangedEvent : IEvent
-	{
-		public Guid SiteId { get; set; }
-		public string Name { get; set; }
-	}
-
 }

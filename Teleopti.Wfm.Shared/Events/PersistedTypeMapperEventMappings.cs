@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				CurrentPersistedName = "UnknownStateCodeReceviedEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.UnknownStateCodeReceviedEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.UnknownStateCodeReceviedEvent, Teleopti.Ccc.Domain"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.States.Events.UnknownStateCodeReceviedEvent, Teleopti.Wfm.Adherence"
 			};
 			yield return new PersistedTypeMapping
 			{
@@ -712,13 +712,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				CurrentPersistedName = "TeamNameChangedEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TeamNameChangedEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TeamNameChangedEvent, Teleopti.Ccc.Domain"
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TeamNameChangedEvent, Teleopti.Wfm.Shared"
 			};
 			yield return new PersistedTypeMapping
 			{
 				CurrentPersistedName = "SiteNameChangedEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.SiteNameChangedEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.SiteNameChangedEvent, Teleopti.Ccc.Domain"
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.SiteNameChangedEvent, Teleopti.Wfm.Shared"
 			};
 			yield return new PersistedTypeMapping
 			{
@@ -748,13 +748,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				CurrentPersistedName = "PersonAssociationChangedEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.PersonAssociationChangedEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.PersonAssociationChangedEvent, Teleopti.Ccc.Domain"
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.PersonAssociationChangedEvent, Teleopti.Wfm.Shared"
 			};
 			yield return new PersistedTypeMapping
 			{
 				CurrentPersistedName = "PersonAssociationChangedEvent.ExternalLogon",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon[], Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon[], Teleopti.Ccc.Domain"
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon[], Teleopti.Wfm.Shared"
 			};
 
 

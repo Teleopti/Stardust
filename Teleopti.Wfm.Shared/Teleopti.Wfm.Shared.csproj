@@ -125,10 +125,13 @@
     <Compile Include="Events\PersistedTypeMapperHandlerMappings.cs" />
     <Compile Include="Events\PersistedTypeMapperInfrastructureMappings.cs" />
     <Compile Include="Events\PersistedTypeMapping.cs" />
+    <Compile Include="Events\PersonAssociationChangedEvent.cs" />
     <Compile Include="Events\ResolveEventHandlers.cs" />
     <Compile Include="Events\RunIntervalAttribute.cs" />
+    <Compile Include="Events\SiteNameChangedEvent.cs" />
     <Compile Include="Events\SyncAllEventPublisher.cs" />
     <Compile Include="Events\SyncEventPublisher.cs" />
+    <Compile Include="Events\TeamNameChangedEvent.cs" />
     <Compile Include="Events\TenantDayTickEvent.cs" />
     <Compile Include="Events\TenantHourTickEvent.cs" />
     <Compile Include="Events\TenantMinuteTickEvent.cs" />
@@ -138,6 +141,9 @@
     <Compile Include="IJsonDeserializer.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IRetryHandle.cs" />
+    <Compile Include="KeyValueStore\IKeyValueStorePersister.cs" />
+    <Compile Include="KeyValueStore\KeyValueStorePersister.cs" />
+    <Compile Include="KeyValueStore\KeyValueStorePersisterExtensions.cs" />
     <Compile Include="Log\ILogManager.cs" />
     <Compile Include="Log\InvocationInfoBuilder.cs" />
     <Compile Include="Log\LogInfoAspect.cs" />
