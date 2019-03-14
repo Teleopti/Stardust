@@ -400,8 +400,10 @@
     <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
+    <Compile Include="Areas\Insights\Controllers\ActionInputs.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\IPermissionProvider.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\PermissionProvider.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\ReportViewMode.cs" />
     <Compile Include="Areas\Insights\Models\InsightsPermission.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\IPowerBiClientFactory.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\IReportProvider.cs" />

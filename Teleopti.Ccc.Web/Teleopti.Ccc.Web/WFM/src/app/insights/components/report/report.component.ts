@@ -71,7 +71,8 @@ export class ReportComponent implements OnInit {
 			}
 
 			if (this.permission.CanViewReport) {
-				this.reportSvc.getReportConfig(this.reportId).then(config => {
+				const viewMode = this.inEditing ? pbi.models.ViewMode.Edit : pbi.models.ViewMode.View;
+				this.reportSvc.getReportConfig(this.reportId, viewMode).then(config => {
 					this.loadReport(config);
 				});
 			} else {
@@ -91,7 +92,8 @@ export class ReportComponent implements OnInit {
 	}
 
 	updateToken(reportId) {
-		this.reportSvc.getReportConfig(reportId).then(config => {
+		const viewMode = this.inEditing ? pbi.models.ViewMode.Edit : pbi.models.ViewMode.View;
+		this.reportSvc.getReportConfig(reportId, viewMode).then(config => {
 			const embedContainer = this.getReportContainer();
 			if (!embedContainer) return;
 
@@ -164,8 +166,17 @@ export class ReportComponent implements OnInit {
 		});
 
 		report.off('saved');
-		report.on('saved', function () {
-			self.reportSvc.updateReport(config.ReportId, config.ReportName);
+		report.on('saved', function (event) {
+			if (!event.detail.saveAs) {
+				self.reportSvc.updateReport(config.ReportId, config.ReportName);
+				return;
+			}
+
+			// Handle Save as new report in embedded report
+			const newReportId = event.detail.reportObjectId;
+			const newReportName = event.detail.reportName;
+			self.reportSvc.updateReport(newReportId, newReportName);
+			self.nav.editReport(newReportId);
 		});
 	}
 
