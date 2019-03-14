@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_repositoryRoot = RepositoryRootFolderLocator.LocateFolderUsingBlackMagic(TestContext.CurrentContext.TestDirectory);
 		}
-		
+
 		public void CreateDatabases(string tenant)
 		{
 			createOrRestoreApplication(tenant);
@@ -107,7 +107,8 @@ namespace Teleopti.Ccc.TestCommon
 			configure.MergePersonAssignments();
 
 			configure.PersistAuditSetting();
-			configure.SetTenantConnectionInfo(tenant ?? InfraTestConfigReader.TenantName(), database.ConnectionString, analytics().ConnectionString);
+
+			setTenantInfo(database);
 		}
 
 		private void backupByFileCopy(DatabaseHelper database, int dataHash)
@@ -118,29 +119,38 @@ namespace Teleopti.Ccc.TestCommon
 			File.WriteAllText(file, JsonConvert.SerializeObject(backup, Formatting.Indented));
 		}
 
+		private void restoreByFileCopy(DatabaseHelper database, int dataHash)
+		{
+			if (!tryRestoreByFileCopy(database, dataHash))
+				throw new Exception("Restore failed!");
+		}
+
 		private bool tryRestoreByFileCopy(DatabaseHelper database, int dataHash)
 		{
-			// maybe it would be possible to attach it if a file exists but the database doesnt. but wth..
-			if (!database.Tasks().Exists(database.DatabaseName))
-				return false;
-
 			var name = database.BackupNameForRestore(dataHash);
 			var file = Path.Combine(_repositoryRoot, name);
 			if (!File.Exists(file))
 				return false;
 
 			var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(file));
-			return database.BackupByFileCopy().TryRestore(backup);
+
+			if (!database.Exists())
+				database.CreateByDbManager();
+
+			var result = database.BackupByFileCopy().TryRestore(backup);
+
+			if (result)
+				setTenantInfo(database);
+
+			return result;
 		}
 
-		private void restoreByFileCopy(DatabaseHelper database, int dataHash)
+		private static void setTenantInfo(DatabaseHelper database)
 		{
-			var name = database.BackupNameForRestore(dataHash);
-			var file = Path.Combine(_repositoryRoot, name);
-			var backup = JsonConvert.DeserializeObject<Backup>(File.ReadAllText(file));
-			var result = database.BackupByFileCopy().TryRestore(backup);
-			if (!result)
-				throw new Exception("Restore failed!");
+			if (database.DatabaseType != DatabaseType.TeleoptiCCC7)
+				return;
+			var configure = database.ConfigureSystem();
+			configure.SetTenantConnectionInfo(InfraTestConfigReader.TenantName(), database.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static DatabaseHelper application()
