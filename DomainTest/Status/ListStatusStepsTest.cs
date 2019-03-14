@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Status;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Status
@@ -13,35 +14,34 @@ namespace Teleopti.Ccc.DomainTest.Status
 		public ListStatusSteps Target;
 		public FakeStatusStep FakeStatusStep;
 		public FakeFetchCustomStatusSteps FetchCustomStatusSteps;
-		private const string statusPath = "status";
-		private static readonly Uri uri = new Uri("http://www.something.com");
-
+		public FakeConfigReader ConfigReader;
+		
 		[Test]
 		public void ShouldListMonitorStepNames()
 		{
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(uri, string.Empty).Select(x => x.Name).Should().Contain(FakeStatusStep.Name);
+			Target.Execute().Select(x => x.Name).Should().Contain(FakeStatusStep.Name);
 		}
 
 		[Test]
 		public void ShouldIncludeUrl()
 		{
-			var baseUrl = new Uri(uri, "virtualDir");
+			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(baseUrl, statusPath).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
-				.Should().Be.EqualTo(baseUrl + "/" + statusPath + "/check/" + FakeStatusStep.Name);
+			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "/check/" + FakeStatusStep.Name);
 		}
 		
 		[Test]
 		public void ShouldIncludeUrl_IfBaseUrlEndsWithSlash()
 		{
-			var baseUrl = new Uri(uri, "/");
+			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir/");
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(baseUrl, statusPath).Single(x => x.Name == FakeStatusStep.Name).StatusUrl
-				.Should().Be.EqualTo(baseUrl + statusPath + "/check/" + FakeStatusStep.Name);
+			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).StatusUrl
+				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "check/" + FakeStatusStep.Name);
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Description = Guid.NewGuid().ToString();
 		
-			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).Description
+			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).Description
 				.Should().Be.EqualTo(FakeStatusStep.Description);
 		}
 
@@ -61,20 +61,20 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var statusStep = new CustomStatusStep(0, stepName, description, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 
-			Target.Execute(uri, stepName).Single(x => x.Name == statusStep.Name).Description
+			Target.Execute().Single(x => x.Name == statusStep.Name).Description
 				.Should().Be.EqualTo(description);
 		}
 
 		[Test]
 		public void ShouldIncludePingUrlIfCustomStatusStep()
 		{
-			var baseUrl = new Uri(uri, "virtDir");
+			ConfigReader.FakeSetting("StatusBaseUrl", "http://www.something.com/virtDir");
 			var stepName = Guid.NewGuid().ToString();
 			var statusStep = new CustomStatusStep(0, stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 			
-			Target.Execute(baseUrl, statusPath).Single(x => x.Name == stepName).PingUrl
-				.Should().Be.EqualTo(baseUrl + "/" + statusPath + "/ping/" + stepName);
+			Target.Execute().Single(x => x.Name == stepName).PingUrl
+				.Should().Be.EqualTo(ConfigReader.AppConfig("StatusBaseUrl") + "/ping/" + stepName);
 		}
 		
 		[Test]
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			FakeStatusStep.Name = Guid.NewGuid().ToString();
 			
-			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).PingUrl
+			Target.Execute().Single(x => x.Name == FakeStatusStep.Name).PingUrl
 				.Should().Be.Null();
 		}
 		
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 			var statusStep = new CustomStatusStep(id, "this", string.Empty, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 		
-			Target.Execute(uri, string.Empty).Single(x => x.Name == statusStep.Name).Id
+			Target.Execute().Single(x => x.Name == statusStep.Name).Id
 				.Should().Be.EqualTo(id);
 		}
 

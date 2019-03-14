@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Status
 		[Route("status/list")]
 		public IHttpActionResult List()
 		{
-			return Ok(_listStatusSteps.Execute(new Uri(Request.RequestUri, RequestContext.VirtualPathRoot), "status"));
+			return Ok(_listStatusSteps.Execute());
 		}
 
 		[HttpGet]
