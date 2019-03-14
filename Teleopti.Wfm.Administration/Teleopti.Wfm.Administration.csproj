@@ -420,6 +420,7 @@
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\EtlController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\ToggleController.cs" />
     <Compile Include="Core\Hangfire\MvcAntiforgery.cs" />
     <Compile Include="Core\ILicenseDataFactoryWrapper.cs" />

@@ -26,5 +26,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Status
 			result.Limit.Should().Be.EqualTo(limit);
 			result.TimeSinceLastPing.Ticks.Should().Be.GreaterThan(TimeSpan.FromDays(10).Ticks);
 		}
+		
+		
+		[Test]
+		public void ShouldIncludeUniqueId()
+		{
+			Target.Execute("1", "1", TimeSpan.FromDays(1));
+			Target.Execute("2", "2", TimeSpan.FromDays(1));
+
+			var result1 = FetchCustomStatusSteps.Execute("1");
+			var result2 = FetchCustomStatusSteps.Execute("2");
+			
+			result1.Id.Should().Not.Be.EqualTo(result2.Id);
+		}
 	}
 }

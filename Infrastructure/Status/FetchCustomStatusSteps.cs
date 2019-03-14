@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Status
 	{
 		private readonly Lazy<string> _connectionString;
 		private const string baseSql = 
-			"select name, description, secondslimit, datediff(second, lastping, getdate()) as secondslastping from status.CustomStatusStep";
+			"select id, name, description, secondslimit, datediff(second, lastping, getdate()) as secondslastping from status.CustomStatusStep";
 
 		public FetchCustomStatusSteps(IConfigReader config)
 		{
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Status
 		
 		private static CustomStatusStep createInstance(IDataRecord reader)
 		{
-			return new CustomStatusStep(
+			return new CustomStatusStep(reader.GetInt32(reader.GetOrdinal("id")),
 				reader.GetString(reader.GetOrdinal("name")), 
 				reader.GetString(reader.GetOrdinal("description")),
 				TimeSpan.FromSeconds(reader.GetInt32(reader.GetOrdinal("secondslastping"))), 

@@ -18,8 +18,14 @@ namespace Teleopti.Ccc.Domain.Status
 			foreach (var monitorStep in _allSteps.FetchAll())
 			{
 				var stepName = monitorStep.Name;
-				var pingUrl = monitorStep is CustomStatusStep customStep ? basePath + "ping/" + customStep.Name : null;
-				yield return new StatusStepInfo(stepName, monitorStep.Description, basePath + "check/" + stepName, pingUrl);
+				string pingUrl=null;
+				var id = 0;
+				if (monitorStep is CustomStatusStep customStatusStep)
+				{
+					pingUrl = basePath + "ping/" + customStatusStep.Name;
+					id = customStatusStep.Id;
+				}
+				yield return new StatusStepInfo(id, stepName, monitorStep.Description, basePath + "check/" + stepName, pingUrl);
 			}
 		}
 	}

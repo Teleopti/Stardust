@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			var stepName = Guid.NewGuid().ToString();
 			var description = Guid.NewGuid().ToString();
-			var statusStep = new CustomStatusStep(stepName, description, TimeSpan.Zero, TimeSpan.Zero);
+			var statusStep = new CustomStatusStep(0, stepName, description, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 
 			Target.Execute(uri, stepName).Single(x => x.Name == statusStep.Name).Description
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			var baseUrl = new Uri(uri, "virtDir");
 			var stepName = Guid.NewGuid().ToString();
-			var statusStep = new CustomStatusStep(stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
+			var statusStep = new CustomStatusStep(0, stepName, string.Empty, TimeSpan.Zero, TimeSpan.Zero);
 			FetchCustomStatusSteps.Has(statusStep);
 			
 			Target.Execute(baseUrl, statusPath).Single(x => x.Name == stepName).PingUrl
@@ -84,6 +84,17 @@ namespace Teleopti.Ccc.DomainTest.Status
 			
 			Target.Execute(uri, string.Empty).Single(x => x.Name == FakeStatusStep.Name).PingUrl
 				.Should().Be.Null();
+		}
+		
+		[Test]
+		public void ShouldIncludeIdIfCustomStatusStep()
+		{
+			const int id = 18;
+			var statusStep = new CustomStatusStep(id, "this", string.Empty, TimeSpan.Zero, TimeSpan.Zero);
+			FetchCustomStatusSteps.Has(statusStep);
+		
+			Target.Execute(uri, string.Empty).Single(x => x.Name == statusStep.Name).Id
+				.Should().Be.EqualTo(id);
 		}
 
 		public void Isolate(IIsolate isolate)
