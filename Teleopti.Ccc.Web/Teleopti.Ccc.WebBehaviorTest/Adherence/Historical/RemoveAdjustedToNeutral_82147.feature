@@ -1,5 +1,6 @@
 @RTA
-@OnlyRunIfEnabled('RTA_RemoveAdjustedToNeutral_82147')
+#@OnlyRunIfEnabled('RTA_RemoveAdjustedToNeutral_82147')
+@ignore
 Feature: Remove adjusted to neutral period
   In order to handle an incorrectly adjusted to neutral period
   As a Manager
