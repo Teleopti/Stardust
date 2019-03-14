@@ -18393,4 +18393,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>min</value>
     <comment>Abbreviation of minute(s)</comment>
   </data>
+  <data name="CouldNotFindReportOrFailedToGenerateToken" xml:space="preserve">
+    <value>Could not find report or failed to generate token</value>
+    <comment>Error message in Insights module</comment>
+  </data>
 </root>

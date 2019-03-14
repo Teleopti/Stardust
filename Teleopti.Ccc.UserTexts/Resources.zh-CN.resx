@@ -15449,4 +15449,7 @@ Teleopti R&amp;D</value>
   <data name="InputNameForNewClonedReport" xml:space="preserve">
     <value>请输入报表“{repName}”另存后的新名称：</value>
   </data>
+  <data name="CouldNotFindReportOrFailedToGenerateToken" xml:space="preserve">
+    <value>找不到报表或无法生成 Token 以打开报表</value>
+  </data>
 </root>

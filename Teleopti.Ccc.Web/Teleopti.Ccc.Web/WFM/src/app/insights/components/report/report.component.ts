@@ -132,6 +132,14 @@ export class ReportComponent implements OnInit {
 	}
 
 	loadReport(config) {
+		if (config.ReportId === null || config.ReportUrl === null) {
+			const title = this.translate.instant('FailedToOpenReport');
+			const content = this.translate.instant('CouldNotFindReportOrFailedToGenerateToken');
+			this.notification.create('error', title, content, this.errorNotificationOption);
+
+			return;
+		}
+
 		this.reportName = config.ReportName;
 
 		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
