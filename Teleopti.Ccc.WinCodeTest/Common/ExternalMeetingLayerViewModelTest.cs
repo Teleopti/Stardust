@@ -16,11 +16,11 @@ using Teleopti.Ccc.WinCodeTest.Helpers;
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
 	[TestFixture]
-	public class MeetingPlanerMeetingLayerViewModelTest 
+	public class ExternalMeetingLayerViewModelTest 
 	{
        
 		private bool _expectMovePermitted;
-		private MeetingPlanerMeetingLayerViewModel _target;
+		private ExternalMeetingLayerViewModel _target;
 		private MockRepository _mocks;
 		private ILayer<IActivity> _layerWithPayload;
 		private IScheduleDay _scheduleDay;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
 			_mocks.ReplayAll();
 			_layerWithPayload = new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), _period, Guid.NewGuid());
-			_target = new MeetingPlanerMeetingLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, _person);
+			_target = new ExternalMeetingLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, _person);
 			testRunner = new CrossThreadTestRunner();
 		}
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void VerifyCanMoveUpDoesNotCheckShiftWhenMoveNotPermitted()
 		{
 			var meeting = new MeetingShiftLayer(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2000,1,1,2000,1,2), Guid.NewGuid());
-			var model = new MeetingPlanerMeetingLayerViewModel(null, meeting, null, _person);
+			var model = new ExternalMeetingLayerViewModel(null, meeting, null, _person);
 			Assert.IsFalse(model.CanMoveUp, "There is a Collection, but it should never get called since moving meeting is not permitted");
 			Assert.IsFalse(model.CanMoveDown, "There is a Collection, but it should never get called since moving meeting is not permitted");
 		}

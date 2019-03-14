@@ -3,9 +3,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
-	public class MeetingPlanerMeetingLayerViewModel : LayerViewModel
+	public class ExternalMeetingLayerViewModel : LayerViewModel
 	{
-		public MeetingPlanerMeetingLayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, IPerson person) : base(observer, layer, eventAggregator, false, person)
+		public ExternalMeetingLayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, IPerson person) : base(observer, layer, eventAggregator, false, person)
 		{
 		}
 

@@ -261,7 +261,7 @@
     <Compile Include="Common\LayerViewModelCollectionTest.cs" />
     <Compile Include="Common\LayerGroupViewModelTest.cs" />
     <Compile Include="Common\LayerViewModelSelectorTest.cs" />
-    <Compile Include="Common\MeetingPlanerMeetingLayerViewModelTest.cs" />
+    <Compile Include="Common\ExternalMeetingLayerViewModelTest.cs" />
     <Compile Include="Common\Messaging\Filter\MessageDialogueFilterTest.cs" />
     <Compile Include="Common\Messaging\Filter\PushMessageFilterTest.cs" />
     <Compile Include="Common\Filter\SpecificationFilterTest.cs" />

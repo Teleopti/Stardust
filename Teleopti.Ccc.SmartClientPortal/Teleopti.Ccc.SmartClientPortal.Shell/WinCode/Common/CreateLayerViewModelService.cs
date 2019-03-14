@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 				foreach (var meetingShiftLayer in assignment.Meetings())
 				{
-					layerViewModels.Add(new MeetingPlanerMeetingLayerViewModel(observer, meetingShiftLayer, eventAggregator, assignment.Person));
+					layerViewModels.Add(new ExternalMeetingLayerViewModel(observer, meetingShiftLayer, eventAggregator, assignment.Person));
 				}
             }
 			// bug 14478 show meetings even if there is no assignment
