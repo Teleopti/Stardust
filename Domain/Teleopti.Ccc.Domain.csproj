@@ -1401,7 +1401,7 @@
     <Compile Include="InterfaceLegacy\Domain\ShiftTradeStatus.cs" />
     <Compile Include="InterfaceLegacy\Domain\ShippedCustomRoles.cs" />
     <Compile Include="InterfaceLegacy\Domain\SkillPersonData.cs" />
-    <Compile Include="InterfaceLegacy\Domain\StaffingPossiblityType.cs" />
+    <Compile Include="InterfaceLegacy\Domain\StaffingPossibilityType.cs" />
     <Compile Include="InterfaceLegacy\Domain\StaffingThreshold.cs" />
     <Compile Include="InterfaceLegacy\Domain\StaffingThresholds.cs" />
     <Compile Include="InterfaceLegacy\Domain\StartTimeLimitation.cs" />

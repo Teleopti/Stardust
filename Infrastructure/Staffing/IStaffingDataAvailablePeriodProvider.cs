@@ -5,7 +5,9 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 {
 	public interface IStaffingDataAvailablePeriodProvider
 	{
-		DateOnlyPeriod? GetPeriodForAbsence(IPerson person, DateOnly date, bool forThisWeek);
-		List<DateOnlyPeriod> GetPeriodsForOvertime(IPerson person, DateOnly date, bool forThisWeek = false);
+		DateOnlyPeriod? GetPeriodForAbsenceForWeek(IPerson person, DateOnly date);
+		DateOnlyPeriod? GetPeriodForAbsenceForMobileDay(IPerson person, DateOnly date);
+		List<DateOnlyPeriod> GetPeriodsForOvertimeForWeek(IPerson person, DateOnly date);
+		List<DateOnlyPeriod> GetPeriodsForOvertimeForMobileDay(IPerson person, DateOnly date);
 	}
 }

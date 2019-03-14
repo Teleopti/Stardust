@@ -273,8 +273,9 @@
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerGetIntradayScheduleEdgeTimeTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerDayTimeLineTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerWeekTimeLineTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerAbsenceForMobileDayTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerAbsenceForWeekTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerOvertimeTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerAbsenceTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerFetchWeekDataTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\AppGuideControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />

@@ -244,7 +244,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		self.fetchProbabilityData = function() {
 			self.loadingProbabilityData(true);
 			ajax.Ajax({
-				url: '../api/ScheduleStaffingPossibility',
+				url: '../api/ScheduleStaffingPossibilityForWeek',
 				dataType: 'json',
 				type: 'GET',
 				data: {

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var date = scheduleDays.First().DateOnlyAsPeriod.DateOnly;
-			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(currentUser, date, true);
+			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForWeek(currentUser, date);
 			if (!staffingDataAvailablePeriod.HasValue)
 				return null;
 
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var date = scheduleDays.First().DateOnlyAsPeriod.DateOnly;
-			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(currentUser, date, true);
+			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForWeek(currentUser, date);
 			if (!staffingDataAvailablePeriod.HasValue)
 				return null;
 

@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function() {
 	module('Teleopti.MyTimeWeb.Schedule.ProbabilityModels');
 
 	var probabilityLevel = {
@@ -58,14 +58,14 @@
 		return result;
 	}
 
-	test('No continous period for empty schedule periods', function () {
+	test('No continous period for empty schedule periods', function() {
 		var schedulePeriods = [];
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetMergedPeriods(baseDate, schedulePeriods);
 
 		equal(vm.length, 0);
 	});
 
-	test('Should get one continous periods', function () {
+	test('Should get one continous periods', function() {
 		var schedulePeriods = [
 			{
 				StartTime: baseDate + 'T02:45:00',
@@ -81,13 +81,13 @@
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetMergedPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 1);
 		equal(vm[0].startTimeInMin, 165);
 		equal(vm[0].endTimeInMin, 360);
 	});
 
-	test('Should get multiple continous periods - 1', function () {
+	test('Should get multiple continous periods - 1', function() {
 		var schedulePeriods = [
 			{
 				StartTime: baseDate + 'T02:45:00',
@@ -103,7 +103,7 @@
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetMergedPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 2);
 
 		var firstContinousPeriod = vm[0];
@@ -115,7 +115,7 @@
 		equal(secondContinousPeriod.endTimeInMin, 540);
 	});
 
-	test('Should get multiple continous periods - 2', function () {
+	test('Should get multiple continous periods - 2', function() {
 		var schedulePeriods = [
 			{
 				StartTime: baseDate + 'T02:45:00',
@@ -135,7 +135,7 @@
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetMergedPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 3);
 
 		var firstContinousPeriod = vm[0];
@@ -151,7 +151,7 @@
 		equal(thirdContinousPeriod.endTimeInMin, 1200);
 	});
 
-	test('Should get correct starttime and endtime for cross day schedules', function () {
+	test('Should get correct start time and end time for cross day schedules', function() {
 		var schedulePeriods = [
 			{
 				StartTime: yesterday + 'T22:45:00',
@@ -167,7 +167,7 @@
 			}
 		];
 
-		var vm = new Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetContinousPeriods(baseDate, schedulePeriods);
+		var vm = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.GetMergedPeriods(baseDate, schedulePeriods);
 		equal(vm.length, 2);
 
 		var firstContinousPeriod = vm[0];
@@ -176,10 +176,10 @@
 
 		var secondContinousPeriod = vm[1];
 		equal(secondContinousPeriod.startTimeInMin, 1035);
-		equal(secondContinousPeriod.endTimeInMin, 1440);
+		equal(secondContinousPeriod.endTimeInMin, 1440 + 90);
 	});
 
-	test('Should not create probability if set to show no probability', function () {
+	test('Should not create probability if set to show no probability', function() {
 		var scheduleDay = {};
 		var rawProbability = createRawProbabilities();
 		var options = {
@@ -194,11 +194,11 @@
 		equal(probabilities.length, 0);
 	});
 
-	test('Should not create probability if set to show absence probability but is full day absence', function () {
+	test('Should not create probability if set to show absence probability but is full day absence', function() {
 		var scheduleDay = {
 			isFullDayAbsence: true,
 			isDayOff: false,
-			fixedDate: function () { },
+			fixedDate: function() {},
 			periods: [
 				{
 					StartTime: baseDate + 'T02:45:00',
@@ -228,7 +228,7 @@
 		equal(probabilities.length, 0);
 	});
 
-	test('Should not merge absence probability when disconnected on mobile day', function () {
+	test('Should not merge absence probability when disconnected on mobile day', function() {
 		var date = '2018-03-12';
 		var scheduleDay = {
 			isFullDayAbsence: false,
@@ -260,12 +260,12 @@
 		equal(probabilities.length, 12 + 8);
 	});
 
-	test('Should merge overtime probability when schedule is disconnected on mobile day', function () {
+	test('Should merge overtime probability when schedule is disconnected on mobile day', function() {
 		var date = '2018-03-12';
 		var scheduleDay = {
 			isFullDayAbsence: false,
 			isDayOff: false,
-			fixedDate: function () {
+			fixedDate: function() {
 				return date;
 			},
 			periods: [
@@ -294,7 +294,7 @@
 		equal(probabilities.length, 12 + 8 + 8);
 	});
 
-	test('Should create probability correctly for absence probability on leaving DST day', function () {
+	test('Should create probability correctly for absence probability on leaving DST day', function() {
 		var date = '2017-11-05';
 		var scheduleDay = {
 			isFullDayAbsence: false,
@@ -310,7 +310,7 @@
 		var rawProbability = createRawProbabilities(date);
 		//There are two 01:00 - 02:00 on leaving DST day and we will sum the probabilities data to one hour
 		var extraProbability = rawProbability.slice(4, 8);
-		extraProbability.forEach(function (p, i) {
+		extraProbability.forEach(function(p, i) {
 			rawProbability[4 + i].Possibility =
 				parseInt(rawProbability[4 + i].Possibility + extraProbability.Possibility) / 2;
 		});
@@ -328,14 +328,14 @@
 		equal(probabilities.length, 12);
 	});
 
-	test('Should create probability correctly for overtime probability on entering DST day', function () {
+	test('Should create probability correctly for overtime probability on entering DST day', function() {
 		var date = '2018-03-11';
 		var scheduleDay = {
 			isFullDayAbsence: false,
-			isDayOff: function () {
+			isDayOff: function() {
 				return true;
 			},
-			fixedDate: function () {
+			fixedDate: function() {
 				return date;
 			},
 			periods: [
@@ -361,14 +361,14 @@
 		equal(probabilities.length, 8);
 	});
 
-	test('Should calcultate probability postition and length correctly for overtime on entering DST day', function () {
+	test('Should calcultate probability postition and length correctly for overtime on entering DST day', function() {
 		var date = '2018-03-11';
 		var scheduleDay = {
 			isFullDayAbsence: false,
-			isDayOff: function () {
+			isDayOff: function() {
 				return true;
 			},
-			fixedDate: function () {
+			fixedDate: function() {
 				return date;
 			},
 			periods: [
@@ -395,7 +395,7 @@
 			}
 		};
 
-		rawProbability.forEach(function (p) {
+		rawProbability.forEach(function(p) {
 			p.Possibility = 1;
 		});
 
@@ -414,13 +414,13 @@
 		);
 	});
 
-	test('Should not create probability if set to show absence probability but is dayoff', function () {
+	test('Should not create probability if set to show absence probability but is dayoff', function() {
 		var scheduleDay = {
 			isFullDayAbsence: false,
-			isDayOff: function () {
+			isDayOff: function() {
 				return true;
 			},
-			fixedDate: function () { },
+			fixedDate: function() {},
 			periods: [
 				{
 					StartTime: baseDate + 'T02:45:00',
@@ -450,10 +450,10 @@
 		equal(probabilities.length, 0);
 	});
 
-	test('Should create probability for schedule starts from yesterday even today is dayoff', function () {
+	test('Should create probability for schedule starts from yesterday even today is dayoff', function() {
 		var scheduleDay = {
 			isFullDayAbsence: false,
-			isDayOff: function () {
+			isDayOff: function() {
 				return true;
 			},
 			fixedDate: baseDate,
@@ -479,7 +479,7 @@
 		equal(probabilities.length, 40);
 	});
 
-	test('Should create probability with same height for vertical layout direction with two continues periods', function () {
+	test('Should create probability with same height for vertical layout direction with two continues periods', function() {
 		var scheduleDay = {
 			fixedDate: baseDate,
 			isFullDayAbsence: false,
@@ -530,7 +530,7 @@
 		}
 	});
 
-	test('Should create probability with height for vertical layout direction', function () {
+	test('Should create probability with height for vertical layout direction', function() {
 		var scheduleDay = {
 			fixedDate: baseDate,
 			isFullDayAbsence: false,
@@ -578,7 +578,7 @@
 		}
 	});
 
-	test('Should create probability with height for horizontal layout direction', function () {
+	test('Should create probability with height for horizontal layout direction', function() {
 		var scheduleDay = {
 			fixedDate: baseDate,
 			isFullDayAbsence: false,
@@ -624,7 +624,7 @@
 		}
 	});
 
-	test('Should merge same probability intervals when options.mergeSameIntervals is set to true', function () {
+	test('Should merge same probability intervals when options.mergeSameIntervals is set to true', function() {
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 
 		var timelineStart = 1,
@@ -643,13 +643,13 @@
 		};
 		var rawProbabilities = createRawProbabilities();
 
-		rawProbabilities.forEach(function (p, index) {
+		rawProbabilities.forEach(function(p, index) {
 			//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
 			//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
 			p.Possibility = index < 7 * 4 ? probabilityLevel.low : probabilityLevel.high;
 		});
 
-		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
+		var expectedRawProbabilities = rawProbabilities.filter(function(p) {
 			return moment(p.EndTime) <= moment(baseDate).add(9, 'hours');
 		});
 
@@ -696,7 +696,7 @@
 		equal(probability.cssClass(), 'probability-high');
 	});
 
-	test('Should merge same probability intervals correctly when there are cross day schedule', function () {
+	test('Should merge same probability intervals correctly when there are cross day schedule', function() {
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 
 		var timelineStart = 0,
@@ -719,13 +719,13 @@
 		};
 		var rawProbabilities = createRawProbabilities();
 
-		rawProbabilities.forEach(function (p, index) {
+		rawProbabilities.forEach(function(p, index) {
 			//Test case: probability level is low from 6:00 to 7:00, and high between 7:00 to 9:00
 			//Schedule Period: 6:00 ~ 9:00, Timeline: 0:45 ~ 9:15
 			p.Possibility = index < 7 * 4 ? probabilityLevel.low : probabilityLevel.high;
 		});
 
-		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
+		var expectedRawProbabilities = rawProbabilities.filter(function(p) {
 			return moment(p.EndTime) <= moment(baseDate).add(9, 'hours');
 		});
 
@@ -775,7 +775,7 @@
 		equal(probability.cssClass(), 'probability-high');
 	});
 
-	test('Should trim probability cell data periods according continousPeriods for absence', function () {
+	test('Should trim probability cell data periods according continousPeriods for absence', function() {
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 
 		var timelineStart = 0,
@@ -798,11 +798,11 @@
 		};
 		//probability period is 24 hours
 		var rawProbabilities = createRawProbabilities();
-		var expectedRawProbabilities = rawProbabilities.filter(function (p) {
+		var expectedRawProbabilities = rawProbabilities.filter(function(p) {
 			return moment(p.EndTime) <= moment(baseDate).add(9, 'hours');
 		});
 
-		expectedRawProbabilities.forEach(function (p) {
+		expectedRawProbabilities.forEach(function(p) {
 			p.Possibility = 1;
 		});
 

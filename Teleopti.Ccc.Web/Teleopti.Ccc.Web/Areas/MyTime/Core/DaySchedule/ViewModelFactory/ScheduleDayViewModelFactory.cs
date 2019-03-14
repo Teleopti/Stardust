@@ -47,15 +47,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 				daySchedule.MinMaxTime = defaultTimeLinePeriod;
 			}
 
-			if (needAdjustTimeline(staffingPossibilityType, date, false))
+			if (needAdjustTimeline(staffingPossibilityType, date))
 			{
 				_scheduleDayMinMaxTimeCalculator.AdjustScheduleMinMaxTime(daySchedule);
 			}
 
 			daySchedule.UnReadMessageCount = _pushMessageProvider.UnreadMessageCount;
 
-			var isOvertimeStaffingPossibility = staffingPossibilityType == StaffingPossibilityType.Overtime;
-			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossibility);
+			var isOvertimeStaffingPossiblity = staffingPossibilityType == StaffingPossibilityType.Overtime;
+			var dayScheduleViewModel = _scheduleViewModelMapper.Map(daySchedule, isOvertimeStaffingPossiblity);
 			return dayScheduleViewModel;
 		}
 
@@ -112,10 +112,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 			return periodIsVisible(period, date, timeZone);
 		}
 
-		private bool needAdjustTimeline(StaffingPossibilityType staffingPossibilityType, DateOnly date, bool forThisWeek)
+		private bool needAdjustTimeline(StaffingPossibilityType staffingPossibilityType, DateOnly date)
 		{
 			return staffingPossibilityType == StaffingPossibilityType.Overtime &&
-				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(_loggedOnUser.CurrentUser(), date, forThisWeek).HasValue;
+				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForMobileDay(_loggedOnUser.CurrentUser(), date).HasValue;
 		}
 	}
 }

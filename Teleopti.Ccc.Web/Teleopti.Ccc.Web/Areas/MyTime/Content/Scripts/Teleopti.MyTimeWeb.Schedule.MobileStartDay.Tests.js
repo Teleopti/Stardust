@@ -949,91 +949,7 @@
 		ok(lastTooltips.indexOf('12:00 - 12:15') > -1, 'expect contains 12:00 - 12:15 but it is ' + lastTooltips);
 	});
 
-	test('should load one week probability data each time', function() {
-		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
-		startDayData.Date = moment()
-			.zone(-startDayData.BaseUtcOffsetInMinutes)
-			.format(constants.serviceDateTimeFormat.dateOnly);
-		startDayData.Schedule.OpenHourPeriod = { EndTime: '13:00:00', StartTime: '08:00:00' };
-		propabilities = createPropabilities(['12:00:00', '15:00:00'], startDayData.Date);
-
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
-			fakeReadyForInteractionCallback,
-			fakeCompletelyLoadedCallback,
-			ajax
-		);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
-
-		equal(ajaxOption.data.returnOneWeekData, true);
-	});
-
-	test('should cache one week probability data once it is loaded', function() {
-		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
-		startDayData.Date = moment()
-			.zone(-startDayData.BaseUtcOffsetInMinutes)
-			.format(constants.serviceDateTimeFormat.dateOnly);
-		startDayData.Schedule.OpenHourPeriod = { EndTime: '13:00:00', StartTime: '08:00:00' };
-		propabilities = createPropabilities(['12:00:00', '12:15:00'], startDayData.Date);
-		propabilities = propabilities.concat(
-			createPropabilities(
-				['12:00:00', '12:15:00'],
-				moment(startDayData.Date)
-					.add(1, 'day')
-					.format(constants.serviceDateTimeFormat.dateOnly)
-			)
-		);
-		propabilities = propabilities.concat(
-			createPropabilities(
-				['12:00:00', '12:15:00'],
-				moment(startDayData.Date)
-					.add(2, 'day')
-					.format(constants.serviceDateTimeFormat.dateOnly)
-			)
-		);
-		propabilities = propabilities.concat(
-			createPropabilities(
-				['12:00:00', '12:15:00'],
-				moment(startDayData.Date)
-					.add(3, 'day')
-					.format(constants.serviceDateTimeFormat.dateOnly)
-			)
-		);
-		propabilities = propabilities.concat(
-			createPropabilities(
-				['12:00:00', '12:15:00'],
-				moment(startDayData.Date)
-					.add(4, 'day')
-					.format(constants.serviceDateTimeFormat.dateOnly)
-			)
-		);
-		propabilities = propabilities.concat(
-			createPropabilities(
-				['12:00:00', '12:15:00'],
-				moment(startDayData.Date)
-					.add(5, 'day')
-					.format(constants.serviceDateTimeFormat.dateOnly)
-			)
-		);
-
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
-			fakeReadyForInteractionCallback,
-			fakeCompletelyLoadedCallback,
-			ajax
-		);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
-
-		equal(ajaxOption.data.returnOneWeekData, true);
-		equal(probabilityAjaxCallCount, 1);
-
-		vm.reloadProbabilityData();
-
-		equal(probabilityAjaxCallCount, 1);
-		equal(vm.probabilities().length, 1);
-	});
-
-	test('should reload one week probability data when probability option is changed', function() {
+	test('should reload two days probability data when probability option is changed', function() {
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 		startDayData.CheckStaffingByIntraday = true;
 		startDayData.Date = moment()
@@ -1090,7 +1006,6 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
 
-		equal(ajaxOption.data.returnOneWeekData, true);
 		equal(probabilityAjaxCallCount, 1);
 
 		propabilities = [];
@@ -1212,7 +1127,7 @@
 					fetchAbsenceAccountCallback(options);
 				} else if (requestUrls.indexOf(options.url) > -1) {
 					requestSuccessCallback(options);
-				} else if (options.url === '../api/ScheduleStaffingPossibility') {
+				} else if (options.url === '../api/ScheduleStaffingPossibilityForMobileDay') {
 					probabilityAjaxCallCount++;
 					scheduleStaffingPossibilityCallback(options);
 				}

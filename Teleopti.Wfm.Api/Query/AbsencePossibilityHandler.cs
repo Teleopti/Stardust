@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.Api.Query
 				};
 			}
 
-			var periodForAbsence = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(person, startDate, true);
+			var periodForAbsence = _staffingDataAvailablePeriodProvider.GetPeriodForAbsenceForWeek(person, startDate);
 			if (!periodForAbsence.HasValue)
 			{
 				return new QueryResultDto<AbsencePossibilityDto>

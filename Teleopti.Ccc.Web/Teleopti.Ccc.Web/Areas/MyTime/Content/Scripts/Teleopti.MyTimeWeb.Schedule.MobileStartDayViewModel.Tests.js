@@ -813,6 +813,101 @@
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
+	test('should show overnight absence probability', function() {
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				Periods: [
+					{
+						Title: 'Phone',
+						TimeSpan: '09:30 - 01:00 +1',
+						StartTime: moment()
+							.startOf('day')
+							.add('hour', 9)
+							.add('minute', 30)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment()
+							.startOf('day')
+							.add('hour', 25)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						Summary: '13:30',
+						StyleClassName: 'color_80FF80',
+						Meeting: null,
+						StartPositionPercentage: 0.017857142857142856,
+						EndPositionPercentage: 0.9821428571428571,
+						Color: '128,255,128',
+						IsOvertime: false
+					}
+				]
+			},
+			RequestPermission: {
+				ShiftExchangePermission: false
+			},
+			ViewPossibilityPermission: true,
+			OvertimeProbabilityEnabled: true,
+			TimeLine: [
+				{
+					Time: '09:15:00',
+					TimeLineDisplay: '09:15',
+					PositionPercentage: 0,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '1.01:00:00',
+					TimeLineDisplay: '01:15',
+					PositionPercentage: 1,
+					TimeFixedFormat: null
+				}
+			]
+		};
+		viewModel.readData(rawData);
+
+		viewModel.selectedProbabilityOptionValue(constants.probabilityType.absence);
+		var fakeProbabilityDataDay1 = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(
+			viewModel.selectedDate().format('YYYY-MM-DD')
+		);
+		var fakeProbabilityDataDay2 = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(
+			moment(viewModel.selectedDate())
+				.add(1, 'days')
+				.format('YYYY-MM-DD')
+		);
+
+		viewModel.updateProbabilityData(fakeProbabilityDataDay1.concat(fakeProbabilityDataDay2));
+		equal(viewModel.probabilities().length, 3);
+		equal(
+			viewModel
+				.probabilities()[0]
+				.tooltips()
+				.indexOf('09:30 - 12:00') > -1,
+			true
+		);
+		equal(
+			viewModel
+				.probabilities()[1]
+				.tooltips()
+				.indexOf('12:00 - 00:00 +1') > -1,
+			true
+		);
+		equal(
+			viewModel
+				.probabilities()[2]
+				.tooltips()
+				.indexOf('00:00 +1 - 01:00 +1') > -1,
+			true
+		);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
 	test('should show overtime probability within timeline range', function() {
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();

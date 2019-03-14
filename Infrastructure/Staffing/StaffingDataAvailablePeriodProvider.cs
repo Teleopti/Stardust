@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -23,32 +24,36 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 			_mergedOvertimeRequestOpenPeriodProvider = mergedOvertimeRequestOpenPeriodProvider;
 		}
 
-		public DateOnlyPeriod? GetPeriodForAbsence(IPerson person, DateOnly date, bool forThisWeek)
+		public DateOnlyPeriod? GetPeriodForAbsenceForWeek(IPerson person, DateOnly date)
 		{
-			return getStaffingDataAvailablePeriod(person, date, forThisWeek);
+			var weekPeriod = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+
+			return getStaffingDataAvailablePeriod(person).Intersection(weekPeriod);
 		}
 
-		public List<DateOnlyPeriod> GetPeriodsForOvertime(IPerson person, DateOnly date, bool forThisWeek = false)
+		public DateOnlyPeriod? GetPeriodForAbsenceForMobileDay(IPerson person, DateOnly date)
+		{
+			var dayPeriod = new DateOnlyPeriod(date, date.AddDays(1));
+			return getStaffingDataAvailablePeriod(person).Intersection(dayPeriod);
+		}
+
+		public List<DateOnlyPeriod> GetPeriodsForOvertimeForWeek(IPerson person, DateOnly date)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
 			if (workflowControlSet == null)
 				return new List<DateOnlyPeriod>();
 
+			var weekPeriod  = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+
 			if (workflowControlSet.OvertimeRequestOpenPeriods.Count == 0)
 			{
-				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(person, date, forThisWeek);
+				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(person).Intersection(weekPeriod);
 				return staffingDataAvailablePeriod.HasValue
-					? new List<DateOnlyPeriod> {staffingDataAvailablePeriod.Value}
+					? new List<DateOnlyPeriod> { staffingDataAvailablePeriod.Value }
 					: new List<DateOnlyPeriod>();
 			}
 
-			var period = date.ToDateOnlyPeriod();
-			if (forThisWeek)
-			{
-				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
-			}
-			
-			var days = period.DayCollection();
+			var days = weekPeriod.DayCollection();
 			var availableDays = new List<DateOnly>();
 			foreach (var day in days)
 			{
@@ -72,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 
 			foreach (var availablePeriod in availablePeriods)
 			{
-				var intersectionPeriod = availablePeriod.Intersection(period);
+				var intersectionPeriod = availablePeriod.Intersection(weekPeriod);
 				if (intersectionPeriod.HasValue)
 				{
 					returnPeriods.Add(intersectionPeriod.Value);
@@ -82,14 +87,50 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 			return returnPeriods;
 		}
 
-		private DateOnlyPeriod? getStaffingDataAvailablePeriod(IPerson person, DateOnly date, bool forThisWeek)
+		public List<DateOnlyPeriod> GetPeriodsForOvertimeForMobileDay(IPerson person, DateOnly date)
 		{
-			var period = date.ToDateOnlyPeriod();
-			if (forThisWeek)
+			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet == null)
+				return new List<DateOnlyPeriod>();
+
+			var dayPeriod = new DateOnlyPeriod(date, date.AddDays(1));
+
+			if (workflowControlSet.OvertimeRequestOpenPeriods.Count == 0)
 			{
-				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(person);
+				if (staffingDataAvailablePeriod.Intersection(dayPeriod).HasValue)
+				{
+					return new List<DateOnlyPeriod> {staffingDataAvailablePeriod.Intersection(dayPeriod).Value};
+
+				}
+
+				return new List<DateOnlyPeriod>();
 			}
 
+			var availableDays = new List<DateOnly>();
+			foreach (var day in dayPeriod.DayCollection())
+			{
+				var overtimeRequestOpenPeriods =
+					_mergedOvertimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
+						day);
+
+				if (!overtimeRequestOpenPeriods.IsNullOrEmpty())
+				{
+					availableDays.Add(day);
+				}
+			}
+
+			if (availableDays.Count == 0)
+			{
+				return new List<DateOnlyPeriod>();
+			}
+
+			return availableDays.SplitToContinuousPeriods().Where(period => period.Intersection(dayPeriod).HasValue)
+				.ToList();
+		}
+
+		private DateOnlyPeriod getStaffingDataAvailablePeriod(IPerson person)
+		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var today = _now.CurrentLocalDate(timeZone);
 
@@ -97,7 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 			var maxEndDate = today.AddDays(staffingInfoAvailableDays);
 
 			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
-			return availablePeriod.Intersection(period);
+			return availablePeriod;
 		}
 	}
 }

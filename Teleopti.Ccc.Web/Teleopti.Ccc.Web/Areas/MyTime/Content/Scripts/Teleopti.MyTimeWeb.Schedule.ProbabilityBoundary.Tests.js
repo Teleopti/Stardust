@@ -100,6 +100,25 @@
 		};
 	}
 
+	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate) {
+		var result = [];
+		for (var i = 0; i < (24 * 60) / constants.probabilityIntervalLengthInMinute; i++) {
+			result.push({
+				Date: formattedDate,
+				StartTime: moment(formattedDate)
+					.startOf('day')
+					.add(constants.probabilityIntervalLengthInMinute * i, 'minutes')
+					.format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: moment(formattedDate)
+					.startOf('day')
+					.add(constants.probabilityIntervalLengthInMinute * (i + 1), 'minutes')
+					.format('YYYY-MM-DDTHH:mm:ss'),
+				Possibility: constants.probabilityIntervalLengthInMinute * i < 12 * 60 ? 0 : 1
+			});
+		}
+		return result;
+	}
+
 	test("Calculate absence probability boundaries for dayoff", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
@@ -339,5 +358,50 @@
 		//site open period: 10 * 60 = 600, 15 * 60 = 900
 		equal(vm.probabilityStartMinutes, 600);
 		equal(vm.probabilityEndMinutes, 900);
+	});
+
+	test("should calculate absence probability boundaries for cross day schedule that ends tomorrow for mobile day view", function () {
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.Days[0].Periods[0].EndTime = moment(basedDate).add('day', 1).startOf('day').add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
+
+		var dayViewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		dayViewModel.readData(
+			{
+				Schedule: fakeScheduleData.Days[0],
+				TimeLine: [
+					{
+						Time: "09:15:00",
+						TimeLineDisplay: "09:15",
+						PositionPercentage: 0,
+						TimeFixedFormat: null
+					}, {
+						Time: "1.02:15:00",
+						TimeLineDisplay: "02:15",
+						PositionPercentage: 1,
+						TimeFixedFormat: null
+					}]
+			}
+		);
+		var probabilityDataDay1 = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(basedDate);
+		var probabilityDataDay2 = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(moment(basedDate).add(1, 'days').format(
+			'YYYY-MM-DD'
+		));
+
+		var schedulePeriodStart = moment(fakeScheduleData.Days[0].Periods[0].StartTime);
+		var schedulePeriodEnd = moment(fakeScheduleData.Days[0].Periods[fakeScheduleData.Days[0].Periods.length - 1].EndTime);
+
+		var filteredProbabilityData = probabilityDataDay1.concat(probabilityDataDay2).filter(function (probability) {
+			return (
+				schedulePeriodStart <= moment(probability.StartTime) &&
+				moment(probability.EndTime) <= schedulePeriodEnd
+			);
+		});
+
+		var boundary = Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, dayViewModel.timeLines(),
+			constants.probabilityType.absence, filteredProbabilityData, null, true);
+
+		equal(boundary.lengthPercentagePerMinute, 1 / ((26.25 - 9.25) * 60));
+		equal(boundary.probabilityStartMinutes, 9 * 60 + 30);
+		equal(boundary.probabilityEndMinutes, 24 * 60 + 2 * 60);
 	});
 });
