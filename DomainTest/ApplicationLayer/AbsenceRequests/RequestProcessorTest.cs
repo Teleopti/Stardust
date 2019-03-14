@@ -1665,112 +1665,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldBeDeniedWhenMidnightAndUnderStaffedShiftTodayAndNonFullDayRequestPeriodTomorrow()
 		{
-			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));
+			var today = new DateTime(2016, 12, 1, 0, 0, 0, DateTimeKind.Utc);
+			var tomorrow = new DateTime(2016, 12, 2, 0, 0, 0, DateTimeKind.Utc);
 
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill.DefaultResolution = 60;
-			var agent = PersonRepository.Has(skill);
-			var wfcs = new WorkflowControlSet().WithId();
-			createWfcs(wfcs, absence);
-			agent.WorkflowControlSet = wfcs;
-
-			var day1 = new DateTime(2016, 12, 1, 0, 0, 0, DateTimeKind.Utc);
-			var day2 = new DateTime(2016, 12, 2, 0, 0, 0, DateTimeKind.Utc);
-
-			var requestPeriod = new DateTimePeriod(day2.AddHours(1), day2.AddHours(2));
-
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(day1.AddHours(20), day2.AddHours(3)), new ShiftCategory("category")));
-
-			var skillCombinations = new HashSet<Guid> { skill.Id.GetValueOrDefault() };
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(22), day1.AddHours(23)),
-					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(23), day1.AddHours(24)),
-					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day2, day2.AddHours(1)),
-					skillCombinations, -5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(1), day2.AddHours(2)),
-					skillCombinations, -5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(2), day2.AddHours(3)),
-					skillCombinations, -5)
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(day1), 2));
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(day2), 2));
-
-
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
-
-			Target.Process(personRequest);
-
-			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
-		}
-
-		[Test]
-		public void ShouldBeApprovedWhenSingleDayFullDayRequestIsTodayAndHasMidnightShiftYesterdayAndUnderStaffed()
-		{
-			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill.DefaultResolution = 60;
-			var agent = PersonRepository.Has(skill);
-			var wfcs = new WorkflowControlSet().WithId();
-			createWfcs(wfcs, absence);
-			agent.WorkflowControlSet = wfcs;
-
-			var day1 = new DateTime(2016, 12, 1, 0, 0, 0, DateTimeKind.Utc);
-			var day2 = new DateTime(2016, 12, 2, 0, 0, 0, DateTimeKind.Utc);
-
-			var requestPeriod = new DateTimePeriod(day2, day2.AddHours(23).AddMinutes(59));
-
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(day1.AddHours(20), day2.AddHours(3)), new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(day2.AddHours(10), day2.AddHours(12)), new ShiftCategory("category")));
-
-			var skillCombinations = new HashSet<Guid> { skill.Id.GetValueOrDefault() };
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(22), day1.AddHours(23)),
-					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(23), day1.AddHours(24)),
-					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day2, day2.AddHours(1)),
-					skillCombinations, -5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(1), day2.AddHours(2)),
-					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(2), day2.AddHours(3)),
-					skillCombinations, -5),
-
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(10), day2.AddHours(11)),
-					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(11), day2.AddHours(12)),
-					skillCombinations, 5),
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(day1), 2));
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(day2), 2));
-
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod){FullDay = true}).WithId();
-
-			Target.Process(personRequest);
-
-			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-		}
-
-		[Test]
-		public void ShouldBeDeniedWhenSingleDayFullDayRequestIsTodayAndHasMidnightShiftAndUnderStaffed()
-		{
-			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));
+			Now.Is(today);
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var scenario = ScenarioRepository.Has("scenario");
@@ -1783,10 +1681,109 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			createWfcs(wfcs, absence);
 			agent.WorkflowControlSet = wfcs;
 
-			var day1 = new DateTime(2016, 12, 2, 0, 0, 0, DateTimeKind.Utc);
-			var day2 = new DateTime(2016, 12, 3, 0, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(day1.AddHours(20), day2.AddHours(3));
-			var requestPeriod = new DateTimePeriod(day1, day1.AddHours(23).AddMinutes(59));
+			var requestPeriod = new DateTimePeriod(tomorrow.AddHours(1), tomorrow.AddHours(2));
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(today.AddHours(20), tomorrow.AddHours(3)), new ShiftCategory("category")));
+
+			var skillCombinations = new HashSet<Guid> { skill.Id.GetValueOrDefault() };
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(22), today.AddHours(23)),
+					skillCombinations, 5),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(23), today.AddHours(24)),
+					skillCombinations, 5),
+				createSkillCombinationResource(new DateTimePeriod(tomorrow, tomorrow.AddHours(1)),
+					skillCombinations, -5),
+				createSkillCombinationResource(new DateTimePeriod(tomorrow.AddHours(1), tomorrow.AddHours(2)),
+					skillCombinations, -5),
+				createSkillCombinationResource(new DateTimePeriod(tomorrow.AddHours(2), tomorrow.AddHours(3)),
+					skillCombinations, -5)
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(today), 2));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(tomorrow), 2));
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+
+			Target.Process(personRequest);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+		[Test]
+		public void ShouldBeApprovedWhenSingleDayFullDayRequestIsTodayAndHasUnderStaffedMidnightShiftYesterday()
+		{
+			var yesterday = new DateTime(2016, 12, 1, 0, 0, 0, DateTimeKind.Utc);
+			var today = new DateTime(2016, 12, 2, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(today);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+
+			var requestPeriod = new DateTimePeriod(today, today.AddHours(23).AddMinutes(59));
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(yesterday.AddHours(20), today.AddHours(3)), new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, new DateTimePeriod(today.AddHours(10), today.AddHours(12)), new ShiftCategory("category")));
+
+			var skillCombinations = new HashSet<Guid> { skill.Id.GetValueOrDefault() };
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(new DateTimePeriod(yesterday.AddHours(22), yesterday.AddHours(23)),
+					skillCombinations, 5),
+				createSkillCombinationResource(new DateTimePeriod(yesterday.AddHours(23), yesterday.AddHours(24)),
+					skillCombinations, 5),
+				createSkillCombinationResource(new DateTimePeriod(today, today.AddHours(1)),
+					skillCombinations, -5),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(1), today.AddHours(2)),
+					skillCombinations, 5),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(2), today.AddHours(3)),
+					skillCombinations, -5),
+
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(10), today.AddHours(11)),
+					skillCombinations, 5),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(11), today.AddHours(12)),
+					skillCombinations, 5),
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(yesterday), 2));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(today), 2));
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod){FullDay = true}).WithId();
+
+			Target.Process(personRequest);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+
+		[Test]
+		public void ShouldBeDeniedWhenSingleDayFullDayRequestIsTodayAndHasMidnightShiftAndUnderStaffed()
+		{
+			var today = new DateTime(2016, 12, 2, 0, 0, 0, DateTimeKind.Utc);
+			var tomorrow = new DateTime(2016, 12, 3, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(today);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+
+			var period = new DateTimePeriod(today.AddHours(20), tomorrow.AddHours(3));
+			var requestPeriod = new DateTimePeriod(today, today.AddHours(23).AddMinutes(59));
 
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario,
 				activity, period, new ShiftCategory("category")));
@@ -1794,18 +1791,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skillCombinations = new HashSet<Guid> {skill.Id.GetValueOrDefault()};
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(20), day1.AddHours(21)),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(20), today.AddHours(21)),
 					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(21), day1.AddHours(22)),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(21), today.AddHours(22)),
 					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(22), day1.AddHours(23)),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(22), today.AddHours(23)),
 					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day1.AddHours(23), day1.AddHours(24)),
+				createSkillCombinationResource(new DateTimePeriod(today.AddHours(23), today.AddHours(24)),
 					skillCombinations, 5),
-				createSkillCombinationResource(new DateTimePeriod(day2, day2.AddHours(1)), skillCombinations, -5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(1), day2.AddHours(2)),
+				createSkillCombinationResource(new DateTimePeriod(tomorrow, tomorrow.AddHours(1)), skillCombinations, -5),
+				createSkillCombinationResource(new DateTimePeriod(tomorrow.AddHours(1), tomorrow.AddHours(2)),
 					skillCombinations, -5),
-				createSkillCombinationResource(new DateTimePeriod(day2.AddHours(2), day2.AddHours(3)),
+				createSkillCombinationResource(new DateTimePeriod(tomorrow.AddHours(2), tomorrow.AddHours(3)),
 					skillCombinations, -5),
 			});
 
