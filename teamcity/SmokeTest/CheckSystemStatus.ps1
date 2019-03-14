@@ -34,11 +34,11 @@ function CheckSystemStatus
         {
             try
             {
-                Invoke-RestMethod -Uri null
+                Invoke-RestMethod -Uri $step.StatusUrl
             }
             catch
             {
-                Write-Host "ErrorDescription:" $error[0]
+                Write-Host $error[0]
                 $success = 0
                 Start-sleep -s 2
             }
