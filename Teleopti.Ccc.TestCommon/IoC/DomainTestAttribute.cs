@@ -218,6 +218,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeScheduleTagRepository>().For<IScheduleTagRepository>();
 				isolate.UseTestDouble<FakeWorkflowControlSetRepository>().For<IWorkflowControlSetRepository>();
 				isolate.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+				isolate.UseTestDouble<FakeExternalMeetingRepository>().For<IExternalMeetingRepository>();
 				isolate.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
 				isolate.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
 				isolate.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();

@@ -51,7 +51,11 @@ namespace Teleopti.Wfm.Api.Command
 			var externalMeeting = _externalMeetingRepository.Get(command.MeetingId);
 			if (externalMeeting == null)
 			{
-				externalMeeting = new ExternalMeeting();
+				externalMeeting = new ExternalMeeting
+				{
+					Title = command.Title,
+					Agenda = command.Agenda
+				};
 				externalMeeting.SetId(command.MeetingId);
 				_externalMeetingRepository.Add(externalMeeting);
 			}

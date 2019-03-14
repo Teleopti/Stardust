@@ -243,6 +243,7 @@
     <Compile Include="FakeRepositories\FakeDatabaseScheduleExtensions.cs" />
     <Compile Include="FakeRepositories\FakeDataSources.cs" />
     <Compile Include="FakeRepositories\FakeExtensiveLogRepository.cs" />
+    <Compile Include="FakeRepositories\FakeExternalMeetingRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
     <Compile Include="FakeRepositories\FakeFetchAllToggleOverrides.cs" />

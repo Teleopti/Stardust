@@ -45,6 +45,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var dateOnly = new DateOnly(start);
 			var meetingId = Guid.NewGuid();
+			const string title = "title";
+			const string agenda = "agenda";
 			var result = await Client.PostAsync("/command/AddMeeting", new StringContent(
 				JsonConvert.SerializeObject(new
 				{
@@ -52,7 +54,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 					ActivityId = activity.Id.Value,
 					UtcStartTime = start,
 					UtcEndTime = end,
-					MeetingId = meetingId
+					MeetingId = meetingId,
+					Title = title,
+					Agenda = agenda
 				}), Encoding.UTF8, "application/json"));
 
 			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
@@ -65,6 +69,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 			meetingShiftLayer.Period.StartDateTime.Should().Be.EqualTo(start);
 			meetingShiftLayer.Period.EndDateTime.Should().Be.EqualTo(end);
 			meetingShiftLayer.Meeting.Id.Should().Be.EqualTo(meetingId);
+			meetingShiftLayer.Meeting.Title.Should().Be.EqualTo(title);
+			meetingShiftLayer.Meeting.Agenda.Should().Be.EqualTo(agenda);
 			meetingShiftLayer.Payload.Id.Value.Should().Be.EqualTo(activity.Id.Value);
 		}
 	}

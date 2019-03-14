@@ -10,5 +10,7 @@ namespace Teleopti.Wfm.Api.Command
 		public Guid ActivityId { get; set; }
 		public DateTime UtcStartTime { get; set; }
 		public DateTime UtcEndTime { get; set; }
+		public string Title { get; set; }
+		public string Agenda { get; set; }
 	}
 }
