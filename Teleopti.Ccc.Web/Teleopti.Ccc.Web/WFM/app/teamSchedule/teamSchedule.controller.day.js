@@ -604,17 +604,6 @@
 			return 'hidden';
 		};
 
-		vm.orgPickerSelectedText = function () {
-			switch (vm.selectedGroups.groupIds.length) {
-				case 0:
-					return $translate.instant('SelectOrganization');
-				case 1:
-					return vm.teamNameMap[vm.selectedGroups.groupIds[0]];
-				default:
-					return $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedGroups.groupIds.length);
-			}
-		};
-
 		vm.boostrap = bootstrapCommon.ready();
 		var loggedonUsersTeamId = $q.defer();
 		vm.onFavoriteSearchInitDefer = $q.defer();

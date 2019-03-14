@@ -174,24 +174,6 @@
 
 		vm.paginationOptions.totalPages = 1;
 
-		vm.orgPickerSelectedText = function () {
-			var text = '';
-			switch (vm.selectedGroups.groupIds.length) {
-				case 0:
-					text = $translate.instant('SelectOrganization');
-					break;
-
-				case 1:
-					text = vm.teamNameMap[vm.selectedGroups.groupIds[0]];
-					break;
-
-				default:
-					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedGroups.groupIds.length);
-					break;
-			}
-			return text;
-		};
-
 		var asyncData = {
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
 			loggedonUsersTeamId: loggedonUsersTeamId.promise,
@@ -306,7 +288,7 @@
 				var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
 				if (defaultFavoriteSearch) {
-					vm.selectedGroups.groupIds = defaultFavoriteSearch.TeamIds.slice(0);
+					initSelectedGroups(mode.BusinessHierarchy, defaultFavoriteSearch.TeamIds.slice(0), '');
 					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
 					vm.selectedFavorite = defaultFavoriteSearch;
 				} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {
