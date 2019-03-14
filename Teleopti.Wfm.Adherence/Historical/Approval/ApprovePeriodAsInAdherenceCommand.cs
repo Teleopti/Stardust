@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Historical.Approval
 {
 	public class ApprovePeriodAsInAdherenceCommand
 	{

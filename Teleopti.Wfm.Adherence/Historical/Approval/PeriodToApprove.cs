@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Historical.Approval
 {
-	public class ApprovedPeriod
+	public class PeriodToApprove
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartTime { get; set; }

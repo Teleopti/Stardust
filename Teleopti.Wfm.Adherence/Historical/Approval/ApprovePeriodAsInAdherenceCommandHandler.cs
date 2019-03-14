@@ -6,17 +6,17 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Historical.Approval
 {
 	public class ApprovePeriodAsInAdherenceCommandHandler
 	{
-		private readonly ApprovePeriodAsInAdherence _approve;
+		private readonly Historical.Approval.Approval _approve;
 		private readonly IUserTimeZone _timeZone;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly IPersonRepository _persons;
 
 		public ApprovePeriodAsInAdherenceCommandHandler(
-			ApprovePeriodAsInAdherence approve,
+			Historical.Approval.Approval approve,
 			IUserTimeZone timeZone,
 			ICurrentAuthorization authorization,
 			IPersonRepository persons)
@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence
 
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());
 			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.EndDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());
-			_approve.Approve(new ApprovedPeriod
+			_approve.ApproveAsInAdherence(new PeriodToApprove
 			{
 				PersonId = command.PersonId,
 				StartTime = startDateTime,

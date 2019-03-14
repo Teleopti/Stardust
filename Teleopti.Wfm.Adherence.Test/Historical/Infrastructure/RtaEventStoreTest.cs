@@ -134,7 +134,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 		[Test]
 		public void ShouldStoreApprovedPeriodRemovedEvent()
 		{
-			WithUnitOfWork.Do(() => Target.Publish(new ApprovedPeriodRemovedEvent()));
+			WithUnitOfWork.Do(() => Target.Publish(new PeriodApprovalAsInAdherenceCanceledEvent()));
 
 			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Single().Should().Not.Be.Null();

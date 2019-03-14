@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public FakeRtaHistory RemovedApprovedPeriod(Guid personId, string start, string end)
 		{
-			_store.Add(new ApprovedPeriodRemovedEvent
+			_store.Add(new PeriodApprovalAsInAdherenceCanceledEvent
 			{
 				PersonId = personId,
 				BelongsToDate = belongsToDate(personId, start, start),

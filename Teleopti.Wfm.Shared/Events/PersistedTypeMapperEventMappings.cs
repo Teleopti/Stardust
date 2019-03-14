@@ -898,9 +898,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			};
 			yield return new PersistedTypeMapping
 			{
-				CurrentPersistedName = "ApprovedPeriodRemoved",
-				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.Historical.Events.ApprovedPeriodRemovedEvent, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.Historical.Events.ApprovedPeriodRemovedEvent, Teleopti.Wfm.Adherence"
+				CurrentPersistedName = "PeriodAdjustmentToNeutralCanceledEvent",
+				CurrentTypeName = "Teleopti.Wfm.Adherence.Historical.Events.PeriodAdjustmentToNeutralCanceledEvent, Teleopti.Wfm.Adherence"
+			};
+			yield return new PersistedTypeMapping
+			{
+				CurrentPersistedName = "PeriodApprovalAsInAdherenceCanceled",
+				LegacyPersistedNames = new[]
+				{
+					"ApprovedPeriodRemoved", 
+					"Teleopti.Wfm.Adherence.Historical.Events.ApprovedPeriodRemovedEvent, Teleopti.Wfm.Adherence"
+				},
+				CurrentTypeName = "Teleopti.Wfm.Adherence.Historical.Events.PeriodApprovalAsInAdherenceCanceledEvent, Teleopti.Wfm.Adherence"
 			};
 			yield return new PersistedTypeMapping
 			{

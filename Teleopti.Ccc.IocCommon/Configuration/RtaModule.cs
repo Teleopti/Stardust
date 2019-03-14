@@ -13,9 +13,9 @@ using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Historical;
-using Teleopti.Wfm.Adherence.Historical.AdjustAdherence;
+using Teleopti.Wfm.Adherence.Historical.Adjustment;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
-using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Approval;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
@@ -119,11 +119,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
-			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
-			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
-			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
-			builder.RegisterType<AdjustAdherenceToNeutral>().SingleInstance();
-			builder.RegisterType<AdjustAdherenceToNeutralCommandHandler>().SingleInstance();
+			builder.RegisterType<Approval>().SingleInstance();
+			builder.RegisterType<CancelApprovalAsInAdherenceCommandHandler>().SingleInstance();
+			builder.RegisterType<Adjustment>().SingleInstance();
+			builder.RegisterType<AdjustPeriodToNeutralCommandHandler>().SingleInstance();
+			builder.RegisterType<CancelAdjustmentToNeutralCommandHandler>().SingleInstance();
 			builder.RegisterType<BelongsToDateMapper>().SingleInstance();
 
 			builder.RegisterType<RtaEventStore>()

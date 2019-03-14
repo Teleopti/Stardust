@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Historical;
-using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Approval;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
@@ -16,17 +16,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IHistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 		private readonly ApprovePeriodAsInAdherenceCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
-		private readonly RemoveApprovedPeriodCommandHandler _removePeriodCommandHandler;
+		private readonly CancelApprovalAsInAdherenceCommandHandler _removeCancelApprovalAsInAdherenceCommandHandler;
 
 		public HistoricalAdherenceController(
 			IHistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			ApprovePeriodAsInAdherenceCommandHandler approvePeriodCommandHandler,
-			RemoveApprovedPeriodCommandHandler removePeriodCommandHandler,
+			CancelApprovalAsInAdherenceCommandHandler removeCancelApprovalAsInAdherenceCommandHandler,
 			HistoricalAdherenceDate historicalAdherenceDate)
 		{
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
 			_approvePeriodCommandHandler = approvePeriodCommandHandler;
-			_removePeriodCommandHandler = removePeriodCommandHandler;
+			_removeCancelApprovalAsInAdherenceCommandHandler = removeCancelApprovalAsInAdherenceCommandHandler;
 			_historicalAdherenceDate = historicalAdherenceDate;
 		}
 
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 		[UnitOfWork]
 		[HttpPost, Route("api/HistoricalAdherence/RemoveApprovedPeriod")]
-		public virtual IHttpActionResult RemoveApprovedPeriod([FromBody] RemoveApprovedPeriodCommand command)
+		public virtual IHttpActionResult RemoveApprovedPeriod([FromBody] CancelApprovalAsInAdherenceCommand approvalAsInAdherenceCommand)
 		{
-			_removePeriodCommandHandler.Handle(command);
+			_removeCancelApprovalAsInAdherenceCommandHandler.Handle(approvalAsInAdherenceCommand);
 			return Ok();
 		}
 

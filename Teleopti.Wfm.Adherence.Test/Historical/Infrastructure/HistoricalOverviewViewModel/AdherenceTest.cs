@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.Historical;
-using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Approval;
 using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
@@ -22,8 +22,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOvervi
 		public IEventPublisher Publisher;
 		public IRtaEventStoreSynchronizer Synchronizer;
 		public WithUnitOfWork UnitOfWork;
-		public ApprovePeriodAsInAdherence Approver;
-		public RemoveApprovedPeriod Remover;
+		public Approval Approval;
 
 		[Test]
 		public void ShouldWorkAfterSynchronize()
@@ -72,8 +71,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOvervi
 				Adherence = EventAdherence.Out
 			});
 			Now.Is("2018-11-14 08:00");
-			UnitOfWork.Do(() => Approver.Approve(
-				new ApprovedPeriod()
+			UnitOfWork.Do(() => Approval.ApproveAsInAdherence(
+				new PeriodToApprove()
 				{
 					PersonId = person,
 					StartTime = "2018-11-13 08:00".Utc(),
@@ -106,16 +105,16 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOvervi
 				Adherence = EventAdherence.Out
 			});
 			Now.Is("2018-11-14 08:00");
-			UnitOfWork.Do(() => Approver.Approve(
-				new ApprovedPeriod
+			UnitOfWork.Do(() => Approval.ApproveAsInAdherence(
+				new PeriodToApprove
 				{
 					PersonId = person,
 					StartTime = "2018-11-13 08:00".Utc(),
 					EndTime = "2018-11-13 17:00".Utc()
 				}
 			));
-			UnitOfWork.Do(() => Remover.Remove(
-				new RemovedPeriod
+			UnitOfWork.Do(() => Approval.Cancel(
+				new PeriodToCancel
 				{
 					PersonId = person,
 					StartTime = "2018-11-13 08:00".Utc(),

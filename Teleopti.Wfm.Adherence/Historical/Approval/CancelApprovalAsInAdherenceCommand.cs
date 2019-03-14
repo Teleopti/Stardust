@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Historical.Approval
 {
-	public class RemoveApprovedPeriodCommand
+	public class CancelApprovalAsInAdherenceCommand
 	{
 		public Guid PersonId { get; set; }
 		public string StartDateTime { get; set; }

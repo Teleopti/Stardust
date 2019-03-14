@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		public void Apply(PeriodApprovedAsInAdherenceEvent @event) =>
 			_collectedApprovedPeriods.Add(new OpenPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
-		public void Apply(ApprovedPeriodRemovedEvent @event) =>
+		public void Apply(PeriodApprovalAsInAdherenceCanceledEvent @event) =>
 			_collectedApprovedPeriods.Remove(new OpenPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
 		public void Apply(PeriodAdjustedToNeutralEvent @event) =>

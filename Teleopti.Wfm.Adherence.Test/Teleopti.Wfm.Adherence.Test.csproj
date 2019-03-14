@@ -198,7 +198,8 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
-    <Compile Include="Historical\Unit\AdjustAdherence\AdjustAdherenceToNeutralCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\AdjustAdherence\AdjustPeriodToNeutralCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\AdjustAdherence\CancelAdjustmentToNeutralCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\AdjustedToNeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\NeutralAdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageAdjustToNeutralTest.cs" />
@@ -219,7 +220,7 @@
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceBelongsToDateCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\RemoveApprovedPeriodTest.cs" />
-    <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\CancelApprovalAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\AdjustedPeriodsViewModelBuilder\AdjustedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceDate\DateTest.cs" />

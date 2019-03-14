@@ -4,23 +4,23 @@ using NUnit.Framework;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using SharpTestsEx;
-using Teleopti.Wfm.Adherence.Historical.AdjustAdherence;
+using Teleopti.Wfm.Adherence.Historical.Adjustment;
 using Teleopti.Wfm.Adherence.Historical.Events;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AdjustAdherence
 {
 	[DomainTest]
 	[TestFixture]
-	public class AdjustAdherenceToNeutralCommandHandlerTest
+	public class AdjustPeriodToNeutralCommandHandlerTest
 	{
-		public AdjustAdherenceToNeutralCommandHandler Target;
+		public AdjustPeriodToNeutralCommandHandler Target;
 		public FakeEventPublisher Publisher;
 		public FakeUserTimeZone TimeZone;
 		
 		[Test]
 		public void ShouldAdjustToNeutral()
 		{
-			Target.Handle(new AdjustAdherenceToNeutralCommand
+			Target.Handle(new AdjustPeriodToNeutralCommand
 			{
 				StartDateTime = "2019-01-30 08:00",
 				EndDateTime = "2019-01-30 10:00"
@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AdjustAdherence
 		{
 			TimeZone.IsSweden();
 
-			Target.Handle(new AdjustAdherenceToNeutralCommand
+			Target.Handle(new AdjustPeriodToNeutralCommand
 			{
 				StartDateTime = "2019-01-30 16:00",
 				EndDateTime = "2019-01-30 18:00"
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AdjustAdherence
 		[Test]
 		public void ShouldNotAllowEndTimeBeforeStartTime()
 		{
-			var command = new AdjustAdherenceToNeutralCommand
+			var command = new AdjustPeriodToNeutralCommand
 			{
 				StartDateTime = "2019-01-30 18:00",
 				EndDateTime = "2019-01-30 16:00"
