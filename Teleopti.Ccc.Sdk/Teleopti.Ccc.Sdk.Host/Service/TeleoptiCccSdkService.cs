@@ -554,7 +554,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			}
 		}
 
-		public ScheduleChangesDto GetSchedulesByChangedDateTime(QueryDto queryDto)
+		public ScheduleChangesDto GetSchedulesByChangedDateTime(GetSchedulesByChangeDateQueryDto queryDto)
 		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{

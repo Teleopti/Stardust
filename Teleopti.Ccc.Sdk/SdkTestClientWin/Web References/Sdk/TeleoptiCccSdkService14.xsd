@@ -6,9 +6,9 @@
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q1:QueryDto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="ChangesFromUTC" type="xs:dateTime" />
+          <xs:element name="ChangesFromUTC" type="xs:dateTime" />
           <xs:element minOccurs="0" name="ChangesToUTC" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="Page" type="xs:int" />
+          <xs:element name="Page" type="xs:int" />
           <xs:element minOccurs="0" name="PageSize" type="xs:int" />
         </xs:sequence>
       </xs:extension>

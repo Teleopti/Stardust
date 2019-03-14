@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			throw new NotImplementedException();
 		}
 
-		public ScheduleChangesDto GetSchedulesByChangedDateTime(QueryDto queryDto)
+		public ScheduleChangesDto GetSchedulesByChangedDateTime(GetSchedulesByChangeDateQueryDto queryDto)
 		{
 			throw new NotImplementedException();
 		}

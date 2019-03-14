@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		/// <summary>
 		/// Gets or sets the point in time from which changes should be retreived.
 		/// </summary>
-		[DataMember]
+		[DataMember(IsRequired = true)]
 		public DateTime ChangesFromUTC { get; set; }
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		/// If set to '0', no paging will occur and all matching data will be received in a single go.
 		/// If set beyond the total number of available pages an empty result set will be returned.
 		/// </summary>
-		[DataMember]
+		[DataMember(IsRequired = true)]
 		public int Page { get; set; }
 
 		/// <summary>

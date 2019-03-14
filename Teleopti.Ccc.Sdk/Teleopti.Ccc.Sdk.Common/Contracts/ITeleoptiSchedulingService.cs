@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <param name="queryDto">The query.</param>
 		/// <returns></returns>
 		[OperationContract]
-		ScheduleChangesDto GetSchedulesByChangedDateTime(QueryDto queryDto);
+		ScheduleChangesDto GetSchedulesByChangedDateTime(GetSchedulesByChangeDateQueryDto queryDto);
 
 		/// <summary>
 		/// Queries the system after saved settings for the schedule change subscriptions.

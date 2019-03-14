@@ -2038,7 +2038,7 @@
   <xs:element name="GetSchedulesByChangedDateTime">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q332="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q332:QueryDto" />
+        <xs:element xmlns:q332="http://schemas.ccc.teleopti.com/sdk/2019/03/" minOccurs="0" name="queryDto" nillable="true" type="q332:GetSchedulesByChangeDateQueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
