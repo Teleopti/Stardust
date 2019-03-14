@@ -72,11 +72,17 @@ export const mainInitializer = [
 			if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
 		});
 
-		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams) => {
-			if (called === false) {
+		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams, from: IState) => {
+			if (!called) {
 				called = true;
 				event.preventDefault();
-				preload.then(() => $state.go(next, toParams));
+				preload.then(() => {
+					if (!isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
+						handleNotPermitted(areas, noticeService, $translate, $state, next)
+						return;
+					}
+					$state.go(next, toParams);
+				});
 			} else if (preloadDone && !isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
 				event.preventDefault();
 				handleNotPermitted(areas, noticeService, $translate, $state, next);
