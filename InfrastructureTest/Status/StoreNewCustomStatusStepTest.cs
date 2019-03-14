@@ -39,5 +39,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Status
 			
 			result1.Id.Should().Not.Be.EqualTo(result2.Id);
 		}
+
+		[Test]
+		public void ShouldSetLastPingToDefaultLongAgo()
+		{
+			Target.Execute("1", "1", TimeSpan.FromDays(1));
+
+			FetchCustomStatusSteps.Execute("1").TimeSinceLastPing.Ticks
+				.Should().Be.GreaterThan(TimeSpan.FromDays(300).Ticks);
+		}
 	}
 }

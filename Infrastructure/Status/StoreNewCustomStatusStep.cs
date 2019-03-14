@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Infrastructure.Status
 		private readonly Lazy<string> _connectionString;
 		
 		private const string sql = @"
-insert into status.CustomStatusStep (name, description, secondslimit, lastping) values
-(@name, @description, @secondslimit, '2015-1-1')";
+insert into status.CustomStatusStep (name, description, secondslimit) values
+(@name, @description, @secondslimit)";
 		
 		public StoreNewCustomStatusStep(IConfigReader config)
 		{
