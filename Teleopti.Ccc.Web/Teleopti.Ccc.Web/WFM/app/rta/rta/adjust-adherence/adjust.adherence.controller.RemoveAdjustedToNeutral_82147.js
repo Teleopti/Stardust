@@ -52,7 +52,7 @@
                         EndTime: moment(period.EndTime).format('L LT')
                     };
                     o.remove = function() {
-                        $http.post('../api/Adherence/RemoveAdjustedPeriod', {
+                        $http.post('../api/Adherence/CancelAdjustedPeriod', {
                             StartDateTime: moment(period.StartTime).format('YYYY-MM-DD HH:mm'),
                             EndDateTime: moment(period.EndTime).format('YYYY-MM-DD HH:mm')
                         }).then(loadData);

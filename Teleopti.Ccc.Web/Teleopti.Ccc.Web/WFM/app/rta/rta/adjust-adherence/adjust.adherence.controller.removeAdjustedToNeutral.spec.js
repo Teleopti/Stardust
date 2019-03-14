@@ -13,7 +13,7 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
             vm.adjustedPeriods[0].remove();
         });
 
-        expect(t.backend.lastParams.removeAdjustedPeriod()).toEqual({
+        expect(t.backend.lastParams.cancelAdjustedPeriod()).toEqual({
             StartDateTime: '2019-03-13 09:00',
             EndDateTime: '2019-03-13 10:00'
         });

@@ -92,8 +92,8 @@
         });
 
 		service.fake({
-			name: 'removeAdjustedPeriod',
-			url: /\.\.\/api\/Adherence\/RemoveAdjustedPeriod/
+			name: 'cancelAdjustedPeriod',
+			url: /\.\.\/api\/Adherence\/CancelAdjustedPeriod/
 		});
 		
 		service.fake({
