@@ -25,7 +25,7 @@ properties {
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
 	$ToBeArtifacted = "$WorkingDir\tobeartifact"
-	$BinDependencies = "\\to-files-01\RnD\MSI_Dependencies\Azure_Net"
+	$BinDependencies = "\\to-files-01\RnD\MSI_Dependencies"
 	$Dependencies = "\\to-files-01\RnD\MSI_Dependencies\ccc7_server"
 	$InternalFileShare = "\\hebe\Installation\msi\$env:CccVersion"
 
