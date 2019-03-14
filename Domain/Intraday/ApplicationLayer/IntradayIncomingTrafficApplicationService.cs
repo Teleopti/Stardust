@@ -173,9 +173,11 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		public DateTime[] GenerateTimeSeries(DateTime firstIntervalStarTime, DateTime lastIntervalStartTime, int resolution)
 		{
 			var lastIntervalEndTime = lastIntervalStartTime.AddMinutes(resolution);
+			var tz = _timeZone.TimeZone();
 			var times = Enumerable
 				.Range(0, (int)Math.Ceiling((decimal)(lastIntervalEndTime - firstIntervalStarTime).TotalMinutes / resolution))
 				.Select(offset => firstIntervalStarTime.AddMinutes(offset * resolution))
+				.Where(x => !tz.IsInvalidTime(x))
 				.ToArray();
 			return times;
 		}

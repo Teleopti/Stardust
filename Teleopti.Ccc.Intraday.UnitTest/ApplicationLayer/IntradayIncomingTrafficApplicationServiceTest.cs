@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public MutableNow Now;
 		private IncomingIntervalModel _firstInterval;
 		private IncomingIntervalModel _secondInterval;
+		public FakeUserTimeZone UserTimeZone;
 		private const int minutesPerInterval = 15;
 
 		[SetUp]
@@ -605,6 +606,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 			startDate.Should().Be.EqualTo(new DateOnly(_firstInterval.IntervalDate));
 			endDate.Should().Be.EqualTo(new DateOnly(_firstInterval.IntervalDate));
+		}
+
+		[Test]
+		public void ShouldExcludeInvalidTimes()
+		{
+			UserTimeZone.IsSweden();
+			var series = Target.GenerateTimeSeries(new DateTime(2019, 3, 31, 1, 00, 0, DateTimeKind.Unspecified), new DateTime(2019, 3, 31, 4, 0, 0, DateTimeKind.Unspecified), 30);
+			series.Count().Should().Be.EqualTo(5);
 		}
 	}
 }
