@@ -22,8 +22,6 @@ namespace Stardust.Node.Workers
 		{
 			_httpSender = httpSender;
 			_jobDetails = new List<JobDetailEntity>();
-			//_uriBuilder = new UriBuilder(nodeConfiguration.ManagerLocation);
-			//_uriBuilder.Path += ManagerRouteConstants.JobProgress;
 		}
 
 

@@ -25,7 +25,7 @@ namespace Stardust.Node.Workers
 		private const string JobToDoTypeCanNotBeResolved = "Job to do property=TYPE {0}, can not be resolved by container.";
 		private const string JobToDoCanNotBeDeserialize = "Job to do property=SERIALIZED can not be deserialized.";
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(WorkerWrapper));
+		private readonly ILog Logger = LogManager.GetLogger(typeof(WorkerWrapper));
 
 		private readonly IInvokeHandler _handler;
 		//private readonly NodeConfigurationService _nodeConfigurationService;
@@ -193,7 +193,11 @@ namespace Stardust.Node.Workers
 							{
 								_handler.Invoke(deSer,
 												CancellationTokenSource,
-												SendJobProgressToManager,
+												//this.SendJobProgressToManager,
+										(message) =>
+										{
+											_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
+										},
 												ref returnObjects);
 							},
 							CancellationTokenSource.Token);
@@ -371,9 +375,9 @@ namespace Stardust.Node.Workers
 			IsWorking = false;
 		}
 
-		private void SendJobProgressToManager(string message)
-		{
-			_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
-		}
+		//private void SendJobProgressToManager(string message)
+		//{
+		//	_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
+		//}
 	}
 }

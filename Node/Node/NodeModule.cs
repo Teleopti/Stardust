@@ -9,17 +9,10 @@ namespace Stardust.Node
 {
 	public class NodeModule : Module
 	{
-		//private readonly NodeConfiguration _nodeConfiguration;
-
-		//public NodeModule(NodeConfiguration nodeConfiguration)
-		//{
-		//	_nodeConfiguration = nodeConfiguration;
-		//}
-
+		
 		protected override void Load(ContainerBuilder builder)
 		{
-			//builder.RegisterInstance(_nodeConfiguration).As<NodeConfiguration>().SingleInstance();
-			builder.RegisterType<HttpSender>().As<IHttpSender>().InstancePerDependency();
+			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<InvokeHandler>().As<IInvokeHandler>().InstancePerDependency();
 			builder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().InstancePerDependency();
 
