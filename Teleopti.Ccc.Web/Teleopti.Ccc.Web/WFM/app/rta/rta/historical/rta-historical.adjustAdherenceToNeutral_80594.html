@@ -179,6 +179,9 @@
                          ng-class="{'highlight': approved.highlight}"
                          ng-attr-style="left: {{approved.Offset}}; width: {{approved.Width}}"
                          data-starttime="{{approved.StartTime}}" data-endtime="{{approved.EndTime}}">
+                        <md-tooltip md-direction="top">
+                            {{approved.StartTime}} - {{approved.EndTime}}
+                        </md-tooltip>
                     </div>
                     <div ng-if="vm.approveOffset" class="approve-period"
                          ng-attr-style="left: {{vm.approveOffset}}; width: {{vm.approveWidth}};">
