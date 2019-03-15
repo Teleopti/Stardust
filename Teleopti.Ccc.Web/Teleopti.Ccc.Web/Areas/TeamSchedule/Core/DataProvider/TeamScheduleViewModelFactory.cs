@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				peopleCanViewUnpublishedFor.AddRange(batchCanViewUnpublishedFor);
 
-				var scheduleDaysForPerson = _scheduleProvider.GetScheduleForPersonsInPeriod(schedulePeriod, batchPermittedPeople);
+				var scheduleDaysForPerson = _scheduleProvider.GetScheduleForPersonsInPeriod(schedulePeriod, batchPermittedPeople, new ScheduleDictionaryLoadOptions(false, true));
 				var peopleForCurrentScheduleDayWithAbsence = scheduleDaysForPerson
 					.Where(sd => (sd.DateOnlyAsPeriod.DateOnly == date) && hasAbsenceProjection(sd, batchCanViewUnpublishedFor))
 					.Select(sd=>sd.Person.Id)

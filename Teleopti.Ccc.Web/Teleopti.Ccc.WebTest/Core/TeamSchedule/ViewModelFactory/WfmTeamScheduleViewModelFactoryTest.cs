@@ -1943,6 +1943,40 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldReturnInternalNotesWhenShowOnlyAbsenceAndThereIsInternalNotesForScheduleSearch()
+		{
+			var scheduleDate = new DateOnly(2019, 3, 15);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(scheduleDate,  team);
+
+			var person = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person);
+			person.AddPersonPeriod(personPeriod);
+
+			var scenario = CurrentScenario.Has("Default");
+			var note = new Note(person, scheduleDate, scenario, "dummy notes");
+			NoteRepository.Add(note);
+
+			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2019, 3, 15, 0, 2019, 3, 15, 23));
+			PersonAbsenceRepository.Add(personAbs);
+			
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					GroupIds = new[] { team.Id.Value },
+					DateInUserTimeZone = scheduleDate,
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = true
+				});
+
+			var schedule = result.Schedules.First();
+			schedule.InternalNotes.Should().Be("dummy notes");
+		}
+
+		[Test]
 		public void ShouldReturnTimezoneWhenThereIsForScheduleSearch()
 		{
 			CurrentScenario.Has("Default");
