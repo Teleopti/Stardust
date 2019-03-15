@@ -10,7 +10,7 @@ using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
 {
-	public class PingToManagerTimer : Timer
+	public class PingToManagerTimer : Timer, IPingToManagerTimer
 	{
 		//private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 		private string _whoAmI;

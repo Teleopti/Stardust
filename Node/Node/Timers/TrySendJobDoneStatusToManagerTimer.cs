@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+﻿using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
 namespace Stardust.Node.Timers
@@ -15,11 +12,5 @@ namespace Stardust.Node.Timers
 																				  interval)
 		{
 		}
-
-		//public override void Setup(NodeConfiguration nodeConfiguration, Uri getManagerJobDoneTemplateUri)
-		//{
-		//	CallbackTemplateUri = nodeConfiguration.GetManagerJobDoneTemplateUri();
-		//	base.Setup(nodeConfiguration);
-		//}
 	}
 }

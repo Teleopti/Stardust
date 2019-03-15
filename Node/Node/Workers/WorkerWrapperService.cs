@@ -15,30 +15,21 @@ namespace Stardust.Node.Workers
 
 		public WorkerWrapperService (ILifetimeScope componentContext, NodeConfigurationService nodeConfigurationService)
 		{
-			if (componentContext == null)
-			{
-				throw new ArgumentNullException(nameof(componentContext));
-			}
-
 			_nodeConfigurationService = nodeConfigurationService;
-
 			ComponentContext = componentContext;
 		}
 
 		private ILifetimeScope ComponentContext { get; }
 
-		public IWorkerWrapper GetWorkerWrapperByPort(int port)
+		public virtual IWorkerWrapper GetWorkerWrapperByPort(int port)
 		{
-			//using (var lifetimeScope = ComponentContext.BeginLifetimeScope())
-			{
-				IWorkerWrapper worker;
-				if (_workersByPort.TryGetValue(port, out worker)) return worker;
+			IWorkerWrapper worker;
+			if (_workersByPort.TryGetValue(port, out worker)) return worker;
 
-				worker = ComponentContext.Resolve<IWorkerWrapper>();
-				worker.Init(_nodeConfigurationService.GetConfigurationForPort(port));
-				_workersByPort.Add(port, worker);
-				return worker;
-			}
+			worker = ComponentContext.Resolve<IWorkerWrapper>();
+			worker.Init(_nodeConfigurationService.GetConfigurationForPort(port));
+			_workersByPort.Add(port, worker);
+			return worker;
 		}
 	}
 }

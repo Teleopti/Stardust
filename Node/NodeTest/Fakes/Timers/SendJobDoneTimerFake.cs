@@ -16,8 +16,7 @@ namespace NodeTest.Fakes.Timers
 
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-		public SendJobDoneTimerFake(NodeConfiguration nodeConfiguration,
-									JobDetailSender jobDetailSender,
+		public SendJobDoneTimerFake(JobDetailSender jobDetailSender,
 									IHttpSender httpSender,
 									double interval = 1000) : base(jobDetailSender,
 																   httpSender,

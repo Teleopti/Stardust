@@ -28,7 +28,7 @@ namespace Stardust.Node
 			builder.RegisterType<TrySendJobDetailToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<TrySendJobDoneStatusToManagerTimer>().InstancePerDependency();
-			builder.RegisterType<PingToManagerTimer>().InstancePerDependency();
+			builder.RegisterType<PingToManagerTimer>().As<IPingToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<TrySendJobFaultedToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<TrySendJobCanceledToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<JobDetailSender>().InstancePerLifetimeScope();

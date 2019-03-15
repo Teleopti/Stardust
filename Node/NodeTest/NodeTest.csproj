@@ -82,6 +82,7 @@
     <Compile Include="Fakes\Timers\SendJobDoneTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Fakes\WorkerWrapperServiceFake.cs" />
     <Compile Include="JobDetailSenderTest.cs" />
     <Compile Include="JobHandlersTests.cs" />
     <Compile Include="MutableNow.cs" />

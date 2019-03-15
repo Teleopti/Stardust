@@ -83,7 +83,12 @@ namespace NodeConsoleHost
 			WhoAmI = "[NODE CONSOLE HOST ( " + nodeConfig.NodeName + ", " + nodeConfig.BaseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
 			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
-			var builder = new ContainerBuilder();
+
+            var nodeConfigurationService = new NodeConfigurationService();
+            nodeConfigurationService.AddConfiguration(nodeConfig.BaseAddress.Port ,nodeConfig);
+
+            var builder = new ContainerBuilder();
+            builder.RegisterInstance(nodeConfigurationService);
 			builder.RegisterModule(new WorkerModule());
 			Container = builder.Build();	
 

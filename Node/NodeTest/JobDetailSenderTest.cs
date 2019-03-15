@@ -54,6 +54,7 @@ namespace NodeTest
 		public void ShouldRemoveDetailWhenSent()
 		{
 			Target = new JobDetailSender(_httpSenderFake);
+            Target.SetManagerLocation(_nodeConfiguration.ManagerLocation);
 			Target.AddDetail(Guid.NewGuid(), "Progress message.");
 			Target.Send(CancellationToken.None);
 			Target.DetailsCount().Should().Be.EqualTo(0);
@@ -63,8 +64,8 @@ namespace NodeTest
 		public void ShouldSendAllDetailsInTheSameRequest()
 		{
 			Target = new JobDetailSender(_httpSenderFake);
-
-			var jobid = Guid.NewGuid();
+            Target.SetManagerLocation(_nodeConfiguration.ManagerLocation);
+            var jobid = Guid.NewGuid();
 			Target.AddDetail(jobid, "Progress message 1.");
 			Target.AddDetail(jobid, "Progress message 2.");
 

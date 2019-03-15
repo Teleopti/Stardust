@@ -31,7 +31,7 @@ namespace Stardust.Node.Workers
 		//private readonly NodeConfigurationService _nodeConfigurationService;
 		private NodeConfiguration _nodeConfiguration;
 		private readonly TrySendNodeStartUpNotificationToManagerTimer _nodeStartUpNotificationToManagerTimer;
-		private readonly PingToManagerTimer _pingToManagerTimer;
+		private readonly IPingToManagerTimer _pingToManagerTimer;
 
 		private readonly object _startJobLock = new object();
 		private readonly TrySendStatusToManagerTimer _trySendJobCanceledStatusToManagerTimer;
@@ -45,20 +45,14 @@ namespace Stardust.Node.Workers
 		private DateTime? _startJobTimeout;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
-							 //NodeConfiguration nodeConfiguration,
-							 //NodeConfigurationService nodeConfigurationService,
 							 TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
-							 PingToManagerTimer pingToManagerTimer,
+							 IPingToManagerTimer pingToManagerTimer,
 							 TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 							 TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
 							 TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
 							 TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender, INow now)
 		{
 			_handler = invokeHandler;
-			//_nodeConfigurationService = nodeConfigurationService;
-			//_nodeConfiguration = nodeConfiguration;
-			//WhoamI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
-
 			_nodeStartUpNotificationToManagerTimer = nodeStartUpNotificationToManagerTimer;
 			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded +=
 				NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded;
@@ -72,9 +66,6 @@ namespace Stardust.Node.Workers
 			_now = now;
 
 			IsWorking = false;
-
-			//_trySendJobDetailToManagerTimer.Start();
-			//_nodeStartUpNotificationToManagerTimer.Start();
 		}
 
 		public void Init(NodeConfiguration nodeConfiguration)

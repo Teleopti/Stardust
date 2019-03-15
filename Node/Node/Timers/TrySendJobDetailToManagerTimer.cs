@@ -10,7 +10,7 @@ namespace Stardust.Node.Timers
 		private readonly JobDetailSender _jobDetailSender;
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
-		public TrySendJobDetailToManagerTimer(/*(NodeConfiguration nodeConfiguration,*/ JobDetailSender jobDetailSender)
+		public TrySendJobDetailToManagerTimer(JobDetailSender jobDetailSender)
 		{
 			_jobDetailSender = jobDetailSender;
 			_cancellationTokenSource = new CancellationTokenSource();
