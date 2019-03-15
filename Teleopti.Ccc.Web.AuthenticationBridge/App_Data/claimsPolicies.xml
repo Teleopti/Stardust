@@ -1,80 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scopes>
-  <scope uri="http://sample-with-policyengine/">
-    <claimTypes>
-      <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" displayName="givenname"/>
-      <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" displayName="email"/>
-      <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/gender" displayName="gender" />
-      <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" displayName="name" />
-      <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier" displayName="nameidentifier" />
+	<scope uri="http://sample-with-policyengine/">
+		<claimTypes>
+			<claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" displayName="givenname"/>
+			<claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" displayName="email"/>
+			<claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/gender" displayName="gender" />
+			<claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" displayName="name" />
+			<claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier" displayName="nameidentifier" />
 
-		<!-- custom section starts here -->
-		<!-- custom section ends here -->
-    </claimTypes>
-    <issuers>
-	  <issuer uri="urn:Windows" thumbprint="" displayName="Windows"/>
-	  <issuer uri="urn:Teleopti" thumbprint="" displayName="Teleopti"/>
-	  <issuer uri="urn:AzureAd" thumbprint="" displayName="AzureAd"/>
-	  <issuer uri="urn:ADFS3" thumbprint="" displayName="ADFS3"/>
-	  <issuer uri="urn:Saml" thumbprint="" displayName="Saml"/>
+			<!-- custom section starts here -->
+			<!-- custom section ends here -->
+		</claimTypes>
+		<issuers>
+			<issuer uri="urn:Windows" thumbprint="" displayName="Windows"/>
+			<issuer uri="urn:Teleopti" thumbprint="" displayName="Teleopti"/>
+			<issuer uri="urn:AzureAd" thumbprint="" displayName="AzureAd"/>
+			<issuer uri="urn:ADFS3" thumbprint="" displayName="ADFS3"/>
+			<issuer uri="urn:Saml" thumbprint="" displayName="Saml"/>
 			<issuer uri="urn:awfos" thumbprint="" displayName="AWFOS"/>
-	  <issuer uri="urn:Google" thumbprint="" displayName="Google"/>
-		<!-- custom section starts here -->
-		<!--<issuer uri="urn:SalesForce" thumbprint="" displayName="SalesForce"/>-->
-		<!-- custom section ends here -->
-    </issuers>
-    <rules>
-		<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="Windows" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>
-		<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="Teleopti" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>
-		<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="AzureAd" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>
-		<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="ADFS3" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>
-		<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="Saml" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>
-		<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="AWFOS" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>
-    <rule assertionsMatch="any">
-      <input>
-        <claim type="nameidentifier" issuer="Google" value="*"/>
-      </input>
-      <output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-    </rule>
+			<issuer uri="urn:Google" thumbprint="" displayName="Google"/>
+			<issuer uri="urn:Test1" thumbprint="" displayName="Test1"/>
+			<issuer uri="urn:Test2" thumbprint="" displayName="Test2"/>
+			<!-- custom section starts here -->
+			<!--<issuer uri="urn:SalesForce" thumbprint="" displayName="SalesForce"/>-->
+			<!-- custom section ends here -->
+		</issuers>
+		<rules>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="Windows" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="Teleopti" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="AzureAd" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="ADFS3" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="Saml" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="AWFOS" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="Google" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="Test1" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
+			<rule assertionsMatch="any">
+				<input>
+					<claim type="nameidentifier" issuer="Test2" value="*"/>
+				</input>
+				<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+			</rule>
 
-		<!-- custom section starts here -->
-		<!--<rule assertionsMatch="any">
-			<input>
-				<claim type="nameidentifier" issuer="SalesForce" value="*"/>
-			</input>
-			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
-		</rule>-->
-		<!-- custom section ends here -->
-    </rules>
-  </scope>  
+			<!-- custom section starts here -->
+			<!--<rule assertionsMatch="any">
+                <input>
+                    <claim type="nameidentifier" issuer="SalesForce" value="*"/>
+                </input>
+                <output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+            </rule>-->
+			<!-- custom section ends here -->
+		</rules>
+	</scope>
 </scopes>
