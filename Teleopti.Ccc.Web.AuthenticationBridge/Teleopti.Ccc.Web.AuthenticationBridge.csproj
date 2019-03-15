@@ -332,7 +332,6 @@
     </Content>
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="teleopti.auth.pfx" />
-    <None Include="test-certificate.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
