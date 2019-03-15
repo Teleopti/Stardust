@@ -1,13 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { configureTestSuite, PageObject } from '@wfm/test';
-import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarAssignToSitesComponent } from './bank-holiday-calendar-assign-to-sites.component';
 import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 import { BankCalendarDataService } from '../../shared';
@@ -24,7 +23,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 	configureTestSuite();
 
-	beforeEach(async(() => {
+	beforeEach(() => {
 		TestBed.configureTestingModule({
 			declarations: [BankHolidayCalendarAssignToSitesComponent],
 			imports: [
@@ -45,11 +44,6 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		dataService = TestBed.get(BankCalendarDataService);
 		fixture.autoDetectChanges(true);
 		httpTestingController = TestBed.get(HttpTestingController);
-	}));
-
-	it('should create component', doneFn => {
-		expect(component).toBeTruthy();
-		doneFn();
 	});
 
 	it('should render sites list', () => {
@@ -551,6 +545,8 @@ class Page extends PageObject {
 	}
 
 	get dropdownOptions() {
-		return this.fixture.nativeElement.ownerDocument.querySelectorAll('.ant-select-dropdown-menu-item') as HTMLElement[];
+		return this.fixture.nativeElement.ownerDocument.querySelectorAll(
+			'.ant-select-dropdown-menu-item'
+		) as HTMLElement[];
 	}
 }

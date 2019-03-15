@@ -60,11 +60,6 @@ describe('BankHolidayCalendarComponent', () => {
 		httpTestingController = TestBed.get(HttpTestingController);
 	});
 
-	it('should create component', doneFn => {
-		expect(component).toBeTruthy();
-		doneFn();
-	});
-
 	it('should render title', () => {
 		fixture.detectChanges();
 		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
