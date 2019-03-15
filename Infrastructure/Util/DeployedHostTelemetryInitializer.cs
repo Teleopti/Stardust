@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 		public void Initialize(ITelemetry telemetry)
 		{
-			telemetry.Context.Properties["DeployedHost"] = deployedHost.Value;
+			telemetry.Context.GlobalProperties["DeployedHost"] = deployedHost.Value;
 		}
 	}
 }

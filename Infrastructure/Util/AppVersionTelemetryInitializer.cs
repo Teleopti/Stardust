@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 		public void Initialize(ITelemetry telemetry)
 		{
-			telemetry.Context.Properties["TeleoptiVersion"] = applicationVersion;
+			telemetry.Context.GlobalProperties["TeleoptiVersion"] = applicationVersion;
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 		public void Initialize(ITelemetry telemetry)
 		{
-			telemetry.Context.Properties["TeleoptiTenant"] = tenant();
+			telemetry.Context.GlobalProperties["TeleoptiTenant"] = tenant();
 		}
 		
 		private string tenant()
