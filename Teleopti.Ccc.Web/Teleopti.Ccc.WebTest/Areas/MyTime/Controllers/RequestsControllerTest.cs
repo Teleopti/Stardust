@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1501,6 +1500,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.ErrorMessages.Should()
 				.Contain(string.Format(Resources.AbsenceRequestCancellationThresholdExceeded,
 					workflowControlSet.AbsenceRequestCancellationThreshold));
+		}
+
+		[Test]
+		public void ShouldValidateCancellationThresholdZeroForCancelAbsenceRequest()
+		{
+			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
+			PersonRepository.Add(LoggedOnUser.CurrentUser());
+
+			var today = DateTime.Today.Utc();
+			Now.Is(today.AddMinutes(10));
+
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays(1)), true, 0);
+
+			data.ErrorMessages.Should().Contain(Resources.AbsenceRequestCancellationZeroThresholdExceeded);
 		}
 
 		[Test]

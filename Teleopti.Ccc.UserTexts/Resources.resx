@@ -14609,6 +14609,10 @@ Check your internet connection or contact your administrator.</value>
     <value>It is too late to cancel this request.  This request could be cancelled no later than {0} days before its start date.</value>
     <comment>Error message that is displayed in MyTimeWeb's Request view when an agent attempts to cancel a request later than the threshold allows.  Parameter {0} = the number of days before the request startdate that the request can be cancelled.</comment>
   </data>
+  <data name="AbsenceRequestCancellationZeroThresholdExceeded" xml:space="preserve">
+    <value>It is too late to cancel this request. This request could not be cancelled after started.</value>
+    <comment>Error message that is displayed in MyTimeWeb's Request view when an agent attempts to cancel a request with zero threshold after request started.</comment>
+  </data>
   <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
     <value>Can't add an activity within a shift that belongs to the day before</value>
     <comment>Error for adding new activity due to conflicting with the overnight shifts from the previous day.</comment>
