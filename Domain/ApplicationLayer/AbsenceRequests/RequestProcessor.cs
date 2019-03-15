@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					? FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodForOvernightShift(absenceRequest,
 						scheduleDays,
 						_globalSettingDataRepository)
-					: requestPeriodToCoverOvernight;
+					: requestPeriod;
 
 
 				//what if the agent changes personPeriod in the middle of the request period?
