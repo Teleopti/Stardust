@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -76,18 +77,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				((PersonRequest)request1).SetDeleted();
 				persistPersonRequests(request1);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period2, _budgetGroup.Id.Value).ToArray());
+
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target.GetPendingAndWaitlistedAbsenceRequests(period2, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
-
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-						{
-							new PersonWaitlistedAbsenceRequest
-								{PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted},
-						}));
-				});
+					new PersonWaitlistedAbsenceRequest{ PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted},
+				}));
 			}
 		}
 
@@ -124,17 +119,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3,
 					request4);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request4.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-					}));
-				});
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request4.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -170,20 +160,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(new DateTimePeriod(_baseTime, _baseTime.AddDays(1).AddSeconds(-1)), _budgetGroup.Id.Value).ToArray());
+
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(new DateTimePeriod(_baseTime, _baseTime.AddDays(1).AddSeconds(-1)), _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-						{
-							new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
-							new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
-							new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-						}));
-				});
-
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -235,24 +219,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2,
 					request1);
 
-				WithUnitOfWork.Do(() =>
+
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray());
+
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value,
-						WaitlistProcessOrder.BySeniority).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest
-							{PersonRequestId = request3.Id.Value, RequestStatus = PersonRequestStatus.Pending},
-						new PersonWaitlistedAbsenceRequest
-							{PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted},
-						new PersonWaitlistedAbsenceRequest
-							{PersonRequestId = request1.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted},
-					}));
-				});
-
+					new PersonWaitlistedAbsenceRequest {PersonRequestId = request3.Id.Value, RequestStatus = PersonRequestStatus.Pending},
+					new PersonWaitlistedAbsenceRequest {PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest {PersonRequestId = request1.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -288,19 +263,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3
 				);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period2, _budgetGroup.Id.Value).ToArray());
+
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(period2, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-					}));
-				});
-
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -336,20 +305,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3
 				);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-					}));
-				});
-
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -388,19 +350,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests= WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-				{
-					new PersonWaitlistedAbsenceRequest
-						{PersonRequestId = request3.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted}
+					new PersonWaitlistedAbsenceRequest {PersonRequestId = request3.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted}
 				}));
-				});
-
 			}
 		}
 
@@ -429,13 +383,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request1
 				);
 
-				WithUnitOfWork.Do(() =>
-				{
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(period2, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(0);
-				});
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period2, _budgetGroup.Id.Value).ToArray());
+				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(0);
 			}
 		}
 
@@ -463,11 +412,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					((IDeleteTag)WorkflowControlSetRepository.Get(_waitlistedWcs.Id.Value)).SetDeleted();
 				});
 
-				WithUnitOfWork.Do(() =>
-				{
-					var pendingAndWaitlistedRequests = Target.GetPendingAndWaitlistedAbsenceRequests(period1, _budgetGroup.Id.Value).ToArray();
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(0);
-				});
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() =>Target.GetPendingAndWaitlistedAbsenceRequests(period1, _budgetGroup.Id.Value).ToArray());
+				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(0);
 			}
 		}
 
@@ -505,18 +451,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					((Person)PersonRepository.Get(person1.Id.Value)).SetDeleted();
 				});
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period1, _budgetGroup.Id.Value).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target.GetPendingAndWaitlistedAbsenceRequests(period1, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
-
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest
-							{PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Pending},
-					}));
-				});
+					new PersonWaitlistedAbsenceRequest {PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Pending}
+				}));
 			}
 		}
 
@@ -559,18 +498,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3,
 					request2);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target.GetPendingAndWaitlistedAbsenceRequests(period3, _budgetGroup.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(3);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-					}));
-				});
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -583,7 +517,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				var budgetGroup1 = new BudgetGroup { Name = "group1", TimeZone = TimeZoneInfo.Utc };
 				var budgetGroup2 = new BudgetGroup { Name = "group2", TimeZone = TimeZoneInfo.Utc };
-				WithUnitOfWork.Do(() => {
+				WithUnitOfWork.Do(() =>
+				{
 					BudgetGroupRepository.Add(budgetGroup1);
 					BudgetGroupRepository.Add(budgetGroup2);
 				});
@@ -618,17 +553,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request3,
 					request2);
 
-				WithUnitOfWork.Do(() =>
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period1, budgetGroup1.Id.Value).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
 				{
-					var pendingAndWaitlistedRequests = Target.GetPendingAndWaitlistedAbsenceRequests(period1, budgetGroup1.Id.Value).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-					}));
-				});
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request1.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -649,7 +579,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new DateOnly(2016, 03, 01),
 					new DateOnly(2016, 03, 02)
 				});
-				WithUnitOfWork.Do(() => {
+				WithUnitOfWork.Do(() =>
+				{
 					PersonRepository.Add(person1);
 					PersonRepository.Add(person2);
 				});
@@ -669,18 +600,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					request2
 				);
 
-				WithUnitOfWork.Do(() => {
-					var pendingAndWaitlistedRequests = Target
-					.GetPendingAndWaitlistedAbsenceRequests(period2, null).ToArray();
-
-					pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(2);
-					Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
-					{
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
-						new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
-					}));
-				});
-				
+				var pendingAndWaitlistedRequests = WithUnitOfWork.Get(() => Target.GetPendingAndWaitlistedAbsenceRequests(period2, null).ToArray());
+				Assert.True(sequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
+				{
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request3.Id.Value,RequestStatus = PersonRequestStatus.Pending},
+					new PersonWaitlistedAbsenceRequest{PersonRequestId = request2.Id.Value,RequestStatus = PersonRequestStatus.Waitlisted}
+				}));
 			}
 		}
 
@@ -740,6 +665,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					Target.Add(request);
 				});
+
+				Thread.Sleep(10);
 			}
 		}
 
