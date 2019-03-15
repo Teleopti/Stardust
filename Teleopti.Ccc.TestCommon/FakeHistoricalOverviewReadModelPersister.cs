@@ -10,8 +10,11 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private IEnumerable<HistoricalOverviewReadModel> _data = Enumerable.Empty<HistoricalOverviewReadModel>();
 
+		public int UpsertCount = 0;
+		
 		public void Upsert(HistoricalOverviewReadModel model)
 		{
+			UpsertCount++;
 			var existing = _data.Where(x => x.Date == model.Date && x.PersonId == model.PersonId);
 			_data = _data.Except(existing).Append(model).ToArray();
 		}

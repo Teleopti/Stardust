@@ -187,6 +187,7 @@
     <Compile Include="Configuration\Unit\RtaStateGroupTest.cs" />
     <Compile Include="Configuration\Unit\RtaStateTest.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Historical\Infrastructure\HistoricalOverviewReadModel\HistoricalOverviewReadModelPersisterTest.cs" />
     <Compile Include="Historical\Infrastructure\HistoricalOverviewViewModel\AdherenceTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreApprovedReadTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreBatchInsertTest.cs" />
@@ -260,7 +261,6 @@
     <Compile Include="Monitor\Infrastructure\AgentState\AgentStateReadModelForTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\AgentStateReadModelPersisterTest.cs" />
-    <Compile Include="Monitor\Infrastructure\AgentState\HistoricalOverviewReadModelPersisterTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\OrganizationReaderBusinessUnitTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\OrganizationReaderSkillsTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\OrganizationReaderTest.cs" />

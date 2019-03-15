@@ -2,11 +2,10 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
+namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOverviewReadModel
 {
 	[TestFixture]
 	[UnitOfWorkTest]
@@ -20,7 +19,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel {PersonId = personId});
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel {PersonId = personId});
 
 			var result = Reader.Read(new[] {personId});
 			result.Single().PersonId.Should().Be(personId);
@@ -31,8 +30,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel {PersonId = personId});
-			Persister.Upsert(new HistoricalOverviewReadModel {PersonId = personId});
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel {PersonId = personId});
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel {PersonId = personId});
 
 			var result = Reader.Read(new[] {personId});
 			result.Count().Should().Be(1);
@@ -44,7 +43,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var personId = Guid.NewGuid();
 			var date = "2018-09-04".Date();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date,
@@ -69,7 +68,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var personId = Guid.NewGuid();
 			var date = "2018-09-04".Date();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date,
@@ -78,7 +77,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 				SecondsInAdherence = 1,
 				SecondsOutOfAdherence = 2
 			});
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date,
@@ -101,19 +100,19 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId1,
 				SecondsInAdherence = 1,
 				SecondsOutOfAdherence = 2
 			});
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId2,
 				SecondsInAdherence = 3,
 				SecondsOutOfAdherence = 4
 			});
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId1,
 				SecondsInAdherence = 5,
@@ -134,21 +133,21 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			var date1 = "2018-09-04".Date();
 			var date2 = "2018-09-05".Date();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date1,
 				SecondsInAdherence = 1,
 				SecondsOutOfAdherence = 2
 			});
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date2,
 				SecondsInAdherence = 3,
 				SecondsOutOfAdherence = 4
 			});
-			Persister.Upsert(new HistoricalOverviewReadModel
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date1,
@@ -168,8 +167,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = Guid.NewGuid();
 			
-			Persister.Upsert(new HistoricalOverviewReadModel {PersonId = personId});
-			Persister.Upsert(new HistoricalOverviewReadModel {PersonId = Guid.NewGuid()});
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel {PersonId = personId});
+			Persister.Upsert(new Adherence.Historical.Infrastructure.HistoricalOverviewReadModel {PersonId = Guid.NewGuid()});
 
 			var result = Reader.Read(new[] {personId});
 			result.Single().PersonId.Should().Be(personId);

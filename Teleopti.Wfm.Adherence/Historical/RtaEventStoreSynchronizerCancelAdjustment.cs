@@ -35,14 +35,14 @@ namespace Teleopti.Wfm.Adherence.Historical
 			_adherenceDayLoader = adherenceDayLoader;
 			_keyValueStore = keyValueStore;
 			_distributedLock = distributedLock;
-		}	
-		
+		}
+
 		[TestLog]
 		public virtual void Synchronize()
-		{			
+		{
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
-				if(ShouldReSync())
+				if (ShouldReSync())
 					UpdateSynchronizedEventId(0);
 				var toEventId = ToEventId();
 				while (true)
@@ -109,6 +109,27 @@ namespace Teleopti.Wfm.Adherence.Historical
 		{
 			public Guid PersonId;
 			public DateOnly Day;
+
+			protected bool Equals(synchronizationKey other)
+			{
+				return PersonId.Equals(other.PersonId) && Day.Equals(other.Day);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != this.GetType()) return false;
+				return Equals((synchronizationKey) obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					return (PersonId.GetHashCode() * 397) ^ Day.GetHashCode();
+				}
+			}
 		}
 
 		private void synchronizeHistoricalOverviewReadModel(synchronizationKey key)
