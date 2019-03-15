@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NzNotificationService } from 'ng-zorro-antd';
 
 import { ReportConfig } from '../models/ReportConfig.model';
 import { Report } from '../models/Report.model';
@@ -18,14 +17,13 @@ export class ReportService {
 	private url_cloneReport = '../api/Insights/CloneReport';
 	private url_deleteReport = '../api/Insights/DeleteReport';
 
-	async getReportConfig(reportId: string): Promise<ReportConfig> {
+	async getReportConfig(reportId: string, viewMode: number): Promise<ReportConfig> {
 		const parameters = {
-			params: {
-				reportId: reportId
-			}
+			ReportId: reportId,
+			ViewMode: viewMode
 		};
 
-		return this.http.get(this.url_getReportConfig, parameters)
+		return this.http.post(this.url_getReportConfig, parameters)
 			.toPromise()
 			.catch(this.handleError);
 	}
@@ -44,26 +42,22 @@ export class ReportService {
 
 	async cloneReport(reportId: string, newReportName: string): Promise<ReportConfig> {
 		const parameters = {
-			params: {
-				reportId: reportId,
-				newReportName: newReportName
-			}
+			ReportId: reportId,
+			NewReportName: newReportName
 		};
 
-		return this.http.get(this.url_cloneReport, parameters)
+		return this.http.post(this.url_cloneReport, parameters)
 			.toPromise()
 			.catch(this.handleError);
 	}
 
 	async updateReport(reportId: string, reportName: string): Promise<boolean> {
 		const parameters = {
-			params: {
-				reportId: reportId,
-				reportName: reportName
-			}
+			ReportId: reportId,
+			ReportName: reportName
 		};
 
-		return this.http.get(this.url_updateReport, parameters)
+		return this.http.post(this.url_updateReport, parameters)
 			.toPromise()
 			.catch(this.handleError);
 	}

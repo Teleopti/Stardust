@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
+﻿Teleopti.MyTimeWeb.PollScheduleUpdates = (function($) {
 	var interval;
 	var listeners = [];
 	var settings = null;
@@ -6,7 +6,11 @@
 	var ajax = null;
 
 	function _addListener(name, callback) {
-		if (listeners.filter(function (listener) { return listener.name === name; }).length > 0) {
+		if (
+			listeners.filter(function(listener) {
+				return listener.name === name;
+			}).length > 0
+		) {
 			return;
 		}
 		listeners.push({ name: name, callback: callback });
@@ -18,10 +22,10 @@
 			url: 'Asm/CheckIfScheduleHasUpdates',
 			dataType: 'json',
 			type: 'POST',
-			success: function (data) {
+			success: function(data) {
 				deferred.resolve(data);
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				deferred.reject(false);
 			}
 		});
@@ -31,7 +35,7 @@
 	function _showNotice() {
 		var notifyText = _getNotifyText();
 		if (!notificerDisplayTime) {
-			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
+			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function(displayTime) {
 				notificerDisplayTime = displayTime;
 				settings.timeout = displayTime * 1000;
 				Teleopti.MyTimeWeb.Notifier.Notify(settings, notifyText);
@@ -84,17 +88,17 @@
 			_handleListenersCallback();
 			return;
 		}
-		interval = setInterval(function () {
+		interval = setInterval(function() {
 			_handleListenersCallback();
 		}, settings.intervalTimeout);
 	}
 
 	function _handleListenersCallback() {
 		var nofityPeriod = _getNotifyPeriod();
-		_checkIfScheduleHasUpdates().done(function (data) {
+		_checkIfScheduleHasUpdates().done(function(data) {
 			if (!!data && !!data.HasUpdates) {
 				_showNotice();
-				listeners.forEach(function (listener) {
+				listeners.forEach(function(listener) {
 					listener && listener.callback && listener.callback(nofityPeriod);
 				});
 			}

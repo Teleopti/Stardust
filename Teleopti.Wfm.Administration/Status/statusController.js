@@ -10,6 +10,12 @@
 
 		vm.statusSteps = [];
 		
+		vm.newStatusStep = {};
+		
+		vm.storeNew = function(){
+			$http.post('./status/Add', vm.newStatusStep);
+		};
+		
 		$http.get('./status/listCustom')
 			.then(function(response){
 				vm.statusSteps = response.data.map(function(step){

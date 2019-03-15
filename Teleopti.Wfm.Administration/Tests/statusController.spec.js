@@ -12,10 +12,14 @@ describe("statusController", function() {
 			$httpBackend = _$httpBackend_;
 		})
 	});
+	
+	var createController = function(){
+		var $scope = $rootScope.$new();
+		return $controller('statusController', { $scope: $scope });
+	};
 
 	it("should return no custom steps", function() {
-		var $scope = $rootScope.$new();
-		var controller = $controller('statusController', { $scope: $scope });
+		var controller = createController();
 
 		expect(controller.statusSteps).toEqual([]);
 	});
@@ -30,8 +34,7 @@ describe("statusController", function() {
 			}];
 		$httpBackend.expectGET('./status/listCustom').respond(serverJson);
 
-		var $scope = $rootScope.$new();
-		var controller = $controller('statusController', { $scope: $scope });
+		var controller = createController();
 		$httpBackend.flush();
 
 		expect(controller.statusSteps[0].id).toBe(serverJson[0].Id);
@@ -45,10 +48,21 @@ describe("statusController", function() {
 		var serverJson = [{	Id : 18}, {Id :1}];
 		$httpBackend.expectGET('./status/listCustom').respond(serverJson);
 
-		var $scope = $rootScope.$new();
-		var controller = $controller('statusController', { $scope: $scope });
+		var controller = createController();
 		$httpBackend.flush();
 
 		expect(controller.statusSteps.length).toBe(2);
+	});
+	
+	it("should send new step to backend", function(){
+		$httpBackend.whenGET('./status/listCustom').respond([]);
+
+		var controller = createController();
+		controller.newStatusStep = {};
+		
+		controller.storeNew();
+		$httpBackend.expectPOST('./status/Add', controller.newStatusStep).respond(200);
+		
+		expect($httpBackend.flush).not.toThrow();
 	})
 });

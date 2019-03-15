@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
@@ -27,7 +27,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		registerLocaleData(zh);
 	});
 
-	beforeEach(async(() => {
+	beforeEach(() => {
 		TestBed.configureTestingModule({
 			declarations: [BankHolidayCalendarEditComponent],
 			imports: [
@@ -55,15 +55,10 @@ describe('BankHolidayCalendarEditComponent', () => {
 		component = fixture.componentInstance;
 		httpTestingController = TestBed.get(HttpTestingController);
 		fixture.autoDetectChanges(true);
-	}));
+	});
 
 	afterAll(() => {
 		registerLocaleData(en);
-	});
-
-	it('should create component', doneFn => {
-		expect(component).toBeTruthy();
-		doneFn();
 	});
 
 	it('should save calendar name after it is changed', () => {

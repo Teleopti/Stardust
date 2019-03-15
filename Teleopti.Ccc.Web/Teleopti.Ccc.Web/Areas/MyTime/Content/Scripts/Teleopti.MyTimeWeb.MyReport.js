@@ -3,7 +3,7 @@
 	var vm;
 
 	function MyReportViewModel(loadDataMethod, date) {
-		var self = this; 
+		var self = this;
 
 		self.adherence = ko.observable();
 		self.answeredCalls = ko.observable();

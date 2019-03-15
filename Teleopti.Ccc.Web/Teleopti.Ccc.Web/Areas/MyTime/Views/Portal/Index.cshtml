@@ -70,15 +70,11 @@ header: '@Resources.Teleopti'
 
 	StoreDeviceInstanceToken = function (token) {
 		var optionForBusinessUnits = {
-			url: "Start/UserToken",
+			url: '@Url.Content("~/Start/UserToken")',
 			dataType: "json",
 			type: 'POST',
 			cache: false,
-			data: { '': token },
-			success: function (responseData, textStatus, jqXHR) {
-			},
-			error: function () {
-			}
+			data: { '': token }
 		};
 
 		$.ajax(optionForBusinessUnits);

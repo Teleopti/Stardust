@@ -31,7 +31,7 @@ describe('SystemSettings page', () => {
 
 	configureTestSuite();
 
-	beforeEach(async(() => {
+	beforeEach(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				SystemSettingsComponent,
@@ -62,14 +62,7 @@ describe('SystemSettings page', () => {
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
 		fixture.autoDetectChanges(true);
-	}));
-
-	it('should create component', async(() => {
-        fixture.whenStable().then(() => {
-            fixture.detectChanges();
-            expect(component).toBeTruthy();
-        });
-    }));
+	});
 
 	it('should show header title', async(() => {
 		fixture.whenStable().then(() => {

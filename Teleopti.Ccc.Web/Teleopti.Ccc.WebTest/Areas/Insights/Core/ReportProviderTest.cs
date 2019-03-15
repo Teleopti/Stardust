@@ -21,15 +21,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 	public class ReportProviderTest
 	{
 		private const string overrideReportName = "Override report name";
-		private IInsightsReportRepository insightsReportRepository;
-		private IPerson person;
+		private IInsightsReportRepository _insightsReportRepository;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
 		{
-			insightsReportRepository = new FakeInsightsReportRepository();
-			person = PersonFactory.CreatePerson("Ashley", "Andeen");
-			person.SetId(Guid.NewGuid());
+			_insightsReportRepository = new FakeInsightsReportRepository();
+			_person = PersonFactory.CreatePerson("Ashley", "Andeen");
+			_person.SetId(Guid.NewGuid());
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reportModel.Id.Should().Be(report.Id);
 			reportModel.Name.Should().Be(overrideReportName);
 			reportModel.EmbedUrl.Should().Be(report.EmbedUrl);
-			reportModel.CreatedBy.Should().Be($"{person.Name.FirstName}@{person.Name.LastName}");
+			reportModel.CreatedBy.Should().Be($"{_person.Name.FirstName}@{_person.Name.LastName}");
 			reportModel.CreatedOn.Should().Be(now);
 		}
 
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var reports = createReports(groupId, DateTime.Now);
 			var target = createReportProvider(reports, groupId);
 
-			var config = target.GetReportConfig(Guid.NewGuid()).GetAwaiter().GetResult();
+			var config = target.GetReportConfig(Guid.NewGuid(), ReportViewMode.View).GetAwaiter().GetResult();
 			reportConfigShouldBeEmpty(config);
 		}
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var reports = createReports(groupId, DateTime.Now, report);
 
 			var target = createReportProvider(reports, groupId);
-			var config = target.GetReportConfig(Guid.NewGuid()).GetAwaiter().GetResult();
+			var config = target.GetReportConfig(Guid.NewGuid(), ReportViewMode.View).GetAwaiter().GetResult();
 			reportConfigShouldBeEmpty(config);
 		}
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reports.SetTokenExpiration(now.AddMinutes(tokenExpirationTimeSpanInMinutes));
 
 			var target = createReportProvider(reports, groupId);
-			var config = target.GetReportConfig(reportId).GetAwaiter().GetResult();
+			var config = target.GetReportConfig(reportId, ReportViewMode.View).GetAwaiter().GetResult();
 			config.ReportId.Should().Be(report.Id);
 			config.ReportName.Should().Be(report.Name);
 			config.AccessToken.Should().Be(token);
@@ -193,12 +193,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			updateReportMetadata(reportId, overrideReportName);
 
 			var target = createReportProvider(reports, groupId);
-			var config = target.GetReportConfig(reportId).GetAwaiter().GetResult();
+			var config = target.GetReportConfig(reportId, ReportViewMode.View).GetAwaiter().GetResult();
 			config.ReportId.Should().Be(report.Id);
 			config.ReportName.Should().Be(overrideReportName);
 			config.AccessToken.Should().Be(token);
 			(config.Expiration.Value - DateTime.Now).TotalMinutes.Should().Be.GreaterThan(9);
-			config.CreatedBy.Should().Be($"{person.Name.FirstName}@{person.Name.LastName}");
+			config.CreatedBy.Should().Be($"{_person.Name.FirstName}@{_person.Name.LastName}");
 			config.CreatedOn.Should().Be(now);
 		}
 
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reportGroups[groupId].Any(x => x.Id == report.Id).Should().Be.True();
 			reportGroups[groupId].Any(x => x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
 
-			insightsReportRepository.LoadAll()
+			_insightsReportRepository.LoadAll()
 				.Single(x => x.Id.ToString() == config.ReportId && x.Name == newReportName)
 				.Should().Not.Be.Null();
 		}
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reportGroups[groupId].Any(x => x.Id == report.Id).Should().Be.True();
 			reportGroups[groupId].Any(x => x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
 
-			insightsReportRepository.LoadAll()
+			_insightsReportRepository.LoadAll()
 				.SingleOrDefault(x => x.Id.ToString() == config.ReportId && x.Name == newReportName)
 				.Should().Not.Be.Null();
 		}
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			config.ReportName.Should().Be.Null();
 			config.AccessToken.Should().Be.Null();
 
-			insightsReportRepository.LoadAll().SingleOrDefault(x => x.Name == newReportName)
+			_insightsReportRepository.LoadAll().SingleOrDefault(x => x.Name == newReportName)
 				.Should().Be.Null();
 		}
 
@@ -347,16 +347,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var insightsReport = new InsightsReport
 			{
 				Name = reportName,
-				CreatedBy = person,
+				CreatedBy = _person,
 				CreatedOn = now
 			};
 			insightsReport.SetId(reportId);
-			insightsReportRepository.Add(insightsReport);
+			_insightsReportRepository.Add(insightsReport);
 		}
 
 		private void updateReportMetadata(Guid reportId, string overrideReportName)
 		{
-			var report = insightsReportRepository.Get(reportId);
+			var report = _insightsReportRepository.Get(reportId);
 			report.Name = overrideReportName;
 		}
 
@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			appConfigProvider.LoadFakeData(appConfigDb);
 
 			return new ReportProvider(appConfigProvider, new FakeCurrentUnitOfWorkFactory(new FakeStorage()),
-				pbiClientFactory, insightsReportRepository, new FakeCommonAgentNameProvider());
+				pbiClientFactory, _insightsReportRepository, new FakeCommonAgentNameProvider());
 		}
 	}
 }

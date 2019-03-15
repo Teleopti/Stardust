@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -291,6 +291,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AbsenceRequestCancellationThresholdExceeded {
             get {
                 return ResourceManager.GetString("AbsenceRequestCancellationThresholdExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is too late to cancel this request. This request could not be cancelled after started..
+        /// </summary>
+        public static string AbsenceRequestCancellationZeroThresholdExceeded {
+            get {
+                return ResourceManager.GetString("AbsenceRequestCancellationZeroThresholdExceeded", resourceCulture);
             }
         }
         
@@ -8106,6 +8115,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CouldNotFindAnyValidShiftInShiftBag {
             get {
                 return ResourceManager.GetString("CouldNotFindAnyValidShiftInShiftBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find report or failed to generate token.
+        /// </summary>
+        public static string CouldNotFindReportOrFailedToGenerateToken {
+            get {
+                return ResourceManager.GetString("CouldNotFindReportOrFailedToGenerateToken", resourceCulture);
             }
         }
         

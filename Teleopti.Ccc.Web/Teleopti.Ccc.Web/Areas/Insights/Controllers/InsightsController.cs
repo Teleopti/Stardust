@@ -32,15 +32,18 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 		}
 
 		[UnitOfWork, TenantUnitOfWork]
-		[HttpGet, Route("api/Insights/ReportConfig")]
-		public virtual async Task<EmbedReportConfig> GetReportConfig(string reportId)
+		[HttpPost, Route("api/Insights/ReportConfig")]
+		public virtual async Task<EmbedReportConfig> GetReportConfig([FromBody] ReportConfigInput input)
 		{
-			if (string.IsNullOrEmpty(reportId) || !Guid.TryParse(reportId, out var repId))
+			if (string.IsNullOrEmpty(input.ReportId) || !Guid.TryParse(input.ReportId, out var repId))
 			{
 				return new EmbedReportConfig();
 			}
 
-			return await _reportProvider.GetReportConfig(repId);
+			var mode = input.ViewMode == (int)ReportViewMode.Edit
+				? ReportViewMode.Edit
+				: ReportViewMode.View;
+			return await _reportProvider.GetReportConfig(repId, mode);
 		}
 
 		[UnitOfWork, TenantUnitOfWork]
@@ -58,27 +61,28 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 		}
 
 		[TenantUnitOfWork]
-		[HttpGet, Route("api/Insights/UpdateReport")]
-		public virtual async Task<bool> UpdateReportMetadata(string reportId, string reportName)
+		[HttpPost, Route("api/Insights/UpdateReport")]
+		public virtual async Task<bool> UpdateReportMetadata([FromBody] UpdateReportInput input)
 		{
-			if (string.IsNullOrEmpty(reportId) || !Guid.TryParse(reportId, out var repId) ||
-				string.IsNullOrWhiteSpace(reportName))
+			if (string.IsNullOrEmpty(input.ReportId) || !Guid.TryParse(input.ReportId, out var repId) ||
+				string.IsNullOrWhiteSpace(input.ReportName))
 			{
 				return false;
 			}
 
-			return await _reportProvider.UpdateReportMetadata(repId, reportName);
+			return await _reportProvider.UpdateReportMetadata(repId, input.ReportName);
 		}
 
 		[TenantUnitOfWork]
-		[HttpGet, Route("api/Insights/CloneReport")]
-		public virtual async Task<EmbedReportConfig> CloneReport(string reportId, string newReportName)
+		[HttpPost, Route("api/Insights/CloneReport")]
+		public virtual async Task<EmbedReportConfig> CloneReport([FromBody] CloneReportInput input)
 		{
-			if (string.IsNullOrEmpty(reportId) || !Guid.TryParse(reportId, out var repId))
+			if (string.IsNullOrEmpty(input.ReportId) || !Guid.TryParse(input.ReportId, out var repId))
 			{
 				return new EmbedReportConfig();
 			}
-			return await _reportProvider.CloneReport(repId, newReportName);
+
+			return await _reportProvider.CloneReport(repId, input.NewReportName);
 		}
 
 		[TenantUnitOfWork]

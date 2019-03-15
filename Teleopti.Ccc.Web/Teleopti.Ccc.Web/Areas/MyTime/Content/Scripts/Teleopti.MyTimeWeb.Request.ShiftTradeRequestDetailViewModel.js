@@ -486,7 +486,9 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function(
 	absenceColor,
 	absenceCategoryShortName,
 	overtimeCategoryColor,
-	contractMinutes
+	contractMinutes,
+	start,
+	end
 ) {
 	var self = this;
 
@@ -514,6 +516,8 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function(
 	self.absenceCategoryShortName = absenceCategoryShortName;
 	self.overtimeCategoryColor = overtimeCategoryColor;
 	self.contractMinutes = contractMinutes;
+	self.start = start;
+	self.end = end;
 };
 
 function ShiftTradeRequestDetailedDayViewModel(data) {

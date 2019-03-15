@@ -42,20 +42,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider
 				return null;
 			}
 
-
 			var workflowControlSet = personRequest.Person.WorkflowControlSet;
 			if (workflowControlSet != null)
 			{
 				var threshold = workflowControlSet.AbsenceRequestCancellationThreshold ?? 0;
-				var minDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).AddDays(-threshold));
+				var minDate = personRequest.Request.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).AddDays(-threshold);
 
-				var today = _now.CurrentLocalDate(personRequest.Person.PermissionInformation.DefaultTimeZone());
+				var today = _now.CurrentLocalDateTime(personRequest.Person.PermissionInformation.DefaultTimeZone());
 				if (today > minDate)
 				{
-					command.ErrorMessages.Add(string.Format(Resources.AbsenceRequestCancellationThresholdExceeded, threshold));
+					var errorMessage = threshold == 0
+						? Resources.AbsenceRequestCancellationZeroThresholdExceeded
+						: string.Format(Resources.AbsenceRequestCancellationThresholdExceeded, threshold);
+					command.ErrorMessages.Add(errorMessage);
 					return command;
 				}
-
 			}
 			
 			if (!hasPermission (DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, personRequest))

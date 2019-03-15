@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			}
 		}
 
-		public async Task<EmbedReportConfig> GetReportConfig(Guid reportId)
+		public async Task<EmbedReportConfig> GetReportConfig(Guid reportId, ReportViewMode viewMode)
 		{
 			var result = new EmbedReportConfig();
 			var rawReportData = mapReportMetaData(_reportRepository.Get(reportId));
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 					return result;
 				}
 
-				result = await generateEmbedReportConfig(client, report);
+				result = await generateEmbedReportConfig(client, report, viewMode);
 			}
 
 			updateReportMetaData(rawReportData, result);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				var newReport = client.Reports.CloneReportInGroup(groupId, templateReport.Id,
 					new CloneReportRequest(newReportName));
 
-				result = await generateEmbedReportConfig(client, newReport);
+				result = await generateEmbedReportConfig(client, newReport, ReportViewMode.Edit);
 			}
 
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				var newReport = client.Reports.CloneReportInGroup(groupId, reportIdStr,
 					new CloneReportRequest(newReportName));
 
-				result = await generateEmbedReportConfig(client, newReport);
+				result = await generateEmbedReportConfig(client, newReport, ReportViewMode.Edit);
 			}
 
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -214,8 +214,10 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		}
 
 		private async Task<EmbedReportConfig> generateEmbedReportConfig(IPowerBIClient client,
-			Report report, string userName = null, string roles = null)
+			Report report, ReportViewMode viewMode, string userName = null, string roles = null)
 		{
+			var allowSaveAs = viewMode == ReportViewMode.Edit;
+
 			GenerateTokenRequest generateTokenRequestParameters;
 			if (!string.IsNullOrEmpty(userName))
 			{
@@ -225,20 +227,28 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 					rls.Roles = roles.Split(',').ToList();
 				}
 
-				// Generate Embed Token with effective identities.
-				// Possible values for access level: 'View', 'Edit', 'Create'
 				// Refer to https://github.com/Microsoft/PowerBI-CSharp/blob/master/sdk/PowerBI.Api/Source/V2/Models/GenerateTokenRequest.cs
-				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit",
-					identities: new List<EffectiveIdentity> { rls });
+				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: viewMode.ToString(),
+					allowSaveAs: allowSaveAs, identities: new List<EffectiveIdentity> {rls});
 			}
 			else
 			{
-				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit");
+				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: viewMode.ToString(),
+					allowSaveAs: allowSaveAs);
 			}
 
 			var groupId = getPowerBiGroupId();
-			var token = await client.Reports.GenerateTokenInGroupAsync(groupId, report.Id,
-				generateTokenRequestParameters);
+			EmbedToken token;
+			try
+			{
+				token = await client.Reports.GenerateTokenInGroupAsync(groupId, report.Id,
+					generateTokenRequestParameters);
+			}
+			catch (Exception ex)
+			{
+				token = null;
+				logger.Error("Error occurred on generating embed token.", ex);
+			}
 
 			if (token == null)
 			{
