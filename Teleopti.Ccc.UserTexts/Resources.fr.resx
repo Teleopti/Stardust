@@ -10583,10 +10583,10 @@ Détails de l'erreur:
     <value>Suppression d'absence individuelle réalisée avec succès.</value>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>Vous n'avez pas la permission d'ajouter des absences intra-journalières pour {0}</value>
+    <value>Vous n'avez pas la permission d'ajouter des absences intra-journalières pour les agents</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>Vous n'avez pas la permission d'ajouter des absences journée entière pour {0}</value>
+    <value>Vous n'avez pas la permission d'ajouter des absences journée entière pour les agents</value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Le serveur est inaccessible! Vérifiez votre connexion internet ou contactez votre adminstrateur.</value>
@@ -10962,7 +10962,7 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
     <value>Désélectionner</value>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>Pas de permission d'ajouter une activité personnelle pour l'agent {0}.</value>
+    <value>Pas de permission d'ajouter une activité personnelle pour l'agent.</value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
     <value>Vous ne pouvez pas ajouter d'activité personnelle là où il n'y a pas d'horaire.</value>
@@ -11659,7 +11659,7 @@ Le schéma de clé d'activation produit est "{3}". Ces options sont activées: {
     <value>La période demandée est trop longue.</value>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>Pas de permission d'ajout d'activité d'heures supplémentaires pour l'agent {0}.</value>
+    <value>Pas de permission d'ajout d'activité d'heures supplémentaires pour l'agent.</value>
   </data>
   <data name="Level" xml:space="preserve">
     <value>Niveau</value>
@@ -13378,7 +13378,7 @@ L'application va maintenant se fermer.</value>
     <value>Campagne non appliquée pour jours avec supplantation</value>
   </data>
   <data name="ChatBot" xml:space="preserve">
-    <value>Grant</value>
+    <value>Chat bot</value>
   </data>
   <data name="CopySchedule" xml:space="preserve">
     <value>Copier planning</value>
@@ -13677,6 +13677,9 @@ L'application va maintenant se fermer.</value>
   <data name="ValidatedPhoneCalls" xml:space="preserve">
     <value>Appels validés</value>
   </data>
+  <data name="ViewInsightsReport" xml:space="preserve">
+    <value>Voir rapport</value>
+  </data>
   <data name="WithOvertime" xml:space="preserve">
     <value>Avec heures supplémentaires</value>
   </data>
@@ -13697,5 +13700,38 @@ L'application va maintenant se fermer.</value>
   </data>
   <data name="ImportBpoZeroResourcesWarning" xml:space="preserve">
     <value>Aucune couverture supprimée. Êtes-vous sûr d'avoir sélectionné le BPO correct et la période?</value>
+  </data>
+  <data name="FiltersColon" xml:space="preserve">
+    <value>Filtres:</value>
+  </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>Vous devez sélectionner au moins un filtre</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Se rappeler de moi</value>
+  </data>
+  <data name="SearchForSiteTeamSkillContract" xml:space="preserve">
+    <value>Rechercher: site / équipe / compétence / contrat</value>
+  </data>
+  <data name="HelpCreatePlanningPeriod" xml:space="preserve">
+    <value>Une période de planification est nécessaire  pour planifier vos agents</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Mot de passe oublié</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Réinitialiser le mot de passe</value>
+  </data>
+  <data name="ResetPasswordErrorMessage" xml:space="preserve">
+    <value>S'il vous plaît, mettez une adresse email valide</value>
+  </data>
+  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
+    <value>Audit trail</value>
+  </data>
+  <data name="AuditTrailBetween" xml:space="preserve">
+    <value>Entre</value>
+  </data>
+  <data name="AuditTrailPeriodEnd" xml:space="preserve">
+    <value>Et</value>
   </data>
 </root>
