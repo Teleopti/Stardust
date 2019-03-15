@@ -54,9 +54,9 @@
 		target.Destroy();
 	});
 
-	test('Should call listener callback if has schedule change within  period', function () {
+	test('Should call listener callback if has schedule change within  period', function() {
 		var called = false;
-		target.AddListener('Schedule/Week', function () {
+		target.AddListener('Schedule/Week', function() {
 			called = true;
 		});
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
@@ -64,10 +64,9 @@
 		target.Destroy();
 	});
 
-	test('Should all listeners be invoked when time is up', function () {
-		
+	test('Should all listeners be invoked when time is up', function() {
 		var executedListeners = [];
-		target.AddListener('Schedule/Week', function () {
+		target.AddListener('Schedule/Week', function() {
 			executedListeners.push('Schedule/Week');
 		});
 		target.AddListener('Schedule/ASM', function() {
@@ -79,12 +78,12 @@
 		target.Destroy();
 	});
 
-	test('Should only registe one time for same name', function () {
+	test('Should only registe one time for same name', function() {
 		var register = '';
-		target.AddListener('Schedule/Week', function () {
+		target.AddListener('Schedule/Week', function() {
 			register = 'first';
 		});
-		target.AddListener('Schedule/Week', function () {
+		target.AddListener('Schedule/Week', function() {
 			register = 'second';
 		});
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });

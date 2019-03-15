@@ -489,29 +489,27 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 				weekViewModels
 			);
 
-			
 			function AlertViewModel(feedbackViewModel) {
-					var self = this;
-					self.PreferenceFeedbackClass = ko.computed(function () {
-						return feedbackViewModel.PreferenceFeedbackClass();
-					});
+				var self = this;
+				self.PreferenceFeedbackClass = ko.computed(function() {
+					return feedbackViewModel.PreferenceFeedbackClass();
+				});
 
-					self.WarningCount = ko.computed(function () {
-						return feedbackViewModel.WarningCount();
-					});
+				self.WarningCount = ko.computed(function() {
+					return feedbackViewModel.WarningCount();
+				});
 
-					self.toggleWarningDetail = function () {
-						feedbackViewModel.toggleWarningDetail();
-					};
+				self.toggleWarningDetail = function() {
+					feedbackViewModel.toggleWarningDetail();
+				};
 
-					self.AlertDanger= ko.computed(function () {
-						return feedbackViewModel.PreferenceFeedbackClass() == 'alert-danger' ? true : false;
-					});
+				self.AlertDanger = ko.computed(function() {
+					return feedbackViewModel.PreferenceFeedbackClass() == 'alert-danger' ? true : false;
+				});
 
-					self.IsHostAMobile = feedbackViewModel.IsHostAMobile();
+				self.IsHostAMobile = feedbackViewModel.IsHostAMobile();
 			}
 
-			
 			var alertViewModelBinding = new AlertViewModel(periodFeedbackViewModel);
 			ko.applyBindings(alertViewModelBinding, $('.warning-indicator')[0]);
 			if (isHostAMobile) {
