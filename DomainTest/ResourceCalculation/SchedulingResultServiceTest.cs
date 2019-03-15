@@ -5,12 +5,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -35,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false, new ActivityDivider());
+			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false);
 			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{
@@ -97,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_target = new SchedulingResultService(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), 
 												  _personAssignmentListContainer.AllSkills,
-												  new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false, new ActivityDivider()),
+												  new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false),
 												  _personSkillProvider);
 			Assert.IsNotNull(_target);
 			

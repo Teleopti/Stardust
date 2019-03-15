@@ -66,10 +66,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private ResourceCalculationDataContainer createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
 		{
 			if (!_allSkills.Any())
-				return new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 60, false, new ActivityDivider());
+				return new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 60, false);
 
 			var minutesSplit = _allSkills.Min(s => s.DefaultResolution);
-			var resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, minutesSplit, false, new ActivityDivider());
+			var resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, minutesSplit, false);
 
 			foreach (var item in scheduleDictionary)
 			{

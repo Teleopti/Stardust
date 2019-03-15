@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public ScheduleProjectionExtractor(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minResolution, bool primarySkillMode)
 	    {
-			retList = new ResourceCalculationDataContainer(bpoResources, personSkillProvider, minResolution, primarySkillMode, new ActivityDivider());
+			retList = new ResourceCalculationDataContainer(bpoResources, personSkillProvider, minResolution, primarySkillMode);
 	   }
 
         /// <summary>

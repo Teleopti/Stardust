@@ -9,17 +9,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourceCalculationDataContainer : IResourceCalculationDataContainerWithSingleOperation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly ActivityDivider _activityDivider;
 		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
 		private readonly ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 		private const double heads = 1d;
 
-		public ResourceCalculationDataContainer(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode, ActivityDivider activityDivider)
+		public ResourceCalculationDataContainer(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
 		{
 			_personSkillProvider = personSkillProvider;
-			_activityDivider = activityDivider;
 			BpoResources = bpoResources;
 			MinSkillResolution = minSkillResolution;
 			PrimarySkillMode = primarySkillMode;
@@ -136,50 +134,37 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var divider = periodToCalculate.ElapsedTime().TotalMinutes/MinSkillResolution;
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 
-			var skillsOffset = new Dictionary<int, TimeZoneInfo>();
-			foreach (var skillKey in _skills)
+			foreach (var dateTimePeriod in periodSplit)
 			{
-				foreach (var skill in skillKey.Value)
+				if (_dictionary.TryGetValue(dateTimePeriod, out var interval))
 				{
-					var minutesOffset = skill.TimeZone.BaseUtcOffset.Minutes;
-					if(!skillsOffset.ContainsKey(minutesOffset))
-						skillsOffset.Add(minutesOffset, skill.TimeZone);
-				}
-			}
-
-			foreach (var skillOffset in skillsOffset)
-			{
-				foreach (var dateTimePeriod in periodSplit)
-				{
-					if (_dictionary.TryGetValue(dateTimePeriod, out var interval))
+					foreach (var pair in interval.GetSkillKeyResources(activityKey))
 					{
-						foreach (var pair in interval.GetSkillKeyResources(activityKey))
+						if (_skills.TryGetValue(pair.SkillKey, out var skills))
 						{
-							if (_skills.TryGetValue(pair.SkillKey, out var skills))
+							double previousResource = 0;
+							double previousCount = 0;
+							var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource/divider);
+							if (result.TryGetValue(pair.SkillKey, out var value))
 							{
-								double previousResource = 0;
-								double previousCount = 0;
-								var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource/divider);
-								if (result.TryGetValue(pair.SkillKey, out var value))
-								{
-									previousResource = value.Resource;
-									previousCount = value.Count;
-									addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
-								}
-								value = new AffectedSkills
-								{
-									Skills = skills,
-									Resource = previousResource + pair.Resource.Resource/divider,
-									Count = previousCount + pair.Resource.Count/divider,
-									SkillEffiencies = accumulatedEffiencies
-								};
-							
-								result[pair.SkillKey] = value;
+								previousResource = value.Resource;
+								previousCount = value.Count;
+								addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
 							}
+							value = new AffectedSkills
+							{
+								Skills = skills,
+								Resource = previousResource + pair.Resource.Resource/divider,
+								Count = previousCount + pair.Resource.Count/divider,
+								SkillEffiencies = accumulatedEffiencies
+							};
+							
+							result[pair.SkillKey] = value;
 						}
 					}
 				}
 			}
+			
 			return result;
 		}
 

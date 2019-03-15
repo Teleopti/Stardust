@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var skillsForActivity = affectedPersonSkillService.ActivityLookup[activity].ToHashSet();
             foreach (ISkill skill in skillsForActivity)
 			{
+				periodToCalculate = FetchPeriodForSkill(periodToCalculate, skill.TimeZone);
                 double? targetDemandValue = skillDayDemand(skill,relevantSkillStaffPeriods, periodToCalculate);
                 if (targetDemandValue.HasValue)
                     dividedActivity.TargetDemands.Add(skill, targetDemandValue.Value);
@@ -79,6 +80,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return dividedActivity;
         }
+
+		public DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, TimeZoneInfo timeZone)
+		{
+			var defaultResolution = period.LocalElapsedTime(timeZone);
+			var minutesOffset = timeZone.BaseUtcOffset.Minutes;
+
+			if (minutesOffset == 0)
+				return period;
+
+			minutesOffset = 60 - Math.Abs(minutesOffset);
+			var start = period.StartDateTime;
+			var end = period.StartDateTime.AddHours(1);
+			while (start <= end)
+			{
+				if (start.Minute == minutesOffset)
+				{
+					minutesOffset = 0;
+					break;
+				}
+				start = start.AddMinutes(defaultResolution.TotalMinutes);
+			}
+	
+			//nepal timezone
+			if (timeZone.BaseUtcOffset.Minutes == 45)
+				minutesOffset = minutesOffset * -1;
+			
+			return period.MovePeriod(TimeSpan.FromMinutes(-minutesOffset));
+		}
 
 		private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {

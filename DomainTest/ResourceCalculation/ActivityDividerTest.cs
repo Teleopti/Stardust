@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_testContainer.ContainedSkills);
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false, new ActivityDivider());
+			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false);
 			var layers = _testContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{
