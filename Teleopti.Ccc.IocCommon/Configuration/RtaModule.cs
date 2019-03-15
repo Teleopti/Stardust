@@ -136,7 +136,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			if (_config.IsToggleEnabled(Toggles.RTA_RemoveAdjustedToNeutral_82147))
+			{
+				builder.RegisterType<RtaEventStoreSynchronizerCancelAdjustment>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RunAsynchronouslyAndLog>().As<IRtaEventStoreAsyncSynchronizerStrategy>().SingleInstance().ApplyAspects();
+			}
+			else if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizerAdjustAdherenceToNeutral>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();

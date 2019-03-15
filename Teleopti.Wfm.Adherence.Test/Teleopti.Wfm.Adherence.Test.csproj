@@ -222,6 +222,8 @@
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\RemoveApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\CancelApprovalAsInAdherenceCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\ReadModels\HistoricalOverviewReadModel\AdherenceAdjustToNeutralTest.cs" />
+    <Compile Include="Historical\Unit\ReadModels\HistoricalOverviewReadModel\CancelAdjustmentTest.cs" />
     <Compile Include="Historical\Unit\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\AdjustedPeriodsViewModelBuilder\AdjustedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceDate\DateTest.cs" />

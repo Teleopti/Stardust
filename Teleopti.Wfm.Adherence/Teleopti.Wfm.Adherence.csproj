@@ -181,6 +181,7 @@
     <Compile Include="Historical\RtaEventStoreMaintainer.cs" />
     <Compile Include="Historical\RtaEventStoreSynchronizer.cs" />
     <Compile Include="Historical\RtaEventStoreSynchronizerAdjustAdherenceToNeutral.cs" />
+    <Compile Include="Historical\RtaEventStoreSynchronizerCancelAdjustment.cs" />
     <Compile Include="Historical\RtaEventStoreUpgrader.cs" />
     <Compile Include="Historical\RtaEventStoreVersion.cs" />
     <Compile Include="KeyValueStorePersisterExtensions.cs" />

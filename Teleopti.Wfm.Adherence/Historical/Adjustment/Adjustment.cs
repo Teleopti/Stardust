@@ -36,6 +36,8 @@ namespace Teleopti.Wfm.Adherence.Historical.Adjustment
 				StartTime = periodToCancel.StartTime,
 				EndTime = periodToCancel.EndTime
 			});
+			
+			_synchronizer.SynchronizeAsync();
 		}
 	}
 }
