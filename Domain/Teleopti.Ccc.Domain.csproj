@@ -257,6 +257,7 @@
     <Compile Include="Status\IStatusStep.cs" />
     <Compile Include="Status\ListCustomStatusSteps.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
+    <Compile Include="Status\NewCustomStatusStep.cs" />
     <Compile Include="Status\StardustChecker.cs" />
     <Compile Include="Status\StatusStepInfo.cs" />
     <Compile Include="Status\StatusStepResult.cs" />

@@ -18,5 +18,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			return Ok(_listCustomStatusSteps.Execute());
 		}
+		
+		[HttpPost]
+        [Route("status/listCustom")]
+		public IHttpActionResult Add(NewCustomStatusStep newCustomStatusStep)
+		{
+			return Ok();
+		}
 	}
 }

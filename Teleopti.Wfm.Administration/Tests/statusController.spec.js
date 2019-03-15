@@ -54,15 +54,24 @@ describe("statusController", function() {
 		expect(controller.statusSteps.length).toBe(2);
 	});
 	
-	it("should send new step to backend", function(){
+	it("should succefully send add to backend", function(){
 		$httpBackend.whenGET('./status/listCustom').respond([]);
 
 		var controller = createController();
-		controller.newStatusStep = {};
-		
+		controller.newStatusStep = {
+			name:'some name',
+			description: 'some desc',
+			limit: 19
+		};
+
+		$httpBackend.whenPOST('./status/Add').respond(function (method, url, data) {
+			var sent = JSON.parse(data);
+			expect(sent.Name).toBe(controller.newStatusStep.name);
+			expect(sent.Description).toBe(controller.newStatusStep.description);
+			expect(sent.LimitInSeconds).toBe(controller.newStatusStep.limit);
+			return [200];
+		});
 		controller.storeNew();
-		$httpBackend.expectPOST('./status/Add', controller.newStatusStep).respond(200);
-		
-		expect($httpBackend.flush).not.toThrow();
-	})
+		$httpBackend.flush();
+	});
 });

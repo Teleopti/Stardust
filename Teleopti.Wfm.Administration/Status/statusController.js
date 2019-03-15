@@ -13,7 +13,11 @@
 		vm.newStatusStep = {};
 		
 		vm.storeNew = function(){
-			$http.post('./status/Add', vm.newStatusStep);
+			$http.post('./status/Add', {
+				Name: vm.newStatusStep.name,
+				Description: vm.newStatusStep.description,
+				LimitInSeconds: vm.newStatusStep.limit
+			});
 		};
 		
 		$http.get('./status/listCustom')

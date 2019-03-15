@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Ccc.Domain.Status
 {
 	public class CustomStatusStepInfo
