@@ -37,11 +37,7 @@
 <div class="con-row">
 	<div class="con-flex" style="padding:0">
 		<div class="con-row">
-			<div
-				class="con-flex"
-				*ngIf="displayDate && displayDate.length > 0"
-				[hidden]="!selectedSkillOrGroup"
-			>
+			<div class="con-flex" *ngIf="displayDate && displayDate.length > 0" [hidden]="!selectedSkillOrGroup">
 				<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
 			</div>
 			<div class="con-flex">
@@ -58,11 +54,7 @@
 		</div>
 		<div
 			style="margin-top: 10px"
-			*ngIf="
-				selectedSkillOrGroup &&
-				selectedSkillOrGroup.Skills &&
-				selectedSkillOrGroup.Skills.length > 0
-			"
+			*ngIf="selectedSkillOrGroup && selectedSkillOrGroup.Skills && selectedSkillOrGroup.Skills.length > 0"
 		>
 			<nz-collapse nzAccordion>
 				<nz-collapse-panel
@@ -71,11 +63,7 @@
 					[nzActive]="showSkills"
 					(click)="onShowHideSkills()"
 				>
-					<nz-radio-group
-						[(ngModel)]="selectedSubSkillId"
-						(ngModelChange)="onPickSubSkill()"
-						nzSize="small"
-					>
+					<nz-radio-group [(ngModel)]="selectedSubSkillId" (ngModelChange)="onPickSubSkill()" nzSize="small">
 						<label nz-radio-button nzValue="all" (click)="onSubSkillClick($event)">
 							<i nz-icon type="appstore" theme="outline"></i> {{ translate.instant('All') }}
 						</label>
@@ -104,8 +92,7 @@
 				(nzSelectedIndexChange)="onClickTab($event)"
 				[nzSelectedIndex]="selectedTabIndex"
 			>
-				<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}" [nzDisabled]="loading">
-				</nz-tab>
+				<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}" [nzDisabled]="loading"> </nz-tab>
 				<nz-tab nzTitle="{{ translate.instant('Performance') }}" [nzDisabled]="loading"> </nz-tab>
 				<nz-tab nzTitle="{{ translate.instant('Staffing') }}" [nzDisabled]="loading"> </nz-tab>
 			</nz-tabset>
