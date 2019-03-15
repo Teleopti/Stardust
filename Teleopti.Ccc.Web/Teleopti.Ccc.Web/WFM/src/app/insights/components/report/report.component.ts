@@ -7,6 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Permission } from '../../models/Permission.model';
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
+import { UserService } from '../../../core/services';
+
 import { IPowerBiElement } from 'service';
 
 @Component({
@@ -17,6 +19,9 @@ import { IPowerBiElement } from 'service';
 export class ReportComponent implements OnInit {
 	private pbiCoreService: any;
 	private action = this.nav.viewAction;
+
+	private languageLocale: string;
+	private dateFormatLocale: string;
 
 	private errorNotificationOption = { nzDuration: 0 };
 
@@ -37,7 +42,8 @@ export class ReportComponent implements OnInit {
 		private translate: TranslateService,
 		private reportSvc: ReportService,
 		public nav: NavigationService,
-		private notification: NzNotificationService) {
+		private notification: NzNotificationService,
+		private userService: UserService) {
 
 		const params = $state.params;
 		this.reportId = params.reportId.trim();
@@ -48,6 +54,13 @@ export class ReportComponent implements OnInit {
 		this.permission.CanViewReport = true;
 		this.permission.CanEditReport = false;
 		this.permission.CanDeleteReport = false;
+
+		this.userService.preferences$.subscribe({
+			next: preferences => {
+				this.languageLocale = preferences.Language;
+				this.dateFormatLocale = preferences.DateFormatLocale;
+			}
+		});
 
 		this.pbiCoreService = new pbi.service.Service(
 			pbi.factories.hpmFactory,
@@ -157,8 +170,8 @@ export class ReportComponent implements OnInit {
 				filterPaneEnabled: true,
 				navContentPaneEnabled: true,
 				localeSettings: {
-					language: 'en',
-					formatLocale: 'en'
+					language: this.languageLocale,
+					formatLocale: this.dateFormatLocale
 				}
 			}
 		};

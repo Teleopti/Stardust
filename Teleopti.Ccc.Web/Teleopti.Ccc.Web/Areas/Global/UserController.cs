@@ -16,7 +16,10 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		private readonly ISessionSpecificWfmCookieProvider _sessionWfmCookieProvider;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public UserController(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, ISessionSpecificWfmCookieProvider sessionWfmCookieProvider, IUserTimeZone userTimeZone)
+		public UserController(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
+			IIanaTimeZoneProvider ianaTimeZoneProvider,
+			ISessionSpecificWfmCookieProvider sessionWfmCookieProvider,
+			IUserTimeZone userTimeZone)
 		{
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
@@ -34,25 +37,24 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			var defaultTimezone = _userTimeZone.TimeZone();
 
 			var sessionData = _sessionWfmCookieProvider.GrabFromCookie();
-			var regionnal = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
+			var regional = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
 
 			return new
 			{
 				UserName = principal.Identity.Name,
 				DefaultTimeZone = _ianaTimeZoneProvider.WindowsToIana(defaultTimezone.Id),
 				DefaultTimeZoneName = defaultTimezone.DisplayName,
-				Language = regionnal.UICulture.IetfLanguageTag,
-				DateFormatLocale = regionnal.Culture.Name,
+				Language = regional.UICulture.IetfLanguageTag,
+				DateFormatLocale = regional.Culture.Name,
 				CultureInfo.CurrentCulture.NumberFormat,
-				FirstDayOfWeek = (int)regionnal.Culture.DateTimeFormat.FirstDayOfWeek,
-				regionnal.Culture.DateTimeFormat.DayNames,
+				FirstDayOfWeek = (int)regional.Culture.DateTimeFormat.FirstDayOfWeek,
+				regional.Culture.DateTimeFormat.DayNames,
 				DateTimeFormat = new {
-					regionnal.Culture.DateTimeFormat.ShortTimePattern,
-					regionnal.Culture.DateTimeFormat.AMDesignator,
-					regionnal.Culture.DateTimeFormat.PMDesignator
+					regional.Culture.DateTimeFormat.ShortTimePattern,
+					regional.Culture.DateTimeFormat.AMDesignator,
+					regional.Culture.DateTimeFormat.PMDesignator
 				},
 				IsTeleoptiApplicationLogon = sessionData?.IsTeleoptiApplicationLogon ?? false
-				
 			};
 		}
 	}
