@@ -2447,7 +2447,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			disableAllExceptCancelInRibbon();
 			if (showProgressBar)
 			{
-				toolStripProgressBar1.Maximum = selectedScheduleCount;
+				toolStripProgressBar1.Maximum = 100;
 				toolStripProgressBar1.Visible = true;
 				toolStripProgressBar1.Value = 0;
 			}
@@ -2514,13 +2514,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					if (progress != null)
 					{
-						var part = progress.SchedulePart;
-						if (part != null)
-						{
-							scheduleStatusBarUpdate(string.Format(CultureInfo.CurrentCulture, "{0} {1}",
-								SchedulerState.SchedulerStateHolder.CommonNameDescription.BuildFor(part.Person),
-								part.DateOnlyAsPeriod.DateOnly.ToShortDateString()));
-						}
+						var message = string.Format(CultureInfo.CurrentCulture,
+							LanguageResourceHelper.Translate("XXSchedulingDays"), string.Empty);
+						toolStripProgressBar1.Value = e.ProgressPercentage -1;
+						scheduleStatusBarUpdate(message + " " +
+												e.ProgressPercentage + "%");
 					}
 					else
 					{
@@ -2577,7 +2575,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var selectedPeriod = selection.Value;
 				var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
 				var backgroundWrapper = new BackgroundWorkerWrapper(_backgroundWorkerScheduling);
-				desktopScheduling.Execute(new SchedulingCallbackForDesktop(backgroundWrapper, _schedulingOptions), _schedulingOptions, backgroundWrapper, selectedAgents, selectedPeriod);
+				desktopScheduling.Execute(new SchedulingCallbackForDesktop(backgroundWrapper, _schedulingOptions, argument.SelectedScheduleDays.Count), _schedulingOptions, backgroundWrapper, selectedAgents, selectedPeriod);
 			}
 		}
 

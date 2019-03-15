@@ -9,22 +9,28 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingProgress _schedulingProgress;
 		private readonly SchedulingOptions _schedulingOptions;
 		private int _scheduledCount;
+		private readonly int? _totalToBeScheduled;
+		private int _totalScheduledCount;
 
-		public SchedulingCallbackForDesktop(ISchedulingProgress schedulingProgress, SchedulingOptions schedulingOptions)
+		public SchedulingCallbackForDesktop(ISchedulingProgress schedulingProgress, SchedulingOptions schedulingOptions, int? totalToBeScheduled = null)
 		{
 			_schedulingProgress = schedulingProgress;
 			_schedulingOptions = schedulingOptions;
+			_totalToBeScheduled = totalToBeScheduled;
 		}
 
 		public void Scheduled(SchedulingCallbackInfo schedulingCallbackInfo)
 		{
+			_totalScheduledCount++;
 			if (schedulingCallbackInfo.WasSuccessful)
 			{
 				_scheduledCount++;
 			}
-			if (_scheduledCount >= _schedulingOptions.RefreshRate)
+			if (_scheduledCount >= _schedulingOptions.RefreshRate) //use timer instead
 			{
-				_schedulingProgress.ReportProgress(1, new SchedulingServiceSuccessfulEventArgs(schedulingCallbackInfo.ScheduleDay));
+				var scheduledPercent = _totalToBeScheduled.HasValue ? _totalScheduledCount / (double)_totalToBeScheduled : 1;
+				if (scheduledPercent > 99) scheduledPercent = 99;
+				_schedulingProgress.ReportProgress((int)(scheduledPercent * 100), new SchedulingServiceSuccessfulEventArgs(schedulingCallbackInfo.ScheduleDay));
 				_scheduledCount = 0;
 			} 
 		}
