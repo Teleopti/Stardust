@@ -355,9 +355,9 @@
 									<span data-bind="text:mySchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName'),tooltip: {title: mySchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName'), placement: $index()==0 ? 'bottom' : 'top'}"></span>
 								</p>
 								<div class="multi-shift-trade-start-end-time">
-									<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date)"></span>
+									<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.start, date)"></span>
 									<span class="spliter">-</span>
-									<span data-bind="text:mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+									<span data-bind="text:mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.end, date)"></span>
 								</div>
 								<div class="shift-trade-contract-time">
 									<span data-bind="text:mySchedule.contractTime"></span>
@@ -426,9 +426,9 @@
 									<span data-bind="text:targetSchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName'), tooltip: {title : targetSchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName'), placement: $index()==0 ? 'bottom' : 'top'}"></span>
 								</p>
 								<div class="multi-shift-trade-start-end-time">
-									<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date)"></span>
+									<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.start, date)"></span>
 									<span class="spliter">-</span>
-									<span data-bind="text:targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+									<span data-bind="text:targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.end, date)"></span>
 								</div>
 								<div class="shift-trade-contract-time">
 									<span data-bind="text:targetSchedule.contractTime"></span>
@@ -518,7 +518,7 @@
 									<div class="multi-shift-trade-cart-schedule-category" data-bind="style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}, tooltip: { title: mySchedule.categoryName}">
 										<span data-bind="text:mySchedule.categoryName"></span>
 									</div>
-									<span class="multi-shift-trade-cart-text" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+									<span class="multi-shift-trade-cart-text" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.start, date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.end, date)"></span>
 									<span data-bind="text:mySchedule.contractTime"></span>
 									<!--/ko-->
 								</div>
@@ -536,7 +536,7 @@
 									<div class="multi-shift-trade-cart-schedule-category" data-bind="style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}, tooltip: { title: targetSchedule.categoryName}">
 										<span data-bind="text:targetSchedule.categoryName"></span>
 									</div>
-									<span class="multi-shift-trade-cart-text" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+									<span class="multi-shift-trade-cart-text" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.start, date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.end, date)"></span>
 									<span data-bind="text:targetSchedule.contractTime"></span>
 									<!--/ko-->
 								</div>

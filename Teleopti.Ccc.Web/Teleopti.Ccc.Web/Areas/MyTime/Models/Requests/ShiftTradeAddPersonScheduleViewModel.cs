@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
+using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
@@ -32,6 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public bool IsIntradayAbsence { get; set; }
 
-		public IntradayAbsenceCategoryViewModel IntradayAbsenceCategory{ get; set; }
+		public IntradayAbsenceCategoryViewModel IntradayAbsenceCategory { get; set; }
+
+		public string Start => this.ScheduleLayers?.ToList().FirstOrDefault()?.Start.ToString("yyyy-MM-dd HH:mm:ss");
+
+		public string End => this.ScheduleLayers?.ToList().LastOrDefault()?.End.ToString("yyyy-MM-dd HH:mm:ss");
+
 	}
 }

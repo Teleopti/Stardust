@@ -166,9 +166,11 @@
 	};
 
 	self.getOvernightFlag = function(dateTime, scheduleDate) {
-		if (dateTime && scheduleDate) {
-			if (dateTime.isBefore(scheduleDate, 'day')) return '(-1)';
-			if (dateTime.isAfter(scheduleDate, 'day')) return ' +1';
+		const momentDateTime = moment(dateTime);
+
+		if (momentDateTime && scheduleDate) {
+			if (momentDateTime.isBefore(scheduleDate, 'day')) return '(-1)';
+			if (momentDateTime.isAfter(scheduleDate, 'day')) return ' +1';
 		}
 
 		return '';
@@ -1378,7 +1380,9 @@
 				personSchedule.IntradayAbsenceCategory.Color,
 				personSchedule.IntradayAbsenceCategory.ShortName,
 				overtimeCategoryColor,
-				personSchedule.ContractTimeInMinute
+				personSchedule.ContractTimeInMinute,
+				personSchedule.Start,
+				personSchedule.End
 			);
 
 			return model;

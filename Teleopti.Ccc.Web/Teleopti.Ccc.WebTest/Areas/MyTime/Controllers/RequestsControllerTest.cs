@@ -1574,6 +1574,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			hasException.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldGetStartAndEndForRetrivedSchedules()
+		{
+			Now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().MySchedule.Start.Should().Be.EqualTo(startDate.Date.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss"));
+			data.MultiSchedulesForShiftTrade.First().MySchedule.End.Should().Be.EqualTo(startDate.Date.AddHours(18).ToString("yyyy-MM-dd HH:mm:ss"));
+
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.Start.Should().Be.EqualTo(startDate.Date.AddHours(8).ToString("yyyy-MM-dd HH:mm:ss"));
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.End.Should().Be.EqualTo(startDate.Date.AddHours(18).ToString("yyyy-MM-dd HH:mm:ss"));
+
+		}
+
 
 		private void setPermissions(params string[] functionPaths)
 		{
