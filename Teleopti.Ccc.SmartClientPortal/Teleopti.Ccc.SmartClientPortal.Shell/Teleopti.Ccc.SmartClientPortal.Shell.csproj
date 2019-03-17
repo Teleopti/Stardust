@@ -3456,6 +3456,7 @@
     <Compile Include="Win\Sikuli\Helpers\SikuliValidatorFactory.cs" />
     <Compile Include="Win\Sikuli\Helpers\TestDuration.cs" />
     <Compile Include="Win\Sikuli\Helpers\ValidatorHelperMethods.cs" />
+    <Compile Include="Win\Sikuli\SikuliCreateInstanceException.cs" />
     <Compile Include="Win\Sikuli\SikuliHelper.cs" />
     <Compile Include="Win\Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
     <Compile Include="Win\Sikuli\Validators\AtomicValidators\IAtomicValidator.cs" />

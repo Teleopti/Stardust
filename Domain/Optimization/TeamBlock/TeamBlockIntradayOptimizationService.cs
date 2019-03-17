@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays, scheduleDictionary, resCalcData, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
 
-				callback.Optimizing(new OptimizationCallbackInfo(teamBlockInfo, success, totalTeamBlockInfos - runningTeamBlockCounter));
+				callback.Optimizing(new OptimizationCallbackInfo(teamBlockInfo, success, totalTeamBlockInfos, runningTeamBlockCounter));
 
 				if (!success ||
 					!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||

@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IHandleBusinessRuleResponse _handleBusinessRuleResponse;
 		private IRequestPresenter _requestPresenter;
 		private readonly IScenario _scenario;
-		private int _scheduleCounter;
 		private bool _backgroundWorkerRunning;
 		private ModifyEventArgs _lastModifiedPart;
 		private readonly bool _shrinkage;
@@ -2655,14 +2654,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					progress.CancelAction();
 				}
 
-				if (_scheduleCounter >= progress.ScreenRefreshRate)
-				{
-					schedulerSplitters1.Grid.Invalidate();
-					schedulerSplitters1.RefreshSummarySkillIfActive();
-					refreshChart();
-					_scheduleCounter = 0;
-				}
-
 				if (_cancelButtonPressed)
 				{
 					toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancellingThreeDots");
@@ -2679,7 +2670,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 			statusStrip1.Refresh();
-			_scheduleCounter++;
 		}
 
 		private void releaseUserInterface(bool canceled)

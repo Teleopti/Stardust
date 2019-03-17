@@ -14,10 +14,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 			{
 				var assembly = Assembly.GetExecutingAssembly();
 
-				var type = assembly.GetTypes()
-					.First(t => t.Name == className);
-
-				return Activator.CreateInstance(type);
+				try
+				{
+					var type = assembly.GetTypes()
+						.First(t => t.Name == className);
+					return Activator.CreateInstance(type);
+				}
+				catch (Exception e)
+				{
+					throw new SikuliCreateInstanceException(string.Concat(assembly.FullName, ".", className, " not found"), e);
+				}
 			}
 
 			public static IRootValidator CreateValidator(string validatorName)

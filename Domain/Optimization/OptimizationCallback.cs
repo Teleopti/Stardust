@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizationCallback : IOptimizationCallback
 	{
 		private readonly ISchedulingProgress _backgroundWorker;
-		private int _counter;
 		private readonly string output;
 		private static readonly long waitBetweenCallbacks = TimeSpan.FromSeconds(0.2).Ticks;
 		
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return;
 
 			var e = new ResourceOptimizerProgressEventArgs(0, 0,
-				string.Format(output, callbackInfo.Number, _counter++, callbackInfo.Name,
+				string.Format(output, callbackInfo.Number, callbackInfo.RunningNumber, callbackInfo.Name,
 					callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful), 100);
 
 			_backgroundWorker.ReportProgress(1, e);
