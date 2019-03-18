@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Domain.Status
 					statusStep.Name, 
 					statusStep.Description, 
 					(int) statusStep.Limit.TotalSeconds, 
-					basePath + "/ping/" + statusStep.Name
+					basePath + "/ping/" + statusStep.Name,
+					statusStep.CanBeDeleted
 				);
 			}
 		}

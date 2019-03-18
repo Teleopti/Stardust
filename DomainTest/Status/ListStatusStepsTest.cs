@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Status
 		{
 			var stepName = Guid.NewGuid().ToString();
 			var description = Guid.NewGuid().ToString();
-			var statusStep = new CustomStatusStep(0, stepName, description, TimeSpan.Zero, TimeSpan.Zero);
+			var statusStep = new CustomStatusStep(0, stepName, description, TimeSpan.Zero, TimeSpan.Zero, false);
 			FetchCustomStatusSteps.Has(statusStep);
 
 			Target.Execute().Single(x => x.Name == statusStep.Name).Description
