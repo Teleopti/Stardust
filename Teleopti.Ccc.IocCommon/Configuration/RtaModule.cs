@@ -14,6 +14,7 @@ using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Adjustment;
+using Teleopti.Wfm.Adherence.Historical.Adjustments;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Historical.Approval;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<HistoricalAdherenceViewModelBuilder>().As<IHistoricalAdherenceViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<HistoricalOverviewViewModelBuilder>().SingleInstance();
-			builder.RegisterType<AdjustedPeriodsViewModelBuilder>().SingleInstance();
+			builder.RegisterType<AdjustmentsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
@@ -168,6 +169,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AgentAdherenceDayLoaderAdjustAdherenceToNeutral>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
 				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			
+			builder.RegisterType<AdjustmentsLoader>().SingleInstance();
 
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 

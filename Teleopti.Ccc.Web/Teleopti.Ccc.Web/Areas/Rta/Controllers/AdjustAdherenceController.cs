@@ -10,22 +10,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.AdjustAdherence)]
 	public class AdjustAdherenceController : ApiController
 	{
-		private readonly AdjustedPeriodsViewModelBuilder _adjustedPeriodsViewModelBuilder;
+		private readonly AdjustmentsViewModelBuilder _adjustmentsViewModelBuilder;
 		private readonly AdjustPeriodToNeutralCommandHandler _adjustPeriodToNeutralCommandHandler;
 		private readonly CancelAdjustmentToNeutralCommandHandler _cancelAdjustmentToNeutralCommandHandler;
 
 		public AdjustAdherenceController(
-			AdjustedPeriodsViewModelBuilder adjustedPeriodsViewModelBuilder,
+			AdjustmentsViewModelBuilder adjustmentsViewModelBuilder,
 			AdjustPeriodToNeutralCommandHandler adjustPeriodToNeutralCommandHandler,
 			CancelAdjustmentToNeutralCommandHandler cancelAdjustmentToNeutralCommandHandler)
 		{
 			_adjustPeriodToNeutralCommandHandler = adjustPeriodToNeutralCommandHandler;
 			_cancelAdjustmentToNeutralCommandHandler = cancelAdjustmentToNeutralCommandHandler;
-			_adjustedPeriodsViewModelBuilder = adjustedPeriodsViewModelBuilder;
+			_adjustmentsViewModelBuilder = adjustmentsViewModelBuilder;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Adherence/AdjustedPeriods")]
-		public virtual IHttpActionResult Load() => Ok(_adjustedPeriodsViewModelBuilder.Build());
+		public virtual IHttpActionResult Load() => Ok(_adjustmentsViewModelBuilder.Build());
 
 		[UnitOfWork, HttpPost, Route("api/Adherence/AdjustPeriod")]
 		public virtual IHttpActionResult AdjustPeriod([FromBody] AdjustPeriodToNeutralCommand command)

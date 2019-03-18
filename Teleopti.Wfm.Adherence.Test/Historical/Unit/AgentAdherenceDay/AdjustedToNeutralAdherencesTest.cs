@@ -28,8 +28,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			
 			var data = Target.LoadUntilNow(person);
 
-			data.AdjustedToNeutralAdherences().Single().StartTime.Should().Be("2019-02-25 08:00:00".Utc());
-			data.AdjustedToNeutralAdherences().Single().EndTime.Should().Be("2019-02-25 09:00:00".Utc());
+			data.AdjustedPeriods().Single().StartTime.Should().Be("2019-02-25 08:00:00".Utc());
+			data.AdjustedPeriods().Single().EndTime.Should().Be("2019-02-25 09:00:00".Utc());
 		}
 		
 		[Test]
@@ -43,10 +43,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			
 			var data = Target.LoadUntilNow(person);
 
-			data.AdjustedToNeutralAdherences().First().StartTime.Should().Be("2019-02-25 08:00:00".Utc());
-			data.AdjustedToNeutralAdherences().First().EndTime.Should().Be("2019-02-25 09:00:00".Utc());
-			data.AdjustedToNeutralAdherences().Last().StartTime.Should().Be("2019-02-25 09:00:00".Utc());
-			data.AdjustedToNeutralAdherences().Last().EndTime.Should().Be("2019-02-25 10:00:00".Utc());
+			data.AdjustedPeriods().First().StartTime.Should().Be("2019-02-25 08:00:00".Utc());
+			data.AdjustedPeriods().First().EndTime.Should().Be("2019-02-25 09:00:00".Utc());
+			data.AdjustedPeriods().Last().StartTime.Should().Be("2019-02-25 09:00:00".Utc());
+			data.AdjustedPeriods().Last().EndTime.Should().Be("2019-02-25 10:00:00".Utc());
 		}
 		
 		[Test]
@@ -60,8 +60,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			
 			var data = Target.LoadUntilNow(person, new DateOnly("2019-02-25".Utc()));
 
-			data.AdjustedToNeutralAdherences().Single().StartTime.Should().Be("2019-02-25 09:00:00".Utc());
-			data.AdjustedToNeutralAdherences().Single().EndTime.Should().Be("2019-02-25 10:00:00".Utc());
+			data.AdjustedPeriods().Single().StartTime.Should().Be("2019-02-25 09:00:00".Utc());
+			data.AdjustedPeriods().Single().EndTime.Should().Be("2019-02-25 10:00:00".Utc());
 		}
 		
 		[Test]
@@ -136,7 +136,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			
 			var data = Target.Load(person, new DateOnly("2019-03-10".Utc()));
 
-			data.AdjustedToNeutralAdherences().Should().Be.Empty();
+			data.AdjustedPeriods().Should().Be.Empty();
 		}
 		
 		[Test]
@@ -150,8 +150,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			
 			var data = Target.Load(person, new DateOnly("2019-03-10".Utc()));
 
-			data.AdjustedToNeutralAdherences().Single().StartTime.Should().Be("2019-03-10 05:00".Utc());
-			data.AdjustedToNeutralAdherences().Single().EndTime.Should().Be("2019-03-10 07:30".Utc());
+			data.AdjustedPeriods().Single().StartTime.Should().Be("2019-03-10 05:00".Utc());
+			data.AdjustedPeriods().Single().EndTime.Should().Be("2019-03-10 07:30".Utc());
 		}
 		
 		[Test]
@@ -165,7 +165,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			
 			var data = Target.Load(person, new DateOnly("2019-03-10".Utc()));
 
-			data.AdjustedToNeutralAdherences().Should().Be.Empty();
+			data.AdjustedPeriods().Should().Be.Empty();
 		}
 	}
 }

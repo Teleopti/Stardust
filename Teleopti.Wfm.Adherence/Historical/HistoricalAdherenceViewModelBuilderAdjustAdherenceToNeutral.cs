@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.RecordedOutOfAdherences()),
 				RecordedNeutralAdherences = buildNeutralAdherences(adherenceDay.RecordedNeutralAdherences()),
 				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
-				AdjustedToNeutralAdherences = buildAdjustedToNeutralAdherences(adherenceDay.AdjustedToNeutralAdherences()),
+				AdjustedToNeutralAdherences = buildAdjustedToNeutralAdherences(adherenceDay.AdjustedPeriods()),
 				Timeline = new ScheduleTimeline
 				{
 					StartTime = formatForUser(adherenceDay.DisplayPeriod().StartDateTime),

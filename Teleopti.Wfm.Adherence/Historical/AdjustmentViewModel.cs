@@ -1,6 +1,6 @@
 namespace Teleopti.Wfm.Adherence.Historical
 {
-	public class AdjustedPeriodViewModel
+	public class AdjustmentViewModel
 	{
 		public string StartTime;
 		public string EndTime;

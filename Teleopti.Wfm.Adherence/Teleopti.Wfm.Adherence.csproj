@@ -128,11 +128,13 @@
     <Compile Include="DateOnly.cs" />
     <Compile Include="DateTimePeriod.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Historical\Adjustments\Adjustments.cs" />
+    <Compile Include="Historical\Adjustments\AdjustmentsLoader.cs" />
     <Compile Include="Historical\Adjustment\CancelAdjustmentToNeutralCommand.cs" />
     <Compile Include="Historical\Adjustment\CancelAdjustmentToNeutralCommandHandler.cs" />
     <Compile Include="Historical\Adjustment\PeriodToCancel.cs" />
-    <Compile Include="Historical\AdjustedPeriodViewModel.cs" />
-    <Compile Include="Historical\AdjustedPeriodsViewModelBuilder.cs" />
+    <Compile Include="Historical\AdjustmentViewModel.cs" />
+    <Compile Include="Historical\AdjustmentsViewModelBuilder.cs" />
     <Compile Include="Historical\Adjustment\Adjustment.cs" />
     <Compile Include="Historical\Adjustment\AdjustPeriodToNeutralCommand.cs" />
     <Compile Include="Historical\Adjustment\AdjustPeriodToNeutralCommandHandler.cs" />

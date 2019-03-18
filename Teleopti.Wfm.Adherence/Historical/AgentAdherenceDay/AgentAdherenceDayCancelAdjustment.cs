@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private IEnumerable<AdherencePeriod> _recordedNeutralAdherences;
 		private IEnumerable<AdherencePeriod> _neutralAdherences;
 		private IEnumerable<AdherencePeriod> _approvedPeriods;
-		private IEnumerable<AdherencePeriod> _adjustedToNeutralAdherences;
+		private IEnumerable<AdherencePeriod> _adjustedPeriods;
 		private IEnumerable<HistoricalChangeModel> _changesWithinDisplayPeriod;
 		private int? _adherencePercentage;
 		private int? _secondsInAdherence;
@@ -45,11 +45,10 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _recordedOutOfAdherences.ToArray();
 		public IEnumerable<AdherencePeriod> RecordedNeutralAdherences() => _recordedNeutralAdherences.ToArray();
 
-		public IEnumerable<AdherencePeriod> ApprovedPeriods() => _approvedPeriods;
 		public IEnumerable<AdherencePeriod> OutOfAdherences() => _outOfAdherences;
 		public IEnumerable<AdherencePeriod> NeutralAdherences() => _neutralAdherences;
-
-		public IEnumerable<AdherencePeriod> AdjustedToNeutralAdherences() => _adjustedToNeutralAdherences;
+		public IEnumerable<AdherencePeriod> ApprovedPeriods() => _approvedPeriods;
+		public IEnumerable<AdherencePeriod> AdjustedPeriods() => _adjustedPeriods;
 
 		public int? Percentage() => _adherencePercentage;
 		public int? SecondsInAdherence() => _secondsInAdherence;
@@ -151,7 +150,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_recordedNeutralAdherences = recordedNeutralAdherences.ToAdherencePeriods();
 			_approvedPeriods = _collectedApprovedPeriods.ToAdherencePeriods();
 
-			_adjustedToNeutralAdherences = _collectedAdjustedToNeutralPeriods
+			_adjustedPeriods = _collectedAdjustedToNeutralPeriods
 				.Intersects(new OpenPeriod(_displayPeriod.Value.StartDateTime, _displayPeriod.Value.EndDateTime))
 				.ToAdherencePeriods();
 

@@ -52,7 +52,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<AdherencePeriod> AdjustedToNeutralAdherences()
+		public IEnumerable<AdherencePeriod> AdjustedPeriods()
 		{
 			throw new NotImplementedException();
 		}

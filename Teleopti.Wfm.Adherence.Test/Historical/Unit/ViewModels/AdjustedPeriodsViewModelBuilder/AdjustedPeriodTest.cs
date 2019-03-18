@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.AdjustedPeriods
 	[DomainTest]
 	public class AdjustedPeriodTest
 	{
-		public Adherence.Historical.AdjustedPeriodsViewModelBuilder Target;
+		public Adherence.Historical.AdjustmentsViewModelBuilder Target;
 		public FakeRtaHistory History;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.AdjustedPeriods
 		public void ShouldGetEmptyModel()
 		{
 			Target.Build()
-				.Should().Have.SameValuesAs(Enumerable.Empty<AdjustedPeriodViewModel>());
+				.Should().Have.SameValuesAs(Enumerable.Empty<AdjustmentViewModel>());
 		}
 
 		[Test]

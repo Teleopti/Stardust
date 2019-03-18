@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		IEnumerable<AdherencePeriod> ApprovedPeriods();
 		IEnumerable<AdherencePeriod> OutOfAdherences();
 		IEnumerable<AdherencePeriod> NeutralAdherences();
-		IEnumerable<AdherencePeriod> AdjustedToNeutralAdherences();
+		IEnumerable<AdherencePeriod> AdjustedPeriods();
 		int? Percentage();
 		int? SecondsInAdherence();
 		int? SecondsOutOfAdherence();
