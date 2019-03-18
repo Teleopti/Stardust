@@ -17,7 +17,8 @@
 			'wfm.favoriteSearch',
 			'wfm.organizationPicker',
 			'wfm.ngEnter',
-			'wfm.utilities'
+			'wfm.utilities',
+			'wfm.throttle'
 		])
 		.constant('REQUESTS_TAB_NAMES', {
 			absenceAndText: 'absenceAndText',

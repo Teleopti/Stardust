@@ -22,8 +22,12 @@
 					</div>
 
 					<div class="request-date-range-picker relative unselectable">
-						<wfm-date-range-picker ng-model="vm.period" show-week="true" custom-validate="vm.dateRangeCustomValidators(vm.period)"
-						 popup-mode="true"></wfm-date-range-picker>
+						<wfm-date-range-picker 
+											   ng-model="vm.period" 
+											   show-week="true"
+											   custom-validate="vm.dateRangeCustomValidators(vm.period)"
+											   popup-mode="true"
+											   on-date-change="vm.onPeriodChange()"></wfm-date-range-picker>
 					</div>
 
 					<div class="filter-switch inline-block">

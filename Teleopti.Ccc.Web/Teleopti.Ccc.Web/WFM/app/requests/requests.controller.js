@@ -18,7 +18,8 @@
 		'CurrentUserInfo',
 		'groupPageService',
 		'requestsPermissions',
-		'RequestsFilter'
+		'RequestsFilter',
+		'throttleDebounce'
 	];
 
 	function RequestsController(
@@ -36,7 +37,8 @@
 		CurrentUserInfo,
 		groupPageService,
 		requestsPermissions,
-		requestFilterSvc
+		requestFilterSvc,
+		throttleDebounce
 	) {
 		var vm = this;
 
@@ -156,8 +158,7 @@
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
-			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
-			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
+			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: angular.copy(currentFavorite.TeamIds), groupPageId: '' };
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
@@ -258,6 +259,8 @@
 			return $state.current.name.indexOf('requests.shiftTrade') > -1;
 		};
 
+		vm.onPeriodChange = throttleDebounce(getGroupPagesAsync, 300);
+
 		var lastPeriodForFetchingTeamOrGroupData;
 		vm.getTeamOrGroupData = function () {
 			if (angular.toJson(lastPeriodForFetchingTeamOrGroupData) !== angular.toJson(vm.period)) {
@@ -282,7 +285,7 @@
 
 			vm.onFavoriteSearchInitDefer.promise.then(function (defaultSearch) {
 				if (defaultSearch) {
-					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
+					vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: angular.copy(defaultSearch.TeamIds), groupPageId: '' };
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
 				if (vm.isShiftTradeViewActive()) {
@@ -300,27 +303,27 @@
 
 		$q.all([toggleService.togglesLoaded])
 			.then(
-			FavoriteSearchSvc.hasPermission().then(function (response) {
-				vm.hasFavoriteSearchPermission = response.data;
-			})
+				FavoriteSearchSvc.hasPermission().then(function (response) {
+					vm.hasFavoriteSearchPermission = response.data;
+				})
 			)
 			.then(
-			loggedonUsersTeamId.promise.then(function (defaultTeam) {
-				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
-					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
-			})
+				loggedonUsersTeamId.promise.then(function (defaultTeam) {
+					if (angular.isString(defaultTeam) && defaultTeam.length > 0)
+						vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [defaultTeam], groupPageId: '' };
+				})
 			)
 			.then(
-			requestsDataService.getRequestLicense().then(function (result) {
-				vm.overtimeRequestsLicenseAvailable = result.data.IsOvertimeRequestEnabled;
-				vm.shiftTradeRequestsLicenseAvailable = result.data.IsShiftTradeRequestEnabled;
-			})
+				requestsDataService.getRequestLicense().then(function (result) {
+					vm.overtimeRequestsLicenseAvailable = result.data.IsOvertimeRequestEnabled;
+					vm.shiftTradeRequestsLicenseAvailable = result.data.IsShiftTradeRequestEnabled;
+				})
 			)
 			.then(
-			requestsDataService.getPermissionsPromise().then(function (result) {
-				requestsPermissions.set(result.data);
-				vm.permissionInited = true;
-			})
+				requestsDataService.getPermissionsPromise().then(function (result) {
+					requestsPermissions.set(result.data);
+					vm.permissionInited = true;
+				})
 			)
 			.then(vm.init);
 
@@ -329,12 +332,16 @@
 		}
 
 		function getGroupPagesAsync() {
+			if (!vm.period.startDate || !vm.period.endDate) return;
 			var startDateStr = moment(vm.period.startDate)
 				.locale('en')
 				.format('YYYY-MM-DD');
 			var endDateStr = moment(vm.period.endDate)
 				.locale('en')
 				.format('YYYY-MM-DD');
+
+			if (startDateStr > endDateStr) return;
+
 			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
 				vm.availableGroups = data;
 				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
@@ -401,13 +408,6 @@
 					$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed', newVal);
 				}
 			);
-		}
-
-		function replaceArrayValues(from, to) {
-			to.splice(0);
-			from.forEach(function (x) {
-				to.push(x);
-			});
 		}
 	}
 })();
