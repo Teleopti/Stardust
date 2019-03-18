@@ -7,11 +7,17 @@ namespace Teleopti.Ccc.Domain.Status
 		public const string Message = "{0} did some work {1} seconds ago";
 		public const string MessageWhenDeadForLongTime = "{0} hasn't done any work for very long time";
 
-		public CustomStatusStep(int id, string name, string description, TimeSpan timeSinceLastPing, TimeSpan limit)
+		public CustomStatusStep(int id, 
+			string name, 
+			string description, 
+			TimeSpan timeSinceLastPing, 
+			TimeSpan limit,
+			bool canBeDeleted)
 		{
 			Id = id;
 			TimeSinceLastPing = timeSinceLastPing;
 			Limit = limit;
+			CanBeDeleted = canBeDeleted;
 			Name = name;
 			Description = description;
 		}
@@ -30,5 +36,6 @@ namespace Teleopti.Ccc.Domain.Status
 		public TimeSpan Limit { get; }
 		public int Id { get; }
 		public TimeSpan TimeSinceLastPing { get; }
+		public bool CanBeDeleted { get; }
 	}
 }

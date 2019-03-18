@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Status
 			result.Description.Should().Not.Be.Null();
 			result.Limit.Should().Be.EqualTo(TimeSpan.FromSeconds(40));
 			result.TimeSinceLastPing.Ticks.Should().Be.GreaterThan(TimeSpan.FromDays(10).Ticks);
+			result.CanBeDeleted.Should().Be.False();
 		}
 
 		[Test]
