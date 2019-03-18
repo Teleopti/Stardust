@@ -10,14 +10,23 @@
 
 		vm.statusSteps = [];
 		
-		vm.newStatusStep = {};
+		vm.newStatusStep = {
+			limit: 60,
+			name:''
+		};
 		
+		vm.newStatusStepValid = function(){
+			return !isNaN(vm.newStatusStep.limit) && vm.newStatusStep.name !== '';
+		};
+
 		vm.storeNew = function(){
-			$http.post('./status/Add', {
-				Name: vm.newStatusStep.name,
-				Description: vm.newStatusStep.description,
-				LimitInSeconds: vm.newStatusStep.limit
-			});
+			if(vm.newStatusStepValid()){
+				$http.post('./status/Add', {
+					Name: vm.newStatusStep.name,
+					Description: vm.newStatusStep.description,
+					LimitInSeconds: vm.newStatusStep.limit
+				});
+			}
 		};
 		
 		$http.get('./status/listCustom')

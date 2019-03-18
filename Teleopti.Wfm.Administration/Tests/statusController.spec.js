@@ -74,4 +74,42 @@ describe("statusController", function() {
 		controller.storeNew();
 		$httpBackend.flush();
 	});
+	
+	it("limit should default to valid number", function(){
+		$httpBackend.whenGET('./status/listCustom').respond([]);
+
+		var controller = createController();
+		
+		expect(controller.newStatusStep.limit).toBe(60);
+	});
+	
+	it("should not be valid if limit is a not number", function(){
+		$httpBackend.whenGET('./status/listCustom').respond([]);
+
+		var controller = createController();
+		controller.newStatusStep.limit = 'roger';
+
+		expect(controller.newStatusStepValid()).toBe(false);
+	});
+
+	it("should not be valid if name is empty", function(){
+		$httpBackend.whenGET('./status/listCustom').respond([]);
+
+		var controller = createController();
+		controller.newStatusStep.name = '';
+
+		expect(controller.newStatusStepValid()).toBe(false);
+	});
+	
+	it("should not call back end if not valid", function(){
+		$httpBackend.whenGET('./status/listCustom').respond([]);
+
+		var controller = createController();
+		controller.newStatusStep = {
+			limit: 'wrong'
+		};
+		controller.storeNew();
+
+		expect($httpBackend.flush).not.toThrow();
+	});
 });
