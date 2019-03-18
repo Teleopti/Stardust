@@ -54,7 +54,7 @@ describe("statusController", function() {
 		expect(controller.statusSteps.length).toBe(2);
 	});
 	
-	it("should succefully send add to backend", function(){
+	it("should successfully send add to backend", function(){
 		$httpBackend.whenGET('./status/listCustom').respond([]);
 
 		var controller = createController();
