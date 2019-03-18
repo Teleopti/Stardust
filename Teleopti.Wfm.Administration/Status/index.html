@@ -22,7 +22,7 @@
 								<td>{{step.description}}</td>
 								<td>{{step.limit}}</td>
 								<td>{{step.pingUrl}}</td>
-								<td><input type="button" value="Delete"/></td>
+								<td><input type="button" value="Delete" ng-if="step.canBeDeleted"/></td>
 							</tr>
 							<tr>
 								<td><input type="text" ng-model="vm.newStatusStep.name" /></td>

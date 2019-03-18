@@ -37,7 +37,8 @@
 						name: step.Name,
 						description: step.Description,
 						pingUrl: step.PingUrl,
-						limit: step.Limit
+						limit: step.Limit,
+						canBeDeleted: step.CanBeDeleted
 					};					
 				});
 			});
