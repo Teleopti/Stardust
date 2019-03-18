@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Wfm_AutomaticNotificationEnrollment_79679,
 		Wfm_AutomaticNotificationEnrollmentStartup_79679,
 		Wfm_PeopleWeb_Improve_Search_81681,
+		Wfm_PurgeAuditTrailForWebPeople_76215,
 
 		WfmGlobalLayout_personalOptions_37114,
 
