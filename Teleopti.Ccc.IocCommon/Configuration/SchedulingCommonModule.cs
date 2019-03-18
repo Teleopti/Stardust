@@ -508,7 +508,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
 			}
-		
+
+			if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_HintRuleSetBagRotation_82442))
+			{
+				builder.RegisterType<PersonRotationShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<PersonRotationShiftBagHintOff>().As<ISchedulePreHint>().SingleInstance();
+			}
+
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 			builder.RegisterType<RemoveNonPreferenceDaysOffs>().SingleInstance();
 			builder.RegisterType<BlockSchedulingPreferenceHint>().As<ISchedulePostHint>().SingleInstance();

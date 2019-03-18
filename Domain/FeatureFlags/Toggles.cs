@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_TeamSchedulingInPlans_79283,
 		ResourcePlanner_DelayShiftCreations_81680,
 		ResourcePlanner_PrepareToRemoveRightToLeft_81112,
+		ResourcePlanner_HintRuleSetBagRotation_82442,
 		WFM_Plans_Redesign_81198,
 		WFM_Plans_HeatMap_79112_80785,
 		WFM_Plans_IntradayIssuesInHeatMap_79113,

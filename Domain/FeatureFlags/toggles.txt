@@ -93,6 +93,7 @@ ResourcePlanner_QueryHintOnLayers_79780 = true
 ResourcePlanner_TeamSchedulingInPlans_79283 = RC #Note to ourselves: remember to remove a build step in ethiopian team after remove this toggle
 ResourcePlanner_DelayShiftCreations_81680 = RC
 ResourcePlanner_PrepareToRemoveRightToLeft_81112 = true
+ResourcePlanner_HintRuleSetBagRotation_82442 = false
 WFM_Plans_Redesign_81198 = true
 WFM_Plans_HeatMap_79112_80785 = true
 WFM_Plans_IntradayIssuesInHeatMap_79113 = RC
