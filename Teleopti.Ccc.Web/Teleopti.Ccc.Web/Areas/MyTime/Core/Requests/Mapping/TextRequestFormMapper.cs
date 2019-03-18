@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				var sourceTimeZone = _userTimeZone.TimeZone();
 				var startTime = TimeZoneHelper.ConvertToUtc(source.Period.StartDate.Date, sourceTimeZone);
-				var endTime = TimeZoneHelper.ConvertToUtc(source.Period.StartDate.Date.AddDays(1).AddMinutes(-1), sourceTimeZone);
+				var endTime = TimeZoneHelper.ConvertToUtc(source.Period.EndDate.Date.AddDays(1).AddMinutes(-1), sourceTimeZone);
 				period = new DateTimePeriod(startTime, endTime);
 			}
 			else

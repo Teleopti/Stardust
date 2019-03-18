@@ -148,10 +148,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Period = new DateTimePeriodForm
 				{
 					StartDate = new DateOnly(new DateTime(2012, 5, 11)),
-					StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
 					EndDate = new DateOnly(new DateTime(2012, 5, 11)),
-					EndTime = new TimeOfDay(TimeSpan.FromHours(23).Add(TimeSpan.FromSeconds(59)))
-				},
+				}
 			};
 
 			var result = target.Map(form);
@@ -174,16 +172,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Period = new DateTimePeriodForm
 				{
 					StartDate = DateOnly.Today,
-					StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
-					EndDate = DateOnly.Today,
-					EndTime = new TimeOfDay(TimeSpan.FromHours(23).Add(TimeSpan.FromSeconds(59)))
+					EndDate = DateOnly.Today.AddDays(2)
 				},
 				FullDay = true
 			};
 			var result = target.Map(form);
 
 			var startTime = TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date, timeZone);
-			var endTime = TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date.AddDays(1).AddMinutes(-1), timeZone);
+			var endTime = TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date.AddDays(3).AddMinutes(-1), timeZone);
 
 			var expected = new DateTimePeriod(startTime, endTime);
 			result.Request.Period.Should().Be(expected);
