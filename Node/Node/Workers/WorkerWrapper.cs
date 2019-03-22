@@ -28,7 +28,6 @@ namespace Stardust.Node.Workers
 		private readonly ILog Logger = LogManager.GetLogger(typeof(WorkerWrapper));
 
 		private readonly IInvokeHandler _handler;
-		//private readonly NodeConfigurationService _nodeConfigurationService;
 		private NodeConfiguration _nodeConfiguration;
 		private readonly TrySendNodeStartUpNotificationToManagerTimer _nodeStartUpNotificationToManagerTimer;
 		private readonly IPingToManagerTimer _pingToManagerTimer;
@@ -193,7 +192,6 @@ namespace Stardust.Node.Workers
 							{
 								_handler.Invoke(deSer,
 												CancellationTokenSource,
-												//this.SendJobProgressToManager,
 										(message) =>
 										{
 											_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
@@ -351,7 +349,6 @@ namespace Stardust.Node.Workers
 			if (newTrySendStatusToManagerTimer != null)
 			{
 				_trySendStatusToManagerTimer = newTrySendStatusToManagerTimer;
-				//_trySendStatusToManagerTimer.Setup(_nodeConfiguration, _nodeConfiguration.GetManagerNodeHeartbeatUri());
 				_trySendStatusToManagerTimer.JobQueueItemEntity = jobQueueItemEntity;
 
 				_trySendStatusToManagerTimer.TrySendStatusSucceded +=
@@ -374,10 +371,5 @@ namespace Stardust.Node.Workers
 			_currentMessageToProcess = null;
 			IsWorking = false;
 		}
-
-		//private void SendJobProgressToManager(string message)
-		//{
-		//	_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
-		//}
 	}
 }

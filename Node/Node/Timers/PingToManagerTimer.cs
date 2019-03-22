@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Timer = System.Timers.Timer;
@@ -12,7 +11,6 @@ namespace Stardust.Node.Timers
 {
 	public class PingToManagerTimer : Timer, IPingToManagerTimer
 	{
-		//private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 		private string _whoAmI;
 		private NodeConfiguration _nodeConfiguration;
 		private readonly IHttpSender _httpSender;
@@ -72,7 +70,6 @@ namespace Stardust.Node.Timers
 				var currentScopeMessage =
 					LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
 				_exceptionLoggerHandler.LogInfo(currentScopeMessage,exception);
-				//Logger.InfoWithLineNumber(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
 			}
 		}
 	}
