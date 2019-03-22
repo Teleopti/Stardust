@@ -327,6 +327,8 @@ namespace Stardust.Node.Workers
 																								  EventArgs e)
 		{
 			_nodeStartUpNotificationToManagerTimer.Stop();
+			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded -=
+				NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded;
 			_pingToManagerTimer.SetupAndStart(_nodeConfiguration);
 		}
         
@@ -358,16 +360,27 @@ namespace Stardust.Node.Workers
 			}
 			else
 			{
-				_trySendStatusToManagerTimer?.Dispose();
-				_trySendStatusToManagerTimer = null;
+				if(_trySendStatusToManagerTimer != null)
+				{
+					_trySendStatusToManagerTimer.Stop();
+					_trySendStatusToManagerTimer.TrySendStatusSucceded -=
+						TrySendStatusToManagerTimer_TrySendStatus;
+
+					_trySendStatusToManagerTimer = null;
+				}
 			}
 		}
 
 		private void TrySendStatusToManagerTimer_TrySendStatus(object sender,
 																	   EventArgs e)
 		{
+			_trySendStatusToManagerTimer.Stop();
+			_trySendStatusToManagerTimer.TrySendStatusSucceded -=
+				TrySendStatusToManagerTimer_TrySendStatus;
+
+			_trySendStatusToManagerTimer = null;
+
 			// Dispose timer.
-			SetNodeStatusTimer(null, null);
 			_currentMessageToProcess = null;
 			IsWorking = false;
 		}

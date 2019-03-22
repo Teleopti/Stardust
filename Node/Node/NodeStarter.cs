@@ -43,10 +43,6 @@ namespace Stardust.Node
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
 			                    {
-									var containerBuilder = new ContainerBuilder();
-									containerBuilder.RegisterModule<NodeModule>();
-									containerBuilder.Update(container);
-
 									// Configure Web API for self-host. 
 									var config = new HttpConfiguration
 				                    {
