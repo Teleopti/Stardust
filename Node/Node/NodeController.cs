@@ -5,7 +5,6 @@ using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
 namespace Stardust.Node
@@ -16,26 +15,14 @@ namespace Stardust.Node
 		private const string JobIdIsInvalid = "Job Id is invalid."; 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
-		//private readonly IWorkerWrapper _workerWrapper;
-		//private readonly NodeConfigurationService _nodeConfigurationService;
-
-		//public NodeController(IWorkerWrapper workerWrapper, NodeConfigurationService nodeConfigurationService)
 		public NodeController(WorkerWrapperService workerWrapperService)
 		{
 			_workerWrapperService = workerWrapperService;
-			//_workerWrapper = workerWrapper;
-			//_nodeConfigurationService = nodeConfigurationService;
 		}
-
-		//public void Init(NodeConfiguration nodeConfiguration)
-		//{
-		//	_workerWrapperService.GetWorkerWrapperByPort()
-		//}
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
-			//_workerWrapper.Init(_nodeConfigurationService.GetConfigurationForPort(ActionContext.Request.RequestUri.Port));
 			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
 
 			var isValidRequest = workerWrapper.ValidateStartJob(jobQueueItemEntity);
