@@ -14,17 +14,14 @@ namespace Stardust.Node.Workers
 	public class JobDetailSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(JobDetailSender));
-		private readonly UriBuilder _uriBuilder;
+		private UriBuilder _uriBuilder;
 		private readonly IHttpSender _httpSender;
 		private readonly List<JobDetailEntity> _jobDetails;
 
-		public JobDetailSender(NodeConfiguration nodeConfiguration,
-												IHttpSender httpSender)
+		public JobDetailSender(IHttpSender httpSender)
 		{
 			_httpSender = httpSender;
 			_jobDetails = new List<JobDetailEntity>();
-			_uriBuilder = new UriBuilder(nodeConfiguration.ManagerLocation);
-			_uriBuilder.Path += ManagerRouteConstants.JobProgress;
 		}
 
 
@@ -32,7 +29,6 @@ namespace Stardust.Node.Workers
 		{
 			return _jobDetails.Count;
 		}
-
 
 		public void AddDetail(Guid jobid, string progressMessage)
 		{
@@ -48,10 +44,9 @@ namespace Stardust.Node.Workers
 			}
 		}
 
-
 		public void Send(CancellationToken cancellationToken)
 		{
-			if (_jobDetails == null || _jobDetails.Count <= 0) return;
+			if (_jobDetails == null || _jobDetails.Count <= 0 || _uriBuilder == null) return;
 			lock (_jobDetails)
 			{
 				try
@@ -69,6 +64,12 @@ namespace Stardust.Node.Workers
 					Logger.ErrorWithLineNumber($"Send job progresses to manager failed for job ( jobId ) : ( {_jobDetails.FirstOrDefault().JobId} )");
 				}
 			}
+		}
+
+		public void SetManagerLocation(Uri managerLocation)
+		{
+			_uriBuilder = new UriBuilder(managerLocation);
+			_uriBuilder.Path += ManagerRouteConstants.JobProgress;
 		}
 	}
 }

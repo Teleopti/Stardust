@@ -10,6 +10,7 @@ using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node;
 using Stardust.Node.Entities;
+using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
@@ -45,26 +46,27 @@ namespace NodeTest
 			};
 			_nodeStartupNotification = new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
 																				new FakeHttpSender());
-			_jobDetailSender  = new JobDetailSender(_nodeConfigurationFake, new FakeHttpSender());
+			_jobDetailSender  = new JobDetailSender(new FakeHttpSender());
 			_trySendJobDetailToManagerTimer =
-				new TrySendJobDetailToManagerTimer(_nodeConfigurationFake,
-														_jobDetailSender);
+				new TrySendJobDetailToManagerTimer(_jobDetailSender);
 
-			_pingToManagerFake = new PingToManagerFake();
+            _trySendJobDetailToManagerTimer.SetupAndStart(_nodeConfigurationFake);
+            _pingToManagerFake = new PingToManagerFake();
+            _pingToManagerFake.SetupAndStart(_nodeConfigurationFake);
 
-			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
-														 _jobDetailSender,
+			_sendJobDoneTimer = new SendJobDoneTimerFake(_jobDetailSender,
 														 new FakeHttpSender());
+            _sendJobDoneTimer.Setup(_nodeConfigurationFake, _nodeConfigurationFake.GetManagerJobDoneTemplateUri());
 
-			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
-																 _jobDetailSender,
+            _sendJobCanceledTimer = new SendJobCanceledTimerFake(_jobDetailSender,
 																 new FakeHttpSender());
+            _sendJobCanceledTimer.Setup(_nodeConfigurationFake, _nodeConfigurationFake.GetManagerJobHasBeenCanceledTemplateUri());
 
-			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-															   _jobDetailSender,
+            _sendJobFaultedTimer = new SendJobFaultedTimerFake(_jobDetailSender,
 															   new FakeHttpSender());
-			_now = new MutableNow();
+            _sendJobFaultedTimer.Setup(_nodeConfigurationFake, _nodeConfigurationFake.GetManagerJobHasFailedTemplatedUri());
 
+            _now = new MutableNow();
 		}
 
 		[TestFixtureSetUp]
@@ -97,7 +99,6 @@ namespace NodeTest
 		public void ShouldBeAbleToCatchExceptionsFromJob() //faulting job
 		{
 			_workerWrapper = new WorkerWrapper(new ThrowExceptionInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -106,6 +107,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 		}
@@ -114,7 +116,6 @@ namespace NodeTest
 		public void ShouldBeAbleToStartJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -123,7 +124,8 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
-			_workerWrapper.ValidateStartJob(_jobDefinition);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 		}
 
@@ -131,7 +133,6 @@ namespace NodeTest
 		public void ShouldBeAbleToTryCancelJob()
 		{
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -140,7 +141,8 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
-			_workerWrapper.ValidateStartJob(_jobDefinition);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
 
@@ -151,7 +153,6 @@ namespace NodeTest
 		public void ShouldNotThrowWhenCancellingAlreadyCancelledJob()
 		{
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -160,7 +161,8 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
-			_workerWrapper.ValidateStartJob(_jobDefinition);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
 
@@ -173,7 +175,6 @@ namespace NodeTest
 		public void StartJobShouldReturnBadRequestWhenMessageIdIsEmptyGuid()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -182,8 +183,8 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
-			
-			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity() { JobId = Guid.Empty });
+            _workerWrapper.Init(_nodeConfigurationFake);
+            var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity() { JobId = Guid.Empty });
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 
@@ -191,7 +192,6 @@ namespace NodeTest
 		public void StartJobShouldReturnBadRequestWhenMessageIsEmpty()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -200,8 +200,8 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
-
-			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity());
+            _workerWrapper.Init(_nodeConfigurationFake);
+            var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity());
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 
@@ -209,7 +209,6 @@ namespace NodeTest
 		public void StartJobShouldReturnBadRequestWhenMessageIsNull()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -218,8 +217,8 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, 
 											   _now);
-
-			var actionResult = _workerWrapper.ValidateStartJob(null);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            var actionResult = _workerWrapper.ValidateStartJob(null);
 			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 

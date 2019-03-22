@@ -33,7 +33,7 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToAddDetail()
 		{
-			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+			Target = new JobDetailSender(_httpSenderFake);
 			Target.AddDetail(Guid.NewGuid(), "Progress message");
 			Assert.IsTrue(Target.DetailsCount() == 1);
 		}
@@ -41,7 +41,7 @@ namespace NodeTest
 		[Test]
 		public void ShouldHaveTwoJobProgressesWhenTwoWithSameGuidAreAdded()
 		{
-			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+			Target = new JobDetailSender(_httpSenderFake);
 
 			var jobid = Guid.NewGuid();
 
@@ -53,7 +53,8 @@ namespace NodeTest
 		[Test]
 		public void ShouldRemoveDetailWhenSent()
 		{
-			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
+			Target = new JobDetailSender(_httpSenderFake);
+            Target.SetManagerLocation(_nodeConfiguration.ManagerLocation);
 			Target.AddDetail(Guid.NewGuid(), "Progress message.");
 			Target.Send(CancellationToken.None);
 			Target.DetailsCount().Should().Be.EqualTo(0);
@@ -62,9 +63,9 @@ namespace NodeTest
 		[Test]
 		public void ShouldSendAllDetailsInTheSameRequest()
 		{
-			Target = new JobDetailSender(_nodeConfiguration, _httpSenderFake);
-
-			var jobid = Guid.NewGuid();
+			Target = new JobDetailSender(_httpSenderFake);
+            Target.SetManagerLocation(_nodeConfiguration.ManagerLocation);
+            var jobid = Guid.NewGuid();
 			Target.AddDetail(jobid, "Progress message 1.");
 			Target.AddDetail(jobid, "Progress message 2.");
 

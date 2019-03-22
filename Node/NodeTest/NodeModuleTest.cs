@@ -26,7 +26,8 @@ namespace NodeTest
 				2000,true);
 
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new NodeModule(nodeConfiguration));
+            builder.RegisterInstance(new NodeConfigurationService());
+			builder.RegisterModule(new NodeModule());
 
 			_container = builder.Build();
 		}
@@ -39,10 +40,10 @@ namespace NodeTest
 			using (var scope = _container.BeginLifetimeScope())
 			{
 				scope.Resolve<NodeController>().Should().Not.Be.Null();
-				scope.Resolve<NodeConfiguration>().Should().Not.Be.Null();
+				scope.Resolve<NodeConfigurationService>().Should().Not.Be.Null();
 				scope.Resolve<TrySendJobDetailToManagerTimer>().Should().Not.Be.Null();
 				scope.Resolve<TrySendNodeStartUpNotificationToManagerTimer>().Should().Not.Be.Null();
-				scope.Resolve<Timer>().Should().Not.Be.Null();
+				scope.Resolve<IPingToManagerTimer>().Should().Not.Be.Null();
 				scope.Resolve<TrySendJobFaultedToManagerTimer>().Should().Not.Be.Null();
 				scope.Resolve<TrySendJobCanceledToManagerTimer>().Should().Not.Be.Null();
 			}

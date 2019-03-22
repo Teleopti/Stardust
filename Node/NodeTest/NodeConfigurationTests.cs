@@ -22,19 +22,19 @@ namespace NodeTest
 				14100,
 				"TestNode",
 				60,
-				2000,true);
+				2000, true);
 
-		    FixedIp = IPAddress.Parse("127.13.3.7");
-            NodeConfigurationStaticIp = new NodeConfiguration(
-                new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-                Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-                1337,
-                "TestNode",
-                60,
-                2000,
-                FixedIp,true);
+			FixedIp = IPAddress.Parse("127.13.3.7");
+			NodeConfigurationStaticIp = new NodeConfiguration(
+				 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+				 Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+				 1337,
+				 "TestNode",
+				 60,
+				 2000,
+				 FixedIp, true);
 
-            UriToTest = NodeConfiguration.ManagerLocation;
+			UriToTest = NodeConfiguration.ManagerLocation;
 
 			Guid = Guid.NewGuid();
 
@@ -45,28 +45,28 @@ namespace NodeTest
 			JobHasFailedTemplateUri = new Uri(UriToTest, ManagerRouteConstants.JobFailed);
 
 			JobHasFailedUri = new Uri(JobHasFailedTemplateUri.ToString()
-				                          .Replace(ManagerRouteConstants.JobIdOptionalParameter,
-				                                   Guid.ToString()));
+												  .Replace(ManagerRouteConstants.JobIdOptionalParameter,
+															  Guid.ToString()));
 
 			JobHasBeenCanceledTemplateUri = new Uri(UriToTest,
-			                                        ManagerRouteConstants.JobHasBeenCanceled);
+																 ManagerRouteConstants.JobHasBeenCanceled);
 
 			JobHasBeenCanceledUri =
 				new Uri(JobHasBeenCanceledTemplateUri.ToString()
-					        .Replace(ManagerRouteConstants.JobIdOptionalParameter,
-					                 Guid.ToString()));
+							  .Replace(ManagerRouteConstants.JobIdOptionalParameter,
+										  Guid.ToString()));
 
 			JobDoneTemplateUri = new Uri(UriToTest,
-			                             ManagerRouteConstants.JobDone);
+												  ManagerRouteConstants.JobDone);
 
 			JobDoneUri =
 				new Uri(JobDoneTemplateUri.ToString()
-					        .Replace(ManagerRouteConstants.JobIdOptionalParameter,
-					                 Guid.ToString()));
+							  .Replace(ManagerRouteConstants.JobIdOptionalParameter,
+										  Guid.ToString()));
 		}
 
 		private NodeConfiguration NodeConfiguration { get; set; }
-        private NodeConfiguration NodeConfigurationStaticIp { get; set; }
+		private NodeConfiguration NodeConfigurationStaticIp { get; set; }
 		private Uri UriToTest { get; set; }
 		private Uri HeartBeatTemplateUri { get; set; }
 		private Uri NodeHasBeenInitializedTemplateUri { get; set; }
@@ -77,7 +77,7 @@ namespace NodeTest
 		private Uri JobDoneUri { get; set; }
 		private Uri JobDoneTemplateUri { get; set; }
 		private Guid Guid { get; set; }
-        private IPAddress FixedIp { get; set; }
+		private IPAddress FixedIp { get; set; }
 
 
 		[Test]
@@ -115,12 +115,12 @@ namespace NodeTest
 			Assert.IsTrue(uri == NodeHasBeenInitializedTemplateUri);
 		}
 
-	    [Test]
-	    public void ShouldReturnCorrectUrlWhenFixedNodeIpIsSet()
-	    {
-	        var uri = NodeConfigurationStaticIp.BaseAddress;
-            var expectedUri = new Uri("http://" + FixedIp + ":1337/");
-	        Assert.IsTrue(uri == expectedUri);
-	    }
-    }
+		[Test]
+		public void ShouldReturnCorrectUrlWhenFixedNodeIpIsSet()
+		{
+			var uri = NodeConfigurationStaticIp.BaseAddress;
+			var expectedUri = new Uri("http://" + FixedIp + ":1337/");
+			Assert.IsTrue(uri == expectedUri);
+		}
+	}
 }

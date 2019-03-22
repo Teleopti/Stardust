@@ -13,28 +13,35 @@ namespace Stardust.Node.Timers
 	{
 		private readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
 		private readonly string _whoAmI;
-		private readonly NodeConfiguration _nodeConfiguration;
-		private readonly Uri _callbackToManagerTemplateUri;
+		private NodeConfiguration _nodeConfiguration;
+		//private Uri _callbackToManagerTemplateUri;
 		private readonly IHttpSender _httpSender;
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		public Uri CallbackToManagerTemplateUri { get; private set; }
 
-		public TrySendNodeStartUpNotificationToManagerTimer(NodeConfiguration nodeConfiguration,
+		public TrySendNodeStartUpNotificationToManagerTimer(/*NodeConfiguration nodeConfiguration,*/
 		                                                    IHttpSender httpSender,
 		                                                    double interval = 5000,
 		                                                    bool autoReset = true) : base(interval)
 		{
-			var callbackToManagerTemplateUri = nodeConfiguration.GetManagerNodeHasBeenInitializedUri();
+			//var callbackToManagerTemplateUri = nodeConfiguration.GetManagerNodeHasBeenInitializedUri();
 			_cancellationTokenSource = new CancellationTokenSource();
-			_nodeConfiguration = nodeConfiguration;
-			_callbackToManagerTemplateUri = callbackToManagerTemplateUri;
+			//_nodeConfiguration = nodeConfiguration;
+			//_callbackToManagerTemplateUri = callbackToManagerTemplateUri;
 			_httpSender = httpSender;
 			_whoAmI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
 
 			Elapsed += OnTimedEvent;
 			AutoReset = autoReset;
+		}
+
+		public void SetupAndStart(NodeConfiguration nodeConfiguration)
+		{
+			_nodeConfiguration = nodeConfiguration;
+			CallbackToManagerTemplateUri = _nodeConfiguration.GetManagerNodeHasBeenInitializedUri();
+			Start();
 		}
 
 		protected override void Dispose(bool disposing)
@@ -71,7 +78,7 @@ namespace Stardust.Node.Timers
 			try
 			{
 				var httpResponseMessage = await TrySendNodeStartUpToManager(_nodeConfiguration.BaseAddress,
-					                                  _callbackToManagerTemplateUri,
+														CallbackToManagerTemplateUri,
 					                                  _cancellationTokenSource.Token);
 
 				if (httpResponseMessage.IsSuccessStatusCode)

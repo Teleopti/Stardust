@@ -17,11 +17,11 @@ namespace NodeTest.Fakes.Timers
 		public NodeStartupNotificationToManagerFake(NodeConfiguration nodeConfiguration,
 													IHttpSender httpSender,
 		                                            double interval = 1000,
-		                                            bool autoReset = false) : base(nodeConfiguration,
-																				   httpSender,
+		                                            bool autoReset = false) : base(httpSender,
 																				   interval,
 		                                                                           autoReset)
 		{
+            SetupAndStart(nodeConfiguration);
 		}
 
 

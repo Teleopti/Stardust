@@ -43,22 +43,19 @@ namespace NodeTest
 			                                                                    new FakeHttpSender());
 			_pingToManagerFake = new PingToManagerFake();
 
-			_jobDetailSender = new JobDetailSender(_nodeConfigurationFake, new FakeHttpSender());
+			_jobDetailSender = new JobDetailSender(new FakeHttpSender());
 
 			_trySendJobDetailToManagerTimer =
-				new TrySendJobDetailToManagerTimer(_nodeConfigurationFake,
-														 _jobDetailSender);
+				new TrySendJobDetailToManagerTimer(_jobDetailSender);
+            _trySendJobDetailToManagerTimer.SetupAndStart(_nodeConfigurationFake);
 
-			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
-														 _jobDetailSender,
+            _sendJobDoneTimer = new SendJobDoneTimerFake(_jobDetailSender,
 			                                             new FakeHttpSender());
 
-			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
-																 _jobDetailSender,
+			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_jobDetailSender,
 			                                                     new FakeHttpSender());
 
-			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-															   _jobDetailSender,
+			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_jobDetailSender,
 			                                                   new FakeHttpSender());
 			_now = new MutableNow();
 		}
@@ -73,13 +70,16 @@ namespace NodeTest
 				"TestNode",
 				60,
 				2000,true);
+
+            _workerWrapperService = new WorkerWrapperServiceFake();
 		}
 
-		private NodeConfiguration _nodeConfigurationFake;
+        private WorkerWrapperServiceFake _workerWrapperService;
+        private NodeConfiguration _nodeConfigurationFake;
 		private IWorkerWrapper _workerWrapper;
 		private NodeController _nodeController;
 		private JobQueueItemEntity _jobQueueItemEntity;
-		private PingToManagerFake _pingToManagerFake;
+		private IPingToManagerTimer _pingToManagerFake;
 		private NodeStartupNotificationToManagerFake _nodeStartupNotification;
 		private SendJobDoneTimerFake _sendJobDoneTimer;
 		private SendJobCanceledTimerFake _sendJobCanceledTimer;
@@ -92,7 +92,6 @@ namespace NodeTest
 		public void CancelJobShouldReturnNotFoundWhenNodeIsIdle()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -101,11 +100,16 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender,
 												_now);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
 
-			_nodeController = new NodeController(_workerWrapper)
+			_nodeController = new NodeController(_workerWrapperService)
 			{
-				Request = new HttpRequestMessage()
-			};
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                }
+            };
 
 			IHttpActionResult actionResultCancel = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
 
@@ -118,7 +122,6 @@ namespace NodeTest
 		public void CancelJobShouldReturnNotFoundWhenCancellingWrongJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -128,9 +131,15 @@ namespace NodeTest
 											   _jobDetailSender, 
 												_now);
 
-			_nodeController = new NodeController(_workerWrapper)
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
 			{
-				Request = new HttpRequestMessage()
+				Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                }
 			};
 			
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
@@ -148,7 +157,6 @@ namespace NodeTest
 		public void CancelJobShouldReturnOkWhenSuccessful()
 		{
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -156,13 +164,18 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage()
-			};
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                }
+            };
 
-			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+            _nodeController.PrepareToStartJob(_jobQueueItemEntity);
 			_nodeController.StartJob(_jobQueueItemEntity.JobId);
 
 			while (!_workerWrapper.IsWorking)
@@ -177,7 +190,6 @@ namespace NodeTest
 		public void ShouldReturnBadRequestWhenCancelJobWithNoId()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -185,10 +197,16 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
 
-			_nodeController = new NodeController(_workerWrapper)
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
 			{
-				Request = new HttpRequestMessage(),
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                },
 				Configuration = new HttpConfiguration()
 			};
 
@@ -203,7 +221,6 @@ namespace NodeTest
 		public void ShouldReturnBadRequestWhenPrepareToStartJobWithNoJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -211,10 +228,15 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
 
-			_nodeController = new NodeController(_workerWrapper)
+            _nodeController = new NodeController(_workerWrapperService)
 			{
-				Request = new HttpRequestMessage(),
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                },
 				Configuration = new HttpConfiguration()
 			};
 
@@ -231,7 +253,6 @@ namespace NodeTest
 		public void PrepareToStartJobShouldReturnConflictWhenAlreadyProcessingJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-											   _nodeConfigurationFake,
 											   _nodeStartupNotification,
 											   _pingToManagerFake,
 											   _sendJobDoneTimer,
@@ -239,11 +260,17 @@ namespace NodeTest
 											   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage(),
-				Configuration = new HttpConfiguration()
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                },
+                Configuration = new HttpConfiguration()
 			};
 
 			var parameters = new TestJobParams("Test Job",
@@ -273,7 +300,6 @@ namespace NodeTest
 		public void PrepareToStartJobShouldReturnOkIfNotRunningJobAlready()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-											   _nodeConfigurationFake,
 											   _nodeStartupNotification,
 											   _pingToManagerFake,
 											   _sendJobDoneTimer,
@@ -281,11 +307,17 @@ namespace NodeTest
 											   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage()
-			};
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                }
+            };
 
 			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
@@ -300,7 +332,6 @@ namespace NodeTest
 		public void StartJobShouldReturnBadRequestWhenStartJobIdDoesNotMatchPrepareJobId()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
 			                                   _pingToManagerFake,
 			                                   _sendJobDoneTimer,
@@ -308,10 +339,16 @@ namespace NodeTest
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage(),
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                },
 				Configuration = new HttpConfiguration()
 			};
 
@@ -329,7 +366,6 @@ namespace NodeTest
 		public void StartJobShouldReturnOkIfJobIdMatchPrepareJobId()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-											   _nodeConfigurationFake,
 											   _nodeStartupNotification,
 											   _pingToManagerFake,
 											   _sendJobDoneTimer,
@@ -337,11 +373,17 @@ namespace NodeTest
 											   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender, _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage()
-			};
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                }
+            };
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 			var actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
@@ -356,7 +398,6 @@ namespace NodeTest
 		{
 			
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-				_nodeConfigurationFake,
 				_nodeStartupNotification,
 				_pingToManagerFake,
 				_sendJobDoneTimer,
@@ -365,9 +406,15 @@ namespace NodeTest
 				_trySendJobDetailToManagerTimer,
 				_jobDetailSender, _now);
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage(),
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                },
 				Configuration = new HttpConfiguration()
 			};
 
@@ -399,7 +446,6 @@ namespace NodeTest
 		{
 
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-				_nodeConfigurationFake,
 				_nodeStartupNotification,
 				_pingToManagerFake,
 				_sendJobDoneTimer,
@@ -408,9 +454,15 @@ namespace NodeTest
 				_trySendJobDetailToManagerTimer,
 				_jobDetailSender, _now);
 
-			_nodeController = new NodeController(_workerWrapper)
-			{
-				Request = new HttpRequestMessage(),
+            _workerWrapper.Init(_nodeConfigurationFake);
+            _workerWrapperService.WorkerWrapper = _workerWrapper;
+
+            _nodeController = new NodeController(_workerWrapperService)
+            {
+                Request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("HTTP://localhost:14100")
+                },
 				Configuration = new HttpConfiguration()
 			};
 

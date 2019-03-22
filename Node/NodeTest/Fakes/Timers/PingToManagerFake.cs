@@ -1,11 +1,15 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Timers;
+using Stardust.Node;
+using Stardust.Node.Extensions;
+using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
 
 namespace NodeTest.Fakes.Timers
 {
-	public class PingToManagerFake : Timer
-	{
+	public class PingToManagerFake : Timer, IPingToManagerTimer
+    {
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
 		public PingToManagerFake()
@@ -20,5 +24,12 @@ namespace NodeTest.Fakes.Timers
 		{
 			Wait.Set();
 		}
-	}
+
+
+        public void SetupAndStart(NodeConfiguration nodeConfiguration)
+        {
+        }
+
+
+    }
 }

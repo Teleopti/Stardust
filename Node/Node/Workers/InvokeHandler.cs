@@ -10,7 +10,7 @@ namespace Stardust.Node.Workers
 {
 	public class InvokeHandler : IInvokeHandler
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
+		private readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
 
 		public InvokeHandler(ILifetimeScope componentContext)
 		{

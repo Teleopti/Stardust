@@ -5,31 +5,32 @@ using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node
 {
 	public class NodeController : ApiController
 	{
+		private readonly WorkerWrapperService _workerWrapperService;
 		private const string JobIdIsInvalid = "Job Id is invalid."; 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
-		private readonly IWorkerWrapper _workerWrapper;
-
-		public NodeController(IWorkerWrapper workerWrapper)
+		public NodeController(WorkerWrapperService workerWrapperService)
 		{
-			_workerWrapper = workerWrapper;
+			_workerWrapperService = workerWrapperService;
 		}
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
-			var isValidRequest = _workerWrapper.ValidateStartJob(jobQueueItemEntity);
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+
+			var isValidRequest = workerWrapper.ValidateStartJob(jobQueueItemEntity);
 			if (!isValidRequest.IsSuccessStatusCode)
 			{
 				return ResponseMessage(isValidRequest);
 			}
-			if (_workerWrapper.IsWorking) return Conflict();
+			if (workerWrapper.IsWorking) return Conflict();
 
 			return Ok();
 		}
@@ -37,14 +38,16 @@ namespace Stardust.Node
 		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
 		public IHttpActionResult StartJob(Guid jobId)
 		{
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+
 			if (jobId == Guid.Empty)
 			{
 				return BadRequest(JobIdIsInvalid);
 			}
 
-			_workerWrapper.CancelTimeoutCurrentMessageTask();
+			workerWrapper.CancelTimeoutCurrentMessageTask();
 
-			var currentMessage = _workerWrapper.GetCurrentMessageToProcess();
+			var currentMessage = workerWrapper.GetCurrentMessageToProcess();
 
 			if (currentMessage == null)
 			{
@@ -58,11 +61,11 @@ namespace Stardust.Node
 
 			Task.Run(() =>
 			{				
-				var startJobMessage = $"{_workerWrapper.WhoamI} : Starting job ( jobId, jobName ) : ( {currentMessage.JobId}, {currentMessage.Name} )";
+				var startJobMessage = $"{workerWrapper.WhoamI} : Starting job ( jobId, jobName ) : ( {currentMessage.JobId}, {currentMessage.Name} )";
 
 				Logger.InfoWithLineNumber(startJobMessage);
 
-				_workerWrapper.StartJob(currentMessage);
+				workerWrapper.StartJob(currentMessage);
 			});
 
 			return Ok();
@@ -71,33 +74,35 @@ namespace Stardust.Node
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+
 			if (jobId == Guid.Empty)
 			{
 				return BadRequest(JobIdIsInvalid);
 			}
 
-			Logger.InfoWithLineNumber(_workerWrapper.WhoamI +
+			Logger.InfoWithLineNumber(workerWrapper.WhoamI +
 			                          " : Received Cancel request. jobId: " + jobId);
 			
-			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
+			var currentJob = workerWrapper.GetCurrentMessageToProcess();
 
 			if (currentJob == null || currentJob.JobId != jobId)
 			{
-				Logger.WarningWithLineNumber(_workerWrapper.WhoamI +
+				Logger.WarningWithLineNumber(workerWrapper.WhoamI +
 							 ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
 							 jobId + " )");
 
 				return NotFound();
 			}
 
-			if (_workerWrapper.IsCancellationRequested)
+			if (workerWrapper.IsCancellationRequested)
 			{
 				return Conflict();
 			}
 
-			_workerWrapper.CancelJob(jobId);
+			workerWrapper.CancelJob(jobId);
 
-			if (_workerWrapper.IsCancellationRequested)
+			if (workerWrapper.IsCancellationRequested)
 			{
 				return Ok();
 			}
@@ -115,13 +120,17 @@ namespace Stardust.Node
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsWorking)]
 		public IHttpActionResult IsWorking()
 		{
-			return Ok(_workerWrapper.IsWorking);
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+
+			return Ok(workerWrapper.IsWorking);
 		}
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
 		public IHttpActionResult IsIdle()
-		{			
-			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
+		{
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+
+			var currentJob = workerWrapper.GetCurrentMessageToProcess();
 
 			if (currentJob == null)
 			{
