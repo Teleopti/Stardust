@@ -52,7 +52,7 @@ namespace NodeTest
 		{
 			var invokehandler = Container.Resolve<InvokeHandler>();
 
-			var jobParams = new TestJobParams("Test Job", 1);
+			var jobParams = new TestJobParams("Test Job", 1, true);
 
 			IEnumerable<object> returnObjects = null;
 

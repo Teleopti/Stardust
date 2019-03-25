@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA01BA57-9C47-4304-B49A-9475782BB277}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stardust.Node", "Node\Node\Stardust.Node.csproj", "{7B0DDB7C-6D8E-453D-9785-F5651756B169}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest.JobHandlers", "Node\NodeTest.JobHandlers\NodeTest.JobHandlers.csproj", "{3D7D71B6-4676-498C-B148-447A5FC5F3A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest", "Node\NodeTest\NodeTest.csproj", "{D851725E-D126-4FF1-A79E-B4B874F4531F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeConsoleHost", "Node\NodeConsoleHost\NodeConsoleHost.csproj", "{3CFC869E-8E1D-4B47-845A-500041AD4DEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stardust.Manager", "Manager\Manager\Stardust.Manager.csproj", "{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerConsoleHost", "Manager\ManagerConsoleHost\ManagerConsoleHost.csproj", "{489535D5-A3F2-4877-81B7-94ADB7BD320B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerTest", "Manager\ManagerTest\ManagerTest.csproj", "{FD3D1B9B-2573-46C2-B699-73E0F119581D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.Test", "Manager.Integration\Manager.Integration.Test\Manager.Integration.Test.csproj", "{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.Test.WPF", "Manager.Integration\Manager.Integration.Test.WPF\Manager.Integration.Test.WPF.csproj", "{43082828-3D79-483F-ABF8-9994B4B44FFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.IntegrationTest.Console.Host", "Manager.Integration\Manager.Integration.Tests.Console.Host\Manager.IntegrationTest.Console.Host.csproj", "{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B0DDB7C-6D8E-453D-9785-F5651756B169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B0DDB7C-6D8E-453D-9785-F5651756B169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B0DDB7C-6D8E-453D-9785-F5651756B169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B0DDB7C-6D8E-453D-9785-F5651756B169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D851725E-D126-4FF1-A79E-B4B874F4531F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D851725E-D126-4FF1-A79E-B4B874F4531F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D851725E-D126-4FF1-A79E-B4B874F4531F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D851725E-D126-4FF1-A79E-B4B874F4531F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD3D1B9B-2573-46C2-B699-73E0F119581D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD3D1B9B-2573-46C2-B699-73E0F119581D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD3D1B9B-2573-46C2-B699-73E0F119581D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD3D1B9B-2573-46C2-B699-73E0F119581D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43082828-3D79-483F-ABF8-9994B4B44FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05DBF79F-31BF-4444-B974-E2714635A7A1}
+	EndGlobalSection
+EndGlobal

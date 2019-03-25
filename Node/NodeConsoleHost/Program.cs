@@ -10,6 +10,7 @@ using log4net.Config;
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.Extensions;
+using Stardust.Node.Workers;
 
 namespace NodeConsoleHost
 {
@@ -90,10 +91,11 @@ namespace NodeConsoleHost
             var builder = new ContainerBuilder();
             builder.RegisterInstance(nodeConfigurationService);
 			builder.RegisterModule(new WorkerModule());
-			Container = builder.Build();	
+			builder.RegisterModule<NodeModule>();
+			Container = builder.Build();
 
 			NodeStarter = new NodeStarter();
-
+			
 			NodeStarter.Start(nodeConfig,
 			                  Container);
 

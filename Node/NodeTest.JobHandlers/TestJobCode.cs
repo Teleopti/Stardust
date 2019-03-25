@@ -60,7 +60,8 @@ namespace NodeTest.JobHandlers
 			progress(jobProgress.Text);
 
 			var objects = new List<object>();
-			objects.Add(new ExitApplication() {ExitCode = 0});
+			if(message.ExitApplication)
+				objects.Add(new ExitApplication { ExitCode = 0 });
 			returnObjects = objects;
 		}
 	}
