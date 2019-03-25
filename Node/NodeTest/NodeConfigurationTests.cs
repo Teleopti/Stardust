@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Net;
 using System.Reflection;
-using System.Reflection.Emit;
 using NUnit.Framework;
 using Stardust.Node;
 using Stardust.Node.Constants;

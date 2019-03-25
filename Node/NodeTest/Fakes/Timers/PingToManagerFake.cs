@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Timers;
 using Stardust.Node;
-using Stardust.Node.Extensions;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
 

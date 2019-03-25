@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Stardust.Node;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
-using Stardust.Node.Workers;
 
 namespace NodeTest.Fakes.Timers
 {

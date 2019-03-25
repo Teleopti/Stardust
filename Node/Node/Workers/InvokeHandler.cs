@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using log4net;
@@ -16,7 +15,7 @@ namespace Stardust.Node.Workers
 		{
 			if (componentContext == null)
 			{
-				throw new ArgumentNullException("componentContext");
+				throw new ArgumentNullException(nameof(componentContext));
 			}
 
 			ComponentContext = componentContext;
@@ -26,8 +25,7 @@ namespace Stardust.Node.Workers
 
 		public void Invoke(object query, 
 			CancellationTokenSource cancellationTokenSource, 
-			Action<string> progressCallback, 
-			ref IEnumerable<object> returnObjects)
+			Action<string> progressCallback)
 		{
 			using (var lifetimeScope = ComponentContext.BeginLifetimeScope())
 			{
@@ -58,7 +56,6 @@ namespace Stardust.Node.Workers
 					method.Invoke(handler,
 					              arguments);
 
-					returnObjects = arguments[arguments.Length - 1] as IEnumerable<object>;
 				}
 				catch (Exception ex)
 				{

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using log4net;
-using log4net.Core;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;

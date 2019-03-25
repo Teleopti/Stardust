@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
-using System.Timers;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;

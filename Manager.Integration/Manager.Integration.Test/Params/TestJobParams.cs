@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Manager.Integration.Test.Params
+﻿namespace Manager.Integration.Test.Params
 {
 	public class TestJobParams
 	{

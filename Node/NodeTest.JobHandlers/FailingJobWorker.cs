@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using log4net;
-using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 
 namespace NodeTest.JobHandlers

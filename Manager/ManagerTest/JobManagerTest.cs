@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
-using log4net;
 using log4net.Config;
 using ManagerTest.Attributes;
 using ManagerTest.Fakes;

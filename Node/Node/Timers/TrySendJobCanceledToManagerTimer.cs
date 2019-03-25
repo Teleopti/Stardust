@@ -1,6 +1,4 @@
-﻿using System;
-using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+﻿using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
 namespace Stardust.Node.Timers

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using Stardust.Node.Interfaces;
 
@@ -9,8 +8,7 @@ namespace NodeTest.Fakes.InvokeHandlers
 	{
 		public void Invoke(object query,
 			CancellationTokenSource cancellationTokenSource,
-			Action<string> progressCallback,
-			ref IEnumerable<object> returnObjects)
+			Action<string> progressCallback)
 		{
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 

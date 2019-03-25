@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NodeTest.JobHandlers
+﻿namespace NodeTest.JobHandlers
 {
 	public class TestJobParams
 	{

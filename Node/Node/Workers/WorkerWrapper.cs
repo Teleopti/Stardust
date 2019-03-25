@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -9,9 +8,7 @@ using Newtonsoft.Json;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.ReturnObjects;
 using Stardust.Node.Timers;
-using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Workers
 {
@@ -167,7 +164,6 @@ namespace Stardust.Node.Workers
 			if (IsWorking) return;
 			IsWorking = true;
 			CancellationTokenSource = new CancellationTokenSource();
-			IEnumerable<object> returnObjects = null;
 
 			var typ = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
 			var deSer = JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized,
@@ -195,8 +191,7 @@ namespace Stardust.Node.Workers
 										(message) =>
 										{
 											_jobDetailSender.AddDetail(_currentMessageToProcess.JobId, message);
-										},
-												ref returnObjects);
+										});
 							},
 							CancellationTokenSource.Token);
 
@@ -209,12 +204,6 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-										  if (returnObjects != null)
-										  {
-											  SpinWait.SpinUntil(() => _currentMessageToProcess == null);
-											  LoopReturnObjects(returnObjects);
-										  }
-
 										  break;
 
 
@@ -222,12 +211,6 @@ namespace Stardust.Node.Workers
 
 										  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
 															 _currentMessageToProcess);
-
-										  if (returnObjects != null)
-										  {
-											  SpinWait.SpinUntil(() => _currentMessageToProcess == null);
-											  LoopReturnObjects(returnObjects);
-										  }
 
 										  break;
 
@@ -248,35 +231,12 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-										  if (returnObjects != null)
-										  {
-											  SpinWait.SpinUntil(() => _currentMessageToProcess == null);
-											  LoopReturnObjects(returnObjects);
-										  }
 
 										  break;
 								  }
 							  }, TaskContinuationOptions.LongRunning);
 
 			Task.Start();
-		}
-
-		private void LoopReturnObjects(IEnumerable<object> returnObjects)
-		{
-			if (returnObjects == null) return;
-
-			foreach (var returnObject in returnObjects)
-			{
-				if (returnObject is ExitApplication)
-				{
-					EnvironmentExit(returnObject as ExitApplication);
-;				}
-			}
-		}
-
-		private void EnvironmentExit(ExitApplication exitApplication)
-		{
-			Environment.Exit(exitApplication.ExitCode);
 		}
 
 		public JobQueueItemEntity GetCurrentMessageToProcess()

@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
-using Stardust.Manager.Extensions;
 
 namespace ManagerTest.Database
 {

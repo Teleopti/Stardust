@@ -2,9 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
