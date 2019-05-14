@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using log4net;
+using Newtonsoft.Json;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
@@ -25,14 +28,10 @@ namespace Stardust.Node
 		{
 			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
 
-			var isValidRequest = workerWrapper.ValidateStartJob(jobQueueItemEntity);
-			if (!isValidRequest.IsSuccessStatusCode)
-			{
-				return ResponseMessage(isValidRequest);
-			}
-			if (workerWrapper.IsWorking) return Conflict();
-
-			return Ok();
+			var result = workerWrapper.ValidateStartJob(jobQueueItemEntity);
+			var prepareToStartJobResult = new PrepareToStartJobResult {IsAvailable = !result.IsWorking && result.HttpResponseMessage.IsSuccessStatusCode};
+			result.HttpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(prepareToStartJobResult));
+			return ResponseMessage(result.HttpResponseMessage);
 		}
 
 		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]

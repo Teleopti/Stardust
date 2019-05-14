@@ -20,7 +20,12 @@ namespace NodeTest.Fakes
 			SentJson = JsonConvert.SerializeObject(data);
 			CalledUrl = url.ToString();
 
-			return new HttpResponseMessage(HttpStatusCode.OK);
+			var responseMessage = new HttpResponseMessage(HttpStatusCode.OK)
+			{
+				RequestMessage = new HttpRequestMessage()
+			};
+
+			return responseMessage;
 		}
 	}
 }

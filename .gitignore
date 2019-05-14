@@ -195,18 +195,7 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 *.orig
-Manager/.idea/.idea.Manager/.idea/contentModel.xml
-Manager/.idea/.idea.Manager/.idea/indexLayout.xml
-Manager/.idea/.idea.Manager/.idea/workspace.xml
-Manager/.idea/.idea.Manager/.idea/modules.xml
-Manager/.idea/.idea.Manager/riderModule.iml
-Node/.idea/.idea.Node/.idea/contentModel.xml
-Node/.idea/.idea.Node/.idea/indexLayout.xml
-Node/.idea/.idea.Node/.idea/modules.xml
-Node/.idea/.idea.Node/.idea/workspace.xml
-Node/.idea/.idea.Node/riderModule.iml
-Manager.Integration/.idea/.idea.Manager.Integration/.idea/contentModel.xml
-Manager.Integration/.idea/.idea.Manager.Integration/.idea/indexLayout.xml
-Manager.Integration/.idea/.idea.Manager.Integration/.idea/modules.xml
-Manager.Integration/.idea/.idea.Manager.Integration/.idea/workspace.xml
-Manager.Integration/.idea/.idea.Manager.Integration/riderModule.iml
+Manager/.idea/
+Node/.idea/
+.idea/
+Manager.Integration/.idea/
