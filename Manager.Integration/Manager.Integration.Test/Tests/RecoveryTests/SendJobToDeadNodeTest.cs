@@ -11,15 +11,21 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.RecoveryTests
 {
 	[TestFixture]
-	class SendJobToDeadNodeTest : InitialzeAndFinalizeOneManagerAndOneNode
+	class SendJobToDeadNodeTest : InitializeAndFinalizeOneManagerAndNodes
 	{
+		public SendJobToDeadNodeTest():base(2)
+		{
+			
+		}
+		
 		[Test]
 		public void ShouldHandleMultipleJobsUsingAllNodesAvailable()
 		{
+			var numberOfNodes = NumberOfNodes;
 			var startedTest = DateTime.UtcNow;
 			var numberOfJobs = 15;
 			var waitForJobToFinishEvent = new ManualResetEventSlim();
-			var waitForNodeToStartEvent = new ManualResetEventSlim();
+			var waitForNodesToStartEvent = new ManualResetEventSlim();
 			
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
@@ -32,24 +38,15 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			};
 			checkTablesInManagerDbTimer.GetWorkerNodes += (sender, nodes) =>
 			{
-				if (nodes.Count == 2)
+				if (nodes.Count == numberOfNodes)
 				{
-					waitForNodeToStartEvent.Set();
+					waitForNodesToStartEvent.Set();
 				}
 			};
 
 			checkTablesInManagerDbTimer.JobTimer.Start();
 			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
-
-			//start second node
-			Task<string> taskStartNewNode = new Task<string>(() =>
-			{
-				string res = IntegrationControllerApiHelper.StartNewNode(HttpSender).Result;
-				return res;
-			});
-
-			taskStartNewNode.Start();
-			waitForNodeToStartEvent.Wait();
+			waitForNodesToStartEvent.Wait();
 
 			var jobQueueItems = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);	
 			jobQueueItems.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));
@@ -57,7 +54,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(60));
 			
 			Assert.IsTrue(jobsFinishedWithoutTimeout, "Timeout on Finishing jobs");
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 2, "There should be two nodes registered");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == numberOfNodes, "There should be two nodes registered");
 			Assert.IsFalse(checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue should be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Job should not be empty.");
 			Assert.AreEqual(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count,
@@ -78,7 +75,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 		}
 		
 		[Test, Ignore("A little flaky still")]
-		public void ShouldHandleNodeDisapperingTemporarily()
+		public void ShouldHandleNodeDisappearingTemporarily()
 		{
 			var startedTest = DateTime.UtcNow;
 			var numberOfJobs = 20;
@@ -111,14 +108,6 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			checkTablesInManagerDbTimer.JobTimer.Start();
 			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
 
-			//start second node
-			Task<string> taskStartNewNode = new Task<string>(() =>
-			{
-				string res = IntegrationControllerApiHelper.StartNewNode(HttpSender).Result;
-				return res;
-			});
-
-			taskStartNewNode.Start();
 			waitForNodeToStartEvent.Wait();
 			var jobQueueItemsBatch1 = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);
 			jobQueueItemsBatch1.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));

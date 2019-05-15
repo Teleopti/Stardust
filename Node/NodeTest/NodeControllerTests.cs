@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
@@ -249,7 +250,7 @@ namespace NodeTest
 
 
 		[Test]
-		public void PrepareToStartJobShouldReturnConflictWhenAlreadyProcessingJob()
+		public void PrepareToStartJobShouldReturnIsWorkingWhenAlreadyProcessingJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 											   _nodeStartupNotification,
@@ -284,15 +285,17 @@ namespace NodeTest
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 
-			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
-			_nodeController.StartJob(_jobQueueItemEntity.JobId);
+			var actionResult1 = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
+			var response1 = actionResult1.ExecuteAsync(new CancellationToken()).Result;
+			response1.StatusCode.Should().Be(HttpStatusCode.OK);
+			var prepareToStartJobResult = JsonConvert.DeserializeObject<PrepareToStartJobResult>(response1.Content.ReadAsStringAsync().Result);
+			prepareToStartJobResult.IsAvailable.Should().Be.True();
 			
-
-			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.Conflict);
+			var actionResult2 = _nodeController.PrepareToStartJob(jobToDo2);
+			var response2 = actionResult2.ExecuteAsync(new CancellationToken()).Result;
+			response2.StatusCode.Should().Be(HttpStatusCode.OK);
+			var prepareToStartJobResult2 = JsonConvert.DeserializeObject<PrepareToStartJobResult>(response2.Content.ReadAsStringAsync().Result);
+			prepareToStartJobResult2.IsAvailable.Should().Be.False();
 		}
 
 		[Test]
@@ -441,7 +444,7 @@ namespace NodeTest
 		}
 
 		[Test]
-		public void ShouldNotTimeoutIfWaitingMoreThan5Minutes()
+		public void ShouldNotTimeoutIfWaitingLessThan5Minutes()
 		{
 
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
@@ -480,12 +483,69 @@ namespace NodeTest
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
 			_now.Is(_now.UtcDateTime().AddMinutes(3));
-			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
-
-			Assert.IsFalse(actionResult.ExecuteAsync(new CancellationToken())
-				.Result.IsSuccessStatusCode);
+			var response = _nodeController.PrepareToStartJob(jobToDo2).ExecuteAsync(new CancellationToken()).Result;
+			response.IsSuccessStatusCode.Should().Be.True();
+			JsonConvert.DeserializeObject<PrepareToStartJobResult>(response.Content.ReadAsStringAsync().Result).IsAvailable.Should().Be.False();
 			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
 		}
+		
+		[Test]
+		public void ShouldNotTimeoutIfJobIsWorking()
+		{
+			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(), 
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				_sendJobDoneTimer,
+				_sendJobCanceledTimer,
+				_sendJobFaultedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, _now);
 
+			_workerWrapper.Init(_nodeConfigurationFake);
+			_workerWrapperService.WorkerWrapper = _workerWrapper;
+
+			_nodeController = new NodeController(_workerWrapperService)
+			{
+				Request = new HttpRequestMessage
+				{
+					RequestUri = new Uri("HTTP://localhost:14100")
+				},
+				Configuration = new HttpConfiguration()
+			};
+
+			var serializedParameters = JsonConvert.SerializeObject(new TestJobParams("Test Job", 1));
+			var jobToDo2 = new JobQueueItemEntity
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Another name",
+				Serialized = serializedParameters,
+				Type = "NodeTest.JobHandlers.TestJobParams"
+			};
+
+			_now.Is(new DateTime(2019, 2, 28, 10, 10, 0));
+			var responseMessage = _nodeController.PrepareToStartJob(_jobQueueItemEntity).ExecuteAsync(CancellationToken.None).Result;
+			responseMessage.IsSuccessStatusCode.Should().Be.True();
+			var prepareResultOk = JsonConvert.DeserializeObject<PrepareToStartJobResult>(responseMessage.Content.ReadAsStringAsync().Result);
+			prepareResultOk.IsAvailable.Should().Be.True();
+			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
+			_workerWrapper.IsWorking.Should().Be.False();
+			
+			var startJobResult = _nodeController.StartJob(_jobQueueItemEntity.JobId)
+				.ExecuteAsync(CancellationToken.None).Result;
+			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
+			startJobResult.IsSuccessStatusCode.Should().Be.True();			
+			
+			while(_workerWrapper.Task == null || _workerWrapper.Task.Status != TaskStatus.Running) { Thread.Sleep(100); }
+			_workerWrapper.IsWorking.Should().Be.True();
+			_now.Is(_now.UtcDateTime().AddMinutes(6));
+			_workerWrapper.IsWorking.Should().Be.True();
+			
+			var responseMessage2 = _nodeController.PrepareToStartJob(jobToDo2).ExecuteAsync(CancellationToken.None).Result;
+			responseMessage2.IsSuccessStatusCode.Should().Be.True();
+			var prepareResult2Ok = JsonConvert.DeserializeObject<PrepareToStartJobResult>(responseMessage2.Content.ReadAsStringAsync().Result);
+			prepareResult2Ok.IsAvailable.Should().Be.False();
+			
+			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
+		}
 	}
 }

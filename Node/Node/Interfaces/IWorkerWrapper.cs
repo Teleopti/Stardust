@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Stardust.Node.Entities;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Interfaces
 {
@@ -23,7 +24,7 @@ namespace Stardust.Node.Interfaces
 
 		void StartJob(JobQueueItemEntity jobQueueItemEntity);
 
-		HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
+		ValidateStartJobResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
 
 		void CancelTimeoutCurrentMessageTask();
 

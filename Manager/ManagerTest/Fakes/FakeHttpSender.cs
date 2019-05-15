@@ -4,7 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Models;
 
 namespace ManagerTest.Fakes
 {
@@ -17,14 +19,14 @@ namespace ManagerTest.Fakes
 			FailPostAsync = false;
 			BusyNodesUrl = new List<string>();
 			CallToWorkerNodes = new List<string>();
-			NodeURLAndResult = new Dictionary<Uri, bool>();
+			NodeUrlAndResult = new Dictionary<Uri, bool>();
 		}
 
-		public List<string> BusyNodesUrl { get; set; }
+		public List<string> BusyNodesUrl { get; }
 
-		public List<string> CallToWorkerNodes { get; set; }
+		public List<string> CallToWorkerNodes { get; }
 
-		public Dictionary<Uri, bool> NodeURLAndResult { get; set; }
+		public Dictionary<Uri, bool> NodeUrlAndResult { get; }
 
 		public Task<HttpResponseMessage> PostAsync(Uri url,
 		                                           object data)
@@ -34,23 +36,23 @@ namespace ManagerTest.Fakes
 				return Task.FromException<HttpResponseMessage>(new HttpRequestException("",  new WebException("The remote name could not be resolved: 'x'")));
 			}
 				
-			return ReturnOkOrConflict(url, true);
+			return ReturnAvailableOrBusy(url, true);
 		}
 
 		public Task<HttpResponseMessage> PutAsync(Uri url, object data)
 		{
-			return ReturnOkOrConflict(url, false);
+			return ReturnAvailableOrBusy(url, false);
 		}
 
 		//Should Delete return more than OK?
 		public Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			return ReturnOkOrConflict(url, false);
+			return ReturnAvailableOrBusy(url, false);
 		}
 
 		public Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			var result = NodeURLAndResult.FirstOrDefault(x => url.ToString().Contains(x.Key.ToString())).Value;
+			var result = NodeUrlAndResult.FirstOrDefault(x => url.ToString().Contains(x.Key.ToString())).Value;
 			var statusCode = HttpStatusCode.OK;
 			if (!result)
 			{
@@ -63,16 +65,15 @@ namespace ManagerTest.Fakes
 			return task;
 		}
 
-		private Task<HttpResponseMessage> ReturnOkOrConflict(Uri url, bool canReturnConflict)
+		private Task<HttpResponseMessage> ReturnAvailableOrBusy(Uri url, bool canReturnBusy)
 		{
 			CallToWorkerNodes.Add(url.ToString());
-			HttpStatusCode statusCode = HttpStatusCode.OK;
-			if (BusyNodesUrl.Any(url.ToString().Contains) && canReturnConflict)
-			{
-				statusCode = HttpStatusCode.Conflict;
-			}
 
-			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(statusCode));
+			var isBusy = BusyNodesUrl.Any(url.ToString().Contains) && canReturnBusy;
+			var content = JsonConvert.SerializeObject(new PrepareToStartJobResult {IsAvailable = !isBusy});
+			
+			var task = new Task<HttpResponseMessage>(
+				() => new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(content)});
 
 			task.Start();
 			task.Wait();

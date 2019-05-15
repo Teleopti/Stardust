@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\PrepareToStartJobResult.cs" />
     <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="NodeConfiguration.cs" />
     <Compile Include="NodeConfigurationService.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Entities\JobDetailEntity.cs" />
     <Compile Include="Workers\JobDetailSender.cs" />
     <Compile Include="Workers\Now.cs" />
+    <Compile Include="Workers\ValidateStartJobResult.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
     <Compile Include="Workers\WorkerWrapperService.cs" />
   </ItemGroup>

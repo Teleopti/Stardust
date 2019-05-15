@@ -88,31 +88,30 @@ namespace Stardust.Node.Workers
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
-		public HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
+		public ValidateStartJobResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
 			lock (_startJobLock)
 			{
-				resetIfTimeout();
+				ResetIfTimeout();
 				if (_currentMessageToProcess != null || IsWorking)
 				{
-					var responseMsg = new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent(WorkerIsAlreadyWorking) };
-					return responseMsg;
+					return new ValidateStartJobResult(new HttpResponseMessage(HttpStatusCode.OK), true);
 				}
 				if (jobQueueItemEntity == null)
 				{
-					return CreateBadRequest(JobToDoIsNull);
+					return new ValidateStartJobResult(CreateBadRequest(JobToDoIsNull), false);
 				}
 				if (jobQueueItemEntity.JobId == Guid.Empty)
 				{
-					return CreateBadRequest(JobToDoIdIsInvalid);
+					return new ValidateStartJobResult(CreateBadRequest(JobToDoIdIsInvalid), false);
 				}
 				if (string.IsNullOrEmpty(jobQueueItemEntity.Name))
 				{
-					return CreateBadRequest(JobToDoNameIsInvalid);
+					return new ValidateStartJobResult( CreateBadRequest(JobToDoNameIsInvalid), false);
 				}
 				if (string.IsNullOrEmpty(jobQueueItemEntity.Type))
 				{
-					return CreateBadRequest(JobToDoTypeIsNullOrEmpty);
+					return new ValidateStartJobResult( CreateBadRequest(JobToDoTypeIsNullOrEmpty), false);
 				}
 				var type = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
 
@@ -121,7 +120,7 @@ namespace Stardust.Node.Workers
 					Logger.WarningWithLineNumber(string.Format(
 						WhoamI + JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type));
 
-					return CreateBadRequest(string.Format(JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type));
+					return new ValidateStartJobResult( CreateBadRequest(string.Format(JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type)), false);
 				}
 
 				try
@@ -130,17 +129,17 @@ namespace Stardust.Node.Workers
 				}
 				catch (Exception)
 				{
-					return CreateBadRequest(JobToDoCanNotBeDeserialize);
+					return new ValidateStartJobResult( CreateBadRequest(JobToDoCanNotBeDeserialize), false);
 				}
 				_currentMessageToProcess = jobQueueItemEntity;
 				_startJobTimeout = _now.UtcDateTime().AddMinutes(5);
-				return new HttpResponseMessage(HttpStatusCode.OK);
+				return new ValidateStartJobResult( new HttpResponseMessage(HttpStatusCode.OK), false);
 			}
 		}
 
-		private void resetIfTimeout()
+		private void ResetIfTimeout()
 		{
-			if (_now.UtcDateTime() >= _startJobTimeout)
+			if (_now.UtcDateTime() >= _startJobTimeout  && IsWorking == false)
 			{
 				_currentMessageToProcess = null;
 				_startJobTimeout = null;

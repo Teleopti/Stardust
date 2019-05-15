@@ -2,12 +2,15 @@
 using System.Configuration;
 using System.Net;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
 using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using SharpTestsEx;
 using Stardust.Node;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
@@ -125,8 +128,31 @@ namespace NodeTest
 											   _jobDetailSender, 
 											   _now);
             _workerWrapper.Init(_nodeConfigurationFake);
-            _workerWrapper.ValidateStartJob(_jobDefinition);
+            var result = _workerWrapper.ValidateStartJob(_jobDefinition);
+            result.IsWorking.Should().Be.False();
+            result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
 			_workerWrapper.StartJob(_jobDefinition);
+		}
+		
+		[Test]
+		public void ShouldReturnIsWorkingWhenJobAssigned()
+		{
+			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				_sendJobDoneTimer,
+				_sendJobCanceledTimer,
+				_sendJobFaultedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, 
+				_now);
+			_workerWrapper.Init(_nodeConfigurationFake);
+			var result = _workerWrapper.ValidateStartJob(_jobDefinition);
+			result.IsWorking.Should().Be.False();
+			result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+			var result2 = _workerWrapper.ValidateStartJob(_jobDefinition);
+			result2.IsWorking.Should().Be.True();
+			result2.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
 		}
 
 		[Test]
@@ -185,7 +211,7 @@ namespace NodeTest
 											   _now);
             _workerWrapper.Init(_nodeConfigurationFake);
             var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity() { JobId = Guid.Empty });
-			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
+			Assert.IsTrue(actionResult.HttpResponseMessage.StatusCode == HttpStatusCode.BadRequest);
 		}
 
 		[Test]
@@ -202,7 +228,7 @@ namespace NodeTest
 											   _now);
             _workerWrapper.Init(_nodeConfigurationFake);
             var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity());
-			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
+			Assert.IsTrue(actionResult.HttpResponseMessage.StatusCode == HttpStatusCode.BadRequest);
 		}
 
 		[Test]
@@ -219,7 +245,120 @@ namespace NodeTest
 											   _now);
             _workerWrapper.Init(_nodeConfigurationFake);
             var actionResult = _workerWrapper.ValidateStartJob(null);
-			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
+			Assert.IsTrue(actionResult.HttpResponseMessage.StatusCode == HttpStatusCode.BadRequest);
+		}
+		
+		[Test]
+		public void ShouldSendJobDone()
+		{
+			var fakeHttpSender = new FakeHttpSender();
+			var newSendJobDoneTimer = new TrySendJobDoneStatusToManagerTimer(_jobDetailSender, fakeHttpSender);
+			var jobDoneTimerTrigger = new ManualResetEvent(false);
+			newSendJobDoneTimer.TrySendStatusSucceded += (sender, args) => { jobDoneTimerTrigger.Set(); };
+			newSendJobDoneTimer.Setup(_nodeConfigurationFake,CallBackUriTemplateFake);
+			var startTime = new DateTime(2019,5,13,15,22,0);
+			_now.Is(startTime);
+			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(), 
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				newSendJobDoneTimer,
+				_sendJobCanceledTimer,
+				_sendJobFaultedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, 
+				_now);
+			_workerWrapper.Init(_nodeConfigurationFake);
+			var validateStartJobResult = _workerWrapper.ValidateStartJob(_jobDefinition);
+			validateStartJobResult.IsWorking.Should().Be.False();
+			validateStartJobResult.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+			
+			_workerWrapper.StartJob(_jobDefinition);
+			while( _workerWrapper.Task.Status != TaskStatus.Running) { Thread.Sleep(100); }
+			_now.Is(startTime.AddMinutes(6)); // faking long job by increasing now time 
+			
+			_workerWrapper.Task.Wait();
+			var triggeredOk = jobDoneTimerTrigger.WaitOne(2000);
+
+			triggeredOk.Should().Be.True();
+			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/done");
+		}
+		
+		[Test]
+		public void ShouldReceiveJobDoneOnJobsTakingLongerThan5Minutes()
+		{
+			var fakeHttpSender = new FakeHttpSender();
+			var newSendJobDoneTimer = new TrySendJobDoneStatusToManagerTimer(_jobDetailSender, fakeHttpSender);
+			var jobDoneTimerTrigger = new ManualResetEvent(false);
+			newSendJobDoneTimer.TrySendStatusSucceded += (sender, args) => { jobDoneTimerTrigger.Set(); };
+			newSendJobDoneTimer.Setup(_nodeConfigurationFake,CallBackUriTemplateFake);
+			var startTime = new DateTime(2019,5,13,15,22,0);
+			_now.Is(startTime);
+			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(), 
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				newSendJobDoneTimer,
+				_sendJobCanceledTimer,
+				_sendJobFaultedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, 
+				_now);
+			_workerWrapper.Init(_nodeConfigurationFake);
+			var validateStartJobResult = _workerWrapper.ValidateStartJob(_jobDefinition);
+			validateStartJobResult.IsWorking.Should().Be.False();
+			validateStartJobResult.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+			_workerWrapper.StartJob(_jobDefinition);
+			while( _workerWrapper.Task.Status != TaskStatus.Running) { Thread.Sleep(100); }
+			_now.Is(startTime.AddMinutes(6)); // faking long job by increasing now time 
+			var validateStartJobResult2 = _workerWrapper.ValidateStartJob(_jobDefinition);			
+			
+			_workerWrapper.Task.Wait();
+			var triggeredOk = jobDoneTimerTrigger.WaitOne(2000);
+
+			validateStartJobResult2.IsWorking.Should().Be.True();
+			validateStartJobResult2.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+			
+			triggeredOk.Should().Be.True();
+			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/done");
+		}
+		
+		[Test]
+		public void ShouldReceiveJobFailedOnJobsTakingLongerThan5MinutesAndFailing()
+		{
+			var fakeHttpSender = new FakeHttpSender();
+			var newSendJobFailedTimer = new TrySendJobFaultedToManagerTimer(_jobDetailSender, fakeHttpSender);
+			var jobFailedTimerTrigger = new ManualResetEvent(false);
+			newSendJobFailedTimer.TrySendStatusSucceded += (sender, args) => { jobFailedTimerTrigger.Set(); };
+			newSendJobFailedTimer.Setup(_nodeConfigurationFake,CallBackUriTemplateFake);
+			var startTime = new DateTime(2019,5,13,15,22,0);
+			_now.Is(startTime);
+			_workerWrapper = new WorkerWrapper(new ThrowExceptionInvokeHandlerFake(), 
+				_nodeStartupNotification,
+				_pingToManagerFake,
+				_sendJobDoneTimer,
+				_sendJobCanceledTimer,
+				newSendJobFailedTimer,
+				_trySendJobDetailToManagerTimer,
+				_jobDetailSender, 
+				_now);
+			_workerWrapper.Init(_nodeConfigurationFake);
+			var validateStartJobResult = _workerWrapper.ValidateStartJob(_jobDefinition);
+			validateStartJobResult.IsWorking.Should().Be.False();
+			validateStartJobResult.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+			_workerWrapper.StartJob(_jobDefinition);
+			while( _workerWrapper.Task.Status != TaskStatus.Running) { Thread.Sleep(100); }
+			_now.Is(startTime.AddMinutes(6)); // faking long job by increasing now time 
+			var validateStartJobResult2 = _workerWrapper.ValidateStartJob(_jobDefinition);			
+			
+			while( _workerWrapper.Task.Status == TaskStatus.Running) { Thread.Sleep(100); }
+			var triggeredOk = jobFailedTimerTrigger.WaitOne(5000);
+
+			validateStartJobResult2.IsWorking.Should().Be.True();
+			validateStartJobResult2.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+			
+			triggeredOk.Should().Be.True();
+			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/fail");
+			_workerWrapper.GetCurrentMessageToProcess().Should().Be.Null();
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 
 	}

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Newtonsoft.Json;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -400,6 +401,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					var responseCodeOk = false;
+					PrepareToStartJobResult result = null;
 					JobQueueItem jobQueueItem = null;
 					try
 					{
@@ -432,9 +434,16 @@ namespace Stardust.Manager
 						}
 						
 						ManagerLogger.Info(response?.ReasonPhrase + " response from the node");
+
+						if (response == null)
+							result = new PrepareToStartJobResult();
+						else
+							result = JsonConvert.DeserializeObject<PrepareToStartJobResult>(response.Content.ReadAsStringAsync().Result);
+						
 						responseCodeOk = response != null &&
 						                 (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest));
-						if (responseCodeOk)
+						
+						if (responseCodeOk && result.IsAvailable)
 						{
 							var sentToWorkerNodeUri = availableNode.ToString();
 							ManagerLogger.Info("node is ok fix the db now");
@@ -455,7 +464,7 @@ namespace Stardust.Manager
 						}
 						else
 						{
-							ManagerLogger.Info("response from the node was not ok " + response?.ReasonPhrase);
+							ManagerLogger.Info($"response from the node was not ok {response?.ReasonPhrase}. Node.IsAvailable={result.IsAvailable}");
 						}
 					}
 					catch (Exception ex)
@@ -465,7 +474,7 @@ namespace Stardust.Manager
 					}
 					finally
 					{
-						if (!responseCodeOk && jobQueueItem != null)
+						if ((!responseCodeOk || !result.IsAvailable) && jobQueueItem != null)
 						{
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
