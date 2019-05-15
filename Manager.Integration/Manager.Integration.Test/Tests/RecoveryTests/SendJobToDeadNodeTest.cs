@@ -16,6 +16,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 		[Test]
 		public void ShouldHandleMultipleJobsUsingAllNodesAvailable()
 		{
+			var numberOfNodes = 2;
 			var startedTest = DateTime.UtcNow;
 			var numberOfJobs = 15;
 			var waitForJobToFinishEvent = new ManualResetEventSlim();
@@ -32,7 +33,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			};
 			checkTablesInManagerDbTimer.GetWorkerNodes += (sender, nodes) =>
 			{
-				if (nodes.Count == 2)
+				if (nodes.Count == numberOfNodes)
 				{
 					waitForNodeToStartEvent.Set();
 				}
@@ -57,7 +58,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(60));
 			
 			Assert.IsTrue(jobsFinishedWithoutTimeout, "Timeout on Finishing jobs");
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 2, "There should be two nodes registered");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == numberOfNodes, "There should be two nodes registered");
 			Assert.IsFalse(checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue should be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Job should not be empty.");
 			Assert.AreEqual(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count,

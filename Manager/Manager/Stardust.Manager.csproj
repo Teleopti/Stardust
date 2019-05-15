@@ -116,6 +116,7 @@
     <Compile Include="JobRepository.cs" />
     <Compile Include="ManagerController.cs" />
     <Compile Include="ManagerConfiguration.cs" />
+    <Compile Include="Models\PrepareToStartJobResult.cs" />
     <Compile Include="NodeManager.cs" />
     <Compile Include="Policies\HalfNodesAffinityPolicy.cs" />
     <Compile Include="SlimAssembliesResolver.cs" />
