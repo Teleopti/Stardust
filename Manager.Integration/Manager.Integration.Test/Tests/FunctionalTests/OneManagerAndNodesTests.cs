@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.FunctionalTests
 {
 	[TestFixture]
-	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNode
+	public class OneManagerAndNodesTests : InitializeAndFinalizeOneManagerAndNodes
 	{
 		[Test]
 		public void CancelWrongJobsTest()

@@ -28,7 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>5</LangVersion>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -99,7 +99,7 @@
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
-    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
+    <Compile Include="Initializers\InitializeAndFinalizeOneManagerAndNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Models\Job.cs" />
@@ -115,7 +115,7 @@
     <Compile Include="Tests\RecoveryTests\SendJobToDeadNodeTest.cs" />
     <Compile Include="Tests\LoadTests\SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
-    <Compile Include="Tests\FunctionalTests\OneManagerAndOneNodeTests.cs" />
+    <Compile Include="Tests\FunctionalTests\OneManagerAndNodesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

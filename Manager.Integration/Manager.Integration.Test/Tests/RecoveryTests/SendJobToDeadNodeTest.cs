@@ -11,16 +11,21 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.RecoveryTests
 {
 	[TestFixture]
-	class SendJobToDeadNodeTest : InitialzeAndFinalizeOneManagerAndOneNode
+	class SendJobToDeadNodeTest : InitializeAndFinalizeOneManagerAndNodes
 	{
+		public SendJobToDeadNodeTest():base(2)
+		{
+			
+		}
+		
 		[Test]
 		public void ShouldHandleMultipleJobsUsingAllNodesAvailable()
 		{
-			var numberOfNodes = 2;
+			var numberOfNodes = NumberOfNodes;
 			var startedTest = DateTime.UtcNow;
 			var numberOfJobs = 15;
 			var waitForJobToFinishEvent = new ManualResetEventSlim();
-			var waitForNodeToStartEvent = new ManualResetEventSlim();
+			var waitForNodesToStartEvent = new ManualResetEventSlim();
 			
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
@@ -35,22 +40,13 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			{
 				if (nodes.Count == numberOfNodes)
 				{
-					waitForNodeToStartEvent.Set();
+					waitForNodesToStartEvent.Set();
 				}
 			};
 
 			checkTablesInManagerDbTimer.JobTimer.Start();
 			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
-
-			//start second node
-			Task<string> taskStartNewNode = new Task<string>(() =>
-			{
-				string res = IntegrationControllerApiHelper.StartNewNode(HttpSender).Result;
-				return res;
-			});
-
-			taskStartNewNode.Start();
-			waitForNodeToStartEvent.Wait();
+			waitForNodesToStartEvent.Wait();
 
 			var jobQueueItems = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);	
 			jobQueueItems.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));
@@ -79,7 +75,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 		}
 		
 		[Test, Ignore("A little flaky still")]
-		public void ShouldHandleNodeDisapperingTemporarily()
+		public void ShouldHandleNodeDisappearingTemporarily()
 		{
 			var startedTest = DateTime.UtcNow;
 			var numberOfJobs = 20;
@@ -112,14 +108,6 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			checkTablesInManagerDbTimer.JobTimer.Start();
 			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
 
-			//start second node
-			Task<string> taskStartNewNode = new Task<string>(() =>
-			{
-				string res = IntegrationControllerApiHelper.StartNewNode(HttpSender).Result;
-				return res;
-			});
-
-			taskStartNewNode.Start();
 			waitForNodeToStartEvent.Wait();
 			var jobQueueItemsBatch1 = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);
 			jobQueueItemsBatch1.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));

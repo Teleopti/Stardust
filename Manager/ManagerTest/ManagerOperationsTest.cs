@@ -178,6 +178,8 @@ namespace ManagerTest
 			{
 				if (JobRepository.GetAllJobs().Count == 1)
 					break;
+				
+				Thread.Sleep(500);
 			}
 			
 			JobRepository.GetAllJobs().First().SentToWorkerNodeUri.Should().Be.EqualTo(_workerNode.Url.ToString());
