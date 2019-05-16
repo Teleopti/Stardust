@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stardust.Node", "Node\Stardust.Node.csproj", "{7B0DDB7C-6D8E-453D-9785-F5651756B169}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeConsoleHost", "NodeConsoleHost\NodeConsoleHost.csproj", "{3CFC869E-8E1D-4B47-845A-500041AD4DEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest.JobHandlers", "NodeTest.JobHandlers\NodeTest.JobHandlers.csproj", "{3D7D71B6-4676-498C-B148-447A5FC5F3A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stardust.Core.Node", "Stardust.Core.Node\Stardust.Core.Node.csproj", "{EA5B0697-C72C-4AE0-9236-FA93845A7E6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,8 +42,15 @@ Global
 		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D7D71B6-4676-498C-B148-447A5FC5F3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5B0697-C72C-4AE0-9236-FA93845A7E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5B0697-C72C-4AE0-9236-FA93845A7E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5B0697-C72C-4AE0-9236-FA93845A7E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5B0697-C72C-4AE0-9236-FA93845A7E6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81BD1660-B5F7-47AE-9A4A-57C1ADC69DE4}
 	EndGlobalSection
 EndGlobal
