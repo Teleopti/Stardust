@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Stardust.Node.Interfaces
+namespace Stardust.Core.Node.Interfaces
 {
 	public interface IHandle<T>
 	{

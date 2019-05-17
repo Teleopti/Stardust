@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace Stardust.Node.Workers
+namespace Stardust.Core.Node.Workers
 {
     public class ValidateStartJobResult
     {

@@ -1,4 +1,4 @@
-﻿namespace Stardust.Node.ReturnObjects
+﻿namespace Stardust.Core.Node.ReturnObjects
 {
 	public class ExitApplication
 	{

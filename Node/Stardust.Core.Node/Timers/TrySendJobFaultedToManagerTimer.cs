@@ -2,12 +2,11 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Stardust.Core.Node.Timers;
+using Stardust.Core.Node.Interfaces;
 using Stardust.Node.Entities;
-using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
+using JobDetailSender = Stardust.Core.Node.Workers.JobDetailSender;
 
-namespace Stardust.Node.Timers
+namespace Stardust.Core.Node.Timers
 {
 	public class TrySendJobFaultedToManagerTimer : TrySendStatusToManagerTimer
 	{

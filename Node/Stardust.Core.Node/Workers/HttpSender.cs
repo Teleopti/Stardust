@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Stardust.Node.Interfaces;
+using Stardust.Core.Node.Interfaces;
 
-namespace Stardust.Node.Workers
+namespace Stardust.Core.Node.Workers
 {
 	public class HttpSender : IHttpSender
 	{

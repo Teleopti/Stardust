@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 //using log4net;
 
-namespace Stardust.Node.Timers
+namespace Stardust.Core.Node.Timers
 {
     public class TimerExceptionLoggerStrategyHandler
     {

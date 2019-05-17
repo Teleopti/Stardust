@@ -4,16 +4,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-//using log4net;
 using Newtonsoft.Json;
 using Stardust.Core.Node.Extensions;
+using Stardust.Core.Node.Interfaces;
 using Stardust.Core.Node.Timers;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
-using Stardust.Node.Timers;
+//using log4net;
 
-namespace Stardust.Node.Workers
+namespace Stardust.Core.Node.Workers
 {
 	public class WorkerWrapper : IWorkerWrapper
 	{

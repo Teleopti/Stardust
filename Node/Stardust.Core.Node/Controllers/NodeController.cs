@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
+//using System.Web.Http;
+//using System.Web.Http.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 //using log4net;
-using Newtonsoft.Json;
 using Stardust.Core.Node.Extensions;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Workers;
+using WorkerWrapperService = Stardust.Core.Node.Workers.WorkerWrapperService;
 
 namespace Stardust.Node
 {
-	public class NodeController : ApiController
+	[ApiController]
+	public class NodeController : ControllerBase
 	{
 		private readonly WorkerWrapperService _workerWrapperService;
 		private const string JobIdIsInvalid = "Job Id is invalid."; 
@@ -26,20 +27,31 @@ namespace Stardust.Node
 		}
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
-		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
+		public ActionResult<PrepareToStartJobResult> PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(Request.Host.Port.GetValueOrDefault());
 
 			var result = workerWrapper.ValidateStartJob(jobQueueItemEntity);
 			var prepareToStartJobResult = new PrepareToStartJobResult {IsAvailable = !result.IsWorking && result.HttpResponseMessage.IsSuccessStatusCode};
-			result.HttpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(prepareToStartJobResult));
-			return ResponseMessage(result.HttpResponseMessage);
+
+			switch (result.HttpResponseMessage.StatusCode)
+			{
+				case HttpStatusCode.OK:
+					return Ok(prepareToStartJobResult);
+				case HttpStatusCode.BadRequest:
+					return BadRequest(prepareToStartJobResult);
+				default:
+					throw new InvalidOperationException($"Unhandled HttpStatusCode {result.HttpResponseMessage.StatusCode}");	
+			}
+			
+			//result.HttpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(prepareToStartJobResult));
+			//return ResponseMessage(result.HttpResponseMessage);
 		}
 
 		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
-		public IHttpActionResult StartJob(Guid jobId)
+		public ActionResult<string> StartJob(Guid jobId)
 		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+			var workerWrapper =_workerWrapperService.GetWorkerWrapperByPort(Request.Host.Port.GetValueOrDefault());
 
 			if (jobId == Guid.Empty)
 			{
@@ -73,9 +85,9 @@ namespace Stardust.Node
 		}
 
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
-		public IHttpActionResult TryCancelJob(Guid jobId)
+		public ActionResult<string> TryCancelJob(Guid jobId)
 		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(Request.Host.Port.GetValueOrDefault());
 
 			if (jobId == Guid.Empty)
 			{
@@ -113,23 +125,23 @@ namespace Stardust.Node
 
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
-		public IHttpActionResult IsAlive()
+		public ActionResult IsAlive()
 		{
 			return Ok();
 		}
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsWorking)]
-		public IHttpActionResult IsWorking()
+		public ActionResult<bool> IsWorking()
 		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(Request.Host.Port.GetValueOrDefault());
 
 			return Ok(workerWrapper.IsWorking);
 		}
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
-		public IHttpActionResult IsIdle()
+		public ActionResult IsIdle()
 		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
+			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(Request.Host.Port.GetValueOrDefault());
 
 			var currentJob = workerWrapper.GetCurrentMessageToProcess();
 

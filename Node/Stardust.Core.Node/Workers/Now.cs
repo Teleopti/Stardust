@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stardust.Node.Workers
+namespace Stardust.Core.Node.Workers
 {
 	public interface INow
 	{

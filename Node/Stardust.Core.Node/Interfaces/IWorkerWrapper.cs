@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Stardust.Node.Entities;
-using Stardust.Node.Workers;
+using ValidateStartJobResult = Stardust.Core.Node.Workers.ValidateStartJobResult;
 
-namespace Stardust.Node.Interfaces
+namespace Stardust.Core.Node.Interfaces
 {
 	public interface IWorkerWrapper : IDisposable
 	{

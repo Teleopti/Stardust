@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Timers;
-using Stardust.Node.Workers;
+using JobDetailSender = Stardust.Core.Node.Workers.JobDetailSender;
 using Timer = System.Timers.Timer;
 
-namespace Stardust.Node.Timers
+namespace Stardust.Core.Node.Timers
 {
 	public class TrySendJobDetailToManagerTimer : Timer
 	{

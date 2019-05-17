@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 
-namespace Stardust.Node
+namespace Stardust.Core.Node
 {
-	public class NodeConfiguration
+	public class NodeConfiguration : IConfiguration
 	{
 		public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, bool enableGc)
 		{
@@ -41,7 +44,9 @@ namespace Stardust.Node
 		public double SendDetailsToManagerMilliSeconds { get; }
 		public bool EnableGarbageCollection { get; set; }
 
-		private void ValidateParameters()
+        public string this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        private void ValidateParameters()
 		{
 			if (ManagerLocation == null)
 			{
@@ -83,5 +88,22 @@ namespace Stardust.Node
 
 			return new Uri($"{nodeUrl}:{port}/");
 		}
-	}
+
+
+
+        public IConfigurationSection GetSection(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IConfigurationSection> GetChildren()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IChangeToken GetReloadToken()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Stardust.Node.Constants;
 
-namespace Stardust.Node.Extensions
+namespace Stardust.Core.Node.Extensions
 {
 	public static class NodeConfigurationExtensions
 	{

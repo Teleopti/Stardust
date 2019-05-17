@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stardust.Node.Timers
+namespace Stardust.Core.Node.Timers
 {
 	public interface IPingToManagerTimer: IDisposable
 	{

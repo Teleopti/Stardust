@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Stardust.Node
+namespace Stardust.Core.Node
 {
 	public class NodeConfigurationService
 	{

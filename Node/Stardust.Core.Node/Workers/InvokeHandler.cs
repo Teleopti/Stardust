@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Threading;
-using Autofac;
 using Microsoft.Extensions.Logging;
 using Stardust.Core.Node.Extensions;
-//using log4net;
-using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+using Stardust.Core.Node.Interfaces;
+//using Autofac;
 
-namespace Stardust.Node.Workers
+//using log4net;
+
+namespace Stardust.Core.Node.Workers
 {
 	public class InvokeHandler : IInvokeHandler
 	{
 		private readonly ILogger Logger = new LoggerFactory().CreateLogger(typeof (InvokeHandler));
 
-		public InvokeHandler(ILifetimeScope componentContext)
+		public InvokeHandler(IServiceProvider componentContext)
 		{
 			if (componentContext == null)
 			{
@@ -23,18 +23,22 @@ namespace Stardust.Node.Workers
 			ComponentContext = componentContext;
 		}
 
-		private ILifetimeScope ComponentContext { get; }
+		private IServiceProvider ComponentContext { get; }
 
 		public void Invoke(object query, 
 			CancellationTokenSource cancellationTokenSource, 
 			Action<string> progressCallback)
 		{
-			using (var lifetimeScope = ComponentContext.BeginLifetimeScope())
+			//using (var lifetimeScope = ComponentContext.GetService<IHandle<>>())
 			{
-				var handler =
-					lifetimeScope.Resolve(typeof(IHandle<>).MakeGenericType(query.GetType()));
 
-				if (handler == null)
+                //           var handler =
+                //lifetimeScope.Resolve(typeof(IHandle<>).MakeGenericType(query.GetType()));
+                var handler =
+                  ComponentContext.GetService(typeof(IHandle<>).MakeGenericType(query.GetType()));
+
+
+                if (handler == null)
 				{
 					Logger.ErrorWithLineNumber($"The job type [{query.GetType()}] could not be resolved. The job cannot be started.");
 

@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+using Stardust.Core.Node.Extensions;
+using Stardust.Core.Node.Interfaces;
 using Timer = System.Timers.Timer;
 
-namespace Stardust.Node.Timers
+namespace Stardust.Core.Node.Timers
 {
 	public class TrySendNodeStartUpNotificationToManagerTimer : Timer
 	{

@@ -5,13 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Stardust.Core.Node.Extensions;
-//using log4net;
+using Stardust.Core.Node.Interfaces;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+//using log4net;
 
-namespace Stardust.Node.Workers
+namespace Stardust.Core.Node.Workers
 {
 	public class JobDetailSender
 	{

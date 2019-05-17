@@ -1,8 +1,7 @@
-﻿using Stardust.Core.Node.Timers;
-using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
+﻿using Stardust.Core.Node.Interfaces;
+using JobDetailSender = Stardust.Core.Node.Workers.JobDetailSender;
 
-namespace Stardust.Node.Timers
+namespace Stardust.Core.Node.Timers
 {
 	public class TrySendJobDoneStatusToManagerTimer : TrySendStatusToManagerTimer
 	{
