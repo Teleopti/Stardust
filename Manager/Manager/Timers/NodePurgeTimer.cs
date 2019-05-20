@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Timers;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly.Retry;
 
 namespace Stardust.Manager.Timers
 {
@@ -26,10 +26,10 @@ namespace Stardust.Manager.Timers
 			const string deleteCommandText = "DELETE FROM [Stardust].[WorkerNode] WHERE Alive = 0";
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				connection.OpenWithRetry(_retryPolicy);
+                _retryPolicy.Execute(connection.Open);
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))	
 				{
-					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(deleteCommand.ExecuteNonQuery);
 				}
 			}
 		}

@@ -1,5 +1,7 @@
 using System;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using System.Data.SqlClient;
+using Polly;
+using Polly.Retry;
 
 namespace Stardust.Manager
 {
@@ -8,11 +10,15 @@ namespace Stardust.Manager
 		private const int DelaysSeconds = 1;
 		private const int MaxRetry = 150; 
 
-		public RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> GetPolicy()
+		public RetryPolicy GetPolicy()
 		{
 			var fromSeconds = TimeSpan.FromSeconds(DelaysSeconds);
-			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(MaxRetry, fromSeconds);
-			return policy;
+            var policy = Policy.Handle<TimeoutException>()
+                .Or<SqlException>(DetectTransientSqlException.IsTransient)
+                .OrInner<SqlException>(DetectTransientSqlException.IsTransient)
+                .WaitAndRetry(MaxRetry, _ => fromSeconds);
+
+            return policy;
 		}
 	}
 }

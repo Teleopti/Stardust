@@ -6,8 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using log4net;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Newtonsoft.Json;
+using Polly.Retry;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -55,7 +55,7 @@ namespace Stardust.Manager
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					_jobRepositoryCommandExecuter.InsertIntoJobQueue(jobQueueItem, sqlConnection);
 				}
 			}
@@ -73,7 +73,7 @@ namespace Stardust.Manager
 				List<JobQueueItem> listToReturn;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					listToReturn = _jobRepositoryCommandExecuter.SelectAllItemsInJobQueue(sqlConnection);
 				}
 				return listToReturn;
@@ -92,7 +92,7 @@ namespace Stardust.Manager
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					_jobRepositoryCommandExecuter.DeleteJobFromJobQueue(jobId, sqlConnection);
 				}
 			}
@@ -112,7 +112,7 @@ namespace Stardust.Manager
 				List<Uri> allAvailableWorkerNodes;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					allAvailableWorkerNodes = _jobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
 				}
 
@@ -171,7 +171,7 @@ namespace Stardust.Manager
 		
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+                _retryPolicy.Execute(sqlConnection.Open);
 				_jobRepositoryCommandExecuter.UpdateResult(jobId, result, ended, sqlConnection);
 
 				var finishDetail = "Job finished";
@@ -184,15 +184,15 @@ namespace Stardust.Manager
 					finishDetail = "Job Failed";
 				}
 
-			 _jobRepositoryCommandExecuter.InsertJobDetail(jobId, finishDetail, sqlConnection);
-			}
+                _jobRepositoryCommandExecuter.InsertJobDetail(jobId, finishDetail, sqlConnection);
+            }
 		}
 
 		public void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created)
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+                _retryPolicy.Execute(sqlConnection.Open);
 				_jobRepositoryCommandExecuter.InsertJobDetail(jobId, detail, sqlConnection);
 			}
 		}
@@ -206,7 +206,7 @@ namespace Stardust.Manager
 				JobQueueItem jobQueueItem;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					jobQueueItem = _jobRepositoryCommandExecuter.SelectJobQueueItem(jobId, sqlConnection);
 				}
 				return jobQueueItem;
@@ -225,7 +225,7 @@ namespace Stardust.Manager
 				Job job;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					job = _jobRepositoryCommandExecuter.SelectJob(jobId, sqlConnection);
 				}
 				return job;
@@ -243,10 +243,10 @@ namespace Stardust.Manager
 			try
 			{
 				
-				var jobs = new List<Job>();
+				List<Job> jobs;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					jobs = _jobRepositoryCommandExecuter.SelectAllJobs(sqlConnection);
 				}
 				return jobs;
@@ -266,7 +266,7 @@ namespace Stardust.Manager
 				List<Job> jobs;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					jobs = _jobRepositoryCommandExecuter.SelectAllExecutingJobs(sqlConnection);
 				}
 				return jobs;
@@ -286,7 +286,7 @@ namespace Stardust.Manager
 				List<JobDetail> jobDetails;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					jobDetails = _jobRepositoryCommandExecuter.SelectJobDetails(jobId, sqlConnection);
 				}
 				return jobDetails;
@@ -312,10 +312,9 @@ namespace Stardust.Manager
 				return false;
 			}
 
-			return response != null && response.IsSuccessStatusCode ;
-		}
-
-
+            return response != null && response.IsSuccessStatusCode;
+        }
+        
 		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri)
 		{
 			try
@@ -324,7 +323,7 @@ namespace Stardust.Manager
 				{
 					using (var sqlConnection = new SqlConnection(_connectionString))
 					{
-						sqlConnection.OpenWithRetry(_retryPolicy);
+                        _retryPolicy.Execute(sqlConnection.Open);
 						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
 							var job = _jobRepositoryCommandExecuter.SelectExecutingJob(workerNodeUri, sqlConnection, sqlTransaction);
@@ -362,7 +361,7 @@ namespace Stardust.Manager
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(sqlConnection.Open);
 					using (var sqlTransaction = sqlConnection.BeginTransaction())
 					{
 						var sentToWorkerNodeUri = _jobRepositoryCommandExecuter.SelectWorkerNode(jobId, sqlConnection, sqlTransaction);
@@ -405,7 +404,7 @@ namespace Stardust.Manager
 					JobQueueItem jobQueueItem = null;
 					try
 					{
-						sqlConnection.OpenWithRetry(_retryPolicy);
+                        _retryPolicy.Execute(sqlConnection.Open);
 						jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
 						if (jobQueueItem == null)
 						{
@@ -492,7 +491,7 @@ namespace Stardust.Manager
 			int count;
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+                _retryPolicy.Execute(sqlConnection.Open);
 				count =_jobRepositoryCommandExecuter.SelectCountJobQueueItem(jobId, sqlConnection);
 			}
 			return count == 1;

@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Timers;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly.Retry;
 
 namespace Stardust.Manager.Timers
 {
@@ -29,13 +29,13 @@ namespace Stardust.Manager.Timers
 			const string deleteCommandText = "DELETE TOP(@batchsize) FROM [Stardust].[Job] WHERE Created < DATEADD(HOUR, -@hours, GETDATE())";
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				connection.OpenWithRetry(_retryPolicy);
+                _retryPolicy.Execute(connection.Open);
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))
 				{
 					deleteCommand.Parameters.AddWithValue("@hours", _managerConfiguration.PurgeJobsOlderThanHours);
 					deleteCommand.Parameters.AddWithValue("@batchsize", _managerConfiguration.PurgeJobsBatchSize);
 
-					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(deleteCommand.ExecuteNonQuery);
 				}
 			}
 		}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly.Retry;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -30,7 +30,7 @@ namespace Stardust.Manager
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(connection.Open);
 
 					using (var workerNodeCommand = new SqlCommand(selectWorkerNodeCommand, connection))
 					{
@@ -39,7 +39,7 @@ namespace Stardust.Manager
 						workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
 						workerNodeCommand.Parameters.AddWithValue("@Alive", workerNode.Alive);
 
-						workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                        _retryPolicy.Execute(workerNodeCommand.ExecuteNonQuery);
 					}
 				}
 			}
@@ -49,7 +49,7 @@ namespace Stardust.Manager
 				{
 					using (var connection = new SqlConnection(_connectionString))
 					{
-						connection.OpenWithRetry(_retryPolicy);
+                        _retryPolicy.Execute(connection.Open);
 						const string updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat,
 											Alive = @Alive
 											WHERE Url = @Url";
@@ -60,7 +60,7 @@ namespace Stardust.Manager
 							command.Parameters.Add("@Alive", SqlDbType.Bit).Value = true;
 							command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = workerNode.Url.ToString();
 
-							command.ExecuteNonQueryWithRetry(_retryPolicy);
+                            _retryPolicy.Execute(command.ExecuteNonQuery);
 						}
 					}
 					return;
@@ -88,12 +88,12 @@ namespace Stardust.Manager
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(connection.Open);
 
 					var allAliveNodes = new List<Tuple<DateTime,string>>();
 					using (var commandSelectAll = new SqlCommand(selectCommand, connection))
 					{
-						using (var readAllWorkerNodes = commandSelectAll.ExecuteReaderWithRetry(_retryPolicy))
+						using (var readAllWorkerNodes = _retryPolicy.Execute(commandSelectAll.ExecuteReader))
 						{
 							if (readAllWorkerNodes.HasRows)
 							{
@@ -128,7 +128,7 @@ namespace Stardust.Manager
 
 									commandUpdate.Parameters["@Alive"].Value = false;
 									commandUpdate.Parameters["@Url"].Value = url;
-									commandUpdate.ExecuteNonQueryWithRetry(_retryPolicy);
+                                    _retryPolicy.Execute(commandUpdate.ExecuteNonQuery);
 									deadNodes.Add(url);
 								}
 							}
@@ -152,7 +152,7 @@ namespace Stardust.Manager
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.OpenWithRetry(_retryPolicy);
+                    _retryPolicy.Execute(connection.Open);
 
 					var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = GETUTCDATE(),
 											Alive = 1
@@ -172,7 +172,7 @@ namespace Stardust.Manager
 					using (var command = new SqlCommand(updateCommandText, connection))
 					{
 						command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUri;
-						command.ExecuteNonQueryWithRetry(_retryPolicy);
+                        _retryPolicy.Execute(command.ExecuteNonQuery);
 					}
 				}
 			}

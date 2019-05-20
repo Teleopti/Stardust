@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using log4net;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly.Retry;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Models;
 using Stardust.Manager.Policies;
@@ -28,7 +28,7 @@ namespace Stardust.Manager.Helpers
 			using (var deleteFromJobQueueCommand = new SqlCommand(deleteItemFromJobQueueItemCommandText, sqlConnection, sqlTransaction))
 			{
 				deleteFromJobQueueCommand.Parameters.AddWithValue("@JobId", jobId);
-				deleteFromJobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                _retryPolicy.Execute(deleteFromJobQueueCommand.ExecuteNonQuery);
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace Stardust.Manager.Helpers
 				insertJobDetailCommand.Parameters.AddWithValue("@Detail", detail);
 				insertJobDetailCommand.Parameters.AddWithValue("@Created", DateTime.UtcNow);
 
-				insertJobDetailCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                _retryPolicy.Execute(insertJobDetailCommand.ExecuteNonQuery);
 			}
 		}
 
@@ -82,7 +82,7 @@ namespace Stardust.Manager.Helpers
 				insertIntojobQueueCommand.Parameters.AddWithValue("@CreatedBy", jobQueueItem.CreatedBy);
 				insertIntojobQueueCommand.Parameters.AddWithValue("@Policy", jobQueueItem.Policy);
 
-				insertIntojobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                _retryPolicy.Execute(insertIntojobQueueCommand.ExecuteNonQuery);
 			}
 		}
 
@@ -126,7 +126,7 @@ namespace Stardust.Manager.Helpers
 				insertIntoJobCommand.Parameters.AddWithValue("@Created", jobQueueItem.Created);
 				insertIntoJobCommand.Parameters.AddWithValue("@Ended", DBNull.Value);
 				insertIntoJobCommand.Parameters.AddWithValue("@Policy", jobQueueItem.Policy ?? (object) DBNull.Value);
-				insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                _retryPolicy.Execute(insertIntoJobCommand.ExecuteNonQuery);
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace Stardust.Manager.Helpers
 			var listToReturn = new List<JobQueueItem>();
 			using (var sqlCommand = new SqlCommand(selectAllItemsInJobQueueCommandText, sqlConnection, sqlTransaction))
 			{
-				using (var sqlDataReader = sqlCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(sqlCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return listToReturn;
 					while (sqlDataReader.Read())
@@ -187,7 +187,7 @@ namespace Stardust.Manager.Helpers
 
 			using (var selectAllAliveWorkerNodesCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection, sqlTransaction))
 			{
-				using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var readerAliveWorkerNodes = _retryPolicy.Execute(()=>selectAllAliveWorkerNodesCommand.ExecuteReader()))
 				{
 					if (!readerAliveWorkerNodes.HasRows) return allAliveWorkerNodesUri;
 
@@ -213,7 +213,7 @@ namespace Stardust.Manager.Helpers
 				updateResultCommand.Parameters.AddWithValue("@Result", result);
 				updateResultCommand.Parameters.AddWithValue("@Ended", ended);
 
-				updateResultCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                _retryPolicy.Execute(updateResultCommand.ExecuteNonQuery);
 			}
 		}
 
@@ -233,7 +233,7 @@ namespace Stardust.Manager.Helpers
 			using (var sqlSelectCommand = new SqlCommand(selectJobQueueItemCommandText, sqlConnection, sqlTransaction))
 			{
 				sqlSelectCommand.Parameters.AddWithValue("@JobId", jobId);
-				using (var sqlDataReader = sqlSelectCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(sqlSelectCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return null;
 					sqlDataReader.Read();
@@ -263,7 +263,7 @@ namespace Stardust.Manager.Helpers
 			using (var selectJobByJobIdCommand = new SqlCommand(selectJobByJobIdCommandText, sqlConnection, sqlTransaction))
 			{
 				selectJobByJobIdCommand.Parameters.AddWithValue("@JobId", jobId);
-				using (var sqlDataReader = selectJobByJobIdCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(selectJobByJobIdCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return null;
 					sqlDataReader.Read();
@@ -291,7 +291,7 @@ namespace Stardust.Manager.Helpers
 
 			using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection, sqlTransaction))
 			{
-				using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(getAllJobsCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return jobs;
 					while (sqlDataReader.Read())
@@ -323,7 +323,7 @@ namespace Stardust.Manager.Helpers
 
 			using (var getAllExecutingJobsCommand = new SqlCommand(selectCommandText, sqlConnection, sqlTransaction))
 			{
-				using (var sqlDataReader = getAllExecutingJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(getAllExecutingJobsCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return jobs;
 					while (sqlDataReader.Read())
@@ -350,7 +350,7 @@ namespace Stardust.Manager.Helpers
 			using (var selectJobDetailByJobIdCommand = new SqlCommand(selectCommandText, sqlConnection, sqlTransaction))
 			{
 				selectJobDetailByJobIdCommand.Parameters.AddWithValue("@JobId", jobId);
-				using (var sqlDataReader = selectJobDetailByJobIdCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(selectJobDetailByJobIdCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return jobDetails;
 					while (sqlDataReader.Read())
@@ -385,7 +385,7 @@ namespace Stardust.Manager.Helpers
 			using (var selectJobThatDidNotEndCommand = new SqlCommand(selectJobThatDidNotEndCommandText, sqlConnection, sqlTransaction))
 			{
 				selectJobThatDidNotEndCommand.Parameters.AddWithValue("@SentToWorkerNodeUri", workerNodeUri);
-				using (var sqlDataReader = selectJobThatDidNotEndCommand.ExecuteReaderWithRetry(_retryPolicy))
+				using (var sqlDataReader = _retryPolicy.Execute(selectJobThatDidNotEndCommand.ExecuteReader))
 				{
 					if (!sqlDataReader.HasRows) return null;
 					sqlDataReader.Read();
@@ -402,7 +402,7 @@ namespace Stardust.Manager.Helpers
 			using (var deleteJobByJobIdCommand = new SqlCommand(deleteJobByIdSqlCommandText, sqlConnection, sqlTransaction))
 			{
 				deleteJobByJobIdCommand.Parameters.AddWithValue("@JobId", jobId);
-				deleteJobByJobIdCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+                _retryPolicy.Execute(deleteJobByJobIdCommand.ExecuteNonQuery);
 			}
 		}
 
@@ -414,12 +414,12 @@ namespace Stardust.Manager.Helpers
 			using (var createSelectWorkerNodeUriCommand = new SqlCommand(selectWorkerNodeUriFromJobCommandText, sqlConnection, sqlTransaction))
 			{
 				createSelectWorkerNodeUriCommand.Parameters.AddWithValue("@JobId", jobId);
-				using (var selectSqlReader = createSelectWorkerNodeUriCommand.ExecuteReaderWithRetry(_retryPolicy))
-				{
-					if (!selectSqlReader.HasRows) return null;
-					selectSqlReader.Read();
-					sentToWorkerNodeUri = selectSqlReader.GetString(selectSqlReader.GetOrdinal("SentToWorkerNodeUri"));
-				}
+                using (var selectSqlReader = _retryPolicy.Execute(createSelectWorkerNodeUriCommand.ExecuteReader))
+                {
+                    if (!selectSqlReader.HasRows) return null;
+                    selectSqlReader.Read();
+                    sentToWorkerNodeUri = selectSqlReader.GetString(selectSqlReader.GetOrdinal("SentToWorkerNodeUri"));
+                }
 			}
 			return sentToWorkerNodeUri;
 		}
@@ -432,7 +432,7 @@ namespace Stardust.Manager.Helpers
 			int count;
 			using (var sqlCommand = new SqlCommand(selectCommand, sqlConnection, sqlTransaction))
 			{
-				count = Convert.ToInt32(sqlCommand.ExecuteScalarWithRetry(_retryPolicy));
+				count = Convert.ToInt32(_retryPolicy.Execute(sqlCommand.ExecuteScalar));
 			}
 			return count;
 		}
@@ -466,7 +466,7 @@ namespace Stardust.Manager.Helpers
 					var parameter = new SqlParameter("@jobId", SqlDbType.UniqueIdentifier) { Value = jobId.Value };
 					selectJobQueueItemCommand.Parameters.Add(parameter);
 
-					using (var reader = selectJobQueueItemCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var reader = _retryPolicy.Execute(selectJobQueueItemCommand.ExecuteReader))
 					{
 						if (!reader.HasRows) return null;
 						reader.Read();
