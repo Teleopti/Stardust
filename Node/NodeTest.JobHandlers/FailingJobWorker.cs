@@ -7,10 +7,7 @@ using Stardust.Node.Interfaces;
 namespace NodeTest.JobHandlers
 {
 	public class FailingJobWorker : IHandle<FailingJobParams>
-
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (FailingJobWorker));
-
 		public FailingJobWorker()
 		{
 		}
