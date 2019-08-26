@@ -13,7 +13,7 @@ namespace NodeTest.JobHandlers
 		{
 			Logger.DebugWithLineNumber("'Failing Job Code' class constructor called.");
 
-			WhoAmI = "[NODETEST.JOBHANDLERS.FailingJobCode, " + Environment.MachineName.ToUpper() + "]";
+			WhoAmI = $"[NODETEST.JOBHANDLERS.FailingJobCode, {Environment.MachineName.ToUpper()}]";
 		}
 
 		public string WhoAmI { get; set; }
@@ -26,7 +26,7 @@ namespace NodeTest.JobHandlers
 
 			var jobProgress = new TestJobProgress
 			{
-				Text = WhoAmI + ": This job will soon throw exeception.",
+				Text = $"{WhoAmI}: This job will soon throw exeception.",
 				ConsoleColor = ConsoleColor.DarkRed
 			};
 
