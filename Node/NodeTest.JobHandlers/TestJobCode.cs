@@ -32,7 +32,8 @@ namespace NodeTest.JobHandlers
 
 			var progressCounter = 0;
 
-			while (stopwatch.Elapsed <= TimeSpan.FromSeconds(message.Duration))
+            var duration = TimeSpan.FromSeconds(message.Duration);
+            while (stopwatch.Elapsed <= duration)
 			{
 				progressCounter++;
 
