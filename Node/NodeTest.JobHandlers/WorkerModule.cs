@@ -7,11 +7,9 @@ namespace NodeTest.JobHandlers
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-
 			builder.RegisterType<TestReportProgressJobCode>();
 			builder.RegisterType<TestReportProgressJobParams>();
 			builder.RegisterType<TestReportProgressJobWorker>().As<IHandle<TestReportProgressJobParams>>();
-
 
 			builder.RegisterType<TestJobCode>();
 			builder.RegisterType<TestJobParams>();
