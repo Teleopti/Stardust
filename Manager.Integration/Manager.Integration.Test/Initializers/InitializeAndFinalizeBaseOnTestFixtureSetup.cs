@@ -123,11 +123,8 @@ namespace Manager.Integration.Test.Initializers
 
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
-		{
-			if (AppDomainTask != null)
-			{
-				AppDomainTask.Dispose();
-			}
-		}
+        {
+            AppDomainTask?.Dispose();
+        }
 	}
 }

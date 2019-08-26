@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.LoadTests
 {
 	[TestFixture]
-	internal class SixManagersSixNodesLoadTests : InitialzeAndFinalizeSixManagersAndSixNodes
+	internal class SixManagersSixNodesLoadTests : InitializeAndFinalizeSixManagersAndSixNodes
 	{
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.

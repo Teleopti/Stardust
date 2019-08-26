@@ -10,63 +10,54 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 {
 	public class HttpSender 
 	{
-		public async Task<HttpResponseMessage> PostAsync(Uri url,
-		                                                 object data = null)
-		{
-			try
-			{
-				using (var client = new HttpClient())
-				{
-					var sez = data == null ? "" : JsonConvert.SerializeObject(data);
+        private readonly HttpClient client = new HttpClient();
 
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-					var response =
-						await client.PostAsync(url,
-						                       new StringContent(sez,
-						                                         Encoding.Unicode,
-						                                         "application/json"))
-							.ConfigureAwait(false);
-					return response;
-				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message,
-				                               exp);
-				throw;
-			}
-		}
+		public async Task<HttpResponseMessage> PostAsync(Uri url, object data = null)
+		{
+            try
+            {
+                var sez = data == null ? "" : JsonConvert.SerializeObject(data);
+
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response =
+                    await client.PostAsync(url,
+                            new StringContent(sez,
+                                Encoding.Unicode,
+                                "application/json"))
+                        .ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception exp)
+            {
+                this.Log().ErrorWithLineNumber(exp.Message,
+                    exp);
+                throw;
+            }
+        }
 		
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			try
-			{
-				using (var client = new HttpClient())
-				{
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-					var response =
-						await client.DeleteAsync(url).ConfigureAwait(false);
-					return response;
-				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message,
-				                               exp);
+                var response =
+                    await client.DeleteAsync(url).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception exp)
+            {
+                this.Log().ErrorWithLineNumber(exp.Message,
+                    exp);
 
-				throw;
-			}
-		}
+                throw;
+            }
+        }
 
-		public async Task<HttpResponseMessage> GetAsync(Uri url)
-		{
-			//Only used for ping the manager, don't error log
-			using (var client = new HttpClient())
-			{
-				var response = await client.GetAsync(url).ConfigureAwait(false);
-				return response;
-			}
-		}
-	}
+        public async Task<HttpResponseMessage> GetAsync(Uri url)
+        {
+            var response = await client.GetAsync(url).ConfigureAwait(false);
+            return response;
+        }
+    }
 }

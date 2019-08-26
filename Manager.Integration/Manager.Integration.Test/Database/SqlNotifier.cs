@@ -52,48 +52,48 @@ namespace Manager.Integration.Test.Database
 
 			if (cancellationTokenSource == null)
 			{
-				throw new ArgumentNullException("cancellationTokenSource");
+				throw new ArgumentNullException(nameof(cancellationTokenSource));
 			}
 
 			NotifyWhenAllNodesAreUp = new ManualResetEventSlim();
 
 			NotifyWhenAllNodesAreUpTaskCancellationTokenSource = cancellationTokenSource;
 
-			NotifyWhenNodesAreUpTask = new Task(() =>
-			{
-				var nodes = numberOfNodes;
+            NotifyWhenNodesAreUpTask = new Task(() =>
+                {
+                    var nodes = numberOfNodes;
 
-				while (!cancellationTokenSource.IsCancellationRequested &&
-				       !NotifyWhenAllNodesAreUp.IsSet)
-				{
-					using (var sqlConnection = new SqlConnection(ConnectionString))
-					{
-						sqlConnection.Open();
+                    while (!cancellationTokenSource.IsCancellationRequested &&
+                           !NotifyWhenAllNodesAreUp.IsSet)
+                    {
+                        using (var sqlConnection = new SqlConnection(ConnectionString))
+                        {
+                            sqlConnection.Open();
 
-						using (var command =
-							new SqlCommand("SELECT COUNT(*) FROM [Stardust].[WorkerNode]",
-							               sqlConnection))
-						{
-							var rowCount = (int) command.ExecuteScalar();
+                            using (var command =
+                                new SqlCommand("SELECT COUNT(*) FROM [Stardust].[WorkerNode] WHERE Alive=1",
+                                    sqlConnection))
+                            {
+                                var rowCount = (int) command.ExecuteScalar();
 
-							if (rowCount == nodes)
-							{
-								NotifyWhenAllNodesAreUp.Set();
-							}
-						}
+                                if (rowCount == nodes)
+                                {
+                                    NotifyWhenAllNodesAreUp.Set();
+                                }
+                            }
 
-						sqlConnection.Close();
-					}
+                            sqlConnection.Close();
+                        }
 
-					Thread.Sleep(TimeSpan.FromSeconds(1));
-				}
+                        Thread.Sleep(TimeSpan.FromSeconds(1));
+                    }
 
-				if (cancellationTokenSource.IsCancellationRequested)
-				{
-					cancellationTokenSource.Token.ThrowIfCancellationRequested();
-				}
-			},
-			                                    NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
+                    if (cancellationTokenSource.IsCancellationRequested)
+                    {
+                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    }
+                },
+                NotifyWhenAllNodesAreUpTaskCancellationTokenSource.Token);
 
 			return NotifyWhenNodesAreUpTask;
 		}

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
 using NodeTest.Fakes.InvokeHandlers;
@@ -105,17 +108,10 @@ namespace NodeTest
 
 			_nodeController = new NodeController(_workerWrapperService)
 			{
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                }
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
             };
 
-			IHttpActionResult actionResultCancel = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
-
-			Assert.IsTrue(actionResultCancel.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.NotFound);
+			_nodeController.TryCancelJob(_jobQueueItemEntity.JobId).Should().Be.OfType<NotFoundResult>();
 		}
 
 		[Test]
@@ -136,21 +132,14 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
 			{
-				Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                }
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 			
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 			_nodeController.StartJob(_jobQueueItemEntity.JobId);
 			
 			var wrongJobId = Guid.NewGuid();
-			var actionResult = _nodeController.TryCancelJob(wrongJobId);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.NotFound);
+			_nodeController.TryCancelJob(wrongJobId).Should().Be.OfType<NotFoundResult>();
 		}
 
 		[Test]
@@ -169,10 +158,7 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                }
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
             };
 
             _nodeController.PrepareToStartJob(_jobQueueItemEntity);
@@ -182,8 +168,7 @@ namespace NodeTest
 			{
 				Thread.Sleep(200);
 			}
-			var actionResult = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken()).Result.StatusCode == HttpStatusCode.OK);
+			_nodeController.TryCancelJob(_jobQueueItemEntity.JobId).Should().Be.OfType<OkResult>();
 		}
 
 		[Test]
@@ -203,18 +188,10 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
 			{
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                },
-				Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
-			var actionResult = _nodeController.TryCancelJob(Guid.Empty);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.BadRequest);
+			_nodeController.TryCancelJob(Guid.Empty).Should().Be.OfType<BadRequestObjectResult>();
 		}
 
 		[Test]
@@ -233,20 +210,12 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
 			{
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                },
-				Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
-
-			var actionResult = _nodeController.PrepareToStartJob(null);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.BadRequest);
-		}
+            var result = (ContentResult)_nodeController.PrepareToStartJob(null);
+            result.StatusCode.Should().Be.EqualTo(HttpStatusCode.BadRequest);
+        }
 
 
 		[Test]
@@ -266,12 +235,8 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                },
-                Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
 			var parameters = new TestJobParams("Test Job",
 			                                  1);
@@ -285,16 +250,14 @@ namespace NodeTest
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 
-			var actionResult1 = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
-			var response1 = actionResult1.ExecuteAsync(new CancellationToken()).Result;
-			response1.StatusCode.Should().Be(HttpStatusCode.OK);
-			var prepareToStartJobResult = JsonConvert.DeserializeObject<PrepareToStartJobResult>(response1.Content.ReadAsStringAsync().Result);
+			var actionResult1 = (ContentResult)_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+            actionResult1.StatusCode.Should().Be(HttpStatusCode.OK);
+			var prepareToStartJobResult = JsonConvert.DeserializeObject<PrepareToStartJobResult>(actionResult1.Content);
 			prepareToStartJobResult.IsAvailable.Should().Be.True();
 			
-			var actionResult2 = _nodeController.PrepareToStartJob(jobToDo2);
-			var response2 = actionResult2.ExecuteAsync(new CancellationToken()).Result;
-			response2.StatusCode.Should().Be(HttpStatusCode.OK);
-			var prepareToStartJobResult2 = JsonConvert.DeserializeObject<PrepareToStartJobResult>(response2.Content.ReadAsStringAsync().Result);
+			var actionResult2 = (ContentResult)_nodeController.PrepareToStartJob(jobToDo2);
+			actionResult2.StatusCode.Should().Be(HttpStatusCode.OK);
+			var prepareToStartJobResult2 = JsonConvert.DeserializeObject<PrepareToStartJobResult>(actionResult2.Content);
 			prepareToStartJobResult2.IsAvailable.Should().Be.False();
 		}
 
@@ -315,21 +278,13 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                }
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
             };
 
-			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.OK);
-
-		}
-
-
+            var result = (ContentResult)_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+            result.StatusCode.Should().Be.EqualTo(HttpStatusCode.OK);
+        }
+        
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenStartJobIdDoesNotMatchPrepareJobId()
 		{
@@ -347,20 +302,12 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                },
-				Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
-			var actionResult = _nodeController.StartJob(Guid.NewGuid());
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.BadRequest);
+			_nodeController.StartJob(Guid.NewGuid()).Should().Be.OfType<BadRequestObjectResult>();
 		}
 
 
@@ -381,24 +328,16 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                }
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
             };
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
-			var actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.OK);
+			_nodeController.StartJob(_jobQueueItemEntity.JobId).Should().Be.OfType<OkResult>();
 		}
 
 		[Test]
 		public void ShouldTimeoutIfWaitingMoreThan5Minutes()
 		{
-			
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 				_nodeStartupNotification,
 				_pingToManagerFake,
@@ -413,12 +352,8 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                },
-				Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
 			var parameters = new TestJobParams("Test Job",1);
 			var ser = JsonConvert.SerializeObject(parameters);
@@ -436,17 +371,15 @@ namespace NodeTest
 			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
 
 			_now.Is(_now.UtcDateTime().AddMinutes(6));
-			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
 
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				.Result.IsSuccessStatusCode);
+            var result = (ContentResult)_nodeController.PrepareToStartJob(jobToDo2);
+            result.StatusCode.Should().Be.EqualTo(HttpStatusCode.OK);
 			_workerWrapper.IsWorking.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldNotTimeoutIfWaitingLessThan5Minutes()
 		{
-
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 				_nodeStartupNotification,
 				_pingToManagerFake,
@@ -461,12 +394,8 @@ namespace NodeTest
 
             _nodeController = new NodeController(_workerWrapperService)
             {
-                Request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri("HTTP://localhost:14100")
-                },
-				Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
 			var parameters = new TestJobParams("Test Job", 1);
 			var ser = JsonConvert.SerializeObject(parameters);
@@ -483,9 +412,9 @@ namespace NodeTest
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
 			_now.Is(_now.UtcDateTime().AddMinutes(3));
-			var response = _nodeController.PrepareToStartJob(jobToDo2).ExecuteAsync(new CancellationToken()).Result;
-			response.IsSuccessStatusCode.Should().Be.True();
-			JsonConvert.DeserializeObject<PrepareToStartJobResult>(response.Content.ReadAsStringAsync().Result).IsAvailable.Should().Be.False();
+			var response = (ContentResult)_nodeController.PrepareToStartJob(jobToDo2);
+            response.StatusCode.Should().Be.EqualTo(HttpStatusCode.OK);
+			JsonConvert.DeserializeObject<PrepareToStartJobResult>(response.Content).IsAvailable.Should().Be.False();
 			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
 		}
 		
@@ -506,12 +435,8 @@ namespace NodeTest
 
 			_nodeController = new NodeController(_workerWrapperService)
 			{
-				Request = new HttpRequestMessage
-				{
-					RequestUri = new Uri("HTTP://localhost:14100")
-				},
-				Configuration = new HttpConfiguration()
-			};
+                ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext() { Request = { Host = new HostString("HTTP://localhost:14100") } }, new RouteData(), new ControllerActionDescriptor()))
+            };
 
 			var serializedParameters = JsonConvert.SerializeObject(new TestJobParams("Test Job", 1));
 			var jobToDo2 = new JobQueueItemEntity
@@ -523,26 +448,24 @@ namespace NodeTest
 			};
 
 			_now.Is(new DateTime(2019, 2, 28, 10, 10, 0));
-			var responseMessage = _nodeController.PrepareToStartJob(_jobQueueItemEntity).ExecuteAsync(CancellationToken.None).Result;
-			responseMessage.IsSuccessStatusCode.Should().Be.True();
-			var prepareResultOk = JsonConvert.DeserializeObject<PrepareToStartJobResult>(responseMessage.Content.ReadAsStringAsync().Result);
+			var responseMessage = (ContentResult)_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+            responseMessage.StatusCode.Should().Be.EqualTo(HttpStatusCode.OK);
+            var prepareResultOk = JsonConvert.DeserializeObject<PrepareToStartJobResult>(responseMessage.Content);
 			prepareResultOk.IsAvailable.Should().Be.True();
 			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
 			_workerWrapper.IsWorking.Should().Be.False();
 			
-			var startJobResult = _nodeController.StartJob(_jobQueueItemEntity.JobId)
-				.ExecuteAsync(CancellationToken.None).Result;
+			var startJobResult = _nodeController.StartJob(_jobQueueItemEntity.JobId).Should().Be.OfType<OkResult>();
 			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();
-			startJobResult.IsSuccessStatusCode.Should().Be.True();			
 			
 			while(_workerWrapper.Task == null || _workerWrapper.Task.Status != TaskStatus.Running) { Thread.Sleep(100); }
 			_workerWrapper.IsWorking.Should().Be.True();
 			_now.Is(_now.UtcDateTime().AddMinutes(6));
 			_workerWrapper.IsWorking.Should().Be.True();
 			
-			var responseMessage2 = _nodeController.PrepareToStartJob(jobToDo2).ExecuteAsync(CancellationToken.None).Result;
-			responseMessage2.IsSuccessStatusCode.Should().Be.True();
-			var prepareResult2Ok = JsonConvert.DeserializeObject<PrepareToStartJobResult>(responseMessage2.Content.ReadAsStringAsync().Result);
+			var responseMessage2 = (ContentResult)_nodeController.PrepareToStartJob(jobToDo2);
+            responseMessage2.StatusCode.Should().Be.EqualTo(HttpStatusCode.OK);
+			var prepareResult2Ok = JsonConvert.DeserializeObject<PrepareToStartJobResult>(responseMessage2.Content);
 			prepareResult2Ok.IsAvailable.Should().Be.False();
 			
 			_workerWrapper.GetCurrentMessageToProcess().Should().Not.Be.Null();

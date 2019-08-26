@@ -36,7 +36,7 @@ namespace Stardust.Node.Workers
 				{
 					Logger.ErrorWithLineNumber($"The job type [{query.GetType()}] could not be resolved. The job cannot be started.");
 
-					throw new Exception("The handler " + query.GetType() + " could not be resolved");
+					throw new Exception($"The handler {query.GetType()} could not be resolved");
 				}
 
 				var method = handler.GetType().GetMethod("Handle");
@@ -45,7 +45,7 @@ namespace Stardust.Node.Workers
 				{
 					Logger.ErrorWithLineNumber($"The method for handler [{handler.GetType()}] could not be found. ");
 
-					throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
+					throw new Exception($"The method 'Handle' for handler {handler.GetType()} could not be found");
 				}
 
 				//this is to throw right exception and not cause faulted on cancellation

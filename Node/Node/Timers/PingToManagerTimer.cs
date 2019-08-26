@@ -68,7 +68,7 @@ namespace Stardust.Node.Timers
 			catch(Exception exception)
 			{
 				var currentScopeMessage =
-					LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
+					LoggerExtensions.GetFormattedLogMessage($"{_whoAmI}: Heartbeat failed. Is the manager up and running?");
 				_exceptionLoggerHandler.LogInfo(currentScopeMessage,exception);
 			}
 		}

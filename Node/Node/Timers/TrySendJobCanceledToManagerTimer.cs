@@ -12,11 +12,5 @@ namespace Stardust.Node.Timers
 																				interval)
 		{
 		}
-
-		//public override void Setup(NodeConfiguration nodeConfiguration, Uri getManagerJobDoneTemplateUri)
-		//{
-		//	CallbackTemplateUri = nodeConfiguration.GetManagerJobHasBeenCanceledTemplateUri();
-		//	base.Setup(nodeConfiguration);
-		//}
 	}
 }

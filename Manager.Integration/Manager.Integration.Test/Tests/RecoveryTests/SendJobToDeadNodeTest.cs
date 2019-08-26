@@ -15,7 +15,6 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	{
 		public SendJobToDeadNodeTest():base(2)
 		{
-			
 		}
 		
 		[Test]
@@ -63,10 +62,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			checkTablesInManagerDbTimer.Dispose();
 			var endedTest = DateTime.UtcNow;
 			var description =
-				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
-							  numberOfJobs,
-							  NumberOfManagers,
-							  NumberOfNodes+1);
+                $"Creates {numberOfJobs} Test Timer jobs with {NumberOfManagers} manager and {NumberOfNodes + 1} nodes.";
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 											  description,
@@ -146,10 +142,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var endedTest = DateTime.UtcNow;
 			
 			var description =
-				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
-							  numberOfJobs,
-							  NumberOfManagers,
-							  NumberOfNodes+2);
+                $"Creates {numberOfJobs} Test Timer jobs with {NumberOfManagers} manager and {NumberOfNodes + 2} nodes.";
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 											  description,

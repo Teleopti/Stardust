@@ -40,12 +40,10 @@ namespace Manager.Integration.Test.WPF.Commands
 		}
 
 		protected virtual void OnCanExecuteChanged()
-		{
-			var handler = CanExecuteChanged;
-			if (handler != null)
-			{
-				handler(this, System.EventArgs.Empty);
-			}
-		}
+        {
+            var handler = CanExecuteChanged;
+            if (handler != null)
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => handler.Invoke(this, EventArgs.Empty)));
+        }
 	}
 }

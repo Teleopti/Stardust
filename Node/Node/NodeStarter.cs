@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
-using System.Web.Http;
-using System.Web.Http.Dispatcher;
-using System.Web.Http.ExceptionHandling;
+using System.Threading.Tasks;
 using Autofac;
-using Autofac.Integration.WebApi;
+using Autofac.Extensions.DependencyInjection;
 using log4net;
-using Microsoft.Owin.Hosting;
-using Owin;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Stardust.Node.Extensions;
 using Stardust.Node.Workers;
 
@@ -17,61 +17,124 @@ namespace Stardust.Node
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof (NodeStarter));
 
-		private readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
+		private readonly CancellationTokenSource _quitEvent = new CancellationTokenSource();
 
 		private string WhoAmI { get; set; }
 
 		public void Stop()
 		{
-			_quitEvent.Set();
+            _logger.InfoWithLineNumber("Stopping the node.");
+            _quitEvent.Cancel();
 		}
 
-		public void Start(NodeConfiguration nodeConfiguration,
-		                  IContainer container)
-		{
-			if (nodeConfiguration == null)
-			{
-				throw new ArgumentNullException(nameof(nodeConfiguration));
-			}
-			if (container == null)
-			{
-				throw new ArgumentNullException(nameof(container));
-			}
-			
-			var nodeAddress = "http://+:" + nodeConfiguration.BaseAddress.Port + "/";
+        public async Task Start(NodeConfiguration nodeConfiguration,
+            IContainer container)
+        {
+            if (nodeConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(nodeConfiguration));
+            }
 
-			using (WebApp.Start(nodeAddress,
-			                    appBuilder =>
-			                    {
-									// Configure Web API for self-host. 
-									var config = new HttpConfiguration
-				                    {
-					                    DependencyResolver = new AutofacWebApiDependencyResolver(container)
-				                    };
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
 
-			                        config.Services.Replace(typeof(IAssembliesResolver), new SlimAssembliesResolver(typeof(SlimAssembliesResolver).Assembly));
-                                    config.MapHttpAttributeRoutes();
-				                    config.Services.Add(typeof (IExceptionLogger),
-				                                        new GlobalExceptionLogger());
+            var nodeAddress = $"http://+:{nodeConfiguration.BaseAddress.Port}/";
+            IWebHostBuilder builder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services.AddAutofac();
+                    services.AddSingleton(new AutofacContainerWrapper(container));
+                })
+                .ConfigureAppConfiguration(cfg => cfg.Properties.Add("baseAutofacContainer", container))
+                .UseUrls(nodeAddress)
+                .UseStartup<Startup>()
+                .UseKestrel();
+            
+            using (var host = builder.Build())
+            {
+                host.Start();
 
-				                    appBuilder.UseAutofacMiddleware(container);
-				                    appBuilder.UseAutofacWebApi(config);
-				                    appBuilder.UseWebApi(config);
-			                    }))
+                WhoAmI = nodeConfiguration.CreateWhoIAm(nodeConfiguration.BaseAddress.LocalPath);
 
-			{
-				WhoAmI = nodeConfiguration.CreateWhoIAm(nodeConfiguration.BaseAddress.LocalPath);
+                _logger.InfoWithLineNumber($"{WhoAmI}: Node starting on machine.");
 
-				_logger.InfoWithLineNumber(WhoAmI + ": Node started on machine.");
+                _logger.InfoWithLineNumber($"{WhoAmI}: Listening on port {nodeConfiguration.BaseAddress}");
 
-				_logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
+                container.Resolve<WorkerWrapperService>().GetWorkerWrapperByPort(nodeConfiguration.BaseAddress.Port);
 
-				//to start it
-				//container.Resolve<NodeController>();
-				container.Resolve<WorkerWrapperService>().GetWorkerWrapperByPort(nodeConfiguration.BaseAddress.Port);
-				//nodeController.Init(nodeConfiguration);
-				_quitEvent.WaitOne();
-			}
-		}
+                _logger.InfoWithLineNumber("Use Ctrl-C to shutdown the host...");
+                await host.WaitForShutdownAsync(_quitEvent.Token);
+            }
+
+            _logger.InfoWithLineNumber($"{WhoAmI}: Stopped listening on port {nodeConfiguration.BaseAddress}");
+        }
+
+        public class Startup
+        {
+            private readonly AutofacContainerWrapper _wrapper;
+
+            public Startup(IHostingEnvironment env, AutofacContainerWrapper wrapper)
+            {
+                _wrapper = wrapper;
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(env.ContentRootPath)
+                    .AddEnvironmentVariables();
+
+                Configuration = builder.Build();
+            }
+
+            public IConfigurationRoot Configuration { get; private set; }
+
+            // ConfigureServices is where you register dependencies. This gets
+            // called by the runtime before the ConfigureContainer method, below.
+            public IServiceProvider ConfigureServices(IServiceCollection services)
+            {
+                // Add services to the collection. Don't build or return
+                // any IServiceProvider or the ConfigureContainer method
+                // won't get called.
+                services.AddMvc();
+
+                // Create the container builder.
+                var builder = new ContainerBuilder();
+
+                // Register dependencies, populate the services from
+                // the collection, and build the container.
+                //
+                // Note that Populate is basically a foreach to add things
+                // into Autofac that are in the collection. If you register
+                // things in Autofac BEFORE Populate then the stuff in the
+                // ServiceCollection can override those things; if you register
+                // AFTER Populate those registrations can override things
+                // in the ServiceCollection. Mix and match as needed.
+                builder.Populate(services);
+#pragma warning disable 618
+                builder.Update(_wrapper.Container);
+#pragma warning restore 618
+
+                ApplicationContainer = _wrapper.Container;
+
+                // Create the IServiceProvider based on the container.
+                return new AutofacServiceProvider(this.ApplicationContainer);
+            }
+
+            public IContainer ApplicationContainer { get; private set; }
+
+            public void Configure(IApplicationBuilder app)
+            {
+                app.UseMvc();
+            }
+        }
+    }
+
+    public class AutofacContainerWrapper
+    {
+        public IContainer Container { get; }
+
+        public AutofacContainerWrapper(IContainer container)
+        {
+            Container = container;
+        }
     }
 }

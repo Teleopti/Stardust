@@ -26,7 +26,7 @@ namespace NodeTest.Fakes.Timers
 		protected override Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
 		                                                           CancellationToken cancellationToken)
 		{
-			InvokeTriggerTrySendStatusSucceded();
+			InvokeTriggerTrySendStatusSucceeded();
 
 			Wait.Set();
 

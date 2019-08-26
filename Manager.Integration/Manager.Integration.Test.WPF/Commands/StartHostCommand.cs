@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using Manager.Integration.Test.WPF.ViewModels;
 
@@ -11,7 +12,7 @@ namespace Manager.Integration.Test.WPF.Commands
 		{
 			if (mainWindowViewModel == null)
 			{
-				throw new ArgumentNullException("mainWindowViewModel");
+				throw new ArgumentNullException(nameof(mainWindowViewModel));
 			}
 
 			MainWindowViewModel = mainWindowViewModel;
@@ -42,12 +43,10 @@ namespace Manager.Integration.Test.WPF.Commands
 		public event EventHandler CanExecuteChanged;
 
 		protected virtual void OnCanExecuteChanged()
-		{
-			var handler = CanExecuteChanged;
-			if (handler != null)
-			{
-				handler(this, System.EventArgs.Empty);
-			}
-		}
+        {
+            var handler = CanExecuteChanged;
+            if (handler != null)
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => handler.Invoke(this, EventArgs.Empty)));
+        }
 	}
 }

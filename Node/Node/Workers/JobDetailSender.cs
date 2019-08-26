@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
@@ -16,55 +14,51 @@ namespace Stardust.Node.Workers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(JobDetailSender));
 		private UriBuilder _uriBuilder;
 		private readonly IHttpSender _httpSender;
-		private readonly List<JobDetailEntity> _jobDetails;
+		private readonly ConcurrentStack<JobDetailEntity> _jobDetails;
 
 		public JobDetailSender(IHttpSender httpSender)
 		{
 			_httpSender = httpSender;
-			_jobDetails = new List<JobDetailEntity>();
+			_jobDetails = new ConcurrentStack<JobDetailEntity>();
 		}
-
-
+        
 		public int DetailsCount()
 		{
 			return _jobDetails.Count;
 		}
 
-		public void AddDetail(Guid jobid, string progressMessage)
-		{
-			lock (_jobDetails)
-			{
-				_jobDetails.Add(new JobDetailEntity
-				{
-					JobId = jobid,
-					Detail = progressMessage,
-					Created = DateTime.UtcNow,
-					Sent = false
-				});
-			}
-		}
+        public void AddDetail(Guid jobId, string progressMessage)
+        {
+            _jobDetails.Push(new JobDetailEntity
+            {
+                JobId = jobId,
+                Detail = progressMessage,
+                Created = DateTime.UtcNow,
+                Sent = false
+            });
+        }
 
-		public void Send(CancellationToken cancellationToken)
+        public void Send(CancellationToken cancellationToken)
 		{
 			if (_jobDetails == null || _jobDetails.Count <= 0 || _uriBuilder == null) return;
-			lock (_jobDetails)
-			{
-				try
-				{
-					var task = Task.Run(async () =>
-					                                 {
-						                                 var httpResponseMessage = await _httpSender.PostAsync(_uriBuilder.Uri, _jobDetails, cancellationToken);
-					                                     httpResponseMessage.EnsureSuccessStatusCode();
-					                                 }, cancellationToken);
-					task.GetAwaiter().GetResult();
-					_jobDetails.Clear();
-				}
-				catch (Exception)
-				{
-					Logger.ErrorWithLineNumber($"Send job progresses to manager failed for job ( jobId ) : ( {_jobDetails.FirstOrDefault().JobId} )");
-				}
-			}
-		}
+
+            var count = _jobDetails.Count;
+            var items = new JobDetailEntity[count];
+            if (_jobDetails.TryPopRange(items) > 0)
+            {
+                try
+                {
+                    var httpResponseMessage = _httpSender.PostAsync(_uriBuilder.Uri, items, cancellationToken)
+                        .ConfigureAwait(false).GetAwaiter().GetResult();
+                    httpResponseMessage.EnsureSuccessStatusCode();
+                }
+                catch (Exception)
+                {
+                    Logger.ErrorWithLineNumber(
+                        $"Send job progresses to manager failed for job ( jobId ) : ( {items[0]?.JobId} )");
+                }
+            }
+        }
 
 		public void SetManagerLocation(Uri managerLocation)
 		{

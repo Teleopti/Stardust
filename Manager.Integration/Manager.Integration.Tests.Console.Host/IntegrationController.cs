@@ -22,11 +22,9 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			this.Log().DebugWithLineNumber("Called API controller.");
 
-			string friendlyname;
+            Program.StartNewManager(out var friendlyName);
 
-			Program.StartNewManager(out friendlyname);
-
-			return Ok(friendlyname);
+			return Ok(friendlyName);
 		}
 
 		[HttpPost, Route(IntegrationControllerRouteConstants.Nodes)]
@@ -34,11 +32,9 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			this.Log().InfoWithLineNumber("StartNewNode.");
 
-			string friendlyname;
+            Program.StartNewNode(out var friendlyName);
 
-			Program.StartNewNode(out friendlyname);
-
-			return Ok(friendlyname);
+			return Ok(friendlyName);
 		}
 
 		[HttpDelete, Route(IntegrationControllerRouteConstants.ManagerById)]
@@ -100,7 +96,7 @@ namespace Manager.IntegrationTest.Console.Host
 		{
 			this.Log().DebugWithLineNumber("GetAllManagers");
 
-			List<string> appDomainsList = Program.GetAllmanagers();
+			List<string> appDomainsList = Program.GetAllManagers();
 
 			return Ok(appDomainsList);
 		}

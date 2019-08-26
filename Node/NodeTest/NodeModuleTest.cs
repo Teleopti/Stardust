@@ -38,7 +38,6 @@ namespace NodeTest
 		{
 			using (var scope = _container.BeginLifetimeScope())
 			{
-				scope.Resolve<NodeController>().Should().Not.Be.Null();
 				scope.Resolve<NodeConfigurationService>().Should().Not.Be.Null();
 				scope.Resolve<TrySendJobDetailToManagerTimer>().Should().Not.Be.Null();
 				scope.Resolve<TrySendNodeStartUpNotificationToManagerTimer>().Should().Not.Be.Null();

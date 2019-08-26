@@ -40,20 +40,17 @@ namespace Manager.Integration.Test.Tasks
 				}
 			}
 
-			if (Task != null)
-			{
-				Task.Dispose();
-			}
-		}
+            Task?.Dispose();
+        }
 
 		public Task StartTask(int numberOfManagers,
 		                      int numberOfNodes,
 							  bool useLoadBalancerIfJustOneManager,
 							  CancellationTokenSource cancellationTokenSource)
 		{
-			Task = Task.Factory.StartNew(() =>
+			Task = Task.Run(() =>
 			{
-				Task.Factory.StartNew(() =>
+				Task.Run(() =>
 				{
 					while (!cancellationTokenSource.IsCancellationRequested)
 					{
@@ -67,7 +64,7 @@ namespace Manager.Integration.Test.Tasks
 				}, cancellationTokenSource.Token);
 
 
-				Task.Factory.StartNew(() =>
+				Task.Run(() =>
 				{
 					string[] commandArguments = new string[3];
 

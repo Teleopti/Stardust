@@ -168,7 +168,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		private void CheckManagerDbTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				Application.Current.Dispatcher.Invoke(
 					DispatcherPriority.Normal,
@@ -697,7 +697,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		private void NewDataCapturedEventHandler(object sender, FiddlerCaptureInformation fiddlerCaptureInformation)
 		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				Application.Current.Dispatcher.Invoke(
 					DispatcherPriority.Normal,
@@ -727,16 +727,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this,
-				                new PropertyChangedEventArgs(propertyName));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		private void GetData()
 		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				Application.Current.Dispatcher.Invoke(
 					DispatcherPriority.Normal,
@@ -750,31 +746,26 @@ namespace Manager.Integration.Test.WPF.ViewModels
 							ManagerDbRepository.PerformanceTests;
 
 						PerformanceTestHeader =
-							PerformanceTestHeaderConstant + " ( " + PerformanceTests.Count + " )";
+							$"{PerformanceTestHeaderConstant} ( {PerformanceTests.Count} )";
 
 						Loggings =
 							ManagerDbRepository.Loggings;
-
-						ErrorLoggings = new ObservableCollection<Logging>();
-
+                        
 						if (Loggings != null && Loggings.Any())
 						{
-							Task.Factory.StartNew(() =>
-							{
-								foreach (var log in
-									Loggings.Where(logging => logging.Level.Equals("ERROR", StringComparison.InvariantCultureIgnoreCase) ||
-															  logging.Level.Equals("FATAL", StringComparison.InvariantCultureIgnoreCase)))
-								{
-									ErrorLoggings.Add(log);
-								}
-							});
+							ErrorLoggings = new ObservableCollection<Logging>(Loggings.Where(logging => logging.Level.Equals("ERROR", StringComparison.InvariantCultureIgnoreCase) ||
+                                                                                                        logging.Level.Equals("FATAL", StringComparison.InvariantCultureIgnoreCase)));
 						}
+                        else
+                        {
+                            ErrorLoggings = new ObservableCollection<Logging>();
+                        }
 
-						ErrorLoggingHeader = ErrorLoggingHeaderConstant + " ( " + ErrorLoggings.Count + " )";
+                        ErrorLoggingHeader = $"{ErrorLoggingHeaderConstant} ( {ErrorLoggings.Count} )";
 
 						++RefreshProgressValue;
 
-						LoggingHeader = LoggingHeaderConstant + " ( " + Loggings.Count + " )";
+						LoggingHeader = $"{LoggingHeaderConstant} ( {Loggings.Count} )";
 
 						Jobs =
 							ManagerDbRepository.Jobs;
@@ -789,10 +780,10 @@ namespace Manager.Integration.Test.WPF.ViewModels
 						++RefreshProgressValue;
 
 						JobHistoryHeader =
-							JobHistoryHeaderConstant + " ( " + Jobs.Count + " )";
+							$"{JobHistoryHeaderConstant} ( {Jobs.Count} )";
 
 						JobHistoryGroupBySentToHeader =
-							JobHistoryGroupBySentToHeaderConstant + " ( " + Jobs.Count + " )";
+							$"{JobHistoryGroupBySentToHeaderConstant} ( {Jobs.Count} )";
 
 						JobHistoryDetailData =
 							ManagerDbRepository.JobDetails;
@@ -800,7 +791,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 						++RefreshProgressValue;
 
 						JobHistoryDetailHeader =
-							JobHistoryDetailHeaderConstant + " ( " + JobHistoryDetailData.Count + " )";
+							$"{JobHistoryDetailHeaderConstant} ( {JobHistoryDetailData.Count} )";
 
 						JobDefinitionData =
 							ManagerDbRepository.JobQueueItems;
@@ -808,7 +799,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 						++RefreshProgressValue;
 
 						JobDefinitionDataHeader =
-							JobDefinitionHeaderConstant + " ( " + JobDefinitionData.Count + " )";
+							$"{JobDefinitionHeaderConstant} ( {JobDefinitionData.Count} )";
 
 						WorkerNodesData =
 							ManagerDbRepository.WorkerNodes;
@@ -816,7 +807,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 						++RefreshProgressValue;
 
 						WorkerNodeHeader =
-							WorkerNodeHeaderConstant + " ( " + WorkerNodesData.Count + " )";
+							$"{WorkerNodeHeaderConstant} ( {WorkerNodesData.Count} )";
 
 						Status = "Refresh finished.";
 
@@ -832,7 +823,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public void DatabaseClearAllInformation()
 		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				ManagerDbRepository.TruncateLoggingTable();
 
@@ -847,7 +838,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public void StartConsoleHost()
 		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				CancellationTokenSourceAppDomainTask = new CancellationTokenSource();
 
@@ -862,24 +853,17 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			});
 		}
 
-		public void ShutDownConsoleHost()
+        public void ShutDownConsoleHost()
+        {
+            CancellationTokenSourceAppDomainTask?.Cancel();
+            AppDomainTask?.Dispose();
+
+            IsConsoleHostStarted = false;
+        }
+
+        public void ClearAllManagerTablesInDatabase()
 		{
-			if (CancellationTokenSourceAppDomainTask != null)
-			{
-				CancellationTokenSourceAppDomainTask.Cancel();
-			}
-
-			if (AppDomainTask != null)
-			{
-				AppDomainTask.Dispose();
-			}
-
-			IsConsoleHostStarted = false;
-		}
-
-		public void ClearAllManagerTablesInDatabase()
-		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				var managerDbRepository =
 					new ManagerDbRepository(ManagerDbConnectionString);
@@ -901,7 +885,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		{
 			CancellationTokenSourceDurationTest = new CancellationTokenSource();
 
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				while (true)
 				{
@@ -922,7 +906,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			}, CancellationTokenSourceDurationTest.Token);
 
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				var mangerUriBuilder = new ManagerUriBuilder();
 				var addToJobQueueUri = mangerUriBuilder.GetAddToJobQueueUri();
@@ -977,7 +961,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public void CancelDurationTest()
 		{
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				CancellationTokenSourceDurationTest.Cancel();
 
@@ -1055,9 +1039,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			CurrentIndex = currentIndex;
 			TotalNumber = totalNumber;
 
-			StatusText = string.Format("{0} / {1}", 
-									  CurrentIndex, 
-									  TotalNumber);
+			StatusText = $"{CurrentIndex} / {TotalNumber}";
 		}
 	}
 }

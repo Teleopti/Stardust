@@ -18,7 +18,7 @@ namespace Stardust.Node.Extensions
 		{
 			if (logger == null)
 			{
-				throw new ArgumentNullException("logger");
+				throw new ArgumentNullException(nameof(logger));
 			}
 		}
 		
