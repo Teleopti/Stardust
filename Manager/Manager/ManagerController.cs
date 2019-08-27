@@ -54,7 +54,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
+			this.Log().InfoWithLineNumber($"{WhoAmI(Request)}: Received job cancel from client ( jobId ) : ( {jobId} )");
 			
 			_jobManager.CancelJobByJobId(jobId);
 
@@ -99,8 +99,8 @@ namespace Stardust.Manager
 
 			Task.Run(() =>
 			{
-				this.Log().InfoWithLineNumber(WhoAmI(Request) +
-					                              ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
+				this.Log().InfoWithLineNumber(
+                    $"{WhoAmI(Request)}: Received heartbeat from Node. Node Uri : ( {workerNodeUri} )");
 
 				_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
 				
@@ -119,8 +119,8 @@ namespace Stardust.Manager
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
-												": Received job done from a Node ( jobId, Node ) : ( " + jobId + ", " + workerNodeUri  + " )");
+				this.Log().InfoWithLineNumber(
+                    $"{WhoAmI(Request)}: Received job done from a Node ( jobId, Node ) : ( {jobId}, {workerNodeUri} )");
 
 				_jobManager.UpdateResultForJob(jobId,
 				                              "Success",
@@ -142,8 +142,8 @@ namespace Stardust.Manager
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId, Node ) : ( " +
-				                               jobFailed.JobId + ", " + workerNodeUri + " )");
+				this.Log().InfoWithLineNumber(
+                    $"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri} )");
 
 				var progress = new JobDetail
 				{
@@ -174,8 +174,8 @@ namespace Stardust.Manager
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
-					": Received cancel from a Node ( jobId, Node ) : ( " + jobId + ", " + workerNodeUri +")");
+				this.Log().InfoWithLineNumber(
+                    $"{WhoAmI(Request)}: Received cancel from a Node ( jobId, Node ) : ( {jobId}, {workerNodeUri})");
 
 				_jobManager.UpdateResultForJob(jobId,
 				                              "Canceled",
@@ -211,7 +211,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 
-			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + workerNodeUri + " )");
+			this.Log().InfoWithLineNumber($"{WhoAmI(Request)}: Received init from Node. Node Uri : ( {workerNodeUri} )");
 
 			_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(workerNodeUri.ToString());
 			_nodeManager.AddWorkerNode(workerNodeUri);
@@ -228,13 +228,13 @@ namespace Stardust.Manager
 		{
 			if (request == null)
 			{
-				return "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
+				return $"[MANAGER, {Environment.MachineName.ToUpper()}]";
 			}
 
 			var baseUrl =
 				request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-			return "[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+			return $"[MANAGER, {baseUrl}, {Environment.MachineName.ToUpper()}]";
 		}
 	}
 }
