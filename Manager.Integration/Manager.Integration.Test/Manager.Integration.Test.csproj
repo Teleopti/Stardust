@@ -108,6 +108,7 @@
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\PerformanceTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
+    <Compile Include="Tests\RecoveryTests\RecoverFromNodeCrashTest.cs" />
     <Compile Include="Tests\RecoveryTests\DetectNodeFailureTest.cs" />
     <Compile Include="Database\SqlNotifier.cs" />
     <Compile Include="Tests\FunctionalTests\OneManagerAndZeroNodesTests.cs" />
