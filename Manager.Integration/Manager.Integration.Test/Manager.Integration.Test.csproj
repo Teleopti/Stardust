@@ -140,6 +140,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\Node\NodeTest.JobHandlers\NodeTest.JobHandlers.csproj">
+      <Project>{3D7D71B6-4676-498C-B148-447A5FC5F3A0}</Project>
+      <Name>NodeTest.JobHandlers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Manager.Integration.Tests.Console.Host\Manager.IntegrationTest.Console.Host.csproj">
       <Project>{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}</Project>
       <Name>Manager.IntegrationTest.Console.Host</Name>
