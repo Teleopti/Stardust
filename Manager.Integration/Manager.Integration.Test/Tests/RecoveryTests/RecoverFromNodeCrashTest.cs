@@ -9,6 +9,7 @@ using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Params;
 using Manager.Integration.Test.Timers;
 using Newtonsoft.Json;
+using NodeTest.JobHandlers;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.Tests.RecoveryTests
@@ -17,84 +18,87 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	public class RecoverFromNodeCrashTest : InitializeAndFinalizeOneManagerAndNodes
 	{
 		[Test]
-		public void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResultToFatal()
-		{
-			var startedTest = DateTime.UtcNow;
-			
-			var waitForJobToStartEvent = new ManualResetEventSlim();
-			var waitForNodeToEndEvent = new ManualResetEventSlim();
-			
-			var checkTablesInManagerDbTimer =
-				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
+		public void GoodNameLater()
+        {
+            WaitForNodeToFinishWorking();
+            var startedTest = DateTime.UtcNow;
+            var manualResetEventSlim = new ManualResetEventSlim();
+            var checkTablesInManagerDbTimer =
+                new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 
-			checkTablesInManagerDbTimer.GetJobItems += (sender, items) =>
-			{
-				if (items.Any() && items.All(job => job.Started != null))
-				{
-					waitForJobToStartEvent.Set();
-				}
-			};
-			checkTablesInManagerDbTimer.GetWorkerNodes += (sender, nodes) =>
-			{
-				if (nodes.Any() && nodes.All(node => node.Alive == false))
-				{
-					waitForNodeToEndEvent.Set();
-				}
-			};
-			checkTablesInManagerDbTimer.JobTimer.Start();
-			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
-			
-            // ###############################
-            var failingJobParams = new FailingJobParams("Error message - THIS SHOULD CRASH");
-            var failingJobParamsJson = JsonConvert.SerializeObject(failingJobParams);
-            var crashingJOb = new  JobQueueItem
+
+            checkTablesInManagerDbTimer.GetJobItems += (sender, items) =>
             {
-                Name = "Crash Job",
-                Serialized = failingJobParamsJson,
-                Type = "NodeTest.JobHandlers.FailingJobParams",
+                if (items.Any() &&
+                    items.All(job => job.Started != null && job.Ended != null))
+                {
+                    manualResetEventSlim.Set();
+
+                }
+            };
+            checkTablesInManagerDbTimer.JobTimer.Start();
+
+            // ############## JOB SETUP #################
+            var crashingJobParams = new CrashingJobParams("Error message - THIS SHOULD CRASH");
+            var crashingJobParamsJson = JsonConvert.SerializeObject(crashingJobParams);
+            var crashingJob = new  JobQueueItem
+            {
+                Name = "Crashing Job",
+                Serialized = crashingJobParamsJson,
+                Type = nameof(CrashingJobParams),
                 CreatedBy = "Test"
             };
-
+            var jobId = HttpRequestManager.AddJob(crashingJob);
             // #################################
 
-			var jobQueueItem =
-				JobHelper.GenerateTestJobRequests(1, 5*60).First();
-			var jobId = HttpRequestManager.AddJob(jobQueueItem);
+            //var jobQueueItem =
+            //    JobHelper.GenerateTestJobRequests(1, 5).First();
+            //var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
-			waitForJobToStartEvent.Wait(TimeSpan.FromMinutes(2));
 
-			Task<string> taskShutDownNode = new Task<string>(() =>
-			{
-				string res = IntegrationControllerApiHelper.ShutDownNode(HttpSender,
-																		"Node1.config").Result;
-				return res;
-			});
+            manualResetEventSlim.Wait(TimeSpan.FromSeconds(30));
 
-			taskShutDownNode.Start();
-			taskShutDownNode.Wait();
-			
-			waitForNodeToEndEvent.Wait(TimeSpan.FromMinutes(1));
+            Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Should not be any jobs left in queue.");
+            Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "There should be jobs in jobs table.");
+            Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.
+                Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
 
-			//Give manager a couple of seconds to requeue job
-			Thread.Sleep(TimeSpan.FromSeconds(2));
+            checkTablesInManagerDbTimer.Dispose();
 
-			var jobs = checkTablesInManagerDbTimer.ManagerDbRepository.Jobs;
+            var endedTest = DateTime.UtcNow;
 
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.All(node => node.Alive == false), "Worker Node should not be alive.");
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(),"Job should be in queue.");
-			Assert.IsTrue(!jobs.Any(), "Job should be empty.");
+            var description =
+                $"Creates {1} Test Timer jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
 
-			checkTablesInManagerDbTimer.Dispose();
+            DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+                description,
+                startedTest,
+                endedTest);
+        }
 
-			var endedTest = DateTime.UtcNow;
 
-			var description =
-                $"Creates Node Failure jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
 
-			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
-		}
+
+        private void WaitForNodeToStartWorking()
+        {
+            var working = false;
+            while (!working)
+            {
+                working = HttpRequestManager.IsNodeWorking();
+                Thread.Sleep(TimeSpan.FromMilliseconds(200));
+            }
+        }
+
+        private void WaitForNodeToFinishWorking()
+        {
+            var working = true;
+            while (working)
+            {
+                working = HttpRequestManager.IsNodeWorking();
+                Thread.Sleep(TimeSpan.FromMilliseconds(200));
+            }
+        }
+
+       
 	}
 }

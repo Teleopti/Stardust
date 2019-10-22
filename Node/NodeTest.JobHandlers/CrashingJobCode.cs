@@ -11,9 +11,9 @@ namespace NodeTest.JobHandlers
 
 		public CrashingJobCode()
 		{
-			Logger.DebugWithLineNumber("'Failing Job Code' class constructor called.");
+			Logger.DebugWithLineNumber("'Crashing Job Code' class constructor called.");
 
-			WhoAmI = $"[NODETEST.JOBHANDLERS.FailingJobCode, {Environment.MachineName.ToUpper()}]";
+			WhoAmI = $"[NODETEST.JOBHANDLERS.CrashingJobCode, {Environment.MachineName.ToUpper()}]";
 		}
 
 		public string WhoAmI { get; set; }
@@ -22,17 +22,25 @@ namespace NodeTest.JobHandlers
 		                       CancellationTokenSource cancellationTokenSource,
 		                       Action<string> progress)
 		{
-			Logger.DebugWithLineNumber("'Failing Job Code' Do The Thing method called.");
+			Logger.DebugWithLineNumber("'Crashing Job Code' Do The Thing method called.");
 
-			var jobProgress = new TestJobProgress
+			var jobProgressStart = new TestJobProgress
 			{
-				Text = $"{WhoAmI}: This job will soon throw exeception.",
+				Text = $"{WhoAmI}: This job will soon crash!",
 				ConsoleColor = ConsoleColor.DarkRed
 			};
 
-			progress(jobProgress.Text);
+            var jobProgressEnd = new TestJobProgress
+            {
+                Text = $"{WhoAmI}: Job Ended",
+                ConsoleColor = ConsoleColor.Green
+            };
 
-			throw new Exception(message.Error);
+			progress(jobProgressStart.Text);
+
+            Thread.Sleep((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+            
+            progress(jobProgressEnd.Text);
 		}
 	}
 }
