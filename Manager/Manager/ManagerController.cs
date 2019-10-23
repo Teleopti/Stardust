@@ -137,7 +137,6 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed([FromBody] JobFailed jobFailed)
 		{
-			var responseMessage = new ManagerResponseMessage();
 			var isValidRequest = _validator.ValidateObject(jobFailed);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
@@ -162,28 +161,19 @@ z
 					DateTime.UtcNow);
 
 				_jobManager.AssignJobToWorkerNodes();
+				ExceptionCall();
 			});
 
 			try
 			{
 				task.Wait();
-				responseMessage.Result = true;
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				responseMessage.Result = false;
-				responseMessage.Exception = ex;
-				responseMessage.Message = ex.Message;
+				return InternalServerError(exception);
 			}
 
-			return Ok(responseMessage);
-		}
-
-		private class ManagerResponseMessage
-		{
-			public string Message;
-			public bool Result;
-			public Exception Exception;
+			return Ok();
 		}
 
 		private void ExceptionCall()
