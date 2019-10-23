@@ -38,9 +38,17 @@ namespace NodeTest.JobHandlers
 
 			progress(jobProgressStart.Text);
 
-            Thread.Sleep((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+			var startTime = DateTime.Now;
+			var endTime = startTime.Add(TimeSpan.FromSeconds(20));
+			while (DateTime.Now < endTime)
+			{
+				Thread.Sleep(TimeSpan.FromSeconds(2));
+				progress($"Waited {DateTime.Now.Subtract(startTime).TotalSeconds} seconds..");
+			}
+
+			throw new Exception("This is an exception!");
             
-            progress(jobProgressEnd.Text);
+            //progress(jobProgressEnd.Text);
 		}
 	}
 }

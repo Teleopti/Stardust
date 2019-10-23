@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Stardust.Manager.Constants;
@@ -135,15 +137,16 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed([FromBody] JobFailed jobFailed)
 		{
+			var responseMessage = new ManagerResponseMessage();
 			var isValidRequest = _validator.ValidateObject(jobFailed);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			Task.Run(() =>
+			var task = Task.Run(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
 				this.Log().InfoWithLineNumber(
-                    $"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri} )");
+					$"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri} )");
 
 				var progress = new JobDetail
 				{
@@ -155,13 +158,37 @@ namespace Stardust.Manager
 				_jobManager.CreateJobDetail(progress);
 
 				_jobManager.UpdateResultForJob(jobFailed.JobId,
-				                              "Failed",
-											  DateTime.UtcNow);
-				
+					"Failed",
+					DateTime.UtcNow);
+
 				_jobManager.AssignJobToWorkerNodes();
 			});
 
-			return Ok();
+			try
+			{
+				task.Wait();
+				responseMessage.Result = true;
+			}
+			catch (Exception ex)
+			{
+				responseMessage.Result = false;
+				responseMessage.Exception = ex;
+				responseMessage.Message = ex.Message;
+			}
+
+			return Ok(responseMessage);
+		}
+
+		private class ManagerResponseMessage
+		{
+			public string Message;
+			public bool Result;
+			public Exception Exception;
+		}
+
+		private void ExceptionCall()
+		{
+			throw new Exception("From inside Task Exception");
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
