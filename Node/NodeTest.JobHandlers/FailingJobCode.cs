@@ -31,7 +31,7 @@ namespace NodeTest.JobHandlers
 			};
 
 			progress(jobProgress.Text);
-
+			
 			throw new Exception(message.Error);
 		}
 	}

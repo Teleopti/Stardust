@@ -17,22 +17,21 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	[TestFixture]
 	public class RecoverFromNodeCrashTest : InitializeAndFinalizeOneManagerAndNodes
 	{
-		[Test]
+		[Test, Ignore("WIP")]
 		public void GoodNameLater()
         {
             WaitForNodeToFinishWorking();
             var startedTest = DateTime.UtcNow;
-            var manualResetEventSlim = new ManualResetEventSlim();
+            var waitForAllJobsDone = new ManualResetEventSlim();
             var checkTablesInManagerDbTimer =
                 new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
-
-
+            
             checkTablesInManagerDbTimer.GetJobItems += (sender, items) =>
             {
                 if (items.Any() &&
                     items.All(job => job.Started != null && job.Ended != null))
                 {
-                    manualResetEventSlim.Set();
+                    waitForAllJobsDone.Set();
 
                 }
             };
@@ -45,40 +44,25 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
             {
                 Name = "Crashing Job",
                 Serialized = crashingJobParamsJson,
-                Type = nameof(CrashingJobParams),
+                Type = typeof(CrashingJobParams).ToString(),
                 CreatedBy = "Test"
             };
+            
             var jobId = HttpRequestManager.AddJob(crashingJob);
             // #################################
 
-            //var jobQueueItem =
-            //    JobHelper.GenerateTestJobRequests(1, 5).First();
-            //var jobId = HttpRequestManager.AddJob(jobQueueItem);
-			
+            var waitResult = waitForAllJobsDone.Wait(TimeSpan.FromSeconds(120));
+            
+            //Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Should not be any jobs left in queue.");
+            //Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "There should be jobs in jobs table.");
+            Assert.AreEqual("Failed", checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.SingleOrDefault(j => j.JobId == jobId).Result);
 
-            manualResetEventSlim.Wait(TimeSpan.FromSeconds(30));
-
-            Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Should not be any jobs left in queue.");
-            Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "There should be jobs in jobs table.");
-            Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.
-                Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
-
+            var allNodesAreIdle = WaitForNodeToFinishWorking(TimeSpan.FromSeconds(5));
+            Assert.IsTrue(allNodesAreIdle);
+            
             checkTablesInManagerDbTimer.Dispose();
-
-            var endedTest = DateTime.UtcNow;
-
-            var description =
-                $"Creates {1} Test Timer jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
-
-            DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-                description,
-                startedTest,
-                endedTest);
         }
-
-
-
-
+        
         private void WaitForNodeToStartWorking()
         {
             var working = false;
@@ -89,16 +73,19 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
             }
         }
 
-        private void WaitForNodeToFinishWorking()
+        private bool WaitForNodeToFinishWorking(TimeSpan? timeSpan = null)
         {
+            var startedWaiting = DateTime.Now;
+
             var working = true;
             while (working)
             {
                 working = HttpRequestManager.IsNodeWorking();
                 Thread.Sleep(TimeSpan.FromMilliseconds(200));
+                if (timeSpan != null && DateTime.Now > startedWaiting.Add(timeSpan.Value))
+                    return false;
             }
+            return true;
         }
-
-       
-	}
+    }
 }
