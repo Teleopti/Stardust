@@ -17,7 +17,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	[TestFixture]
 	public class RecoverFromNodeCrashTest : InitializeAndFinalizeOneManagerAndNodes
 	{
-		[Test, Ignore("WIP")]
+		[Test]
 		public void GoodNameLater()
         {
             WaitForNodeToFinishWorking();

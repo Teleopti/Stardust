@@ -39,7 +39,7 @@ namespace NodeTest.JobHandlers
 			progress(jobProgressStart.Text);
 
 			var startTime = DateTime.Now;
-			var endTime = startTime.Add(TimeSpan.FromSeconds(20));
+			var endTime = startTime.Add(TimeSpan.FromSeconds(10));
 			while (DateTime.Now < endTime)
 			{
 				Thread.Sleep(TimeSpan.FromSeconds(2));
