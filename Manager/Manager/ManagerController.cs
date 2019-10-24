@@ -41,13 +41,10 @@ namespace Stardust.Manager
 			var msg = $"{WhoAmI(Request)} : New job received from client ( jobId, jobName ) : ( {jobQueueItem.JobId}, {jobQueueItem.Name} )";
 			this.Log().InfoWithLineNumber(msg);
 
-			
-			Task.Run(() =>
+			return TaskRunnerHelper(() =>
 			{
 				_jobManager.AssignJobToWorkerNodes();
 			});
-
-			return Ok(jobQueueItem.JobId);
 		}
 
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
@@ -99,7 +96,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 
-			Task.Run(() =>
+            return TaskRunnerHelper(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) +
 					                              ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
@@ -107,8 +104,6 @@ namespace Stardust.Manager
 				_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
 				
 			});
-
-			return Ok();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobSucceed)]
@@ -117,7 +112,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			Task.Run(() =>
+            return TaskRunnerHelper(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
@@ -130,8 +125,6 @@ namespace Stardust.Manager
 
 				_jobManager.AssignJobToWorkerNodes();
 			});
-
-			return Ok();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
@@ -139,47 +132,39 @@ namespace Stardust.Manager
 		{
 			var isValidRequest = _validator.ValidateObject(jobFailed);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
-			
-			var task = Task.Run(() =>
-			{
-				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().InfoWithLineNumber(
-					$"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri} )");
+            return TaskRunnerHelper(() =>
+            {
+                var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+                this.Log().InfoWithLineNumber(
+                    $"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri} )");
 z
-				var progress = new JobDetail
-				{
-					JobId = jobFailed.JobId,
-					Created = DateTime.UtcNow,
-					Detail = jobFailed.AggregateException.ToString()
-				};
+                var progress = new JobDetail
+                {
+                    JobId = jobFailed.JobId,
+                    Created = DateTime.UtcNow,
+                    Detail = jobFailed.AggregateException.ToString()
+                };
 
-				_jobManager.CreateJobDetail(progress);
+                _jobManager.CreateJobDetail(progress);
 
-				_jobManager.UpdateResultForJob(jobFailed.JobId,
-					"Failed",
-					DateTime.UtcNow);
+                _jobManager.UpdateResultForJob(jobFailed.JobId,
+                    "Failed",
+                    DateTime.UtcNow);
 
-				_jobManager.AssignJobToWorkerNodes();
-				ExceptionCall();
-			});
-
-			try
-			{
-				task.Wait();
-			}
-			catch (Exception exception)
-			{
-				return InternalServerError(exception);
-			}
-
-			return Ok();
-		}
+                _jobManager.AssignJobToWorkerNodes();
+                ExceptionCall();
+            });
+        }
 
 		private void ExceptionCall()
 		{
 			throw new Exception("From inside Task Exception");
 		}
+
+
+
 
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
@@ -187,7 +172,7 @@ z
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			Task.Run(() =>
+           return TaskRunnerHelper(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
@@ -200,9 +185,24 @@ z
 				
 				_jobManager.AssignJobToWorkerNodes();
 			});
-
-			return Ok();
 		}
+
+
+        private IHttpActionResult TaskRunnerHelper(Action action)
+        {
+            try
+            {
+                var task = Task.Factory.StartNew(action);
+                task.Start();
+                task.Wait();
+            }
+            catch (Exception exception)
+            {
+                return InternalServerError(exception);
+            }
+            return Ok();
+        }
+
 
 
 		[HttpPost, Route(ManagerRouteConstants.JobDetail)]
