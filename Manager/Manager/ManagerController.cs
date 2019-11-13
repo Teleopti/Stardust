@@ -161,7 +161,6 @@ z
                     DateTime.UtcNow);
 
                 _jobManager.AssignJobToWorkerNodes();
-                ExceptionCall();
             });
 
 			try
@@ -175,12 +174,7 @@ z
 
 			return Ok();
         }
-
-		private void ExceptionCall()
-		{
-			throw new Exception("From inside Task Exception");
-		}
-
+		
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
