@@ -161,7 +161,6 @@ namespace Stardust.Manager
                     DateTime.UtcNow);
 
                 _jobManager.AssignJobToWorkerNodes();
-                ExceptionCall();
             });
 
 			try
@@ -175,12 +174,7 @@ namespace Stardust.Manager
 
 			return Ok();
         }
-
-		private void ExceptionCall()
-		{
-			throw new Exception("From inside Task Exception");
-		}
-
+		
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
