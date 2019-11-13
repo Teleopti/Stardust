@@ -210,7 +210,7 @@ namespace Stardust.Node.Workers
 
 										  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
 															 _currentMessageToProcess);
-
+										  //IsWorking = false;
 										  break;
 
 
@@ -230,7 +230,7 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-
+										  //IsWorking = false;
 										  break;
 								  }
 							  }, TaskContinuationOptions.LongRunning);

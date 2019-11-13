@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Net;
 using System.Reflection;
+using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,6 +18,7 @@ using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
+using TimeoutException = System.TimeoutException;
 
 namespace NodeTest
 {
@@ -170,9 +172,21 @@ namespace NodeTest
             _workerWrapper.Init(_nodeConfigurationFake);
             _workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
+			Assert.IsTrue(_workerWrapper.IsWorking);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
-
+			
 			Assert.IsTrue(_workerWrapper.IsCancellationRequested);
+
+
+			var timeoutWaitingForIdle = DateTime.Now.AddSeconds(10);
+			while (_workerWrapper.IsWorking)
+			{
+				Thread.Sleep(100);
+				if(DateTime.Now > timeoutWaitingForIdle)
+					throw new TimeoutException("Timed out waiting for Node to become Idle in test");
+			}
+			
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 
 		[Test]
@@ -281,6 +295,7 @@ namespace NodeTest
 
 			triggeredOk.Should().Be.True();
 			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/done");
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 		
 		[Test]
@@ -319,6 +334,7 @@ namespace NodeTest
 			
 			triggeredOk.Should().Be.True();
 			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/done");
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 		
 		[Test]
