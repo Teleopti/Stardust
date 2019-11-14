@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using Manager.Integration.Test.Database;
-using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
-using Manager.Integration.Test.Params;
 using Manager.Integration.Test.Timers;
 using Newtonsoft.Json;
 using NodeTest.JobHandlers;
