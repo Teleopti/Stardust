@@ -101,6 +101,7 @@
     <Compile Include="Helpers\JobRepositoryCommandExecuter.cs" />
     <Compile Include="Helpers\NodeUriBuilderHelper.cs" />
     <Compile Include="HttpSender.cs" />
+    <Compile Include="IJobManager.cs" />
     <Compile Include="Interfaces\IHttpSender.cs" />
     <Compile Include="Interfaces\IJobRepository.cs" />
     <Compile Include="Interfaces\IWorkerNodeRepository.cs" />
