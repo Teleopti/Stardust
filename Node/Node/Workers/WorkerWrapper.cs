@@ -162,7 +162,6 @@ namespace Stardust.Node.Workers
         {
             object jobQueueItem = null;
             TrySendJobFaultedToManagerTimer faultedTimer;
-
             try
             {
                 if (IsWorking) return;
@@ -179,10 +178,10 @@ namespace Stardust.Node.Workers
                     return;
                 }
 
-			    //-----------------------------------------------------
-			    // Clear faulted timer.
-			    //-----------------------------------------------------
-			    faultedTimer = _trySendJobFaultedStatusToManagerTimer as TrySendJobFaultedToManagerTimer;
+                //-----------------------------------------------------
+                // Clear faulted timer.
+                //-----------------------------------------------------
+                faultedTimer = _trySendJobFaultedStatusToManagerTimer as TrySendJobFaultedToManagerTimer;
 
 			    if (faultedTimer != null)
 			    {
@@ -197,11 +196,11 @@ namespace Stardust.Node.Workers
                 return;
             }
 
-            //----------------------------------------------------
-            // Define task.
-            //----------------------------------------------------
+    //----------------------------------------------------
+    // Define task.
+    //----------------------------------------------------
 
-            Task = new Task(() =>
+    Task = new Task(() =>
 							{
 								_handler.Invoke(jobQueueItem,
 												CancellationTokenSource,
