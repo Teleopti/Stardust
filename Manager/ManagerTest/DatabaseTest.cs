@@ -7,7 +7,7 @@ namespace ManagerTest
 	{
 		private DatabaseHelper _databaseHelper;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUpAttribute]
 		public void BaseTestTestFixtureSetup()
 		{
 			_databaseHelper = new DatabaseHelper();

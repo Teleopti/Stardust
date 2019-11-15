@@ -10,7 +10,7 @@ namespace NodeTest
 	[TestFixture]
 	public class JobHandlersTests
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUpAttribute]
 		public void TestFixtureSetUp()
 		{
 			var builder = new ContainerBuilder();

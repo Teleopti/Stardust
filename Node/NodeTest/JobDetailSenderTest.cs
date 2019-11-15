@@ -17,7 +17,7 @@ namespace NodeTest
 		private FakeHttpSender _httpSenderFake;
 		public JobDetailSender Target;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUpAttribute]
 		public void TestFixtureSetup()
 		{
 			_nodeConfiguration = new NodeConfiguration(

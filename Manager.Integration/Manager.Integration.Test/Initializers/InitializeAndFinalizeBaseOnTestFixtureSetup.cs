@@ -76,7 +76,7 @@ namespace Manager.Integration.Test.Initializers
 			
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUpAttribute]
 		public virtual void TestFixtureSetUp()
 		{
 			HttpSender = new HttpSender();
@@ -121,7 +121,7 @@ namespace Manager.Integration.Test.Initializers
 			}
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDownAttribute]
 		public virtual void TestFixtureTearDown()
         {
             AppDomainTask?.Dispose();
