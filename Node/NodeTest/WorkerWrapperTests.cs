@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.ServiceProcess;
@@ -115,10 +116,43 @@ namespace NodeTest
             _workerWrapper.Init(_nodeConfigurationFake);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
-		}
+            _workerWrapper.IsWorking.Should().Be.True();
+            while (true)
+            {
+                if (!_workerWrapper.IsWorking)
+                    break;
 
-		[Test]
-		public void ShouldBeAbleToStartJob()
+                Thread.Sleep(100);
+            }
+            _workerWrapper.IsWorking.Should().Be.False();
+            _sendJobFaultedTimer.AggregateExceptionToSend.InnerExceptions.First().Message.Should().Contain("Exception of type 'System.Exception' was thrown.");
+            _sendJobFaultedTimer.ErrorOccured.Should().Not.Be(null);
+        }
+
+        [Test]
+        public void ShouldHandleStartJobFailingEarly()
+        {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                _nodeStartupNotification,
+                _pingToManagerFake,
+                _sendJobDoneTimer,
+                _sendJobCanceledTimer,
+                _sendJobFaultedTimer,
+                _trySendJobDetailToManagerTimer,
+                _jobDetailSender,
+                _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            var result = _workerWrapper.ValidateStartJob(_jobDefinition);
+            result.IsWorking.Should().Be.False();
+            result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+            _workerWrapper.IsWorking.Should().Be.False();
+            _workerWrapper.StartJob(_jobDefinition);
+           
+        }
+
+
+        [Test]
+		public void ShouldBeAbleToExecuteJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeStartupNotification,
@@ -133,8 +167,22 @@ namespace NodeTest
             var result = _workerWrapper.ValidateStartJob(_jobDefinition);
             result.IsWorking.Should().Be.False();
             result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
-			_workerWrapper.StartJob(_jobDefinition);
-		}
+            _workerWrapper.IsWorking.Should().Be.False();
+            _workerWrapper.StartJob(_jobDefinition);
+            _workerWrapper.IsWorking.Should().Be.True();
+
+            var finishedOk = _workerWrapper.Task.Wait(TimeSpan.FromSeconds(5));
+
+            finishedOk.Should().Be.True();
+            while (true)
+            {
+                if (!_workerWrapper.IsWorking)
+                    break;
+
+                Thread.Sleep(100);
+            }
+            _workerWrapper.Task.Status.Should().Be(TaskStatus.RanToCompletion);
+        }
 		
 		[Test]
 		public void ShouldReturnIsWorkingWhenJobAssigned()

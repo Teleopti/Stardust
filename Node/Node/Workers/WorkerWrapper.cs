@@ -159,33 +159,51 @@ namespace Stardust.Node.Workers
 		}
 
 		public void StartJob(JobQueueItemEntity jobQueueItemEntity)
-		{
-			if (IsWorking) return;
-			IsWorking = true;
-			CancellationTokenSource = new CancellationTokenSource();
+        {
+            object jobQueueItem = null;
+            TrySendJobFaultedToManagerTimer faultedTimer;
 
-			var typ = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
-			var deSer = JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized,
-													  typ);
-			//-----------------------------------------------------
-			// Clear faulted timer.
-			//-----------------------------------------------------
-			var faultedTimer =
-				_trySendJobFaultedStatusToManagerTimer as TrySendJobFaultedToManagerTimer;
+            try
+            {
+                if (IsWorking) return;
+			    IsWorking = true;
+			    CancellationTokenSource = new CancellationTokenSource();
 
-			if (faultedTimer != null)
-			{
-				faultedTimer.AggregateExceptionToSend = null;
-				faultedTimer.ErrorOccured = null;
-			}
+			    var typ = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
+			    jobQueueItem = JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized,
+													      typ);
+                if (jobQueueItem == null)
+                {
+                    Logger.ErrorFormat($"Job Deserializing failed. JobId: {jobQueueItemEntity.JobId}");
+                    IsWorking = false;
+                    return;
+                }
 
-			//----------------------------------------------------
-			// Define task.
-			//----------------------------------------------------
+			    //-----------------------------------------------------
+			    // Clear faulted timer.
+			    //-----------------------------------------------------
+			    faultedTimer = _trySendJobFaultedStatusToManagerTimer as TrySendJobFaultedToManagerTimer;
 
-			Task = new Task(() =>
+			    if (faultedTimer != null)
+			    {
+				    faultedTimer.AggregateExceptionToSend = null;
+				    faultedTimer.ErrorOccured = null;
+			    }
+            }
+            catch (Exception exception)
+            {
+                Logger.ErrorFormat($"StartJob has thrown exception before starting job '{jobQueueItemEntity?.Name}': {exception.Message}");
+                IsWorking = false;
+                return;
+            }
+
+            //----------------------------------------------------
+            // Define task.
+            //----------------------------------------------------
+
+            Task = new Task(() =>
 							{
-								_handler.Invoke(deSer,
+								_handler.Invoke(jobQueueItem,
 												CancellationTokenSource,
 										(message) =>
 										{
@@ -230,7 +248,6 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-										  //IsWorking = false;
 										  break;
 								  }
 							  }, TaskContinuationOptions.LongRunning);
