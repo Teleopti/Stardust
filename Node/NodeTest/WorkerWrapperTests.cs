@@ -130,7 +130,7 @@ namespace NodeTest
         }
 
         [Test]
-        public void ShouldHandleStartJobFailingEarly()
+        public void ShouldHandleStartJobWithNonSerializableJobQueueItem()
         {
             _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
                 _nodeStartupNotification,
@@ -143,13 +143,13 @@ namespace NodeTest
                 _now);
             _workerWrapper.Init(_nodeConfigurationFake);
             var result = _workerWrapper.ValidateStartJob(_jobDefinition);
+            _jobDefinition.Serialized = "";
             result.IsWorking.Should().Be.False();
             result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
             _workerWrapper.IsWorking.Should().Be.False();
             _workerWrapper.StartJob(_jobDefinition);
-           
+            _workerWrapper.IsWorking.Should().Be.False();
         }
-
 
         [Test]
 		public void ShouldBeAbleToExecuteJob()
