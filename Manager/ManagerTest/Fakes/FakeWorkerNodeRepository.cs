@@ -36,7 +36,7 @@ namespace ManagerTest.Fakes
 
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 		{
-			throw new NotImplementedException();
+			return new List<string>();
 		}
 	}
 }

@@ -46,6 +46,7 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -90,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ManagerControllerValidationWithCustomJobManagerTestAttribute.cs" />
     <Compile Include="Attributes\ManagerControllerValidationTestAttribute.cs" />
     <Compile Include="Database\DatabaseCreator.cs" />
     <Compile Include="Database\DatabaseHelper.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Database\ExecuteSql.cs" />
     <Compile Include="Database\SchemaVersionInformation.cs" />
     <Compile Include="Fakes\FakeHttpSender.cs" />
+    <Compile Include="Fakes\FakeJobManager.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
     <Compile Include="Fakes\FakeLogger.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
@@ -108,11 +111,12 @@
     <Compile Include="JobManagerTest.cs" />
     <Compile Include="Attributes\JobTestsAttribute.cs" />
     <Compile Include="ManagerConfigurationTest.cs" />
+    <Compile Include="ManagerControllerValidationTest.cs" />
     <Compile Include="ManagerModuleTest.cs" />
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="Attributes\ManagerOperationTestsAttribute.cs" />
     <Compile Include="Attributes\BaseTestsAttribute.cs" />
-    <Compile Include="ManagerControllerValidationTest.cs" />
+    <Compile Include="ManagerControllerValidationWithCustomJobManagerTest.cs" />
     <Compile Include="NodeUriBuilderHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PurgeTimerTest.cs" />
