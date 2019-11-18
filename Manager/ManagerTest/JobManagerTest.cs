@@ -39,7 +39,7 @@ namespace ManagerTest
 		private WorkerNode _workerNode2;
 		private FakeHttpSender FakeHttpSender => (FakeHttpSender) HttpSender;
 
-		[OneTimeSetUpAttribute]
+		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
 		{
 			_workerNode = new WorkerNode
@@ -206,12 +206,12 @@ namespace ManagerTest
 			JobManager.AssignJobToWorkerNodes();
 
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
-			job.Satisfies(job1 => job1.Started != null);
+			job.Satisfy(job1 => job1.Started != null);
 
 			JobManager.CancelJobByJobId(jobQueueItem.JobId);
 
 			job = JobManager.GetJobByJobId(jobQueueItem.JobId);
-			job.Satisfies(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
+			job.Satisfy(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
 
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
@@ -297,8 +297,8 @@ namespace ManagerTest
 			JobManager.AssignJobToWorkerNodes();
 
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
-			job.Satisfies(job1 => job1.Started != null);
-			job.Satisfies(job1 => job1.Ended == null);
+			job.Satisfy(job1 => job1.Started != null);
+			job.Satisfy(job1 => job1.Ended == null);
 
 			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(job.SentToWorkerNodeUri);
 

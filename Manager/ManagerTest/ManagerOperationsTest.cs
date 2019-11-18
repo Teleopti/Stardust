@@ -28,7 +28,7 @@ namespace ManagerTest
 
 		private WorkerNode _workerNode;
 
-		[OneTimeSetUpAttribute]
+		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
 		{
 			_workerNode = new WorkerNode
@@ -202,7 +202,7 @@ namespace ManagerTest
 			var okNegotiatedContentResult = actionResult as OkNegotiatedContentResult<Guid>;
 			var jobId = okNegotiatedContentResult.Content;
 
-			jobId.Satisfies(guid => guid != Guid.Empty);
+			jobId.Satisfy(guid => guid != Guid.Empty);
 		}
 
 		[Test]

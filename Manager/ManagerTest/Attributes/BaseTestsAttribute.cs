@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
 
 namespace ManagerTest.Attributes
 {
@@ -13,7 +12,7 @@ namespace ManagerTest.Attributes
 		private object _fixture;
 		private Type _fixtureType;
 
-		public void BeforeTest(ITest test)
+		public void BeforeTest(TestDetails test)
 		{
 			_fixture = test.Fixture;
 			_fixtureType = _fixture.GetType();
@@ -22,7 +21,7 @@ namespace ManagerTest.Attributes
 			injectMembers();
 		}
 
-		public void AfterTest(ITest test)
+		public void AfterTest(TestDetails test)
 		{
 		}
 
