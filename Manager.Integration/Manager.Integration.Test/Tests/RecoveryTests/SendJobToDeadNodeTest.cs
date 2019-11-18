@@ -13,12 +13,12 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	[TestFixture]
 	class SendJobToDeadNodeTest : InitializeAndFinalizeOneManagerAndNodes
 	{
-		public SendJobToDeadNodeTest():base(2)
+		public SendJobToDeadNodeTest():base(4)
 		{
 		}
 		
 		[Test]
-		public void ShouldHandleMultipleJobsUsingAllNodesAvailable()
+        public void ShouldHandleMultipleJobsUsingAllNodesAvailable()
 		{
 			var numberOfNodes = NumberOfNodes;
 			var startedTest = DateTime.UtcNow;
@@ -50,7 +50,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var jobQueueItems = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);	
 			jobQueueItems.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));
 			
-			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(75));
+			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(100));
 			
 			Assert.IsTrue(jobsFinishedWithoutTimeout, "Timeout on Finishing jobs");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == numberOfNodes, "There should be two nodes registered");
