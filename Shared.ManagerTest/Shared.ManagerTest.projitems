@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>ac024d88-a9c6-4114-ba28-43233721c7e8</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.ManagerTest</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BaseTestsAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\JobTestsAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ManagerControllerValidationTestAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ManagerControllerValidationWithCustomJobManagerTestAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ManagerOperationTestsAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DatabaseTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\DatabaseCreator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\DatabaseHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\DatabaseSchemaCreator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\DatabaseTasks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\ExecuteSql.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\SchemaVersionInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\FakeHttpSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\FakeJobManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\FakeJobRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\FakeLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\FakeWorkerNodeRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\JobPurgeTimerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)JobManagerTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerConfigurationTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerControllerValidationTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerControllerValidationWithCustomJobManagerTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerModuleTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerOperationsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeUriBuilderHelperTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PurgeTimerTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Database\WhoLock.sql" />
+  </ItemGroup>
+</Project>

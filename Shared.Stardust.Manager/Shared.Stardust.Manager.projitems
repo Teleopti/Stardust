@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8c7f6cff-4d2a-4435-9f0c-fdd7c98b6c2e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.Stardust.Manager</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\ManagerRouteConstans.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\NodeRouteConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DetectTransientSqlException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoggerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SqlDataReaderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalExceptionLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\JobRepositoryCommandExecuter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\NodeUriBuilderHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IJobManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IHttpSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IJobRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkerNodeRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JobManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JobRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Job.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JobDetail.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JobFailed.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JobQueueItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PrepareToStartJobResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WorkerNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Policies\HalfNodesAffinityPolicy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RetryPolicyProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SlimAssembliesResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\JobPurgeTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\NodePurgeTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Validations\ObjectValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Validations\Validator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WorkerNodeRepository.cs" />
+  </ItemGroup>
+</Project>

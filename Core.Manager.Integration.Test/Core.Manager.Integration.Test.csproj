@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Configurations>Debug;Release;DebugCore;ReleaseCore</Configurations>
+  </PropertyGroup>
+
+  <Import Project="..\Shared.Manager.Integration.Test\Shared.Manager.Integration.Test.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Manager.ConsoleHost\Core.Manager.ConsoleHost.csproj" />
+    <ProjectReference Include="..\Core.Manager.Integration.Test.Console.Host\Core.Manager.Integration.Test.Console.Host.csproj" />
+    <ProjectReference Include="..\Node\NodeConsoleHost\NodeConsoleHost.csproj" />
+    <ProjectReference Include="..\Node\NodeTest.JobHandlers\NodeTest.JobHandlers.csproj" />
+  </ItemGroup>
+
+</Project>

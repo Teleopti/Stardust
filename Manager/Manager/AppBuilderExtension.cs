@@ -3,6 +3,7 @@ using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
 using Autofac.Integration.WebApi;
+using log4net;
 using Owin;
 
 namespace Stardust.Manager
@@ -33,7 +34,7 @@ namespace Stardust.Manager
 				});
 
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new ManagerModule(managerConfiguration));
+
 #pragma warning disable 618
             builder.Update(lifetimeScope.ComponentRegistry);
 #pragma warning restore 618

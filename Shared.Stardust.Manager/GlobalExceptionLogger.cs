@@ -1,4 +1,5 @@
-﻿using System.Web.Http.ExceptionHandling;
+﻿
+using System.Web.Http.ExceptionHandling;
 using Stardust.Manager.Extensions;
 
 namespace Stardust.Manager

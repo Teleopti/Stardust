@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>47f6c72e-a005-43a0-b30a-e7587f507b86</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.Manager.Integration.Test</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\IntegrationControllerRouteConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\ManagerRouteConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\DatabaseHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\ManagerDbRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\SqlDataReaderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Database\SqlNotifier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpRequestManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\IntegrationControllerApiHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\JobHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ManagerUriBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializers\InitializeAndFinalizeOneManagerAndNodes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializers\InitializeAndFinalizeSixManagersAndSixNodes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Job.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JobDetail.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JobQueueItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Logging.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PerformanceTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WorkerNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Params\FailingJobParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Params\TestJobParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tasks\AppDomainTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\FunctionalTests\OneManagerAndNodesTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\FunctionalTests\OneManagerAndZeroNodesTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\LoadTests\SixManagersSixNodesLoadTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\RecoveryTests\DetectNodeFailureTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\RecoveryTests\RecoverFromNodeCrashTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tests\RecoveryTests\SendJobToDeadNodeTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\CheckTablesInManagerDbTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\SendJobEveryDurationTimer.cs" />
+  </ItemGroup>
+</Project>

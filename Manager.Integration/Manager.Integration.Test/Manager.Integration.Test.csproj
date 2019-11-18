@@ -38,6 +38,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugCore|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugCore\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseCore|AnyCPU'">
+    <OutputPath>bin\ReleaseCore\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.9.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.4.9.1\lib\net45\Autofac.dll</HintPath>
@@ -99,44 +120,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Constants\IntegrationControllerRouteConstants.cs" />
-    <Compile Include="Constants\ManagerRouteConstants.cs" />
-    <Compile Include="Database\ManagerDbRepository.cs" />
-    <Compile Include="Database\SqlDataReaderExtensions.cs" />
-    <Compile Include="Helpers\IntegrationControllerApiHelper.cs" />
-    <Compile Include="Helpers\HttpRequestManager.cs" />
-    <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
-    <Compile Include="Database\DatabaseHelper.cs" />
-    <Compile Include="Helpers\JobHelper.cs" />
-    <Compile Include="Helpers\ManagerUriBuilder.cs" />
-    <Compile Include="Initializers\InitializeAndFinalizeOneManagerAndNodes.cs" />
-    <Compile Include="Initializers\InitializeAndFinalizeSixManagersAndSixNodes.cs" />
-    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
-    <Compile Include="Models\Job.cs" />
-    <Compile Include="Models\JobDetail.cs" />
-    <Compile Include="Models\JobQueueItem.cs" />
-    <Compile Include="Models\Logging.cs" />
-    <Compile Include="Models\PerformanceTest.cs" />
-    <Compile Include="Models\WorkerNode.cs" />
-    <Compile Include="Tests\RecoveryTests\RecoverFromNodeCrashTest.cs" />
-    <Compile Include="Tests\RecoveryTests\DetectNodeFailureTest.cs" />
-    <Compile Include="Database\SqlNotifier.cs" />
-    <Compile Include="Tests\FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Tests\RecoveryTests\SendJobToDeadNodeTest.cs" />
-    <Compile Include="Tests\LoadTests\SixManagersSixNodesLoadTests.cs" />
-    <Compile Include="Tasks\AppDomainTask.cs" />
-    <Compile Include="Tests\FunctionalTests\OneManagerAndNodesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Params\FailingJobParams.cs" />
-    <Compile Include="Params\TestJobParams.cs" />
-    <Compile Include="Timers\CheckTablesInManagerDbTimer.cs" />
-    <Compile Include="Timers\SendJobEveryDurationTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -172,6 +162,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <Import Project="..\..\Shared.Manager.Integration.Test\Shared.Manager.Integration.Test.projitems" Label="Shared" />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
