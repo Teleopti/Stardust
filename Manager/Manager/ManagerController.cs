@@ -12,13 +12,13 @@ namespace Stardust.Manager
 {
 	public class ManagerController : ApiController
 	{
-		private readonly JobManager _jobManager;
+		private readonly IJobManager _jobManager;
 		private readonly NodeManager _nodeManager;
 
 		private readonly Validator _validator;
 
 		public ManagerController(NodeManager nodeManager,
-		                         JobManager jobManager,
+                                 IJobManager jobManager,
 		                         Validator validator)
 		{
 			_nodeManager = nodeManager;
@@ -97,7 +97,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 
-			Task.Run(() =>
+		    Task.Run(() =>
 			{
 				this.Log().InfoWithLineNumber(
                     $"{WhoAmI(Request)}: Received heartbeat from Node. Node Uri : ( {workerNodeUri} )");
@@ -105,8 +105,8 @@ namespace Stardust.Manager
 				_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
 				
 			});
-
-			return Ok();
+         
+            return Ok();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobSucceed)]
@@ -114,8 +114,8 @@ namespace Stardust.Manager
 		{			
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
-			
-			Task.Run(() =>
+
+            var task = Task.Run(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
@@ -129,7 +129,16 @@ namespace Stardust.Manager
 				_jobManager.AssignJobToWorkerNodes();
 			});
 
-			return Ok();
+            try
+            {
+                task.Wait();
+            }
+            catch (Exception exception)
+            {
+                return InternalServerError(exception);
+            }
+
+            return Ok();
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
@@ -137,33 +146,48 @@ namespace Stardust.Manager
 		{
 			var isValidRequest = _validator.ValidateObject(jobFailed);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
-			
-			Task.Run(() =>
-			{
-				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().InfoWithLineNumber(
-                    $"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri} )");
+			var task = Task.Run(() =>
+            {
+                var workerNodeUri = Request.RequestUri?.GetLeftPart(UriPartial.Authority);
 
-				var progress = new JobDetail
-				{
-					JobId = jobFailed.JobId,
-					Created = DateTime.UtcNow,
-					Detail = jobFailed.AggregateException.ToString()
-				};
+                this.Log().ErrorWithLineNumber(
+                    $"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri??"Unknown Uri"} )");
 
-				_jobManager.CreateJobDetail(progress);
+                var progress = new JobDetail
+                {
+                    JobId = jobFailed.JobId,
+                    Created = DateTime.UtcNow,
+                    Detail = jobFailed.AggregateException?.ToString()??"No Exception specified for job"
+                };
 
-				_jobManager.UpdateResultForJob(jobFailed.JobId,
-				                              "Failed",
-											  DateTime.UtcNow);
-				
-				_jobManager.AssignJobToWorkerNodes();
-			});
+                _jobManager.CreateJobDetail(progress);
 
-			return Ok();
-		}
+                _jobManager.UpdateResultForJob(jobFailed.JobId,
+                    "Failed",
+                    DateTime.UtcNow);
 
+                _jobManager.AssignJobToWorkerNodes();
+            });
+
+            try
+            {
+                var taskIsSuccessful = task.Wait(TimeSpan.FromMinutes(1));
+                if (!taskIsSuccessful)
+                {
+                    var aggregationException = new AggregateException(
+                        new TimeoutException($"Timeout while executing {nameof(JobFailed)}"));
+                    return InternalServerError(aggregationException);
+                }
+            }
+            catch (Exception exception)
+            {
+                return InternalServerError(exception);
+            }
+
+            return Ok();
+        }
+		
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
@@ -184,8 +208,8 @@ namespace Stardust.Manager
 				_jobManager.AssignJobToWorkerNodes();
 			});
 
-			return Ok();
-		}
+            return Ok();
+        }
 
 
 		[HttpPost, Route(ManagerRouteConstants.JobDetail)]
@@ -197,9 +221,9 @@ namespace Stardust.Manager
 				if (!isValidRequest.Success) continue;
 				
 				Task.Run(() =>
-				                      {
-					                      _jobManager.CreateJobDetail(detail);
-				                      });
+			     {
+				      _jobManager.CreateJobDetail(detail);
+                });
 			}
 
 			return Ok();

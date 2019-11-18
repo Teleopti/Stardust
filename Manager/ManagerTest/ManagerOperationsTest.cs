@@ -24,7 +24,7 @@ namespace ManagerTest
 		public FakeHttpSender HttpSender;
 		public ManagerConfiguration ManagerConfiguration;
 		public TestHelper TestHelper;
-		public JobManager JobManager;
+		public IJobManager JobManager;
 
 		private WorkerNode _workerNode;
 

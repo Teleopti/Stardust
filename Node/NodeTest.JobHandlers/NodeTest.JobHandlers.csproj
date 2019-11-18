@@ -48,6 +48,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrashingJobParams.cs" />
+    <Compile Include="CrashingJobCode.cs" />
+    <Compile Include="CrashingJobWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FailingJobCode.cs" />
     <Compile Include="FailingJobParams.cs" />
