@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5835f5f3-05d9-470d-9f63-1ac3d1972044</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.Stardust.Node</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\ManagerRouteConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\NodeRouteConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\JobDetailEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\JobFailedEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\JobQueueItemEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\PrepareToStartJobResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoggerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\NodeConfigurationExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IHttpSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IInvokeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWorkerWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeConfigurationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeStarter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReturnObjects\ExitApplication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\IPingToManagerTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\PingToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TimerExceptionLoggerStrategyHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TrySendJobCanceledToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TrySendJobDetailToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TrySendJobDoneStatusToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TrySendJobFaultedToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TrySendNodeStartUpNotificationToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Timers\TrySendStatusToManagerTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\HttpSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\InvokeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\JobDetailSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\Now.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\ValidateStartJobResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\WorkerWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Workers\WorkerWrapperService.cs" />
+  </ItemGroup>
+</Project>

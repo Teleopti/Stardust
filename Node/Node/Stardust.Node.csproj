@@ -30,4 +30,5 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <Import Project="..\..\Shared.Stardust.Node\Shared.Stardust.Node.projitems" Label="Shared" />
 </Project>

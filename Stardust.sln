@@ -54,14 +54,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.ManagerTest", "Core.Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.Integration.Test", "Core.Manager.Integration.Test\Core.Manager.Integration.Test.csproj", "{06763290-BD4D-4385-89C6-DACFD0A0FDE2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestsDotNetStandard", "TestsDotNetStandard", "{7FAFA4AF-8DAA-43BB-9244-94B86A47CE89}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Stardust.Node", "Shared.Stardust.Node\Shared.Stardust.Node.shproj", "{5835F5F3-05D9-470D-9F63-1AC3D1972044}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Standard.Stardust.Manager", "Standard.Stardust.Manager\Standard.Stardust.Manager.csproj", "{F859D766-9618-4994-8977-CDF9BAAFF683}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Stardust.Node", "Core.Stardust.Node\Core.Stardust.Node.csproj", "{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Shared.Manager.Integration.Test.Console.Host\Shared.Manager.Integration.Test.Console.Host.projitems*{43000469-2cae-4fb4-a424-085d75d673e3}*SharedItemsImports = 13
 		Shared.Manager.Integration.Test\Shared.Manager.Integration.Test.projitems*{47f6c72e-a005-43a0-b30a-e7587f507b86}*SharedItemsImports = 13
+		Shared.Stardust.Node\Shared.Stardust.Node.projitems*{5835f5f3-05d9-470d-9f63-1ac3d1972044}*SharedItemsImports = 13
 		Shared.Stardust.Manager\Shared.Stardust.Manager.projitems*{7bf4e937-f4ad-4b2e-bbc2-96ac56765b7d}*SharedItemsImports = 4
 		Shared.Stardust.Manager\Shared.Stardust.Manager.projitems*{8c7f6cff-4d2a-4435-9f0c-fdd7c98b6c2e}*SharedItemsImports = 13
 		Shared.Manager.Integration.Test.Console.Host\Shared.Manager.Integration.Test.Console.Host.projitems*{8fc65e40-c783-48d2-9b50-baf7a7ec8298}*SharedItemsImports = 4
@@ -173,10 +174,14 @@ Global
 		{06763290-BD4D-4385-89C6-DACFD0A0FDE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06763290-BD4D-4385-89C6-DACFD0A0FDE2}.ReleaseCore|Any CPU.ActiveCfg = ReleaseCore|Any CPU
 		{06763290-BD4D-4385-89C6-DACFD0A0FDE2}.ReleaseCore|Any CPU.Build.0 = ReleaseCore|Any CPU
-		{F859D766-9618-4994-8977-CDF9BAAFF683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F859D766-9618-4994-8977-CDF9BAAFF683}.DebugCore|Any CPU.ActiveCfg = DebugCore|Any CPU
-		{F859D766-9618-4994-8977-CDF9BAAFF683}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F859D766-9618-4994-8977-CDF9BAAFF683}.ReleaseCore|Any CPU.ActiveCfg = ReleaseCore|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.DebugCore|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.DebugCore|Any CPU.Build.0 = Debug|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.ReleaseCore|Any CPU.ActiveCfg = Release|Any CPU
+		{F3908DB0-A17D-49BB-AA50-724DFE1B4A88}.ReleaseCore|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
