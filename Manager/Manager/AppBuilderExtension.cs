@@ -33,12 +33,6 @@ namespace Stardust.Manager
 					inner.UseWebApi(config);
 				});
 
-			var builder = new ContainerBuilder();
-
-#pragma warning disable 618
-            builder.Update(lifetimeScope.ComponentRegistry);
-#pragma warning restore 618
-
             //to start the timers etc
 			lifetimeScope.Resolve<ManagerController>();
 		}

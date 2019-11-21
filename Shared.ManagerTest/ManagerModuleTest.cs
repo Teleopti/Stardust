@@ -19,8 +19,8 @@ namespace ManagerTest
 
 			ManagerConfiguration config = new ManagerConfiguration(
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 1, 1, 1,1);
-
-			containerBuilder.RegisterModule(new ManagerModule(config));
+            containerBuilder.RegisterInstance(config).As<ManagerConfiguration>();
+			containerBuilder.RegisterModule(new ManagerModule());
 			_container = containerBuilder.Build();
 		}
 

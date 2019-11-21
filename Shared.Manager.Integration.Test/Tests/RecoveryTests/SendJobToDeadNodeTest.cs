@@ -50,7 +50,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var jobQueueItems = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);	
 			jobQueueItems.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));
 			
-			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(100));
+			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(120));
 			
 			Assert.IsTrue(jobsFinishedWithoutTimeout, "Timeout on Finishing jobs");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == numberOfNodes, "There should be two nodes registered");

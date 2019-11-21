@@ -11,17 +11,9 @@ namespace Stardust.Manager
 {
 	public class ManagerModule : Module
 	{
-		private readonly ManagerConfiguration _managerConfiguration;
-
-		public ManagerModule(ManagerConfiguration managerConfiguration)
-		{
-			_managerConfiguration = managerConfiguration;
-		}
-
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterInstance(_managerConfiguration).As<ManagerConfiguration>().SingleInstance();
-			builder.RegisterType<NodeManager>().SingleInstance();
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<NodeManager>().SingleInstance();
             builder.RegisterType<JobManager>().As<IJobManager>().SingleInstance();
             builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<JobPurgeTimer>().SingleInstance();

@@ -56,6 +56,7 @@ namespace Manager.Integration.Test.Initializers
 			var containerBuilder = new ContainerBuilder();
 
 			Container = containerBuilder.Build();
+
 		}
 
 		protected IContainer Container { get; set; }
@@ -76,7 +77,7 @@ namespace Manager.Integration.Test.Initializers
 			
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public virtual void TestFixtureSetUp()
 		{
 			HttpSender = new HttpSender();
@@ -121,7 +122,7 @@ namespace Manager.Integration.Test.Initializers
 			}
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public virtual void TestFixtureTearDown()
         {
             AppDomainTask?.Dispose();

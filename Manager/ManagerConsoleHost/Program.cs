@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web.Http;
@@ -71,11 +73,16 @@ namespace ManagerConsoleHost
 				int.Parse(ConfigurationManager.AppSettings["purgeJobsIntervalHours"]),
 				int.Parse(ConfigurationManager.AppSettings["PurgeJobsOlderThanHours"]),
 				int.Parse(ConfigurationManager.AppSettings["PurgeNodesIntervalHours"]));
-			
-			var container = new ContainerBuilder().Build();
-			var config = new HttpConfiguration();
 
-			using (WebApp.Start(managerAddress,
+            var builder = new ContainerBuilder();
+            builder.RegisterInstance(managerConfiguration).As<ManagerConfiguration>();
+
+            var assembly = typeof(ManagerController).Assembly;
+            builder.RegisterAssemblyModules(assembly);
+            var container = builder.Build();
+
+			var config = new HttpConfiguration();
+            using (WebApp.Start(managerAddress,
 			                    appBuilder =>
 			                    {
 				                    string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
@@ -88,7 +95,7 @@ namespace ManagerConsoleHost
 				                    owinListener.SetRequestQueueLimit(int.MaxValue);
 				                    owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
 
-				                    appBuilder.UseAutofacMiddleware(container);
+                                    appBuilder.UseAutofacMiddleware(container);
 
 				                    // Configure Web API for self-host. 
 				                    appBuilder.UseStardustManager(managerConfiguration,
