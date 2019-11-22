@@ -15,7 +15,7 @@ namespace Stardust.Node
 {
 	public class NodeStarter
 	{
-		private readonly ILog _logger = LogManager.GetLogger(typeof (NodeStarter));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(NodeStarter));
 
 		private readonly CancellationTokenSource _quitEvent = new CancellationTokenSource();
 

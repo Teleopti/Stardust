@@ -18,22 +18,16 @@ namespace Core.Stardust.Node
 {
     public class NodeStarter
     {
-        private readonly ILog _logger = LogManager.GetLogger(typeof (global::Stardust.Node.NodeStarter));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(NodeStarter));
         private readonly CancellationTokenSource _quitEvent = new CancellationTokenSource();
         public string WhoAmI { get; set; }
 
         public IConfiguration Configuration { get; }
         public ILifetimeScope AutofacContainer { get; }
 
-        public NodeStarter(IHostEnvironment hostEnvironment, IContainer container)
+        public NodeStarter(IContainer container)
         {
             AutofacContainer = container;
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(hostEnvironment.ContentRootPath)
-                //    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                //    .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
         }
 
 
@@ -45,7 +39,7 @@ namespace Core.Stardust.Node
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
                     webHostBuilder.UseUrls(nodeAddress);
-                    webHostBuilder.UseStartup<NodeStarter>();
+                    webHostBuilder.UseStartup<Startup>();
                     webHostBuilder.UseKestrel();
                 });
             
@@ -76,25 +70,39 @@ namespace Core.Stardust.Node
         }
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public class Startup
         {
-            services.AddMvc().AddMvcOptions(_ => new MvcOptions
+            public IConfigurationRoot Configuration { get; }
+
+            public Startup(IHostEnvironment hostEnvironment)
             {
-                EnableEndpointRouting = false
-            });
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(hostEnvironment.ContentRootPath)
+                    //    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    //    .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables();
+                Configuration = builder.Build();
+            }
+
+            // This method gets called by the runtime. Use this method to add services to the container.
+            // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+            public void ConfigureServices(IServiceCollection services)
+            {
+                services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
+            }
+
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            {
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                }
+                app.UseMvc();
+            }
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseMvc();
-        }
+        
 
 
     }

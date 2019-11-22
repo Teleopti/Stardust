@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using System.Reflection;
 using Autofac;
+using Core.Stardust.Node;
 using log4net;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Configuration;
@@ -8,11 +10,11 @@ using Microsoft.Extensions.Hosting;
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.Extensions;
-using NodeStarter = Core.Stardust.Node.NodeStarter;
+
 
 namespace Core.NodeConsoleTest
 {
-    class Program
+    public class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
@@ -34,24 +36,24 @@ namespace Core.NodeConsoleTest
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-		
-			//var nodeConfig = new NodeConfiguration(
-			//	new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-			//	Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-			//	int.Parse(ConfigurationManager.AppSettings["Port"]),
-			//	ConfigurationManager.AppSettings["NodeName"],
-			//	int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]),
-			//	int.Parse(ConfigurationManager.AppSettings["SendJobDetailToManagerMilliSeconds"]), 
-   //             bool.Parse(ConfigurationManager.AppSettings["EnableGc"]
-			//	);
 
             var nodeConfig = new NodeConfiguration(
-                new Uri("http://localhost:9001/StardustDashboard/"), 
-               typeof(WorkerModule).Assembly,
-               14100 , 
-               "Node1",
-               20,2000
-               ,true );
+                new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
+                Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                int.Parse(ConfigurationManager.AppSettings["Port"]),
+                ConfigurationManager.AppSettings["NodeName"],
+                int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]),
+                int.Parse(ConfigurationManager.AppSettings["SendJobDetailToManagerMilliSeconds"]),
+                bool.Parse(ConfigurationManager.AppSettings["EnableGc"]
+                ));
+
+            //var nodeConfig = new NodeConfiguration(
+            //    new Uri("http://localhost:9001/StardustDashboard/"), 
+            //   typeof(WorkerModule).Assembly,
+            //   14100 , 
+            //   "Node1",
+            //   20,2000
+            //   ,true );
 
 
 			WhoAmI = $"[NODE CONSOLE HOST ( {nodeConfig.NodeName}, {nodeConfig.BaseAddress} ), {Environment.MachineName.ToUpper()}]";
@@ -67,13 +69,7 @@ namespace Core.NodeConsoleTest
 			builder.RegisterModule<NodeModule>();
 			Container = builder.Build();
 
-            IHostEnvironment hostEnv = new HostingEnvironment()
-            {
-                
-            };
-
-
-			NodeStarter = new NodeStarter(hostEnv, Container);
+			NodeStarter = new NodeStarter(Container);
 
 
             _ = NodeStarter.Start(nodeConfig);

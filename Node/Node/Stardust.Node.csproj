@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Stardust.Node</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Configurations>Debug;Release;DebugCore;ReleaseCore</Configurations>
+    <Configurations>Debug;Release;DebugCore;ReleaseCore;DebugAll;ReleaseAll</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="GlobalExceptionLogger.cs" />
