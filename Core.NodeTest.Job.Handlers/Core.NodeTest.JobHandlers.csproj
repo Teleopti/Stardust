@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Core.NodeTestJobHandlers</RootNamespace>
+  </PropertyGroup>
+
+  <Import Project="..\Shared.NodeTest.JobHandlers\Shared.NodeTest.JobHandlers.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Stardust.Node\Core.Stardust.Node.csproj" />
+  </ItemGroup>
+
+</Project>

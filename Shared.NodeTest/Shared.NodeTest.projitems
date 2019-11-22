@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>44897c2a-c8cf-4752-a994-a2a090e0fdf3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.NodeTest</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\FakeHttpSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\InvokeHandlers\LongRunningInvokeHandlerFake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\InvokeHandlers\ShortRunningInvokeHandlerFake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\InvokeHandlers\ThrowExceptionInvokeHandlerFake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\Timers\NodeStartupNotificationToManagerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\Timers\PingToManagerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\Timers\SendJobCanceledTimerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\Timers\SendJobDoneTimerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\Timers\SendJobDoneWithEventTriggerTimerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\Timers\SendJobFaultedTimerFake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Fakes\WorkerWrapperServiceFake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JobDetailSenderTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JobHandlersTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MutableNow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeConfigurationTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeControllerTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NodeModuleTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WorkerWrapperTests.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>53700344-1771-49d2-9e53-5e8a4709c317</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.NodeTest.JobHandlers</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CrashingJobCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CrashingJobParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CrashingJobWorker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FailingJobCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FailingJobParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FailingJobWorker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestJobCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestJobParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestJobProgress.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestJobWorker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestReportProgressJobCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestReportProgressJobParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestReportProgressJobProgress.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestReportProgressJobWorker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WorkerModule.cs" />
+  </ItemGroup>
+</Project>

@@ -41,7 +41,7 @@ namespace Stardust.Node
             }
 
             var nodeAddress = $"http://+:{nodeConfiguration.BaseAddress.Port}/";
-            IWebHostBuilder builder = new WebHostBuilder()
+            IWebHostBuilder builder =  new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
                     services.AddAutofac();

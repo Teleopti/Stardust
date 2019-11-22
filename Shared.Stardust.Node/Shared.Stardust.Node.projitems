@@ -25,7 +25,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)NodeConfigurationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NodeController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NodeModule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NodeStarter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReturnObjects\ExitApplication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Timers\IPingToManagerTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Timers\PingToManagerTimer.cs">

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -7,9 +7,13 @@
     <StartupObject />
   </PropertyGroup>
 
-  <Import Project="..\Shared.Stardust.Node\Shared.Stardust.Node.projitems" Label="Shared" />
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
+    <ProjectReference Include="..\Node\Node\Stardust.Node.csproj" />
   </ItemGroup>
+
 </Project>

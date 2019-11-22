@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.NodeTest.Job.Handlers\Core.NodeTest.JobHandlers.csproj" />
+    <ProjectReference Include="..\Core.Stardust.Node\Core.Stardust.Node.csproj" />
+  </ItemGroup>
+
+</Project>
