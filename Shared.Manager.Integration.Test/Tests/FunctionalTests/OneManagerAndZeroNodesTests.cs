@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using Manager.Integration.Test.Database;
-using Manager.Integration.Test.Helpers;
-using Manager.Integration.Test.Initializers;
-using Manager.Integration.Test.Timers;
+using Manager.IntegrationTest.Database;
+using Manager.IntegrationTest.Helpers;
+using Manager.IntegrationTest.Initializers;
+using Manager.IntegrationTest.Timers;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.Tests.FunctionalTests
+namespace Manager.IntegrationTest.Tests.FunctionalTests
 {
 	[TestFixture]
 	public class OneManagerAndZeroNodesTests : InitialzeAndFinalizeOneManagerAndZeroNodes

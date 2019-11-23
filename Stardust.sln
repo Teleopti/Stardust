@@ -10,25 +10,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA01BA
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stardust.Node", "Node\Node\Stardust.Node.csproj", "{7B0DDB7C-6D8E-453D-9785-F5651756B169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stardust.Node", "Node\Stardust.Node.csproj", "{7B0DDB7C-6D8E-453D-9785-F5651756B169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest.JobHandlers", "Node\NodeTest.JobHandlers\NodeTest.JobHandlers.csproj", "{3D7D71B6-4676-498C-B148-447A5FC5F3A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest.JobHandlers", "NodeTest.JobHandlers\NodeTest.JobHandlers.csproj", "{3D7D71B6-4676-498C-B148-447A5FC5F3A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest", "Node\NodeTest\NodeTest.csproj", "{D851725E-D126-4FF1-A79E-B4B874F4531F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeTest", "NodeTest\NodeTest.csproj", "{D851725E-D126-4FF1-A79E-B4B874F4531F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeConsoleHost", "Node\NodeConsoleHost\NodeConsoleHost.csproj", "{3CFC869E-8E1D-4B47-845A-500041AD4DEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Node.ConsoleHost", "NodeConsoleHost\Node.ConsoleHost.csproj", "{3CFC869E-8E1D-4B47-845A-500041AD4DEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stardust.Manager", "Manager\Manager\Stardust.Manager.csproj", "{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerConsoleHost", "ManagerConsoleHost\ManagerConsoleHost.csproj", "{489535D5-A3F2-4877-81B7-94ADB7BD320B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerConsoleHost", "Manager\ManagerConsoleHost\ManagerConsoleHost.csproj", "{489535D5-A3F2-4877-81B7-94ADB7BD320B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerTest", "ManagerTest\ManagerTest.csproj", "{FD3D1B9B-2573-46C2-B699-73E0F119581D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerTest", "Manager\ManagerTest\ManagerTest.csproj", "{FD3D1B9B-2573-46C2-B699-73E0F119581D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.IntegrationTest", "Manager.IntegrationTest\Manager.IntegrationTest.csproj", "{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.Test", "Manager.Integration\Manager.Integration.Test\Manager.Integration.Test.csproj", "{B826FD46-436A-4EA9-BFB9-7BAAE271BC55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.IntegrationTest.WPF", "Manager.IntegrationTest.WPF\Manager.IntegrationTest.WPF.csproj", "{43082828-3D79-483F-ABF8-9994B4B44FFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.Integration.Test.WPF", "Manager.Integration\Manager.Integration.Test.WPF\Manager.Integration.Test.WPF.csproj", "{43082828-3D79-483F-ABF8-9994B4B44FFF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.IntegrationTest.Console.Host", "Manager.Integration\Manager.Integration.Tests.Console.Host\Manager.IntegrationTest.Console.Host.csproj", "{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manager.IntegrationTest.ConsoleHost", "Manager.IntegrationTest.ConsoleHost\Manager.IntegrationTest.ConsoleHost.csproj", "{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestsDotNetFramework", "TestsDotNetFramework", "{270CCF4D-CA8B-4435-9A75-7115BD4267B4}"
 EndProject
@@ -38,15 +36,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestsDotNetCore", "TestsDot
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedTests", "SharedTests", "{E3CD1D4D-97F5-4F9F-804B-57EA55BAD51D}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Manager.Integration.Test", "Shared.Manager.Integration.Test\Shared.Manager.Integration.Test.shproj", "{47F6C72E-A005-43A0-B30A-E7587F507B86}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Manager.IntegrationTest", "Shared.Manager.Integration.Test\Shared.Manager.IntegrationTest.shproj", "{47F6C72E-A005-43A0-B30A-E7587F507B86}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.ManagerTest", "Shared.ManagerTest\Shared.ManagerTest.shproj", "{AC024D88-A9C6-4114-BA28-43233721C7E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.ConsoleHost", "Core.Manager.ConsoleHost\Core.Manager.ConsoleHost.csproj", "{B76FE7E6-09E7-4EA2-9903-B9A4C59C5456}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Manager.Integration.Test.Console.Host", "Shared.Manager.Integration.Test.Console.Host\Shared.Manager.Integration.Test.Console.Host.shproj", "{43000469-2CAE-4FB4-A424-085D75D673E3}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Manager.IntegrationTest.ConsoleHost", "Shared.Manager.Integration.Test.Console.Host\Shared.Manager.IntegrationTest.ConsoleHost.shproj", "{43000469-2CAE-4FB4-A424-085D75D673E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.Integration.Test.Console.Host", "Core.Manager.Integration.Test.Console.Host\Core.Manager.Integration.Test.Console.Host.csproj", "{5DF2E4E2-2D00-47CD-B598-4DA4592B3D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.Integration.Test.ConsoleHost", "Core.Manager.Integration.Test.Console.Host\Core.Manager.Integration.Test.ConsoleHost.csproj", "{5DF2E4E2-2D00-47CD-B598-4DA4592B3D61}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.ManagerTest", "Core.ManagerTest\Core.ManagerTest.csproj", "{03BE78EA-769A-4955-A65E-0B24D49CE50E}"
 EndProject
@@ -58,7 +56,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Stardust.Node", "Core.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Stardust.Manager", "Core.Stardust.Manager\Core.Stardust.Manager.csproj", "{3E447BC3-F4C8-47BE-AC03-AB85DCB70806}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.NodeConsoleTest", "Core.NodeConsoleTest\Core.NodeConsoleTest.csproj", "{95B4BC1D-7775-4A64-BC95-5C55320D36E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Node.ConsoleHost", "Core.NodeConsoleTest\Core.Node.ConsoleHost.csproj", "{95B4BC1D-7775-4A64-BC95-5C55320D36E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.NodeTest", "Core.NodeTest\Core.NodeTest.csproj", "{57DC40EB-7EFB-45E8-B116-9DA2DC560B15}"
 EndProject
@@ -67,6 +65,8 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.NodeTest", "Shared.NodeTest\Shared.NodeTest.shproj", "{44897C2A-C8CF-4752-A994-A2A090E0FDF3}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.NodeTest.JobHandlers", "Shared.NodeTest.JobHandlers\Shared.NodeTest.JobHandlers.shproj", "{53700344-1771-49D2-9E53-5E8A4709C317}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stardust.Manager", "Manager\Stardust.Manager.csproj", "{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -133,16 +133,6 @@ Global
 		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.ReleaseAll|Any CPU.ActiveCfg = ReleaseAll|Any CPU
 		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.ReleaseAll|Any CPU.Build.0 = ReleaseAll|Any CPU
 		{3CFC869E-8E1D-4B47-845A-500041AD4DEC}.ReleaseCore|Any CPU.ActiveCfg = ReleaseCore|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugAll|Any CPU.ActiveCfg = DebugAll|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugAll|Any CPU.Build.0 = DebugAll|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugCore|Any CPU.ActiveCfg = DebugCore|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseAll|Any CPU.ActiveCfg = ReleaseAll|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseAll|Any CPU.Build.0 = ReleaseAll|Any CPU
-		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseCore|Any CPU.ActiveCfg = ReleaseCore|Any CPU
 		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{489535D5-A3F2-4877-81B7-94ADB7BD320B}.DebugAll|Any CPU.ActiveCfg = DebugAll|Any CPU
@@ -283,6 +273,18 @@ Global
 		{7085403A-2284-4783-8906-8F367BFCE0F1}.ReleaseAll|Any CPU.Build.0 = ReleaseAll|Any CPU
 		{7085403A-2284-4783-8906-8F367BFCE0F1}.ReleaseCore|Any CPU.ActiveCfg = Release|Any CPU
 		{7085403A-2284-4783-8906-8F367BFCE0F1}.ReleaseCore|Any CPU.Build.0 = Release|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugAll|Any CPU.ActiveCfg = DebugAll|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugAll|Any CPU.Build.0 = DebugAll|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugCore|Any CPU.ActiveCfg = DebugCore|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.DebugCore|Any CPU.Build.0 = DebugCore|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseAll|Any CPU.ActiveCfg = ReleaseAll|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseAll|Any CPU.Build.0 = ReleaseAll|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseCore|Any CPU.ActiveCfg = ReleaseCore|Any CPU
+		{7BF4E937-F4AD-4B2E-BBC2-96AC56765B7D}.ReleaseCore|Any CPU.Build.0 = ReleaseCore|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

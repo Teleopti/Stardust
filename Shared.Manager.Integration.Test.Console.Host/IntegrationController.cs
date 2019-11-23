@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using Manager.IntegrationTest.Console.Host.Constants;
-using Manager.IntegrationTest.Console.Host.Log4Net;
+using Manager.IntegrationTest.ConsoleHost.Constants;
+using Manager.IntegrationTest.ConsoleHost.Log4Net;
 
-namespace Manager.IntegrationTest.Console.Host
+namespace  Manager.IntegrationTest.ConsoleHost
 {
 	public class IntegrationController : ApiController
 	{

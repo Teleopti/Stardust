@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Manager.Integration.Test.Constants;
-using Manager.Integration.Test.Properties;
-using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Properties;
+using Manager.IntegrationTest.Constants;
+using Manager.IntegrationTest.ConsoleHost.Helpers;
 
-namespace Manager.Integration.Test.Helpers
+
+namespace Manager.IntegrationTest.Helpers
 {
 	public static class IntegrationControllerApiHelper
 	{

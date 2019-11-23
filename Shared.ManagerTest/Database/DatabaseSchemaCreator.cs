@@ -52,7 +52,10 @@ namespace ManagerTest.Database
 		}
 
 		public void ApplyProgramability(string programmabilityPath, string databaseName)
-		{
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+          
+
 			//var programmabilityPath = _databaseFolder.ProgrammabilityPath(databaseType);
 			//var directories = Directory.GetFiles(programmabilityPath);
 			var directories = Directory.GetFiles(programmabilityPath, "*.sql");

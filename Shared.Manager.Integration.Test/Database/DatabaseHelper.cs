@@ -3,9 +3,9 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.CompilerServices;
 using log4net;
-using Manager.IntegrationTest.Console.Host.Log4Net;
+using Manager.IntegrationTest.ConsoleHost.Log4Net;
 
-namespace Manager.Integration.Test.Database
+namespace Manager.IntegrationTest.Database
 {
 	public static class DatabaseHelper
 	{

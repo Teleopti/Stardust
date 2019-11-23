@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using log4net.Appender;
 
-namespace Manager.IntegrationTest.Console.Host.Log4Net
+namespace  Manager.IntegrationTest.ConsoleHost.Log4Net
 {
 	public class AdoNetCreateTableIfNotExistsAppender : AdoNetAppender
 	{

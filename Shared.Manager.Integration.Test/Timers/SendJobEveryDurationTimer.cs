@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace Manager.Integration.Test.Timers
+namespace Manager.IntegrationTest.Timers
 {
 	public class SendJobEveryDurationTimer<T>
 	{

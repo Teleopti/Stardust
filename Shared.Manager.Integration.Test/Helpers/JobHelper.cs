@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Manager.Integration.Test.Models;
-using Manager.Integration.Test.Params;
+using Manager.IntegrationTest.Models;
+using Manager.IntegrationTest.Params;
 using Newtonsoft.Json;
 
-namespace Manager.Integration.Test.Helpers
+namespace Manager.IntegrationTest.Helpers
 {
 	public static class JobHelper
 	{

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using Manager.Integration.Test.Initializers;
-using Manager.Integration.Test.Models;
-using Manager.Integration.Test.Timers;
+using Manager.IntegrationTest.Initializers;
+using Manager.IntegrationTest.Models;
+using Manager.IntegrationTest.Timers;
 using Newtonsoft.Json;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.Tests.RecoveryTests
+namespace Manager.IntegrationTest.Tests.RecoveryTests
 {
 	[TestFixture]
 	public class RecoverFromNodeCrashTest : InitializeAndFinalizeOneManagerAndNodes

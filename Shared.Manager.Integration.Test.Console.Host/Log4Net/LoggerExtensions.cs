@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Manager.IntegrationTest.Console.Host.Log4Net
+namespace  Manager.IntegrationTest.ConsoleHost.Log4Net
 {
 	public static class LoggerExtensions
 	{

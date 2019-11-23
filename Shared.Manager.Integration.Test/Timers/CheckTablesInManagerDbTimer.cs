@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Timers;
-using Manager.Integration.Test.Database;
-using Manager.Integration.Test.Models;
+using Manager.IntegrationTest.Database;
+using Manager.IntegrationTest.Models;
 
-namespace Manager.Integration.Test.Timers
+namespace Manager.IntegrationTest.Timers
 {
 	public class CheckTablesInManagerDbTimer : IDisposable
 	{

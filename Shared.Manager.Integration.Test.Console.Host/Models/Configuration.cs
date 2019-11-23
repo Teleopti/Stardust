@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manager.IntegrationTest.Console.Host.Models
+namespace  Manager.IntegrationTest.ConsoleHost.Models
 {
 	public class Configuration
 	{

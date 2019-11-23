@@ -5,13 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using log4net.Config;
-using Manager.Integration.Test.Database;
-using Manager.Integration.Test.Helpers;
-using Manager.Integration.Test.Tasks;
-using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Database;
+using Manager.IntegrationTest.Helpers;
+using Manager.IntegrationTest.Tasks;
+using Manager.IntegrationTest.ConsoleHost.Helpers;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.Initializers
+namespace Manager.IntegrationTest.Initializers
 {
 	public abstract class InitializeAndFinalizeBaseOnTestFixtureSetup
 	{

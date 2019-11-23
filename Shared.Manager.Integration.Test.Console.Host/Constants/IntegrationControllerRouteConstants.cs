@@ -1,4 +1,4 @@
-﻿namespace Manager.IntegrationTest.Console.Host.Constants
+﻿namespace  Manager.IntegrationTest.ConsoleHost.Constants
 {
 	public class IntegrationControllerRouteConstants
 	{

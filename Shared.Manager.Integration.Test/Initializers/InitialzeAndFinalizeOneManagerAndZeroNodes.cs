@@ -1,4 +1,4 @@
-﻿namespace Manager.Integration.Test.Initializers
+﻿namespace Manager.IntegrationTest.Initializers
 {
 	public class InitialzeAndFinalizeOneManagerAndZeroNodes : InitializeAndFinalizeBaseOnTestFixtureSetup
 	{

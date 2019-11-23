@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 
-namespace Manager.Integration.Test.Database
+namespace Manager.IntegrationTest.Database
 {
 	public static class SqlDataReaderExtensions
 	{

@@ -2,9 +2,9 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using Manager.IntegrationTest.Console.Host.Log4Net;
+using Manager.IntegrationTest.ConsoleHost.Log4Net;
 
-namespace Manager.Integration.Test.Database
+namespace Manager.IntegrationTest.Database
 {
 	public class SqlNotifier : IDisposable
 	{

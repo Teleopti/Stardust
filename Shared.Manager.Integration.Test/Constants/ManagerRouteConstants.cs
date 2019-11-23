@@ -1,4 +1,4 @@
-﻿namespace Manager.Integration.Test.Constants
+﻿namespace Manager.IntegrationTest.Constants
 {
 	public static class ManagerRouteConstants
 	{

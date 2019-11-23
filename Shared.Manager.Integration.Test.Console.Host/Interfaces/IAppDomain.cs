@@ -1,4 +1,4 @@
-﻿namespace Manager.IntegrationTest.Console.Host.Interfaces
+﻿namespace  Manager.IntegrationTest.ConsoleHost.Interfaces
 {
     public interface IAppDomain
     {

@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Manager.IntegrationTest.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ManagerIntegrationConsoleHostLocation" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Manager.IntegrationTest.ConsoleHost/bin/</Value>
+    </Setting>
+    <Setting Name="ManagerIntegrationConsoleHostAssemblyName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Manager.IntegrationTest.ConsoleHost.exe</Value>
+    </Setting>
+    <Setting Name="ManagerConfigurationFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Manager.config</Value>
+    </Setting>
+    <Setting Name="ManagerIntegrationConsoleHostConfigurationFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Manager.IntegrationTest.ConsoleHost.exe.config</Value>
+    </Setting>
+    <Setting Name="CreateLoggingTableSqlScriptLocationAndFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">scripts/CreateLoggingTable.sql</Value>
+    </Setting>
+    <Setting Name="ManagerIntegrationTestControllerBaseAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9100/</Value>
+    </Setting>
+    <Setting Name="ManagerLocationUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9000/StardustDashboard/</Value>
+    </Setting>
+    <Setting Name="IntegrationControllerBaseAddress" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9100/</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

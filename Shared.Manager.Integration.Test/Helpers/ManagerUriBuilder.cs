@@ -1,8 +1,8 @@
 ﻿using System;
-using Manager.Integration.Test.Constants;
-using Manager.Integration.Test.Properties;
+using Manager.IntegrationTest.Constants;
+using Manager.IntegrationTest.Properties;
 
-namespace Manager.Integration.Test.Helpers
+namespace Manager.IntegrationTest.Helpers
 {
 	public class ManagerUriBuilder
 	{

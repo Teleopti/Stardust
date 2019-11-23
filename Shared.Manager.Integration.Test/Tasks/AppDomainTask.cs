@@ -2,9 +2,9 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Manager.Integration.Test.Properties;
+using Manager.IntegrationTest.Properties;
 
-namespace Manager.Integration.Test.Tasks
+namespace Manager.IntegrationTest.Tasks
 {
 	public class AppDomainTask : IDisposable
 	{

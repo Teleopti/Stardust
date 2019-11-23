@@ -1,4 +1,4 @@
-﻿namespace Manager.Integration.Test.Params
+﻿namespace Manager.IntegrationTest.Params
 {
 	public class FailingJobParams
 	{

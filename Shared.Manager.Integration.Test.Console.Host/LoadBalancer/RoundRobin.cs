@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using log4net;
-using Manager.IntegrationTest.Console.Host.Log4Net;
+using Manager.IntegrationTest.ConsoleHost.Log4Net;
 
-namespace Manager.IntegrationTest.Console.Host.LoadBalancer
+namespace  Manager.IntegrationTest.ConsoleHost.LoadBalancer
 {
 	public static class RoundRobin
 	{

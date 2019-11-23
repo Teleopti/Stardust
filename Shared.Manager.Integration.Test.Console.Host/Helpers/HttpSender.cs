@@ -3,10 +3,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Manager.IntegrationTest.Console.Host.Log4Net;
+using Manager.IntegrationTest.ConsoleHost.Log4Net;
 using Newtonsoft.Json;
 
-namespace Manager.IntegrationTest.Console.Host.Helpers
+namespace Manager.IntegrationTest.ConsoleHost.Helpers
 {
 	public class HttpSender 
 	{

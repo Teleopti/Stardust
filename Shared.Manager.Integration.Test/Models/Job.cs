@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manager.Integration.Test.Models
+namespace Manager.IntegrationTest.Models
 {
 	public class Job
 	{

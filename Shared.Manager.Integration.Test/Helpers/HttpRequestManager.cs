@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Manager.Integration.Test.Models;
-using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.ConsoleHost.Helpers;
+using Manager.IntegrationTest.Models;
+
 using Newtonsoft.Json;
 
-namespace Manager.Integration.Test.Helpers
+namespace Manager.IntegrationTest.Helpers
 {
 	public class HttpRequestManager
 	{
