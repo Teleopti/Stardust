@@ -42,13 +42,13 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.ManagerTest", "Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.ConsoleHost", "Core.Manager.ConsoleHost\Core.Manager.ConsoleHost.csproj", "{B76FE7E6-09E7-4EA2-9903-B9A4C59C5456}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Manager.IntegrationTest.ConsoleHost", "Shared.Manager.Integration.Test.Console.Host\Shared.Manager.IntegrationTest.ConsoleHost.shproj", "{43000469-2CAE-4FB4-A424-085D75D673E3}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Manager.IntegrationTest.ConsoleHost", "Shared.Manager.IntegrationTest.Console.Host\Shared.Manager.IntegrationTest.ConsoleHost.shproj", "{43000469-2CAE-4FB4-A424-085D75D673E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.Integration.Test.ConsoleHost", "Core.Manager.Integration.Test.Console.Host\Core.Manager.Integration.Test.ConsoleHost.csproj", "{5DF2E4E2-2D00-47CD-B598-4DA4592B3D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.Integration.Test.ConsoleHost", "Core.Manager.IntegrationTest.ConsoleHost\Core.Manager.IntegrationTest.ConsoleHost.csproj", "{5DF2E4E2-2D00-47CD-B598-4DA4592B3D61}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.ManagerTest", "Core.ManagerTest\Core.ManagerTest.csproj", "{03BE78EA-769A-4955-A65E-0B24D49CE50E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.Integration.Test", "Core.Manager.Integration.Test\Core.Manager.Integration.Test.csproj", "{06763290-BD4D-4385-89C6-DACFD0A0FDE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Manager.IntegrationTest", "Core.Manager.IntegrationTest\Core.Manager.IntegrationTest.csproj", "{06763290-BD4D-4385-89C6-DACFD0A0FDE2}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.Stardust.Node", "Shared.Stardust.Node\Shared.Stardust.Node.shproj", "{5835F5F3-05D9-470D-9F63-1AC3D1972044}"
 EndProject

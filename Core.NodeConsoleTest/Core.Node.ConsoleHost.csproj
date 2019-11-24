@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Configurations>Debug;Release;DebugAll;ReleaseAll</Configurations>
-    <StartupObject>Core.NodeConsoleTest.Program</StartupObject>
+    <StartupObject>Core.Node.ConsoleHost.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

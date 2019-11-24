@@ -4,15 +4,13 @@ using System.Reflection;
 using Autofac;
 using Core.Stardust.Node;
 using log4net;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.Extensions;
 
 
-namespace Core.NodeConsoleTest
+namespace Core.Node.ConsoleHost
 {
     public class Program
     {
