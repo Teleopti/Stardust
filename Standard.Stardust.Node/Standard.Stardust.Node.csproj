@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Stardust.Node</RootNamespace>
+    <RootNamespace>Standard.Stardust.Node</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Configurations>Debug;Release;DebugCore;ReleaseCore;DebugAll;ReleaseAll</Configurations>
   </PropertyGroup>

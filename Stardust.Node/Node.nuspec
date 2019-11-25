@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Stardust.Node</id>
+    <authors>Teleopti</authors>
+    <owners>Teleopti</owners>
+	<version>$version$</version>
+    <description>Node to handle long running jobs</description>
+    <copyright>Teleopti</copyright>
+<dependencies>
+	<dependency id="Autofac" version="3.5.2" />
+	<dependency id="Autofac.Owin" version="4.1.0" />
+	<dependency id="Autofac.WebApi2" version="4.0.1" />
+	<dependency id="Autofac.WebApi2.Owin" version="4.0.0" />
+	<dependency id="log4net" version="2.0.5" />
+	<dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
+	<dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
+	<dependency id="Microsoft.AspNet.WebApi.Owin" version="5.2.3" />
+	<dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
+	<dependency id="Microsoft.Owin" version="3.1.0" />
+	<dependency id="Microsoft.Owin.Hosting" version="3.1.0" />
+	<dependency id="Newtonsoft.Json" version="10.0.2" />
+	<dependency id="Owin" version="1.0" />
+	<dependency id="Microsoft.Owin.Host.HttpListener" version="3.1.0" />
+</dependencies>
+  </metadata>
+  <files>
+	<file src="\bin\Release\Stardust.Node.dll" target="lib\net451"/>
+  </files>
+</package>

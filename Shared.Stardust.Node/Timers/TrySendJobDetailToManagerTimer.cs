@@ -19,7 +19,7 @@ namespace Stardust.Node.Timers
 
 		public void SetupAndStart(NodeConfiguration nodeConfiguration)
 		{
-			Interval = nodeConfiguration.SendDetailsToManagerMilliseconds;
+			Interval = nodeConfiguration.SendDetailsToManagerMilliSeconds;
 			base.Start();
 		}
 

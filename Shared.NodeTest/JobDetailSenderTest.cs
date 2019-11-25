@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Reflection;
 using System.Threading;
 using NodeTest.Fakes;
+using NodeTest.JobHandlers;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Node;
@@ -19,10 +20,10 @@ namespace NodeTest
 
 		[OneTimeSetUp]
 		public void TestFixtureSetup()
-		{
-			_nodeConfiguration = new NodeConfiguration(
-				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+        {
+            _nodeConfiguration = new NodeConfiguration(
+                new Uri("http://localhost:9001/StardustDashboard/"),
+                Assembly.Load(typeof(WorkerModule).Assembly.FullName),
 				14100,
 				"TestNode",
 				60,

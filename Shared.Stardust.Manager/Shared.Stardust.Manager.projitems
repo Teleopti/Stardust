@@ -14,7 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DetectTransientSqlException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoggerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SqlDataReaderExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GlobalExceptionLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\JobRepositoryCommandExecuter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NodeUriBuilderHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpSender.cs" />
@@ -25,8 +24,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)JobManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JobRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ManagerConfiguration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ManagerController.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ManagerModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Job.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JobDetail.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JobFailed.cs" />
@@ -36,7 +33,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)NodeManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Policies\HalfNodesAffinityPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RetryPolicyProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SlimAssembliesResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Timers\JobPurgeTimer.cs">
       <SubType>Component</SubType>
     </Compile>

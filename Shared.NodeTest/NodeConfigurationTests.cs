@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Net;
 using System.Reflection;
+using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node;
 using Stardust.Node.Constants;
@@ -15,9 +16,9 @@ namespace NodeTest
 		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
-			NodeConfiguration = new NodeConfiguration(
-				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+            NodeConfiguration = new NodeConfiguration(
+                new Uri("http://localhost:9001/StardustDashboard/"),
+                Assembly.Load(typeof(WorkerModule).Assembly.FullName),
 				14100,
 				"TestNode",
 				60,
@@ -25,8 +26,8 @@ namespace NodeTest
 
 			FixedIp = IPAddress.Parse("127.13.3.7");
 			NodeConfigurationStaticIp = new NodeConfiguration(
-				 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-				 Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                new Uri("http://localhost:9001/StardustDashboard/"),
+                Assembly.Load(typeof(WorkerModule).Assembly.FullName),
 				 1337,
 				 "TestNode",
 				 60,

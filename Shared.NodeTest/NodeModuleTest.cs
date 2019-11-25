@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 using Autofac;
+using NodeTest.JobHandlers;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Node;
@@ -17,8 +18,8 @@ namespace NodeTest
 		public void SetUp()
 		{
 			var nodeConfiguration = new NodeConfiguration(
-				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
+                new Uri("http://localhost:9001/StardustDashboard/"),
+                Assembly.Load(typeof(WorkerModule).Assembly.FullName),
 				14100,
 				"TestNode",
 				60,
@@ -38,6 +39,7 @@ namespace NodeTest
 		{
 			using (var scope = _container.BeginLifetimeScope())
 			{
+				scope.Resolve<NodeController>().Should().Not.Be.Null();
 				scope.Resolve<NodeConfigurationService>().Should().Not.Be.Null();
 				scope.Resolve<TrySendJobDetailToManagerTimer>().Should().Not.Be.Null();
 				scope.Resolve<TrySendNodeStartUpNotificationToManagerTimer>().Should().Not.Be.Null();

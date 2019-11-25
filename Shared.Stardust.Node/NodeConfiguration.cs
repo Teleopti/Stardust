@@ -8,22 +8,22 @@ namespace Stardust.Node
 {
 	public class NodeConfiguration
 	{
-		public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds, int sendDetailsToManagerMilliseconds, bool enableGc)
+		public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, bool enableGc)
 		{
 			BaseAddress = CreateNodeAddress(port);
 			ManagerLocation = managerLocation;
 			HandlerAssembly = handlerAssembly;
 			NodeName = nodeName;
 			PingToManagerSeconds = pingToManagerSeconds;
-			SendDetailsToManagerMilliseconds = sendDetailsToManagerMilliseconds;
+			SendDetailsToManagerMilliSeconds = sendDetailsToManagerMilliSeconds;
 			EnableGarbageCollection = enableGc;
 
 			ValidateParameters();
 		}
 
 	    public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName,
-	        int pingToManagerSeconds, int sendDetailsToManagerMilliseconds, IPAddress fixedNodeIp, bool enableGc) : this(managerLocation,
-	        handlerAssembly, port, nodeName, pingToManagerSeconds, sendDetailsToManagerMilliseconds, enableGc)
+	        int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, IPAddress fixedNodeIp, bool enableGc) : this(managerLocation,
+	        handlerAssembly, port, nodeName, pingToManagerSeconds, sendDetailsToManagerMilliSeconds, enableGc)
 	    {
 	        if (fixedNodeIp == null)
 	        {
@@ -38,7 +38,7 @@ namespace Stardust.Node
 		public string NodeName { get; }
 		public Assembly HandlerAssembly { get; }
 		public double PingToManagerSeconds { get; }
-		public double SendDetailsToManagerMilliseconds { get; }
+		public double SendDetailsToManagerMilliSeconds { get; }
 		public bool EnableGarbageCollection { get; set; }
 
 		private void ValidateParameters()
@@ -74,7 +74,7 @@ namespace Stardust.Node
 
             if(fixedIp != null)
             {
-                nodeUrl.Append(fixedIp.AddressFamily == AddressFamily.InterNetworkV6 ? $"[{fixedIp}]" : fixedIp.ToString());
+                nodeUrl.Append(fixedIp.AddressFamily == AddressFamily.InterNetworkV6 ? "[" + fixedIp + "]" : fixedIp.ToString());
             }
             else
             {

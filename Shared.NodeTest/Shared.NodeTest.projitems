@@ -36,7 +36,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)JobHandlersTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MutableNow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NodeConfigurationTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NodeControllerTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NodeModuleTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WorkerWrapperTests.cs" />
   </ItemGroup>

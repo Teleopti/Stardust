@@ -91,8 +91,8 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
@@ -142,13 +142,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Manager\Stardust.Manager.csproj">
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NodeTest.JobHandlers\NodeTest.JobHandlers.csproj">
+      <Project>{3d7d71b6-4676-498c-b148-447a5fc5f3a0}</Project>
+      <Name>NodeTest.JobHandlers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stardust.Manager\Stardust.Manager.csproj">
       <Project>{7bf4e937-f4ad-4b2e-bbc2-96ac56765b7d}</Project>
       <Name>Stardust.Manager</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <ProjectReference Include="..\Stardust.Node\Stardust.Node.csproj">
+      <Project>{ecd6026f-6cd5-48ef-8e2e-2a32b7497053}</Project>
+      <Name>Stardust.Node</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Shared.ManagerTest\Shared.ManagerTest.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

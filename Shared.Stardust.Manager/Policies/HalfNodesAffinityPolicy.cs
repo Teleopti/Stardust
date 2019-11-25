@@ -9,7 +9,7 @@ namespace Stardust.Manager.Policies
 	{
 		public const string PolicyName = "HalfNodesAffinity";
 		//private static readonly ILog ManagerLogger = LogManager.GetLogger(typeof(HalfNodesAffinityPolicy));
-        private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+        private static readonly ILog ManagerLogger = LogManager.GetLogger(typeof(HalfNodesAffinityPolicy));
 
 		public bool CheckPolicy(JobQueueItem jobQueueItem, List<Job> allExecutingJobs, int countOfAliveNodes)
 		{

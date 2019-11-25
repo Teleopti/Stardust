@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web.Http;
@@ -14,6 +12,7 @@ using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Manager;
 using Stardust.Manager.Extensions;
+
 
 namespace ManagerConsoleHost
 {

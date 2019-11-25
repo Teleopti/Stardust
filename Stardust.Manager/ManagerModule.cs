@@ -25,8 +25,7 @@ namespace Stardust.Manager
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
             builder.RegisterApiControllers(typeof(ManagerController).Assembly);
-            //builder.Register(c => LogManager.GetLogger(c.GetType()));
-            builder.Register(c => LogManager.GetLogger("Stardust.ManagerLog"));
-		}
+            builder.Register(c => LogManager.GetLogger(c.GetType()));
+        }
 	}
 }

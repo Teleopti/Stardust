@@ -29,7 +29,7 @@ namespace Stardust.Node.Workers
 				try
 				{
 					return await Client.PostAsync(url,
-							new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, Mediatype),
+							new StringContent(JsonConvert.SerializeObject(data), Encoding.Unicode, Mediatype),
 							cancellationToken)
 						.ConfigureAwait(false);
 				}

@@ -4,7 +4,6 @@ using System.Reflection;
 using Autofac;
 using Core.Stardust.Node;
 using log4net;
-
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.Extensions;
@@ -34,6 +33,8 @@ namespace Core.Node.ConsoleHost
 
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            var aaa = ConfigurationManager.AppSettings["ManagerLocation"];
 
             var nodeConfig = new NodeConfiguration(
                 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),

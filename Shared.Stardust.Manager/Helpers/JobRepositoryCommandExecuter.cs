@@ -14,7 +14,7 @@ namespace Stardust.Manager.Helpers
 	{
 		private readonly HalfNodesAffinityPolicy _halfNodesAffinityPolicy;
 		private readonly RetryPolicy _retryPolicy;
-		private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+		private static readonly ILog ManagerLogger = LogManager.GetLogger(typeof(JobRepositoryCommandExecuter));
         //private static readonly ILog ManagerLogger = LogManager.GetLogger(typeof(JobRepositoryCommandExecuter));
         
         public JobRepositoryCommandExecuter(RetryPolicyProvider retryPolicyProvider, HalfNodesAffinityPolicy halfNodesAffinityPolicy)
