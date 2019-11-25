@@ -54,7 +54,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Workers\InvokeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workers\JobDetailSender.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workers\Now.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Workers\SimpleResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workers\ValidateStartJobResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workers\WorkerWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workers\WorkerWrapperService.cs" />

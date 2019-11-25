@@ -1,144 +1,86 @@
 ﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using log4net;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
+using Shared.Stardust.Node;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Workers;
 
 namespace Stardust.Node
 {
-
     [ApiController]
 	public class NodeController : ControllerBase, IamStardustNodeController
 	{
-		private readonly WorkerWrapperService _workerWrapperService;
-		private const string JobIdIsInvalid = "Job Id is invalid."; 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
+        private readonly NodeActionExecutor _nodeActionExecutor;
 
-		public NodeController(WorkerWrapperService workerWrapperService)
-		{
-			_workerWrapperService = workerWrapperService;
-		}
+        public NodeController(NodeActionExecutor nodeActionExecutor)
+        {
+            _nodeActionExecutor = nodeActionExecutor;
+        }
 
-		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
-		public IActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
-		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort((int)Request.Host.Port);
+        private IActionResult ResultTranslator(SimpleResponse simpleResponse)
+        {
+            switch (simpleResponse.Result)
+            {
+                case SimpleResponse.Status.Ok:
+                    return Ok(simpleResponse.ResponseValue);
+                case SimpleResponse.Status.BadRequest:
+                    return BadRequest(simpleResponse.Message);
+                case SimpleResponse.Status.Conflict:
+                    return Conflict();
+                default:
+                    throw new Exception("ResultTranslator - does not have a mapping for: " + simpleResponse.Result.ToString());
+            }
+        }
 
-			var result = workerWrapper.ValidateStartJob(jobQueueItemEntity);
-			var prepareToStartJobResult = new PrepareToStartJobResult {IsAvailable = !result.IsWorking && result.HttpResponseMessage.IsSuccessStatusCode};
-			result.HttpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(prepareToStartJobResult));
-			return Ok(result.HttpResponseMessage);
-		}
+        [HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
+        public IActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
+        {
+            var port = GetPort();
+            return ResultTranslator(_nodeActionExecutor.PrepareToStartJob(jobQueueItemEntity, port));
+        }
 
-		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
-		public IActionResult StartJob(Guid jobId)
-		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort((int)Request.Host.Port);
+        [HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
+        public IActionResult StartJob(Guid jobId)
+        {
+            var port = GetPort();
+            return ResultTranslator(_nodeActionExecutor.StartJob(jobId, port));
+        }
 
-			if (jobId == Guid.Empty)
-			{
-				return BadRequest(JobIdIsInvalid);
-			}
+        [HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
+        public IActionResult TryCancelJob(Guid jobId)
+        {
+            var port = GetPort();
+            return ResultTranslator(_nodeActionExecutor.StartJob(jobId, port));
+        }
 
-			workerWrapper.CancelTimeoutCurrentMessageTask();
+        [HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
+        public IActionResult IsAlive()
+        {
+            return Ok();
+        }
 
-			var currentMessage = workerWrapper.GetCurrentMessageToProcess();
+        [HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsWorking)]
+        public IActionResult IsWorking()
+        {
+            var port = GetPort();
+            return ResultTranslator(_nodeActionExecutor.IsWorking(port));
+        }
 
-			if (currentMessage == null)
-			{
-				return BadRequest("Current message has timed out.");
-			}
+        [HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
+        public IActionResult IsIdle()
+        {
+            var port = GetPort();
+            return ResultTranslator(_nodeActionExecutor.IsIdle(port));
+        }
 
-			if (currentMessage.JobId != jobId)
-			{
-				return BadRequest("Current message job id does not match with job id argument.");
-			}
+        private int GetPort()
+        {
+            if (Request.Host.Port != null)
+            {
+                return Request.Host.Port.Value;
+            }
+            throw  new Exception("Port number not set!");
+        }
 
-			Task.Run(() =>
-			{				
-				var startJobMessage = $"{workerWrapper.WhoamI} : Starting job ( jobId, jobName ) : ( {currentMessage.JobId}, {currentMessage.Name} )";
-
-				Logger.InfoWithLineNumber(startJobMessage);
-
-				workerWrapper.StartJob(currentMessage);
-			});
-
-			return Ok();
-		}
-
-		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
-		public IActionResult TryCancelJob(Guid jobId)
-		{
-            var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort((int)Request.Host.Port);
-
-			if (jobId == Guid.Empty)
-			{
-				return BadRequest(JobIdIsInvalid);
-			}
-
-			Logger.InfoWithLineNumber(workerWrapper.WhoamI +
-			                          " : Received Cancel request. jobId: " + jobId);
-			
-			var currentJob = workerWrapper.GetCurrentMessageToProcess();
-
-			if (currentJob == null || currentJob.JobId != jobId)
-			{
-				Logger.WarningWithLineNumber(workerWrapper.WhoamI +
-							 ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
-							 jobId + " )");
-
-				return NotFound();
-			}
-
-			if (workerWrapper.IsCancellationRequested)
-			{
-				return Conflict();
-			}
-
-			workerWrapper.CancelJob(jobId);
-
-			if (workerWrapper.IsCancellationRequested)
-			{
-				return Ok();
-			}
-
-			return NotFound();
-		}
-
-
-		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
-		public IActionResult IsAlive()
-		{
-			return Ok();
-		}
-
-		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsWorking)]
-		public IActionResult IsWorking()
-		{
-            var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort((int)Request.Host.Port);
-
-			return Ok(workerWrapper.IsWorking);
-		}
-
-		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
-		public IActionResult IsIdle()
-		{
-            var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort((int)Request.Host.Port);
-
-			var currentJob = workerWrapper.GetCurrentMessageToProcess();
-
-			if (currentJob == null)
-			{
-				return Ok();
-			}
-
-			return Conflict();
-		}
-	}
+    }
 }

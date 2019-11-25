@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.props" Condition="Exists('..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.props')" />
+  <Import Project="..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\packages\Microsoft.DiaSymReader.Native.1.7.0\build\Microsoft.DiaSymReader.Native.props" Condition="Exists('..\packages\Microsoft.DiaSymReader.Native.1.7.0\build\Microsoft.DiaSymReader.Native.props')" />
   <Import Project="..\packages\Microsoft.AspNetCore.Razor.Design.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Razor.Design.props" Condition="Exists('..\packages\Microsoft.AspNetCore.Razor.Design.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Razor.Design.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -349,7 +349,6 @@
     </Reference>
     <Reference Include="System.Collections.Immutable, Version=1.2.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.6.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
@@ -416,7 +415,6 @@
     </Reference>
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Numerics" />
@@ -430,7 +428,6 @@
     </Reference>
     <Reference Include="System.Reflection.Metadata, Version=1.4.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reflection.Metadata.1.7.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
@@ -439,7 +436,6 @@
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
@@ -557,11 +553,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -572,9 +568,9 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.AspNetCore.Razor.Design.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Razor.Design.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.AspNetCore.Razor.Design.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Razor.Design.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.DiaSymReader.Native.1.7.0\build\Microsoft.DiaSymReader.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.DiaSymReader.Native.1.7.0\build\Microsoft.DiaSymReader.Native.props'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.targets'))" />
-    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
   </Target>
   <Import Project="..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.targets" Condition="Exists('..\packages\Microsoft.AspNetCore.Mvc.Razor.Extensions.2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
 using log4net;
-using log4net.Repository.Hierarchy;
-using Newtonsoft.Json;
-using Shared.Stardust.Node.Workers;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Workers;
@@ -20,21 +13,23 @@ namespace Shared.Stardust.Node
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapperService));
         private const string JobIdIsInvalid = "Job Id is invalid."; 
 
-
         public NodeActionExecutor(WorkerWrapperService workerWrapperService)
         {
             _workerWrapperService = workerWrapperService;
         }
 
 
-        public ValidateStartJobResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity, int portNumber)
+        public SimpleResponse PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity, int portNumber)
         {
             var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(portNumber);
-
+            
             var result = workerWrapper.ValidateStartJob(jobQueueItemEntity);
-            var prepareToStartJobResult = new PrepareToStartJobResult {IsAvailable = !result.IsWorking && result.HttpResponseMessage.IsSuccessStatusCode};
-            result.HttpResponseMessage.Content = new StringContent(JsonConvert.SerializeObject(prepareToStartJobResult));
-            return result;
+            if (!result.HttpResponseMessage.IsSuccessStatusCode)
+            {
+                return SimpleResponse.BadRequest(result.HttpResponseMessage.Content.ReadAsStringAsync().Result);
+            }
+            var prepareToStartJobResult = new PrepareToStartJobResult { IsAvailable = !result.IsWorking && result.HttpResponseMessage.IsSuccessStatusCode };
+            return SimpleResponse.Ok(prepareToStartJobResult);
         }
 
 
@@ -116,6 +111,17 @@ namespace Shared.Stardust.Node
         {
             var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(portNumber);
             return SimpleResponse.Ok(workerWrapper.IsWorking);
+        }
+
+        public SimpleResponse IsIdle(int portNumber)
+        {
+            var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(portNumber);
+            var currentJob = workerWrapper.GetCurrentMessageToProcess();
+            if (currentJob == null)
+            {
+                return SimpleResponse.Ok();
+            }
+            return SimpleResponse.Conflict();
         }
 
     }

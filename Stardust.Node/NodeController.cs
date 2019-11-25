@@ -1,30 +1,18 @@
 ﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
-using log4net;
-using Newtonsoft.Json;
 using Shared.Stardust.Node;
-using Shared.Stardust.Node.Workers;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Workers;
 
 namespace Stardust.Node
 {
     
 	public class NodeController : ApiController, IamStardustNodeController
 	{
-		private readonly WorkerWrapperService _workerWrapperService;
         private readonly NodeActionExecutor _nodeActionExecutor;
-        private const string JobIdIsInvalid = "Job Id is invalid."; 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
-		public NodeController(WorkerWrapperService workerWrapperService, NodeActionExecutor nodeActionExecutor)
+		public NodeController( NodeActionExecutor nodeActionExecutor)
         {
-            _workerWrapperService = workerWrapperService;
             _nodeActionExecutor = nodeActionExecutor;
         }
 
@@ -48,7 +36,7 @@ namespace Stardust.Node
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
         {
             var port = ActionContext.Request.RequestUri.Port;
-			return Ok(_nodeActionExecutor.PrepareToStartJob(jobQueueItemEntity, port));
+			return ResultTranslator(_nodeActionExecutor.PrepareToStartJob(jobQueueItemEntity, port));
 		}
 
 		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
@@ -63,9 +51,7 @@ namespace Stardust.Node
 		{
             var port = ActionContext.Request.RequestUri.Port;
             return ResultTranslator(_nodeActionExecutor.StartJob(jobId, port));
-			
-		}
-
+        }
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
 		public IHttpActionResult IsAlive()
@@ -83,16 +69,8 @@ namespace Stardust.Node
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
 		public IHttpActionResult IsIdle()
 		{
-			var workerWrapper = _workerWrapperService.GetWorkerWrapperByPort(ActionContext.Request.RequestUri.Port);
-
-			var currentJob = workerWrapper.GetCurrentMessageToProcess();
-
-			if (currentJob == null)
-			{
-				return Ok();
-			}
-
-			return Conflict();
-		}
+            var port = ActionContext.Request.RequestUri.Port;
+            return ResultTranslator(_nodeActionExecutor.IsIdle(port));
+        }
 	}
 }

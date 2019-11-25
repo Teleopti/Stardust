@@ -125,7 +125,7 @@ namespace NodeTest
                 Thread.Sleep(100);
             }
             _workerWrapper.IsWorking.Should().Be.False();
-            _sendJobFaultedTimer.AggregateExceptionToSend.InnerExceptions.First().Message.Should().Contain("Exception of type 'System.Exception' was thrown.");
+            _sendJobFaultedTimer.AggregateExceptionToSend.InnerExceptions.First().Message.Should().Contain("System.Exception");
             _sendJobFaultedTimer.ErrorOccured.Should().Not.Be(null);
         }
 

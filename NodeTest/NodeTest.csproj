@@ -42,6 +42,9 @@
     <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Extras.DynamicProxy, Version=4.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Extras.DynamicProxy.4.5.0\lib\net45\Autofac.Extras.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac.Integration.WebApi, Version=4.3.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.4.3.1\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
@@ -53,7 +56,7 @@
       <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.4.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -62,10 +65,10 @@
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="SharpTestsEx, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
     <Reference Include="SharpTestsEx.Mvc, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.Mvc.dll</HintPath>
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -79,7 +82,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NodeControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

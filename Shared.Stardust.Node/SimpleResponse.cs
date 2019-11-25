@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Shared.Stardust.Node.Workers
+namespace Shared.Stardust.Node
 {
     public class SimpleResponse
     {
@@ -16,9 +16,9 @@ namespace Shared.Stardust.Node.Workers
         public Status Result { get; }
         public string Message { get; }
         public Exception Exception { get; }
-        public object ResponseValue { get; }
+        public string ResponseValue { get; }
 
-        public SimpleResponse(Status result, string message = null, Exception exception = null, string responseValue = null)
+        private SimpleResponse(Status result, string message = null, Exception exception = null, string responseValue = null)
         {
             Result = result;
             Message = message;
@@ -29,7 +29,6 @@ namespace Shared.Stardust.Node.Workers
 
         private static string SerializeObject(object obj)
         {
-            //Type t = obj.GetType();
             return JsonConvert.SerializeObject(obj);
         }
 

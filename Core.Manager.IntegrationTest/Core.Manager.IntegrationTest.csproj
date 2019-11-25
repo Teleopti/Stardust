@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Manager.ConsoleHost\Core.Manager.ConsoleHost.csproj" />
-    <ProjectReference Include="..\Core.Manager.Integration.Test.Console.Host\Core.Manager.Integration.Test.ConsoleHost.csproj" />
+    <ProjectReference Include="..\Core.Manager.IntegrationTest.ConsoleHost\Core.Manager.IntegrationTest.ConsoleHost.csproj" />
     <ProjectReference Include="..\Core.NodeConsoleTest\Core.Node.ConsoleHost.csproj" />
     <ProjectReference Include="..\Core.NodeTest.Job.Handlers\Core.NodeTest.JobHandlers.csproj" />
   </ItemGroup>
