@@ -153,7 +153,7 @@ namespace Stardust.Manager
 
                 this.Log().ErrorWithLineNumber(
                     $"{WhoAmI(Request)}: Received job failed from a Node ( jobId, Node ) : ( {jobFailed.JobId}, {workerNodeUri??"Unknown Uri"} )");
-z
+
                 var progress = new JobDetail
                 {
                     JobId = jobFailed.JobId,
