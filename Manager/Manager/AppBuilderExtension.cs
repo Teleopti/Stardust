@@ -9,7 +9,7 @@ namespace Stardust.Manager
 {
 	public static class AppBuilderExtension
 	{
-		public static void UseStardustManager(this IAppBuilder appBuilder,
+        public static void UseStardustManager(this IAppBuilder appBuilder,
 		                                      ManagerConfiguration managerConfiguration,
 		                                      ILifetimeScope lifetimeScope)
 		{
@@ -34,10 +34,12 @@ namespace Stardust.Manager
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new ManagerModule(managerConfiguration));
-			builder.Update(lifetimeScope.ComponentRegistry);
+#pragma warning disable CS0618 // Type or member is obsolete
+            builder.Update(lifetimeScope.ComponentRegistry);
+#pragma warning restore CS0618 // Type or member is obsolete
 
-			//to start the timers etc
-			lifetimeScope.Resolve<ManagerController>();
+            //to start the timers etc
+            lifetimeScope.Resolve<ManagerController>();
 		}
 	}
 }
