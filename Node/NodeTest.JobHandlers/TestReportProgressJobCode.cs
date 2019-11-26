@@ -14,8 +14,8 @@ namespace NodeTest.JobHandlers
 			// -----------------------------------------------------------
 			var jobProgress = new TestReportProgressJobProgress
 			{
-				Text = $"Starting job: {message.Name}"
-            };
+				Text = "Starting job: " + message.Name
+			};
 
 			var loop = 0;
 
@@ -23,12 +23,12 @@ namespace NodeTest.JobHandlers
 			{
 				loop++;
 
-				jobProgress.Text = $"Loop count : {loop}";
+				jobProgress.Text = "Loop count : " + loop;
 
 				progress(jobProgress.Text);
 			}
 
-			jobProgress.Text = $"Finished job: {message.Name}";
+			jobProgress.Text = "Finished job: " + message.Name;
 
 			progress(jobProgress.Text);
 		}
