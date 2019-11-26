@@ -8,6 +8,8 @@ namespace ManagerTest.Fakes
 {
 	public class FakeJobRepository : IJobRepository
 	{
+        public readonly List<DateTime> HasCalledAssignJobToNode = new List<DateTime>();
+        public readonly List<JobDetail> JobDetailList = new List<JobDetail>();
 		private readonly List<Job> _jobs = new List<Job>();
 
 		private readonly List<JobQueueItem> _jobQueue = new List<JobQueueItem>();
@@ -58,9 +60,9 @@ namespace ManagerTest.Fakes
 			}
 		}
 
-		public void AssignJobToWorkerNode( )
+		public void AssignJobToWorkerNode()
 		{
-			throw new NotImplementedException();
+			HasCalledAssignJobToNode.Add(DateTime.Now);
 		}
 
 		public void CancelJobByJobId(Guid jobId)
@@ -69,14 +71,16 @@ namespace ManagerTest.Fakes
 		}
 
 		public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
-		{
-			throw new NotImplementedException();
-		}
+        {
+            //var currentJob = _jobs.Single(j => j.JobId == jobId)
+            //currentJob.Result = result;
+            //currentJob.Ended = ended;
+        }
 
 		public void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created)
-		{
-			throw new NotImplementedException();
-		}
+        {
+            JobDetailList.Add(new JobDetail {Created = created, Detail = detail, JobId = jobId});
+        }
 
 		public Job GetJobByJobId(Guid jobId)
 		{
@@ -109,9 +113,9 @@ namespace ManagerTest.Fakes
 		}
 
 		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)
-		{
-			throw new NotImplementedException();
-		}
+        {
+            return JobDetailList;
+        }
 
 		public bool PingWorkerNode(Uri workerNodeUri)
 		{

@@ -34,7 +34,7 @@ namespace ManagerTest
 				scope.Resolve<ManagerController>().Should().Not.Be.Null();
 				scope.Resolve<ManagerConfiguration>().Should().Not.Be.Null();
 				scope.Resolve<NodeManager>().Should().Not.Be.Null();
-				scope.Resolve<JobManager>().Should().Not.Be.Null();
+				scope.Resolve<IJobManager>().Should().Not.Be.Null();
 				scope.Resolve<Validator>().Should().Not.Be.Null();
 				scope.Resolve<RetryPolicyProvider>().Should().Not.Be.Null();
 				scope.Resolve<JobPurgeTimer>().Should().Not.Be.Null();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,6 +19,7 @@ using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
+using TimeoutException = System.TimeoutException;
 
 namespace NodeTest
 {
@@ -113,10 +116,43 @@ namespace NodeTest
             _workerWrapper.Init(_nodeConfigurationFake);
 			_workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
-		}
+            _workerWrapper.IsWorking.Should().Be.True();
+            while (true)
+            {
+                if (!_workerWrapper.IsWorking)
+                    break;
 
-		[Test]
-		public void ShouldBeAbleToStartJob()
+                Thread.Sleep(100);
+            }
+            _workerWrapper.IsWorking.Should().Be.False();
+            _sendJobFaultedTimer.AggregateExceptionToSend.InnerExceptions.First().Message.Should().Contain("Exception of type 'System.Exception' was thrown.");
+            _sendJobFaultedTimer.ErrorOccured.Should().Not.Be(null);
+        }
+
+        [Test]
+        public void ShouldHandleStartJobWithNonSerializableJobQueueItem()
+        {
+            _workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+                _nodeStartupNotification,
+                _pingToManagerFake,
+                _sendJobDoneTimer,
+                _sendJobCanceledTimer,
+                _sendJobFaultedTimer,
+                _trySendJobDetailToManagerTimer,
+                _jobDetailSender,
+                _now);
+            _workerWrapper.Init(_nodeConfigurationFake);
+            var result = _workerWrapper.ValidateStartJob(_jobDefinition);
+            _jobDefinition.Serialized = "";
+            result.IsWorking.Should().Be.False();
+            result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+            _workerWrapper.IsWorking.Should().Be.False();
+            _workerWrapper.StartJob(_jobDefinition);
+            _workerWrapper.IsWorking.Should().Be.False();
+        }
+
+        [Test]
+		public void ShouldBeAbleToExecuteJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeStartupNotification,
@@ -131,8 +167,22 @@ namespace NodeTest
             var result = _workerWrapper.ValidateStartJob(_jobDefinition);
             result.IsWorking.Should().Be.False();
             result.HttpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
-			_workerWrapper.StartJob(_jobDefinition);
-		}
+            _workerWrapper.IsWorking.Should().Be.False();
+            _workerWrapper.StartJob(_jobDefinition);
+            _workerWrapper.IsWorking.Should().Be.True();
+
+            var finishedOk = _workerWrapper.Task.Wait(TimeSpan.FromSeconds(5));
+
+            finishedOk.Should().Be.True();
+            while (true)
+            {
+                if (!_workerWrapper.IsWorking)
+                    break;
+
+                Thread.Sleep(100);
+            }
+            _workerWrapper.Task.Status.Should().Be(TaskStatus.RanToCompletion);
+        }
 		
 		[Test]
 		public void ShouldReturnIsWorkingWhenJobAssigned()
@@ -170,9 +220,21 @@ namespace NodeTest
             _workerWrapper.Init(_nodeConfigurationFake);
             _workerWrapper.ValidateStartJob(_jobDefinition);
 			_workerWrapper.StartJob(_jobDefinition);
+			Assert.IsTrue(_workerWrapper.IsWorking);
 			_workerWrapper.CancelJob(_jobDefinition.JobId);
-
+			
 			Assert.IsTrue(_workerWrapper.IsCancellationRequested);
+
+
+			var timeoutWaitingForIdle = DateTime.Now.AddSeconds(10);
+			while (_workerWrapper.IsWorking)
+			{
+				Thread.Sleep(100);
+				if(DateTime.Now > timeoutWaitingForIdle)
+					throw new TimeoutException("Timed out waiting for Node to become Idle in test");
+			}
+			
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 
 		[Test]
@@ -281,6 +343,7 @@ namespace NodeTest
 
 			triggeredOk.Should().Be.True();
 			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/done");
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 		
 		[Test]
@@ -319,6 +382,7 @@ namespace NodeTest
 			
 			triggeredOk.Should().Be.True();
 			fakeHttpSender.CalledUrl.Should().Contain(CallBackUriTemplateFake+"status/done");
+			_workerWrapper.IsWorking.Should().Be.False();
 		}
 		
 		[Test]
