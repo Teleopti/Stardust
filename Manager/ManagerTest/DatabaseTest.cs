@@ -3,6 +3,8 @@ using NUnit.Framework;
 
 namespace ManagerTest
 {
+	
+	
 	public class DatabaseTest
 	{
 		private DatabaseHelper _databaseHelper;
@@ -15,7 +17,7 @@ namespace ManagerTest
 		}
 
 		[SetUp]
-		public void BaseTestSetup()
+		public void BasteTestSetup()
 		{
 			_databaseHelper.TryClearDatabase();
 		}
