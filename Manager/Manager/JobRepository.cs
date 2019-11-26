@@ -123,7 +123,7 @@ namespace Stardust.Manager
 				var shuffledNodes = allAvailableWorkerNodes.OrderBy(a => Guid.NewGuid()).ToList();
 				foreach (var nodeUri in shuffledNodes)
 				{
-					ManagerLogger.Info($"trying to assign the job to node {nodeUri}");
+					ManagerLogger.Info("trying to assign the job to node " + nodeUri);
 					AssignJobToWorkerNodeWorker(nodeUri);
 					Thread.Sleep(500);
 				}
@@ -196,7 +196,9 @@ namespace Stardust.Manager
 				_jobRepositoryCommandExecuter.InsertJobDetail(jobId, detail, sqlConnection);
 			}
 		}
-        
+
+
+
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
 		{
 			try
@@ -234,11 +236,13 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-        
+
+
 		public IList<Job> GetAllJobs()
 		{
 			try
 			{
+				
 				List<Job> jobs;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -254,7 +258,8 @@ namespace Stardust.Manager
 			}
 		}
 
-        public IList<Job> GetAllExecutingJobs()
+
+		public IList<Job> GetAllExecutingJobs()
 		{
 			try
 			{
@@ -375,7 +380,7 @@ namespace Stardust.Manager
 						}
 						else
 						{
-							this.Log().ErrorWithLineNumber($"Could not send cancel to node. JobId: {jobId}");
+							this.Log().ErrorWithLineNumber("Could not send cancel to node. JobId: " + jobId);
 						}
 					}
 				}
@@ -404,11 +409,11 @@ namespace Stardust.Manager
 						if (jobQueueItem == null)
 						{
 							sqlConnection.Close();
-							ManagerLogger.Info($"no job acquired for node {availableNode}");
+							ManagerLogger.Info("no job acquired for node " + availableNode);
 							return;
 						}
 
-						ManagerLogger.Info($"acquired job with id  {jobQueueItem.JobId} for node {availableNode}");
+						ManagerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " + availableNode);
 						var builderHelper = new NodeUriBuilderHelper(availableNode);
 						var urijob = builderHelper.GetJobTemplateUri();
 						ManagerLogger.Info("posting the job to the node");

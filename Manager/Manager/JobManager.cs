@@ -20,7 +20,8 @@ namespace Stardust.Manager
 		private readonly NodeManager _nodeManager;
 
 		private readonly ILog ManagerLogger;
-		
+		//private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  ManagerConfiguration managerConfiguration,
