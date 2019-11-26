@@ -41,7 +41,7 @@ namespace ManagerTest
 
             var httpActionResult = Target.JobFailed(jobFailed);
             var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Contain("CreateJobDetail");
+            exceptionResult.Exception.InnerException.Message.Should().Be("CreateJobDetail");
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace ManagerTest
 
             var httpActionResult = Target.JobSucceed(Guid.NewGuid());
             var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Contain("UpdateResultForJob");
+            exceptionResult.Exception.InnerException.Message.Should().Be("UpdateResultForJob");
         }
 
         [Test]
@@ -76,7 +76,20 @@ namespace ManagerTest
 
             var httpActionResult = Target.JobFailed(jobFailed);
             var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Contain("Timeout while executing JobFailed");
+            exceptionResult.Exception.InnerException.Message.Should().Be("Timeout while executing JobFailed");
         }
+
+        //[Test]
+        //public void ShouldHandleExceptionFromWithinJobSucceeded()
+        //{
+        //    Target.Request = new HttpRequestMessage
+        //    {
+        //        RequestUri = new Uri("http://calabiro.com")
+        //    };
+
+        //    var httpActionResult = Target.JobSucceed(Guid.NewGuid());
+        //    var exceptionResult = httpActionResult as ExceptionResult;
+        //    exceptionResult.Exception.InnerException.Message.Should().Be("UpdateResultForJob");
+        //}
     }
 }
