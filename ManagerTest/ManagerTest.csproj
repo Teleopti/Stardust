@@ -165,10 +165,6 @@
       <Project>{7bf4e937-f4ad-4b2e-bbc2-96ac56765b7d}</Project>
       <Name>Stardust.Manager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stardust.Node\Stardust.Node.csproj">
-      <Project>{ecd6026f-6cd5-48ef-8e2e-2a32b7497053}</Project>
-      <Name>Stardust.Node</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Shared.ManagerTest\Shared.ManagerTest.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
