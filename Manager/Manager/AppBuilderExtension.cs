@@ -34,11 +34,9 @@ namespace Stardust.Manager
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new ManagerModule(managerConfiguration));
-#pragma warning disable 618
-            builder.Update(lifetimeScope.ComponentRegistry);
-#pragma warning restore 618
+			builder.Update(lifetimeScope.ComponentRegistry);
 
-            //to start the timers etc
+			//to start the timers etc
 			lifetimeScope.Resolve<ManagerController>();
 		}
 	}

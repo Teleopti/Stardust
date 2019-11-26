@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
@@ -33,18 +32,18 @@ namespace Manager.Integration.Test.WPF.Commands
 
 		public void Execute(object parameter)
 		{
-			Task.Run(() =>
+			Task.Factory.StartNew(() =>
 			{
 				var uri = ManagerUriBuilder.GetAddToJobQueueUri();
 
 				for (var i = 0; i < NumberOfJobs; i++)
 				{
-					var testJobParams = new TestJobParams($"Test job Data {i}", 10);
+					var testJobParams = new TestJobParams("Test job Data " + i, 10);
 					var testJobParamsToJson = JsonConvert.SerializeObject(testJobParams);
 
 					var job = new JobQueueItem
 					{
-						Name = $"Job Name {i}",
+						Name = "Job Name " + i,
 						Serialized = testJobParamsToJson,
 						Type = "NodeTest.JobHandlers.TestJobParams",
 						CreatedBy = "test"
@@ -58,10 +57,13 @@ namespace Manager.Integration.Test.WPF.Commands
 		public event EventHandler CanExecuteChanged;
 
 		protected virtual void OnCanExecuteChanged()
-        {
-            var handler = CanExecuteChanged;
-            if (handler != null)
-                Application.Current.Dispatcher.BeginInvoke(new Action(() => handler.Invoke(this, EventArgs.Empty)));
-        }
+		{
+			var handler = CanExecuteChanged;
+
+			if (handler != null)
+			{
+				handler(this, System.EventArgs.Empty);
+			}
+		}
 	}
 }

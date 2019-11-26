@@ -54,7 +54,7 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 
 		public void Start()
 		{
-			Task.Run(() =>
+			Task.Factory.StartNew(() =>
 			{
 				if (FiddlerApplication.IsStarted())
 				{
@@ -74,7 +74,7 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 
 		public void Stop()
 		{
-			Task.Run(() =>
+			Task.Factory.StartNew(() =>
 			{
 				FiddlerApplication.AfterSessionComplete -= FiddlerApplicationOnAfterSessionComplete;
 

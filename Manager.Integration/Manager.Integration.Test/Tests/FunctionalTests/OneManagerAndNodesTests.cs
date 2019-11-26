@@ -54,7 +54,9 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-                $"Creates CANCEL WRONG jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
+				string.Format("Creates CANCEL WRONG jobs with {0} manager and {1} nodes.",
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 			                                  description,
@@ -105,7 +107,9 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-                $"Creates Cancel Job with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
+				string.Format("Creates Cancel Job with {0} manager and {1} nodes.",
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 			                                  description,
@@ -213,7 +217,9 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-                $"Creates FAILED jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
+				string.Format("Creates FAILED jobs with {0} manager and {1} nodes.",
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 			                                  description,
@@ -264,7 +270,10 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-                $"Creates {1} Test Timer jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
+				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
+				              1,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 			                                  description,

@@ -22,7 +22,7 @@ namespace Stardust.Node.Timers
 		private readonly IHttpSender _httpSender;
 		public JobQueueItemEntity JobQueueItemEntity { get; set; }
 		public Uri CallbackTemplateUri { get; protected set; }
-		public event EventHandler TrySendStatusSucceeded;
+		public event EventHandler TrySendStatusSucceded;
 		protected readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
 		private bool _enableGc;
 
@@ -30,8 +30,11 @@ namespace Stardust.Node.Timers
 		                                   IHttpSender httpSender, double interval = 500) : base(interval)
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
+			//_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			//_enableGc = nodeConfiguration.EnableGarbageCollection;
 			_jobDetailSender = jobDetailSender;
 			_httpSender = httpSender;
+			//CallbackTemplateUri = callbackTemplateUri;
 			_exceptionLoggerHandler = new TimerExceptionLoggerStrategyHandler(TimerExceptionLoggerStrategyHandler.DefaultLogInterval, GetType());
 			
 			Elapsed += OnTimedEvent;
@@ -46,9 +49,9 @@ namespace Stardust.Node.Timers
 			CallbackTemplateUri = getManagerJobDoneTemplateUri;
 		}
 
-		public void InvokeTriggerTrySendStatusSucceeded()
+		public void InvokeTriggerTrySendStatusSucceded()
 		{
-			TrySendStatusSucceeded?.Invoke(this, EventArgs.Empty);
+			TrySendStatusSucceded?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected virtual async Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
@@ -60,7 +63,9 @@ namespace Stardust.Node.Timers
 				var uri = new Uri(CallbackTemplateUri.ToString().Replace(ManagerRouteConstants.JobIdOptionalParameter,
 														jobQueueItemEntity.JobId.ToString()));
 
-				var httpResponseMessage = await _httpSender.PostAsync(uri, null, cancellationToken);
+				var httpResponseMessage = await _httpSender.PostAsync(uri,
+				                                                     null,
+				                                                     cancellationToken);
 				return httpResponseMessage;
 			}
 
@@ -119,7 +124,7 @@ namespace Stardust.Node.Timers
 					Logger.DebugWithLineNumber($"{_whoAmI} : Sent job status to manager ({httpResponseMessage.RequestMessage.RequestUri}) " +
 											   $"for job ( jobId, jobName ) : ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )");
 					
-					InvokeTriggerTrySendStatusSucceeded();
+					InvokeTriggerTrySendStatusSucceded();
 				}
 				else
 				{

@@ -21,7 +21,7 @@ namespace Stardust.Node.Extensions
 				machine = machineName;
 			}
 
-			return $"[{nodeName.ToUpper()}, {machine.ToUpper()}]";
+			return "[" + nodeName.ToUpper() + ", " + machine.ToUpper() + "]";
 		}
 
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Input;
 using Manager.Integration.Test.WPF.ViewModels;
 
@@ -28,9 +27,11 @@ namespace Manager.Integration.Test.WPF.Commands
 
         protected virtual void OnCanExecuteChanged()
         {
-            var handler = CanExecuteChanged;
-            if (handler != null)
-                Application.Current.Dispatcher.BeginInvoke(new Action(() => handler.Invoke(this, EventArgs.Empty)));
+            if (CanExecuteChanged != null)
+            {
+                CanExecuteChanged(this,
+                                  System.EventArgs.Empty);
+            }
         }
     }
 }

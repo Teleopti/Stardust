@@ -254,7 +254,7 @@ namespace NodeTest
 			var fakeHttpSender = new FakeHttpSender();
 			var newSendJobDoneTimer = new TrySendJobDoneStatusToManagerTimer(_jobDetailSender, fakeHttpSender);
 			var jobDoneTimerTrigger = new ManualResetEvent(false);
-			newSendJobDoneTimer.TrySendStatusSucceeded += (sender, args) => { jobDoneTimerTrigger.Set(); };
+			newSendJobDoneTimer.TrySendStatusSucceded += (sender, args) => { jobDoneTimerTrigger.Set(); };
 			newSendJobDoneTimer.Setup(_nodeConfigurationFake,CallBackUriTemplateFake);
 			var startTime = new DateTime(2019,5,13,15,22,0);
 			_now.Is(startTime);
@@ -289,7 +289,7 @@ namespace NodeTest
 			var fakeHttpSender = new FakeHttpSender();
 			var newSendJobDoneTimer = new TrySendJobDoneStatusToManagerTimer(_jobDetailSender, fakeHttpSender);
 			var jobDoneTimerTrigger = new ManualResetEvent(false);
-			newSendJobDoneTimer.TrySendStatusSucceeded += (sender, args) => { jobDoneTimerTrigger.Set(); };
+			newSendJobDoneTimer.TrySendStatusSucceded += (sender, args) => { jobDoneTimerTrigger.Set(); };
 			newSendJobDoneTimer.Setup(_nodeConfigurationFake,CallBackUriTemplateFake);
 			var startTime = new DateTime(2019,5,13,15,22,0);
 			_now.Is(startTime);
@@ -327,7 +327,7 @@ namespace NodeTest
 			var fakeHttpSender = new FakeHttpSender();
 			var newSendJobFailedTimer = new TrySendJobFaultedToManagerTimer(_jobDetailSender, fakeHttpSender);
 			var jobFailedTimerTrigger = new ManualResetEvent(false);
-			newSendJobFailedTimer.TrySendStatusSucceeded += (sender, args) => { jobFailedTimerTrigger.Set(); };
+			newSendJobFailedTimer.TrySendStatusSucceded += (sender, args) => { jobFailedTimerTrigger.Set(); };
 			newSendJobFailedTimer.Setup(_nodeConfigurationFake,CallBackUriTemplateFake);
 			var startTime = new DateTime(2019,5,13,15,22,0);
 			_now.Is(startTime);

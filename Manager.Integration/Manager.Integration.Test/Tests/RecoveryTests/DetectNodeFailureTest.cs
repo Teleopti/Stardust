@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.RecoveryTests
 {
 	[TestFixture]
-	public class DetectNodeFailureTest : InitializeAndFinalizeOneManagerAndNodes
+	internal class DetectNodeFailureTest : InitializeAndFinalizeOneManagerAndNodes
 	{
 		[Test]
 		public void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResultToFatal()
@@ -21,6 +21,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var waitForJobToStartEvent = new ManualResetEventSlim();
 			var waitForNodeToEndEvent = new ManualResetEventSlim();
 			
+
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 
@@ -74,12 +75,15 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-                $"Creates Node Failure jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
+				string.Format("Creates Node Failure jobs with {0} manager and {1} nodes.",
+							  NumberOfManagers,
+							  NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 											  description,
 											  startedTest,
 											  endedTest);
 		}
+		
 	}
 }

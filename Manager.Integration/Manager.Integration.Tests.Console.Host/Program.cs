@@ -32,9 +32,9 @@ namespace Manager.IntegrationTest.Console.Host
 
 
 #if (DEBUG)
-		private const string _buildMode = "Debug";
+		private static readonly string _buildMode = "Debug";
 #else
-        private const string _buildMode = "Release";
+        private static string _buildMode = "Release";
 #endif
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
@@ -170,7 +170,7 @@ namespace Manager.IntegrationTest.Console.Host
 			}
 		}
 
-		private static Dictionary<string, FileInfo> NodeConfigurationFiles { get; set; }
+		private static Dictionary<string, FileInfo> NodeconfigurationFiles { get; set; }
 
 		public static void Main(string[] args)
 		{
@@ -264,12 +264,14 @@ namespace Manager.IntegrationTest.Console.Host
 
 				Uri address = configuration.BaseAddress;
 
-                var copiedManagerConfigurationFile =
+				Uri uri;
+
+				var copiedManagerConfigurationFile =
 					CopyManagerConfigurationFile(ManagerConfigurationFile,
 												 1,
 												 address.ToString(),
 												 allowedDowntimeSeconds,
-												 out var uri);
+												 out uri);
 
 				CopiedManagerConfigurationFiles.Add(uri,
 													copiedManagerConfigurationFile);
@@ -280,19 +282,21 @@ namespace Manager.IntegrationTest.Console.Host
 				{
 					var portNumber = Settings.Default.ManagerEndpointPortNumberStart + i;
 
-                    var copiedManagerConfigurationFile =
+					Uri uri;
+
+					var copiedManagerConfigurationFile =
 						CopyManagerConfigurationFile(ManagerConfigurationFile,
 													 i + 1,
 													 portNumber,
 													 allowedDowntimeSeconds,
-													 out var uri);
+													 out uri);
 
 					CopiedManagerConfigurationFiles.Add(uri,
 														copiedManagerConfigurationFile);
 				}
 			}
 
-			Logger.DebugWithLineNumber($"Created {CopiedManagerConfigurationFiles.Count} manager configuration files.");
+			Logger.DebugWithLineNumber("Created " + CopiedManagerConfigurationFiles.Count + " manager configuration files.");
 
 
 			DirectoryNodeConfigurationFileFullPath =
@@ -308,7 +312,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			Logger.DebugWithLineNumber("NodeConfigurationFile : " + NodeConfigurationFile.FullName);
 
-			NodeConfigurationFiles = new Dictionary<string, FileInfo>();
+			NodeconfigurationFiles = new Dictionary<string, FileInfo>();
 
 			PortStartNumber =
 				Settings.Default.NodeEndpointPortNumberStart;
@@ -363,12 +367,13 @@ namespace Manager.IntegrationTest.Console.Host
 
 			AppDomainNodeTasks = new ConcurrentDictionary<string, AppDomainNodeTask>();
 
-			Parallel.ForEach(NodeConfigurationFiles, pair =>
+			Parallel.ForEach(NodeconfigurationFiles, pair =>
 			{
 				Logger.DebugWithLineNumber("AppDomainNodeTask");
 
 				var appDomainNodeTask =
-					new AppDomainNodeTask(DirectoryNodeAssemblyLocationFullPath,
+					new AppDomainNodeTask(_buildMode,
+					                      DirectoryNodeAssemblyLocationFullPath,
 					                      pair.Value,
 					                      Settings.Default.NodeAssemblyName);
 
@@ -385,7 +390,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (NumberOfManagersToStart > 1 || UseLoadBalancerIfJustOneManager)
 			{
-				Task.Run(() => StartLoadBalancerProxy(CopiedManagerConfigurationFiles.Keys));
+				Task.Factory.StartNew(() => StartLoadBalancerProxy(CopiedManagerConfigurationFiles.Keys));
 			}			
 
 			StartSelfHosting();
@@ -430,7 +435,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                            pingToManagerSeconds,
 				                            Settings.Default.HandlerAssembly);
 
-			NodeConfigurationFiles.Add(nodeName,
+			NodeconfigurationFiles.Add(nodeName,
 			                           copiedConfigurationFile);
 
 			return copiedConfigurationFile;
@@ -439,7 +444,9 @@ namespace Manager.IntegrationTest.Console.Host
 		private static void CurrentDomain_UnhandledException(object sender,
 		                                                     UnhandledExceptionEventArgs e)
 		{
-            if (e.ExceptionObject is Exception exp)
+			var exp = e.ExceptionObject as Exception;
+
+			if (exp != null)
 			{
 				Logger.FatalWithLineNumber(exp.Message,
 				                           exp);
@@ -546,7 +553,7 @@ namespace Manager.IntegrationTest.Console.Host
 		                                                    int allowedDowntimeSeconds,
 		                                                    out Uri uri)
 		{
-			var newConfigFileName = $"Manager{i}.config";
+			var newConfigFileName = "Manager" + i + ".config";
 
 			var copyManagerConfigurationFile = managerConfigFile.CopyTo(newConfigFileName,
 			                                                            true);
@@ -567,7 +574,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			uri = uriBuilder.Uri;
 
-			config.AppSettings.Settings["ManagerName"].Value = $"Manager{i}";
+			config.AppSettings.Settings["ManagerName"].Value = "Manager" + i;
 			config.AppSettings.Settings["BaseAddress"].Value = uri.ToString();
 			config.AppSettings.Settings["AllowedNodeDownTimeSeconds"].Value = allowedDowntimeSeconds.ToString();
 			config.Save();
@@ -583,8 +590,11 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (AppDomainManagerTasks != null && AppDomainManagerTasks.Any())
 			{
-                ret = AppDomainManagerTasks.TryRemove(friendlyName, out var managerToDispose);
-                
+				AppDomainManagerTask managerToDispose;
+
+				ret = AppDomainManagerTasks.TryRemove(friendlyName, out managerToDispose);
+
+
 				if (ret)
 				{
 					Logger.DebugWithLineNumber("Start disposing manager (appdomain) with friendly name :" + friendlyName);
@@ -608,7 +618,9 @@ namespace Manager.IntegrationTest.Console.Host
 
 			if (AppDomainNodeTasks != null && AppDomainNodeTasks.Any())
 			{
-                ret = AppDomainNodeTasks.TryRemove(friendlyName, out var nodeToDispose);
+				AppDomainNodeTask nodeToDispose;
+
+				ret = AppDomainNodeTasks.TryRemove(friendlyName, out nodeToDispose);
 
 				if (nodeToDispose != null)
 				{
@@ -644,7 +656,8 @@ namespace Manager.IntegrationTest.Console.Host
 				Logger.DebugWithLineNumber("AppDomainNodeTask");
 
 				var appDomainNodeTask =
-					new AppDomainNodeTask(DirectoryNodeAssemblyLocationFullPath,
+					new AppDomainNodeTask(_buildMode,
+					                      DirectoryNodeAssemblyLocationFullPath,
 					                      nodeConfig,
 					                      Settings.Default.NodeAssemblyName);
 
@@ -660,11 +673,12 @@ namespace Manager.IntegrationTest.Console.Host
 				                               appDomainNodeTask,
 				                               (s, task) => appDomainNodeTask);
 
-				Logger.DebugWithLineNumber($"Finished creating node configuration file for node : ( id, config file ) : ( {NumberOfNodesToStart}, {nodeConfig.FullName} )");
+				Logger.DebugWithLineNumber("Finished creating node configuration file for node : ( id, config file ) : ( " +
+				                           NumberOfNodesToStart + ", " + nodeConfig.FullName + " )");
 			}
 		}
 
-		public static List<string> GetAllManagers()
+		public static List<string> GetAllmanagers()
 		{
 			return AppDomainManagerTasks.Keys.ToList();
 		}
@@ -674,7 +688,7 @@ namespace Manager.IntegrationTest.Console.Host
 			return AppDomainNodeTasks.Keys.ToList();
 		}
 
-		public static void StartNewManager(out string friendlyName)
+		public static void StartNewManager(out string friendlyname)
 		{
 			NumberOfManagersToStart++;
 
@@ -682,12 +696,14 @@ namespace Manager.IntegrationTest.Console.Host
 				Settings.Default.ManagerEndpointPortNumberStart + (NumberOfManagersToStart - 1);
 			var allowedDowntimeSeconds = Settings.Default.AllowedDowntimeSeconds;
 
-            var copiedManagerConfigurationFile =
+			Uri uri;
+
+			var copiedManagerConfigurationFile =
 				CopyManagerConfigurationFile(ManagerConfigurationFile,
 				                             NumberOfManagersToStart ,
 				                             portNumber,
 				                             allowedDowntimeSeconds,
-				                             out var uri);
+				                             out uri);
 
 			CopiedManagerConfigurationFiles.Add(uri,
 			                                    copiedManagerConfigurationFile);
@@ -710,7 +726,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			Logger.DebugWithLineNumber("Finished: AppDomainManagerTask.StartTask");
 
-			friendlyName = appDomainManagerTask.GetAppDomainUniqueId();
+			friendlyname = appDomainManagerTask.GetAppDomainUniqueId();
 		}
 	}
 }

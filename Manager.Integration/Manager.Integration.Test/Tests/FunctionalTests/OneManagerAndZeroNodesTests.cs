@@ -19,6 +19,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 
 			var manualResetEventSlim = new ManualResetEventSlim();
 			
+
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 
@@ -48,7 +49,10 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-                $"Creates {1} Test Timer jobs with {NumberOfManagers} manager and {NumberOfNodes} nodes.";
+				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
+				              1,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 			                                  description,

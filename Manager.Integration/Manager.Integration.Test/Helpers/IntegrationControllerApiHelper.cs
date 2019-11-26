@@ -13,9 +13,13 @@ namespace Manager.Integration.Test.Helpers
 		{
 			var deleteUri = CreateUri(IntegrationControllerRouteConstants.NodeById.Replace("{id}", nodeName));
 
-			var httpResponseMessage = await httpSender.DeleteAsync(deleteUri);
+			var httpResponseMessage = httpSender.DeleteAsync(deleteUri);
 
-			var content = await httpResponseMessage.Content.ReadAsStringAsync();
+			httpResponseMessage.Wait();
+
+			var res = httpResponseMessage.Result;
+
+			var content = await res.Content.ReadAsStringAsync();
 
 			return content;
 		}
@@ -24,9 +28,13 @@ namespace Manager.Integration.Test.Helpers
 		{
 			var allManagersUri = CreateUri(IntegrationControllerRouteConstants.Managers);
 
-			var httpResponseMessage = await httpSender.PostAsync(allManagersUri);
+			var httpResponseMessage = httpSender.PostAsync(allManagersUri);
 
-			var content = await httpResponseMessage.Content.ReadAsStringAsync();
+			httpResponseMessage.Wait();
+
+			var res = httpResponseMessage.Result;
+
+			var content = await res.Content.ReadAsStringAsync();
 
 			return content;
 		}
@@ -35,9 +43,13 @@ namespace Manager.Integration.Test.Helpers
 		{
 			var allNodesUri = CreateUri(IntegrationControllerRouteConstants.Nodes);
 
-			var httpResponseMessage = await httpSender.PostAsync(allNodesUri);
+			var httpResponseMessage = httpSender.PostAsync(allNodesUri);
 
-			var content = await httpResponseMessage.Content.ReadAsStringAsync();
+			httpResponseMessage.Wait();
+
+			var res = httpResponseMessage.Result;
+
+			var content = await res.Content.ReadAsStringAsync();
 
 			return content;
 		}

@@ -74,9 +74,9 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		public Task StartTask(CancellationTokenSource cancellationTokenSource)
 		{
-			Task = Task.Run(() =>
+			Task = Task.Factory.StartNew(() =>
 			{
-				Task.Run(() =>
+				Task.Factory.StartNew(() =>
 				{
 					while (!cancellationTokenSource.IsCancellationRequested)
 					{
@@ -89,7 +89,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 					}
 				}, cancellationTokenSource.Token);
 
-				Task.Run(() =>
+				Task.Factory.StartNew(() =>
 				{
 					// Start manager.
 					var managerAppDomainSetup = new AppDomainSetup

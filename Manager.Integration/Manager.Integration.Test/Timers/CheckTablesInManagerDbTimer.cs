@@ -51,29 +51,44 @@ namespace Manager.Integration.Test.Timers
 		public Timer JobQueueTimer { get; private set; }
 
 		private void WorkerNodeTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
-        {
-            GetWorkerNodes?.Invoke(this, ManagerDbRepository.WorkerNodes);
-        }
+		{
+			if (GetWorkerNodes != null)
+			{
+				GetWorkerNodes(this, ManagerDbRepository.WorkerNodes);
+			}
+		}
 
 		private void LoggingTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
-        {
-            GetLogging?.Invoke(this, ManagerDbRepository.Loggings);
-        }
+		{
+			if (GetLogging != null)
+			{
+				GetLogging(this, ManagerDbRepository.Loggings);
+			}
+		}
 
 		private void JobDetailTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            GetJobDetailItems?.Invoke(this, ManagerDbRepository.JobDetails);
-        }
+		{
+			if (GetJobDetailItems != null)
+			{
+				GetJobDetailItems(this, ManagerDbRepository.JobDetails);
+			}
+		}
 
 		private void JobTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            GetJobItems?.Invoke(this, ManagerDbRepository.Jobs);
-        }
+		{
+			if (GetJobItems != null)
+			{
+				GetJobItems(this, ManagerDbRepository.Jobs);
+			}
+		}
 
 		private void JobQueueTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            GetJobQueueItems?.Invoke(this, ManagerDbRepository.JobQueueItems);
-        }
+		{
+			if (GetJobQueueItems != null)
+			{
+				GetJobQueueItems(this, ManagerDbRepository.JobQueueItems);
+			}
+		}
 
 		public void Dispose()
 		{

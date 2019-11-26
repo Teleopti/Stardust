@@ -406,7 +406,7 @@ namespace Manager.Integration.Test.Database
 				sqlConnection.Open();
 
 				var sqlCommand =
-					new SqlCommand(@"DELETE FROM [Stardust].[Job]", sqlConnection);
+					new SqlCommand(@"TRUNCATE TABLE [Stardust].[Job]", sqlConnection);
 
 				sqlCommand.ExecuteNonQuery();
 			}

@@ -1,29 +1,31 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Generic;
+using Autofac;
 using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Workers
 {
 	public class WorkerWrapperService
 	{
-        private readonly Func<IWorkerWrapper> _workerWrapperFunc;
-        private readonly NodeConfigurationService _nodeConfigurationService;
-		private readonly ConcurrentDictionary<int, IWorkerWrapper> _workersByPort = new ConcurrentDictionary<int, IWorkerWrapper>();
+		private readonly NodeConfigurationService _nodeConfigurationService;
+		private Dictionary<int, IWorkerWrapper> _workersByPort = new Dictionary<int, IWorkerWrapper>();
 
-		public WorkerWrapperService (Func<IWorkerWrapper> workerWrapperFunc, NodeConfigurationService nodeConfigurationService)
+		public WorkerWrapperService (ILifetimeScope componentContext, NodeConfigurationService nodeConfigurationService)
 		{
-            _workerWrapperFunc = workerWrapperFunc;
-            _nodeConfigurationService = nodeConfigurationService;
+			_nodeConfigurationService = nodeConfigurationService;
+			ComponentContext = componentContext;
 		}
+
+		private ILifetimeScope ComponentContext { get; }
 
 		public virtual IWorkerWrapper GetWorkerWrapperByPort(int port)
 		{
-			return _workersByPort.GetOrAdd(port, p =>
-            {
-                var w = _workerWrapperFunc.Invoke();
-                w.Init(_nodeConfigurationService.GetConfigurationForPort(p));
-                return w;
-            });
+			IWorkerWrapper worker;
+			if (_workersByPort.TryGetValue(port, out worker)) return worker;
+
+			worker = ComponentContext.Resolve<IWorkerWrapper>();
+			worker.Init(_nodeConfigurationService.GetConfigurationForPort(port));
+			_workersByPort.Add(port, worker);
+			return worker;
 		}
 	}
 }

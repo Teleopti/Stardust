@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Autofac;
 using log4net;
 using log4net.Config;
@@ -13,7 +15,24 @@ namespace NodeConsoleHost
 {
 	public class Program
 	{
+		// A delegate type to be used as the handler routine 
+		// for SetConsoleCtrlHandler.
+		public delegate bool HandlerRoutine(CtrlTypes ctrlType);
+
+		// An enumerated type for the control messages
+		// sent to the handler routine.
+		public enum CtrlTypes
+		{
+			CtrlCEvent = 0,
+			CtrlBreakEvent,
+			CtrlCloseEvent,
+			CtrlLogoffEvent = 5,
+			CtrlShutdownEvent
+		}
+
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
+
+		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
 		private static string WhoAmI { get; set; }
 
@@ -21,17 +40,35 @@ namespace NodeConsoleHost
 
 		public static IContainer Container { get; set; }
 
+
+		[DllImport("Kernel32")]
+		public static extern bool SetConsoleCtrlHandler(HandlerRoutine handler,
+		                                                bool add);
+
+		private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+		{
+			if (ctrlType == CtrlTypes.CtrlCloseEvent ||
+			    ctrlType == CtrlTypes.CtrlShutdownEvent)
+			{
+				NodeStarter.Stop();
+
+				QuitEvent.Set();
+
+				return true;
+			}
+
+			return false;
+		}
+
 		public static void Main()
 		{
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-            Console.CancelKeyPress += (sender, eventArgs) => {
-                eventArgs.Cancel = true;
-                NodeStarter?.Stop();
-            };
-
-            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
+			SetConsoleCtrlHandler(ConsoleCtrlCheck,
+			                      true);
+			
+			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 			var enableGc = bool.Parse(ConfigurationManager.AppSettings["EnableGc"]);
 			var nodeConfig = new NodeConfiguration(
@@ -43,8 +80,8 @@ namespace NodeConsoleHost
 				int.Parse(ConfigurationManager.AppSettings["SendJobDetailToManagerMilliSeconds"]),enableGc
 				);
 
-			WhoAmI = $"[NODE CONSOLE HOST ( {nodeConfig.NodeName}, {nodeConfig.BaseAddress} ), {Environment.MachineName.ToUpper()}]";
-			Logger.InfoWithLineNumber($"{WhoAmI} : started.");
+			WhoAmI = "[NODE CONSOLE HOST ( " + nodeConfig.NodeName + ", " + nodeConfig.BaseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
+			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
 
             var nodeConfigurationService = new NodeConfigurationService();
@@ -58,22 +95,29 @@ namespace NodeConsoleHost
 
 			NodeStarter = new NodeStarter();
 			
-#pragma warning disable 4014
-            NodeStarter.Start(nodeConfig, Container);
-#pragma warning restore 4014
-        }
+			NodeStarter.Start(nodeConfig,
+			                  Container);
+
+			QuitEvent.WaitOne();
+		}
 
 		private static void CurrentDomain_DomainUnload(object sender,
 		                                               EventArgs e)
 		{
-            Logger.InfoWithLineNumber($"{WhoAmI} : domain unloaded.");
-            NodeStarter?.Stop();
+			if (NodeStarter != null)
+			{
+				NodeStarter.Stop();
+			}
+
+			QuitEvent.Set();
 		}
 
 		private static void CurrentDomain_UnhandledException(object sender,
 		                                                     UnhandledExceptionEventArgs e)
 		{
-            if (e.ExceptionObject is Exception exp)
+			var exp = e.ExceptionObject as Exception;
+
+			if (exp != null)
 			{
 				Logger.FatalWithLineNumber(exp.Message,exp);
 				//Should crash integration tests

@@ -300,7 +300,7 @@ namespace Stardust.Node.Workers
 				_trySendStatusToManagerTimer.Stop();
 
 				// Remove event handler.
-				_trySendStatusToManagerTimer.TrySendStatusSucceeded -=
+				_trySendStatusToManagerTimer.TrySendStatusSucceded -=
 					TrySendStatusToManagerTimer_TrySendStatus;
 
 				_trySendStatusToManagerTimer = null;
@@ -312,7 +312,7 @@ namespace Stardust.Node.Workers
 				_trySendStatusToManagerTimer = newTrySendStatusToManagerTimer;
 				_trySendStatusToManagerTimer.JobQueueItemEntity = jobQueueItemEntity;
 
-				_trySendStatusToManagerTimer.TrySendStatusSucceeded +=
+				_trySendStatusToManagerTimer.TrySendStatusSucceded +=
 					TrySendStatusToManagerTimer_TrySendStatus;
 
 				_trySendStatusToManagerTimer.Start();
@@ -322,7 +322,7 @@ namespace Stardust.Node.Workers
 				if(_trySendStatusToManagerTimer != null)
 				{
 					_trySendStatusToManagerTimer.Stop();
-					_trySendStatusToManagerTimer.TrySendStatusSucceeded -=
+					_trySendStatusToManagerTimer.TrySendStatusSucceded -=
 						TrySendStatusToManagerTimer_TrySendStatus;
 
 					_trySendStatusToManagerTimer = null;
@@ -334,7 +334,7 @@ namespace Stardust.Node.Workers
 																	   EventArgs e)
 		{
 			_trySendStatusToManagerTimer.Stop();
-			_trySendStatusToManagerTimer.TrySendStatusSucceeded -=
+			_trySendStatusToManagerTimer.TrySendStatusSucceded -=
 				TrySendStatusToManagerTimer_TrySendStatus;
 
 			_trySendStatusToManagerTimer = null;
