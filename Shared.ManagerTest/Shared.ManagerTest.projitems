@@ -31,10 +31,9 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)JobManagerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ManagerConfigurationTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ManagerControllerValidationTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ManagerControllerValidationWithCustomJobManagerTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerActionExecutorValidationTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ManagerActionExecutorValidationWithErrorTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ManagerModuleTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ManagerOperationsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NodeUriBuilderHelperTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PurgeTimerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestHelper.cs" />

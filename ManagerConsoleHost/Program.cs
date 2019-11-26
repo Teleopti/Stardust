@@ -76,7 +76,7 @@ namespace ManagerConsoleHost
             var builder = new ContainerBuilder();
             builder.RegisterInstance(managerConfiguration).As<ManagerConfiguration>();
 
-            var assembly = typeof(ManagerController).Assembly;
+            var assembly = typeof(ManagerActionExecutor).Assembly;
             builder.RegisterAssemblyModules(assembly);
             var container = builder.Build();
 

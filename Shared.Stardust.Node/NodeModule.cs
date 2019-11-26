@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Shared.Stardust.Node;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
@@ -11,12 +10,11 @@ namespace Stardust.Node
 	{
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(NodeModule).Assembly)
-                .Where(type => type.GetInterfaces().Contains(typeof(IamStardustNodeController))).AsSelf();
+            //builder.RegisterAssemblyTypes(typeof(NodeModule).Assembly)
+            //    .Where(type => type.GetInterfaces().Contains(typeof(IamStardustNodeController))).AsSelf();
 			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<InvokeHandler>().As<IInvokeHandler>().InstancePerDependency();
 			builder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().InstancePerDependency();
-            //builder.RegisterApiControllers(typeof (NodeController).Assembly);
             builder.RegisterType<TrySendJobDetailToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().InstancePerDependency();
 			builder.RegisterType<TrySendJobDoneStatusToManagerTimer>().InstancePerDependency();

@@ -122,6 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerModule.cs" />
     <Compile Include="GlobalExceptionLogger.cs" />
     <Compile Include="NodeController.cs" />
     <Compile Include="NodeStarter.cs" />

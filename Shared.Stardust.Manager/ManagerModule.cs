@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Integration.WebApi;
 using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -24,8 +23,11 @@ namespace Stardust.Manager
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
-            builder.RegisterApiControllers(typeof(ManagerController).Assembly);
+            // builder.RegisterApiControllers(typeof(ManagerActionExecutor).Assembly);
             builder.Register(c => LogManager.GetLogger(c.GetType()));
+            builder.RegisterType<ManagerActionExecutor>().InstancePerDependency();
+            //builder.RegisterAssemblyTypes(typeof(ManagerModule).Assembly)
+            //    .Where(type => type.GetInterfaces().ToList().Contains(typeof(IamStardustManagerController))).AsSelf();
         }
 	}
 }

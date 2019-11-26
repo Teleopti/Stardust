@@ -5,11 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using log4net.Config;
+using Manager.IntegrationTest.ConsoleHost.Helpers;
 using Manager.IntegrationTest.Database;
 using Manager.IntegrationTest.Helpers;
 using Manager.IntegrationTest.Tasks;
-using Manager.IntegrationTest.ConsoleHost.Helpers;
 using NUnit.Framework;
+
 
 namespace Manager.IntegrationTest.Initializers
 {

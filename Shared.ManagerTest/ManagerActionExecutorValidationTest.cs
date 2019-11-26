@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Results;
 using ManagerTest.Attributes;
 using NUnit.Framework;
+using Shared.Stardust.Manager;
 using SharpTestsEx;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;
@@ -15,78 +10,62 @@ using Stardust.Manager.Models;
 
 namespace ManagerTest
 {
-	[ManagerControllerValidationTest]
+	[ManagerActionExecutorValidationTestAttribute]
 	[TestFixture]
-	public class ManagerControllerValidationTest
+	public class ManagerActionExecutorValidationTest
 	{
-		public ManagerController ManagerController;
+		public ManagerActionExecutor Target;
         public IJobRepository JobRepository;
+        public const string Hostname = "AGreatHostname";
 
         [Test]
 		public void ShouldReturnOkWhenJobDoneReceived()
 		{
-			ManagerController.ControllerContext = new HttpControllerContext
-			{
-				Configuration = new HttpConfiguration()
-			};
-			ManagerController.Request = new HttpRequestMessage
-			{
-				RequestUri = new Uri("http://calabiro.com") 
-			};
-			var result = ManagerController.JobSucceed(Guid.NewGuid());
-			var httpResponseMessage = result.ExecuteAsync(CancellationToken.None).Result;
-			httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
-			//Assert.IsInstanceOf(typeof(OkResult), result);
-		}
+            var response = Target.JobSucceed(Guid.NewGuid(),Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.Ok);
+        }
 
 		[Test]
 		public void ShouldReturnBadRequestIfCancelThisJobGetsAnInvalidGuid()
 		{
-			var response = ManagerController.CancelJobByJobId(Guid.Empty);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.CancelJobByJobId(Guid.Empty, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestIfHeartbeatGetsAnInvalidUri()
 		{
-			var response = ManagerController.WorkerNodeRegisterHeartbeat(null);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.WorkerNodeRegisterHeartbeat(null, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestIfJobFailedGetsANull()
 		{
-			var response = ManagerController.JobFailed(null);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.JobFailed(null, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestIfJobFailedGetsInvalidJobFailedModel()
 		{
 			var jobFailed = new JobFailed();
-
-			var response = ManagerController.JobFailed(jobFailed);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+            var response = Target.JobFailed(jobFailed, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestIfJobHistoryDetailsGetsAnInvalidGuid()
 		{
-			var response = ManagerController.GetJobDetailsByJobId(Guid.Empty);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.GetJobDetailsByJobId(Guid.Empty);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestIfJobHistoryGetsAnInvalidGuid()
 		{
-			var response = ManagerController.GetJobByJobId(Guid.Empty);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.GetJobByJobId(Guid.Empty);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -100,9 +79,8 @@ namespace ManagerTest
 				CreatedBy = string.Empty
 			};
 
-			var response = ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -116,10 +94,8 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			var response =
-				ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -133,9 +109,8 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			var response = ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -149,10 +124,8 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			var response =
-				ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -166,10 +139,8 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			var response =
-				ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -183,10 +154,8 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			var response =
-				ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -200,10 +169,8 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			var response =
-				ManagerController.AddItemToJobQueue(jobQueueItem);
-
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+			var response = Target.AddItemToJobQueue(jobQueueItem, Hostname);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 		[Test]
@@ -218,18 +185,18 @@ namespace ManagerTest
 			};
 
 			var response =
-				ManagerController.AddItemToJobQueue(jobQueueItem);
+				Target.AddItemToJobQueue(jobQueueItem, Hostname);
 
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
 
 		[Test]
 		public void ShouldReturnBadRequestIJobDoneGetsAnInvalidUri()
 		{
-			var response = ManagerController.JobSucceed(Guid.Empty);
+			var response = Target.JobSucceed(Guid.Empty, Hostname);
 
-			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
+            response.Result.Should().Be(SimpleResponse.Status.BadRequest);
 		}
 
         [Test]
@@ -240,12 +207,9 @@ namespace ManagerTest
                 JobId = Guid.NewGuid(),
                 AggregateException = null
             };
-            ManagerController.Request = new HttpRequestMessage()
-            {
-                RequestUri = new Uri("http://calabiro.com")
-            };
+         
 
-            var response = ManagerController.JobFailed(jobFailed);
+            var response = Target.JobFailed(jobFailed, Hostname);
 
             var jobDetails = JobRepository.GetJobDetailsByJobId(jobFailed.JobId);
             jobDetails.Single().Detail.Should().Be("No Exception specified for job");

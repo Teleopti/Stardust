@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net.Http;
-using System.Web.Http.Results;
 using ManagerTest.Attributes;
 using ManagerTest.Fakes;
 using NUnit.Framework;
@@ -10,12 +8,14 @@ using Stardust.Manager.Models;
 
 namespace ManagerTest
 {
-	[ManagerControllerValidationWithCustomJobManagerTest]
+	[ManagerActionExecutorValidationWithCustomJobManagerTestAttribute]
 	[TestFixture]
-	public class ManagerControllerValidationWithErrorTest
+	public class ManagerActionExecutorValidationWithErrorTest
     {
-		public ManagerController Target;
+		public ManagerActionExecutor Target;
         public FakeJobManager FakeJobManager;
+
+        public const string Hostname = "AGreatHostname";
 
         [SetUp]
         public void Setup()
@@ -34,39 +34,24 @@ namespace ManagerTest
                 AggregateException = new AggregateException()
             };
 
-            Target.Request = new HttpRequestMessage
-            {
-                RequestUri = new Uri("http://calabiro.com")
-            };
-
-            var httpActionResult = Target.JobFailed(jobFailed);
-            var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Be("CreateJobDetail");
+            var actionResult = Target.JobFailed(jobFailed, Hostname);
+            actionResult.Exception.InnerException.Message.Should().Be("CreateJobDetail");
         }
 
         [Test]
         public void ShouldHandleExceptionFromWithinJobSucceeded()
         {
             FakeJobManager.SetFakeBehaviour(FakeJobManager.BehaviourSelector.ThrowException);
-            Target.Request = new HttpRequestMessage
-            {
-                RequestUri = new Uri("http://calabiro.com")
-            };
-
-            var httpActionResult = Target.JobSucceed(Guid.NewGuid());
-            var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Be("UpdateResultForJob");
+            
+            var actionResult = Target.JobSucceed(Guid.NewGuid(),Hostname);
+            actionResult.Exception.InnerException.Message.Should().Be("UpdateResultForJob");
         }
 
         [Test]
         public void ShouldHandleTimeoutFromWithinJobFailed()
         {
             FakeJobManager.SetFakeBehaviour(FakeJobManager.BehaviourSelector.Timeout, TimeSpan.FromSeconds(70));
-            Target.Request = new HttpRequestMessage
-            {
-                RequestUri = new Uri("http://calabiro.com")
-            };
-            
+
             var jobFailed = new JobFailed
             {
                 JobId = Guid.NewGuid(),
@@ -74,9 +59,8 @@ namespace ManagerTest
                 AggregateException = new AggregateException()
             };
 
-            var httpActionResult = Target.JobFailed(jobFailed);
-            var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Be("Timeout while executing JobFailed");
+            var actionResult = Target.JobFailed(jobFailed, Hostname);
+            actionResult.Exception.InnerException.Message.Should().Be("Timeout while executing JobFailed");
         }
 
         //[Test]

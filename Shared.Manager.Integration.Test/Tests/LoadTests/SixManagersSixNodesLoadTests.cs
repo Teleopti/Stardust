@@ -7,6 +7,7 @@ using Manager.IntegrationTest.Initializers;
 using Manager.IntegrationTest.Timers;
 using NUnit.Framework;
 
+
 namespace Manager.IntegrationTest.Tests.LoadTests
 {
 	[TestFixture]

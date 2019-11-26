@@ -31,7 +31,7 @@ namespace ManagerTest
 		{
 			using (var scope = _container.BeginLifetimeScope())
 			{
-				scope.Resolve<ManagerController>().Should().Not.Be.Null();
+				scope.Resolve<ManagerActionExecutor>().Should().Not.Be.Null();
 				scope.Resolve<ManagerConfiguration>().Should().Not.Be.Null();
 				scope.Resolve<NodeManager>().Should().Not.Be.Null();
 				scope.Resolve<IJobManager>().Should().Not.Be.Null();

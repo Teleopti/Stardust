@@ -6,7 +6,7 @@
     <Configurations>Debug;Release;DebugCore;ReleaseCore;DebugAll;ReleaseAll</Configurations>
   </PropertyGroup>
 
-  <Import Project="..\Shared.Manager.Integration.Test.Console.Host\Shared.Manager.Integration.Test.Console.Host.projitems" Label="Shared" />
+  <Import Project="..\Shared.Manager.IntegrationTest.ConsoleHost\Shared.Manager.IntegrationTest.ConsoleHost.projitems" Label="Shared" />
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />

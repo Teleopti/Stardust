@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using log4net;
 using log4net.Config;
 using ManagerTest.Attributes;
 using ManagerTest.Fakes;
@@ -51,9 +53,11 @@ namespace ManagerTest
 				Url = new Uri("http://localhost:9051/")
 			};
 
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-		}
+
+            var logRepository = LogManager.GetRepository(typeof(JobManager).Assembly);
+            var configurationFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).FilePath;
+            XmlConfigurator.Configure(logRepository, new FileInfo(configurationFile));
+        }
 
 		[Test]
 		public void ShouldAddANodeOnInit()
@@ -206,12 +210,12 @@ namespace ManagerTest
 			JobManager.AssignJobToWorkerNodes();
 
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
-			job.Satisfy(job1 => job1.Started != null);
+			job.Satisfies(job1 => job1.Started != null);
 
 			JobManager.CancelJobByJobId(jobQueueItem.JobId);
 
 			job = JobManager.GetJobByJobId(jobQueueItem.JobId);
-			job.Satisfy(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
+			job.Satisfies(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
 
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
@@ -297,8 +301,8 @@ namespace ManagerTest
 			JobManager.AssignJobToWorkerNodes();
 
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
-			job.Satisfy(job1 => job1.Started != null);
-			job.Satisfy(job1 => job1.Ended == null);
+			job.Satisfies(job1 => job1.Started != null);
+			job.Satisfies(job1 => job1.Ended == null);
 
 			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(job.SentToWorkerNodeUri);
 

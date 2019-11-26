@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
+using Shared.Stardust.Node;
 using SharpTestsEx;
 using Stardust.Node;
 using Stardust.Node.Interfaces;
@@ -39,7 +40,7 @@ namespace NodeTest
 		{
 			using (var scope = _container.BeginLifetimeScope())
 			{
-				scope.Resolve<NodeController>().Should().Not.Be.Null();
+				scope.Resolve<NodeActionExecutor>().Should().Not.Be.Null();
 				scope.Resolve<NodeConfigurationService>().Should().Not.Be.Null();
 				scope.Resolve<TrySendJobDetailToManagerTimer>().Should().Not.Be.Null();
 				scope.Resolve<TrySendNodeStartUpNotificationToManagerTimer>().Should().Not.Be.Null();

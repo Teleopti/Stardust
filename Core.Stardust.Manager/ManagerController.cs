@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Web.Http;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Stardust.Manager;
 using Shared.Stardust.Manager.Interfaces;
 using Stardust.Manager.Constants;
@@ -9,7 +9,7 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
-	public class ManagerController : ApiController, IamStardustManagerController
+	public class ManagerController : ControllerBase, IamStardustManagerController
 	{
         private readonly ManagerActionExecutor _managerActionExecutor;
 
@@ -17,10 +17,9 @@ namespace Stardust.Manager
         {
             _managerActionExecutor = managerActionExecutor;
         }
-
-        private IHttpActionResult ResultTranslator(SimpleResponse simpleResponse)
+        
+        private IActionResult ResultTranslator(SimpleResponse simpleResponse)
         {
-            
             switch (simpleResponse.Result)
             {
                 case SimpleResponse.Status.Ok:
@@ -30,82 +29,81 @@ namespace Stardust.Manager
                 case SimpleResponse.Status.Conflict:
                     return Conflict();
                 case SimpleResponse.Status.InternalServerError:
-                    return InternalServerError(simpleResponse.Exception);
+                    return  StatusCode(StatusCodes.Status500InternalServerError, simpleResponse.Exception );
                 default:
                     throw new Exception("ResultTranslator - does not have a mapping for: " + simpleResponse.Result.ToString());
             }
         }
-
-
-		[HttpPost, Route(ManagerRouteConstants.Job)]
-		public IHttpActionResult AddItemToJobQueue([FromBody] JobQueueItem jobQueueItem)
-		{
-            return ResultTranslator( _managerActionExecutor.AddItemToJobQueue(jobQueueItem, Request?.RequestUri?.GetLeftPart(UriPartial.Authority)));
+        
+        [HttpPost, Route(ManagerRouteConstants.Job)]
+		public IActionResult AddItemToJobQueue([FromBody] JobQueueItem jobQueueItem)
+        {
+            return ResultTranslator( _managerActionExecutor.AddItemToJobQueue(jobQueueItem, Request.Host.Value));
         }
 
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
-		public IHttpActionResult CancelJobByJobId(Guid jobId)
+		public IActionResult CancelJobByJobId(Guid jobId)
 		{
-            return ResultTranslator( _managerActionExecutor.CancelJobByJobId(jobId, Request?.RequestUri?.GetLeftPart(UriPartial.Authority))); ;
-		}
-
-		[HttpGet, Route(ManagerRouteConstants.Jobs)]
-		public IHttpActionResult GetAllJobs()
-		{
-            return ResultTranslator( _managerActionExecutor.GetAllJobs());
+            return ResultTranslator( _managerActionExecutor.CancelJobByJobId(jobId, Request.Host.Value));
         }
 
+		[HttpGet, Route(ManagerRouteConstants.Jobs)]
+		public IActionResult GetAllJobs()
+		{
+            return ResultTranslator( _managerActionExecutor.GetAllJobs());
+		}
+
 		[HttpGet, Route(ManagerRouteConstants.JobByJobId)]
-		public IHttpActionResult GetJobByJobId(Guid jobId)
+		public IActionResult GetJobByJobId(Guid jobId)
 		{
             return ResultTranslator( _managerActionExecutor.GetJobByJobId(jobId));
         }
 
 		[HttpGet, Route(ManagerRouteConstants.JobDetailByJobId)]
-		public IHttpActionResult GetJobDetailsByJobId(Guid jobId)
+		public IActionResult GetJobDetailsByJobId(Guid jobId)
 		{
             return ResultTranslator( _managerActionExecutor.GetJobDetailsByJobId(jobId));
         }
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-		public IHttpActionResult WorkerNodeRegisterHeartbeat([FromBody] Uri workerNodeUri)
+		public IActionResult WorkerNodeRegisterHeartbeat([FromBody] Uri workerNodeUri)
 		{
-            return ResultTranslator( _managerActionExecutor.WorkerNodeRegisterHeartbeat(workerNodeUri, Request?.RequestUri?.GetLeftPart(UriPartial.Authority)));
+            return ResultTranslator( _managerActionExecutor.WorkerNodeRegisterHeartbeat(workerNodeUri, Request.Host.Host));
         }
 
 		[HttpPost, Route(ManagerRouteConstants.JobSucceed)]
-		public IHttpActionResult JobSucceed(Guid jobId)
-		{		
-            return ResultTranslator( _managerActionExecutor.JobSucceed(jobId, Request?.RequestUri?.GetLeftPart(UriPartial.Authority)));
+		public IActionResult JobSucceed(Guid jobId)
+		{
+            return ResultTranslator( _managerActionExecutor.JobSucceed(jobId, Request.Host.Host));
         }
 
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
-		public IHttpActionResult JobFailed([FromBody] JobFailed jobFailed)
+		public IActionResult JobFailed([FromBody] JobFailed jobFailed)
 		{
-            return ResultTranslator( _managerActionExecutor.JobFailed(jobFailed, Request?.RequestUri?.GetLeftPart(UriPartial.Authority)));
+            return ResultTranslator( _managerActionExecutor.JobFailed(jobFailed, Request.Host.Host));
         }
 		
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
-		public IHttpActionResult JobCanceled(Guid jobId)
+		public IActionResult JobCanceled(Guid jobId)
 		{
-            return ResultTranslator( _managerActionExecutor.JobCanceled(jobId, Request?.RequestUri?.GetLeftPart(UriPartial.Authority)));
+            return ResultTranslator( _managerActionExecutor.JobCanceled(jobId, Request.Host.Host));
         }
 
 
 		[HttpPost, Route(ManagerRouteConstants.JobDetail)]
-		public IHttpActionResult AddJobDetail([FromBody] IList<JobDetail> jobDetails)
+		public IActionResult AddJobDetail([FromBody] IList<JobDetail> jobDetails)
 		{
             return ResultTranslator( _managerActionExecutor.AddJobDetail(jobDetails));
         }
 
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
-		public IHttpActionResult NodeInitialized([FromBody] Uri workerNodeUri)
-		{	
-            return ResultTranslator( _managerActionExecutor.NodeInitialized(workerNodeUri, Request?.RequestUri?.GetLeftPart(UriPartial.Authority)));
+		public IActionResult NodeInitialized([FromBody] Uri workerNodeUri)
+		{
+            return ResultTranslator( _managerActionExecutor.NodeInitialized(workerNodeUri, Request.Host.Host));
         }
 
 		[HttpGet, Route(ManagerRouteConstants.Ping)]
-		public IHttpActionResult Ping()
+		public IActionResult Ping()
 		{
 			return Ok();
 		}

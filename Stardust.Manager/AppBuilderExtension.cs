@@ -3,7 +3,6 @@ using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
 using Autofac.Integration.WebApi;
-using log4net;
 using Owin;
 
 namespace Stardust.Manager
@@ -34,7 +33,7 @@ namespace Stardust.Manager
 				});
 
             //to start the timers etc
-			lifetimeScope.Resolve<ManagerController>();
+			lifetimeScope.Resolve<ManagerActionExecutor>();
 		}
 	}
 }

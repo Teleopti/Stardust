@@ -27,14 +27,14 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 			builder.RegisterType<JobRepositoryCommandExecuter>().SingleInstance();
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
-
-			builder.RegisterType<ManagerController>();
+            builder.RegisterType<ManagerActionExecutor>();
 			builder.RegisterType<FakeLogger>().As<ILog>().SingleInstance();
 			builder.RegisterType<JobManager>().As<IJobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
 			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimerFake>().As<NodePurgeTimer>().SingleInstance();
 			builder.RegisterType<TestHelper>().SingleInstance();
-		}
+            builder.RegisterType<ManagerController>();
+        }
 	}
 }
