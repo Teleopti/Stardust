@@ -9,8 +9,8 @@ using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 { 
-	public class JobManager : IDisposable, IJobManager
-    {
+	public class JobManager : IDisposable
+	{
 		private readonly Timer _checkAndAssignJob = new Timer();
 		private readonly Timer _checkHeartbeatsTimer = new Timer();
 

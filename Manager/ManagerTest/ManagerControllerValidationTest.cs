@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Web.Http;
-using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using ManagerTest.Attributes;
 using NUnit.Framework;
-using SharpTestsEx;
 using Stardust.Manager;
-using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
 namespace ManagerTest
@@ -20,23 +12,13 @@ namespace ManagerTest
 	public class ManagerControllerValidationTest
 	{
 		public ManagerController ManagerController;
-        public IJobRepository JobRepository;
 
-        [Test]
+		[Test]
 		public void ShouldReturnOkWhenJobDoneReceived()
 		{
-			ManagerController.ControllerContext = new HttpControllerContext
-			{
-				Configuration = new HttpConfiguration()
-			};
-			ManagerController.Request = new HttpRequestMessage
-			{
-				RequestUri = new Uri("http://calabiro.com") 
-			};
 			var result = ManagerController.JobSucceed(Guid.NewGuid());
-			var httpResponseMessage = result.ExecuteAsync(CancellationToken.None).Result;
-			httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
-			//Assert.IsInstanceOf(typeof(OkResult), result);
+
+			Assert.IsInstanceOf(typeof(OkResult), result);
 		}
 
 		[Test]
@@ -231,24 +213,5 @@ namespace ManagerTest
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
-
-        [Test]
-        public void ShouldLogIfAggregateExceptionIsNull()
-        {
-            var jobFailed = new JobFailed
-            {
-                JobId = Guid.NewGuid(),
-                AggregateException = null
-            };
-            ManagerController.Request = new HttpRequestMessage()
-            {
-                RequestUri = new Uri("http://calabiro.com")
-            };
-
-            var response = ManagerController.JobFailed(jobFailed);
-
-            var jobDetails = JobRepository.GetJobDetailsByJobId(jobFailed.JobId);
-            jobDetails.Single().Detail.Should().Be("No Exception specified for job");
-        }
 	}
 }

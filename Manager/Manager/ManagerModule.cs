@@ -22,8 +22,8 @@ namespace Stardust.Manager
 		{
 			builder.RegisterInstance(_managerConfiguration).As<ManagerConfiguration>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
-            builder.RegisterType<JobManager>().As<IJobManager>().SingleInstance();
-            builder.RegisterType<Validator>().SingleInstance();
+			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimer>().SingleInstance();
 			builder.RegisterType<HalfNodesAffinityPolicy>().SingleInstance();

@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
-using Newtonsoft.Json;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
@@ -124,11 +123,9 @@ namespace Stardust.Node.Timers
 				}
 				else
 				{
-					var result = httpResponseMessage.Content.ReadAsStringAsync().Result;
-					var interpretedString = JsonConvert.DeserializeObject(result).ToString();
 					Start();
 					var errorMessage = $"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : " +
-					                   $"( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase} Exception: {interpretedString}";
+					                   $"( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase}";
 					_exceptionLoggerHandler.LogError(LoggerExtensions.GetFormattedLogMessage(errorMessage));
 				}
 			}

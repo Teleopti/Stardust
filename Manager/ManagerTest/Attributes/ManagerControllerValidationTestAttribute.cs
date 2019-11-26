@@ -17,10 +17,10 @@ namespace ManagerTest.Attributes
 			builder.RegisterInstance(managerConfiguration).As<ManagerConfiguration>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
-			builder.RegisterType<FakeJobRepository>().As<IJobRepository>().SingleInstance();
-            builder.RegisterType<FakeWorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
+			builder.Register(c => new FakeJobRepository()).As<IJobRepository>();
+			builder.Register(c => new FakeWorkerNodeRepository()).As<IWorkerNodeRepository>();
 			builder.RegisterApiControllers(typeof(ManagerController).Assembly);
-			builder.RegisterType<JobManager>().As<IJobManager>().SingleInstance();
+			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();

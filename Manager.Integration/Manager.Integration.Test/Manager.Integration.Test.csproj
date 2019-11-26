@@ -118,7 +118,6 @@
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\PerformanceTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
-    <Compile Include="Tests\RecoveryTests\RecoverFromNodeCrashTest.cs" />
     <Compile Include="Tests\RecoveryTests\DetectNodeFailureTest.cs" />
     <Compile Include="Database\SqlNotifier.cs" />
     <Compile Include="Tests\FunctionalTests\OneManagerAndZeroNodesTests.cs" />
@@ -150,20 +149,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Manager\ManagerConsoleHost\ManagerConsoleHost.csproj">
-      <Project>{489535d5-a3f2-4877-81b7-94adb7bd320b}</Project>
-      <Name>ManagerConsoleHost</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Node\NodeConsoleHost\NodeConsoleHost.csproj">
-      <Project>{3cfc869e-8e1d-4b47-845a-500041ad4dec}</Project>
-      <Name>NodeConsoleHost</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Node\NodeTest.JobHandlers\NodeTest.JobHandlers.csproj">
-      <Project>{3D7D71B6-4676-498C-B148-447A5FC5F3A0}</Project>
-      <Name>NodeTest.JobHandlers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Manager.Integration.Tests.Console.Host\Manager.IntegrationTest.Console.Host.csproj">
       <Project>{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}</Project>
       <Name>Manager.IntegrationTest.Console.Host</Name>
