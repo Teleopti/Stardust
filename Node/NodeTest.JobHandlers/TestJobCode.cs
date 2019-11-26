@@ -17,14 +17,14 @@ namespace NodeTest.JobHandlers
 			// -----------------------------------------------------------
 			var jobProgress = new TestJobProgress
 			{
-				Text = $"Starting job: {message.Name}"
-            };
+				Text = "Starting job: " + message.Name
+			};
 			progress(jobProgress.Text);
 
 			jobProgress = new TestJobProgress
 			{
-				Text = $"Will execute for : {message.Duration} seconds."
-            };
+				Text = "Will execute for : " + message.Duration + " seconds."
+			};
 			progress(jobProgress.Text);
 
 			var stopwatch = new Stopwatch();
@@ -43,8 +43,8 @@ namespace NodeTest.JobHandlers
 				
 				jobProgress = new TestJobProgress
 				{
-					Text = $"Progress loop number :{progressCounter}"
-                };
+					Text = "Progress loop number :" + progressCounter
+				};
 				progress(jobProgress.Text);
 
 				Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -55,8 +55,8 @@ namespace NodeTest.JobHandlers
 			// -----------------------------------------------------------
 			jobProgress = new TestJobProgress
 			{
-				Text = $"Finished job: {message.Name}"
-            };
+				Text = "Finished job: " + message.Name
+			};
 			progress(jobProgress.Text);
 
 			var objects = new List<object>();
