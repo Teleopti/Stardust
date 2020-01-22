@@ -108,7 +108,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				ManagerLogger.Info("Assigning jobs to node");
+				ManagerLogger.Info("Trying to assign a job to a free worker node");
 				List<Uri> allAvailableWorkerNodes;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -119,11 +119,11 @@ namespace Stardust.Manager
 				if (!allAvailableWorkerNodes.Any()) return;
 
 				//sending to the available nodes
-				ManagerLogger.Info(allAvailableWorkerNodes.Count + " nodes found that are available");
+				ManagerLogger.Info($"Found {allAvailableWorkerNodes.Count} available worker nodes");
 				var shuffledNodes = allAvailableWorkerNodes.OrderBy(a => Guid.NewGuid()).ToList();
 				foreach (var nodeUri in shuffledNodes)
 				{
-					ManagerLogger.Info("trying to assign the job to node " + nodeUri);
+					ManagerLogger.Info($"Trying to assign a job to the node: \"{nodeUri}\"" );
 					AssignJobToWorkerNodeWorker(nodeUri);
 					Thread.Sleep(500);
 				}
@@ -168,23 +168,34 @@ namespace Stardust.Manager
 
 		public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
 		{
-		
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-                _retryPolicy.Execute(sqlConnection.Open);
-				_jobRepositoryCommandExecuter.UpdateResult(jobId, result, ended, sqlConnection);
-
-				var finishDetail = "Job finished";
-				if (result == "Canceled")
+				try
 				{
-					finishDetail = "Job was canceled";
-				}
-				else if (result == "Fatal Node Failure" || result == "Failed")
-				{
-					finishDetail = "Job Failed";
-				}
+					_retryPolicy.Execute(sqlConnection.Open);
 
-                _jobRepositoryCommandExecuter.InsertJobDetail(jobId, finishDetail, sqlConnection);
+					var moveIsOk = MoveJobFromQueueToJob(sqlConnection, jobId, "");
+					if (!moveIsOk)
+						return;
+
+					_jobRepositoryCommandExecuter.UpdateResult(jobId, result, ended, sqlConnection);
+
+					var finishDetail = "Job finished";
+					if (result == "Canceled")
+					{
+						finishDetail = "Job was canceled";
+					}
+					else if (result == "Fatal Node Failure" || result == "Failed")
+					{
+						finishDetail = "Job Failed";
+					}
+
+					_jobRepositoryCommandExecuter.InsertJobDetail(jobId, finishDetail, sqlConnection);
+				}
+				catch (Exception exception)
+				{
+					this.Log().Error($"UpdateResultForJob failed for job:{jobId} job result:{result} date:{ended}",exception);
+				}
             }
 		}
 
@@ -192,12 +203,12 @@ namespace Stardust.Manager
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-                _retryPolicy.Execute(sqlConnection.Open);
-				_jobRepositoryCommandExecuter.InsertJobDetail(jobId, detail, sqlConnection);
+				_retryPolicy.Execute(sqlConnection.Open);
+				var moveIsOk = MoveJobFromQueueToJob(sqlConnection, jobId ,"");
+				if(moveIsOk)
+					_jobRepositoryCommandExecuter.InsertJobDetail(jobId, detail, sqlConnection);
 			}
 		}
-
-
 
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
 		{
@@ -394,7 +405,7 @@ namespace Stardust.Manager
 
 		private void AssignJobToWorkerNodeWorker(Uri availableNode)
 		{
-			ManagerLogger.Info("starting the assignment process");
+			ManagerLogger.Info($"Starting the assignment process for node: \"{availableNode}\"");
 			lock (_assigningJob)
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
@@ -409,7 +420,7 @@ namespace Stardust.Manager
 						if (jobQueueItem == null)
 						{
 							sqlConnection.Close();
-							ManagerLogger.Info("no job acquired for node " + availableNode);
+							ManagerLogger.Info($"No job acquired for node: \"{availableNode}\"");
 							return;
 						}
 
@@ -446,15 +457,11 @@ namespace Stardust.Manager
 						{
 							var sentToWorkerNodeUri = availableNode.ToString();
 							ManagerLogger.Info("node is ok fix the db now");
-							using (var sqlTransaction = sqlConnection.BeginTransaction())
-							{
-								_jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
-								_jobRepositoryCommandExecuter.DeleteJobFromJobQueue(jobQueueItem.JobId, sqlConnection, sqlTransaction);
-								_jobRepositoryCommandExecuter.InsertJobDetail(jobQueueItem.JobId, "Job Started", sqlConnection, sqlTransaction);
-								sqlTransaction.Commit();
-							}
-
-							if (!response.IsSuccessStatusCode) return;
+							
+							if (!response.IsSuccessStatusCode ) return;
+							
+                            var couldMoveJob = MoveJobFromQueueToJob(sqlConnection, jobQueueItem.JobId, sentToWorkerNodeUri);
+                            if (!couldMoveJob) return;
 
 							urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 							//what should happen if this response is not 200? 
@@ -463,7 +470,7 @@ namespace Stardust.Manager
 						}
 						else
 						{
-							ManagerLogger.Info($"response from the node was not ok {response?.ReasonPhrase}. Node.IsAvailable={result.IsAvailable}");
+							ManagerLogger.Info($"Response code: {response?.ReasonPhrase}. Node.IsAvailable={result.IsAvailable}");
 						}
 					}
 					catch (Exception ex)
@@ -496,5 +503,39 @@ namespace Stardust.Manager
 			}
 			return count == 1;
 		}
+
+
+
+        private bool MoveJobFromQueueToJob(SqlConnection sqlConnection, Guid jobId, string sentToWorkerNodeUri)
+        {
+            using (var sqlTransaction = sqlConnection.BeginTransaction())
+            {
+                try
+                {
+	                if (_jobRepositoryCommandExecuter.TheJobIsNotMoved(jobId, sqlConnection, sqlTransaction))
+                    {
+	                    var jobQueueItem = _jobRepositoryCommandExecuter.SelectJobQueueItem(jobId, sqlConnection, sqlTransaction);
+                        _jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
+                        _jobRepositoryCommandExecuter.DeleteJobFromJobQueue(jobId, sqlConnection, sqlTransaction);
+                        _jobRepositoryCommandExecuter.InsertJobDetail(jobId, "Job Started", sqlConnection, sqlTransaction);
+                        sqlTransaction.Commit();
+					}
+                }
+                catch (Exception exception)
+                {
+                    ManagerLogger.Info($"MoveJobFromQueueToJob failed for node: \"{sentToWorkerNodeUri}\" and job: \"{jobId}\" with exception: {exception.Message}", exception);
+                    if (sqlTransaction != null)
+                    {
+                        sqlTransaction.Rollback();
+                    }
+
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
+
 	}
 }

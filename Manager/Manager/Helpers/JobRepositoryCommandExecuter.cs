@@ -86,6 +86,18 @@ namespace Stardust.Manager.Helpers
 			}
 		}
 
+        public bool TheJobIsNotMoved(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+        {
+            const string theJobIsNotMovedQuery = @"IF Exists (Select * from stardust.JobQueue where JobId= @JobId) and not exists (Select * from stardust.Job where JobId= @JobId) SELECT CONVERT(BIT,1) else SELECT CONVERT(BIT,0)";
+			
+            using (var theJobIsNotMovedQueryCommand = new SqlCommand(theJobIsNotMovedQuery, sqlConnection, sqlTransaction))
+            {
+                theJobIsNotMovedQueryCommand.Parameters.AddWithValue("@JobId", jobId);
+                return (bool) _retryPolicy.Execute(theJobIsNotMovedQueryCommand.ExecuteScalar);
+            }
+        }
+
+
 		public void InsertIntoJob(JobQueueItem jobQueueItem, string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
 			const string insertIntoJobCommandText = @"INSERT INTO [Stardust].[Job]
@@ -129,6 +141,8 @@ namespace Stardust.Manager.Helpers
                 _retryPolicy.Execute(insertIntoJobCommand.ExecuteNonQuery);
 			}
 		}
+
+
 
 		public List<JobQueueItem> SelectValidItemsInJobQueue(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{

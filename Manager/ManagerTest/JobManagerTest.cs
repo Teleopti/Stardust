@@ -337,41 +337,6 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldJustWarnIfAnotherManagerAlreadySentJob()
-		{
-			var jobQueueItem = new JobQueueItem
-			{
-				JobId = Guid.NewGuid(),
-				Name = "Name",
-				Serialized = "Serialized",
-				Type = "Type",
-				CreatedBy = "CreatedBy",
-				Created = DateTime.Now
-			};
-
-			NodeManager.AddWorkerNode(_workerNode.Url);
-
-			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
-			{
-				sqlConnection.Open();
-				JobRepositoryCommandExecuter.InsertIntoJobQueue(jobQueueItem, sqlConnection);
-				JobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, "aNode", sqlConnection);
-			}
-			
-			JobManager.AssignJobToWorkerNodes();
-			var assertSQL = "SELECT COUNT(*) FROM Stardust.Logging WHERE [Level] = 'WARN' AND [Message] like '%It was already assigned, probably by another Manager.%'";
-			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
-			{
-				using (var getAllJobsCommand = new SqlCommand(assertSQL, sqlConnection))
-				{
-					sqlConnection.Open();
-					var ret = getAllJobsCommand.ExecuteScalar();
-					ret.Should().Be.EqualTo(1);
-				}
-			}
-		}
-		
-		[Test]
 		public void ShouldNotLogErrorWhenNodeDownOnPostAsync()
 		{
 			var jobQueueItem = new JobQueueItem
@@ -425,5 +390,57 @@ namespace ManagerTest
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldHandleJobIsNotMovedWhenNodeSendingDetail()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+			JobManager.AddItemToJobQueue(jobQueueItem);
+			FakeHttpSender.FailPostAsync = false;
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+			JobRepository.GetAllJobs().Count.Should().Be(0);
+			JobManager.CreateJobDetail(new JobDetail{Created = DateTime.Now, Detail ="Running",Id = 2, JobId = jobQueueItem.JobId });
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+			JobRepository.GetAllJobs().Count.Should().Be(1);
+			JobRepository.GetJobDetailsByJobId(jobQueueItem.JobId).Count.Should().Be(2);
+		}
+		
+		[Test]
+		public void ShouldHandleJobIsNotMovedWhenNodeSendingJobDone()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+			JobManager.AddItemToJobQueue(jobQueueItem);
+			FakeHttpSender.FailPostAsync = false;
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+			JobRepository.GetAllJobs().Count.Should().Be(0);
+			
+			JobManager.UpdateResultForJob(jobQueueItem.JobId,
+				"Success",
+				DateTime.UtcNow);
+			
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+			JobRepository.GetAllJobs().Count.Should().Be(1);
+			JobRepository.GetJobDetailsByJobId(jobQueueItem.JobId).Count.Should().Be(2);
+		}
 	}
 }
