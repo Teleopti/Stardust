@@ -13,9 +13,10 @@ namespace Stardust.Manager
 
         void UpdateResultForJob(Guid jobId,
             string result,
+            string workerNodeUri,
             DateTime ended);
 
-        void CreateJobDetail(JobDetail jobDetail);
+        void CreateJobDetail(JobDetail jobDetail, string workerNodeUri);
         Job GetJobByJobId(Guid jobId);
         IList<Job> GetAllJobs();
         IList<JobDetail> GetJobDetailsByJobId(Guid jobId);

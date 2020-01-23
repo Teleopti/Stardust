@@ -75,12 +75,12 @@ namespace ManagerTest.Fakes
             SelectFunction();
         }
 
-        public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
+        public void UpdateResultForJob(Guid jobId, string result, string workerNodeUri, DateTime ended)
         {
             SelectFunction();
         }
 
-        public void CreateJobDetail(JobDetail jobDetail)
+        public void CreateJobDetail(JobDetail jobDetail, string workerNodeUri)
         {
             SelectFunction();
         }

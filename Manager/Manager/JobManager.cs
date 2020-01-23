@@ -100,18 +100,21 @@ namespace Stardust.Manager
 		}
 
 		public void UpdateResultForJob(Guid jobId,
-		                               string result,
-		                               DateTime ended)
+			string result,
+			string workerNodeUri,
+			DateTime ended)
 		{
 			_jobRepository.UpdateResultForJob(jobId,
 			                                  result,
+			                                  workerNodeUri,
 			                                  ended);
 		}
 
-		public void CreateJobDetail(JobDetail jobDetail)
+		public void CreateJobDetail(JobDetail jobDetail, string workerNodeUri)
 		{
 			_jobRepository.CreateJobDetailByJobId(jobDetail.JobId,
 			                                      jobDetail.Detail,
+			                                      workerNodeUri,
 												  jobDetail.Created);
 		}
 

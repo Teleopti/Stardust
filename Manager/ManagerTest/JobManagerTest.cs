@@ -408,7 +408,8 @@ namespace ManagerTest
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
 			JobRepository.GetAllJobs().Count.Should().Be(0);
-			JobManager.CreateJobDetail(new JobDetail{Created = DateTime.Now, Detail ="Running",Id = 2, JobId = jobQueueItem.JobId });
+			var workerNodeUri = _workerNode.Url.AbsoluteUri;
+			JobManager.CreateJobDetail(new JobDetail{Created = DateTime.Now, Detail ="Running",Id = 2, JobId = jobQueueItem.JobId }, workerNodeUri);
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 			JobRepository.GetAllJobs().Count.Should().Be(1);
@@ -436,6 +437,7 @@ namespace ManagerTest
 			
 			JobManager.UpdateResultForJob(jobQueueItem.JobId,
 				"Success",
+				_workerNode.Url.AbsoluteUri,
 				DateTime.UtcNow);
 			
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);

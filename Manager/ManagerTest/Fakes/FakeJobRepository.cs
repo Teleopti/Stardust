@@ -70,14 +70,14 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
+		public void UpdateResultForJob(Guid jobId, string result, string workerNodeUri, DateTime ended)
         {
             //var currentJob = _jobs.Single(j => j.JobId == jobId)
             //currentJob.Result = result;
             //currentJob.Ended = ended;
         }
 
-		public void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created)
+		public void CreateJobDetailByJobId(Guid jobId, string detail, string workerNodeUri, DateTime created)
         {
             JobDetailList.Add(new JobDetail {Created = created, Detail = detail, JobId = jobId});
         }

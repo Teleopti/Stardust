@@ -20,9 +20,9 @@ namespace Stardust.Manager.Interfaces
 
 		void CancelJobByJobId(Guid jobId );
 
-		void UpdateResultForJob(Guid jobId, string result, DateTime ended);
+		void UpdateResultForJob(Guid jobId, string result, string workerNodeUri, DateTime ended);
 
-		void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created);
+		void CreateJobDetailByJobId(Guid jobId, string detail, string workerNodeUri, DateTime created);
 
 		Job GetJobByJobId(Guid jobId);
 

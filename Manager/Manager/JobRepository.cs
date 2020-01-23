@@ -166,7 +166,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
+		public void UpdateResultForJob(Guid jobId, string result, string workerNodeUri, DateTime ended)
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
@@ -174,7 +174,7 @@ namespace Stardust.Manager
 				{
 					_retryPolicy.Execute(sqlConnection.Open);
 
-					var moveIsOk = MoveJobFromQueueToJob(sqlConnection, jobId, "");
+					var moveIsOk = MoveJobFromQueueToJob(sqlConnection, jobId, workerNodeUri);
 					if (!moveIsOk)
 						return;
 
@@ -199,12 +199,12 @@ namespace Stardust.Manager
             }
 		}
 
-		public void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created)
+		public void CreateJobDetailByJobId(Guid jobId, string detail, string workerNodeUri, DateTime created)
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				_retryPolicy.Execute(sqlConnection.Open);
-				var moveIsOk = MoveJobFromQueueToJob(sqlConnection, jobId ,"");
+				var moveIsOk = MoveJobFromQueueToJob(sqlConnection, jobId ,workerNodeUri);
 				if(moveIsOk)
 					_jobRepositoryCommandExecuter.InsertJobDetail(jobId, detail, sqlConnection);
 			}

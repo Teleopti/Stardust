@@ -119,11 +119,11 @@ namespace Stardust.Manager
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
-												": Received job done from a Node ( jobId, Node ) : ( " + jobId + ", " + workerNodeUri  + " )");
+				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job done from a Node ( jobId, Node ) : ( " + jobId + ", " + workerNodeUri  + " )");
 
 				_jobManager.UpdateResultForJob(jobId,
 				                              "Success",
+				                              workerNodeUri,
 											  DateTime.UtcNow);
 
 				_jobManager.AssignJobToWorkerNodes();
@@ -161,10 +161,11 @@ namespace Stardust.Manager
                     Detail = jobFailed.AggregateException?.ToString()??"No Exception specified for job"
                 };
 
-                _jobManager.CreateJobDetail(progress);
+                _jobManager.CreateJobDetail(progress, workerNodeUri);
 
                 _jobManager.UpdateResultForJob(jobFailed.JobId,
                     "Failed",
+                    workerNodeUri,
                     DateTime.UtcNow);
 
                 _jobManager.AssignJobToWorkerNodes();
@@ -203,6 +204,7 @@ namespace Stardust.Manager
 
 				_jobManager.UpdateResultForJob(jobId,
 				                              "Canceled",
+				                              workerNodeUri,
 											  DateTime.UtcNow);
 				
 				_jobManager.AssignJobToWorkerNodes();
@@ -215,6 +217,7 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobDetail)]
 		public IHttpActionResult AddJobDetail([FromBody] IList<JobDetail> jobDetails)
 		{
+			var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 			foreach (var detail in jobDetails)
 			{
 				var isValidRequest = _validator.ValidateObject(detail);
@@ -222,7 +225,7 @@ namespace Stardust.Manager
 				
 				Task.Run(() =>
 			     {
-				      _jobManager.CreateJobDetail(detail);
+				     _jobManager.CreateJobDetail(detail, workerNodeUri);
                 });
 			}
 
