@@ -28,7 +28,7 @@ namespace Stardust.Manager
 				try
 				{
 					return await Client.PutAsync(url,
-							new StringContent(JsonConvert.SerializeObject(data), Encoding.Unicode, Mediatype))
+							new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), Encoding.Unicode, Mediatype))
 						.ConfigureAwait(false);
 				}
 				catch
@@ -48,7 +48,7 @@ namespace Stardust.Manager
 				try
 				{
 					return await Client.PostAsync(url,
-							new StringContent(JsonConvert.SerializeObject(data), Encoding.Unicode, Mediatype))
+							new StringContent(JsonConvert.SerializeObject(data, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), Encoding.Unicode, Mediatype))
 						.ConfigureAwait(false);
 				}
 				catch
