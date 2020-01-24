@@ -13,7 +13,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	[TestFixture]
 	class SendJobToDeadNodeTest : InitializeAndFinalizeOneManagerAndNodes
 	{
-		public SendJobToDeadNodeTest():base(2)
+		public SendJobToDeadNodeTest():base(8)
 		{
 			
 		}
@@ -23,7 +23,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 		{
 			var numberOfNodes = NumberOfNodes;
 			var startedTest = DateTime.UtcNow;
-			var numberOfJobs = 15;
+			var numberOfJobs = 100;
 			var waitForJobToFinishEvent = new ManualResetEventSlim();
 			var waitForNodesToStartEvent = new ManualResetEventSlim();
 			
@@ -47,11 +47,15 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			checkTablesInManagerDbTimer.JobTimer.Start();
 			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
 			waitForNodesToStartEvent.Wait();
-
-			var jobQueueItems = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);	
-			jobQueueItems.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));
 			
-			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(75));
+			var jobQueueItems = JobHelper.GenerateTestJobRequestsRandomDurationSomeFailing(numberOfJobs);	
+			Task.Run(() => jobQueueItems.ForEach(jobQueueItem =>
+			{
+				HttpRequestManager.AddJob(jobQueueItem);
+				Thread.Sleep(300);
+			}));
+			
+			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(250));
 			
 			Assert.IsTrue(jobsFinishedWithoutTimeout, "Timeout on Finishing jobs");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == numberOfNodes, "There should be two nodes registered");

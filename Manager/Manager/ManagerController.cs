@@ -39,12 +39,6 @@ namespace Stardust.Manager
 			var msg = $"{WhoAmI(Request)} : New job received from client ( jobId, jobName ) : ( {jobQueueItem.JobId}, {jobQueueItem.Name} )";
 			this.Log().InfoWithLineNumber(msg);
 
-			
-			Task.Run(() =>
-			{
-				_jobManager.AssignJobToWorkerNodes();
-			});
-
 			return Ok(jobQueueItem.JobId);
 		}
 
@@ -125,8 +119,6 @@ namespace Stardust.Manager
 				                              "Success",
 				                              workerNodeUri,
 											  DateTime.UtcNow);
-
-				_jobManager.AssignJobToWorkerNodes();
 			});
 
             try
@@ -167,8 +159,6 @@ namespace Stardust.Manager
                     "Failed",
                     workerNodeUri,
                     DateTime.UtcNow);
-
-                _jobManager.AssignJobToWorkerNodes();
             });
 
             try
@@ -206,8 +196,6 @@ namespace Stardust.Manager
 				                              "Canceled",
 				                              workerNodeUri,
 											  DateTime.UtcNow);
-				
-				_jobManager.AssignJobToWorkerNodes();
 			});
 
             return Ok();

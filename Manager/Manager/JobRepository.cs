@@ -178,8 +178,10 @@ namespace Stardust.Manager
 					if (!moveIsOk)
 						return;
 
+					this.Log().InfoWithLineNumber($"Started UpdateResultForJob for job:{jobId} job result:{result} date:{ended}");
 					_jobRepositoryCommandExecuter.UpdateResult(jobId, result, ended, sqlConnection);
-
+					this.Log().InfoWithLineNumber($"Finished UpdateResultForJob for job:{jobId}");
+					
 					var finishDetail = "Job finished";
 					if (result == "Canceled")
 					{
@@ -194,7 +196,7 @@ namespace Stardust.Manager
 				}
 				catch (Exception exception)
 				{
-					this.Log().Error($"UpdateResultForJob failed for job:{jobId} job result:{result} date:{ended}",exception);
+					this.Log().ErrorWithLineNumber($"UpdateResultForJob failed for job:{jobId} job result:{result} date:{ended}",exception);
 				}
             }
 		}
@@ -514,16 +516,18 @@ namespace Stardust.Manager
                 {
 	                if (_jobRepositoryCommandExecuter.TheJobIsNotMoved(jobId, sqlConnection, sqlTransaction))
                     {
+	                    ManagerLogger.InfoWithLineNumber($"Try MoveJob in DB. JobId:{jobId}");
 	                    var jobQueueItem = _jobRepositoryCommandExecuter.SelectJobQueueItem(jobId, sqlConnection, sqlTransaction);
                         _jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
                         _jobRepositoryCommandExecuter.DeleteJobFromJobQueue(jobId, sqlConnection, sqlTransaction);
                         _jobRepositoryCommandExecuter.InsertJobDetail(jobId, "Job Started", sqlConnection, sqlTransaction);
                         sqlTransaction.Commit();
+                        ManagerLogger.InfoWithLineNumber($"Finished MoveJob in DB. JobId:{jobId} OK!");
 					}
                 }
                 catch (Exception exception)
                 {
-                    ManagerLogger.Info($"MoveJobFromQueueToJob failed for node: \"{sentToWorkerNodeUri}\" and job: \"{jobId}\" with exception: {exception.Message}", exception);
+                    ManagerLogger.ErrorWithLineNumber($"MoveJobFromQueueToJob failed for node: \"{sentToWorkerNodeUri}\" and job: \"{jobId}\" with exception: {exception.Message}", exception);
                     if (sqlTransaction != null)
                     {
                         sqlTransaction.Rollback();
@@ -534,8 +538,5 @@ namespace Stardust.Manager
             }
             return true;
         }
-
-
-
 	}
 }

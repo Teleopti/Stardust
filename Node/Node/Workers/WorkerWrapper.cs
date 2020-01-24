@@ -92,6 +92,7 @@ namespace Stardust.Node.Workers
 		{
 			lock (_startJobLock)
 			{
+				Logger.InfoWithLineNumber($"ValidateStartJob on: {WhoamI} ThreadId:{Thread.CurrentThread.ManagedThreadId} currentMessageToProcess:{_currentMessageToProcess?.JobId} IsWorking:{IsWorking} JobQueueItem:{jobQueueItemEntity?.JobId}");
 				ResetIfTimeout();
 				if (_currentMessageToProcess != null || IsWorking)
 				{
@@ -353,6 +354,8 @@ namespace Stardust.Node.Workers
 			_trySendStatusToManagerTimer.TrySendStatusSucceded -=
 				TrySendStatusToManagerTimer_TrySendStatus;
 
+			Logger.InfoWithLineNumber($"Node:{_nodeConfiguration.BaseAddress} Leaving Timer state: { _trySendStatusToManagerTimer.GetType()} currentMessageToProcess:{_currentMessageToProcess.JobId} IsWorking:{IsWorking}");
+			
 			_trySendStatusToManagerTimer = null;
 
 			// Dispose timer.

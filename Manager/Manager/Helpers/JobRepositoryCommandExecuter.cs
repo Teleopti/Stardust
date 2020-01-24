@@ -88,8 +88,8 @@ namespace Stardust.Manager.Helpers
 
         public bool TheJobIsNotMoved(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
         {
-            const string theJobIsNotMovedQuery = @"IF Exists (Select * from stardust.JobQueue where JobId= @JobId) and not exists (Select * from stardust.Job where JobId= @JobId) SELECT CONVERT(BIT,1) else SELECT CONVERT(BIT,0)";
-			
+            const string theJobIsNotMovedQuery =
+	            @"IF Exists (SELECT * from stardust.JobQueue WITH (NOLOCK) where JobId= @JobId ) and not exists (SELECT * from stardust.Job WITH (NOLOCK) where JobId= @JobId ) SELECT CONVERT(BIT,1) else SELECT CONVERT(BIT,0)";
             using (var theJobIsNotMovedQueryCommand = new SqlCommand(theJobIsNotMovedQuery, sqlConnection, sqlTransaction))
             {
                 theJobIsNotMovedQueryCommand.Parameters.AddWithValue("@JobId", jobId);

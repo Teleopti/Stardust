@@ -52,6 +52,7 @@ namespace Stardust.Node.Timers
 
 		public void InvokeTriggerTrySendStatusSucceded()
 		{
+			Logger.Info( $"{_whoAmI} InvokeTriggerTrySendStatusSucceded for timer {GetType()} TrySendStatusSucceded has value:{TrySendStatusSucceded!=null}");
 			TrySendStatusSucceded?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -64,9 +65,14 @@ namespace Stardust.Node.Timers
 				var uri = new Uri(CallbackTemplateUri.ToString().Replace(ManagerRouteConstants.JobIdOptionalParameter,
 														jobQueueItemEntity.JobId.ToString()));
 
+				Logger.Info($"{_whoAmI} Timer sending to Uri: {uri.AbsolutePath}");
+
 				var httpResponseMessage = await _httpSender.PostAsync(uri,
 				                                                     null,
 				                                                     cancellationToken);
+				
+				Logger.Info($"{_whoAmI} Finished Timer sending to Uri: {uri.AbsolutePath} with response StatusCode:{httpResponseMessage.StatusCode}");
+				
 				return httpResponseMessage;
 			}
 
@@ -95,12 +101,14 @@ namespace Stardust.Node.Timers
 		{
 			if (JobQueueItemEntity == null)
 			{
+				Logger.ErrorWithLineNumber($"{_whoAmI} OnTimedEvent for {GetType()} had JobQueueItemEntity == null");
 				return;
 			}
 
 			// All job progresses must have been sent to manager. 
 			if (_jobDetailSender.DetailsCount() != 0)
 			{
+				Logger.ErrorWithLineNumber($"{_whoAmI} OnTimedEvent for {GetType()} and JobQueueItemEntity:{JobQueueItemEntity.JobId} had _jobDetailSender.DetailsCount() != 0");
 				return;
 			}
 
@@ -135,6 +143,9 @@ namespace Stardust.Node.Timers
 					var errorMessage = $"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) : " +
 					                   $"( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} ). Reason : {httpResponseMessage.ReasonPhrase} Exception: {interpretedString}";
 					_exceptionLoggerHandler.LogError(LoggerExtensions.GetFormattedLogMessage(errorMessage));
+					
+					Logger.ErrorWithLineNumber(errorMessage);
+
 				}
 			}
 
@@ -144,6 +155,8 @@ namespace Stardust.Node.Timers
 				var errorMessage = $"{_whoAmI} : Send status to manager failed for job ( jobId, jobName ) :" +
 				                   $" ( {JobQueueItemEntity.JobId}, {JobQueueItemEntity.Name} )";
 				_exceptionLoggerHandler.LogError(LoggerExtensions.GetFormattedLogMessage(errorMessage), exp);
+				
+				Logger.ErrorWithLineNumber(errorMessage);
 			}
 		}
 	}
