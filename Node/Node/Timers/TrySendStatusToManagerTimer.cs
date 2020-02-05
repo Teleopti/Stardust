@@ -108,7 +108,7 @@ namespace Stardust.Node.Timers
 			// All job progresses must have been sent to manager. 
 			if (_jobDetailSender.DetailsCount() != 0)
 			{
-				Logger.ErrorWithLineNumber($"{_whoAmI} OnTimedEvent for {GetType()} and JobQueueItemEntity:{JobQueueItemEntity.JobId} had _jobDetailSender.DetailsCount() != 0");
+				Logger.InfoWithLineNumber($"{_whoAmI} OnTimedEvent for {GetType()} and JobQueueItemEntity:{JobQueueItemEntity.JobId} had _jobDetailSender.DetailsCount() != 0");
 				return;
 			}
 
