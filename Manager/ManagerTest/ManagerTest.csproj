@@ -110,6 +110,7 @@
     <Compile Include="Fakes\JobPurgeTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="JobManagerLogicTest.cs" />
     <Compile Include="JobManagerTest.cs" />
     <Compile Include="Attributes\JobTestsAttribute.cs" />
     <Compile Include="ManagerConfigurationTest.cs" />

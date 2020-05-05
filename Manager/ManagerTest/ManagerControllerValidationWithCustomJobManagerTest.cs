@@ -41,7 +41,11 @@ namespace ManagerTest
 
             var httpActionResult = Target.JobFailed(jobFailed);
             var exceptionResult = httpActionResult as ExceptionResult;
-            exceptionResult.Exception.InnerException.Message.Should().Contain("JobFailed");
+            #if DEBUG
+                exceptionResult.Exception.InnerException.Message.Should().Contain("CreateJobDetail");
+            #else
+                exceptionResult.Exception.InnerException.Message.Should().Contain("JobFailed");
+            #endif
         }
 
         [Test]
