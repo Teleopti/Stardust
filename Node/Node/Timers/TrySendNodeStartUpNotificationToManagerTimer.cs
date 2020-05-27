@@ -74,31 +74,38 @@ namespace Stardust.Node.Timers
 
 		private async void OnTimedEvent(object sender,
 		                                ElapsedEventArgs e)
-		{
-			try
-			{
-				var httpResponseMessage = await TrySendNodeStartUpToManager(_nodeConfiguration.BaseAddress,
-														CallbackToManagerTemplateUri,
-					                                  _cancellationTokenSource.Token);
+        {
+            this.Enabled = false;
+            try
+            {
+                var httpResponseMessage = await TrySendNodeStartUpToManager(_nodeConfiguration.BaseAddress,
+                    CallbackToManagerTemplateUri,
+                    _cancellationTokenSource.Token);
 
-				if (httpResponseMessage.IsSuccessStatusCode)
-				{
-					TrySendNodeStartUpNotificationSuccededInvoke();
-				}
-				else
-				{
-					var currentScopeMessage =
-						LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Node start up notification to manager failed.");
-					_exceptionLoggerHandler.LogWarning(currentScopeMessage);
-				}
-			}
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    TrySendNodeStartUpNotificationSuccededInvoke();
+                }
+                else
+                {
+                    var currentScopeMessage =
+                        LoggerExtensions.GetFormattedLogMessage(
+                            _whoAmI + ": Node start up notification to manager failed.");
+                    _exceptionLoggerHandler.LogWarning(currentScopeMessage);
+                }
+            }
 
-			catch (Exception exception)
-			{
-				var currentScopeMessage =
-					LoggerExtensions.GetFormattedLogMessage(_whoAmI + ": Node start up notification to manager failed.");
-				_exceptionLoggerHandler.LogWarning(currentScopeMessage, exception);
-			}
+            catch (Exception exception)
+            {
+                var currentScopeMessage =
+                    LoggerExtensions.GetFormattedLogMessage(
+                        _whoAmI + ": Node start up notification to manager failed.");
+                _exceptionLoggerHandler.LogWarning(currentScopeMessage, exception);
+            }
+            finally
+            {
+                this.Enabled = true;
+            }
 		}
 	}
 }
