@@ -54,7 +54,7 @@ namespace Stardust.Node.Timers
 			}
 		}
 
-		public event EventHandler TrySendNodeStartUpNotificationSucceded;
+		public event EventHandler TrySendNodeStartUpNotificationSucceeded;
 
 		public virtual async Task<HttpResponseMessage> TrySendNodeStartUpToManager(Uri nodeAddress,
 		                                                                           Uri callbackToManagerUri,
@@ -69,7 +69,7 @@ namespace Stardust.Node.Timers
 
 		private void TrySendNodeStartUpNotificationSuccededInvoke()
 		{
-			TrySendNodeStartUpNotificationSucceded?.Invoke(this, EventArgs.Empty);
+			TrySendNodeStartUpNotificationSucceeded?.Invoke(this, EventArgs.Empty);
 		}
 
 		private async void OnTimedEvent(object sender,
@@ -85,12 +85,13 @@ namespace Stardust.Node.Timers
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     TrySendNodeStartUpNotificationSuccededInvoke();
+					return;
                 }
                 else
                 {
                     var currentScopeMessage =
                         LoggerExtensions.GetFormattedLogMessage(
-                            _whoAmI + ": Node start up notification to manager failed.");
+                            $"{_whoAmI}: Node start up notification to manager failed.");
                     _exceptionLoggerHandler.LogWarning(currentScopeMessage);
                 }
             }
@@ -99,13 +100,11 @@ namespace Stardust.Node.Timers
             {
                 var currentScopeMessage =
                     LoggerExtensions.GetFormattedLogMessage(
-                        _whoAmI + ": Node start up notification to manager failed.");
+                        $"{_whoAmI}: Node start up notification to manager failed.");
                 _exceptionLoggerHandler.LogWarning(currentScopeMessage, exception);
             }
-            finally
-            {
-                this.Enabled = true;
-            }
+
+			this.Enabled = true;
 		}
 	}
 }

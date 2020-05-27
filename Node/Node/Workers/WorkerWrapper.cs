@@ -50,8 +50,8 @@ namespace Stardust.Node.Workers
 		{
 			_handler = invokeHandler;
 			_nodeStartUpNotificationToManagerTimer = nodeStartUpNotificationToManagerTimer;
-			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded +=
-				NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded;
+			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceeded +=
+				NodeStartUpNotificationToManagerTimerTrySendNodeStartUpNotificationSucceeded;
 
 			_pingToManagerTimer = pingToManagerTimer;
 			_trySendJobDoneStatusToManagerTimer = trySendJobDoneStatusToManagerTimer;
@@ -299,12 +299,12 @@ namespace Stardust.Node.Workers
 			_nodeStartUpNotificationToManagerTimer?.Dispose();
 		}
 
-		private void NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded(object sender,
+		private void NodeStartUpNotificationToManagerTimerTrySendNodeStartUpNotificationSucceeded(object sender,
 																								  EventArgs e)
 		{
 			_nodeStartUpNotificationToManagerTimer.Stop();
-			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceded -=
-				NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded;
+			_nodeStartUpNotificationToManagerTimer.TrySendNodeStartUpNotificationSucceeded -=
+				NodeStartUpNotificationToManagerTimerTrySendNodeStartUpNotificationSucceeded;
 			_pingToManagerTimer.SetupAndStart(_nodeConfiguration);
 		}
         

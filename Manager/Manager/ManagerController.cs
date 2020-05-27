@@ -226,7 +226,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 
-			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + workerNodeUri + " )");
+			this.Log().InfoWithLineNumber($"{WhoAmI(Request)}: Received init from Node. Node Uri : ( {workerNodeUri} )");
 
 			_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(workerNodeUri.ToString());
 			_nodeManager.AddWorkerNode(workerNodeUri);
@@ -243,13 +243,13 @@ namespace Stardust.Manager
 		{
 			if (request == null)
 			{
-				return "[MANAGER, " + Environment.MachineName.ToUpper() + "]";
+				return $"[MANAGER, {Environment.MachineName.ToUpper()}]";
 			}
 
 			var baseUrl =
 				request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-			return "[MANAGER, " + baseUrl + ", " + Environment.MachineName.ToUpper() + "]";
+			return $"[MANAGER, {baseUrl}, {Environment.MachineName.ToUpper()}]";
 		}
 	}
 }
