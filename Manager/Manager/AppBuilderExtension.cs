@@ -1,9 +1,10 @@
-﻿using System.Web.Http;
+﻿#if NET472
+using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
-using Autofac;
 using Autofac.Integration.WebApi;
 using Owin;
+using Autofac;
 
 namespace Stardust.Manager
 {
@@ -43,3 +44,4 @@ namespace Stardust.Manager
 		}
 	}
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if NET472
+using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Http.Dispatcher;
 
@@ -19,3 +20,4 @@ namespace Stardust.Manager
         }
     }
 }
+#endif

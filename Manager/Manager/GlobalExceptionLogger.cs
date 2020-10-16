@@ -1,4 +1,5 @@
-﻿using System.Web.Http.ExceptionHandling;
+﻿#if NET472
+using System.Web.Http.ExceptionHandling;
 using Stardust.Manager.Extensions;
 
 namespace Stardust.Manager
@@ -11,3 +12,4 @@ namespace Stardust.Manager
 		}
 	}
 }
+#endif
