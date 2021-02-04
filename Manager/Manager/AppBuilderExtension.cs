@@ -11,16 +11,19 @@ namespace Stardust.Manager
 	public static class AppBuilderExtension
 	{
         public static void UseStardustManager(this IAppBuilder appBuilder,
-		                                      ManagerConfiguration managerConfiguration,
-		                                      ILifetimeScope lifetimeScope)
+		                                      ManagerConfiguration managerConfiguration)
 		{
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new ManagerModule(managerConfiguration));
+            var container = builder.Build();
+
 			appBuilder.Map(
 				managerConfiguration.Route,
 				inner =>
 				{
 					var config = new HttpConfiguration
 					{
-						DependencyResolver = new AutofacWebApiDependencyResolver(lifetimeScope)
+						DependencyResolver = new AutofacWebApiDependencyResolver(container)
 					};
 
 				    config.Services.Replace(typeof(IAssembliesResolver), new SlimAssembliesResolver(typeof(SlimAssembliesResolver).Assembly));
@@ -29,18 +32,14 @@ namespace Stardust.Manager
 					config.Services.Add(typeof (IExceptionLogger),
 					                    new GlobalExceptionLogger());
 
+					inner.UseAutofacMiddleware(container);
 					inner.UseAutofacWebApi(config);
 					inner.UseWebApi(config);
 				});
 
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new ManagerModule(managerConfiguration));
-#pragma warning disable CS0618 // Type or member is obsolete
-            builder.Update(lifetimeScope.ComponentRegistry);
-#pragma warning restore CS0618 // Type or member is obsolete
 
             //to start the timers etc
-            lifetimeScope.Resolve<ManagerController>();
+            container.Resolve<ManagerController>();
 		}
 	}
 }

@@ -20,12 +20,10 @@ namespace Stardust.Manager
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new ManagerModule(managerConfiguration));
-#pragma warning disable CS0618 // Type or member is obsolete
-            builder.Update(lifetimeScope.ComponentRegistry);
-#pragma warning restore CS0618 // Type or member is obsolete
+            var container = builder.Build();
 
             //to start the timers etc
-            lifetimeScope.Resolve<ManagerController>();
+            container.Resolve<ManagerController>();
 		}
 	}
 }

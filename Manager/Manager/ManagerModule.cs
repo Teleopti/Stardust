@@ -36,6 +36,8 @@ namespace Stardust.Manager
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 #if NET472
 			builder.RegisterApiControllers(typeof(ManagerController).Assembly);
+#else
+            builder.RegisterType<ManagerController>();
 #endif
 			builder.Register(c => LogManager.GetLogger(typeof(Stardust.Manager.ManagerModule).Assembly, "Stardust.ManagerLog"));
 		}
