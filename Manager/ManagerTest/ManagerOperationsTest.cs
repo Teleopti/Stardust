@@ -28,7 +28,7 @@ namespace ManagerTest
 
 		private WorkerNode _workerNode;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TextFixtureSetUp()
 		{
 			_workerNode = new WorkerNode

@@ -12,7 +12,7 @@ namespace NodeTest
 	[TestFixture]
 	public class NodeConfigurationTests
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			NodeConfiguration = new NodeConfiguration(

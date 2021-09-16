@@ -60,7 +60,7 @@ namespace NodeTest
 			_now = new MutableNow();
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			_nodeConfigurationFake = new NodeConfiguration(
