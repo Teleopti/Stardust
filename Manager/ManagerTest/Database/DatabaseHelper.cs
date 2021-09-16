@@ -1,5 +1,7 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace ManagerTest.Database
 {
@@ -18,9 +20,9 @@ namespace ManagerTest.Database
 		{
 			_connectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 			_databaseName = ConfigurationManager.AppSettings["TestDb"];
-			_createScriptPath = ConfigurationManager.AppSettings["CreateScriptPath"];
-			_schemaScriptsPath = ConfigurationManager.AppSettings["ReleaseScriptPath"];
-			_programabilityPath = ConfigurationManager.AppSettings["ProgrammibilityPath"];
+			_createScriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["CreateScriptPath"]);
+			_schemaScriptsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ReleaseScriptPath"]);
+			_programabilityPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["ProgrammibilityPath"]);
 			_masterDatabaseName = "master";
 			var executeMaster = new ExecuteSql(() => OpenConnection(true));
 
