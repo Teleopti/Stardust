@@ -236,11 +236,11 @@ namespace Manager.IntegrationTest.Console.Host
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			DirectoryManagerAssemblyLocationFullPath =
-				new DirectoryInfo(Path.Combine(Settings.Default.ManagerAssemblyLocationFullPath,
+				new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.ManagerAssemblyLocationFullPath,
 				                               _buildMode));
 
 			DirectoryManagerConfigurationFileFullPath =
-				new DirectoryInfo(Path.Combine(Settings.Default.ManagerConfigurationFileFullPath,
+				new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.ManagerConfigurationFileFullPath,
 				                               _buildMode));
 
 			Logger.DebugWithLineNumber("DirectoryManagerConfigurationFileFullPath : " +
