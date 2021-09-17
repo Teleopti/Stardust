@@ -76,7 +76,7 @@ namespace Manager.Integration.Test.Tasks
 					commandArguments[2] = "UseLoadBalancerIfJustOneManager=" + useLoadBalancerIfJustOneManager;
 					
 					var assemblyLocationFullPath =
-						Path.Combine(Settings.Default.ManagerIntegrationConsoleHostLocation,
+						Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.ManagerIntegrationConsoleHostLocation,
 						             Buildmode);
 
 					var directoryManagerAssemblyLocationFullPath =
