@@ -300,7 +300,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 
 			DirectoryNodeConfigurationFileFullPath =
-				new DirectoryInfo(Path.Combine(Settings.Default.NodeConfigurationFileFullPath,
+				new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.NodeConfigurationFileFullPath,
 				                               _buildMode));
 
 			Logger.DebugWithLineNumber("DirectoryNodeConfigurationFileFullPath : " +

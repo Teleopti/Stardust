@@ -79,6 +79,7 @@ namespace Manager.Integration.Test.Initializers
 		[OneTimeSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 			HttpSender = new HttpSender();
 			HttpRequestManager = new HttpRequestManager();
 
