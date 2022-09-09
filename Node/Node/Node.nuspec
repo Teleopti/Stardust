@@ -8,20 +8,23 @@
     <description>Node to handle long running jobs</description>
     <copyright>Teleopti</copyright>
 <dependencies>
-	<dependency id="Autofac" version="3.5.2" />
-	<dependency id="Autofac.Owin" version="4.1.0" />
-	<dependency id="Autofac.WebApi2" version="4.0.1" />
-	<dependency id="Autofac.WebApi2.Owin" version="4.0.0" />
-	<dependency id="log4net" version="2.0.10" />
-	<dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
-	<dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
-	<dependency id="Microsoft.AspNet.WebApi.Owin" version="5.2.3" />
-	<dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
-	<dependency id="Microsoft.Owin" version="3.1.0" />
-	<dependency id="Microsoft.Owin.Hosting" version="3.1.0" />
-	<dependency id="Newtonsoft.Json" version="10.0.2" />
-	<dependency id="Owin" version="1.0" />
-	<dependency id="Microsoft.Owin.Host.HttpListener" version="3.1.0" />
+  <dependency id="Autofac" version="6.3.0" />
+  <dependency id="Autofac.Extras.DynamicProxy" version="6.0.1" />
+  <dependency id="Autofac.Owin" version="6.0.1" />
+  <dependency id="Autofac.WebApi2" version="6.1.0" />
+  <dependency id="Autofac.WebApi2.Owin" version="6.0.0" />
+  <dependency id="Castle.Core" version="4.4.0" />
+  <dependency id="log4net" version="2.0.10" />
+  <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.7" />
+  <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.7" />
+  <dependency id="Microsoft.AspNet.WebApi.Owin" version="5.2.7" />
+  <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
+  <dependency id="Microsoft.Bcl.AsyncInterfaces" version="1.1.0" />
+  <dependency id="Microsoft.Owin" version="4.2.2" />
+  <dependency id="Microsoft.Owin.Host.HttpListener" version="4.2.2" />
+  <dependency id="Microsoft.Owin.Hosting" version="4.2.2" />
+  <dependency id="Newtonsoft.Json" version="12.0.3" />
+  <dependency id="Owin" version="1.0" />
 </dependencies>
   </metadata>
   <files>
